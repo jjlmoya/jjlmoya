@@ -1,7 +1,7 @@
 <template>
     <footer class="footer footer--default">
         <div class="footer__copyright">
-            © 2020 <a href="https://www.jjlmoya.es">jjlmoya</a>
+            © 1989-2020 <a href="https://www.jjlmoya.es">jjlmoya</a>
         </div>
     </footer>
 </template>

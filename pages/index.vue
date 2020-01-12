@@ -1,7 +1,10 @@
 <template>
     <div class="home" :class="theme">
         <Layout>
-            Hola
+            <h1>Portfolio</h1>
+            <h2>Habilidades</h2>
+            <h2>Proyectos</h2>
+            <h2>Empresas</h2>
         </Layout>
     </div>
 </template>
