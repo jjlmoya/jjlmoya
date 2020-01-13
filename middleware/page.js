@@ -1,5 +1,5 @@
-export default function ({ route, store }) {
+export default function ({ route }) {
     if (route && route.params && route.params.id) {
-        console.log(route.params.id)
+        //Middleware for pages
     }
 }
