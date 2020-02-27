@@ -11,6 +11,11 @@
 
 <script>
     import Layout from '@/layouts/Default.vue'
+    import SeoService from '@/services/seoService'
+    const SEO_PAGE_DATA = new SeoService({
+        title: 'Home',
+        description: 'Home Description'
+    })
 
     export default {
         name: 'Home',
@@ -18,16 +23,7 @@
             Layout
         },
         head () {
-            return {
-                title: 'jjlmoya',
-                meta: [
-                    {
-                        hid: 'description',
-                        name: 'description',
-                        content: 'My custom description'
-                    }
-                ]
-            }
+            return SEO_PAGE_DATA.getMetas()
         }
     }
 </script>
