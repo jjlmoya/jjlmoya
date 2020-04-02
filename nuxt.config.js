@@ -5,6 +5,10 @@ export default {
     /*
      ** Headers of the page
      */
+    server: {
+        port: 8000, // default: 3000
+        host: '0.0.0.0' // default: localhost
+    },
     router: {
         base: '/jjlmoya/',
         middleware: 'page'

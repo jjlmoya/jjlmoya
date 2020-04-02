@@ -1,16 +1,24 @@
 <template>
-    <div class="home" :class="theme">
+    <div class="p-home" :class="theme">
         <Layout>
-            <h1>Portfolio</h1>
-            <h2>Habilidades</h2>
-            <h2>Proyectos</h2>
-            <h2>Empresas</h2>
+            <Grid>
+                <h1>Portfolio</h1>
+                <h2>Habilidades</h2>
+                <h2>Proyectos</h2>
+                <h2>Empresas</h2>
+            </Grid>
         </Layout>
     </div>
 </template>
 
+<style lang="scss">
+  @import 'index.scss';
+</style>
+
 <script>
     import Layout from '@/layouts/Default.vue'
+    import Grid from '@/layouts/Grid.vue'
+
     import SeoService from '@/services/seoService'
     const SEO_PAGE_DATA = new SeoService({
         title: 'Home',
@@ -20,7 +28,8 @@
     export default {
         name: 'Home',
         components: {
-            Layout
+            Layout,
+            Grid
         },
         head () {
             return SEO_PAGE_DATA.getMetas()

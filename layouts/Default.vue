@@ -1,8 +1,9 @@
 <template>
     <div class="l-default l-default--background">
-        <div class="l-default__background"></div>
-        <HeaderDefault />
         <div class="l-default__main">
+            <div class="l-default__menu">
+                <Menu />
+            </div>
             <div class="l-default__content">
                 <slot />
             </div>
@@ -13,14 +14,14 @@
 <style lang="scss">@import 'default.scss';
 </style>
 <script>
-    import HeaderDefault from '@/components/Header/Default.vue'
     import Footer from '@/components/Footer/Default.vue'
+    import Menu from '@/components/Menu/Default.vue'
 
     export default {
         name: 'DefaultLayout',
         components: {
-            HeaderDefault,
-            Footer
+            Footer,
+            Menu
         }
     }
 </script>
