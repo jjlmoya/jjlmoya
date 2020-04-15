@@ -5,7 +5,8 @@
             JJLMOYA
         </div>
         <div class="menu__element">
-            Habilidades
+            <a href=""><img src="" alt="linkedin"></a>
+            <a href=""><img src="" alt="github"></a>
         </div>
         <div class="menu__element">
             Proyectos
