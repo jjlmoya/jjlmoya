@@ -3,9 +3,9 @@ const SEO = {
     separator: '|'
 }
 export default class SeoService {
-    constructor ({ id, title, description }) {
+    constructor ({ id, title, description, full }) {
         this.id = id
-        this.title = `${title} ${SEO.separator} ${SEO.name}`
+        this.title = full ? `${title} ${SEO.separator} ${SEO.name}` : `${title} `
         this.description = description
     }
 
