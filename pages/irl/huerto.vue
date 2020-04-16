@@ -1,23 +1,22 @@
 <template>
-    <div class="health food" :class="theme">
+    <div class="p-huerto">
         <Layout>
-            <h1>Portfolio</h1>
-            <h2>Habilidades</h2>
-            <h2>Proyectos</h2>
-            <h2>Empresas</h2>
+            Hola
         </Layout>
     </div>
 </template>
 
 <script>
     import Layout from '@/layouts/Default.vue'
+
     import SeoService from '@/services/seoService'
     const SEO_PAGE_DATA = new SeoService({
-        title: 'Title',
-        description: 'Description'
+        title: 'IRL Huerto',
+        description: 'Home Description'
     })
+
     export default {
-        name: 'HealthFood',
+        name: 'Home',
         components: {
             Layout
         },

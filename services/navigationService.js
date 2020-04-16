@@ -1,26 +1,26 @@
 const MENU = [{
-    name: 'About Me',
+    name: 'Sobre Mi',
     submenu: [
         {
-            name: 'C. Vitae',
+            name: 'C.V.',
             link: './docs/cv.pdf',
             target: '_blank'
         },
         {
-            name: 'Companies',
+            name: 'Empresas',
             link: ''
         }
     ]
 },
 {
-    name: 'Skills',
+    name: 'Habilidades',
     submenu: [
         {
-            name: 'Languages',
+            name: 'Idiomas',
             link: ''
         },
         {
-            name: 'Code',
+            name: 'Código',
             link: ''
         }
     ]
@@ -39,19 +39,23 @@ const MENU = [{
     ]
 },
 {
-    name: 'Health',
+    name: 'IRL',
     submenu: [
         {
-            name: 'Recipes',
+            name: 'Cocina',
             link: ''
         },
         {
-            name: 'Workouts',
+            name: 'Fitness',
             link: ''
         },
         {
             name: 'IMC',
             link: ''
+        },
+        {
+            name: 'Huerto',
+            link: 'irl/huerto'
         }
     ]
 }
