@@ -1,0 +1,1753 @@
+export default [{
+    name: 'BottomsTexSkirtBoxGrass0',
+    image: 'BottomsTexSkirtBoxGrass0.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'BottomsTexSkirtBoxGrass1',
+    image: 'BottomsTexSkirtBoxGrass1.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FishBait',
+    image: 'FishBait.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrAcorsticguitar',
+    image: 'FtrAcorsticguitar.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrAlomapot',
+    image: 'FtrAlomapot.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBalancingtoy',
+    image: 'FtrBalancingtoy.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBarbell',
+    image: 'FtrBarbell.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBasketsteamer',
+    image: 'FtrBasketsteamer.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBearXL',
+    image: 'FtrBearXL.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBeekeepingbox',
+    image: 'FtrBeekeepingbox.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBirdbus',
+    image: 'FtrBirdbus.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBirdcage',
+    image: 'FtrBirdcage.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBirdhouse',
+    image: 'FtrBirdhouse.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBonfire',
+    image: 'FtrBonfire.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBonsaiPine',
+    image: 'FtrBonsaiPine.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBonsaiShelf',
+    image: 'FtrBonsaiShelf.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBooks',
+    image: 'FtrBooks.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBookshelf',
+    image: 'FtrBookshelf.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBoomerang',
+    image: 'FtrBoomerang.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrBucketWood',
+    image: 'FtrBucketWood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrButtermixer',
+    image: 'FtrButtermixer.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrCampfire',
+    image: 'FtrCampfire.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrCandleXmas',
+    image: 'FtrCandleXmas.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrClaytoy',
+    image: 'FtrClaytoy.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrClothesline',
+    image: 'FtrClothesline.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrCoconutjuice',
+    image: 'FtrCoconutjuice.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrCushionJapanPile',
+    image: 'FtrCushionJapanPile.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrCuttingboard',
+    image: 'FtrCuttingboard.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrDecoy',
+    image: 'FtrDecoy.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrDiningtableJapan',
+    image: 'FtrDiningtableJapan.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrDishesUnglazed',
+    image: 'FtrDishesUnglazed.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrDoghouse',
+    image: 'FtrDoghouse.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrDrinkingfountain',
+    image: 'FtrDrinkingfountain.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrDrumcanbath',
+    image: 'FtrDrumcanbath.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFallenleaves',
+    image: 'FtrFallenleaves.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFallenleavesChairS',
+    image: 'FtrFallenleavesChairS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFallenleavesfire',
+    image: 'FtrFallenleavesfire.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFallenleavesGreen',
+    image: 'FtrFallenleavesGreen.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFallenleavesRed',
+    image: 'FtrFallenleavesRed.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFallenleavesYellow',
+    image: 'FtrFallenleavesYellow.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFestivaltop',
+    image: 'FtrFestivaltop.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFirewood',
+    image: 'FtrFirewood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFishArowanaGold',
+    image: 'FtrFishArowanaGold.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFloat',
+    image: 'FtrFloat.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFloorpapers',
+    image: 'FtrFloorpapers.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerBedW',
+    image: 'FtrFlowerBedW.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerFan',
+    image: 'FtrFlowerFan.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerLamp',
+    image: 'FtrFlowerLamp.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerRecordplayer',
+    image: 'FtrFlowerRecordplayer.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerShower',
+    image: 'FtrFlowerShower.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerStoolS',
+    image: 'FtrFlowerStoolS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerSurprisedbox',
+    image: 'FtrFlowerSurprisedbox.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerSwag',
+    image: 'FtrFlowerSwag.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFlowerTableS',
+    image: 'FtrFlowerTableS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFountain',
+    image: 'FtrFountain.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitbasket',
+    image: 'FtrFruitbasket.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsBedS',
+    image: 'FtrFruitsBedS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsBox',
+    image: 'FtrFruitsBox.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsChairApple',
+    image: 'FtrFruitsChairApple.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsChairPeach',
+    image: 'FtrFruitsChairPeach.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsClockW',
+    image: 'FtrFruitsClockW.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsClosetLR',
+    image: 'FtrFruitsClosetLR.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsLampW',
+    image: 'FtrFruitsLampW.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsMusic',
+    image: 'FtrFruitsMusic.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsTableS',
+    image: 'FtrFruitsTableS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitsTV',
+    image: 'FtrFruitsTV.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrFruitswater',
+    image: 'FtrFruitswater.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGarbagebag',
+    image: 'FtrGarbagebag.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenChairNatural',
+    image: 'FtrGardenChairNatural.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenrock',
+    image: 'FtrGardenrock.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenrockLow',
+    image: 'FtrGardenrockLow.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenrockMoss',
+    image: 'FtrGardenrockMoss.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenrockTall',
+    image: 'FtrGardenrockTall.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenTableNatural',
+    image: 'FtrGardenTableNatural.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenTableSNatural',
+    image: 'FtrGardenTableSNatural.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGardenwagon',
+    image: 'FtrGardenwagon.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGearWallGold',
+    image: 'FtrGearWallGold.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGoemonburo',
+    image: 'FtrGoemonburo.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGoldbar',
+    image: 'FtrGoldbar.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGoldbench',
+    image: 'FtrGoldbench.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGoldCandlestand',
+    image: 'FtrGoldCandlestand.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGoldCoffin',
+    image: 'FtrGoldCoffin.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGoldDishes',
+    image: 'FtrGoldDishes.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGoldWC',
+    image: 'FtrGoldWC.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGravestoneEuropean',
+    image: 'FtrGravestoneEuropean.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrGravestoneJapan',
+    image: 'FtrGravestoneJapan.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHandpump',
+    image: 'FtrHandpump.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHariboteGrass',
+    image: 'FtrHariboteGrass.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHariboteHedge',
+    image: 'FtrHariboteHedge.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHariboteMountain',
+    image: 'FtrHariboteMountain.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHariboteTree',
+    image: 'FtrHariboteTree.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHaybed',
+    image: 'FtrHaybed.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHerorobot',
+    image: 'FtrHerorobot.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrHuntingtrophy',
+    image: 'FtrHuntingtrophy.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrIllumiPresent',
+    image: 'FtrIllumiPresent.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrIllumiReindeer',
+    image: 'FtrIllumiReindeer.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrIllumiSnow',
+    image: 'FtrIllumiSnow.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrIllumiTree',
+    image: 'FtrIllumiTree.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrInsectKabutomushiGold',
+    image: 'FtrInsectKabutomushiGold.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrIrori',
+    image: 'FtrIrori.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrKalimbaCan',
+    image: 'FtrKalimbaCan.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrKame',
+    image: 'FtrKame.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrKatakatatoy',
+    image: 'FtrKatakatatoy.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrKettlebell',
+    image: 'FtrKettlebell.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrKeyhanger',
+    image: 'FtrKeyhanger.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrLeafWall',
+    image: 'FtrLeafWall.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMagagine',
+    image: 'FtrMagagine.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMagazinerack',
+    image: 'FtrMagazinerack.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrManekinekoGold',
+    image: 'FtrManekinekoGold.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrManhole',
+    image: 'FtrManhole.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMatryoshka',
+    image: 'FtrMatryoshka.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMeteo',
+    image: 'FtrMeteo.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMicrolibrary',
+    image: 'FtrMicrolibrary.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrModule',
+    image: 'FtrModule.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMokugyo',
+    image: 'FtrMokugyo.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMoon',
+    image: 'FtrMoon.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMoonrover',
+    image: 'FtrMoonrover.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMovingboxL',
+    image: 'FtrMovingboxL.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMovingboxM',
+    image: 'FtrMovingboxM.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMovingboxS',
+    image: 'FtrMovingboxS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMushroomChairS',
+    image: 'FtrMushroomChairS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMushroomLamp',
+    image: 'FtrMushroomLamp.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMushroomParasol',
+    image: 'FtrMushroomParasol.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMushroomPulpwood',
+    image: 'FtrMushroomPulpwood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMushroomScreen',
+    image: 'FtrMushroomScreen.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMushroomTableL',
+    image: 'FtrMushroomTableL.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrMusicstand',
+    image: 'FtrMusicstand.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrNutArch',
+    image: 'FtrNutArch.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrNutLamp',
+    image: 'FtrNutLamp.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrNutMobile',
+    image: 'FtrNutMobile.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrNutTreeL',
+    image: 'FtrNutTreeL.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrNutTreeS',
+    image: 'FtrNutTreeS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrOfficePapers',
+    image: 'FtrOfficePapers.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrOpenairbath',
+    image: 'FtrOpenairbath.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrOrnamentMobile',
+    image: 'FtrOrnamentMobile.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrOrnamentTanuki',
+    image: 'FtrOrnamentTanuki.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPalmtreelamp',
+    image: 'FtrPalmtreelamp.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPan',
+    image: 'FtrPan.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrParkbenche',
+    image: 'FtrParkbenche.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPianoStreet',
+    image: 'FtrPianoStreet.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPirateBarrel',
+    image: 'FtrPirateBarrel.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPlanterPalm',
+    image: 'FtrPlanterPalm.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPlantSucculents',
+    image: 'FtrPlantSucculents.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPlayingtire',
+    image: 'FtrPlayingtire.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrPotteryjug',
+    image: 'FtrPotteryjug.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrQuoits',
+    image: 'FtrQuoits.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrRockArch',
+    image: 'FtrRockArch.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrRocket',
+    image: 'FtrRocket.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrRockingchair',
+    image: 'FtrRockingchair.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrRockinghorse',
+    image: 'FtrRockinghorse.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrRockMonument',
+    image: 'FtrRockMonument.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSakuraBranch',
+    image: 'FtrSakuraBranch.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSakuraClockW',
+    image: 'FtrSakuraClockW.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSakuraLantern',
+    image: 'FtrSakuraLantern.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSakuraPetal',
+    image: 'FtrSakuraPetal.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSakuraPicnicset',
+    image: 'FtrSakuraPicnicset.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSatellite',
+    image: 'FtrSatellite.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrScarecrow',
+    image: 'FtrScarecrow.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrScreenCage',
+    image: 'FtrScreenCage.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSekishishi',
+    image: 'FtrSekishishi.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrShishiodoshi',
+    image: 'FtrShishiodoshi.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrShuttle',
+    image: 'FtrShuttle.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSignboardWood',
+    image: 'FtrSignboardWood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSignpost',
+    image: 'FtrSignpost.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSignpostTilt',
+    image: 'FtrSignpostTilt.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSignpostWorld',
+    image: 'FtrSignpostWorld.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSignWood',
+    image: 'FtrSignWood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSilo',
+    image: 'FtrSilo.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSled',
+    image: 'FtrSled.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSnowman',
+    image: 'FtrSnowman.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrStandflower',
+    image: 'FtrStandflower.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrStoveSauna',
+    image: 'FtrStoveSauna.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrSwingWood',
+    image: 'FtrSwingWood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTamtam',
+    image: 'FtrTamtam.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTerrarium',
+    image: 'FtrTerrarium.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTerrariumWall',
+    image: 'FtrTerrariumWall.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTetrapod',
+    image: 'FtrTetrapod.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrToolboxWood',
+    image: 'FtrToolboxWood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTorch',
+    image: 'FtrTorch.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTrashboxWood',
+    image: 'FtrTrashboxWood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTreeXmasL',
+    image: 'FtrTreeXmasL.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTreeXmasMini',
+    image: 'FtrTreeXmasMini.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTreeXmasS',
+    image: 'FtrTreeXmasS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTrophycase',
+    image: 'FtrTrophycase.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrTyres',
+    image: 'FtrTyres.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrUFO',
+    image: 'FtrUFO.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrUkulele',
+    image: 'FtrUkulele.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWashstandBowl',
+    image: 'FtrWashstandBowl.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWashtub',
+    image: 'FtrWashtub.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWell',
+    image: 'FtrWell.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWellBrick',
+    image: 'FtrWellBrick.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWoodBench',
+    image: 'FtrWoodBench.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWoodPile',
+    image: 'FtrWoodPile.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWorkbench',
+    image: 'FtrWorkbench.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWorkbenchIronwood',
+    image: 'FtrWorkbenchIronwood.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWorkbenchS',
+    image: 'FtrWorkbenchS.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrWorkbenchStump',
+    image: 'FtrWorkbenchStump.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'ItemMedicine',
+    image: 'ItemMedicine.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'LongWoodenStick',
+    image: 'LongWoodenStick.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'PitfallSeed',
+    image: 'PitfallSeed.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugOtherAppleM00',
+    image: 'RugOtherAppleM00.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugOtherCherryM00',
+    image: 'RugOtherCherryM00.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugOtherOrangeM00',
+    image: 'RugOtherOrangeM00.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugOtherPeachM00',
+    image: 'RugOtherPeachM00.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugOtherPearM00',
+    image: 'RugOtherPearM00.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugOtherShellM00',
+    image: 'RugOtherShellM00.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugRectBambooM00',
+    image: 'RugRectBambooM00.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'RugRectBambooM01',
+    image: 'RugRectBambooM01.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'ShoesKneeKnightGold',
+    image: 'ShoesKneeKnightGold.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'ShoesKneeKnightIron',
+    image: 'ShoesKneeKnightIron.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'ShoesKneeRecyclingboots0',
+    image: 'ShoesKneeRecyclingboots0.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexOnepieceAlineNApple0',
+    image: 'TopsTexOnepieceAlineNApple0.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexOnepieceAlineNCherry0',
+    image: 'TopsTexOnepieceAlineNCherry0.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexOnepieceAlineNOrange',
+    image: 'TopsTexOnepieceAlineNOrange.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexOnepieceAlineNPeach0',
+    image: 'TopsTexOnepieceAlineNPeach0.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexOnepieceAlineNPear0',
+    image: 'TopsTexOnepieceAlineNPear0.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexOnepieceOverallLPlatearmorGold',
+    image: 'TopsTexOnepieceOverallLPlatearmorGold.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexOnepieceOverallLPlatearmorIron',
+    image: 'TopsTexOnepieceOverallLPlatearmorIron.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'TopsTexTopCoatLStrawBeige',
+    image: 'TopsTexTopCoatLStrawBeige.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}]

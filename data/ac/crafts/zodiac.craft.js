@@ -1,0 +1,97 @@
+export default [{
+    name: 'FtrZodiacAquarius',
+    image: 'FtrZodiacAquarius.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacAries',
+    image: 'FtrZodiacAries.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacCancer',
+    image: 'FtrZodiacCancer.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacCapricornus',
+    image: 'FtrZodiacCapricornus.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacGemini',
+    image: 'FtrZodiacGemini.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacLeo',
+    image: 'FtrZodiacLeo.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacLibra',
+    image: 'FtrZodiacLibra.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacPisces',
+    image: 'FtrZodiacPisces.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacSagittarius',
+    image: 'FtrZodiacSagittarius.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacScorpio',
+    image: 'FtrZodiacScorpio.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacTaurus',
+    image: 'FtrZodiacTaurus.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}, {
+    name: 'FtrZodiacVirgo',
+    image: 'FtrZodiacVirgo.png',
+    height: 1,
+    width: 1,
+    category: [],
+    serie: 'nook',
+    materials: []
+}]

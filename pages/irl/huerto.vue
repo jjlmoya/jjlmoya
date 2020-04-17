@@ -1,5 +1,5 @@
 <template>
-    <div class="p-huerto">
+    <div class="p-ac p-ac--crafting">
         <Layout>
             Hola
         </Layout>
@@ -11,7 +11,7 @@
 
     import SeoService from '@/services/seoService'
     const SEO_PAGE_DATA = new SeoService({
-        title: 'IRL Huerto',
+        title: 'Crafting Animal Crossing',
         description: 'Home Description'
     })
 
