@@ -1,5 +1,3 @@
-// import MATERIALS from '@/data/ac/materials.data'
-// import CATEGORY from '@/data/ac/category.data'
 import ACCESORY from '@/data/ac/crafts/accessory.craft'
 import BACKPACK from '@/data/ac/crafts/backpack.craft'
 import BAMBOO from '@/data/ac/crafts/bamboo.craft'
@@ -46,5 +44,6 @@ const CRAFTS = [
     ...ZODIAC,
     ...OTHERS
 ]
+console.log(CRAFTS)
 
-export default CRAFTS
+export default [...BLOSSOM]

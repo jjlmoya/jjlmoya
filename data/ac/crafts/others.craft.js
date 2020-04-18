@@ -1207,46 +1207,6 @@ export default [{
     serie: 'nook',
     materials: []
 }, {
-    name: 'FtrSakuraBranch',
-    image: 'FtrSakuraBranch.png',
-    height: 1,
-    width: 1,
-    category: [],
-    serie: 'nook',
-    materials: []
-}, {
-    name: 'FtrSakuraClockW',
-    image: 'FtrSakuraClockW.png',
-    height: 1,
-    width: 1,
-    category: [],
-    serie: 'nook',
-    materials: []
-}, {
-    name: 'FtrSakuraLantern',
-    image: 'FtrSakuraLantern.png',
-    height: 1,
-    width: 1,
-    category: [],
-    serie: 'nook',
-    materials: []
-}, {
-    name: 'FtrSakuraPetal',
-    image: 'FtrSakuraPetal.png',
-    height: 1,
-    width: 1,
-    category: [],
-    serie: 'nook',
-    materials: []
-}, {
-    name: 'FtrSakuraPicnicset',
-    image: 'FtrSakuraPicnicset.png',
-    height: 1,
-    width: 1,
-    category: [],
-    serie: 'nook',
-    materials: []
-}, {
     name: 'FtrSatellite',
     image: 'FtrSatellite.png',
     height: 1,

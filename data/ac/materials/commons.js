@@ -1,76 +1,81 @@
 const WOOD = {
     name: 'Madera normal',
-    image: ''
+    image: 'wood.png'
 }
 
 const FLEXIBLE_WOOD = {
     name: 'Madera flexible',
-    image: ''
+    image: 'flexible-wood.png'
 }
 
 const SOLID_WOOD = {
     name: 'Madera rígida',
-    image: ''
+    image: 'solid-wood.png'
 }
 
 const BRANCH = {
     name: 'Rama',
-    image: ''
+    image: 'branch.png'
 }
 
 const STONE = {
     name: 'Piedra',
-    image: ''
+    image: 'stone.png'
 }
 
 const IRON_NUGGET = {
     name: 'Pepita de Hierro',
-    image: ''
+    image: 'iron-nugget.png'
 }
 
 const GOLD_NUGGET = {
     name: 'Pepita de Oro',
-    image: ''
+    image: 'gold-nugget.png'
 }
 
 const HERB = {
     name: 'Hierbajo',
-    image: ''
+    image: 'herb.png'
 }
 
 const JAPANESE_CLAM = {
     name: 'Almeja japonesa',
-    image: ''
+    image: 'clam.png'
 }
 
 const CLAY = {
     name: 'Bola de arcilla',
-    image: ''
+    image: 'clay.png'
 }
 
 const WASP_NEST = {
     name: 'Aviespero',
-    image: ''
+    image: 'wasp-nest.png'
 }
 
 const TRASH_CAN = {
     name: 'Chatarra',
-    image: ''
+    image: 'can.png'
 }
 
 const TRASH_WHEEL = {
-    name: 'Chatarra',
-    image: ''
+    name: 'Neumático',
+    image: 'wheel.png'
 }
 
-const TRASH_BOT = {
-    name: 'Chatarra',
-    image: ''
+const TRASH_BOOT = {
+    name: 'Bota',
+    image: 'boot.png'
 }
 
 const STAR_FRAGMENT = {
     name: 'Fragmento de estrella',
-    image: ''
+    image: 'star-fragment.png'
+}
+
+const STAR_FRAGMENT_XL = {
+    name: 'Fragmento de estrella XL',
+    image: 'star-fragment-xl.png'
 }
 
 export default {
@@ -85,8 +90,9 @@ export default {
     JAPANESE_CLAM,
     CLAY,
     WASP_NEST,
-    TRASH_BOT,
+    TRASH_BOOT,
     TRASH_CAN,
     TRASH_WHEEL,
-    STAR_FRAGMENT
+    STAR_FRAGMENT,
+    STAR_FRAGMENT_XL
 }

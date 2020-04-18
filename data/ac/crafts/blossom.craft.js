@@ -2,8 +2,8 @@ import MATERIALS from '@/data/ac/materials.data'
 import CATEGORY from '@/data/ac/category.data'
 
 const PILE_BLOSSOM = {
-    name: 'Pila de pétalos de cerezco',
-    image: 'AccessoryMouthLeafGreen.png',
+    name: 'Pila de cerezos',
+    image: 'FtrSakuraPetal.png',
     height: 1,
     width: 1,
     category: [CATEGORY.FURNITURE],
@@ -44,8 +44,8 @@ const BLOSSOM_BONSAI = {
 }
 
 const BLOSSOM_FLOWERS = {
-    name: 'Jarrón con flores de cerezo',
-    image: '',
+    name: 'Jarrón de cerezo',
+    image: 'FtrSakuraBranch.png',
     height: 1,
     width: 1,
     category: [CATEGORY.FURNITURE],
@@ -68,7 +68,7 @@ const BLOSSOM_FLOWERS = {
 
 const PICNIC_SET = {
     name: 'Set de pícnic',
-    image: '',
+    image: 'FtrSakuraPicnicset.png',
     height: 1,
     width: 1,
     category: [CATEGORY.FURNITURE, CATEGORY.OBJECT],
@@ -83,7 +83,7 @@ const PICNIC_SET = {
 
 const BLOSSOM_LANTERN = {
     name: 'Farol flor de cerezo',
-    image: '',
+    image: 'FtrSakuraLantern.png',
     height: 1,
     width: 1,
     category: [CATEGORY.FURNITURE],
@@ -102,7 +102,7 @@ const BLOSSOM_LANTERN = {
 
 const BLOSSOM_CLOCK = {
     name: 'Reloj flor de cerezo',
-    image: '',
+    image: 'FtrSakuraClockW.png',
     height: 1,
     width: 1,
     category: [CATEGORY.WALL_OBJECT],
@@ -120,8 +120,8 @@ const BLOSSOM_CLOCK = {
 }
 
 const BLOSSOM_FLOWERS_WALL = {
-    name: 'Pared de cerezones en flor',
-    image: '',
+    name: 'Pared de cerezos',
+    image: 'RoomSpWallSakura00.png',
     height: 1,
     width: 1,
     category: [CATEGORY.WALL_FLOOR],
@@ -157,8 +157,8 @@ const BLOSSOM_WALL = {
 }
 
 const BLOSSOM_FLOWERS_FLOOR = {
-    name: 'Suelo de cerezos en flor',
-    image: '',
+    name: 'Suelo de cerezos',
+    image: 'RoomTexFloorSakura00.png',
     height: 1,
     width: 1,
     category: [CATEGORY.WALL_FLOOR],
@@ -177,7 +177,7 @@ const BLOSSOM_FLOWERS_FLOOR = {
 
 const BLOSSOM_FLOOR = {
     name: 'Suelo de cerezo',
-    image: '',
+    image: 'RoomTexFloorSolidWood00.png',
     height: 1,
     width: 1,
     category: [CATEGORY.WALL_FLOOR],
@@ -195,7 +195,7 @@ const BLOSSOM_FLOOR = {
 }
 
 const BLOSSOM_UMBRELLA = {
-    name: 'Paraguas de flor de cerezo',
+    name: 'Paraguas de cerezo',
     image: 'UmbrellaCherryblossom0.png',
     height: 1,
     width: 1,
@@ -210,7 +210,7 @@ const BLOSSOM_UMBRELLA = {
 }
 
 const BLOSSOM_PURSE = {
-    name: 'Bolsito de flor de cerezo',
+    name: 'Bolsito de cerezo',
     image: 'BagShoulderCherryblossoms0.png',
     height: 1,
     width: 1,
@@ -225,7 +225,7 @@ const BLOSSOM_PURSE = {
 }
 
 const BLOSSOM_WAND = {
-    name: 'Bolsito de flor de cerezo',
+    name: 'Varita de cerezo',
     image: 'ToolStickCherryblossom.png',
     height: 1,
     width: 1,

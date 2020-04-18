@@ -3,7 +3,7 @@ import CATEGORY from '@/data/ac/category.data'
 
 const WEAK_AXE = {
     name: 'Hacha Endeble',
-    image: '',
+    image: 'ToolAxeStone.png',
     height: 1,
     width: 1,
     category: [CATEGORY.TOOL],
@@ -22,7 +22,7 @@ const WEAK_AXE = {
 
 const STONE_AXE = {
     name: 'Hacha de piedra',
-    image: '',
+    image: 'ToolAxeStoneNormal.png',
     height: 1,
     width: 1,
     category: [CATEGORY.TOOL],
@@ -40,8 +40,8 @@ const STONE_AXE = {
 }
 
 const AXE = {
-    name: 'Hacha de piedra',
-    image: '',
+    name: 'Hacha',
+    image: 'ToolAxe.png',
     height: 1,
     width: 1,
     category: [CATEGORY.TOOL],
@@ -63,8 +63,8 @@ const AXE = {
 }
 
 const GOLD_AXE = {
-    name: 'Hacha de piedra',
-    image: '',
+    name: 'Hacha de oro',
+    image: 'ToolAxeGold.png',
     height: 1,
     width: 1,
     category: [CATEGORY.TOOL],
@@ -88,159 +88,230 @@ export default [
     AXE,
     GOLD_AXE,
     {
-        name: 'ToolAngling',
+        name: 'Caña de Pescar',
         image: 'ToolAngling.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.WEAK_FISHING_ROD,
+                quantity: 1
+            },
+            {
+                ...MATERIALS.IRON_NUGGET,
+                quantity: 1
+            }
+        ]
     }, {
-        name: 'ToolAxe',
-        image: 'ToolAxe.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
-        name: 'ToolAxeGold',
-        image: 'ToolAxeGold.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
-        name: 'ToolAxeStone',
-        image: 'ToolAxeStone.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
-        name: 'ToolAxeStoneNormal',
-        image: 'ToolAxeStoneNormal.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
-        name: 'ToolChangeStick',
+        name: 'Varita Estrella',
         image: 'ToolChangeStick.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STAR_FRAGMENT,
+            quantity: 1
+        },
+        {
+            ...MATERIALS.STAR_FRAGMENT_XL,
+            quantity: 1
+        }]
     }, {
-        name: 'ToolFishingrodGold',
+        name: 'Caña Dorada',
         image: 'ToolFishingrodGold.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.FISHING_ROD,
+                quantity: 1
+            },
+            {
+                ...MATERIALS.GOLD_NUGGET,
+                quantity: 1
+            }
+        ]
     }, {
-        name: 'ToolFishingrodWood',
+        name: 'Caña Endeble',
         image: 'ToolFishingrodWood.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.BRANCH,
+                quantity: 5
+            }
+        ]
     }, {
-        name: 'ToolLadder',
+        name: 'Escalera',
         image: 'ToolLadder.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.WOOD,
+                quantity: 4
+            },
+            {
+                ...MATERIALS.FLEXIBLE_WOOD,
+                quantity: 4
+            },
+            {
+                ...MATERIALS.SOLID_WOOD,
+                quantity: 4
+            }
+        ]
     }, {
-        name: 'ToolNet',
+        name: 'Red Endeble',
         image: 'ToolNet.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.BRANCH,
+                quantity: 5
+            }
+        ]
     }, {
-        name: 'ToolNetGold',
+        name: 'Red Dorada',
         image: 'ToolNetGold.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.NET,
+                quantity: 1
+            },
+            {
+                ...MATERIALS.GOLD_NUGGET,
+                quantity: 1
+            }
+        ]
     }, {
-        name: 'ToolNetNormal',
+        name: 'Red',
         image: 'ToolNetNormal.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.WEAK_NET,
+                quantity: 1
+            },
+            {
+                ...MATERIALS.IRON_NUGGET,
+                quantity: 1
+            }
+        ]
     }, {
-        name: 'ToolOcarina',
+        name: 'Ocarina',
         image: 'ToolOcarina.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.CLAY,
+                quantity: 5
+            }
+        ]
     }, {
-        name: 'ToolPanpipe',
+        name: 'Flauta de Pan',
         image: 'ToolPanpipe.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.CLAY,
+                quantity: 5
+            }
+        ]
     }, {
-        name: 'ToolScoop',
+        name: 'Pala',
         image: 'ToolScoop.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.WEAK_SHOVEL,
+            quantity: 1
+        },
+        {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 1
+        }]
     }, {
-        name: 'ToolScoopGold',
+        name: 'Pala Dorada',
         image: 'ToolScoopGold.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SHOVEL,
+            quantity: 1
+        },
+        {
+            ...MATERIALS.GOLD_NUGGET,
+            quantity: 1
+        }]
     }, {
-        name: 'ToolShovelWood',
+        name: 'Pala Endeble',
         image: 'ToolShovelWood.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'ToolSlingshot',
+        name: 'Tirachinas',
         image: 'ToolSlingshot.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'ToolSlingshotGold',
+        name: 'Tirachinas Dorado',
         image: 'ToolSlingshotGold.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SLINGSHOT,
+            quantity: 1
+        },
+        {
+            ...MATERIALS.GOLD_NUGGET,
+            quantity: 1
+        }]
     }, {
-        name: 'ToolStickAnemones',
+        name: 'Varita de Anémona',
         image: 'ToolStickAnemones.png',
         height: 1,
         width: 1,
@@ -248,15 +319,22 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickBamboo',
+        name: 'Varita de Bambú',
         image: 'ToolStickBamboo.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.BAMBU_SPRING,
+            quantity: 6
+        },
+        {
+            ...MATERIALS.STAR_FRAGMENT,
+            quantity: 3
+        }]
     }, {
-        name: 'ToolStickChrysanthemum',
+        name: 'Varita de Crisantemo',
         image: 'ToolStickChrysanthemum.png',
         height: 1,
         width: 1,
@@ -264,7 +342,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickCosmos',
+        name: 'Varita Cosmos',
         image: 'ToolStickCosmos.png',
         height: 1,
         width: 1,
@@ -272,7 +350,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickGolden',
+        name: 'Vara Dorada',
         image: 'ToolStickGolden.png',
         height: 1,
         width: 1,
@@ -280,7 +358,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickHyacinth',
+        name: 'Vara de Jacinto',
         image: 'ToolStickHyacinth.png',
         height: 1,
         width: 1,
@@ -288,15 +366,22 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickIron',
+        name: 'Vara de hierro',
         image: 'ToolStickIron.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 3
+        },
+        {
+            ...MATERIALS.STAR_FRAGMENT,
+            quantity: 3
+        }]
     }, {
-        name: 'ToolStickMushroom',
+        name: 'Varita de setas',
         image: 'ToolStickMushroom.png',
         height: 1,
         width: 1,
@@ -304,7 +389,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickPansy',
+        name: 'Varita de viola',
         image: 'ToolStickPansy.png',
         height: 1,
         width: 1,
@@ -312,7 +397,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickRose',
+        name: 'Varita de Rosa',
         image: 'ToolStickRose.png',
         height: 1,
         width: 1,
@@ -320,7 +405,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickShell',
+        name: 'Varita de Conchas',
         image: 'ToolStickShell.png',
         height: 1,
         width: 1,
@@ -328,7 +413,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickSnow',
+        name: 'Varita de Nieve',
         image: 'ToolStickSnow.png',
         height: 1,
         width: 1,
@@ -336,7 +421,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickTree',
+        name: 'Varita de Árbol',
         image: 'ToolStickTree.png',
         height: 1,
         width: 1,
@@ -344,7 +429,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickTulip',
+        name: 'Varita de Tulipán',
         image: 'ToolStickTulip.png',
         height: 1,
         width: 1,
@@ -352,7 +437,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickWood',
+        name: 'Varita de Madera',
         image: 'ToolStickWood.png',
         height: 1,
         width: 1,
@@ -360,7 +445,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolStickYuri',
+        name: 'Varita de Lirio',
         image: 'ToolStickYuri.png',
         height: 1,
         width: 1,
@@ -368,28 +453,51 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ToolWatering',
+        name: 'Regadera',
         image: 'ToolWatering.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.WEAK_WATER_CANING,
+                quantity: 1
+            },
+            {
+                ...MATERIALS.IRON_NUGGET,
+                quantity: 1
+            }
+        ]
     }, {
-        name: 'ToolWateringGold',
+        name: 'Regadera de Oro',
         image: 'ToolWateringGold.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.WATER_CANING,
+                quantity: 1
+            },
+            {
+                ...MATERIALS.GOLD_NUGGET,
+                quantity: 1
+            }
+        ]
     }, {
-        name: 'ToolWateringWood',
+        name: 'Regadera Endeble',
         image: 'ToolWateringWood.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.FLEXIBLE_WOOD,
+                quantity: 5
+            }
+        ]
     }
 ]

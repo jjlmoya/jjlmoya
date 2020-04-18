@@ -1,15 +1,15 @@
 const BAMBU_SPRING = {
     name: 'Bambú primaveral',
-    image: ''
+    image: 'spring-bamboo.png'
 }
 
 const BAMBU_ROOT = {
     name: 'Brote de bambú',
-    image: ''
+    image: 'bomboo-root.png'
 }
 const BAMBU = {
     name: 'Bambú',
-    image: ''
+    image: 'bamboo.png'
 }
 
 const EARTH_EGG = {
@@ -44,7 +44,7 @@ const WATER_EGG = {
 
 const CHERRY_PETALS = {
     name: 'Pétalos',
-    image: ''
+    image: 'blossom-petal.png'
 }
 
 const PINECONE = {

@@ -96,14 +96,6 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexFloorSakura00',
-        image: 'RoomTexFloorSakura00.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
         name: 'RoomTexFloorSand00',
         image: 'RoomTexFloorSand00.png',
         height: 1,
@@ -114,14 +106,6 @@ export default [
     }, {
         name: 'RoomTexFloorSandStar00',
         image: 'RoomTexFloorSandStar00.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
-        name: 'RoomTexFloorSolidWood00',
-        image: 'RoomTexFloorSolidWood00.png',
         height: 1,
         width: 1,
         category: [],
@@ -360,14 +344,6 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallSolidWood00',
-        image: 'RoomTexWallSolidWood00.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
         name: 'RoomTexWallSteel00',
         image: 'RoomTexWallSteel00.png',
         height: 1,
@@ -467,14 +443,6 @@ export default [
     }, {
         name: 'RoomSpWallIce00',
         image: 'RoomSpWallIce00.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
-        name: 'RoomSpWallSakura00',
-        image: 'RoomSpWallSakura00.png',
         height: 1,
         width: 1,
         category: [],

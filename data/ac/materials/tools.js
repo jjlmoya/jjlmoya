@@ -1,31 +1,56 @@
 const WEAK_SHOVEL = {
     name: 'Pala endeble',
-    image: ''
+    image: 'shovel.png'
+}
+
+const SHOVEL = {
+    name: 'Pala',
+    image: 'shovel.png'
 }
 
 const WEAK_AXE = {
     name: 'Hacha endeble',
-    image: ''
+    image: 'axe.png'
 }
 
 const AXE = {
     name: 'Hacha',
-    image: ''
+    image: 'axe.png'
 }
 
 const WEAK_WATER_CANING = {
     name: 'Regadera endeble',
-    image: ''
+    image: 'watering-can.png'
+}
+
+const WATER_CANING = {
+    name: 'Regadera ',
+    image: 'watering-can.png'
 }
 
 const WEAK_FISHING_ROD = {
     name: 'Caña endeble',
-    image: ''
+    image: 'fishing.png'
+}
+
+const FISHING_ROD = {
+    name: 'Caña',
+    image: 'fishing.png'
 }
 
 const WEAK_NET = {
     name: 'Red endeble',
-    image: ''
+    image: 'net.png'
+}
+
+const NET = {
+    name: 'Red',
+    image: 'net.png'
+}
+
+const SLINGSHOT = {
+    name: 'Tirachinas',
+    image: 'slingshot.png'
 }
 
 export default {
@@ -34,5 +59,10 @@ export default {
     WEAK_SHOVEL,
     WEAK_WATER_CANING,
     WEAK_AXE,
-    AXE
+    AXE,
+    FISHING_ROD,
+    NET,
+    SHOVEL,
+    SLINGSHOT,
+    WATER_CANING
 }
