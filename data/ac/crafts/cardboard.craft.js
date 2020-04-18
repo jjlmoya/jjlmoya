@@ -1,3 +1,4 @@
+import MATERIALS from '@/data/ac/materials.data'
 export default [
     {
         name: 'FtrCardboardBedS',
@@ -24,12 +25,15 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrCardboardTableL',
+        name: 'Mesa de Cartón',
         image: 'FtrCardboardTableL.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.FURNITURE('Caja de cartón'),
+            quantity: 4
+        }]
     }
 ]

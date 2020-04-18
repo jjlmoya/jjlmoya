@@ -231,7 +231,7 @@ export default [
             }
         ]
     }, {
-        name: 'Flauta de Pan',
+        name: 'Sicu',
         image: 'ToolPanpipe.png',
         height: 1,
         width: 1,
@@ -239,8 +239,8 @@ export default [
         serie: 'nook',
         materials: [
             {
-                ...MATERIALS.CLAY,
-                quantity: 5
+                ...MATERIALS.BAMBU_SPRING,
+                quantity: 7
             }
         ]
     }, {

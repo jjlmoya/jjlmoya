@@ -1,97 +1,111 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [{
-    name: 'FtrZodiacAquarius',
+    name: 'Jarron Acuario',
     image: 'FtrZodiacAquarius.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacAries',
+    name: 'Mecedora Aries',
     image: 'FtrZodiacAries.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
-    materials: []
+    serie: 'zodiac',
+    materials: [{
+        ...MATERIALS.STAR_FRAGMENT,
+        quantity: 3
+    }, {
+        ...MATERIALS.CONSTELATION_FRAGMENT('Aries'),
+        quantity: 2
+    }, {
+        ...MATERIALS.GOLD_NUGGET,
+        quantity: 1
+    }, {
+        ...MATERIALS.STONE,
+        quantity: 5
+    }]
 }, {
-    name: 'FtrZodiacCancer',
+    name: 'Mesita Cáncer',
     image: 'FtrZodiacCancer.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacCapricornus',
+    name: 'Escultura Capricornio',
     image: 'FtrZodiacCapricornus.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacGemini',
+    name: 'Armario Géminis',
     image: 'FtrZodiacGemini.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacLeo',
+    name: 'Cuadro Leo',
     image: 'FtrZodiacLeo.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacLibra',
+    name: 'Balanza Libra',
     image: 'FtrZodiacLibra.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacPisces',
+    name: 'Pedestal Piscis',
     image: 'FtrZodiacPisces.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacSagittarius',
+    name: 'Arco de Sagitario',
     image: 'FtrZodiacSagittarius.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacScorpio',
+    name: 'Escultura Escorpio',
     image: 'FtrZodiacScorpio.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacTaurus',
+    name: 'Fuente Tauro',
     image: 'FtrZodiacTaurus.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }, {
-    name: 'FtrZodiacVirgo',
+    name: 'Arpa Virgo',
     image: 'FtrZodiacVirgo.png',
     height: 1,
     width: 1,
     category: [],
-    serie: 'nook',
+    serie: 'zodiac',
     materials: []
 }]

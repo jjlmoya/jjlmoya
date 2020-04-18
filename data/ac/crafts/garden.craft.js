@@ -1,71 +1,65 @@
+// import MATERIALS from '@/data/ac/materials.data'
+// import CATEGORY from '@/data/ac/category.data'
 export default [
     {
-        name: 'FtrShellArch',
-        image: 'FtrShellArch.png',
+        name: 'FtrGardenChairNatural',
+        image: 'FtrGardenChairNatural.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellBedW',
-        image: 'FtrShellBedW.png',
+        name: 'FtrGardenrock',
+        image: 'FtrGardenrock.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellFountain',
-        image: 'FtrShellFountain.png',
+        name: 'FtrGardenrockLow',
+        image: 'FtrGardenrockLow.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellLamp',
-        image: 'FtrShellLamp.png',
+        name: 'FtrGardenrockMoss',
+        image: 'FtrGardenrockMoss.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellMusic',
-        image: 'FtrShellMusic.png',
+        name: 'FtrGardenrockTall',
+        image: 'FtrGardenrockTall.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellScreen',
-        image: 'FtrShellScreen.png',
+        name: 'FtrGardenTableNatural',
+        image: 'FtrGardenTableNatural.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellStoolS',
-        image: 'FtrShellStoolS.png',
+        name: 'FtrGardenTableSNatural',
+        image: 'FtrGardenTableSNatural.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellTableL',
-        image: 'FtrShellTableL.png',
-        height: 1,
-        width: 1,
-        category: [],
-        serie: 'nook',
-        materials: []
-    }, {
-        name: 'RugOtherShellM00',
-        image: 'RugOtherShellM00.png',
+        name: 'FtrGardenwagon',
+        image: 'FtrGardenwagon.png',
         height: 1,
         width: 1,
         category: [],

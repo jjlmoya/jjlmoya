@@ -7,6 +7,13 @@ import CAP from '@/data/ac/crafts/cap.craft'
 import CARDBOARD from '@/data/ac/crafts/cardboard.craft'
 import DOOR from '@/data/ac/crafts/door.craft'
 import FENCES from '@/data/ac/crafts/fences.craft'
+import FLOWER from '@/data/ac/crafts/flower.craft'
+import FRUIT from '@/data/ac/crafts/fruit.craft'
+import GARDEN from '@/data/ac/crafts/garden.craft'
+import GOLD from '@/data/ac/crafts/gold.craft'
+import ILLUMI from '@/data/ac/crafts/illumi.craft'
+import MUSHROOM from '@/data/ac/crafts/mushroom.craft'
+import NUT from '@/data/ac/crafts/nut.craft'
 import ICE from '@/data/ac/crafts/ice.craft'
 import IRON from '@/data/ac/crafts/iron.craft'
 import KITS from '@/data/ac/crafts/kits.craft'
@@ -42,8 +49,15 @@ const CRAFTS = [
     ...UMBRELLA,
     ...WOODEN,
     ...ZODIAC,
-    ...OTHERS
+    ...OTHERS,
+    ...FLOWER,
+    ...FRUIT,
+    ...GARDEN,
+    ...GOLD,
+    ...ILLUMI,
+    ...MUSHROOM,
+    ...NUT
 ]
 console.log(CRAFTS)
 
-export default [...BLOSSOM]
+export default [...DOOR]

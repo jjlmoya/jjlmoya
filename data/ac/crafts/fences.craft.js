@@ -1,107 +1,172 @@
+import MATERIALS from '@/data/ac/materials.data'
+// import CATEGORY from '@/data/ac/category.data'
 export default [{
-    name: 'ItemFenceBamboo',
+    name: 'Valla de Bambú',
     image: 'ItemFenceBamboo.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [
+        {
+            ...MATERIALS.BAMBU,
+            quantity: 6
+        }
+    ]
 }, {
-    name: 'ItemFenceBarbedWire',
+    name: 'Valla de Alamber',
     image: 'ItemFenceBarbedWire.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.SOLID_WOOD,
+        quantity: 4
+    }, {
+        ...MATERIALS.IRON_NUGGET,
+        quantity: 2
+    }]
 }, {
-    name: 'ItemFenceChinese',
+    name: 'Valla Dinastía',
     image: 'ItemFenceChinese.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 6
+    }, {
+        ...MATERIALS.FLEXIBLE_WOOD,
+        quantity: 4
+    }]
 }, {
-    name: 'ItemFenceDriedStraw',
+    name: 'Valla de paja',
     image: 'ItemFenceDriedStraw.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.HERB,
+        quantity: 10
+    }, {
+        ...MATERIALS.WOOD,
+        quantity: 3
+    }]
 }, {
-    name: 'ItemFenceHorizontalWood',
+    name: 'Valla de Corral',
     image: 'ItemFenceHorizontalWood.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 6
+    }]
 }, {
-    name: 'ItemFenceIronAndStone',
+    name: 'Valla de hierro y piedra',
     image: 'ItemFenceIronAndStone.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [
+        {
+            ...MATERIALS.STONE,
+            quantity: 6
+        },
+        {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 3
+        }
+    ]
 }, {
-    name: 'ItemFenceJapanese',
+    name: 'Cerca Oriental',
     image: 'ItemFenceJapanese.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.IRON_NUGGET,
+        quantity: 3
+    },
+    {
+        ...MATERIALS.CLAY,
+        quantity: 3
+    }, {
+        ...MATERIALS.STONE,
+        quantity: 3
+    }]
 }, {
-    name: 'ItemFenceLatiiceNatural',
+    name: 'Valla celosía',
     image: 'ItemFenceLatiiceNatural.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.FLEXIBLE_WOOD,
+        quantity: 8
+    }]
 }, {
-    name: 'ItemFenceLog',
+    name: 'Valla leños',
     image: 'ItemFenceLog.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.SOLID_WOOD,
+        quantity: 6
+    }]
 }, {
-    name: 'ItemFenceNatural',
+    name: 'Valla de madera',
     image: 'ItemFenceNatural.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.FLEXIBLE_WOOD,
+        quantity: 6
+    }]
 }, {
-    name: 'ItemFencePegRope',
+    name: 'Valla Cordón',
     image: 'ItemFencePegRope.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.IRON_NUGGET,
+        quantity: 4
+    }]
 }, {
-    name: 'ItemFenceSharply',
+    name: 'Valla Puntiaguda',
     image: 'ItemFenceSharply.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.SOLID_WOOD,
+        quantity: 8
+    }]
 }, {
-    name: 'ItemFenceSteel',
+    name: 'Verja de hierro',
     image: 'ItemFenceSteel.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.IRON_NUGGET,
+        quantity: 6
+    }]
 }, {
     name: 'ItemFenceStone',
     image: 'ItemFenceStone.png',
@@ -109,21 +174,30 @@ export default [{
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.STONE,
+        quantity: 4
+    }]
 }, {
-    name: 'ItemFenceVerticalWood',
+    name: 'Valla de Tablones',
     image: 'ItemFenceVerticalWood.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 8
+    }]
 }, {
-    name: 'ItemFenceWallRenga',
+    name: 'Cerca de Ladrillo',
     image: 'ItemFenceWallRenga.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.CLAY,
+        quantity: 6
+    }]
 }]

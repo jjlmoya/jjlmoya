@@ -1,6 +1,8 @@
+import MATERIALS from '@/data/ac/materials.data'
+// import CATEGORY from '@/data/ac/category.data'
 export default [
     {
-        name: 'FtrDoorOrnamentCrest',
+        name: 'Placa Crespón',
         image: 'FtrDoorOrnamentCrest.png',
         height: 1,
         width: 1,
@@ -8,7 +10,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentFossil',
+        name: 'Place Fósil',
         image: 'FtrDoorOrnamentFossil.png',
         height: 1,
         width: 1,
@@ -16,7 +18,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentIron',
+        name: 'Placa de Hierro',
         image: 'FtrDoorOrnamentIron.png',
         height: 1,
         width: 1,
@@ -24,15 +26,18 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentLog',
+        name: 'Placa Leña',
         image: 'FtrDoorOrnamentLog.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.WOOD,
+            quantity: 6
+        }]
     }, {
-        name: 'FtrDoorOrnamentPaw',
+        name: 'Placa Huella',
         image: 'FtrDoorOrnamentPaw.png',
         height: 1,
         width: 1,
@@ -40,7 +45,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathAnemone',
+        name: 'Corona Anémona A',
         image: 'FtrDoorOrnamentWreathAnemone.png',
         height: 1,
         width: 1,
@@ -48,7 +53,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathAnemoneMix',
+        name: 'Corona Anémona Mezcla',
         image: 'FtrDoorOrnamentWreathAnemoneMix.png',
         height: 1,
         width: 1,
@@ -56,7 +61,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathAnemoneRare',
+        name: 'Corona Anémona Rara',
         image: 'FtrDoorOrnamentWreathAnemoneRare.png',
         height: 1,
         width: 1,
@@ -64,7 +69,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathBranch',
+        name: 'Corona de Ramas',
         image: 'FtrDoorOrnamentWreathBranch.png',
         height: 1,
         width: 1,
@@ -72,7 +77,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathCosmos',
+        name: 'Corona Cosmos',
         image: 'FtrDoorOrnamentWreathCosmos.png',
         height: 1,
         width: 1,
@@ -80,7 +85,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathCosmosMix',
+        name: 'Corona Cosmos Mix',
         image: 'FtrDoorOrnamentWreathCosmosMix.png',
         height: 1,
         width: 1,
@@ -88,7 +93,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathCosmosRare',
+        name: 'Corona Cosmos Raros',
         image: 'FtrDoorOrnamentWreathCosmosRare.png',
         height: 1,
         width: 1,
@@ -96,7 +101,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathFruit',
+        name: 'Corona de Frutas',
         image: 'FtrDoorOrnamentWreathFruit.png',
         height: 1,
         width: 1,
@@ -104,7 +109,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathHyacinth',
+        name: 'Corona de Jacintos',
         image: 'FtrDoorOrnamentWreathHyacinth.png',
         height: 1,
         width: 1,
@@ -112,7 +117,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathHyacinthMix',
+        name: 'Corona Jacintos Mezcla',
         image: 'FtrDoorOrnamentWreathHyacinthMix.png',
         height: 1,
         width: 1,
@@ -120,7 +125,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathHyacinthRare',
+        name: 'Corona Jacintos Raros',
         image: 'FtrDoorOrnamentWreathHyacinthRare.png',
         height: 1,
         width: 1,
@@ -128,7 +133,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathIce',
+        name: 'Corona de Hielo',
         image: 'FtrDoorOrnamentWreathIce.png',
         height: 1,
         width: 1,
@@ -136,7 +141,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathMum',
+        name: 'Corona de Crisantemos',
         image: 'FtrDoorOrnamentWreathMum.png',
         height: 1,
         width: 1,
@@ -144,7 +149,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathMumMix',
+        name: 'Corona Crisantemos Mezcla',
         image: 'FtrDoorOrnamentWreathMumMix.png',
         height: 1,
         width: 1,
@@ -152,7 +157,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathMumRare',
+        name: 'Corona Crisantemos Raros',
         image: 'FtrDoorOrnamentWreathMumRare.png',
         height: 1,
         width: 1,
@@ -160,7 +165,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathMushroom',
+        name: 'Corona Setas',
         image: 'FtrDoorOrnamentWreathMushroom.png',
         height: 1,
         width: 1,
@@ -168,7 +173,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathOrnament',
+        name: 'Corona Navideña',
         image: 'FtrDoorOrnamentWreathOrnament.png',
         height: 1,
         width: 1,
@@ -176,7 +181,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathPansy',
+        name: 'Corona Viola',
         image: 'FtrDoorOrnamentWreathPansy.png',
         height: 1,
         width: 1,
@@ -184,7 +189,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathPansyMix',
+        name: 'Corona Viola Mix',
         image: 'FtrDoorOrnamentWreathPansyMix.png',
         height: 1,
         width: 1,
@@ -192,7 +197,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathPansyRare',
+        name: 'Corona Viola Rara',
         image: 'FtrDoorOrnamentWreathPansyRare.png',
         height: 1,
         width: 1,
@@ -200,7 +205,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathRose',
+        name: 'Corona Rosa',
         image: 'FtrDoorOrnamentWreathRose.png',
         height: 1,
         width: 1,
@@ -208,7 +213,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathRoseGold',
+        name: 'Corona Rosa Dorada',
         image: 'FtrDoorOrnamentWreathRoseGold.png',
         height: 1,
         width: 1,
@@ -216,7 +221,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathRoseMix',
+        name: 'Corona Rosa Mezcla',
         image: 'FtrDoorOrnamentWreathRoseMix.png',
         height: 1,
         width: 1,
@@ -224,7 +229,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathRoseRare',
+        name: 'Corona Rosa Rara',
         image: 'FtrDoorOrnamentWreathRoseRare.png',
         height: 1,
         width: 1,
@@ -232,7 +237,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathRoseUrtraRare',
+        name: 'Corona Rosa Ultra Rara',
         image: 'FtrDoorOrnamentWreathRoseUrtraRare.png',
         height: 1,
         width: 1,
@@ -240,7 +245,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathShell',
+        name: 'Corona Conchas',
         image: 'FtrDoorOrnamentWreathShell.png',
         height: 1,
         width: 1,
@@ -248,7 +253,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathTulip',
+        name: 'Corona Tulipán',
         image: 'FtrDoorOrnamentWreathTulip.png',
         height: 1,
         width: 1,
@@ -256,7 +261,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathTulipMix',
+        name: 'Corona Tulipán Mezcla',
         image: 'FtrDoorOrnamentWreathTulipMix.png',
         height: 1,
         width: 1,
@@ -264,7 +269,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathTulipRare',
+        name: 'Corona Tulipán Rara',
         image: 'FtrDoorOrnamentWreathTulipRare.png',
         height: 1,
         width: 1,
@@ -272,7 +277,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathYuri',
+        name: 'Corona Lirio',
         image: 'FtrDoorOrnamentWreathYuri.png',
         height: 1,
         width: 1,
@@ -280,7 +285,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathYuriMix',
+        name: 'Corona Lirio Mezcla',
         image: 'FtrDoorOrnamentWreathYuriMix.png',
         height: 1,
         width: 1,
@@ -288,7 +293,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrDoorOrnamentWreathYuriRare',
+        name: 'Corona Lirio Raro',
         image: 'FtrDoorOrnamentWreathYuriRare.png',
         height: 1,
         width: 1,

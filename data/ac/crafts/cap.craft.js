@@ -1,4 +1,4 @@
-// import MATERIALS from '@/data/ac/materials.data'
+import MATERIALS from '@/data/ac/materials.data'
 import CATEGORY from '@/data/ac/category.data'
 
 const CAP_COSTUME_SNOWBALL = {
@@ -47,67 +47,88 @@ const CAP_AJIRO_BEIGE = {
     materials: []
 }
 const CAP_APPLE = {
-    name: 'CAP_APPLE',
+    name: 'Gorro Manzana',
     image: 'CapHatApple0.png',
     height: 1,
     width: 1,
     category: [CATEGORY.CLOTH],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.APPLE,
+        quantity: 5
+    }]
 }
 const CAP_CHERRY = {
-    name: 'CAP_CHERRY',
+    name: 'Gorro Ceerza',
     image: 'CapHatCherry0.png',
     height: 1,
     width: 1,
     category: [CATEGORY.CLOTH],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.CHERRY,
+        quantity: 5
+    }]
 }
 const CAP_ORANGE = {
-    name: 'CAP_ORANGE',
+    name: 'Gorro Naranja',
     image: 'CapHatOrange.png',
     height: 1,
     width: 1,
     category: [CATEGORY.CLOTH],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.ORANGE,
+        quantity: 5
+    }]
 }
 const CAP_PEACH = {
-    name: 'CAP_PEACH',
+    name: 'Gorro Melocotón',
     image: 'CapHatPeach0.png',
     height: 1,
     width: 1,
     category: [CATEGORY.CLOTH],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.PEACH,
+        quantity: 5
+    }]
 }
 const CAP_PEAR = {
-    name: 'CAP_PEAR',
+    name: 'Gorro Pera',
     image: 'CapHatPear0.png',
     height: 1,
     width: 1,
     category: [CATEGORY.CLOTH],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.PEAR,
+        quantity: 5
+    }]
 }
 const CAP_SANDOGASA = {
-    name: 'CAP_SANDOGASA',
+    name: 'Gorro de Paja achatado',
     image: 'CapHatSandogasa0.png',
     height: 1,
     width: 1,
     category: [CATEGORY.CLOTH],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.HERB,
+        quantity: 10
+    }]
 }
 const CAP_MASK_LEAF = {
-    name: 'CAP_MASK_LEAF',
+    name: 'Máscara Hoja',
     image: 'CapMaskLeaf0.png',
     height: 1,
     width: 1,
     category: [CATEGORY.CLOTH],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.HERB,
+        quantity: 10
+    }]
 }
 
 const CAP_ANEMONE_1 = {

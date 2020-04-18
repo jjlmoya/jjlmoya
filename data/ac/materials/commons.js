@@ -78,6 +78,31 @@ const STAR_FRAGMENT_XL = {
     image: 'star-fragment-xl.png'
 }
 
+const CONSTELATION_FRAGMENT = (name) => {
+    return {
+        name: 'Fragmento de Constelación ' + name,
+        image: 'star-fragment-xl.png'
+    }
+}
+
+const FURNITURE = (name) => {
+    return {
+        name,
+        image: 'furniture.png'
+    }
+}
+
+const CLOTH = (name) => {
+    return {
+        name,
+        image: 'cloth.png'
+    }
+}
+
+const RUSTY_PIECE = {
+    name: 'Pieza oxidada',
+    image: 'rusty-piece.png'
+}
 export default {
     WOOD,
     FLEXIBLE_WOOD,
@@ -94,5 +119,9 @@ export default {
     TRASH_CAN,
     TRASH_WHEEL,
     STAR_FRAGMENT,
-    STAR_FRAGMENT_XL
+    STAR_FRAGMENT_XL,
+    CONSTELATION_FRAGMENT,
+    FURNITURE,
+    RUSTY_PIECE,
+    CLOTH
 }

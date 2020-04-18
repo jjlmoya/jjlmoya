@@ -5,7 +5,7 @@ const BAMBU_SPRING = {
 
 const BAMBU_ROOT = {
     name: 'Brote de bambú',
-    image: 'bomboo-root.png'
+    image: 'bamboo-root.png'
 }
 const BAMBU = {
     name: 'Bambú',
