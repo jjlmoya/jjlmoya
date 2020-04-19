@@ -1,3 +1,5 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [
     {
         name: 'RoomTexFloorAutumun00',
@@ -16,13 +18,16 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexFloorBasement00',
+        name: 'Suelo Sótano',
         image: 'RoomTexFloorBasement00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 10
+        }]
     }, {
         name: 'RoomTexFloorBill00',
         image: 'RoomTexFloorBill00.png',
@@ -32,13 +37,22 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexFloorGarbage00',
+        name: 'Suelo Vertedero',
         image: 'RoomTexFloorGarbage00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.TRASH_BOOT,
+            quantity: 2
+        }, {
+            ...MATERIALS.TRASH_CAN,
+            quantity: 2
+        }, {
+            ...MATERIALS.TRASH_WHEEL,
+            quantity: 2
+        }]
     }, {
         name: 'RoomTexFloorGelande00',
         image: 'RoomTexFloorGelande00.png',
@@ -64,21 +78,30 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexFloorJungle00',
+        name: 'Suelo Jungle',
         image: 'RoomTexFloorJungle00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.HERB,
+            quantity: 10
+        }, {
+            ...MATERIALS.CLAY,
+            quantity: 10
+        }]
     }, {
-        name: 'RoomTexFloorLawn00',
+        name: 'Suelo Césped',
         image: 'RoomTexFloorLawn00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.HERB,
+            quantity: 30
+        }]
     }, {
         name: 'RoomTexFloorLunar00',
         image: 'RoomTexFloorLunar00.png',
@@ -112,21 +135,27 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexFloorSteel00',
+        name: 'Suelo Acero',
         image: 'RoomTexFloorSteel00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 7
+        }]
     }, {
-        name: 'RoomTexWallApple00',
+        name: 'Pared Manzanas',
         image: 'RoomTexWallApple00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.APPLE,
+            quantity: 20
+        }]
     }, {
         name: 'RoomTexWallBamboo00',
         image: 'RoomTexWallBamboo00.png',
@@ -152,13 +181,16 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallCherry00',
+        name: 'Pared Cerezas',
         image: 'RoomTexWallCherry00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.CHERRY,
+            quantity: 20
+        }]
     }, {
         name: 'RoomTexWallChikurin00',
         image: 'RoomTexWallChikurin00.png',
@@ -166,7 +198,13 @@ export default [
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.BAMBU_SPRING,
+            quantity: 7
+        }, {
+            ...MATERIALS.BAMBU_ROOT,
+            quantity: 3
+        }]
     }, {
         name: 'RoomTexWallFireWood00',
         image: 'RoomTexWallFireWood00.png',
@@ -184,13 +222,22 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallGarbage00',
+        name: 'Pared Vertedero',
         image: 'RoomTexWallGarbage00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.TRASH_BOOT,
+            quantity: 2
+        }, {
+            ...MATERIALS.TRASH_CAN,
+            quantity: 2
+        }, {
+            ...MATERIALS.TRASH_WHEEL,
+            quantity: 2
+        }]
     }, {
         name: 'RoomTexWallGold00',
         image: 'RoomTexWallGold00.png',
@@ -200,21 +247,28 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallHerringbone00',
+        name: 'Pared Espiga Clara',
         image: 'RoomTexWallHerringbone00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.FLEXIBLE_WOOD,
+                quantity: 15
+            }]
     }, {
-        name: 'RoomTexWallHerringbone01',
+        name: 'Pared Espiga Oscura',
         image: 'RoomTexWallHerringbone01.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.FLEXIBLE_WOOD,
+            quantity: 15
+        }]
     }, {
         name: 'RoomTexWallHoney00',
         image: 'RoomTexWallHoney00.png',
@@ -232,15 +286,21 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallJukai00',
+        name: 'Pared Selva',
         image: 'RoomTexWallJukai00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.HERB,
+            quantity: 15
+        }, {
+            ...MATERIALS.FLEXIBLE_WOOD,
+            quantity: 9
+        }]
     }, {
-        name: 'RoomTexWallJungle00',
+        name: 'Pared Selva',
         image: 'RoomTexWallJungle00.png',
         height: 1,
         width: 1,
@@ -248,13 +308,16 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallLibrary00',
+        name: 'Pared Biblioteca',
         image: 'RoomTexWallLibrary00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.FURNITURE('Libros'),
+            quantity: 10
+        }]
     }, {
         name: 'RoomTexWallLibrary01',
         image: 'RoomTexWallLibrary01.png',
@@ -272,29 +335,38 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallMixPlankWood00',
+        name: 'Pared de Madera Flexible',
         image: 'RoomTexWallMixPlankWood00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.FLEXIBLE_WOOD,
+            quantity: 15
+        }]
     }, {
-        name: 'RoomTexWallMixPlankWood01',
+        name: 'Pared de Madera Rígida',
         image: 'RoomTexWallMixPlankWood01.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 15
+        }]
     }, {
-        name: 'RoomTexWallMixwood00',
+        name: 'Pared de Madera',
         image: 'RoomTexWallMixwood00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.WOOD,
+            quantity: 15
+        }]
     }, {
         name: 'RoomTexWallMush00',
         image: 'RoomTexWallMush00.png',
@@ -312,29 +384,38 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallOrange00',
+        name: 'Pared Naranjas',
         image: 'RoomTexWallOrange00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.ORANGE,
+            quantity: 20
+        }]
     }, {
-        name: 'RoomTexWallPeach00',
+        name: 'Pared Melocotones',
         image: 'RoomTexWallPeach00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEACH,
+            quantity: 20
+        }]
     }, {
-        name: 'RoomTexWallPear00',
+        name: 'Pared Peras',
         image: 'RoomTexWallPear00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 20
+        }]
     }, {
         name: 'RoomTexWallSnowCrystal00',
         image: 'RoomTexWallSnowCrystal00.png',
@@ -344,7 +425,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallSteel00',
+        name: 'Pared Acero',
         image: 'RoomTexWallSteel00.png',
         height: 1,
         width: 1,
@@ -352,13 +433,16 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RoomTexWallStone00',
+        name: 'Pared',
         image: 'RoomTexWallStone00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 10
+        }]
     }, {
         name: 'RoomTexWallWildWood00',
         image: 'RoomTexWallWildWood00.png',

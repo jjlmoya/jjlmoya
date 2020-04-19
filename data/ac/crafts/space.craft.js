@@ -1,3 +1,4 @@
+import MATERIALS from '@/data/ac/materials.data'
 export default [
     {
         name: 'FtrStarClock',
@@ -8,13 +9,16 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrStarDecorationWall',
+        name: 'Guirnalda de Estrellas',
         image: 'FtrStarDecorationWall.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STAR_FRAGMENT,
+            quantity: 10
+        }]
     }, {
         name: 'FtrStarLamp',
         image: 'FtrStarLamp.png',

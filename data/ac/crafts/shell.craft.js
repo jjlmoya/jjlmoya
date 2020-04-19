@@ -1,6 +1,8 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [
     {
-        name: 'FtrShellArch',
+        name: 'Arco Concha Marina',
         image: 'FtrShellArch.png',
         height: 1,
         width: 1,
@@ -8,7 +10,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellBedW',
+        name: 'Cama Concha Marina',
         image: 'FtrShellBedW.png',
         height: 1,
         width: 1,
@@ -16,15 +18,21 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellFountain',
+        name: 'Fuente Conchas Marinas',
         image: 'FtrShellFountain.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.GIANT_CLAM,
+            quantity: 3
+        }, {
+            ...MATERIALS.STONE,
+            quantity: 5
+        }]
     }, {
-        name: 'FtrShellLamp',
+        name: 'Lámpara Concha Marina',
         image: 'FtrShellLamp.png',
         height: 1,
         width: 1,
@@ -32,7 +40,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellMusic',
+        name: 'Cadena Concha Marina',
         image: 'FtrShellMusic.png',
         height: 1,
         width: 1,
@@ -40,7 +48,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellScreen',
+        name: 'Pantalla Concha Marina',
         image: 'FtrShellScreen.png',
         height: 1,
         width: 1,
@@ -48,7 +56,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellStoolS',
+        name: 'Herramientas Concha Marina',
         image: 'FtrShellStoolS.png',
         height: 1,
         width: 1,
@@ -56,20 +64,29 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrShellTableL',
+        name: 'Mesa Conchas Marinas',
         image: 'FtrShellTableL.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.DOLLAR,
+            quantity: 7
+        }, {
+            ...MATERIALS.CLAY,
+            quantity: 3
+        }]
     }, {
-        name: 'RugOtherShellM00',
+        name: 'Alfombra Concha Marina',
         image: 'RugOtherShellM00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.GIANT_CLAM,
+            quantity: 3
+        }]
     }
 ]

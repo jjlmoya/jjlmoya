@@ -14,7 +14,7 @@ export default [
             quantity: 1
         }]
     }, {
-        name: 'FtrGoldbench',
+        name: 'Banco de Oro',
         image: 'FtrGoldbench.png',
         height: 1,
         width: 1,
@@ -33,7 +33,7 @@ export default [
             quantity: 2
         }]
     }, {
-        name: 'FtrGoldCoffin',
+        name: 'Tumba dorada',
         image: 'FtrGoldCoffin.png',
         height: 1,
         width: 1,
@@ -41,7 +41,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrGoldDishes',
+        name: 'Cubertería de Oro',
         image: 'FtrGoldDishes.png',
         height: 1,
         width: 1,
@@ -49,7 +49,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrGoldWC',
+        name: 'Lavabo Dorado',
         image: 'FtrGoldWC.png',
         height: 1,
         width: 1,
@@ -57,15 +57,18 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrInsectKabutomushiGold',
+        name: 'Escarabajo de Oro',
         image: 'FtrInsectKabutomushiGold.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.GOLD_NUGGET,
+            quantity: 3
+        }]
     }, {
-        name: 'FtrManekinekoGold',
+        name: 'Manekineko',
         image: 'FtrManekinekoGold.png',
         height: 1,
         width: 1,
@@ -73,7 +76,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'ShoesKneeKnightGold',
+        name: 'Botas de Oro',
         image: 'ShoesKneeKnightGold.png',
         height: 1,
         width: 1,
@@ -81,7 +84,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'TopsTexOnepieceOverallLPlatearmorGold',
+        name: 'Armadura de Oro',
         image: 'TopsTexOnepieceOverallLPlatearmorGold.png',
         height: 1,
         width: 1,
@@ -100,12 +103,18 @@ export default [
             quantity: 3
         }]
     }, {
-        name: 'FtrGearWallGold',
+        name: 'Engranaje de Oro',
         image: 'FtrGearWallGold.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.GOLD_NUGGET,
+            quantity: 1
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 3
+        }]
     }
 ]

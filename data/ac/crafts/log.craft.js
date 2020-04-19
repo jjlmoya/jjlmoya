@@ -1,3 +1,5 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [
     {
         name: 'FtrLogBedS',
@@ -8,21 +10,30 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrLogBedW',
+        name: 'Cama Leño',
         image: 'FtrLogBedW.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 30
+        }]
     }, {
-        name: 'FtrLogClockWall',
+        name: 'Reloj Pared Leño',
         image: 'FtrLogClockWall.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 2
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 1
+        }]
     }, {
         name: 'FtrLogShelf',
         image: 'FtrLogShelf.png',
@@ -32,13 +43,16 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrLogSofaL',
+        name: 'Sofá Leño',
         image: 'FtrLogSofaL.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.FURNITURE('Sillón Leño'),
+            quantity: 2
+        }]
     }, {
         name: 'FtrLogSofaS',
         image: 'FtrLogSofaS.png',
@@ -48,36 +62,48 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrLogStoolL',
+        name: 'Banco Leño',
         image: 'FtrLogStoolL.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'FtrLogStoolS',
+        name: 'Taburete Leño',
         image: 'FtrLogStoolS.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 4
+        }]
     }, {
-        name: 'FtrLogTableL',
+        name: 'Mesa Comedor Leño',
         image: 'FtrLogTableL.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 15
+        }]
     }, {
-        name: 'FtrLogTableLRound',
+        name: 'Mesa Redonda Leño',
         image: 'FtrLogTableLRound.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 15
+        }]
     }
 ]

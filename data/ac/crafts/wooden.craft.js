@@ -1,13 +1,18 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [{
-    name: 'FtrWoodenBedS',
+    name: 'Cama Individual de Madera',
     image: 'FtrWoodenBedS.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 18
+    }]
 }, {
-    name: 'FtrWoodenBedW',
+    name: 'Cama Doble de Madera',
     image: 'FtrWoodenBedW.png',
     height: 1,
     width: 1,
@@ -15,31 +20,40 @@ export default [{
     serie: 'nook',
     materials: []
 }, {
-    name: 'FtrWoodenChairS',
+    name: 'Silla de Madera',
     image: 'FtrWoodenChairS.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 6
+    }]
 }, {
-    name: 'FtrWoodenChest',
+    name: 'Cómoda de Madera',
     image: 'FtrWoodenChest.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 16
+    }]
 }, {
-    name: 'FtrWoodenCloset',
+    name: 'Armario de Madera',
     image: 'FtrWoodenCloset.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 12
+    }]
 }, {
-    name: 'FtrWoodenMirror',
+    name: 'Espejo de Madera',
     image: 'FtrWoodenMirror.png',
     height: 1,
     width: 1,
@@ -47,13 +61,19 @@ export default [{
     serie: 'nook',
     materials: []
 }, {
-    name: 'FtrWoodenMirrorS',
+    name: 'Espejito de Mesa de MAdera',
     image: 'FtrWoodenMirrorS.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 3
+    }, {
+        ...MATERIALS.IRON_NUGGET,
+        quantity: 1
+    }]
 }, {
     name: 'FtrWoodenStoolS',
     image: 'FtrWoodenStoolS.png',
@@ -79,19 +99,25 @@ export default [{
     serie: 'nook',
     materials: []
 }, {
-    name: 'FtrWoodenTableMini',
+    name: 'Mesita de Madera',
     image: 'FtrWoodenTableMini.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 6
+    }]
 }, {
-    name: 'FtrWoodenTableS',
+    name: 'Mesita Auxiliar de Madera',
     image: 'FtrWoodenTableS.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 8
+    }]
 }]

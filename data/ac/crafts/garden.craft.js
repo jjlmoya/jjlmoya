@@ -1,4 +1,4 @@
-// import MATERIALS from '@/data/ac/materials.data'
+import MATERIALS from '@/data/ac/materials.data'
 // import CATEGORY from '@/data/ac/category.data'
 export default [
     {
@@ -8,23 +8,35 @@ export default [
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 6
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 2
+        }]
     }, {
-        name: 'FtrGardenrock',
+        name: 'Roca Gruesa',
         image: 'FtrGardenrock.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 15
+        }]
     }, {
-        name: 'FtrGardenrockLow',
+        name: 'Roca Plana',
         image: 'FtrGardenrockLow.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 20
+        }]
     }, {
         name: 'FtrGardenrockMoss',
         image: 'FtrGardenrockMoss.png',
@@ -42,13 +54,19 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrGardenTableNatural',
+        name: 'Mesa Madera Natual',
         image: 'FtrGardenTableNatural.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 9
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 3
+        }]
     }, {
         name: 'FtrGardenTableSNatural',
         image: 'FtrGardenTableSNatural.png',

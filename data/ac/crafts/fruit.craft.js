@@ -1,3 +1,5 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [
     {
         name: 'FtrFruitbasket',
@@ -8,103 +10,188 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrFruitsBedS',
+        name: 'Cama Pera',
         image: 'FtrFruitsBedS.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 10
+        }, {
+            ...MATERIALS.WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'FtrFruitsBox',
+        name: 'Caja sorpresa Melocotón',
         image: 'FtrFruitsBox.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 10
+        }, {
+            ...MATERIALS.FLEXIBLE_WOOD,
+            quantity: 4
+        }]
     }, {
-        name: 'FtrFruitsChairApple',
+        name: 'Silla Manzana',
         image: 'FtrFruitsChairApple.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.APPLE,
+            quantity: 10
+        }, {
+            ...MATERIALS.WOOD,
+            quantity: 4
+        }]
     }, {
-        name: 'FtrFruitsChairPeach',
+        name: 'Silla Melocotón',
         image: 'FtrFruitsChairPeach.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 10
+        }, {
+            ...MATERIALS.WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'FtrFruitsClockW',
+        name: 'Reloj Naranja',
         image: 'FtrFruitsClockW.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.ORANGE,
+            quantity: 10
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 2
+        }]
     }, {
-        name: 'FtrFruitsClosetLR',
+        name: 'Armario Pera',
         image: 'FtrFruitsClosetLR.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 10
+        }, {
+            ...MATERIALS.WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'FtrFruitsLampW',
+        name: 'Lámpara Cereza',
         image: 'FtrFruitsLampW.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.CHERRY,
+            quantity: 10
+        }, {
+            ...MATERIALS.WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'FtrFruitsMusic',
+        name: 'Cadena Cereza',
         image: 'FtrFruitsMusic.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.CHERRY_PETALS,
+            quantity: 10
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 2
+        }]
     }, {
-        name: 'FtrFruitsTableS',
+        name: 'Tabla Naranja',
         image: 'FtrFruitsTableS.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.ORANGE,
+            quantity: 10
+        }, {
+            ...MATERIALS.WOOD,
+            quantity: 5
+        }]
     }, {
-        name: 'FtrFruitsTV',
+        name: 'Tele Manzana',
         image: 'FtrFruitsTV.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.APPLE,
+            quantity: 10
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 2
+        }]
     }, {
-        name: 'FtrFruitswater',
+        name: 'Jarro de Agua afrutada',
         image: 'FtrFruitswater.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [
+            {
+                ...MATERIALS.PEAR,
+                quantity: 2
+            },
+            {
+                ...MATERIALS.APPLE,
+                quantity: 2
+            }, {
+                ...MATERIALS.ORANGE,
+                quantity: 2
+            }, {
+                ...MATERIALS.PEACH,
+                quantity: 2
+            },
+            {
+                ...MATERIALS.COCONUT,
+                quantity: 2
+            }, {
+                ...MATERIALS.CHERRY,
+                quantity: 2
+            }
+        ]
     }, {
-        name: 'RugOtherPearM00',
+        name: 'Alfombra Pera',
         image: 'RugOtherPearM00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 7
+        }]
     }, {
-        name: 'TopsTexOnepieceAlineNPear0',
+        name: 'Top Pera',
         image: 'TopsTexOnepieceAlineNPear0.png',
         height: 1,
         width: 1,
@@ -112,15 +199,18 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RugOtherAppleM00',
+        name: 'Alfombra Manzana',
         image: 'RugOtherAppleM00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.APPLE,
+            quantity: 7
+        }]
     }, {
-        name: 'TopsTexOnepieceAlineNApple0',
+        name: 'Top Manzana',
         image: 'TopsTexOnepieceAlineNApple0.png',
         height: 1,
         width: 1,
@@ -128,23 +218,29 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'TopsTexOnepieceAlineNPeach0',
+        name: 'Alfombra Melocotón',
         image: 'TopsTexOnepieceAlineNPeach0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 7
+        }]
     }, {
-        name: 'RugOtherPeachM00',
+        name: 'Top Melocotón',
         image: 'RugOtherPeachM00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEACH,
+            quantity: 7
+        }]
     }, {
-        name: 'TopsTexOnepieceAlineNCherry0',
+        name: 'Top Cereza',
         image: 'TopsTexOnepieceAlineNCherry0.png',
         height: 1,
         width: 1,
@@ -152,7 +248,7 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'TopsTexOnepieceAlineNOrange',
+        name: 'Top Naranja',
         image: 'TopsTexOnepieceAlineNOrange.png',
         height: 1,
         width: 1,
@@ -160,20 +256,26 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'RugOtherCherryM00',
+        name: 'Alfombra Cereza',
         image: 'RugOtherCherryM00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.CHERRY_PETALS,
+            quantity: 7
+        }]
     }, {
-        name: 'RugOtherOrangeM00',
+        name: 'Alfombra Naranja',
         image: 'RugOtherOrangeM00.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.ORANGE,
+            quantity: 7
+        }]
     }
 ]

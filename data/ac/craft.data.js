@@ -60,4 +60,12 @@ const CRAFTS = [
 ]
 console.log(CRAFTS)
 
-export default [...DOOR]
+export default GOLD
+// Papelera de Madera (el vaso xD): 4 tabla normal
+// Redonda Lisa: Mesa de centro de madera: 10 tabla normal
+// Reloj Pared Construcciones: 1 Juguete de construcciones (es un mueble), 2 tablas flexibles y 1 pepita de hierro
+// tumba japonesa= 30 piedras
+// Escarabajo pelotero de oro: 3 pepitas
+// Cartel sencillo madera= 6 tabla normal
+// Engranaje de oro= 1 pepita de oro y 3 pepitas de hierro
+// Terrario botánico = 12 hierbajos y 2 pepitas de hierro

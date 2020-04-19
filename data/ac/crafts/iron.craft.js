@@ -1,3 +1,5 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [
     {
         name: 'FtrIronClosetLR',
@@ -8,13 +10,16 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrIronframe',
+        name: 'Torre de Vigas',
         image: 'FtrIronframe.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 20
+        }]
     }, {
         name: 'FtrIrongardenBench',
         image: 'FtrIrongardenBench.png',
@@ -48,13 +53,19 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrIronLampW',
+        name: 'Aplique de Hierro',
         image: 'FtrIronLampW.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 4
+        }, {
+            ...MATERIALS.CLAY,
+            quantity: 2
+        }]
     }, {
         name: 'FtrIronShelf',
         image: 'FtrIronShelf.png',
@@ -120,13 +131,25 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrIronwoodKitchen',
+        name: 'Fregadero Universidad',
         image: 'FtrIronwoodKitchen.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.WOOD,
+            quantity: 4
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 3
+        }, {
+            ...MATERIALS.FURNITURE('Cómoda Universal'),
+            quantity: 1
+        }, {
+            ...MATERIALS.FURNITURE('Tabla de Cortar Sencilla'),
+            quantity: 1
+        }]
     }, {
         name: 'FtrIronwoodServingcart',
         image: 'FtrIronwoodServingcart.png',

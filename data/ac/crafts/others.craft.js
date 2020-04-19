@@ -870,21 +870,27 @@ export default [{
         quantity: 1
     }]
 }, {
-    name: 'FtrPlayingtire',
+    name: 'Rueda de Juguete',
     image: 'FtrPlayingtire.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.TRASH_WHEEL,
+        quantity: 1
+    }]
 }, {
-    name: 'FtrPotteryjug',
+    name: 'Jarra de Cerámica',
     image: 'FtrPotteryjug.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.CLAY,
+        quantity: 4
+    }]
 }, {
     name: 'Juego de Lanzar Aros',
     image: 'FtrQuoits.png',
@@ -919,13 +925,19 @@ export default [{
     serie: 'nook',
     materials: []
 }, {
-    name: 'FtrRockingchair',
+    name: 'Mecedora',
     image: 'FtrRockingchair.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.WOOD,
+        quantity: 3
+    }, {
+        ...MATERIALS.FLEXIBLE_WOOD,
+        quantity: 5
+    }]
 }, {
     name: 'FtrRockinghorse',
     image: 'FtrRockinghorse.png',
@@ -1190,21 +1202,36 @@ export default [{
     serie: 'nook',
     materials: []
 }, {
-    name: 'FtrTrophycase',
+    name: 'Vitrina de Trofeos',
     image: 'FtrTrophycase.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [
+        {
+            ...MATERIALS.SOLID_WOOD,
+            quantity: 24
+        },
+        {
+            ...MATERIALS.GOLD_NUGGET,
+            quantity: 3
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 6
+        }
+    ]
 }, {
-    name: 'FtrTyres',
+    name: 'Pila de Neumáticos',
     image: 'FtrTyres.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.TRASH_WHEEL,
+        quantity: 3
+    }]
 }, {
     name: 'FtrUFO',
     image: 'FtrUFO.png',
@@ -1377,13 +1404,19 @@ export default [{
         quantity: 5
     }]
 }, {
-    name: 'PitfallSeed',
+    name: 'Trampa',
     image: 'PitfallSeed.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.HERB,
+        quantity: 4
+    }, {
+        ...MATERIALS.BRANCH,
+        quantity: 6
+    }]
 }, {
     name: 'ShoesKneeKnightIron',
     image: 'ShoesKneeKnightIron.png',
@@ -1393,13 +1426,16 @@ export default [{
     serie: 'nook',
     materials: []
 }, {
-    name: 'ShoesKneeRecyclingboots0',
+    name: 'Bota Reciclada',
     image: 'ShoesKneeRecyclingboots0.png',
     height: 1,
     width: 1,
     category: [],
     serie: 'nook',
-    materials: []
+    materials: [{
+        ...MATERIALS.TRASH_BOOT,
+        quantity: 2
+    }]
 }, {
     name: 'TopsTexOnepieceOverallLPlatearmorIron',
     image: 'TopsTexOnepieceOverallLPlatearmorIron.png',

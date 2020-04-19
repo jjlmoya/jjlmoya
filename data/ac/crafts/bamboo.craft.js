@@ -1,6 +1,18 @@
 import MATERIALS from '@/data/ac/materials.data'
-// import CATEGORY from '@/data/ac/category.data'
+import CATEGORY from '@/data/ac/category.data'
 export default [
+    {
+        name: 'Mochila de Cesta',
+        image: 'BagBackpackBasket0.png',
+        height: 1,
+        width: 1,
+        category: [CATEGORY.CLOTH],
+        serie: 'nook',
+        materials: [{
+            ...MATERIALS.BAMBU_SPRING,
+            quantity: 6
+        }]
+    },
     {
         name: 'Esfera de Bambú',
         image: 'FtrBambooBall.png',

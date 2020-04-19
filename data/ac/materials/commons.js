@@ -23,6 +23,21 @@ const STONE = {
     image: 'stone.png'
 }
 
+const DOLLAR = {
+    name: 'Dólar de Arena',
+    image: 'dollar.png'
+}
+
+const GIANT_CLAM = {
+    name: 'Almeja Gigante',
+    image: 'giant-clam.png'
+}
+
+const FOSSIL = {
+    name: 'Fósil',
+    image: 'fossil.png'
+}
+
 const IRON_NUGGET = {
     name: 'Pepita de Hierro',
     image: 'iron-nugget.png'
@@ -55,17 +70,17 @@ const WASP_NEST = {
 
 const TRASH_CAN = {
     name: 'Chatarra',
-    image: 'can.png'
+    image: 'trash-can.png'
 }
 
 const TRASH_WHEEL = {
     name: 'Neumático',
-    image: 'wheel.png'
+    image: 'trash-wheel.png'
 }
 
 const TRASH_BOOT = {
     name: 'Bota',
-    image: 'boot.png'
+    image: 'trash-boot.png'
 }
 
 const STAR_FRAGMENT = {
@@ -123,5 +138,8 @@ export default {
     CONSTELATION_FRAGMENT,
     FURNITURE,
     RUSTY_PIECE,
-    CLOTH
+    CLOTH,
+    DOLLAR,
+    FOSSIL,
+    GIANT_CLAM
 }

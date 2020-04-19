@@ -1,14 +1,19 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [
     {
-        name: 'FtrStoneChair',
+        name: 'Taburete de Piedra',
         image: 'FtrStoneChair.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 3
+        }]
     }, {
-        name: 'FtrStonelantern',
+        name: 'Linterna de Piedra',
         image: 'FtrStonelantern.png',
         height: 1,
         width: 1,
@@ -16,15 +21,24 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrStoneoven',
+        name: 'Horno de Piedra',
         image: 'FtrStoneoven.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.CLAY,
+            quantity: 8
+        }, {
+            ...MATERIALS.IRON_NUGGET,
+            quantity: 2
+        }, {
+            ...MATERIALS.WOOD,
+            quantity: 6
+        }]
     }, {
-        name: 'FtrStoneTable',
+        name: 'Mesa de Piedra',
         image: 'FtrStoneTable.png',
         height: 1,
         width: 1,
@@ -32,28 +46,43 @@ export default [
         serie: 'nook',
         materials: []
     }, {
-        name: 'FtrStonewaterbowl',
+        name: 'Roca con Agua',
         image: 'FtrStonewaterbowl.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 10
+        }]
     }, {
-        name: 'FtrStonewaterbowlAutumun',
+        name: 'Roca con Agua y hojas',
         image: 'FtrStonewaterbowlAutumun.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 10
+        }, {
+            ...MATERIALS.AUTUMN_PETALS,
+            quantity: 3
+        }]
     }, {
-        name: 'FtrStonewaterbowlSakura',
+        name: 'Roca con Agua y Pétalos',
         image: 'FtrStonewaterbowlSakura.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.STONE,
+            quantity: 10
+        }, {
+            ...MATERIALS.CHERRY_PETALS,
+            quantity: 3
+        }]
     }
 ]

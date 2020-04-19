@@ -1,6 +1,8 @@
+import MATERIALS from '@/data/ac/materials.data'
+
 export default [
     {
-        name: 'FtrUmbrellastand',
+        name: 'Stand de Paraguas',
         image: 'FtrUmbrellastand.png',
         height: 1,
         width: 1,
@@ -9,68 +11,92 @@ export default [
         materials: []
     },
     {
-        name: 'UmbrellaApple0',
+        name: 'Paraguas Manzana',
         image: 'UmbrellaApple0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.APPLE,
+            quantity: 7
+        }]
     }, {
-        name: 'UmbrellaAutumn0',
+        name: 'Parasol Otoño',
         image: 'UmbrellaAutumn0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.AUTUMN_LEAVE,
+            quantity: 7
+        }]
     }, {
-        name: 'UmbrellaCherry0',
+        name: 'Paraguas Cereza',
         image: 'UmbrellaCherry0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.CHERRY_PETALS,
+            quantity: 7
+        }]
     }, {
-        name: 'UmbrellaLeaf0',
+        name: 'Parasol Hoja',
         image: 'UmbrellaLeaf0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.HERB,
+            quantity: 15
+        }]
     }, {
-        name: 'UmbrellaMushroom0',
+        name: 'Paraguas Seta',
         image: 'UmbrellaMushroom0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.MUSHROOM,
+            quantity: 7
+        }]
     }, {
-        name: 'UmbrellaOrange0',
+        name: 'Paraguas Naranja',
         image: 'UmbrellaOrange0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.ORANGE,
+            quantity: 7
+        }]
     }, {
-        name: 'UmbrellaPeach0',
+        name: 'Paraguas Melocotón',
         image: 'UmbrellaPeach0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEACH,
+            quantity: 7
+        }]
     }, {
-        name: 'UmbrellaPear0',
+        name: 'Paraguas Pera',
         image: 'UmbrellaPear0.png',
         height: 1,
         width: 1,
         category: [],
         serie: 'nook',
-        materials: []
+        materials: [{
+            ...MATERIALS.PEAR,
+            quantity: 7
+        }]
     }
 ]
