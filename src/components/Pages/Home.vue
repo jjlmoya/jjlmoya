@@ -1,12 +1,15 @@
 <template>
     <div>
-        Hola
+        <TimeLine />
     </div>
 </template>
 
 <script>
-
+    import TimeLine from '@/components/Timeline.vue'
     export default {
+        components: {
+            TimeLine
+        }
       
     }
 </script>

@@ -19,7 +19,6 @@
         setup() {
             const active = ref(false)
             const toggleActive = () => {
-                console.log('hola')
                 active.value = !active.value
             }
             return {
