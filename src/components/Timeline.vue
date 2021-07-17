@@ -40,12 +40,11 @@
     &__list {
       display: grid;
       grid-gap: calc(var(--gap-container) / 2);
-      grid-template-columns: 10px repeat(var(--total), calc(50% - var(--gap-container) * 2)) 10px;
+      grid-template-columns: 10px repeat(var(--total), 300px) 10px;
       grid-template-rows: minmax(0, 1fr);
       overflow-x: scroll;
       overflow-y: inherit;
       scroll-snap-type: x proximity;
-      padding-bottom: 100px;
       margin-bottom: calc(-0.25 * var(--gap-container));
 
       &::before {
