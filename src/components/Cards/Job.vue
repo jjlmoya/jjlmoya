@@ -1,26 +1,27 @@
 <template>
     <div class="card-job">
-        <div class="card-job__inner">
-            <div class="card-job__title u-text-bold">
-                {{ job.title }}
-            </div>
-            <div class="card-job__dates">
+        <div
+            target="_blank"
+            class="card-job__content"
+        >
+            <div class="card-job__wrapper ">
                 <div class="card-job__date-in">
-                    <span class="fal fa-portal-enter"></span><span>{{ job.dateIn }}</span>
+                    <span class="fas fa-arrow-right"></span> <span>{{ job.dateIn }}</span>
+                </div>
+                <div class="card-job__title u-text-bold">
+                    {{ job.title }}
                 </div>
                 <div v-if="job.dateOut" class="card-job__date-out">
-                    {{ job.dateOut ? `${job.dateOut}` : '(Actualmente)' }}  <span class="fal fa-portal-exit"></span>
+                    {{ job.dateOut ? `${job.dateOut}` : '(Actualmente)' }}  <span class="fas fa-arrow-right card-job__icon"></span>
                 </div>
                 <div v-else class="card-job__date-out">
                 </div>
             </div>
-            <a
-                :href="job.web"
-                target="_blank"
-                class="card-job__image"
-            >
-                <img :src="job.logo">
-            </a>
+            <img :alt="job.company" :src="job.logo">
+           
+            <!--
+            
+            -->
         </div>
     </div>
 </template>
@@ -42,53 +43,69 @@
 
 <style lang="postcss">
   .card-job {
-    margin-top: 20px;
     padding: 10px;
-    border: 1px solid black;
+    display: grid;
+    grid-gap: 20px;
 
-    &__image {
-      margin-top: 20px;
-      border-radius: 50%;
+    &__content {
+      position: relative;
       overflow: hidden;
-      align-self: end;
       justify-self: center;
-      text-align: center;
+      height: 300px;
+      width: 300px;
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
 
-    &__inner {
-      text-align: center;
+    &__title {
+      font-size: em(32px);
+    }
+
+    &__wrapper {
+      position: absolute;
+      z-index: 2;
+      padding: 10px 0;
+      background-color: var(--color-black);
       display: grid;
-      justify-content: center;
-      justify-self: center;
-    }
-
-    img {
-      object-fit: scale-down;
-    }
-
-    &__image,
-    img {
-      height: 100px;
-      width: 100px;
-    }
-
-    &__dates {
-      padding: 10px;
-      display: grid;
-      grid-gap: 5px;
+      grid-template-rows: auto 1fr auto;
+      align-items: center;
+      color: white;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      opacity: 0.7;
+      line-height: 0.9;
+      text-align: center;
     }
 
     &__date-in,
     &__date-out {
+      width: 100%;
+      text-align: left;
+      font-size: em(16px);
       display: grid;
-      grid-gap: 20px;
-      grid-template-columns: 10px auto;
-      text-align: right;
+      grid-template-columns: auto auto 1fr;
+      align-items: center;
+      grid-gap: 10px;
     }
 
     &__date-out {
-      grid-template-columns: auto 10px;
-      text-align: left;
+      text-align: right;
+      grid-template-columns: 1fr auto auto;
+      grid-gap: 0;
+    }
+
+    &__icon {
+      padding-left: 10px;
     }
   }
 </style>

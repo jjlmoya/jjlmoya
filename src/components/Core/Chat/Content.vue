@@ -98,7 +98,7 @@
     height: em(600px);
     width: em(350px);
     background-color: #222;
-    color: white;
+    color: var(--color-white);
     border-radius: 5px;
     overflow: hidden;
 

@@ -1,14 +1,24 @@
 <template>
     <div>
-        <TimeLine />
+        <CoreSection title="Experiencia Personal">
+            <TimeLine />
+        </CoreSection>
+        <CoreSection title="Habilidades">
+            <Skills />
+        </CoreSection>
     </div>
 </template>
 
 <script>
     import TimeLine from '@/components/Timeline.vue'
+    import Skills from '@/components/Skills.vue'
+    import CoreSection from '@/components/Core/Section.vue'
+
     export default {
         components: {
-            TimeLine
+            CoreSection,
+            TimeLine,
+            Skills
         }
       
     }

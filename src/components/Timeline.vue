@@ -24,7 +24,7 @@
             const time = ref(null)
 
             onMounted(() => {
-                time.value.style.setProperty('--total', 7)
+                time.value.style.setProperty('--total', timeline.value.length)
             })
 
             return {
@@ -37,6 +37,11 @@
 
 <style lang="postcss">
   .timeline {
+    &__title {
+      padding: 0 20px;
+      font-size: em(32px);
+    }
+
     &__list {
       display: grid;
       grid-gap: calc(var(--gap-container) / 2);
@@ -54,7 +59,7 @@
 
     &__card {
       img {
-        object-fit: contain;
+        object-fit: cover;
       }
     }
   }

@@ -1,5 +1,6 @@
 <template>
     <div class="header">
+        <Logo />
         <UserProfile />
         <NavMenu />
     </div>
@@ -8,11 +9,13 @@
 <script>
     import UserProfile from '@/components/User/Profile.vue'
     import NavMenu from '@/components/Core/NavMenu.vue'
+    import Logo from '@/components/Core/Logo.vue'
 
     export default {
         components: {
             UserProfile,
-            NavMenu
+            NavMenu,
+            Logo
         },
     
     }
@@ -21,7 +24,8 @@
 <style lang="postcss">
   .header {
     height: 100px;
-    border-bottom: 1px solid black;
-    //background-color: #e9e7e8;
+    border-bottom: 1px solid var(--color-black);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
   }
 </style>

@@ -40,7 +40,7 @@
       justify-content: center;
       align-items: center;
       font-size: em(24px);
-      background-color: black;
+      background-color: var(--color-black);
       color: var(--color-white);
       height: em(32px);
       width: em(32px);
