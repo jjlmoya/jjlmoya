@@ -39,7 +39,7 @@
   .timeline {
     &__title {
       padding: 0 20px;
-      font-size: em(32px);
+      font-size: var(--font-size-h3);
     }
 
     &__list {

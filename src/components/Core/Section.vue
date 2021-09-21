@@ -20,11 +20,11 @@
 
 <style lang="postcss">
   .core-section {
-    padding: 20px;
+    padding: em(16px);
 
     &__title {
-      font-size: em(32px);
-      padding-bottom: 40px;
+      font-size: var(--font-size-h3);
+      padding-bottom: em(8px);
       text-align: center;
     }
   }

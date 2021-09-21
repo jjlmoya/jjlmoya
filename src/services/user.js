@@ -24,32 +24,32 @@ export const user = {
             web: 'https://www.indracompany.com/',
             logo: 'https://www.elindependiente.com/wp-content/uploads/2016/11/Indra-1440x624.jpg',
             title: 'Front End Developer',
-            dateIn: 'Abril 2014',
-            dateOut: 'Noviembre 2015'
+            dateIn: { month:'april', year: 2014},
+            dateOut: { month:'november', year: 2015}
         },
         {
             company: 'eDreams ODIGEO',
             web: 'https://www.edreamsodigeo.com',
             logo: 'https://marketing4ecommerce.net/wp-content/uploads/2014/03/eDreams-1.jpg',
             title: 'Senior Front End Developer',
-            dateIn:  'Noviembre 2015',
-            dateOut: 'Enero 2018'
+            dateIn: { month:'november', year: 2015},
+            dateOut: { month:'january', year: 2018}
         },
         {
             company: 'Ávoris Travel',
             web: 'https://www.avoristravel.com',
             logo: 'https://www.preferente.com/wp-content/uploads/2018/10/%C3%A1voris.jpg',
             title: 'Full Stack Developer',
-            dateIn: 'Enero 2018',
-            dateOut: 'Diciembre 2020'
+            dateIn: {  month:'january', year: 2018},
+            dateOut: { month:'december', year: 2020}
         },
         {
             company: 'beJAOFIT',
             web: 'https://www.bejao.fit',
             logo: 'https://trabajoenremoto.com/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBak1CIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--618999728c1caf8559cf53746317ac92aeb83dd4/bejaofit-logo.png',
             title: 'Architect & Front End (Hybrid Apps)',
-            dateIn: 'Diciembre 2020',
-            dateOut: ''
+            dateIn: {  month:'december', year: 2020},
+            dateOut: false
         }
     ],
     skills: [
@@ -73,13 +73,8 @@ export const user = {
         getLang('Catalán', 5, { maternal: true}),
         getLang('English', 4),
         getLang('Pусский', 2),
-
-
-
-
     ]
 }
-console.log(user.skills)
 
 export const getTimeline = () => user.timeline
 export const getSkills = () => user.skills

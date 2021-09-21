@@ -1,9 +1,10 @@
 <template>
     <div>
-        <CoreSection title="Experiencia Personal">
+        <HeroBannerFace />
+        <CoreSection :title="$t('section.experience')">
             <TimeLine />
         </CoreSection>
-        <CoreSection title="Habilidades">
+        <CoreSection :title="$t('section.skills')">
             <Skills />
         </CoreSection>
     </div>
@@ -13,12 +14,17 @@
     import TimeLine from '@/components/Timeline.vue'
     import Skills from '@/components/Skills.vue'
     import CoreSection from '@/components/Core/Section.vue'
+    import HeroBannerFace from '@/components/Banner/HeroFace.vue'
 
     export default {
         components: {
+            HeroBannerFace,
             CoreSection,
             TimeLine,
             Skills
+        },
+        setup() {
+        
         }
       
     }

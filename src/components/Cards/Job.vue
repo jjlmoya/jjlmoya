@@ -6,13 +6,13 @@
         >
             <div class="card-job__wrapper ">
                 <div class="card-job__date-in">
-                    <span class="fas fa-arrow-right"></span> <span>{{ job.dateIn }}</span>
+                    <span class="fas fa-arrow-right"></span> <span>{{ $t('date.month.' + job.dateIn.month) }} {{ job.dateIn.year }}</span>
                 </div>
                 <div class="card-job__title u-text-bold">
                     {{ job.title }}
                 </div>
                 <div v-if="job.dateOut" class="card-job__date-out">
-                    {{ job.dateOut ? `${job.dateOut}` : '(Actualmente)' }}  <span class="fas fa-arrow-right card-job__icon"></span>
+                    {{ job.dateOut ? `${$t('date.month.' + job.dateOut.month)} ${job.dateOut.year}` : `(${$t('date.actually')} )` }}  <span class="fas fa-arrow-right card-job__icon"></span>
                 </div>
                 <div v-else class="card-job__date-out">
                 </div>
@@ -67,7 +67,7 @@
     }
 
     &__title {
-      font-size: em(32px);
+      font-size: var(--font-size-h3);
     }
 
     &__wrapper {
@@ -91,7 +91,7 @@
     &__date-out {
       width: 100%;
       text-align: left;
-      font-size: em(16px);
+      font-size: var(--font-size);
       display: grid;
       grid-template-columns: auto auto 1fr;
       align-items: center;

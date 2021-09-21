@@ -130,7 +130,7 @@
       }
 
       &-subtitle {
-        font-size: em(12px);
+        font-size: var(--font-size-accent);
       }
     }
 
