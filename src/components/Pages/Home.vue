@@ -1,10 +1,16 @@
 <template>
-    <div>
+    <div class="page">
         <HeroBannerFace />
-        <CoreSection :title="$t('section.experience')">
+        <CoreSection
+            :order="0"
+            :title="$t('section.experience')"
+        >
             <TimeLine />
         </CoreSection>
-        <CoreSection :title="$t('section.skills')">
+        <CoreSection
+            :order="1"
+            :title="$t('section.skills')"
+        >
             <Skills />
         </CoreSection>
     </div>
@@ -31,5 +37,7 @@
 </script>
 
 <style lang="postcss">
+
+
   /* estilos */
 </style>

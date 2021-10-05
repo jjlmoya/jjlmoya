@@ -1,21 +1,31 @@
 <template>
     <div class="nav-menu">
         <div
-            v-for="(path, i) in paths"
+            v-for="path in paths"
             :key="path.name"
             class="nav-menu__item"
             :class="{'nav-menu__item--active': path.path === $route.path}"
             @click="$router.push({ name: path.name })"
         >
             {{ $t(`router.${path.name}`) }}
+            <div class="nav-menu__wrapper">
+                <Asterik 
+                    v-if="path.path === $route.path"
+                    class="nav-menu__asterisk"
+                    secondary
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import useCustomRouter from '@/use/customRouter'
-
+    import Asterik from '@/components/Core/Asterisk.vue'
     export default {
+        components: {
+            Asterik,
+        },
         setup() {
             const { getNavPath } = useCustomRouter()
 
@@ -35,14 +45,25 @@
 
     &__item {
       font-weight: bold;
-      text-transform: uppercase;
-      opacity: 0.5;
       cursor: pointer;
+      font-size: var(--font-size-h3);
 
       &--active {
-        font-weight: 900;
+        position: relative;
         opacity: 1;
+        color: var(--color-secondary-lighter);
       }
+    }
+
+    &__wrapper {
+      position: absolute;
+      display: grid;
+      justify-content: center;
+      width: 100%;
+    }
+
+    &__asterisk {
+      width: em(12px);
     }
   }
 </style>
