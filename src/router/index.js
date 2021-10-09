@@ -15,7 +15,7 @@ const routes = [
         meta: {
             menu: true,
         },
-        component: () => import('@/views/Home.vue')
+        component: () => import('@/views/About.vue')
     },
     {
         path: '/projects',

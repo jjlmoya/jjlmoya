@@ -20,17 +20,15 @@
 
 <style lang="postcss">
   .shape-basic {
-    top: 0;
-    height: 100%;
-    width: 150%;
-    right: 25%;
     bottom: 0;
-    opacity: 0.2;
-    transform: rotate(15deg);
+    height: 25%;
+    width: 150%;
+    left: -25%;
+    transform: rotate(185deg);
 
     &--reverse {
-      transform: rotate(-15deg);
-      left: 25%;
+      transform: rotate(175deg);
+      right: -25%;
     }
   }
 </style>

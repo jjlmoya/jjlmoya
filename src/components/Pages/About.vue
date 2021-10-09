@@ -7,31 +7,32 @@
         </CoreSection>
         <CoreSection
             :order="instances++"
-            :title="$t('section.lastPosts')"
+            :title="$t('section.experience')"
         >
-            <PostVerticalList>
-                <PostResume 
-                    v-for="(post, i) in [1,2,3,4,5,6]"
-                    :key="i"
-                    :index="i" 
-                />
-            </PostVerticalList>
+            <TimeLine />
+        </CoreSection>
+        <CoreSection
+            :order="instances++"
+            :title="$t('section.skills')"
+        >
+            <Skills />
         </CoreSection>
     </div>
 </template>
 
 <script>
+    import TimeLine from '@/components/Timeline.vue'
+    import Skills from '@/components/Skills.vue'
     import CoreSection from '@/components/Core/Section.vue'
     import HeroBannerFace from '@/components/Banner/HeroFace.vue'
-    import PostResume from '@/components/Cards/Post/Resume.vue'
-    import PostVerticalList from '@/components/Cards/Post/VerticalList.vue'
+    import { ref } from '@vue/reactivity'
 
     export default {
         components: {
             HeroBannerFace,
             CoreSection,
-            PostResume,
-            PostVerticalList
+            TimeLine,
+            Skills
         },
         setup() {
             const instances = 0

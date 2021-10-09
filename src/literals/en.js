@@ -1,8 +1,15 @@
 export default {
+    button: {
+        read: 'Read'
+    },
     section: {
         experience: 'Experiences',
-        skills: 'Skills'
+        skills: 'Skills',
+        lastPosts: 'Last Post (Spanish)'
 
+    },
+    about: {
+        description: 'I\'m located in <strong>Mallorca</strong> (Working Remotely) builiding digital & comfortable web experiences. Focus to developer <strong> humnas and unique </strong> flows.'
     },
     date: {
         month: {
@@ -17,7 +24,19 @@ export default {
             september: 'September',
             october: 'October',
             november: 'November',
-            december: 'December'
+            december: 'December',
+            1: 'January',
+            2: 'February',
+            3: 'March',
+            4: 'April',
+            5: 'May',
+            6: 'June',
+            7: 'July',
+            8: 'August',
+            9: 'September',
+            10: 'October',
+            11: 'November',
+            12: 'December'
         },
         actually: 'Current'
     },

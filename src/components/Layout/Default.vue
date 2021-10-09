@@ -30,4 +30,10 @@
     }
   }
 
+  .page {
+    &--header {
+      padding-top: em(100px);
+    }
+  }
+
 </style>

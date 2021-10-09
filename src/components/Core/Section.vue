@@ -1,7 +1,7 @@
 <template>
     <div class="core-section">
         <div class="core-section__content">
-            <div class="core-section__title u-text-bold">
+            <div v-if="title" class="core-section__title u-text-bold">
                 <h2>{{ title }}</h2>
                 <Asterik 
                     class="core-section__asterisk"
@@ -38,7 +38,6 @@
 <style lang="postcss">
   .core-section {
     position: relative;
-    overflow: hidden;
 
     &__content {
       padding: em(24px) em(32px);
@@ -60,12 +59,14 @@
   }
 
   .shape {
+    opacity: 0.1;
+    z-index: -1;
     position: absolute;
     background:
       linear-gradient(
         0deg,
         var(--color-primary) 50%,
-        rgba(0, 0, 0, 0) 100%
+        rgba(0, 0, 0, 0) 90%
       );
   }
 </style>
