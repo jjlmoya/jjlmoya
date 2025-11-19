@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="dark">
+	<head>
+        <SEO title={title} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --color-gamebob-primary: #1ddabc;
+                --color-gamebob-text: #f9f9f9;
+                --color-gamebob-bg: #000000;
+                
+                /* Override global variables for this layout */
+                --color-bg: var(--color-gamebob-bg);
+                --color-text: var(--color-gamebob-text);
+                --color-accent: var(--color-gamebob-primary);
+            }
+            
+            body {
+                background-color: var(--color-gamebob-bg);
+                color: var(--color-gamebob-text);
+            }
+
+            /* Force header links to match GameBob aesthetic */
+            :global(nav) {
+                border-bottom-color: rgba(29, 218, 188, 0.1) !important;
+            }
+            :global(nav a) {
+                color: var(--color-gamebob-text) !important;
+            }
+            :global(nav a:hover) {
+                color: var(--color-gamebob-primary) !important;
+            }
+            :global(nav a.nav-active) {
+                color: var(--color-gamebob-primary) !important;
+            }
+            /* Hide theme toggle as this layout is strictly dark/custom */
+            :global(#theme-toggle) {
+                display: none !important;
+            }
+        </style>
+	</head>
+	<body class="min-h-screen flex flex-col antialiased selection:bg-[#1ddabc] selection:text-white">
+        
+        <Header />
+
+		<main class="flex-grow">
+			<slot />
+		</main>
+
+        <Footer />
+
+	</body>
+</html>

@@ -1,0 +1,262 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="inflación | jjlmoya">
+    <div
+        class="min-h-screen flex flex-col items-center justify-center bg-amber-50 text-amber-900 p-4 relative overflow-hidden"
+    >
+        <div class="max-w-4xl w-full text-center z-10">
+            <h1 class="text-4xl md:text-6xl font-black mb-2 tracking-tighter">
+                LA INFLACIÓN
+            </h1>
+            <p class="text-xl opacity-70 mb-12 font-mono">
+                ¿Qué podías comprar con 100€?
+            </p>
+
+            <div
+                class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-12 relative"
+            >
+                <div
+                    class="absolute -top-6 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-1 font-bold border-2 border-black transform -rotate-2"
+                >
+                    BILLETE DE 100€
+                </div>
+
+                <div
+                    id="items-container"
+                    class="flex flex-wrap gap-4 min-h-[300px] content-start justify-center p-4"
+                >
+                    <!-- Items will be injected here -->
+                </div>
+
+                <div
+                    class="mt-8 pt-4 border-t-2 border-dashed border-gray-300 flex justify-between items-end"
+                >
+                    <div class="text-left">
+                        <div
+                            class="text-xs uppercase tracking-widest text-gray-500"
+                        >
+                            Año
+                        </div>
+                        <div
+                            id="year-display"
+                            class="text-5xl font-black tabular-nums"
+                        >
+                            2025
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div
+                            class="text-xs uppercase tracking-widest text-gray-500"
+                        >
+                            Valor equivalente hoy
+                        </div>
+                        <div
+                            id="value-display"
+                            class="text-3xl font-bold text-green-600 tabular-nums"
+                        >
+                            100€
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative px-4 max-w-xl mx-auto">
+                <input
+                    type="range"
+                    min="1970"
+                    max="2025"
+                    value="2025"
+                    class="w-full h-4 bg-gray-200 rounded-lg appearance-none cursor-pointer border-2 border-black accent-black"
+                    id="year-slider"
+                />
+                <div
+                    class="flex justify-between text-xs font-mono mt-2 opacity-50"
+                >
+                    <span>1970</span>
+                    <span>2025</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Background Pattern -->
+        <div
+            class="absolute inset-0 opacity-5 pointer-events-none"
+            style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"
+        >
+        </div>
+    </div>
+</Layout>
+
+<script>
+    const slider = document.getElementById("year-slider") as HTMLInputElement;
+    const yearDisplay = document.getElementById("year-display");
+    const valueDisplay = document.getElementById("value-display");
+    const itemsContainer = document.getElementById("items-container");
+
+    // Inflation data (approximate cumulative inflation from 2025 backwards)
+    // Base 100 in 2025.
+    const getPurchasingPower = (year) => {
+        const yearsDiff = 2025 - year;
+        // Using a slightly higher inflation rate for older years to simulate the drastic change
+        // 1970 -> ~14x purchasing power
+        // 2000 -> ~1.7x purchasing power
+        if (year < 1980) return Math.pow(1.06, yearsDiff);
+        if (year < 2000) return Math.pow(1.04, yearsDiff);
+        return Math.pow(1.025, yearsDiff);
+    };
+
+    // SVGs for items
+    const icons = {
+        bread: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M18 8c0-2.2-1.8-4-4-4H6C3.8 4 2 5.8 2 8c0 1.5.8 2.8 2 3.5V19c0 .6.4 1 1 1h10c.6 0 1-.4 1-1v-7.5c1.2-.7 2-2 2-3.5z"/><path d="M6 8h8"/></svg>`,
+        milk: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M8 2h8v4H8zM7 6h10v16H7z"/></svg>`,
+        beer: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M7 7h10v10a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4V7z"/><path d="M17 11h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-2"/><path d="M7 7c0-2 1.5-3 3-3s3 2 3 2 1.5-2 3-2 3 1 3 3"/></svg>`,
+        coffee: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`,
+        burger: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M3 15h18"/><path d="M3 11h18a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4z"/><path d="M3 15v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/></svg>`,
+        movie: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>`,
+        book: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+        vinyl: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 12l4-4"/></svg>`,
+        shirt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>`,
+        shoe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 11 3.8 13 5c5.5 2.69 6 2 6 2 0 0 1 3.5 0 6l-2 4c-1 2-2.5 3-4.5 3H5c-1 0-1-2-1-2z"/><path d="M11.5 10a2 2 0 0 0-2 2"/></svg>`,
+        game: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4m-2-2v4"/><circle cx="17" cy="11" r="0.5" fill="currentColor"/><circle cx="15" cy="13" r="0.5" fill="currentColor"/></svg>`,
+        fuel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M3 22v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8"/><path d="M5 12V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5"/><path d="M14 2h2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-2"/></svg>`,
+        pizza: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M12 2L2 22h20L12 2z"/><circle cx="12" cy="14" r="1" fill="currentColor"/><circle cx="10" cy="18" r="1" fill="currentColor"/><circle cx="14" cy="18" r="1" fill="currentColor"/></svg>`,
+        concert: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+        flight: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>`,
+        house: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+        diamond: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>`,
+        car: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+    };
+
+    const items = [
+        { icon: icons.bread, price: 1.2, name: "Pan" },
+        { icon: icons.milk, price: 1.0, name: "Leche" },
+        { icon: icons.coffee, price: 1.6, name: "Café" },
+        { icon: icons.beer, price: 3.0, name: "Caña" },
+        { icon: icons.burger, price: 9.0, name: "Menú Burger" },
+        { icon: icons.pizza, price: 12.0, name: "Pizza Familiar" },
+        { icon: icons.movie, price: 9.0, name: "Cine" },
+        { icon: icons.book, price: 18.0, name: "Best Seller" },
+        { icon: icons.shirt, price: 25.0, name: "Camiseta" },
+        { icon: icons.vinyl, price: 30.0, name: "Vinilo" },
+        { icon: icons.concert, price: 45.0, name: "Concierto" },
+        { icon: icons.fuel, price: 60.0, name: "Llenar Depósito" },
+        { icon: icons.game, price: 70.0, name: "Videojuego AAA" },
+        { icon: icons.shoe, price: 100.0, name: "Zapatillas" },
+        { icon: icons.flight, price: 150.0, name: "Vuelo Low Cost" },
+        { icon: icons.diamond, price: 500.0, name: "Joya" },
+        { icon: icons.car, price: 15000.0, name: "Coche" },
+        { icon: icons.house, price: 250000.0, name: "Piso" },
+    ];
+
+    const update = () => {
+        const year = parseInt(slider.value);
+        const power = getPurchasingPower(year);
+        const totalValue = 100 * power; // Total value in today's money
+
+        if (yearDisplay) yearDisplay.innerText = year.toString();
+        if (valueDisplay) valueDisplay.innerText = `${Math.round(totalValue)}€`;
+
+        // Generate items that fit in the budget
+        let currentBudget = totalValue;
+        let html = "";
+
+        // Create a "shopping basket"
+        // Logic: If we have a lot of money (past), we prioritize big purchases first.
+
+        // Sort items by price descending
+        const sortedItems = [...items].sort((a, b) => b.price - a.price);
+
+        // 1. Try to buy expensive items first if we have a lot of budget
+        sortedItems.forEach((item) => {
+            // Only buy expensive stuff if we have > 500€ budget or if it's the only thing we can buy
+            if (currentBudget >= item.price) {
+                // If item is expensive (>50€) and we have budget, buy it with 50% chance to add variety
+                // Or if it's cheap, buy it later
+                if (item.price > 50 && Math.random() > 0.3) {
+                    html += createItemHtml(item, 0);
+                    currentBudget -= item.price;
+                }
+            }
+        });
+
+        // 2. Fill the rest with affordable items mixed
+        let safety = 0;
+        while (currentBudget > 1 && safety < 100) {
+            const affordable = items.filter((i) => i.price <= currentBudget);
+            if (affordable.length === 0) break;
+
+            // Prefer more expensive items in the affordable list to fill budget faster
+            // but keep some randomness
+            const randomItem =
+                affordable[Math.floor(Math.random() * affordable.length)];
+
+            html += createItemHtml(randomItem, safety * 30);
+            currentBudget -= randomItem.price;
+            safety++;
+        }
+
+        if (itemsContainer) itemsContainer.innerHTML = html;
+    };
+
+    function createItemHtml(item, delay) {
+        // Scale size based on price roughly
+        const scale = item.price > 50 ? "scale-110" : "scale-100";
+        const bg = item.price > 50 ? "bg-amber-200/50" : "bg-amber-100/50";
+
+        return `<div class="animate-pop text-amber-900 flex flex-col items-center p-2 ${bg} rounded-lg border border-amber-200/50 ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€)">
+        ${item.icon}
+        <span class="text-[10px] font-bold mt-1 opacity-60">${item.name}</span>
+      </div>`;
+    }
+
+    slider?.addEventListener("input", update);
+
+    // Init
+    update();
+</script>
+
+<style>
+    @keyframes pop {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        80% {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    .animate-pop {
+        animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        opacity: 0;
+    }
+
+    /* Custom Range Slider Styling */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        background: #000;
+        cursor: pointer;
+        margin-top: -10px;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.1s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 4px;
+        cursor: pointer;
+        background: #000;
+        border-radius: 2px;
+    }
+</style>

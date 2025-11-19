@@ -7,6 +7,9 @@ export default defineConfig({
   site: 'https://jjlmoya.com',
   integrations: [icon()],
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['date-fns']
+    }
   }
 });

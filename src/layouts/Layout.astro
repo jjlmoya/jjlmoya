@@ -2,14 +2,17 @@
 import '../styles/global.css';
 import { Icon } from 'astro-icon/components';
 import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
 	title: string;
     bodyClass?: string;
     showBackground?: boolean;
+    mainClass?: string;
 }
 
-const { title, bodyClass = "", showBackground = true } = Astro.props;
+const { title, bodyClass = "", showBackground = true, mainClass = "pt-20 px-4" } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,7 +23,7 @@ const { title, bodyClass = "", showBackground = true } = Astro.props;
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
 	</head>
-	<body class={`min-h-screen flex flex-col antialiased text-slate-900 dark:text-white bg-slate-50 dark:bg-[#0a0f1c] transition-colors duration-300 ${bodyClass}`}>
+	<body class={`min-h-screen flex flex-col antialiased text-slate-900 bg-slate-50 transition-colors duration-300 ${bodyClass}`}>
         {showBackground && (
             <>
                 <div class="fixed inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
@@ -28,32 +31,13 @@ const { title, bodyClass = "", showBackground = true } = Astro.props;
             </>
         )}
 
-		<nav class="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10 bg-white/5">
-            <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-                <a href="/" class="text-xl font-bold tracking-tighter hover:text-[var(--color-accent)] transition-colors">
-                    jjlmoya
-                </a>
-                
-                <div class="flex items-center gap-6">
-                    <a href="/proyectos" class="hover:text-[var(--color-accent)] transition-colors text-sm font-medium">proyectos</a>
-                    <a href="/conceptos" class="hover:text-[var(--color-accent)] transition-colors text-sm font-medium">conceptos</a>
-                    <a href="/gamebob" class="hover:text-[var(--color-accent)] transition-colors text-sm font-medium text-blue-500">gamebob</a>
-                    
-                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/10 transition-colors" aria-label="Toggle Theme">
-                        <Icon name="mdi:weather-sunny" class="w-5 h-5 hidden dark:block" />
-                        <Icon name="mdi:weather-night" class="w-5 h-5 block dark:hidden" />
-                    </button>
-                </div>
-            </div>
-        </nav>
+		<Header />
 
-		<main class="flex-grow pt-20 px-4">
+		<main class={`flex-grow ${mainClass}`}>
 			<slot />
 		</main>
 
-        <footer class="py-8 text-center text-sm opacity-60">
-            <p>&copy; {new Date().getFullYear()} jjlmoya</p>
-        </footer>
+        <Footer />
 
         <script>
             const themeToggle = document.getElementById('theme-toggle');
