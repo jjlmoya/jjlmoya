@@ -1,59 +1,79 @@
 ---
-import '../styles/global.css';
-import { Icon } from 'astro-icon/components';
-import SEO from '../components/SEO.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import "../styles/global.css";
+import { Icon } from "astro-icon/components";
+import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
-	title: string;
+    title: string;
     bodyClass?: string;
     showBackground?: boolean;
     mainClass?: string;
+    headerClass?: string;
 }
 
-const { title, bodyClass = "", showBackground = true, mainClass = "pt-20 px-4" } = Astro.props;
+const {
+    title,
+    bodyClass = "",
+    showBackground = true,
+    mainClass = "pt-20 px-4",
+    headerClass = "",
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
-	<head>
+    <head>
         <SEO title={title} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
-	</head>
-	<body class={`min-h-screen flex flex-col antialiased text-slate-900 bg-slate-50 transition-colors duration-300 ${bodyClass}`}>
-        {showBackground && (
-            <>
-                <div class="fixed inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-                <div class="fixed inset-0 -z-10 h-full w-full bg-[radial-gradient(circle_800px_at_100%_200px,rgba(29,78,216,0.15),transparent)]"></div>
-            </>
-        )}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body
+        class={`min-h-screen flex flex-col antialiased text-slate-900 bg-slate-50 transition-colors duration-300 ${bodyClass}`}
+    >
+        {
+            showBackground && (
+                <>
+                    <div class="fixed inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
+                    <div class="fixed inset-0 -z-10 h-full w-full bg-[radial-gradient(circle_800px_at_100%_200px,rgba(29,78,216,0.15),transparent)]" />
+                </>
+            )
+        }
 
-		<Header />
+        <Header className={headerClass} />
 
-		<main class={`flex-grow ${mainClass}`}>
-			<slot />
-		</main>
+        <main class={`flex-grow ${mainClass}`}>
+            <slot />
+        </main>
 
         <Footer />
 
         <script>
-            const themeToggle = document.getElementById('theme-toggle');
+            const themeToggle = document.getElementById("theme-toggle");
             const html = document.documentElement;
 
             // Initial check
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                html.classList.add('dark');
+            if (
+                localStorage.theme === "dark" ||
+                (!("theme" in localStorage) &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ) {
+                html.classList.add("dark");
             } else {
-                html.classList.remove('dark');
+                html.classList.remove("dark");
             }
 
-            themeToggle?.addEventListener('click', () => {
-                html.classList.toggle('dark');
-                localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+            themeToggle?.addEventListener("click", () => {
+                html.classList.toggle("dark");
+                localStorage.theme = html.classList.contains("dark")
+                    ? "dark"
+                    : "light";
             });
         </script>
-	</body>
+    </body>
 </html>
