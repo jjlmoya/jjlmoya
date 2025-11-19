@@ -1,0 +1,35 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  title: string;
+  description: string;
+  url: string;
+  stars: number;
+  language: string;
+}
+
+const { title, description, url, stars, language } = Astro.props;
+---
+
+<a href={url} target="_blank" rel="noopener noreferrer" class="group relative block p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-[var(--color-accent)]/50 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-[var(--color-accent)]/10">
+  <div class="flex justify-between items-start mb-4">
+    <div class="p-3 rounded-lg bg-[var(--color-accent)]/10 text-[var(--color-accent)] group-hover:scale-110 transition-transform">
+      <Icon name="mdi:github" class="w-6 h-6" />
+    </div>
+    <div class="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+      <Icon name="mdi:star" class="w-4 h-4 text-yellow-500" />
+      <span>{stars}</span>
+    </div>
+  </div>
+
+  <h3 class="text-xl font-bold mb-2 group-hover:text-[var(--color-accent)] transition-colors">{title}</h3>
+  <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
+    {description || "Sin descripción disponible."}
+  </p>
+
+  <div class="flex items-center gap-2 text-xs font-medium text-slate-500">
+    <span class="w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
+    {language || "N/A"}
+  </div>
+</a>
