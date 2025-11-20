@@ -105,7 +105,7 @@ const { base_elements, recipes } = evolutionData;
 
         <!-- Main Playground -->
         <main
-            class="flex-1 relative overflow-hidden cursor-crosshair touch-none"
+            class="flex-1 relative overflow-hidden cursor-crosshair"
             id="playground"
         >
             <!-- Instructions Overlay (Fades out) -->
@@ -547,10 +547,12 @@ const { base_elements, recipes } = evolutionData;
     
     // Get data from the server-side rendered script tag below
     const dataScript = document.getElementById('evolution-data');
-    const { base_elements, recipes } = JSON.parse(dataScript.textContent);
+    if (dataScript && dataScript.textContent) {
+        const { base_elements, recipes } = JSON.parse(dataScript.textContent);
 
-    // Initialize Game
-    new Game({ base_elements, recipes });
+        // Initialize Game
+        new Game({ base_elements, recipes });
+    }
 
     // Iconify
     const script = document.createElement("script");

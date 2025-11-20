@@ -41,6 +41,14 @@ export class Game {
             onMoveEntity: (id, clientX, clientY) => this.moveEntity(id, clientX, clientY)
         });
 
+        // Connect battle system callbacks to input system cleanup
+        this.battleSystem.onBattleStart = () => {
+            this.inputSystem.cleanup();
+        };
+        this.battleSystem.onClose = () => {
+            this.inputSystem.cleanup();
+        };
+
         // Init
         this.renderInventory();
         this.setupControls();
@@ -87,10 +95,16 @@ export class Game {
             try {
                 const saveData = JSON.parse(saved);
                 this.nextId = saveData.nextId || 1;
-                this.entities = saveData.entities.map(e => ({
-                    ...e,
-                    inBattle: false
-                }));
+
+                // Clear and refill the array to maintain the reference
+                this.entities.length = 0;
+                saveData.entities.forEach(e => {
+                    this.entities.push({
+                        ...e,
+                        inBattle: false
+                    });
+                });
+
                 this.renderEntities();
             } catch (e) {
                 console.error('Failed to load save:', e);
@@ -108,7 +122,7 @@ export class Game {
         });
 
         document.getElementById("clear-btn").addEventListener("click", () => {
-            this.entities = [];
+            this.entities.length = 0; // Clear array while maintaining reference
             this.renderEntities();
             this.saveGame();
         });
@@ -402,7 +416,10 @@ export class Game {
 
                 // Loser Logic
                 if (loser.type === 'poop' || loser.currentHp <= 0) {
-                    this.entities = this.entities.filter(e => e.id !== loser.id);
+                    const loserIndex = this.entities.findIndex(e => e.id === loser.id);
+                    if (loserIndex !== -1) {
+                        this.entities.splice(loserIndex, 1); // Remove while maintaining reference
+                    }
                 }
 
                 this.renderEntities();

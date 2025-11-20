@@ -2,6 +2,8 @@ export class BattleSystem {
     constructor(ui) {
         this.ui = ui; // { overlay, closeBtn, actionText, f1: {visual, name, hpBar, hpText}, f2: ... }
         this.onBattleEnd = null;
+        this.onBattleStart = null;
+        this.onClose = null;
 
         this.ui.closeBtn.addEventListener('click', () => this.close());
 
@@ -31,6 +33,10 @@ export class BattleSystem {
 
     start(fighter1, fighter2, onBattleEnd) {
         this.onBattleEnd = onBattleEnd;
+
+        // Notify that battle is starting (for cleanup)
+        if (this.onBattleStart) this.onBattleStart();
+
         this.ui.overlay.classList.remove("opacity-0", "pointer-events-none");
         this.ui.closeBtn.classList.add("hidden");
         this.ui.actionText.innerText = "¡COMIENZA LA PELEA!";
@@ -149,5 +155,6 @@ export class BattleSystem {
 
     close() {
         this.ui.overlay.classList.add("opacity-0", "pointer-events-none");
+        if (this.onClose) this.onClose();
     }
 }
