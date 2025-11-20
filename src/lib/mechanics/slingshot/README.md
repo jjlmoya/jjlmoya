@@ -204,7 +204,7 @@ Improvements welcome! Pull requests appreciated.
 
 ## 🔗 Demo
 
-[View interactive demo](https://jjlmoya.dev/gamebob/mecanicas/slingshot)
+[View interactive demo](https://jjlmoya.vercel.app/gamebob/mecanicas/slingshot)
 
 ---
 

@@ -255,7 +255,7 @@ Improvements welcome! Pull requests appreciated.
 
 ## 🔗 Demo
 
-[View interactive demo](https://jjlmoya.dev/gamebob/mecanicas/swipe)
+[View interactive demo](https://jjlmoya.vercel.app/gamebob/mecanicas/swipe)
 
 ---
 

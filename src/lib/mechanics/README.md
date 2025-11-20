@@ -13,7 +13,7 @@ Physics-based slingshot mechanic with drag-and-launch controls.
 - Fully configurable
 - Event callbacks for audio/particles
 
-[View Demo](https://jjlmoya.dev/gamebob/mecanicas/slingshot) | [Documentation](./slingshot/README.md)
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/slingshot) | [Documentation](./slingshot/README.md)
 
 ### [Swipe Gesture](./swipe)
 Swipe gesture detection system with direction and velocity tracking.
@@ -25,7 +25,7 @@ Swipe gesture detection system with direction and velocity tracking.
 - Touch and mouse support
 - Event callbacks
 
-[View Demo](https://jjlmoya.dev/gamebob/mecanicas/swipe) | [Documentation](./swipe/README.md)
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/swipe) | [Documentation](./swipe/README.md)
 
 ---
 
