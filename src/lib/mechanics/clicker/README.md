@@ -1,34 +1,44 @@
-# Clicker Mechanic
+# Clicker Mechanic 🖱️
 
-A classic incremental game mechanic where players click to earn currency and buy upgrades to automate the process.
+A robust incremental game mechanic featuring currency accumulation, passive income, and an upgrade system.
 
-## How it works
+> **[🎮 Play Live Demo](/gamebob/mecanicas/clicker)**
 
-- **Click**: Clicking the main target generates currency based on "Click Power".
-- **Upgrades**: Players can spend currency to buy upgrades.
-    - **Click Upgrades**: Increase the amount of currency earned per click.
-    - **Auto Upgrades**: Automatically generate currency over time (GPS - Gold Per Second).
-- **Scaling Costs**: Upgrade costs increase exponentially with each purchase.
+## 🕹️ How it Works
+The **Clicker** mechanic is the foundation of idle/incremental games. Players generate currency by clicking manually or purchasing upgrades that generate currency over time (passive income).
 
-## Implementation
+### Key Features
+- **Manual Clicking**: Generate currency with every click.
+- **Passive Income**: "Auto-Clickers" generate currency automatically every second.
+- **Upgrade System**: Purchase upgrades to increase click power or auto-click rate.
+- **Dynamic Costs**: Upgrade costs increase exponentially with each purchase.
+- **Persistence**: Game state (currency, upgrades) is saved automatically to `localStorage`.
+- **Visual Feedback**: Floating numbers and particle effects on click.
 
-The `ClickerMechanic` class manages:
-1.  **Economy**: Tracks currency, income rates, and costs.
-2.  **Upgrades**: Manages a list of available upgrades, their costs, and effects.
-3.  **Game Loop**: Handles auto-generation of currency based on delta time.
-4.  **Particles**: Simple visual feedback system for clicks.
+## 🛠️ Implementation Details
 
-## Usage
+The core logic is encapsulated in the `ClickerMechanic` class, separating game rules from the UI.
+
+- **Source Code**: [`ClickerMechanic.ts`](./ClickerMechanic.ts)
+- **Demo UI**: [`clicker.astro`](../../../../pages/gamebob/mecanicas/clicker.astro)
+
+### Usage Example
 
 ```typescript
-const mechanic = new ClickerMechanic();
+import { ClickerMechanic } from "./ClickerMechanic";
 
-// Interaction
-mechanic.click(x, y);
-mechanic.buyUpgrade("cursor");
+// Initialize
+const game = new ClickerMechanic();
 
-// Loop
-mechanic.update(deltaTimeInSeconds);
-const state = mechanic.getState();
-// Render state.currency, state.upgrades...
+// Handle Click
+canvas.addEventListener("mousedown", (e) => {
+    const reward = game.click(e.clientX, e.clientY);
+    console.log(`Gained ${reward} coins!`);
+});
+
+// Game Loop
+function loop(dt: number) {
+    game.update(dt); // Handles passive income
+    render(game.getState());
+}
 ```

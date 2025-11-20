@@ -1,31 +1,43 @@
-# Autorunner Mechanic
+# Autorunner Mechanic 🏃
 
-A side-scrolling platformer mechanic where the player automatically runs forward and must jump to avoid obstacles and gaps.
+A fast-paced infinite runner mechanic with procedural generation, physics-based movement, and parallax scrolling.
 
-## How it works
+> **[🎮 Play Live Demo](/gamebob/mecanicas/autorunner)**
 
-- **Auto-run**: The player character (or the world) moves at a constant speed that increases over time.
-- **Jump**: Tapping or clicking makes the player jump. Only possible when grounded.
+## 🕹️ How it Works
+The **Autorunner** mechanic automatically moves the player forward (or rather, the world backward) while they must jump to avoid obstacles and gaps.
+
+### Key Features
 - **Procedural Generation**: Platforms and obstacles are generated infinitely as the player progresses.
-- **Collision**: Hitting an obstacle or falling off the screen results in a game over.
+- **Physics System**: Gravity, jumping, and collision detection with "coyote time" and penetration tolerance.
+- **Parallax Background**: Multi-layered scrolling background (clouds) for depth and speed sensation.
+- **Progressive Difficulty**: The game speed increases gradually over time.
+- **Score Tracking**: Distance traveled is tracked as the score.
 
-## Implementation
+## 🛠️ Implementation Details
 
-The `AutorunnerMechanic` class manages:
-1.  **Physics**: Gravity, velocity, and collision detection (AABB).
-2.  **Level Generation**: Spawns platforms and obstacles ahead of the player view.
-3.  **Game Loop**: Updates positions, checks collisions, and manages game state.
+The `AutorunnerMechanic` class handles the physics simulation and world generation.
 
-## Usage
+- **Source Code**: [`AutorunnerMechanic.ts`](./AutorunnerMechanic.ts)
+- **Demo UI**: [`autorunner.astro`](../../../../pages/gamebob/mecanicas/autorunner.astro)
+
+### Usage Example
 
 ```typescript
-const mechanic = new AutorunnerMechanic(width, height);
+import { AutorunnerMechanic } from "./AutorunnerMechanic";
 
-// Interaction
-mechanic.jump();
+const game = new AutorunnerMechanic(window.innerWidth, window.innerHeight);
 
-// Loop
-mechanic.update(deltaTimeInSeconds);
-const state = mechanic.getState();
-// Render state.player, state.platforms...
+// Handle Input
+window.addEventListener("keydown", (e) => {
+    if (e.code === "Space") game.jump();
+});
+
+// Game Loop
+function loop(dt: number) {
+    game.update(dt);
+    const state = game.getState();
+    
+    // Render state.player, state.platforms, etc.
+}
 ```
