@@ -92,7 +92,15 @@ const { base_elements, recipes } = evolutionData;
             </div>
 
             <!-- Footer Actions -->
-            <div class="relative p-3 md:p-4 border-t border-white/10 bg-slate-950/50">
+            <div class="relative p-3 md:p-4 border-t border-white/10 bg-slate-950/50 space-y-2">
+                <button
+                    id="encyclopedia-btn"
+                    class="w-full py-3 md:py-2.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 hover:border-indigo-500/30 text-xs md:text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-all flex items-center justify-center gap-2 group"
+                >
+                    <Icon name="mdi:book-open-page-variant" class="w-5 h-5 md:w-4 md:h-4 group-hover:scale-110 transition-transform" />
+                    <span class="hidden md:inline">Enciclopedia</span>
+                </button>
+
                 <button
                     id="clear-btn"
                     class="w-full py-3 md:py-2.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/30 text-xs md:text-sm font-medium text-red-400 hover:text-red-300 transition-all flex items-center justify-center gap-2 group"
@@ -105,31 +113,107 @@ const { base_elements, recipes } = evolutionData;
 
         <!-- Main Playground -->
         <main
-            class="flex-1 relative overflow-hidden cursor-crosshair"
+            class="flex-1 relative overflow-hidden cursor-crosshair bg-stone-800"
             id="playground"
         >
-            <!-- Instructions Overlay (Fades out) -->
-            <div
-                id="instructions"
-                class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-1000 delay-1000 px-6"
-            >
-                <h1
-                    class="text-3xl md:text-6xl font-black text-white/10 tracking-tighter text-center"
-                >
-                    EVOLUCIÓN INFINITA
-                </h1>
-                <p
-                    class="text-white/20 font-mono mt-4 text-center max-w-md text-xs md:text-base"
-                >
-                    1. Crea Huevos<br />
-                    2. Arrastra ingredientes para alimentar<br />
-                    3. Arrastra criaturas entre sí para pelear
-                </p>
+            <!-- Background Texture (Subtle) -->
+            <div 
+                class="absolute inset-0 z-0 pointer-events-none opacity-20 mix-blend-soft-light"
+                style="background-image: url('/assets/textures/stone_wall.png'); background-size: cover; background-position: center;"
+            ></div>
+
+            <!-- Diegetic Tutorial (Carvings) -->
+            <div id="stone-tutorial" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0 select-none opacity-60">
+                
+                <div class="flex flex-col gap-12 items-center">
+                    
+                    <!-- 1. The Rivals (Egg w/ Fire vs Egg w/ Water) -->
+                    <div class="flex gap-32 opacity-80">
+                        <!-- Fire Egg -->
+                        <div class="relative">
+                            <Icon name="mdi:egg-outline" class="w-24 h-24 carved-icon text-stone-900" />
+                            <Icon name="mdi:fire" class="w-10 h-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 carved-icon text-stone-800" />
+                        </div>
+
+                        <!-- Water Egg -->
+                        <div class="relative">
+                            <Icon name="mdi:egg-outline" class="w-24 h-24 carved-icon text-stone-900" />
+                            <Icon name="mdi:water" class="w-10 h-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 carved-icon text-stone-800" />
+                        </div>
+                    </div>
+
+                    <!-- 2. The Clash (Headbutt) -->
+                    <div class="flex items-center justify-center -space-x-8 opacity-90">
+                        <!-- Fire Egg (Lunging Right) -->
+                        <div class="relative transform rotate-12 z-10">
+                            <Icon name="mdi:egg-outline" class="w-24 h-24 carved-icon text-stone-900" />
+                            <Icon name="mdi:fire" class="w-10 h-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 carved-icon text-stone-800" />
+                        </div>
+
+                        <!-- Impact Flash -->
+                        <Icon name="mdi:flash" class="w-16 h-16 carved-icon text-stone-200 z-30 -mt-8" />
+
+                        <!-- Water Egg (Lunging Left) -->
+                        <div class="relative transform -rotate-12 z-20">
+                            <Icon name="mdi:egg-outline" class="w-24 h-24 carved-icon text-stone-900" />
+                            <Icon name="mdi:water" class="w-10 h-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 carved-icon text-stone-800" />
+                        </div>
+                    </div>
+
+                    <!-- 3. The Aftermath (Victor & Loser) -->
+                    <div class="flex gap-24 items-end opacity-80">
+                        <!-- Loser (Broken Fire Egg) -->
+                        <div class="relative transform rotate-45 opacity-60">
+                            <Icon name="mdi:egg-off-outline" class="w-20 h-20 carved-icon text-stone-900" />
+                            <Icon name="mdi:fire" class="w-8 h-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 carved-icon text-stone-800 opacity-50" />
+                        </div>
+
+                        <!-- Victor (Level 2 Water Egg) -->
+                        <div class="relative transform scale-110">
+                            <Icon name="mdi:egg-outline" class="w-28 h-28 carved-icon text-stone-900" />
+                            <Icon name="mdi:water" class="w-12 h-12 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 carved-icon text-stone-800" />
+                            <!-- Level 2 Indicator -->
+                            <div class="absolute -top-2 -right-2 bg-stone-800 rounded-full p-1 border border-stone-700">
+                                <Icon name="mdi:numeric-2" class="w-6 h-6 text-stone-400" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             <!-- Entities Container -->
-            <div id="entities-layer" class="absolute inset-0"></div>
+            <div id="entities-layer" class="absolute inset-0 z-10"></div>
         </main>
+
+        <!-- Encyclopedia Modal -->
+        <div
+            id="encyclopedia-modal"
+            class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 p-4"
+        >
+            <div class="w-full max-w-4xl bg-slate-900 border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[85vh]">
+                <!-- Header -->
+                <div class="p-6 border-b border-white/10 flex items-center justify-between bg-slate-900/50 rounded-t-2xl">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
+                            <Icon name="mdi:book-open-variant" class="w-6 h-6 text-indigo-400" />
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">Enciclopedia</h2>
+                            <p class="text-sm text-slate-400 font-mono" id="encyclopedia-stats">Descubiertos: 0/0</p>
+                        </div>
+                    </div>
+                    <button id="close-encyclopedia" class="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-white">
+                        <Icon name="mdi:close" class="w-6 h-6" />
+                    </button>
+                </div>
+
+                <!-- Grid -->
+                <div id="encyclopedia-grid" class="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                    <!-- Items injected via JS -->
+                </div>
+            </div>
+        </div>
 
         <!-- Battle Overlay (El Bruto Style) -->
         <div
@@ -539,6 +623,10 @@ const { base_elements, recipes } = evolutionData;
         100% {
             transform: translateX(0);
         }
+    }
+
+    .carved-icon, .carved-text {
+        filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.3));
     }
 </style>
 

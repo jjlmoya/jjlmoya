@@ -15,6 +15,11 @@ export class Game {
         this.inventoryContainer = document.getElementById("inventory");
         this.instructions = document.getElementById("instructions");
 
+        // Encyclopedia Elements
+        this.encyclopediaModal = document.getElementById("encyclopedia-modal");
+        this.encyclopediaGrid = document.getElementById("encyclopedia-grid");
+        this.encyclopediaStats = document.getElementById("encyclopedia-stats");
+
         // Systems
         this.fx = new FX(this.entitiesLayer);
         this.battleSystem = new BattleSystem({
@@ -56,6 +61,7 @@ export class Game {
 
         // Load from localStorage or spawn default egg
         this.loadGame();
+        this.loadEncyclopedia();
     }
 
     getTypeColor(types) {
@@ -115,6 +121,23 @@ export class Game {
         }
     }
 
+    saveEncyclopedia() {
+        localStorage.setItem('evolution_encyclopedia', JSON.stringify([...this.discoveredCreatures]));
+    }
+
+    loadEncyclopedia() {
+        const saved = localStorage.getItem('evolution_encyclopedia');
+        if (saved) {
+            try {
+                this.discoveredCreatures = new Set(JSON.parse(saved));
+            } catch (e) {
+                this.discoveredCreatures = new Set();
+            }
+        } else {
+            this.discoveredCreatures = new Set();
+        }
+    }
+
     setupControls() {
         document.getElementById("spawn-egg-btn").addEventListener("click", () => {
             this.spawnEgg();
@@ -125,6 +148,21 @@ export class Game {
             this.entities.length = 0; // Clear array while maintaining reference
             this.renderEntities();
             this.saveGame();
+        });
+
+        // Encyclopedia Controls
+        const openBtn = document.getElementById("encyclopedia-btn");
+        const closeBtn = document.getElementById("close-encyclopedia");
+
+        openBtn.addEventListener("click", () => {
+            this.renderEncyclopedia();
+            this.encyclopediaModal.style.opacity = "1";
+            this.encyclopediaModal.style.pointerEvents = "auto";
+        });
+
+        closeBtn.addEventListener("click", () => {
+            this.encyclopediaModal.style.opacity = "0";
+            this.encyclopediaModal.style.pointerEvents = "none";
         });
     }
 
@@ -312,7 +350,23 @@ export class Game {
         const entity = this.entities.find(e => e.id === entityId);
         if (!entity || entity.type !== "creature") return;
 
-        if (entity.stomach.length >= entity.maxStomach) {
+        // Check if we can feed (Normal case OR Egg Evolution case)
+        let canFeed = false;
+
+        if (entity.stomach.length < entity.maxStomach) {
+            canFeed = true;
+        } else if (entity.data.id === 'egg' && entity.stomach.length === 1) {
+            // Allow overfilling egg ONLY if it creates a valid recipe
+            const i1 = entity.stomach[0];
+            const i2 = ingredient;
+            const recipe = this.recipes.find(r =>
+                (r.inputs[0] === i1.id && r.inputs[1] === i2.id) ||
+                (r.inputs[0] === i2.id && r.inputs[1] === i1.id)
+            );
+            if (recipe) canFeed = true;
+        }
+
+        if (!canFeed) {
             const el = document.getElementById(`entity-${entity.id}`);
             if (el) {
                 el.animate([
@@ -346,6 +400,7 @@ export class Game {
     }
 
     checkEvolution(entity) {
+        if (entity.data.id !== 'egg') return;
         if (entity.stomach.length < 2) return;
 
         let recipe = null;
@@ -373,6 +428,7 @@ export class Game {
             entity.currentHp = recipe.result.stats.hp;
             entity.stomach = [];
             this.fx.createExplosion(entity.x, entity.y, "232, 121, 249");
+            this.unlockRecipe(recipe);
             this.saveGame();
         } else if (entity.stomach.length >= entity.maxStomach && entity.data.id === 'egg') {
             entity.type = "poop";
@@ -448,5 +504,78 @@ export class Game {
             }
             this.saveGame();
         }
+    }
+
+    getEntityData(id) {
+        const base = this.base_elements.find(e => e.id === id);
+        if (base) return base;
+        const recipe = this.recipes.find(r => r.result.id === id);
+        if (recipe) return recipe.result;
+        return null;
+    }
+
+    unlockRecipe(recipe) {
+        if (!this.discoveredCreatures.has(recipe.result.id)) {
+            this.discoveredCreatures.add(recipe.result.id);
+            this.saveEncyclopedia();
+        }
+    }
+
+    renderEncyclopedia() {
+        this.encyclopediaGrid.innerHTML = "";
+        let discoveredCount = 0;
+
+        this.recipes.forEach(recipe => {
+            const isDiscovered = this.discoveredCreatures.has(recipe.result.id);
+            if (isDiscovered) discoveredCount++;
+
+            const el = document.createElement("div");
+            el.className = `relative p-4 rounded-xl border ${isDiscovered ? 'bg-slate-800/50 border-white/10' : 'bg-slate-900/50 border-white/5'} flex flex-col items-center text-center transition-all hover:scale-[1.02]`;
+
+            if (isDiscovered) {
+                const typeColor = this.getTypeColor(recipe.result.types);
+
+                // Inputs HTML
+                const inputsHtml = recipe.inputs.map(inputId => {
+                    const data = this.getEntityData(inputId);
+                    return `
+                        <div class="w-8 h-8 rounded bg-slate-900 flex items-center justify-center border border-white/10" title="${data ? data.name : inputId}">
+                            <span class="iconify text-slate-400" data-icon="${data ? data.icon : 'mdi:help'}"></span>
+                        </div>
+                    `;
+                }).join('<span class="text-slate-600">+</span>');
+
+                el.innerHTML = `
+                    <div class="mb-3 relative">
+                        <div class="w-16 h-16 rounded-full bg-slate-900 border border-[rgba(${typeColor.bg},0.3)] flex items-center justify-center shadow-lg">
+                            <span class="iconify text-3xl ${typeColor.text} drop-shadow-[0_0_10px_rgba(${typeColor.glow},0.5)]" data-icon="${recipe.result.icon}"></span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">${recipe.result.name}</h3>
+                    <p class="text-xs text-slate-400 mb-4 h-8 line-clamp-2">${recipe.result.desc}</p>
+                    
+                    <div class="w-full pt-3 border-t border-white/5">
+                        <p class="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Receta</p>
+                        <div class="flex items-center justify-center gap-2">
+                            ${inputsHtml}
+                        </div>
+                    </div>
+                `;
+            } else {
+                el.innerHTML = `
+                    <div class="mb-3 relative opacity-20">
+                        <div class="w-16 h-16 rounded-full bg-slate-900 border border-white/10 flex items-center justify-center">
+                            <span class="iconify text-3xl text-white" data-icon="mdi:help"></span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-700 mb-1">???</h3>
+                    <p class="text-xs text-slate-800 mb-4">Bloqueado</p>
+                `;
+            }
+
+            this.encyclopediaGrid.appendChild(el);
+        });
+
+        this.encyclopediaStats.textContent = `Descubiertos: ${discoveredCount}/${this.recipes.length}`;
     }
 }
