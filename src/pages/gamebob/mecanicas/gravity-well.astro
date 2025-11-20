@@ -1,0 +1,165 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+---
+
+<Layout
+    title="Gravity Well Mechanic | GameBob"
+    bodyClass="bg-neutral-900 text-white overflow-hidden touch-none"
+    showBackground={false}
+    mainClass="p-0"
+    headerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
+    footerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
+>
+    <!-- Game Container -->
+    <div
+        id="game-container"
+        class="fixed inset-0 w-full h-full overflow-hidden bg-black cursor-crosshair touch-none select-none z-0"
+    >
+        <canvas id="game-canvas" class="block w-full h-full"></canvas>
+
+        <!-- Simple Hint -->
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/10 font-black text-4xl font-mono pointer-events-none select-none text-center"
+        >
+            CLICK TO ADD<br />GRAVITY
+        </div>
+
+        <!-- Info Overlay -->
+        <div
+            class="absolute bottom-20 left-6 right-6 z-[100] flex gap-2 pointer-events-none"
+        >
+            <a
+                href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/gravity-well/GravityWellMechanic.ts"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-white/10 pointer-events-auto"
+                title="View source code"
+            >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                    ></path>
+                </svg>
+                <span>Code</span>
+            </a>
+            <a
+                href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/gravity-well/README.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-white/10 pointer-events-auto"
+                title="View documentation"
+            >
+                <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                </svg>
+                <span>Docs</span>
+            </a>
+            <button
+                id="clear-btn"
+                class="ml-auto px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-200 rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-red-500/20 pointer-events-auto"
+            >
+                <span>Clear All</span>
+            </button>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    import { GravityWellMechanic } from "../../../lib/mechanics/gravity-well/GravityWellMechanic";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+    const clearBtn = document.getElementById("clear-btn")!;
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const mechanic = new GravityWellMechanic(width, height, {
+        particleCount: 400,
+        gravityConstant: 25,
+        friction: 0.96,
+        maxSpeed: 15,
+    });
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        mechanic.updateBounds(width, height);
+    }
+
+    window.addEventListener("resize", resize);
+
+    // Interaction
+    canvas.addEventListener("mousedown", (e) => {
+        mechanic.addWell(e.clientX, e.clientY);
+    });
+
+    canvas.addEventListener(
+        "touchstart",
+        (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            mechanic.addWell(touch.clientX, touch.clientY);
+        },
+        { passive: false },
+    );
+
+    clearBtn.addEventListener("click", () => {
+        mechanic.clearWells();
+    });
+
+    // Animation Loop
+    function loop() {
+        mechanic.update();
+
+        // Render
+        ctx.fillStyle = "rgba(0, 0, 0, 0.2)"; // Trail effect
+        ctx.fillRect(0, 0, width, height);
+
+        // Draw Wells
+        const wells = mechanic.getWells();
+        for (const well of wells) {
+            const opacity = well.lifetime / well.maxLifetime;
+            ctx.beginPath();
+            ctx.arc(
+                well.pos.x,
+                well.pos.y,
+                well.radius * (0.5 + 0.5 * opacity),
+                0,
+                Math.PI * 2,
+            );
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.1 * opacity})`;
+            ctx.fill();
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * opacity})`;
+            ctx.stroke();
+        }
+
+        // Draw Particles
+        const particles = mechanic.getParticles();
+        for (const p of particles) {
+            ctx.beginPath();
+            ctx.arc(p.pos.x, p.pos.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+        }
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+</script>
