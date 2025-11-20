@@ -2,7 +2,7 @@
 
 A fast-paced infinite runner mechanic with procedural generation, physics-based movement, and parallax scrolling.
 
-> **[🎮 Play Live Demo](/gamebob/mecanicas/autorunner)**
+> **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/autorunner)**
 
 ## 🕹️ How it Works
 The **Autorunner** mechanic automatically moves the player forward (or rather, the world backward) while they must jump to avoid obstacles and gaps.
@@ -19,7 +19,7 @@ The **Autorunner** mechanic automatically moves the player forward (or rather, t
 The `AutorunnerMechanic` class handles the physics simulation and world generation.
 
 - **Source Code**: [`AutorunnerMechanic.ts`](./AutorunnerMechanic.ts)
-- **Demo UI**: [`autorunner.astro`](../../../../pages/gamebob/mecanicas/autorunner.astro)
+- **Demo UI**: [`autorunner.astro`](../../../pages/gamebob/mecanicas/autorunner.astro)
 
 ### Usage Example
 

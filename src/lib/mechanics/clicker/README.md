@@ -2,7 +2,7 @@
 
 A robust incremental game mechanic featuring currency accumulation, passive income, and an upgrade system.
 
-> **[🎮 Play Live Demo](/gamebob/mecanicas/clicker)**
+> **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/clicker)**
 
 ## 🕹️ How it Works
 The **Clicker** mechanic is the foundation of idle/incremental games. Players generate currency by clicking manually or purchasing upgrades that generate currency over time (passive income).
@@ -20,7 +20,7 @@ The **Clicker** mechanic is the foundation of idle/incremental games. Players ge
 The core logic is encapsulated in the `ClickerMechanic` class, separating game rules from the UI.
 
 - **Source Code**: [`ClickerMechanic.ts`](./ClickerMechanic.ts)
-- **Demo UI**: [`clicker.astro`](../../../../pages/gamebob/mecanicas/clicker.astro)
+- **Demo UI**: [`clicker.astro`](../../../pages/gamebob/mecanicas/clicker.astro)
 
 ### Usage Example
 

@@ -2,6 +2,8 @@
 
 A platformer mechanic where jump height and distance are determined by how long the player holds the input.
 
+> **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/hold-jump)**
+
 ## How it works
 
 - **Charge**: Holding down the input charges the jump power (0% to 100%).

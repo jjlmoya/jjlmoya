@@ -2,6 +2,8 @@
 
 A one-tap mechanic where the player must tap to fly upwards and avoid obstacles, similar to Flappy Bird.
 
+> **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/tap-fly)**
+
 ## How it works
 
 - **Gravity**: Constantly pulls the player down.
