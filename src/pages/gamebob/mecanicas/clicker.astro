@@ -1,0 +1,323 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+---
+
+<Layout
+    title="Clicker Mechanic | GameBob"
+    bodyClass="bg-neutral-900 text-white overflow-hidden touch-none"
+    showBackground={false}
+    mainClass="p-0"
+    headerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
+    footerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
+>
+    <div
+        class="fixed inset-0 w-full h-full flex flex-col md:flex-row bg-[#1a1a1a] pt-16"
+    >
+        <!-- Game Area -->
+        <div
+            class="relative flex-1 flex flex-col items-center justify-center p-8 select-none"
+        >
+            <div
+                class="absolute top-1/2 left-1/2 ml-28 mt-8 text-left z-20 pointer-events-none"
+            >
+                <h2
+                    class="text-4xl font-black text-[#fbbf24] drop-shadow-lg"
+                    id="currency-display"
+                >
+                    0
+                </h2>
+                <p class="text-white/50 font-mono text-xs mt-1">MONEDAS</p>
+                <p
+                    class="text-[#fbbf24]/70 font-mono text-xs mt-0.5"
+                    id="gps-display"
+                >
+                    0 por segundo
+                </p>
+            </div>
+
+            <button
+                id="click-btn"
+                class="w-48 h-48 rounded-full bg-gradient-to-br from-[#fbbf24] to-[#d97706] shadow-[0_0_50px_rgba(251,191,36,0.3)] active:scale-95 transition-transform duration-75 flex items-center justify-center group relative z-10"
+            >
+                <svg
+                    class="w-24 h-24 text-white drop-shadow-md group-hover:scale-110 transition-transform"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                    ></path>
+                </svg>
+            </button>
+
+            <canvas
+                id="particle-canvas"
+                class="absolute inset-0 pointer-events-none"></canvas>
+        </div>
+
+        <!-- Shop Area -->
+        <div
+            class="w-full md:w-96 bg-black/20 border-l border-white/10 flex flex-col backdrop-blur-sm z-20 pb-48"
+        >
+            <div class="p-6 border-b border-white/10">
+                <h3 class="text-xl font-bold text-white">Mejoras</h3>
+                <p class="text-sm text-white/50">Invierte tus monedas</p>
+            </div>
+            <div
+                id="upgrades-list"
+                class="flex-1 overflow-y-auto p-4 space-y-3"
+            >
+                <!-- Upgrades injected here -->
+            </div>
+
+            <!-- Info Overlay -->
+            <div class="p-4 border-t border-white/10 flex gap-2">
+                <a
+                    href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/clicker/ClickerMechanic.ts"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex-1 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-sm font-mono flex items-center justify-center gap-2 transition-all border border-white/10"
+                >
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"
+                        ><path
+                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                        ></path></svg
+                    >
+                    <span>Código</span>
+                </a>
+                <a
+                    href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/clicker/README.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex-1 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-sm font-mono flex items-center justify-center gap-2 transition-all border border-white/10"
+                >
+                    <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        ><path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        ></path></svg
+                    >
+                    <span>Docs</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<script>
+    import { ClickerMechanic } from "../../../lib/mechanics/clicker/ClickerMechanic";
+
+    const mechanic = new ClickerMechanic();
+    mechanic.load();
+
+    const els = {
+        currency: document.getElementById("currency-display")!,
+        gps: document.getElementById("gps-display")!,
+        clickBtn: document.getElementById("click-btn")!,
+        upgradesList: document.getElementById("upgrades-list")!,
+        canvas: document.getElementById("particle-canvas") as HTMLCanvasElement,
+    };
+
+    const ctx = els.canvas.getContext("2d")!;
+
+    function resize() {
+        els.canvas.width = els.canvas.offsetWidth;
+        els.canvas.height = els.canvas.offsetHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    // Auto-save every 10 seconds
+    setInterval(() => {
+        mechanic.save();
+    }, 10000);
+
+    // Save on exit
+    window.addEventListener("beforeunload", () => {
+        mechanic.save();
+    });
+
+    function formatNumber(num: number): string {
+        if (num < 1000) return Math.floor(num).toString();
+        const suffixes = ["", "k", "M", "B", "T", "Qa", "Qi"];
+        const suffixNum = Math.floor(Math.log10(num) / 3);
+        const shortValue = parseFloat(
+            (suffixNum != 0
+                ? num / Math.pow(1000, suffixNum)
+                : num
+            ).toPrecision(3),
+        );
+        if (shortValue % 1 != 0) {
+            return shortValue.toFixed(1) + suffixes[suffixNum];
+        }
+        return shortValue + suffixes[suffixNum];
+    }
+
+    // Initialize Shop UI once
+    function initShop() {
+        const state = mechanic.getState();
+        els.upgradesList.innerHTML = "";
+
+        state.upgrades.forEach((u) => {
+            const btn = document.createElement("button");
+            btn.id = `upgrade-btn-${u.id}`;
+            // Base classes
+            btn.className =
+                "w-full p-4 rounded-xl border text-left transition-all mb-3";
+
+            // Structure
+            btn.innerHTML = `
+                <div class="flex justify-between items-start mb-1">
+                    <span class="font-bold text-white">${u.name}</span>
+                    <span class="font-mono text-[#fbbf24]" id="upgrade-count-${u.id}">${u.count}</span>
+                </div>
+                <div class="flex justify-between items-end">
+                    <div class="text-xs text-white/50">
+                        ${u.type === "click" ? "+" + u.power + " clic" : "+" + u.power + "/s"}
+                    </div>
+                    <div class="font-mono text-sm" id="upgrade-cost-${u.id}">
+                        ${formatNumber(u.cost)} 💰
+                    </div>
+                </div>
+            `;
+
+            // Always attach listener, logic handles affordability
+            btn.onclick = () => {
+                if (mechanic.buyUpgrade(u.id)) {
+                    updateShop(); // Update immediately on buy
+                    updateUI();
+                    mechanic.save();
+
+                    // Animation feedback
+                    btn.style.transform = "scale(0.95)";
+                    setTimeout(() => (btn.style.transform = "scale(1)"), 50);
+                }
+            };
+
+            els.upgradesList.appendChild(btn);
+        });
+    }
+
+    // Update Shop UI (called in loop)
+    function updateShop() {
+        const state = mechanic.getState();
+
+        state.upgrades.forEach((u) => {
+            const btn = document.getElementById(`upgrade-btn-${u.id}`);
+            const countEl = document.getElementById(`upgrade-count-${u.id}`);
+            const costEl = document.getElementById(`upgrade-cost-${u.id}`);
+
+            if (!btn || !countEl || !costEl) return;
+
+            const canAfford = state.currency >= u.cost;
+
+            // Update classes for enabled/disabled state
+            if (canAfford) {
+                btn.classList.remove(
+                    "bg-black/20",
+                    "border-white/5",
+                    "opacity-50",
+                    "cursor-not-allowed",
+                );
+                btn.classList.add(
+                    "bg-white/5",
+                    "border-white/10",
+                    "hover:bg-white/10",
+                    "hover:border-[#fbbf24]/50",
+                    "cursor-pointer",
+                );
+                costEl.classList.remove("text-red-400");
+                costEl.classList.add("text-[#fbbf24]");
+            } else {
+                btn.classList.add(
+                    "bg-black/20",
+                    "border-white/5",
+                    "opacity-50",
+                    "cursor-not-allowed",
+                );
+                btn.classList.remove(
+                    "bg-white/5",
+                    "border-white/10",
+                    "hover:bg-white/10",
+                    "hover:border-[#fbbf24]/50",
+                    "cursor-pointer",
+                );
+                costEl.classList.remove("text-[#fbbf24]");
+                costEl.classList.add("text-red-400");
+            }
+
+            // Update text
+            countEl.innerText = u.count.toString();
+            costEl.innerText = `${formatNumber(u.cost)} 💰`;
+        });
+    }
+
+    function updateUI() {
+        const state = mechanic.getState();
+        els.currency.innerText = formatNumber(state.currency);
+        els.gps.innerText = `${formatNumber(state.autoClickRate)} por segundo`;
+        // updateShop is called in loop, so we don't strictly need it here,
+        // but calling it ensures immediate response to clicks.
+        updateShop();
+    }
+
+    // Interaction
+    els.clickBtn.addEventListener("mousedown", (e) => {
+        const rect = els.clickBtn.getBoundingClientRect();
+        const x = e.clientX;
+        const y = e.clientY;
+
+        mechanic.click(
+            x - els.canvas.getBoundingClientRect().left,
+            y - els.canvas.getBoundingClientRect().top,
+        );
+        updateUI();
+
+        // Button animation
+        els.clickBtn.style.transform = "scale(0.90)";
+        setTimeout(() => (els.clickBtn.style.transform = "scale(1)"), 50);
+    });
+
+    // Loop
+    let lastTime = performance.now();
+    function loop(time: number) {
+        const dt = (time - lastTime) / 1000;
+        lastTime = time;
+
+        mechanic.update(dt);
+
+        // Render Particles
+        const state = mechanic.getState();
+        ctx.clearRect(0, 0, els.canvas.width, els.canvas.height);
+
+        ctx.font = "bold 20px monospace";
+        ctx.textAlign = "center";
+
+        for (const p of state.particles) {
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life;
+            ctx.fillText(p.text, p.x, p.y);
+        }
+        ctx.globalAlpha = 1;
+
+        // Update currency display every frame for smooth auto-increment feel
+        if (state.autoClickRate > 0) {
+            els.currency.innerText = formatNumber(state.currency);
+        }
+
+        // Update shop state (enable/disable buttons)
+        updateShop();
+
+        requestAnimationFrame(loop);
+    }
+
+    initShop(); // Create DOM elements
+    updateUI(); // Initial UI update
+    requestAnimationFrame(loop);
+</script>

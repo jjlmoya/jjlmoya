@@ -71,6 +71,28 @@ Platformer mechanic where jump height is determined by input duration.
 
 [View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/hold-jump) | [Documentation](./hold-jump/README.md)
 
+### [Clicker](./clicker)
+Incremental game mechanic with resource management and upgrades.
+
+**Features:**
+- Click and auto-click income
+- Upgrade system with scaling costs
+- Particle effects
+- Save/Load ready state structure
+
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/clicker) | [Documentation](./clicker/README.md)
+
+### [Autorunner](./autorunner)
+Infinite side-scrolling runner with procedural generation.
+
+**Features:**
+- Procedural platform generation
+- Physics-based jumping
+- Increasing difficulty (speed)
+- Obstacle collision
+
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/autorunner) | [Documentation](./autorunner/README.md)
+
 ---
 
 ## 🚀 Quick Start

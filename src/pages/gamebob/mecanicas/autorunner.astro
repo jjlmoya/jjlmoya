@@ -1,0 +1,285 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+---
+
+<Layout
+    title="Autorunner Mechanic | GameBob"
+    bodyClass="bg-neutral-900 text-white overflow-hidden touch-none"
+    showBackground={false}
+    mainClass="p-0"
+    headerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
+    footerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
+>
+    <div
+        id="game-container"
+        class="fixed inset-0 w-full h-full overflow-hidden bg-[#87CEEB] cursor-pointer touch-none select-none z-0"
+    >
+        <canvas id="game-canvas" class="block w-full h-full"></canvas>
+    </div>
+
+    <!-- Info Overlay -->
+    <div
+        class="absolute bottom-24 left-6 right-6 z-[100] flex gap-2 pointer-events-none"
+    >
+        <a
+            href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/autorunner/AutorunnerMechanic.ts"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 bg-black/20 hover:bg-black/40 text-white rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-white/10 pointer-events-auto"
+            title="Ver código fuente"
+        >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                ></path>
+            </svg>
+            <span>Código</span>
+        </a>
+        <a
+            href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/autorunner/README.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 bg-black/20 hover:bg-black/40 text-white rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-white/10 pointer-events-auto"
+            title="Ver documentación"
+        >
+            <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+            </svg>
+            <span>Docs</span>
+        </a>
+    </div>
+</Layout>
+
+<script>
+    import { AutorunnerMechanic } from "../../../lib/mechanics/autorunner/AutorunnerMechanic";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+    const container = document.getElementById("game-container")!;
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const mechanic = new AutorunnerMechanic(width, height);
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        mechanic.updateBounds(width, height);
+    }
+
+    window.addEventListener("resize", resize);
+
+    function onJump(e: Event) {
+        e.preventDefault();
+        mechanic.jump();
+    }
+
+    container.addEventListener("mousedown", onJump);
+    container.addEventListener("touchstart", onJump, { passive: false });
+    window.addEventListener("keydown", (e) => {
+        if (e.code === "Space" || e.code === "ArrowUp") {
+            mechanic.jump();
+        }
+    });
+
+    // Draw Stick Figure
+    function drawPlayer(
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        w: number,
+        h: number,
+        grounded: boolean,
+        runTime: number,
+    ) {
+        ctx.strokeStyle = "#4B0082";
+        ctx.lineWidth = 3;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        const cx = x + w / 2;
+        const cy = y + h / 2;
+
+        // Head
+        ctx.beginPath();
+        ctx.arc(cx, y + 10, 8, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.stroke();
+
+        // Eye
+        ctx.beginPath();
+        ctx.arc(cx + 3, y + 10, 1, 0, Math.PI * 2);
+        ctx.fillStyle = "black";
+        ctx.fill();
+
+        // Scarf
+        ctx.save();
+        ctx.strokeStyle = "#ff4444";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(cx, y + 22);
+        const wave = Math.sin(runTime * 20) * 5;
+        ctx.quadraticCurveTo(cx - 15, y + 22 - wave, cx - 30, y + 25 + wave);
+        ctx.stroke();
+        ctx.restore();
+
+        // Body
+        ctx.beginPath();
+        ctx.moveTo(cx, y + 18);
+        ctx.lineTo(cx, y + 35);
+        ctx.stroke();
+
+        // Arms
+        const armOffset = Math.sin(runTime * 15) * 5;
+        ctx.beginPath();
+        // Left Arm
+        ctx.moveTo(cx, y + 22);
+        ctx.lineTo(
+            cx + (grounded ? -10 : -15),
+            y + 30 + (grounded ? armOffset : -10),
+        );
+        // Right Arm
+        ctx.moveTo(cx, y + 22);
+        ctx.lineTo(
+            cx + (grounded ? 10 : 15),
+            y + 30 + (grounded ? -armOffset : -10),
+        );
+        ctx.stroke();
+
+        // Legs
+        const legOffset = Math.sin(runTime * 15) * 10;
+        ctx.beginPath();
+        // Left Leg
+        ctx.moveTo(cx, y + 35);
+        ctx.lineTo(
+            cx - 5 + (grounded ? legOffset : -5),
+            y + 50 + (grounded ? 0 : -5),
+        );
+        // Right Leg
+        ctx.moveTo(cx, y + 35);
+        ctx.lineTo(
+            cx + 5 + (grounded ? -legOffset : 5),
+            y + 50 + (grounded ? 0 : -5),
+        );
+        ctx.stroke();
+    }
+
+    let lastTime = performance.now();
+    let runTime = 0;
+
+    function loop(time: number) {
+        const dt = Math.min((time - lastTime) / 1000, 0.1); // Cap dt
+        lastTime = time;
+        runTime += dt;
+
+        mechanic.update(dt);
+        const state = mechanic.getState();
+
+        // Render Background
+        ctx.fillStyle = "#87CEEB"; // Sky blue
+        ctx.fillRect(0, 0, width, height);
+
+        // Render Clouds
+        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        for (const cloud of state.clouds) {
+            ctx.beginPath();
+            ctx.arc(cloud.x, cloud.y, cloud.height, 0, Math.PI * 2);
+            ctx.arc(
+                cloud.x + cloud.width * 0.3,
+                cloud.y - cloud.height * 0.5,
+                cloud.height * 0.8,
+                0,
+                Math.PI * 2,
+            );
+            ctx.arc(
+                cloud.x + cloud.width * 0.6,
+                cloud.y,
+                cloud.height * 0.9,
+                0,
+                Math.PI * 2,
+            );
+            ctx.fill();
+        }
+
+        // Render Platforms
+        ctx.fillStyle = "#8B4513"; // Ground brown
+        for (const plat of state.platforms) {
+            ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
+            // Grass top
+            ctx.fillStyle = "#228B22";
+            ctx.fillRect(plat.x, plat.y, plat.width, 10);
+            ctx.fillStyle = "#8B4513";
+        }
+
+        // Render Obstacles
+        ctx.fillStyle = "#FF4500"; // Red spike/box
+        for (const obs of state.obstacles) {
+            ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+            // Warning stripes
+            ctx.fillStyle = "#800000";
+            ctx.beginPath();
+            ctx.moveTo(obs.x + 5, obs.y);
+            ctx.lineTo(obs.x + 15, obs.y + obs.height);
+            ctx.lineTo(obs.x + 10, obs.y + obs.height);
+            ctx.lineTo(obs.x, obs.y);
+            ctx.fill();
+        }
+
+        // Render Player
+        drawPlayer(
+            ctx,
+            state.player.x,
+            state.player.y,
+            state.player.width,
+            state.player.height,
+            state.player.grounded,
+            runTime,
+        );
+
+        // UI
+        ctx.fillStyle = "white";
+        ctx.font = "bold 32px monospace";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.shadowColor = "black";
+        ctx.shadowBlur = 4;
+
+        ctx.fillText(`DISTANCIA: ${state.score}m`, 20, 80); // Moved down to avoid header
+
+        if (state.state === "gameover") {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = "bold 48px monospace";
+            ctx.fillText("GAME OVER", width / 2, height / 2 - 20);
+            ctx.font = "bold 24px monospace";
+            ctx.fillText("TOCA PARA REINICIAR", width / 2, height / 2 + 40);
+        }
+
+        ctx.shadowBlur = 0;
+
+        requestAnimationFrame(loop);
+    }
+
+    requestAnimationFrame(loop);
+</script>
