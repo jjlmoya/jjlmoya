@@ -27,6 +27,50 @@ Swipe gesture detection system with direction and velocity tracking.
 
 [View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/swipe) | [Documentation](./swipe/README.md)
 
+### [Gravity Well](./gravity-well)
+Particle physics simulation where users can place gravity sources that attract floating particles.
+
+**Features:**
+- Particle system with trails
+- Interactive gravity wells
+- Lifetime management for wells
+- Optimized performance
+
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/gravity-well) | [Documentation](./gravity-well/README.md)
+
+### [Flocking](./flocking)
+Boids simulation demonstrating emergent behavior through simple rules.
+
+**Features:**
+- Separation, Alignment, and Cohesion rules
+- Mouse interaction (repulsion)
+- Smooth movement
+- Configurable parameters
+
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/flocking) | [Documentation](./flocking/README.md)
+
+### [Tap & Fly](./tap-fly)
+One-tap mechanic where the player must tap to fly upwards and avoid obstacles.
+
+**Features:**
+- Gravity and impulse physics
+- Obstacle generation and collision
+- Score tracking
+- Game state management
+
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/tap-fly) | [Documentation](./tap-fly/README.md)
+
+### [Hold to Jump](./hold-jump)
+Platformer mechanic where jump height is determined by input duration.
+
+**Features:**
+- Charge-based jump force
+- Parabolic arc physics
+- Platform collision detection
+- Visual charge feedback
+
+[View Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/hold-jump) | [Documentation](./hold-jump/README.md)
+
 ---
 
 ## 🚀 Quick Start
