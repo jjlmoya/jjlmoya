@@ -77,7 +77,7 @@ export class BattleSystem {
             // Attack Animation
             if (attackerDiv) {
                 attackerDiv.classList.add(isF1Turn ? "attack-lunge-right" : "attack-lunge-left");
-                setTimeout(() => attackerDiv.classList.remove("attack-lunge-right", "attack-lunge-left"), 300);
+                setTimeout(() => attackerDiv.classList.remove("attack-lunge-right", "attack-lunge-left"), 200);
             }
 
             // --- Damage Calculation ---
@@ -116,7 +116,7 @@ export class BattleSystem {
             setTimeout(() => {
                 if (defenderDiv) {
                     defenderDiv.classList.add("hit-shake");
-                    setTimeout(() => defenderDiv.classList.remove("hit-shake"), 400);
+                    setTimeout(() => defenderDiv.classList.remove("hit-shake"), 300);
                 }
 
                 let msg = `¡${attacker.data.name} golpea! -${Math.floor(dmg)}`;
@@ -134,7 +134,7 @@ export class BattleSystem {
 
                 this.ui.actionText.innerText = msg;
                 this.ui.actionText.style.color = color;
-            }, 150);
+            }, 100);
 
             // Check Win
             if (hp1 <= 0 || hp2 <= 0) {
@@ -148,9 +148,9 @@ export class BattleSystem {
                     this.ui.closeBtn.classList.remove("hidden");
 
                     if (this.onBattleEnd) this.onBattleEnd(winner, loser);
-                }, 1000);
+                }, 600);
             }
-        }, 1500);
+        }, 800); // Battle turn interval - faster for more dynamic combat
     }
 
     close() {
