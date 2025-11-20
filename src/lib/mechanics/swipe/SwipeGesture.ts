@@ -18,6 +18,7 @@ export interface SwipeConfig {
 
 export interface SwipeCallbacks {
     onSwipeStart?: (x: number, y: number) => void;
+    onSwipeMove?: (x: number, y: number) => void;
     onSwipe?: (direction: SwipeDirection, velocity: number, distance: number) => void;
     onSwipeEnd?: () => void;
 }
@@ -101,6 +102,8 @@ export class SwipeGesture {
         if (this.config.preventScroll) {
             e.preventDefault();
         }
+        const touch = e.touches[0];
+        this.callbacks.onSwipeMove?.(touch.clientX, touch.clientY);
     }
 
     private handleTouchEnd(e: TouchEvent): void {
@@ -119,6 +122,7 @@ export class SwipeGesture {
 
     private handleMouseMove(e: MouseEvent): void {
         if (!this.enabled || !this.isSwiping) return;
+        this.callbacks.onSwipeMove?.(e.clientX, e.clientY);
     }
 
     private handleMouseUp(e: MouseEvent): void {

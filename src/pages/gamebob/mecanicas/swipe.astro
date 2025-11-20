@@ -57,23 +57,21 @@ import Layout from "../../../layouts/Layout.astro";
 
         <div
             id="swipe-area"
-            class="absolute inset-0 flex items-center justify-center pt-24"
+            class="absolute inset-0 flex items-center justify-center pt-32"
         >
             <div class="text-center pointer-events-none select-none">
                 <div class="text-6xl font-black mb-4 text-white/20">
                     DESLIZA
                 </div>
-                <div class="text-sm font-mono text-white/40">
-                    cualquier dirección
-                </div>
+                <div class="text-sm font-mono text-white/40">8 direcciones</div>
             </div>
 
             <div
                 id="arrow-up"
-                class="absolute top-32 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300"
+                class="absolute top-40 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300"
             >
                 <svg
-                    class="w-16 h-16 text-cyan-400"
+                    class="w-16 h-16 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                 >
@@ -85,7 +83,7 @@ import Layout from "../../../layouts/Layout.astro";
                 class="absolute bottom-32 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300"
             >
                 <svg
-                    class="w-16 h-16 text-pink-400 rotate-180"
+                    class="w-16 h-16 text-pink-400 rotate-180 drop-shadow-[0_0_8px_rgba(244,114,182,0.6)]"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                 >
@@ -97,7 +95,7 @@ import Layout from "../../../layouts/Layout.astro";
                 class="absolute left-32 top-1/2 -translate-y-1/2 opacity-0 transition-all duration-300"
             >
                 <svg
-                    class="w-16 h-16 text-green-400 -rotate-90"
+                    class="w-16 h-16 text-green-400 -rotate-90 drop-shadow-[0_0_8px_rgba(74,222,128,0.6)]"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                 >
@@ -109,7 +107,56 @@ import Layout from "../../../layouts/Layout.astro";
                 class="absolute right-32 top-1/2 -translate-y-1/2 opacity-0 transition-all duration-300"
             >
                 <svg
-                    class="w-16 h-16 text-yellow-400 rotate-90"
+                    class="w-16 h-16 text-yellow-400 rotate-90 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+
+            <div
+                id="arrow-up-left"
+                class="absolute top-40 left-40 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-12 h-12 text-purple-400 -rotate-45 drop-shadow-[0_0_6px_rgba(192,132,252,0.6)]"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+            <div
+                id="arrow-up-right"
+                class="absolute top-40 right-40 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-12 h-12 text-orange-400 rotate-45 drop-shadow-[0_0_6px_rgba(251,146,60,0.6)]"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+            <div
+                id="arrow-down-left"
+                class="absolute bottom-32 left-40 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-12 h-12 text-teal-400 -rotate-[135deg] drop-shadow-[0_0_6px_rgba(45,212,191,0.6)]"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+            <div
+                id="arrow-down-right"
+                class="absolute bottom-32 right-40 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-12 h-12 text-rose-400 rotate-[135deg] drop-shadow-[0_0_6px_rgba(251,113,133,0.6)]"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                 >
@@ -119,7 +166,7 @@ import Layout from "../../../layouts/Layout.astro";
         </div>
 
         <div
-            class="absolute top-6 left-6 right-6 flex justify-between items-start pointer-events-none z-50"
+            class="absolute top-24 left-6 right-6 flex justify-between items-start pointer-events-none z-50"
         >
             <div class="font-mono text-white/80">
                 <div class="text-xs mb-2 text-white/50">deslizamientos</div>
@@ -190,6 +237,10 @@ import Layout from "../../../layouts/Layout.astro";
         down: document.getElementById("arrow-down")!,
         left: document.getElementById("arrow-left")!,
         right: document.getElementById("arrow-right")!,
+        "up-left": document.getElementById("arrow-up-left")!,
+        "up-right": document.getElementById("arrow-up-right")!,
+        "down-left": document.getElementById("arrow-down-left")!,
+        "down-right": document.getElementById("arrow-down-right")!,
     };
 
     const counts = {
@@ -203,7 +254,7 @@ import Layout from "../../../layouts/Layout.astro";
     const velocityDisplay = document.getElementById("velocity-display")!;
 
     const swipeCounts = { up: 0, down: 0, left: 0, right: 0 };
-    let trailPoints: { x: number; y: number }[] = [];
+    let trailPoints: { x: number; y: number; alpha: number }[] = [];
     let currentSwipeStart: { x: number; y: number } | null = null;
 
     const swipe = new SwipeGesture(
@@ -212,19 +263,26 @@ import Layout from "../../../layouts/Layout.astro";
             minDistance: 50,
             maxDuration: 500,
             preventScroll: true,
+            enableDiagonals: true,
         },
         {
             onSwipeStart: (x, y) => {
                 currentSwipeStart = { x, y };
-                trailPoints = [{ x, y }];
+                trailPoints = [{ x, y, alpha: 1 }];
+            },
+            onSwipeMove: (x, y) => {
+                if (trailPoints.length > 0) {
+                    trailPoints.push({ x, y, alpha: 1 });
+                }
             },
             onSwipe: (direction, velocity, distance) => {
-                if (direction in swipeCounts) {
-                    swipeCounts[direction as keyof typeof swipeCounts]++;
-                    counts[direction as keyof typeof counts].textContent =
-                        swipeCounts[
-                            direction as keyof typeof swipeCounts
-                        ].toString();
+                const baseDir = direction.split(
+                    "-",
+                )[0] as keyof typeof swipeCounts;
+                if (baseDir in swipeCounts) {
+                    swipeCounts[baseDir]++;
+                    counts[baseDir].textContent =
+                        swipeCounts[baseDir].toString();
                 }
 
                 if (direction in arrows) {
@@ -245,6 +303,10 @@ import Layout from "../../../layouts/Layout.astro";
                     down: "#f472b6",
                     left: "#4ade80",
                     right: "#facc15",
+                    "up-left": "#c084fc",
+                    "up-right": "#fb923c",
+                    "down-left": "#2dd4bf",
+                    "down-right": "#fb7185",
                 };
                 lastDirection.style.color = colors[direction] || "#ffffff";
                 setTimeout(() => {
@@ -253,7 +315,11 @@ import Layout from "../../../layouts/Layout.astro";
 
                 const swipeInfo = swipe.getLastSwipe();
                 if (swipeInfo && currentSwipeStart) {
-                    trailPoints.push({ x: swipeInfo.endX, y: swipeInfo.endY });
+                    trailPoints.push({
+                        x: swipeInfo.endX,
+                        y: swipeInfo.endY,
+                        alpha: 1,
+                    });
                 }
             },
             onSwipeEnd: () => {
@@ -269,11 +335,22 @@ import Layout from "../../../layouts/Layout.astro";
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (trailPoints.length > 1) {
-            ctx.strokeStyle = "#ffffff";
-            ctx.lineWidth = 4;
+            const gradient = ctx.createLinearGradient(
+                trailPoints[0].x,
+                trailPoints[0].y,
+                trailPoints[trailPoints.length - 1].x,
+                trailPoints[trailPoints.length - 1].y,
+            );
+            gradient.addColorStop(0, "rgba(139, 92, 246, 0.8)");
+            gradient.addColorStop(0.5, "rgba(59, 130, 246, 0.8)");
+            gradient.addColorStop(1, "rgba(236, 72, 153, 0.8)");
+
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = "rgba(139, 92, 246, 0.5)";
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 8;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
-            ctx.globalAlpha = 0.5;
 
             ctx.beginPath();
             trailPoints.forEach((point, i) => {
@@ -284,7 +361,23 @@ import Layout from "../../../layouts/Layout.astro";
                 }
             });
             ctx.stroke();
-            ctx.globalAlpha = 1;
+
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            trailPoints.forEach((point, i) => {
+                if (i === 0) {
+                    ctx.moveTo(point.x, point.y);
+                } else {
+                    ctx.lineTo(point.x, point.y);
+                }
+            });
+            ctx.stroke();
+
+            trailPoints = trailPoints
+                .map((p) => ({ ...p, alpha: p.alpha * 0.95 }))
+                .filter((p) => p.alpha > 0.01);
         }
 
         requestAnimationFrame(animate);
