@@ -15,6 +15,18 @@ Physics-based slingshot mechanic with drag-and-launch controls.
 
 [View Demo](https://jjlmoya.dev/gamebob/mecanicas/slingshot) | [Documentation](./slingshot/README.md)
 
+### [Swipe Gesture](./swipe)
+Swipe gesture detection system with direction and velocity tracking.
+
+**Features:**
+- 4 or 8 direction detection
+- Velocity tracking
+- Configurable sensitivity
+- Touch and mouse support
+- Event callbacks
+
+[View Demo](https://jjlmoya.dev/gamebob/mecanicas/swipe) | [Documentation](./swipe/README.md)
+
 ---
 
 ## 🚀 Quick Start

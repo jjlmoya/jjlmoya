@@ -1,0 +1,299 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+---
+
+<Layout
+    title="Swipe Gesture | GameBob"
+    bodyClass="bg-neutral-900 text-white overflow-hidden touch-none"
+    showBackground={false}
+    mainClass="p-0"
+    headerClass="relative z-50"
+    footerClass="relative z-50"
+>
+    <div
+        id="swipe-container"
+        class="fixed inset-0 w-full h-full overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 touch-none select-none"
+    >
+        <div
+            class="absolute bottom-20 left-6 right-6 z-[100] flex gap-2 pointer-events-none"
+        >
+            <a
+                href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/swipe/SwipeGesture.ts"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="px-4 py-2 bg-black/80 hover:bg-black text-white rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-white/10 pointer-events-auto"
+                title="ver código fuente"
+            >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                    ></path>
+                </svg>
+                <span>código</span>
+            </a>
+            <a
+                href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/swipe/README.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="px-4 py-2 bg-black/80 hover:bg-black text-white rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-white/10 pointer-events-auto"
+                title="ver documentación"
+            >
+                <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                </svg>
+                <span>docs</span>
+            </a>
+        </div>
+
+        <div
+            id="swipe-area"
+            class="absolute inset-0 flex items-center justify-center pt-24"
+        >
+            <div class="text-center pointer-events-none select-none">
+                <div class="text-6xl font-black mb-4 text-white/20">
+                    DESLIZA
+                </div>
+                <div class="text-sm font-mono text-white/40">
+                    cualquier dirección
+                </div>
+            </div>
+
+            <div
+                id="arrow-up"
+                class="absolute top-32 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-16 h-16 text-cyan-400"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+            <div
+                id="arrow-down"
+                class="absolute bottom-32 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-16 h-16 text-pink-400 rotate-180"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+            <div
+                id="arrow-left"
+                class="absolute left-32 top-1/2 -translate-y-1/2 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-16 h-16 text-green-400 -rotate-90"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+            <div
+                id="arrow-right"
+                class="absolute right-32 top-1/2 -translate-y-1/2 opacity-0 transition-all duration-300"
+            >
+                <svg
+                    class="w-16 h-16 text-yellow-400 rotate-90"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M12 4l-8 8h5v8h6v-8h5z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div
+            class="absolute top-6 left-6 right-6 flex justify-between items-start pointer-events-none z-50"
+        >
+            <div class="font-mono text-white/80">
+                <div class="text-xs mb-2 text-white/50">deslizamientos</div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div>↑ <span id="count-up" class="font-bold">0</span></div>
+                    <div>
+                        ↓ <span id="count-down" class="font-bold">0</span>
+                    </div>
+                    <div>
+                        ← <span id="count-left" class="font-bold">0</span>
+                    </div>
+                    <div>
+                        → <span id="count-right" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="font-mono text-right text-white/80">
+                <div class="text-xs mb-2 text-white/50">último</div>
+                <div id="last-direction" class="text-2xl font-black">-</div>
+                <div id="velocity-display" class="text-xs text-white/50 mt-1">
+                    0 px/ms
+                </div>
+            </div>
+        </div>
+
+        <canvas id="trail-canvas" class="absolute inset-0 pointer-events-none"
+        ></canvas>
+    </div>
+</Layout>
+
+<style>
+    :global(html),
+    :global(body) {
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+    }
+
+    @keyframes pulse-arrow {
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+    }
+
+    .arrow-active {
+        animation: pulse-arrow 0.3s ease-out;
+    }
+</style>
+
+<script>
+    import { SwipeGesture } from "../../../lib/mechanics/swipe/SwipeGesture";
+
+    const swipeArea = document.getElementById("swipe-area")!;
+    const canvas = document.getElementById("trail-canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const arrows = {
+        up: document.getElementById("arrow-up")!,
+        down: document.getElementById("arrow-down")!,
+        left: document.getElementById("arrow-left")!,
+        right: document.getElementById("arrow-right")!,
+    };
+
+    const counts = {
+        up: document.getElementById("count-up")!,
+        down: document.getElementById("count-down")!,
+        left: document.getElementById("count-left")!,
+        right: document.getElementById("count-right")!,
+    };
+
+    const lastDirection = document.getElementById("last-direction")!;
+    const velocityDisplay = document.getElementById("velocity-display")!;
+
+    const swipeCounts = { up: 0, down: 0, left: 0, right: 0 };
+    let trailPoints: { x: number; y: number }[] = [];
+    let currentSwipeStart: { x: number; y: number } | null = null;
+
+    const swipe = new SwipeGesture(
+        swipeArea,
+        {
+            minDistance: 50,
+            maxDuration: 500,
+            preventScroll: true,
+        },
+        {
+            onSwipeStart: (x, y) => {
+                currentSwipeStart = { x, y };
+                trailPoints = [{ x, y }];
+            },
+            onSwipe: (direction, velocity, distance) => {
+                if (direction in swipeCounts) {
+                    swipeCounts[direction as keyof typeof swipeCounts]++;
+                    counts[direction as keyof typeof counts].textContent =
+                        swipeCounts[
+                            direction as keyof typeof swipeCounts
+                        ].toString();
+                }
+
+                if (direction in arrows) {
+                    const arrow = arrows[direction as keyof typeof arrows];
+                    arrow.style.opacity = "1";
+                    arrow.classList.add("arrow-active");
+                    setTimeout(() => {
+                        arrow.style.opacity = "0";
+                        arrow.classList.remove("arrow-active");
+                    }, 300);
+                }
+
+                lastDirection.textContent = direction.toUpperCase();
+                velocityDisplay.textContent = `${velocity.toFixed(2)} px/ms`;
+
+                const colors: Record<string, string> = {
+                    up: "#22d3ee",
+                    down: "#f472b6",
+                    left: "#4ade80",
+                    right: "#facc15",
+                };
+                lastDirection.style.color = colors[direction] || "#ffffff";
+                setTimeout(() => {
+                    lastDirection.style.color = "";
+                }, 500);
+
+                const swipeInfo = swipe.getLastSwipe();
+                if (swipeInfo && currentSwipeStart) {
+                    trailPoints.push({ x: swipeInfo.endX, y: swipeInfo.endY });
+                }
+            },
+            onSwipeEnd: () => {
+                setTimeout(() => {
+                    trailPoints = [];
+                    currentSwipeStart = null;
+                }, 500);
+            },
+        },
+    );
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (trailPoints.length > 1) {
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 4;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.globalAlpha = 0.5;
+
+            ctx.beginPath();
+            trailPoints.forEach((point, i) => {
+                if (i === 0) {
+                    ctx.moveTo(point.x, point.y);
+                } else {
+                    ctx.lineTo(point.x, point.y);
+                }
+            });
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    animate();
+</script>
