@@ -78,7 +78,10 @@ export class TapFlyMechanic {
         this.player.angle = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, this.player.vel.y * 0.1));
 
         // Bounds collision
-        if (this.player.pos.y + this.player.radius > this.bounds.height || this.player.pos.y - this.player.radius < 0) {
+        if (
+            this.player.pos.y + this.player.radius > this.bounds.height ||
+            this.player.pos.y - this.player.radius < 0
+        ) {
             this.state = "gameover";
         }
 

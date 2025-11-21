@@ -26,7 +26,6 @@ export class AutorunnerMechanic {
     private state: "playing" | "gameover" = "playing";
     private width: number;
     private height: number;
-    private spawnTimer: number = 0;
 
     constructor(width: number, height: number) {
         this.width = width;
@@ -104,7 +103,7 @@ export class AutorunnerMechanic {
                 // Landing Logic
                 // We check if the player is falling and if their feet are within a reasonable distance of the platform top.
                 // This "maxPenetration" accounts for high velocity (tunneling) and frame time variations.
-                const penetration = (this.player.y + this.player.height) - plat.y;
+                const penetration = this.player.y + this.player.height - plat.y;
                 const maxPenetration = Math.max(40, this.player.vy * dt + 10);
 
                 if (this.player.vy > 0 && penetration > 0 && penetration <= maxPenetration) {
@@ -126,7 +125,7 @@ export class AutorunnerMechanic {
         this.obstacles.forEach((o) => (o.x -= moveX));
 
         // Move Clouds (Parallax)
-        this.clouds.forEach(c => {
+        this.clouds.forEach((c) => {
             c.x -= moveX * c.speedFactor;
             if (c.x + c.width < -100) {
                 c.x = this.width + Math.random() * 200;
@@ -172,7 +171,7 @@ export class AutorunnerMechanic {
             const y = this.height - 200 - (Math.random() > 0.7 ? 80 : 0); // Higher base ground
 
             this.platforms.push({
-                x: startX + (Math.random() * 150), // Small gap
+                x: startX + Math.random() * 150, // Small gap
                 y,
                 width,
                 height: 400, // Extend well below screen
@@ -204,7 +203,7 @@ export class AutorunnerMechanic {
             y: Math.random() * (this.height / 2),
             width: 60 + Math.random() * 40,
             height: 30 + Math.random() * 20,
-            speedFactor: 0.2 + Math.random() * 0.3
+            speedFactor: 0.2 + Math.random() * 0.3,
         });
     }
 
@@ -221,7 +220,7 @@ export class AutorunnerMechanic {
             clouds: this.clouds,
             score: Math.floor(this.score),
             state: this.state,
-            speed: this.speed
+            speed: this.speed,
         };
     }
 }

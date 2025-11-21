@@ -5,13 +5,13 @@ export class BattleSystem {
         this.onBattleStart = null;
         this.onClose = null;
 
-        this.ui.closeBtn.addEventListener('click', () => this.close());
+        this.ui.closeBtn.addEventListener("click", () => this.close());
 
         this.typeChart = {
             fuego: { tierra: 2, aire: 2, agua: 0.5, fuego: 0.5 },
             agua: { fuego: 2, tierra: 2, agua: 0.5, aire: 0.5 },
             tierra: { aire: 2, agua: 2, tierra: 0.5, fuego: 0.5 },
-            aire: { agua: 2, fuego: 2, aire: 0.5, tierra: 0.5 }
+            aire: { agua: 2, fuego: 2, aire: 0.5, tierra: 0.5 },
         };
     }
 
@@ -22,12 +22,12 @@ export class BattleSystem {
 
     getTypeColor(types) {
         const typeColors = {
-            fuego: '255, 87, 34',
-            agua: '33, 150, 243',
-            tierra: '121, 85, 72',
-            aire: '158, 158, 158'
+            fuego: "255, 87, 34",
+            agua: "33, 150, 243",
+            tierra: "121, 85, 72",
+            aire: "158, 158, 158",
         };
-        const primaryType = types && types[0] ? types[0] : 'aire';
+        const primaryType = types && types[0] ? types[0] : "aire";
         return typeColors[primaryType] || typeColors.aire;
     }
 
@@ -71,13 +71,20 @@ export class BattleSystem {
             const isF1Turn = turn % 2 !== 0;
             const attacker = isF1Turn ? fighter1 : fighter2;
             const defender = isF1Turn ? fighter2 : fighter1;
-            const attackerDiv = isF1Turn ? document.getElementById("fighter-1") : document.getElementById("fighter-2");
-            const defenderDiv = isF1Turn ? document.getElementById("fighter-2") : document.getElementById("fighter-1");
+            const attackerDiv = isF1Turn
+                ? document.getElementById("fighter-1")
+                : document.getElementById("fighter-2");
+            const defenderDiv = isF1Turn
+                ? document.getElementById("fighter-2")
+                : document.getElementById("fighter-1");
 
             // Attack Animation
             if (attackerDiv) {
                 attackerDiv.classList.add(isF1Turn ? "attack-lunge-right" : "attack-lunge-left");
-                setTimeout(() => attackerDiv.classList.remove("attack-lunge-right", "attack-lunge-left"), 200);
+                setTimeout(
+                    () => attackerDiv.classList.remove("attack-lunge-right", "attack-lunge-left"),
+                    200
+                );
             }
 
             // --- Damage Calculation ---
@@ -85,11 +92,11 @@ export class BattleSystem {
             const defStat = defender.data.stats.def || 0;
 
             // Types
-            const atkType = (attacker.data.types && attacker.data.types[0]) || 'normal';
-            const defTypes = defender.data.types || ['normal'];
+            const atkType = (attacker.data.types && attacker.data.types[0]) || "normal";
+            const defTypes = defender.data.types || ["normal"];
 
             let typeMult = 1;
-            defTypes.forEach(dt => {
+            defTypes.forEach((dt) => {
                 typeMult *= this.getEffectiveness(atkType, dt);
             });
 
@@ -98,7 +105,7 @@ export class BattleSystem {
             const critMult = isCrit ? 1.5 : 1;
 
             // Base Damage
-            let dmg = Math.max(1, (atkStat - defStat * 0.5));
+            let dmg = Math.max(1, atkStat - defStat * 0.5);
             dmg = dmg * typeMult * critMult;
             dmg += Math.random() * 5; // Variance
 

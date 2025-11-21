@@ -1,12 +1,12 @@
 export type SwipeDirection =
-    | 'up'
-    | 'down'
-    | 'left'
-    | 'right'
-    | 'up-left'
-    | 'up-right'
-    | 'down-left'
-    | 'down-right';
+    | "up"
+    | "down"
+    | "left"
+    | "right"
+    | "up-left"
+    | "up-right"
+    | "down-left"
+    | "down-right";
 
 export interface SwipeConfig {
     minDistance?: number;
@@ -63,11 +63,7 @@ export class SwipeGesture {
         mouseUp: this.handleMouseUp.bind(this),
     };
 
-    constructor(
-        element: HTMLElement,
-        config: SwipeConfig = {},
-        callbacks: SwipeCallbacks = {}
-    ) {
+    constructor(element: HTMLElement, config: SwipeConfig = {}, callbacks: SwipeCallbacks = {}) {
         this.element = element;
         this.config = {
             minDistance: config.minDistance ?? 50,
@@ -82,10 +78,14 @@ export class SwipeGesture {
     }
 
     private attachListeners(): void {
-        this.element.addEventListener('touchstart', this.boundHandlers.touchStart, { passive: false });
-        this.element.addEventListener('touchmove', this.boundHandlers.touchMove, { passive: false });
-        this.element.addEventListener('touchend', this.boundHandlers.touchEnd);
-        this.element.addEventListener('mousedown', this.boundHandlers.mouseDown);
+        this.element.addEventListener("touchstart", this.boundHandlers.touchStart, {
+            passive: false,
+        });
+        this.element.addEventListener("touchmove", this.boundHandlers.touchMove, {
+            passive: false,
+        });
+        this.element.addEventListener("touchend", this.boundHandlers.touchEnd);
+        this.element.addEventListener("mousedown", this.boundHandlers.mouseDown);
     }
 
     private handleTouchStart(e: TouchEvent): void {
@@ -116,8 +116,8 @@ export class SwipeGesture {
         if (!this.enabled) return;
         this.startSwipe(e.clientX, e.clientY);
 
-        window.addEventListener('mousemove', this.boundHandlers.mouseMove);
-        window.addEventListener('mouseup', this.boundHandlers.mouseUp);
+        window.addEventListener("mousemove", this.boundHandlers.mouseMove);
+        window.addEventListener("mouseup", this.boundHandlers.mouseUp);
     }
 
     private handleMouseMove(e: MouseEvent): void {
@@ -129,8 +129,8 @@ export class SwipeGesture {
         if (!this.enabled || !this.isSwiping) return;
         this.endSwipe(e.clientX, e.clientY);
 
-        window.removeEventListener('mousemove', this.boundHandlers.mouseMove);
-        window.removeEventListener('mouseup', this.boundHandlers.mouseUp);
+        window.removeEventListener("mousemove", this.boundHandlers.mouseMove);
+        window.removeEventListener("mouseup", this.boundHandlers.mouseUp);
     }
 
     private startSwipe(x: number, y: number): void {
@@ -178,23 +178,23 @@ export class SwipeGesture {
         const absAngle = Math.abs(angle);
 
         if (this.config.enableDiagonals) {
-            if (angle >= -22.5 && angle < 22.5) return 'right';
-            if (angle >= 22.5 && angle < 67.5) return 'down-right';
-            if (angle >= 67.5 && angle < 112.5) return 'down';
-            if (angle >= 112.5 && angle < 157.5) return 'down-left';
-            if (absAngle >= 157.5) return 'left';
-            if (angle >= -157.5 && angle < -112.5) return 'up-left';
-            if (angle >= -112.5 && angle < -67.5) return 'up';
-            if (angle >= -67.5 && angle < -22.5) return 'up-right';
+            if (angle >= -22.5 && angle < 22.5) return "right";
+            if (angle >= 22.5 && angle < 67.5) return "down-right";
+            if (angle >= 67.5 && angle < 112.5) return "down";
+            if (angle >= 112.5 && angle < 157.5) return "down-left";
+            if (absAngle >= 157.5) return "left";
+            if (angle >= -157.5 && angle < -112.5) return "up-left";
+            if (angle >= -112.5 && angle < -67.5) return "up";
+            if (angle >= -67.5 && angle < -22.5) return "up-right";
         } else {
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                return deltaX > 0 ? 'right' : 'left';
+                return deltaX > 0 ? "right" : "left";
             } else {
-                return deltaY > 0 ? 'down' : 'up';
+                return deltaY > 0 ? "down" : "up";
             }
         }
 
-        return 'right';
+        return "right";
     }
 
     enable(): void {
@@ -215,11 +215,11 @@ export class SwipeGesture {
     }
 
     destroy(): void {
-        this.element.removeEventListener('touchstart', this.boundHandlers.touchStart);
-        this.element.removeEventListener('touchmove', this.boundHandlers.touchMove);
-        this.element.removeEventListener('touchend', this.boundHandlers.touchEnd);
-        this.element.removeEventListener('mousedown', this.boundHandlers.mouseDown);
-        window.removeEventListener('mousemove', this.boundHandlers.mouseMove);
-        window.removeEventListener('mouseup', this.boundHandlers.mouseUp);
+        this.element.removeEventListener("touchstart", this.boundHandlers.touchStart);
+        this.element.removeEventListener("touchmove", this.boundHandlers.touchMove);
+        this.element.removeEventListener("touchend", this.boundHandlers.touchEnd);
+        this.element.removeEventListener("mousedown", this.boundHandlers.mouseDown);
+        window.removeEventListener("mousemove", this.boundHandlers.mouseMove);
+        window.removeEventListener("mouseup", this.boundHandlers.mouseUp);
     }
 }

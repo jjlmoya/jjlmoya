@@ -1,9 +1,9 @@
 /**
  * Slingshot Mechanic
- * 
+ *
  * A reusable physics-based slingshot mechanic for games.
  * Drag an object, stretch it like a rubber band, and release to launch.
- * 
+ *
  * @author jjlmoya
  * @license MIT
  */

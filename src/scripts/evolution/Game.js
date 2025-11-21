@@ -1,6 +1,6 @@
-import { BattleSystem } from './BattleSystem.js';
-import { InputSystem } from './InputSystem.js';
-import { FX } from './FX.js';
+import { BattleSystem } from "./BattleSystem.js";
+import { InputSystem } from "./InputSystem.js";
+import { FX } from "./FX.js";
 
 export class Game {
     constructor(config) {
@@ -30,20 +30,20 @@ export class Game {
                 visual: document.getElementById("f1-visual"),
                 name: document.getElementById("f1-name"),
                 hpBar: document.getElementById("f1-hp-bar"),
-                hpText: document.getElementById("f1-hp-text")
+                hpText: document.getElementById("f1-hp-text"),
             },
             f2: {
                 visual: document.getElementById("f2-visual"),
                 name: document.getElementById("f2-name"),
                 hpBar: document.getElementById("f2-hp-bar"),
-                hpText: document.getElementById("f2-hp-text")
-            }
+                hpText: document.getElementById("f2-hp-text"),
+            },
         });
 
         this.inputSystem = new InputSystem(this.playground, this.entities, {
             onDropIngredient: (entityId, ingredient) => this.feedEntity(entityId, ingredient),
             onDropEntity: (sourceId, targetId) => this.handleEntityCollision(sourceId, targetId),
-            onMoveEntity: (id, clientX, clientY) => this.moveEntity(id, clientX, clientY)
+            onMoveEntity: (id, clientX, clientY) => this.moveEntity(id, clientX, clientY),
         });
 
         // Connect battle system callbacks to input system cleanup
@@ -66,19 +66,19 @@ export class Game {
 
     getTypeColor(types) {
         const typeColors = {
-            fuego: { glow: '255, 87, 34', bg: '255, 87, 34', text: 'text-orange-200' },
-            agua: { glow: '33, 150, 243', bg: '33, 150, 243', text: 'text-blue-200' },
-            tierra: { glow: '121, 85, 72', bg: '121, 85, 72', text: 'text-amber-200' },
-            aire: { glow: '158, 158, 158', bg: '158, 158, 158', text: 'text-slate-200' }
+            fuego: { glow: "255, 87, 34", bg: "255, 87, 34", text: "text-orange-200" },
+            agua: { glow: "33, 150, 243", bg: "33, 150, 243", text: "text-blue-200" },
+            tierra: { glow: "121, 85, 72", bg: "121, 85, 72", text: "text-amber-200" },
+            aire: { glow: "158, 158, 158", bg: "158, 158, 158", text: "text-slate-200" },
         };
 
-        const primaryType = types && types[0] ? types[0] : 'aire';
+        const primaryType = types && types[0] ? types[0] : "aire";
         return typeColors[primaryType] || typeColors.aire;
     }
 
     saveGame() {
         const saveData = {
-            entities: this.entities.map(e => ({
+            entities: this.entities.map((e) => ({
                 id: e.id,
                 type: e.type,
                 data: e.data,
@@ -88,15 +88,15 @@ export class Game {
                 level: e.level,
                 xp: e.xp,
                 maxStomach: e.maxStomach,
-                currentHp: e.currentHp
+                currentHp: e.currentHp,
             })),
-            nextId: this.nextId
+            nextId: this.nextId,
         };
-        localStorage.setItem('evolution_game_save', JSON.stringify(saveData));
+        localStorage.setItem("evolution_game_save", JSON.stringify(saveData));
     }
 
     loadGame() {
-        const saved = localStorage.getItem('evolution_game_save');
+        const saved = localStorage.getItem("evolution_game_save");
         if (saved) {
             try {
                 const saveData = JSON.parse(saved);
@@ -104,16 +104,16 @@ export class Game {
 
                 // Clear and refill the array to maintain the reference
                 this.entities.length = 0;
-                saveData.entities.forEach(e => {
+                saveData.entities.forEach((e) => {
                     this.entities.push({
                         ...e,
-                        inBattle: false
+                        inBattle: false,
                     });
                 });
 
                 this.renderEntities();
             } catch (e) {
-                console.error('Failed to load save:', e);
+                console.error("Failed to load save:", e);
                 this.spawnEgg();
             }
         } else {
@@ -122,11 +122,14 @@ export class Game {
     }
 
     saveEncyclopedia() {
-        localStorage.setItem('evolution_encyclopedia', JSON.stringify([...this.discoveredCreatures]));
+        localStorage.setItem(
+            "evolution_encyclopedia",
+            JSON.stringify([...this.discoveredCreatures])
+        );
     }
 
     loadEncyclopedia() {
-        const saved = localStorage.getItem('evolution_encyclopedia');
+        const saved = localStorage.getItem("evolution_encyclopedia");
         if (saved) {
             try {
                 this.discoveredCreatures = new Set(JSON.parse(saved));
@@ -168,7 +171,7 @@ export class Game {
 
     startPassiveHealing() {
         setInterval(() => {
-            this.entities.forEach(entity => {
+            this.entities.forEach((entity) => {
                 // Don't heal if dead or in battle
                 if (entity.currentHp <= 0 || entity.inBattle) return;
 
@@ -183,7 +186,7 @@ export class Game {
                     if (hpBar) {
                         const pct = (entity.currentHp / maxHp) * 100;
                         hpBar.style.width = `${pct}%`;
-                        hpBar.className = `h-full transition-all duration-300 ${pct < 30 ? 'bg-red-500' : 'bg-emerald-500'}`;
+                        hpBar.className = `h-full transition-all duration-300 ${pct < 30 ? "bg-red-500" : "bg-emerald-500"}`;
                     }
                 }
             });
@@ -194,7 +197,8 @@ export class Game {
         this.inventoryContainer.innerHTML = "";
         this.base_elements.forEach((item) => {
             const el = document.createElement("div");
-            el.className = "group flex items-center gap-3 p-3 md:p-2 rounded-lg bg-slate-800/50 hover:bg-indigo-600/20 border border-white/5 hover:border-indigo-500/30 transition-all cursor-grab active:cursor-grabbing select-none touch-manipulation";
+            el.className =
+                "group flex items-center gap-3 p-3 md:p-2 rounded-lg bg-slate-800/50 hover:bg-indigo-600/20 border border-white/5 hover:border-indigo-500/30 transition-all cursor-grab active:cursor-grabbing select-none touch-manipulation";
             el.innerHTML = `
                 <div class="w-10 h-10 md:w-8 md:h-8 rounded bg-slate-900 flex items-center justify-center text-xl md:text-lg border border-white/10">
                     <span class="iconify text-slate-300 group-hover:text-indigo-300" data-icon="${item.icon}"></span>
@@ -204,7 +208,7 @@ export class Game {
                 </div>
             `;
 
-            this.inputSystem.makeDraggable(el, 'ingredient', { data: item });
+            this.inputSystem.makeDraggable(el, "ingredient", { data: item });
             this.inventoryContainer.appendChild(el);
         });
     }
@@ -218,7 +222,7 @@ export class Game {
                 icon: "mdi:egg",
                 desc: "...",
                 stats: { atk: 10, def: 5, hp: 100 },
-                types: ["normal"]
+                types: ["normal"],
             },
             x: Math.random() * (this.playground.clientWidth - 100) + 50,
             y: Math.random() * (this.playground.clientHeight - 100) + 50,
@@ -237,7 +241,7 @@ export class Game {
             xp: 0,
             maxStomach: 1,
             currentHp: props.data.stats ? props.data.stats.hp : 100,
-            inBattle: false
+            inBattle: false,
         };
         this.entities.push(entity);
         this.renderEntity(entity);
@@ -250,7 +254,8 @@ export class Game {
 
         const el = document.createElement("div");
         el.id = `entity-${entity.id}`;
-        el.className = "absolute flex flex-col items-center justify-center w-24 h-24 cursor-grab active:cursor-grabbing transition-transform hover:scale-110 z-10 touch-none";
+        el.className =
+            "absolute flex flex-col items-center justify-center w-24 h-24 cursor-grab active:cursor-grabbing transition-transform hover:scale-110 z-10 touch-none";
         el.style.left = `${entity.x}px`;
         el.style.top = `${entity.y}px`;
         el.style.transform = "translate(-50%, -50%)";
@@ -266,8 +271,8 @@ export class Game {
         }
 
         // Slots
-        let slotsHtml = '';
-        if (entity.type === 'creature') {
+        let slotsHtml = "";
+        if (entity.type === "creature") {
             slotsHtml = `<div class="absolute -top-4 flex gap-1">`;
             for (let i = 0; i < entity.maxStomach; i++) {
                 const filled = entity.stomach[i];
@@ -282,12 +287,14 @@ export class Game {
         }
 
         // Level
-        const levelHtml = entity.type === 'creature' ?
-            `<div class="absolute -right-2 -top-2 w-5 h-5 rounded-full bg-amber-500 text-slate-900 text-[10px] font-black flex items-center justify-center border border-white/20 shadow-lg z-20">${entity.level}</div>` : '';
+        const levelHtml =
+            entity.type === "creature"
+                ? `<div class="absolute -right-2 -top-2 w-5 h-5 rounded-full bg-amber-500 text-slate-900 text-[10px] font-black flex items-center justify-center border border-white/20 shadow-lg z-20">${entity.level}</div>`
+                : "";
 
         // HP Bar
         const hpPct = (entity.currentHp / entity.data.stats.hp) * 100;
-        const hpColor = hpPct < 30 ? 'bg-red-500' : 'bg-emerald-500';
+        const hpColor = hpPct < 30 ? "bg-red-500" : "bg-emerald-500";
         const hpBarHtml = `
             <div class="absolute -bottom-4 w-16 h-1.5 bg-slate-900/80 rounded-full overflow-hidden border border-white/10">
                 <div id="hp-bar-${entity.id}" class="h-full ${hpColor} transition-all duration-300" style="width: ${hpPct}%"></div>
@@ -295,8 +302,8 @@ export class Game {
         `;
 
         // XP Bar
-        let xpBarHtml = '';
-        if (entity.type === 'creature') {
+        let xpBarHtml = "";
+        if (entity.type === "creature") {
             const xpNeeded = entity.level * 100;
             const xpPct = (entity.xp / xpNeeded) * 100;
             xpBarHtml = `
@@ -311,27 +318,31 @@ export class Game {
             ${slotsHtml}
             <div class="relative w-16 h-16 rounded-full border ${bgClass} backdrop-blur-sm flex items-center justify-center shadow-xl animate-float pointer-events-none">
                 <span class="iconify text-4xl ${visualClass}" data-icon="${entity.data.icon}"></span>
-                ${entity.type === "creature" ? `
+                ${
+                    entity.type === "creature"
+                        ? `
                     <div class="absolute -bottom-2 px-2 py-0.5 bg-black/80 rounded-full text-[9px] font-bold text-white border border-white/10 whitespace-nowrap">
                         ${entity.data.name}
                     </div>
-                ` : ""}
+                `
+                        : ""
+                }
             </div>
             ${hpBarHtml}
             ${xpBarHtml}
         `;
 
-        this.inputSystem.makeDraggable(el, 'entity', { id: entity.id });
+        this.inputSystem.makeDraggable(el, "entity", { id: entity.id });
         this.entitiesLayer.appendChild(el);
     }
 
     renderEntities() {
         this.entitiesLayer.innerHTML = "";
-        this.entities.forEach(e => this.renderEntity(e));
+        this.entities.forEach((e) => this.renderEntity(e));
     }
 
     moveEntity(id, clientX, clientY) {
-        const ent = this.entities.find(e => e.id === id);
+        const ent = this.entities.find((e) => e.id === id);
         if (ent) {
             const rect = this.playground.getBoundingClientRect();
             ent.x = clientX - rect.left;
@@ -347,7 +358,7 @@ export class Game {
     }
 
     feedEntity(entityId, ingredient) {
-        const entity = this.entities.find(e => e.id === entityId);
+        const entity = this.entities.find((e) => e.id === entityId);
         if (!entity || entity.type !== "creature") return;
 
         // Check if we can feed (Normal case OR Egg Evolution case)
@@ -355,13 +366,14 @@ export class Game {
 
         if (entity.stomach.length < entity.maxStomach) {
             canFeed = true;
-        } else if (entity.data.id === 'egg' && entity.stomach.length === 1) {
+        } else if (entity.data.id === "egg" && entity.stomach.length === 1) {
             // Allow overfilling egg ONLY if it creates a valid recipe
             const i1 = entity.stomach[0];
             const i2 = ingredient;
-            const recipe = this.recipes.find(r =>
-                (r.inputs[0] === i1.id && r.inputs[1] === i2.id) ||
-                (r.inputs[0] === i2.id && r.inputs[1] === i1.id)
+            const recipe = this.recipes.find(
+                (r) =>
+                    (r.inputs[0] === i1.id && r.inputs[1] === i2.id) ||
+                    (r.inputs[0] === i2.id && r.inputs[1] === i1.id)
             );
             if (recipe) canFeed = true;
         }
@@ -369,12 +381,15 @@ export class Game {
         if (!canFeed) {
             const el = document.getElementById(`entity-${entity.id}`);
             if (el) {
-                el.animate([
-                    { transform: 'translate(-50%, -50%) translateX(0)' },
-                    { transform: 'translate(-50%, -50%) translateX(-5px)' },
-                    { transform: 'translate(-50%, -50%) translateX(5px)' },
-                    { transform: 'translate(-50%, -50%) translateX(0)' }
-                ], { duration: 300 });
+                el.animate(
+                    [
+                        { transform: "translate(-50%, -50%) translateX(0)" },
+                        { transform: "translate(-50%, -50%) translateX(-5px)" },
+                        { transform: "translate(-50%, -50%) translateX(5px)" },
+                        { transform: "translate(-50%, -50%) translateX(0)" },
+                    ],
+                    { duration: 300 }
+                );
             }
             return;
         }
@@ -387,7 +402,7 @@ export class Game {
 
         entity.stomach.push(ingredient);
 
-        if (entity.data.id === 'egg' && entity.stomach.length === 1) {
+        if (entity.data.id === "egg" && entity.stomach.length === 1) {
             entity.data.name = `Huevo de ${ingredient.name}`;
             if (ingredient.types && ingredient.types.length > 0) {
                 entity.data.types = ingredient.types;
@@ -400,7 +415,7 @@ export class Game {
     }
 
     checkEvolution(entity) {
-        if (entity.data.id !== 'egg') return;
+        if (entity.data.id !== "egg") return;
         if (entity.stomach.length < 2) return;
 
         let recipe = null;
@@ -412,7 +427,7 @@ export class Game {
                 const r = this.recipes.find(
                     (rec) =>
                         (rec.inputs[0] === i1.id && rec.inputs[1] === i2.id) ||
-                        (rec.inputs[0] === i2.id && rec.inputs[1] === i1.id),
+                        (rec.inputs[0] === i2.id && rec.inputs[1] === i1.id)
                 );
 
                 if (r) {
@@ -430,7 +445,7 @@ export class Game {
             this.fx.createExplosion(entity.x, entity.y, "232, 121, 249");
             this.unlockRecipe(recipe);
             this.saveGame();
-        } else if (entity.stomach.length >= entity.maxStomach && entity.data.id === 'egg') {
+        } else if (entity.stomach.length >= entity.maxStomach && entity.data.id === "egg") {
             entity.type = "poop";
             entity.data = {
                 id: "poop",
@@ -438,7 +453,7 @@ export class Game {
                 icon: "mdi:emoticon-poop",
                 desc: "Huele mal.",
                 stats: { atk: 0, def: 0, hp: 1 },
-                types: ["normal"]
+                types: ["normal"],
             };
             entity.stomach = [];
             this.fx.createExplosion(entity.x, entity.y, "120, 53, 15");
@@ -455,7 +470,10 @@ export class Game {
         // Prevent entity from battling itself
         if (sourceId === targetId) return;
 
-        const canFight = (e) => (e.type === "creature" && e.data.id !== "egg") || e.type === "poop" || (e.data.id === 'egg' && e.stomach.length > 0);
+        const canFight = (e) =>
+            (e.type === "creature" && e.data.id !== "egg") ||
+            e.type === "poop" ||
+            (e.data.id === "egg" && e.stomach.length > 0);
 
         if (canFight(source) && canFight(target)) {
             // Set Battle State
@@ -471,8 +489,8 @@ export class Game {
                 this.gainXp(winner, 50);
 
                 // Loser Logic
-                if (loser.type === 'poop' || loser.currentHp <= 0) {
-                    const loserIndex = this.entities.findIndex(e => e.id === loser.id);
+                if (loser.type === "poop" || loser.currentHp <= 0) {
+                    const loserIndex = this.entities.findIndex((e) => e.id === loser.id);
                     if (loserIndex !== -1) {
                         this.entities.splice(loserIndex, 1); // Remove while maintaining reference
                     }
@@ -507,9 +525,9 @@ export class Game {
     }
 
     getEntityData(id) {
-        const base = this.base_elements.find(e => e.id === id);
+        const base = this.base_elements.find((e) => e.id === id);
         if (base) return base;
-        const recipe = this.recipes.find(r => r.result.id === id);
+        const recipe = this.recipes.find((r) => r.result.id === id);
         if (recipe) return recipe.result;
         return null;
     }
@@ -525,25 +543,27 @@ export class Game {
         this.encyclopediaGrid.innerHTML = "";
         let discoveredCount = 0;
 
-        this.recipes.forEach(recipe => {
+        this.recipes.forEach((recipe) => {
             const isDiscovered = this.discoveredCreatures.has(recipe.result.id);
             if (isDiscovered) discoveredCount++;
 
             const el = document.createElement("div");
-            el.className = `relative p-4 rounded-xl border ${isDiscovered ? 'bg-slate-800/50 border-white/10' : 'bg-slate-900/50 border-white/5'} flex flex-col items-center text-center transition-all hover:scale-[1.02]`;
+            el.className = `relative p-4 rounded-xl border ${isDiscovered ? "bg-slate-800/50 border-white/10" : "bg-slate-900/50 border-white/5"} flex flex-col items-center text-center transition-all hover:scale-[1.02]`;
 
             if (isDiscovered) {
                 const typeColor = this.getTypeColor(recipe.result.types);
 
                 // Inputs HTML
-                const inputsHtml = recipe.inputs.map(inputId => {
-                    const data = this.getEntityData(inputId);
-                    return `
+                const inputsHtml = recipe.inputs
+                    .map((inputId) => {
+                        const data = this.getEntityData(inputId);
+                        return `
                         <div class="w-8 h-8 rounded bg-slate-900 flex items-center justify-center border border-white/10" title="${data ? data.name : inputId}">
-                            <span class="iconify text-slate-400" data-icon="${data ? data.icon : 'mdi:help'}"></span>
+                            <span class="iconify text-slate-400" data-icon="${data ? data.icon : "mdi:help"}"></span>
                         </div>
                     `;
-                }).join('<span class="text-slate-600">+</span>');
+                    })
+                    .join('<span class="text-slate-600">+</span>');
 
                 el.innerHTML = `
                     <div class="mb-3 relative">

@@ -9,7 +9,7 @@ A particle physics simulation where users can place gravity wells that attract f
 - **Particles**: Hundreds of particles float freely in space.
 - **Gravity Wells**: Clicking creates a "gravity well" that exerts an attractive force on all particles.
 - **Physics**: Uses a simplified universal law of gravitation to calculate forces: `F = G * (m1 * m2) / r^2`.
-- **Interaction**: 
+- **Interaction**:
     - **Click/Tap**: Creates a new gravity well.
     - **Right Click / Double Tap**: Removes all wells.
     - **Lifetime**: Wells slowly fade and disappear over time.
@@ -17,6 +17,7 @@ A particle physics simulation where users can place gravity wells that attract f
 ## Implementation
 
 The `GravityWellMechanic` class manages:
+
 1.  The state of all particles (position, velocity, acceleration).
 2.  The list of active gravity wells.
 3.  The physics update loop that applies forces and moves particles.

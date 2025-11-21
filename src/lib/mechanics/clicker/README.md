@@ -5,9 +5,11 @@ A robust incremental game mechanic featuring currency accumulation, passive inco
 > **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/clicker)**
 
 ## 🕹️ How it Works
+
 The **Clicker** mechanic is the foundation of idle/incremental games. Players generate currency by clicking manually or purchasing upgrades that generate currency over time (passive income).
 
 ### Key Features
+
 - **Manual Clicking**: Generate currency with every click.
 - **Passive Income**: "Auto-Clickers" generate currency automatically every second.
 - **Upgrade System**: Purchase upgrades to increase click power or auto-click rate.

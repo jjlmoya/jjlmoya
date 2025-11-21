@@ -5,9 +5,11 @@ A fast-paced infinite runner mechanic with procedural generation, physics-based 
 > **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/autorunner)**
 
 ## 🕹️ How it Works
+
 The **Autorunner** mechanic automatically moves the player forward (or rather, the world backward) while they must jump to avoid obstacles and gaps.
 
 ### Key Features
+
 - **Procedural Generation**: Platforms and obstacles are generated infinitely as the player progresses.
 - **Physics System**: Gravity, jumping, and collision detection with "coyote time" and penetration tolerance.
 - **Parallax Background**: Multi-layered scrolling background (clouds) for depth and speed sensation.
@@ -37,7 +39,7 @@ window.addEventListener("keydown", (e) => {
 function loop(dt: number) {
     game.update(dt);
     const state = game.getState();
-    
+
     // Render state.player, state.platforms, etc.
 }
 ```

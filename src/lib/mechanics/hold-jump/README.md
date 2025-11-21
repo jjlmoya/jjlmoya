@@ -14,6 +14,7 @@ A platformer mechanic where jump height and distance are determined by how long 
 ## Implementation
 
 The `HoldJumpMechanic` class manages:
+
 1.  **Physics**: Velocity, gravity, friction, and position updates.
 2.  **Input Handling**: Tracks "charging" state and calculates jump force on release.
 3.  **Collision**: Checks for intersections with platform rectangles.

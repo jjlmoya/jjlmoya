@@ -14,6 +14,7 @@ A one-tap mechanic where the player must tap to fly upwards and avoid obstacles,
 ## Implementation
 
 The `TapFlyMechanic` class manages:
+
 1.  **Physics**: Velocity, gravity, and position updates.
 2.  **Game State**: Start, Playing, Game Over states.
 3.  **Obstacle Spawning**: Generates obstacles at regular intervals with randomized gap positions.

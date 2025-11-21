@@ -9,12 +9,8 @@ import itemsData from "../../data/inflacion-items.json";
         class="min-h-screen flex flex-col items-center justify-center bg-amber-50 text-amber-900 p-4 relative overflow-hidden"
     >
         <div class="max-w-4xl w-full text-center z-10">
-            <h1 class="text-4xl md:text-6xl font-black mb-2 tracking-tighter">
-                LA INFLACIÓN
-            </h1>
-            <p class="text-xl opacity-70 mb-12 font-mono">
-                ¿Qué podías comprar con 100€?
-            </p>
+            <h1 class="text-4xl md:text-6xl font-black mb-2 tracking-tighter">LA INFLACIÓN</h1>
+            <p class="text-xl opacity-70 mb-12 font-mono">¿Qué podías comprar con 100€?</p>
 
             <div
                 class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-12 relative"
@@ -36,22 +32,11 @@ import itemsData from "../../data/inflacion-items.json";
                     class="mt-8 pt-4 border-t-2 border-dashed border-gray-300 flex justify-between items-end"
                 >
                     <div class="text-left">
-                        <div
-                            class="text-xs uppercase tracking-widest text-gray-500"
-                        >
-                            Año
-                        </div>
-                        <div
-                            id="year-display"
-                            class="text-5xl font-black tabular-nums"
-                        >
-                            2025
-                        </div>
+                        <div class="text-xs uppercase tracking-widest text-gray-500">Año</div>
+                        <div id="year-display" class="text-5xl font-black tabular-nums">2025</div>
                     </div>
                     <div class="text-right">
-                        <div
-                            class="text-xs uppercase tracking-widest text-gray-500"
-                        >
+                        <div class="text-xs uppercase tracking-widest text-gray-500">
                             Valor equivalente hoy
                         </div>
                         <div
@@ -73,9 +58,7 @@ import itemsData from "../../data/inflacion-items.json";
                     class="w-full h-4 bg-gray-200 rounded-lg appearance-none cursor-pointer border-2 border-black accent-black"
                     id="year-slider"
                 />
-                <div
-                    class="flex justify-between text-xs font-mono mt-2 opacity-50"
-                >
+                <div class="flex justify-between text-xs font-mono mt-2 opacity-50">
                     <span>1970</span>
                     <span>2025</span>
                 </div>
@@ -221,7 +204,7 @@ import itemsData from "../../data/inflacion-items.json";
     <div id="icon-apple_watch"><Icon name="mdi:watch" class="w-8 h-8" /></div>
 </div>
 
-<script define:vars={{ itemsData }}>
+<script is:inline define:vars={{ itemsData }}>
     const slider = document.getElementById("year-slider");
     const yearDisplay = document.getElementById("year-display");
     const valueDisplay = document.getElementById("value-display");
@@ -250,9 +233,7 @@ import itemsData from "../../data/inflacion-items.json";
         if (valueDisplay) valueDisplay.innerText = `${Math.round(totalValue)}€`;
 
         // Filter items available in the selected year
-        const availableItems = items.filter(
-            (item) => item.minYear <= year && item.maxYear >= year,
-        );
+        const availableItems = items.filter((item) => item.minYear <= year && item.maxYear >= year);
 
         // Generate items that fit in the budget
         let currentBudget = totalValue;
@@ -264,9 +245,7 @@ import itemsData from "../../data/inflacion-items.json";
         // Logic: If we have a lot of money (past), we prioritize big purchases first.
 
         // Sort items by price descending
-        const sortedItems = [...availableItems].sort(
-            (a, b) => b.price - a.price,
-        );
+        const sortedItems = [...availableItems].sort((a, b) => b.price - a.price);
 
         // 1. Try to buy expensive items first if we have a lot of budget
         sortedItems.forEach((item) => {
@@ -275,10 +254,7 @@ import itemsData from "../../data/inflacion-items.json";
                 // If item is expensive (>50€) and we have budget, buy it with 50% chance to add variety
                 // Or if it's cheap, buy it later
                 if (item.price > 50 && Math.random() > 0.3) {
-                    itemCounts.set(
-                        item.name,
-                        (itemCounts.get(item.name) || 0) + 1,
-                    );
+                    itemCounts.set(item.name, (itemCounts.get(item.name) || 0) + 1);
                     currentBudget -= item.price;
                 }
             }
@@ -287,20 +263,14 @@ import itemsData from "../../data/inflacion-items.json";
         // 2. Fill the rest with affordable items mixed
         let safety = 0;
         while (currentBudget > 1 && safety < 100) {
-            const affordable = availableItems.filter(
-                (i) => i.price <= currentBudget,
-            );
+            const affordable = availableItems.filter((i) => i.price <= currentBudget);
             if (affordable.length === 0) break;
 
             // Prefer more expensive items in the affordable list to fill budget faster
             // but keep some randomness
-            const randomItem =
-                affordable[Math.floor(Math.random() * affordable.length)];
+            const randomItem = affordable[Math.floor(Math.random() * affordable.length)];
 
-            itemCounts.set(
-                randomItem.name,
-                (itemCounts.get(randomItem.name) || 0) + 1,
-            );
+            itemCounts.set(randomItem.name, (itemCounts.get(randomItem.name) || 0) + 1);
             currentBudget -= randomItem.price;
             safety++;
         }

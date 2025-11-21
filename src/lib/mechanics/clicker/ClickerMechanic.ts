@@ -22,7 +22,7 @@ export class ClickerMechanic {
     private currency: number = 0;
     private clickPower: number = 1;
     private autoClickRate: number = 0; // clicks per second
-    private lastAutoClickTime: number = 0;
+
     private upgrades: Upgrade[] = [];
     private particles: Particle[] = [];
 
@@ -106,7 +106,7 @@ export class ClickerMechanic {
                 // Restore upgrades count and cost
                 if (data.upgrades) {
                     data.upgrades.forEach((savedUpgrade: any) => {
-                        const upgrade = this.upgrades.find(u => u.id === savedUpgrade.id);
+                        const upgrade = this.upgrades.find((u) => u.id === savedUpgrade.id);
                         if (upgrade) {
                             upgrade.count = savedUpgrade.count;
                             upgrade.cost = savedUpgrade.cost;
@@ -124,11 +124,11 @@ export class ClickerMechanic {
             currency: this.currency,
             clickPower: this.clickPower,
             autoClickRate: this.autoClickRate,
-            upgrades: this.upgrades.map(u => ({
+            upgrades: this.upgrades.map((u) => ({
                 id: u.id,
                 count: u.count,
-                cost: u.cost
-            }))
+                cost: u.cost,
+            })),
         };
         localStorage.setItem("clicker_save", JSON.stringify(data));
     }

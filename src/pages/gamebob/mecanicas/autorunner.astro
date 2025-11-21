@@ -18,9 +18,7 @@ import Layout from "../../../layouts/Layout.astro";
         <canvas id="game-canvas" class="block w-full h-full"></canvas>
     </div>
     <!-- Info Overlay -->
-    <div
-        class="absolute bottom-24 left-6 right-6 z-[100] flex gap-2 pointer-events-none"
-    >
+    <div class="absolute bottom-24 left-6 right-6 z-[100] flex gap-2 pointer-events-none">
         <a
             href="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/autorunner/AutorunnerMechanic.ts"
             target="_blank"
@@ -42,12 +40,7 @@ import Layout from "../../../layouts/Layout.astro";
             class="px-4 py-2 bg-black/20 hover:bg-black/40 text-white rounded-lg text-sm font-mono flex items-center gap-2 transition-all hover:scale-105 backdrop-blur-sm border border-white/10 pointer-events-auto"
             title="Ver documentación"
         >
-            <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -61,9 +54,7 @@ import Layout from "../../../layouts/Layout.astro";
             <script>
                 import { AutorunnerMechanic } from "../../../lib/mechanics/autorunner/AutorunnerMechanic";
 
-                const canvas = document.getElementById(
-                    "game-canvas",
-                ) as HTMLCanvasElement;
+                const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
                 const ctx = canvas.getContext("2d")!;
                 const container = document.getElementById("game-container")!;
 
@@ -108,7 +99,7 @@ import Layout from "../../../layouts/Layout.astro";
                     w: number,
                     h: number,
                     grounded: boolean,
-                    runTime: number,
+                    runTime: number
                 ) {
                     ctx.strokeStyle = "#4B0082";
                     ctx.lineWidth = 3;
@@ -116,7 +107,6 @@ import Layout from "../../../layouts/Layout.astro";
                     ctx.lineJoin = "round";
 
                     const cx = x + w / 2;
-                    const cy = y + h / 2;
 
                     // Head
                     ctx.beginPath();
@@ -138,12 +128,7 @@ import Layout from "../../../layouts/Layout.astro";
                     ctx.beginPath();
                     ctx.moveTo(cx, y + 22);
                     const wave = Math.sin(runTime * 20) * 5;
-                    ctx.quadraticCurveTo(
-                        cx - 15,
-                        y + 22 - wave,
-                        cx - 30,
-                        y + 25 + wave,
-                    );
+                    ctx.quadraticCurveTo(cx - 15, y + 22 - wave, cx - 30, y + 25 + wave);
                     ctx.stroke();
                     ctx.restore();
 
@@ -158,16 +143,10 @@ import Layout from "../../../layouts/Layout.astro";
                     ctx.beginPath();
                     // Left Arm
                     ctx.moveTo(cx, y + 22);
-                    ctx.lineTo(
-                        cx + (grounded ? -10 : -15),
-                        y + 30 + (grounded ? armOffset : -10),
-                    );
+                    ctx.lineTo(cx + (grounded ? -10 : -15), y + 30 + (grounded ? armOffset : -10));
                     // Right Arm
                     ctx.moveTo(cx, y + 22);
-                    ctx.lineTo(
-                        cx + (grounded ? 10 : 15),
-                        y + 30 + (grounded ? -armOffset : -10),
-                    );
+                    ctx.lineTo(cx + (grounded ? 10 : 15), y + 30 + (grounded ? -armOffset : -10));
                     ctx.stroke();
 
                     // Legs
@@ -175,16 +154,10 @@ import Layout from "../../../layouts/Layout.astro";
                     ctx.beginPath();
                     // Left Leg
                     ctx.moveTo(cx, y + 35);
-                    ctx.lineTo(
-                        cx - 5 + (grounded ? legOffset : -5),
-                        y + 50 + (grounded ? 0 : -5),
-                    );
+                    ctx.lineTo(cx - 5 + (grounded ? legOffset : -5), y + 50 + (grounded ? 0 : -5));
                     // Right Leg
                     ctx.moveTo(cx, y + 35);
-                    ctx.lineTo(
-                        cx + 5 + (grounded ? -legOffset : 5),
-                        y + 50 + (grounded ? 0 : -5),
-                    );
+                    ctx.lineTo(cx + 5 + (grounded ? -legOffset : 5), y + 50 + (grounded ? 0 : -5));
                     ctx.stroke();
                 }
 
@@ -213,14 +186,14 @@ import Layout from "../../../layouts/Layout.astro";
                             cloud.y - cloud.height * 0.5,
                             cloud.height * 0.8,
                             0,
-                            Math.PI * 2,
+                            Math.PI * 2
                         );
                         ctx.arc(
                             cloud.x + cloud.width * 0.6,
                             cloud.y,
                             cloud.height * 0.9,
                             0,
-                            Math.PI * 2,
+                            Math.PI * 2
                         );
                         ctx.fill();
                     }
@@ -257,7 +230,7 @@ import Layout from "../../../layouts/Layout.astro";
                         state.player.width,
                         state.player.height,
                         state.player.grounded,
-                        runTime,
+                        runTime
                     );
 
                     // UI
@@ -280,11 +253,7 @@ import Layout from "../../../layouts/Layout.astro";
                         ctx.font = "bold 48px monospace";
                         ctx.fillText("GAME OVER", width / 2, height / 2 - 20);
                         ctx.font = "bold 24px monospace";
-                        ctx.fillText(
-                            "TOCA PARA REINICIAR",
-                            width / 2,
-                            height / 2 + 40,
-                        );
+                        ctx.fillText("TOCA PARA REINICIAR", width / 2, height / 2 + 40);
                     }
 
                     ctx.shadowBlur = 0;

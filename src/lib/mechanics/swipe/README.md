@@ -22,23 +22,23 @@ cp SwipeGesture.ts your-project/lib/
 ## 🚀 Basic Usage
 
 ```typescript
-import { SwipeGesture } from './lib/swipe/SwipeGesture';
+import { SwipeGesture } from "./lib/swipe/SwipeGesture";
 
-const swipeArea = document.getElementById('swipe-area')!;
+const swipeArea = document.getElementById("swipe-area")!;
 
 const swipe = new SwipeGesture(
     swipeArea,
     {
         minDistance: 50,
         maxDuration: 500,
-        preventScroll: true
+        preventScroll: true,
     },
     {
         onSwipe: (direction, velocity, distance) => {
             console.log(`Swiped ${direction}!`);
             console.log(`Velocity: ${velocity.toFixed(2)} px/ms`);
             console.log(`Distance: ${distance.toFixed(0)} px`);
-        }
+        },
     }
 );
 ```
@@ -51,19 +51,19 @@ const swipe = new SwipeGesture(
     { minDistance: 50 },
     {
         onSwipeStart: (x, y) => {
-            console.log('Swipe started at:', x, y);
+            console.log("Swipe started at:", x, y);
         },
         onSwipe: (direction, velocity) => {
             // Animate based on direction
-            if (direction === 'left') {
+            if (direction === "left") {
                 nextCard();
-            } else if (direction === 'right') {
+            } else if (direction === "right") {
                 previousCard();
             }
         },
         onSwipeEnd: () => {
-            console.log('Swipe ended');
-        }
+            console.log("Swipe ended");
+        },
     }
 );
 ```
@@ -72,13 +72,13 @@ const swipe = new SwipeGesture(
 
 ### SwipeConfig
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `minDistance` | number | 50 | Minimum swipe distance in pixels |
-| `maxDuration` | number | 500 | Maximum swipe duration in milliseconds |
-| `threshold` | number | 45 | Direction threshold angle in degrees |
-| `preventScroll` | boolean | true | Prevent default scroll behavior |
-| `enableDiagonals` | boolean | false | Enable 8-direction detection |
+| Property          | Type    | Default | Description                            |
+| ----------------- | ------- | ------- | -------------------------------------- |
+| `minDistance`     | number  | 50      | Minimum swipe distance in pixels       |
+| `maxDuration`     | number  | 500     | Maximum swipe duration in milliseconds |
+| `threshold`       | number  | 45      | Direction threshold angle in degrees   |
+| `preventScroll`   | boolean | true    | Prevent default scroll behavior        |
+| `enableDiagonals` | boolean | false   | Enable 8-direction detection           |
 
 ### SwipeCallbacks
 
@@ -93,10 +93,15 @@ interface SwipeCallbacks {
 ### SwipeDirection
 
 ```typescript
-type SwipeDirection = 
-    | 'up' | 'down' | 'left' | 'right'           // 4 directions
-    | 'up-left' | 'up-right'                      // Diagonals (if enabled)
-    | 'down-left' | 'down-right';
+type SwipeDirection =
+    | "up"
+    | "down"
+    | "left"
+    | "right" // 4 directions
+    | "up-left"
+    | "up-right" // Diagonals (if enabled)
+    | "down-left"
+    | "down-right";
 ```
 
 ## 🎯 API Reference
@@ -114,9 +119,9 @@ type SwipeDirection =
 ```typescript
 interface SwipeInfo {
     direction: SwipeDirection;
-    velocity: number;      // pixels per millisecond
-    distance: number;      // total distance in pixels
-    duration: number;      // duration in milliseconds
+    velocity: number; // pixels per millisecond
+    distance: number; // total distance in pixels
+    duration: number; // duration in milliseconds
     startX: number;
     startY: number;
     endX: number;
@@ -130,10 +135,7 @@ Touch events are automatically supported. The mechanic prevents default scroll b
 
 ```typescript
 // Disable scroll prevention if needed
-const swipe = new SwipeGesture(
-    element,
-    { preventScroll: false }
-);
+const swipe = new SwipeGesture(element, { preventScroll: false });
 ```
 
 ## 🎮 Use Cases
@@ -146,12 +148,12 @@ const swipe = new SwipeGesture(
     { minDistance: 100 },
     {
         onSwipe: (direction, velocity) => {
-            if (direction === 'right') {
+            if (direction === "right") {
                 likeCard(velocity);
-            } else if (direction === 'left') {
+            } else if (direction === "left") {
                 dislikeCard(velocity);
             }
-        }
+        },
     }
 );
 ```
@@ -164,21 +166,21 @@ const swipe = new SwipeGesture(
     { minDistance: 80 },
     {
         onSwipe: (direction) => {
-            switch(direction) {
-                case 'left':
+            switch (direction) {
+                case "left":
                     nextPage();
                     break;
-                case 'right':
+                case "right":
                     previousPage();
                     break;
-                case 'up':
+                case "up":
                     scrollDown();
                     break;
-                case 'down':
+                case "down":
                     scrollUp();
                     break;
             }
-        }
+        },
     }
 );
 ```
@@ -188,16 +190,16 @@ const swipe = new SwipeGesture(
 ```typescript
 const swipe = new SwipeGesture(
     gameArea,
-    { 
+    {
         minDistance: 30,
         maxDuration: 300,
-        enableDiagonals: true 
+        enableDiagonals: true,
     },
     {
         onSwipe: (direction, velocity, distance) => {
             sliceFruit(direction, velocity);
             createSlashEffect(direction, distance);
-        }
+        },
     }
 );
 ```
@@ -221,7 +223,7 @@ const swipe = new SwipeGesture(
         },
         onSwipeEnd: () => {
             clearTrail();
-        }
+        },
     }
 );
 ```
@@ -231,16 +233,16 @@ const swipe = new SwipeGesture(
 ```typescript
 const swipe = new SwipeGesture(
     element,
-    { 
+    {
         enableDiagonals: true,
-        threshold: 45  // Angle threshold for diagonals
+        threshold: 45, // Angle threshold for diagonals
     },
     {
         onSwipe: (direction) => {
             // Now receives: up, down, left, right,
             // up-left, up-right, down-left, down-right
             handleDirection(direction);
-        }
+        },
     }
 );
 ```
