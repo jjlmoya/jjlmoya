@@ -3,15 +3,24 @@ interface Props {
     title: string;
     description?: string;
     image?: string;
+    article?: boolean;
+    publishedTime?: string;
+    modifiedTime?: string;
 }
 
 const {
     title,
     description = "Portfolio de JJLMoya. Desarrollador Web y Creativo.",
     image = "/og-image.png",
+    article = false,
+    publishedTime,
+    modifiedTime,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteTitle = "JJLMoya";
+const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
+const imageURL = new URL(image, Astro.url);
 ---
 
 <!-- Global Metadata -->
@@ -19,25 +28,52 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/jpeg" href="/favicon.jpeg" />
 <meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content="#0f172a" />
+<meta name="author" content="JJLMoya" />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
-<title>{title}</title>
-<meta name="title" content={title} />
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={article ? "article" : "website"} />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:secure_url" content={imageURL} />
+<meta property="og:image:alt" content={description} />
+<meta property="og:site_name" content="jjlmoya" />
+<meta property="og:locale" content="es_ES" />
+
+<!-- Article Specific Tags -->
+{
+    article && (
+        <>
+            <meta property="article:author" content="JJLMoya" />
+            {publishedTime && (
+                <meta
+                    property="article:published_time"
+                    content={publishedTime}
+                />
+            )}
+            {modifiedTime && (
+                <meta property="article:modified_time" content={modifiedTime} />
+            )}
+        </>
+    )
+}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
+<meta property="twitter:title" content={fullTitle} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:image" content={imageURL} />
+<meta property="twitter:image:alt" content={description} />
+<meta property="twitter:site" content="@jjlmoya" />
+<meta property="twitter:creator" content="@jjlmoya" />
