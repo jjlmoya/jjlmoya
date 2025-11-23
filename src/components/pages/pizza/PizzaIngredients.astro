@@ -1,0 +1,56 @@
+---
+import { Icon } from "astro-icon/components";
+import { ingredients } from "../../../data/pizza-ingredients";
+---
+
+<div class="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">
+    <div class="mb-10 text-center max-w-2xl mx-auto">
+        <h2 class="text-3xl font-bold flex items-center justify-center gap-3 mb-4">
+            <Icon name="mdi:shopping" class="w-8 h-8 text-orange-500" />
+            Ingredientes Recomendados
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 text-lg">
+            Para obtener el resultado de una pizzería napolitana, la calidad de la materia prima es
+            innegociable. Aquí tienes nuestra selección para comprar directamente.
+        </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {
+            ingredients.map((item) => (
+                <a
+                    href={item.url}
+                    target="_blank"
+                    rel="nofollow sponsored noopener noreferrer"
+                    class="group flex flex-col p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-orange-500 dark:hover:border-orange-500 transition-all hover:shadow-xl hover:-translate-y-2 h-full"
+                >
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${item.bg} ${item.color} group-hover:scale-110 transition-transform`}
+                        >
+                            <Icon name={item.icon} class="w-6 h-6" />
+                        </div>
+                        <h3 class="font-bold text-lg leading-tight group-hover:text-orange-500 transition-colors">
+                            {item.name}
+                        </h3>
+                    </div>
+
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6 flex-grow">
+                        {item.description}
+                    </p>
+
+                    <div class="mt-auto">
+                        <span class="w-full py-2.5 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 group-hover:bg-orange-500 group-hover:text-white text-slate-600 dark:text-slate-300 text-sm font-bold flex items-center justify-center gap-2 transition-all">
+                            <Icon name="mdi:amazon" class="w-5 h-5" />
+                            Comprar en Amazon
+                        </span>
+                    </div>
+                </a>
+            ))
+        }
+    </div>
+    <p class="mt-8 text-xs text-center text-slate-400 dark:text-slate-600">
+        * Participamos en el Programa de Afiliados de Amazon. Si compras a través de estos enlaces,
+        nos ayudas a mantener esta herramienta sin coste extra para ti.
+    </p>
+</div>

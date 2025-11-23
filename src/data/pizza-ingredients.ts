@@ -1,0 +1,68 @@
+export const ingredients = [
+    {
+        name: "Harina Caputo Pizzeria",
+        description:
+            "La auténtica harina napolitana. W260-270, elasticidad perfecta.",
+        url: "https://amzn.to/3X9U9eF",
+        icon: "mdi:sack",
+        color: "text-blue-500",
+        bg: "bg-blue-500/10",
+    },
+    {
+        name: "Tomate San Marzano",
+        description: "DOP Agro Sarnese-Nocerino. Dulce y denso para la base.",
+        url: "https://www.amazon.es/s?k=tomate+san+marzano+dop&linkCode=ll2&tag=jardineraamable-21&linkId=1ea2f71ce116b6e045c4de1fceffefa9&language=es_ES&ref_=as_li_ss_tl",
+        icon: "mdi:fruit-cherries",
+        color: "text-red-500",
+        bg: "bg-red-500/10",
+    },
+    {
+        name: "Pala de Pizza Perforada",
+        description: "Esencial para hornear. Elimina el exceso de harina.",
+        url: "https://www.amazon.es/s?k=pala+pizza+perforada&linkCode=ll2&tag=jardineraamable-21&linkId=f7b72b343ec254cb76f6167794ce5985&language=es_ES&ref_=as_li_ss_tl",
+        icon: "mdi:silverware-fork-knife",
+        color: "text-slate-400",
+        bg: "bg-slate-500/10",
+    },
+    {
+        name: "Piedra Refractaria",
+        description:
+            "Retiene el calor para un cornicione explosivo en horno doméstico.",
+        url: "https://www.amazon.es/s?k=piedra+pizza+horno&tag=jardineraamable-21",
+        icon: "mdi:toaster-oven",
+        color: "text-orange-500",
+        bg: "bg-orange-500/10",
+    },
+    {
+        name: "Aceite de Oliva Virgen Extra",
+        description: "El toque final imprescindible. Un buen AOVE realza todos los sabores.",
+        url: "https://www.amazon.es/s?k=aceite+oliva+virgen+extra+premium&linkCode=ll2&tag=jardineraamable-21&linkId=1e9b584b87d43ee6efd3d3ef9a948434&language=es_ES&ref_=as_li_ss_tl",
+        icon: "mdi:oil",
+        color: "text-yellow-600",
+        bg: "bg-yellow-500/10",
+    },
+    {
+        name: "Levadura Seca Caputo",
+        description: "Levadura de alta actividad específica para largas fermentaciones.",
+        url: "https://www.amazon.es/s?k=levadura+caputo&linkCode=ll2&tag=jardineraamable-21&linkId=77ea5b9c1934b5b2922dbc05b52603fd&language=es_ES&ref_=as_li_ss_tl",
+        icon: "mdi:bacteria",
+        color: "text-amber-700",
+        bg: "bg-amber-500/10",
+    },
+    {
+        name: "Caja de Fermentación",
+        description: "Mantiene la humedad perfecta para que las bolas no se sequen en la nevera.",
+        url: "https://es-pre-prod.amazon.com/s?k=caja+fermentacion+pizza&linkCode=ll2&tag=jardineraamable-21&linkId=7d602ab8a607977219b84a7b8686810d&language=es_ES&ref_=as_li_ss_tl",
+        icon: "mdi:box-variant",
+        color: "text-slate-500",
+        bg: "bg-slate-500/10",
+    },
+    {
+        name: "Cortapizzas Profesional",
+        description: "Corte limpio sin arrastrar los ingredientes. Imprescindible.",
+        url: "https://www.amazon.es/s?k=cortapizzas+profesional&linkCode=ll2&tag=jardineraamable-21&linkId=7aa47135eb6ddf57ad7577f480a31a71&language=es_ES&ref_=as_li_ss_tl",
+        icon: "mdi:pizza",
+        color: "text-red-600",
+        bg: "bg-red-500/10",
+    },
+];
