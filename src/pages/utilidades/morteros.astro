@@ -1423,15 +1423,36 @@ import { Icon } from "astro-icon/components";
 
             if (state.materialType === "cal") {
                 // User has Cal, show how much Arena/Mármol they need
+                // CRITICAL: Ratios are by VOLUME, not weight!
+                // Must convert kg → liters → apply ratio → convert back to kg
+
+                const calDensity = CAL_DENSITY[state.calType]; // 0.65 for polvo, 1.30 for pasta
+                const calVolumeLiters = state.materialKg / calDensity;
+
                 const aggregateParts = phase.ratio.arena || phase.ratio.marmol || 0;
-                complementaryAmount = state.materialKg * aggregateParts;
+                const arenaVolumeLiters = calVolumeLiters * aggregateParts;
+
+                // Convert arena volume back to kg using arena density
+                const arenaDensity = phase.density; // 1.6 for arena, 1.2 for marmol
+                complementaryAmount = arenaVolumeLiters * arenaDensity;
+
                 complementaryName = phase.ratio.arena ? "Arena" : "Mármol";
                 ratioText = `${phase.ratio.cal}:${aggregateParts}`;
             } else {
                 // User has Arena, show how much Cal they need
+                // Same logic: convert to volume first
+
+                const arenaDensity = phase.density;
+                const arenaVolumeLiters = state.materialKg / arenaDensity;
+
                 const calParts = phase.ratio.cal;
                 const aggregateParts = phase.ratio.arena || phase.ratio.marmol || 0;
-                complementaryAmount = state.materialKg * (calParts / aggregateParts);
+                const calVolumeLiters = arenaVolumeLiters * (calParts / aggregateParts);
+
+                // Convert cal volume back to kg using selected cal type density
+                const calDensity = CAL_DENSITY[state.calType];
+                complementaryAmount = calVolumeLiters * calDensity;
+
                 complementaryName = "Cal";
                 ratioText = `${calParts}:${aggregateParts}`;
             }
