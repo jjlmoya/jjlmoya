@@ -1210,16 +1210,17 @@ import { Icon } from "astro-icon/components";
 
         // Update sack pile
         function updateSackPile() {
-            const numSacks = Math.ceil(state.materialKg / 25);
-            const maxSacks = 8;
-            const displaySacks = Math.min(numSacks, maxSacks);
+            const totalSacks = state.materialKg / 25; // Exact number including decimals
+            const fullSacks = Math.floor(totalSacks);
+            const hasHalfSack = totalSacks - fullSacks >= 0.25; // Show half sack if at least 0.25 remaining
 
             let svg = "";
             const sackWidth = 40;
             const sackHeight = 50;
             const cols = 4;
 
-            for (let i = 0; i < displaySacks; i++) {
+            // Draw full sacks
+            for (let i = 0; i < fullSacks; i++) {
                 const row = Math.floor(i / cols);
                 const col = i % cols;
                 const x = 30 + col * (sackWidth + 10);
@@ -1232,6 +1233,38 @@ import { Icon } from "astro-icon/components";
                     <line x1="${x + 5}" y1="${y + 15}" x2="${x + sackWidth - 5}" y2="${y + 15}" 
                           stroke="#333" stroke-width="1" opacity="0.3"/>
                     <line x1="${x + 5}" y1="${y + 25}" x2="${x + sackWidth - 5}" y2="${y + 25}" 
+                          stroke="#333" stroke-width="1" opacity="0.3"/>
+                `;
+            }
+
+            // Draw half sack if needed
+            if (hasHalfSack) {
+                const i = fullSacks;
+                const row = Math.floor(i / cols);
+                const col = i % cols;
+                const x = 30 + col * (sackWidth + 10);
+                const y = 150 - row * (sackHeight - 10);
+
+                // Half sack with diagonal cut
+                const halfColor = state.materialType === "cal" ? "#f5f5f5" : "#e6c288";
+                const lightColor = state.materialType === "cal" ? "#fafafa" : "#f0d5a8";
+
+                svg += `
+                    <defs>
+                        <clipPath id="half-sack-clip">
+                            <polygon points="${x},${y} ${x + sackWidth},${y} ${x + sackWidth},${y + sackHeight} ${x},${y + sackHeight / 2}" />
+                        </clipPath>
+                    </defs>
+                    <rect x="${x}" y="${y}" width="${sackWidth}" height="${sackHeight}" 
+                          fill="${lightColor}" 
+                          stroke="#333" stroke-width="1.5" stroke-dasharray="3,3" rx="3"/>
+                    <rect x="${x}" y="${y}" width="${sackWidth}" height="${sackHeight}" 
+                          fill="${halfColor}" 
+                          clip-path="url(#half-sack-clip)"
+                          stroke="none"/>
+                    <line x1="${x}" y1="${y + sackHeight / 2}" x2="${x + sackWidth}" y2="${y + sackHeight}" 
+                          stroke="#333" stroke-width="1.5"/>
+                    <line x1="${x + 5}" y1="${y + 15}" x2="${x + sackWidth - 5}" y2="${y + 15}" 
                           stroke="#333" stroke-width="1" opacity="0.3"/>
                 `;
             }
