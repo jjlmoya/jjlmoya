@@ -9,16 +9,16 @@ interface Props {
 const { className = "" } = Astro.props;
 ---
 
-<nav
-    class={`fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10 bg-white/5 transition-colors duration-300 ${className}`}
->
-    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+<nav class={`fixed top-0 w-full z-50 transition-all duration-300 ${className}`} id="main-nav">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative z-50">
         <a
             href="/"
             class="text-xl font-bold tracking-tighter hover:text-[var(--color-accent)] transition-colors"
             >jjlmoya</a
         >
-        <div class="flex items-center gap-6">
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-6">
             <a
                 href="/proyectos"
                 class={`text-sm font-medium ${currentPath.startsWith("proyectos") ? "text-[var(--color-accent)] nav-active" : ""} hover:text-[var(--color-accent)] transition-colors`}
@@ -40,5 +40,138 @@ const { className = "" } = Astro.props;
                 >gamebob</a
             >
         </div>
+
+        <!-- Mobile Menu Button (High Contrast) -->
+        <button
+            id="menu-toggle"
+            class="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-1.5 group z-50"
+            aria-label="Toggle Menu"
+        >
+            <span class="w-6 h-0.5 bg-current transition-all duration-300 origin-center line-1"
+            ></span>
+            <span class="w-6 h-0.5 bg-current transition-all duration-300 origin-center line-2"
+            ></span>
+        </button>
+    </div>
+
+    <!-- Premium Full-Screen Overlay -->
+    <div
+        id="mobile-menu-overlay"
+        class="fixed inset-0 z-40 pointer-events-none opacity-0 transition-opacity duration-500"
+    >
+        <div class="absolute inset-0 bg-white/95 dark:bg-black/95 backdrop-blur-xl"></div>
+
+        <div class="relative h-full flex flex-col justify-center items-center gap-8 p-8">
+            <a href="/proyectos" class="menu-link" style="--delay: 0.1s">
+                <span class="link-number">01</span>
+                <span class="link-text">Proyectos</span>
+            </a>
+            <a href="/conceptos" class="menu-link" style="--delay: 0.2s">
+                <span class="link-number">02</span>
+                <span class="link-text">Conceptos</span>
+            </a>
+            <a href="/utilidades" class="menu-link" style="--delay: 0.3s">
+                <span class="link-number">03</span>
+                <span class="link-text">Utilidades</span>
+            </a>
+            <a href="/gamebob" class="menu-link" style="--delay: 0.4s">
+                <span class="link-number">04</span>
+                <span class="link-text">GameBob</span>
+            </a>
+        </div>
     </div>
 </nav>
+
+<style>
+    /* Menu Toggle Animation */
+    body.menu-open .line-1 {
+        transform: translateY(4px) rotate(45deg);
+    }
+    body.menu-open .line-2 {
+        transform: translateY(-4px) rotate(-45deg);
+    }
+
+    /* Prevent Scroll */
+    html.menu-open,
+    body.menu-open {
+        overflow: hidden;
+    }
+
+    /* Overlay Visibility */
+    body.menu-open #mobile-menu-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Link Styles */
+    .menu-link {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        text-decoration: none;
+        color: #1a1a1a;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+            opacity 0.5s ease,
+            transform 0.5s ease;
+        transition-delay: var(--delay);
+    }
+
+    :global(.dark) .menu-link {
+        color: #ffffff;
+    }
+
+    body.menu-open .menu-link {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .link-number {
+        font-size: 0.875rem;
+        color: var(--color-accent);
+        font-weight: 400;
+    }
+
+    .link-text {
+        font-size: 3rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        transition: transform 0.3s ease;
+    }
+
+    .menu-link:hover .link-text {
+        transform: translateX(10px);
+        font-style: italic;
+    }
+
+    @media (max-height: 600px) {
+        .link-text {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const body = document.body;
+    const html = document.documentElement;
+    const menuLinks = document.querySelectorAll(".menu-link");
+
+    function toggleMenu() {
+        body.classList.toggle("menu-open");
+        html.classList.toggle("menu-open");
+    }
+
+    function closeMenu() {
+        body.classList.remove("menu-open");
+        html.classList.remove("menu-open");
+    }
+
+    menuToggle?.addEventListener("click", toggleMenu);
+
+    menuLinks.forEach((link) => {
+        link.addEventListener("click", closeMenu);
+    });
+</script>
