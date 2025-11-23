@@ -10,10 +10,10 @@ const { className = "" } = Astro.props;
 ---
 
 <nav
-    class={`fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10 bg-white/5 transition-all duration-300 ${className}`}
+    class={`fixed top-0 w-full z-[100] backdrop-blur-md border-b border-white/10 bg-white/5 transition-all duration-300 ${className}`}
     id="main-nav"
 >
-    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative z-[100]">
         <a
             href="/"
             class="text-xl font-bold tracking-tighter hover:text-[var(--color-accent)] transition-colors"
@@ -47,7 +47,7 @@ const { className = "" } = Astro.props;
         <!-- Mobile Menu Button (High Contrast) -->
         <button
             id="menu-toggle"
-            class="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-1.5 group z-50"
+            class="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-1.5 group z-[100]"
             aria-label="Toggle Menu"
         >
             <span class="w-6 h-0.5 bg-current transition-all duration-300 origin-center line-1"
@@ -60,7 +60,7 @@ const { className = "" } = Astro.props;
     <!-- Premium Full-Screen Overlay -->
     <div
         id="mobile-menu-overlay"
-        class="fixed inset-0 z-40 pointer-events-none opacity-0 transition-opacity duration-500"
+        class="fixed top-0 left-0 w-screen h-screen z-[90] pointer-events-none opacity-0 transition-opacity duration-500"
     >
         <div class="absolute inset-0 bg-white/95 dark:bg-black/95 backdrop-blur-xl"></div>
 
@@ -87,21 +87,21 @@ const { className = "" } = Astro.props;
 
 <style>
     /* Menu Toggle Animation */
-    body.menu-open .line-1 {
+    :global(body.menu-open) .line-1 {
         transform: translateY(4px) rotate(45deg);
     }
-    body.menu-open .line-2 {
+    :global(body.menu-open) .line-2 {
         transform: translateY(-4px) rotate(-45deg);
     }
 
     /* Prevent Scroll */
-    html.menu-open,
-    body.menu-open {
+    :global(html.menu-open),
+    :global(body.menu-open) {
         overflow: hidden;
     }
 
     /* Overlay Visibility */
-    body.menu-open #mobile-menu-overlay {
+    :global(body.menu-open) #mobile-menu-overlay {
         opacity: 1;
         pointer-events: auto;
     }
@@ -126,7 +126,7 @@ const { className = "" } = Astro.props;
         color: #ffffff;
     }
 
-    body.menu-open .menu-link {
+    :global(body.menu-open) .menu-link {
         opacity: 1;
         transform: translateY(0);
     }
@@ -157,24 +157,35 @@ const { className = "" } = Astro.props;
 </style>
 
 <script>
-    const menuToggle = document.getElementById("menu-toggle");
-    const body = document.body;
-    const html = document.documentElement;
-    const menuLinks = document.querySelectorAll(".menu-link");
+    function setupMenu() {
+        const menuToggle = document.getElementById("menu-toggle");
+        const body = document.body;
+        const html = document.documentElement;
+        const menuLinks = document.querySelectorAll(".menu-link");
 
-    function toggleMenu() {
-        body.classList.toggle("menu-open");
-        html.classList.toggle("menu-open");
+        if (!menuToggle) return;
+
+        // Clone to remove existing listeners
+        const newToggle = menuToggle.cloneNode(true);
+        menuToggle.parentNode?.replaceChild(newToggle, menuToggle);
+
+        newToggle.addEventListener("click", (e) => {
+            e.stopPropagation(); // Prevent bubbling issues
+            body.classList.toggle("menu-open");
+            html.classList.toggle("menu-open");
+        });
+
+        menuLinks.forEach((link) => {
+            link.addEventListener("click", () => {
+                body.classList.remove("menu-open");
+                html.classList.remove("menu-open");
+            });
+        });
     }
 
-    function closeMenu() {
-        body.classList.remove("menu-open");
-        html.classList.remove("menu-open");
-    }
+    // Initialize on load
+    setupMenu();
 
-    menuToggle?.addEventListener("click", toggleMenu);
-
-    menuLinks.forEach((link) => {
-        link.addEventListener("click", closeMenu);
-    });
+    // Re-initialize on Astro page swaps
+    document.addEventListener("astro:page-load", setupMenu);
 </script>
