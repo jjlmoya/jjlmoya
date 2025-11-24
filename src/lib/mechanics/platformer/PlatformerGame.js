@@ -1,0 +1,107 @@
+import { Player } from './Player.js';
+import { InputHandler } from './InputHandler.js';
+
+export class PlatformerGame {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.width = canvas.width = 800;
+        this.height = canvas.height = 600;
+
+        this.input = new InputHandler();
+        this.player = new Player(this);
+
+        this.particles = [];
+
+        // Platforms
+        this.platforms = [
+            { x: 200, y: 400, width: 200, height: 20 },
+            { x: 500, y: 300, width: 200, height: 20 },
+            { x: 50, y: 250, width: 100, height: 20 },
+            { x: 700, y: 150, width: 20, height: 200 } // Wall jump target
+        ];
+
+        // Debug UI
+        this.debugState = document.getElementById('debug-state');
+        this.debugVelX = document.getElementById('debug-vel-x');
+        this.debugVelY = document.getElementById('debug-vel-y');
+
+        this.animate = this.animate.bind(this);
+        this.animate();
+    }
+
+    update() {
+        this.player.update(this.input);
+
+        // Update particles
+        this.particles.forEach((particle, index) => {
+            particle.update();
+            if (particle.markedForDeletion) this.particles.splice(index, 1);
+        });
+
+        this.updateDebugUI();
+    }
+
+    draw() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // Draw Floor
+        this.ctx.fillStyle = '#1e293b'; // Slate-800
+        this.ctx.fillRect(0, this.height - 50, this.width, 50);
+
+        // Draw Platforms
+        this.ctx.fillStyle = '#334155'; // Slate-700
+        this.platforms.forEach(platform => {
+            this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+        });
+
+        this.player.draw(this.ctx);
+
+        this.particles.forEach(particle => particle.draw(this.ctx));
+    }
+
+    animate() {
+        this.update();
+        this.draw();
+        requestAnimationFrame(this.animate);
+    }
+
+    createParticles(x, y, count, color) {
+        for (let i = 0; i < count; i++) {
+            this.particles.push(new Particle(this, x, y, color));
+        }
+    }
+
+    updateDebugUI() {
+        if (this.debugState) this.debugState.innerText = this.player.state;
+        if (this.debugVelX) this.debugVelX.innerText = this.player.vx.toFixed(2);
+        if (this.debugVelY) this.debugVelY.innerText = this.player.vy.toFixed(2);
+    }
+}
+
+class Particle {
+    constructor(game, x, y, color) {
+        this.game = game;
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.size = Math.random() * 5 + 2;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * -2 - 1;
+        this.markedForDeletion = false;
+    }
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.size *= 0.95;
+        if (this.size < 0.5) this.markedForDeletion = true;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}

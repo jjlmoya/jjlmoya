@@ -2,11 +2,19 @@
 export interface Props {
     codeUrl: string;
     docsUrl: string;
+    mode?: "overlay" | "static";
 }
-const { codeUrl, docsUrl } = Astro.props as Props;
+const { codeUrl, docsUrl, mode = "overlay" } = Astro.props as Props;
 ---
 
-<div class="absolute bottom-24 left-6 right-6 z-[100] flex gap-2 pointer-events-none">
+<div
+    class:list={[
+        "flex gap-2 pointer-events-none",
+        mode === "overlay"
+            ? "absolute bottom-24 left-6 right-6 z-[100]"
+            : "w-full justify-center py-8 relative z-10",
+    ]}
+>
     <a
         href={codeUrl}
         target="_blank"
