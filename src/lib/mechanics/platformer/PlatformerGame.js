@@ -13,29 +13,29 @@ export class PlatformerGame {
 
         this.particles = [];
 
-        // Platforms
         this.platforms = [
             { x: 200, y: 400, width: 200, height: 20 },
             { x: 500, y: 300, width: 200, height: 20 },
             { x: 50, y: 250, width: 100, height: 20 },
-            { x: 700, y: 150, width: 20, height: 200 } // Wall jump target
+            { x: 700, y: 150, width: 20, height: 200 }
         ];
 
-        // Debug UI
         this.debugState = document.getElementById('debug-state');
         this.debugVelX = document.getElementById('debug-vel-x');
         this.debugVelY = document.getElementById('debug-vel-y');
 
+        this.lastTime = 0;
         this.animate = this.animate.bind(this);
-        this.animate();
+        requestAnimationFrame(this.animate);
     }
 
-    update() {
-        this.player.update(this.input);
+    update(deltaTime) {
+        const dt = deltaTime / 16.67;
 
-        // Update particles
+        this.player.update(this.input, dt);
+
         this.particles.forEach((particle, index) => {
-            particle.update();
+            particle.update(dt);
             if (particle.markedForDeletion) this.particles.splice(index, 1);
         });
 
@@ -45,12 +45,10 @@ export class PlatformerGame {
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Draw Floor
-        this.ctx.fillStyle = '#1e293b'; // Slate-800
+        this.ctx.fillStyle = '#1e293b';
         this.ctx.fillRect(0, this.height - 50, this.width, 50);
 
-        // Draw Platforms
-        this.ctx.fillStyle = '#334155'; // Slate-700
+        this.ctx.fillStyle = '#334155';
         this.platforms.forEach(platform => {
             this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
         });
@@ -60,8 +58,14 @@ export class PlatformerGame {
         this.particles.forEach(particle => particle.draw(this.ctx));
     }
 
-    animate() {
-        this.update();
+    animate(timeStamp) {
+        const deltaTime = timeStamp - this.lastTime;
+        this.lastTime = timeStamp;
+
+        if (deltaTime < 100) {
+            this.update(deltaTime);
+        }
+
         this.draw();
         requestAnimationFrame(this.animate);
     }
@@ -91,9 +95,9 @@ class Particle {
         this.markedForDeletion = false;
     }
 
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
+    update(dt) {
+        this.x += this.speedX * dt;
+        this.y += this.speedY * dt;
         this.size *= 0.95;
         if (this.size < 0.5) this.markedForDeletion = true;
     }

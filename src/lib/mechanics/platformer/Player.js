@@ -31,35 +31,31 @@ export class Player {
         this.stretch = 1;
     }
 
-    update(input) {
-        this.handleMovement(input);
-        this.applyPhysics(); // Apply gravity and move
-        this.checkCollisions(); // Resolve collisions and set flags
-        this.handleJump(input); // Jump based on flags
+    update(input, dt = 1) {
+        this.dt = dt;
+        this.handleMovement(input, dt);
+        this.applyPhysics(dt);
+        this.checkCollisions(dt);
+        this.handleJump(input);
         this.handleSlide(input);
         this.updateState();
         this.updateVisuals();
     }
 
-    handleMovement(input) {
-        // Horizontal Movement
+    handleMovement(input, dt) {
         if (input.keys.left) {
-            // Skid effect
             if (this.vx > 0 && this.onGround) this.createParticles(1, '#cbd5e1');
-            this.vx -= this.acceleration;
+            this.vx -= this.acceleration * dt;
         } else if (input.keys.right) {
-            // Skid effect
             if (this.vx < 0 && this.onGround) this.createParticles(1, '#cbd5e1');
-            this.vx += this.acceleration;
+            this.vx += this.acceleration * dt;
         } else {
             this.vx *= this.friction;
         }
 
-        // Clamp speed
         if (this.vx > this.maxSpeed) this.vx = this.maxSpeed;
         if (this.vx < -this.maxSpeed) this.vx = -this.maxSpeed;
 
-        // Stop if very slow
         if (Math.abs(this.vx) < 0.1) this.vx = 0;
     }
 
@@ -145,21 +141,18 @@ export class Player {
         }
     }
 
-    applyPhysics() {
-        // Apply Gravity
-        this.vy += this.weight;
+    applyPhysics(dt) {
+        this.vy += this.weight * dt;
 
-        // Apply Velocity
-        this.x += this.vx;
-        this.y += this.vy;
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
     }
 
-    checkCollisions() {
+    checkCollisions(dt) {
         this.onGround = false;
         this.onWall = false;
         this.wallDir = 0;
 
-        // Floor Collision
         const floorY = this.game.height - 50;
         if (this.y + this.height >= floorY) {
             this.y = floorY - this.height;
@@ -169,17 +162,11 @@ export class Player {
             this.handleLanding();
         }
 
-        // Platform Collision
         this.game.platforms.forEach(platform => {
             if (this.checkRectCollision(this, platform)) {
-                // Determine direction of collision
-                // Simple AABB resolution
+                const prevY = this.y - this.vy * dt;
+                const prevX = this.x - this.vx * dt;
 
-                // Previous position (approximate)
-                const prevY = this.y - this.vy;
-                const prevX = this.x - this.vx;
-
-                // Landing on top
                 if (prevY + this.height <= platform.y && this.vy >= 0) {
                     this.y = platform.y - this.height;
                     this.vy = 0;
@@ -187,27 +174,25 @@ export class Player {
                     this.canDoubleJump = true;
                     this.handleLanding();
                 }
-                // Hitting bottom
                 else if (prevY >= platform.y + platform.height && this.vy < 0) {
                     this.y = platform.y + platform.height;
                     this.vy = 0;
                 }
-                // Hitting left
                 else if (prevX + this.width <= platform.x && this.vx > 0) {
                     this.x = platform.x - this.width;
                     this.vx = 0;
                     this.onWall = true;
-                    this.wallDir = 1; // Wall is to the right
+                    this.wallDir = 1;
                 }
-                // Hitting right
                 else if (prevX >= platform.x + platform.width && this.vx < 0) {
                     this.x = platform.x + platform.width;
                     this.vx = 0;
                     this.onWall = true;
-                    this.wallDir = -1; // Wall is to the left
+                    this.wallDir = -1;
                 }
             }
         });
+
 
         // World Bounds
         if (this.x < 0) {
