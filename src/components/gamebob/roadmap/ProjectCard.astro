@@ -1,0 +1,65 @@
+---
+import ProgressBar from "./ProgressBar.astro";
+import ProjectTasks from "./ProjectTasks.astro";
+
+import type { Project } from "../../../data/gamebob/roadmap/types";
+
+interface Props {
+    project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<div class="lg:col-span-2 h-full">
+    <div
+        class="relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-[var(--color-gamebob-primary)]/30 transition-colors duration-300 group h-full"
+    >
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            {
+                project.image && (
+                    <div
+                        class="w-full h-full bg-cover bg-no-repeat opacity-30 group-hover:scale-105 transition-transform duration-700"
+                        style={`background-image: url('${project.image}'); background-position: center;`}
+                    />
+                )
+            }
+            <div
+                class="absolute inset-0 bg-gradient-to-t from-[#000000] via-[#000000]/90 to-[#000000]/40"
+            >
+            </div>
+        </div>
+
+        <div class="relative z-10 p-8 flex flex-col h-full">
+            <div class="flex justify-between items-start mb-8">
+                <div>
+                    <div
+                        class="text-[var(--color-gamebob-primary)] text-xs font-bold mb-2 uppercase tracking-widest"
+                    >
+                        {project.statusLabel}
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-2">
+                        {project.name}
+                    </h2>
+                    <p class="text-gray-400">{project.description}</p>
+                </div>
+                <!-- Minimalist Status Indicator -->
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-3 w-3">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"
+                        ></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"
+                        ></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex-grow">
+                <ProgressBar progress={project.progress} />
+                <ProjectTasks tasks={project.tasks} />
+            </div>
+        </div>
+    </div>
+</div>

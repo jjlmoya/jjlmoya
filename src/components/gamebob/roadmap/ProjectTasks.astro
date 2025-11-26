@@ -1,0 +1,89 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Task {
+    name: string;
+    status: string;
+}
+
+interface Props {
+    tasks: Task[];
+}
+
+const { tasks } = Astro.props;
+
+// Logic to split tasks
+const doneTasks = tasks.filter((t) => t.status === "done");
+const activeTask = tasks.find((t) => t.status === "active");
+const pendingTasks = tasks.filter((t) => t.status === "pending");
+
+// We show the last 'done' task as context, and collapse the rest
+const visibleDoneTask = doneTasks[doneTasks.length - 1];
+const hiddenDoneTasks = doneTasks.slice(0, doneTasks.length - 1);
+---
+
+<div class="space-y-2">
+    {/* Collapsible History */}
+    {
+        hiddenDoneTasks.length > 0 && (
+            <details class="group mb-4">
+                <summary class="list-none cursor-pointer flex items-center gap-2 text-xs text-gray-500 hover:text-gray-300 transition-colors py-2 select-none">
+                    <Icon
+                        name="mdi:chevron-right"
+                        class="w-4 h-4 group-open:rotate-90 transition-transform"
+                    />
+                    <span>Ver historial completo ({hiddenDoneTasks.length} pasos completados)</span>
+                </summary>
+                <div class="pl-6 pt-2 space-y-3 border-l border-white/5 ml-2 mb-4">
+                    {hiddenDoneTasks.map((task) => (
+                        <div class="flex items-center gap-3 opacity-50">
+                            <Icon
+                                name="mdi:check"
+                                class="w-4 h-4 text-[var(--color-gamebob-primary)]"
+                            />
+                            <span class="text-sm text-gray-500 line-through">{task.name}</span>
+                        </div>
+                    ))}
+                </div>
+            </details>
+        )
+    }
+
+    {/* Visible Last Done Task */}
+    {
+        visibleDoneTask && (
+            <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5 border border-white/5 opacity-70">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center bg-[var(--color-gamebob-primary)] text-black">
+                    <Icon name="mdi:check" class="w-4 h-4" />
+                </div>
+                <span class="text-sm text-gray-400 line-through decoration-gray-600">
+                    {visibleDoneTask.name}
+                </span>
+            </div>
+        )
+    }
+
+    {/* Active Task */}
+    {
+        activeTask && (
+            <div class="flex items-center gap-4 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 shadow-[0_0_15px_rgba(234,179,8,0.1)] transform scale-[1.02] transition-transform">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center border-2 border-yellow-500 text-yellow-500 relative">
+                    <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
+                </div>
+                <span class="text-base font-bold text-white">{activeTask.name}</span>
+            </div>
+        )
+    }
+
+    {/* Pending Tasks */}
+    {
+        pendingTasks.map((task) => (
+            <div class="flex items-center gap-4 p-3 rounded-lg opacity-50">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center border border-gray-700">
+                    <div class="w-2 h-2 rounded-full bg-gray-800" />
+                </div>
+                <span class="text-sm text-gray-500">{task.name}</span>
+            </div>
+        ))
+    }
+</div>
