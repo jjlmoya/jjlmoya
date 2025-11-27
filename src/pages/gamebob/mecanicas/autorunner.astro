@@ -1,237 +1,77 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import LinkButtons from "../../../components/ui/LinkButtons.astro";
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/autorunner";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/autorunner/AutorunnerMechanic.ts";
 ---
 
-<Layout
-    title="Autorunner Mechanic"
+<MechanicPage
+    title="Autorunner"
     description="Corre sin mirar atrás. Un mundo infinito generado paso a paso bajo tus pies."
-    bodyClass="bg-neutral-900 text-white overflow-hidden touch-none"
-    showBackground={false}
-    mainClass="p-0"
-    headerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
-    footerClass="relative z-50 bg-black/40 backdrop-blur-md text-white"
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
 >
-    <div
-        id="game-container"
-        class="fixed inset-0 w-full h-full overflow-hidden bg-[#87CEEB] cursor-pointer touch-none select-none z-0"
-    >
-        <canvas id="game-canvas" class="block w-full h-full"></canvas>
-    </div>
-    <LinkButtons
-        codeUrl="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/autorunner/AutorunnerMechanic.ts"
-        docsUrl="https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/autorunner/README.md"
+    <Icon slot="icon" name="mdi:run-fast" class="text-green-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Toca para Saltar"
+        subInstruction="Evita los obstáculos"
+        verticalOnMobile={true}
     />
-    <>
-        <script>
-            import { AutorunnerMechanic } from "../../../lib/mechanics/autorunner/AutorunnerMechanic";
 
-            const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
-            const ctx = canvas.getContext("2d")!;
-            const container = document.getElementById("game-container")!;
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Generación procedural de plataformas y obstáculos.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Velocidad constante con saltos basados en física.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Detección de colisiones precisa (AABB).</span>
+            </li>
+        </Fragment>
 
-            let width = window.innerWidth;
-            let height = window.innerHeight;
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Click / Tap / Espacio</span>
+                <span class="text-xs text-zinc-400">Saltar / Doble Salto</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
 
-            canvas.width = width;
-            canvas.height = height;
+<script>
+    import { AutorunnerGame } from "../../../lib/mechanics/autorunner/AutorunnerGame";
 
-            const mechanic = new AutorunnerMechanic(width, height);
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: AutorunnerGame | null = null;
 
-            function resize() {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-                mechanic.updateBounds(width, height);
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new AutorunnerGame(canvas);
             }
+        });
 
-            window.addEventListener("resize", resize);
-
-            function onJump(e: Event) {
-                e.preventDefault();
-                mechanic.jump();
-            }
-
-            container.addEventListener("mousedown", onJump);
-            container.addEventListener("touchstart", onJump, {
-                passive: false,
-            });
-            window.addEventListener("keydown", (e) => {
-                if (e.code === "Space" || e.code === "ArrowUp") {
-                    mechanic.jump();
-                }
-            });
-
-            // Draw Stick Figure
-            function drawPlayer(
-                ctx: CanvasRenderingContext2D,
-                x: number,
-                y: number,
-                w: number,
-                grounded: boolean,
-                runTime: number
-            ) {
-                ctx.strokeStyle = "#4B0082";
-                ctx.lineWidth = 3;
-                ctx.lineCap = "round";
-                ctx.lineJoin = "round";
-
-                const cx = x + w / 2;
-
-                // Head
-                ctx.beginPath();
-                ctx.arc(cx, y + 10, 8, 0, Math.PI * 2);
-                ctx.fillStyle = "white";
-                ctx.fill();
-                ctx.stroke();
-
-                // Eye
-                ctx.beginPath();
-                ctx.arc(cx + 3, y + 10, 1, 0, Math.PI * 2);
-                ctx.fillStyle = "black";
-                ctx.fill();
-
-                // Scarf
-                ctx.save();
-                ctx.strokeStyle = "#ff4444";
-                ctx.lineWidth = 4;
-                ctx.beginPath();
-                ctx.moveTo(cx, y + 22);
-                const wave = Math.sin(runTime * 20) * 5;
-                ctx.quadraticCurveTo(cx - 15, y + 22 - wave, cx - 30, y + 25 + wave);
-                ctx.stroke();
-                ctx.restore();
-
-                // Body
-                ctx.beginPath();
-                ctx.moveTo(cx, y + 18);
-                ctx.lineTo(cx, y + 35);
-                ctx.stroke();
-
-                // Arms
-                const armOffset = Math.sin(runTime * 15) * 5;
-                ctx.beginPath();
-                // Left Arm
-                ctx.moveTo(cx, y + 22);
-                ctx.lineTo(cx + (grounded ? -10 : -15), y + 30 + (grounded ? armOffset : -10));
-                // Right Arm
-                ctx.moveTo(cx, y + 22);
-                ctx.lineTo(cx + (grounded ? 10 : 15), y + 30 + (grounded ? -armOffset : -10));
-                ctx.stroke();
-
-                // Legs
-                const legOffset = Math.sin(runTime * 15) * 10;
-                ctx.beginPath();
-                // Left Leg
-                ctx.moveTo(cx, y + 35);
-                ctx.lineTo(cx - 5 + (grounded ? legOffset : -5), y + 50 + (grounded ? 0 : -5));
-                // Right Leg
-                ctx.moveTo(cx, y + 35);
-                ctx.lineTo(cx + 5 + (grounded ? -legOffset : 5), y + 50 + (grounded ? 0 : -5));
-                ctx.stroke();
-            }
-
-            let lastTime = performance.now();
-            let runTime = 0;
-
-            function loop(time: number) {
-                const dt = Math.min((time - lastTime) / 1000, 0.1); // Cap dt
-                lastTime = time;
-                runTime += dt;
-
-                mechanic.update(dt);
-                const state = mechanic.getState();
-
-                // Render Background
-                ctx.fillStyle = "#87CEEB"; // Sky blue
-                ctx.fillRect(0, 0, width, height);
-
-                // Render Clouds
-                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-                for (const cloud of state.clouds) {
-                    ctx.beginPath();
-                    ctx.arc(cloud.x, cloud.y, cloud.height, 0, Math.PI * 2);
-                    ctx.arc(
-                        cloud.x + cloud.width * 0.3,
-                        cloud.y - cloud.height * 0.5,
-                        cloud.height * 0.8,
-                        0,
-                        Math.PI * 2
-                    );
-                    ctx.arc(
-                        cloud.x + cloud.width * 0.6,
-                        cloud.y,
-                        cloud.height * 0.9,
-                        0,
-                        Math.PI * 2
-                    );
-                    ctx.fill();
-                }
-
-                // Render Platforms
-                ctx.fillStyle = "#8B4513"; // Ground brown
-                for (const plat of state.platforms) {
-                    ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
-                    // Grass top
-                    ctx.fillStyle = "#228B22";
-                    ctx.fillRect(plat.x, plat.y, plat.width, 10);
-                    ctx.fillStyle = "#8B4513";
-                }
-
-                // Render Obstacles
-                ctx.fillStyle = "#FF4500"; // Red spike/box
-                for (const obs of state.obstacles) {
-                    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-                    // Warning stripes
-                    ctx.fillStyle = "#800000";
-                    ctx.beginPath();
-                    ctx.moveTo(obs.x + 5, obs.y);
-                    ctx.lineTo(obs.x + 15, obs.y + obs.height);
-                    ctx.lineTo(obs.x + 10, obs.y + obs.height);
-                    ctx.lineTo(obs.x, obs.y);
-                    ctx.fill();
-                }
-
-                // Render Player
-                drawPlayer(
-                    ctx,
-                    state.player.x,
-                    state.player.y,
-                    state.player.width,
-                    state.player.grounded,
-                    runTime
-                );
-
-                // UI
-                ctx.fillStyle = "white";
-                ctx.font = "bold 32px monospace";
-                ctx.textAlign = "left";
-                ctx.textBaseline = "top";
-                ctx.shadowColor = "black";
-                ctx.shadowBlur = 4;
-
-                ctx.fillText(`DISTANCIA: ${state.score}m`, 20, 80); // Moved down to avoid header
-
-                if (state.state === "gameover") {
-                    ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-                    ctx.fillRect(0, 0, width, height);
-
-                    ctx.fillStyle = "white";
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle";
-                    ctx.font = "bold 48px monospace";
-                    ctx.fillText("GAME OVER", width / 2, height / 2 - 20);
-                    ctx.font = "bold 24px monospace";
-                    ctx.fillText("TOCA PARA REINICIAR", width / 2, height / 2 + 40);
-                }
-
-                ctx.shadowBlur = 0;
-
-                requestAnimationFrame(loop);
-            }
-
-            requestAnimationFrame(loop);
-        </script>
-    </>
-</Layout>
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+    }
+</script>

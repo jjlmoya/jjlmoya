@@ -8,10 +8,16 @@ export interface Box {
 export interface Player extends Box {
     vy: number;
     grounded: boolean;
+    jumps: number;
+    isDashing: boolean;
 }
 
 export interface Cloud extends Box {
     speedFactor: number;
+}
+
+export interface Coin extends Box {
+    collected: boolean;
 }
 
 export class AutorunnerMechanic {
@@ -19,24 +25,28 @@ export class AutorunnerMechanic {
     private platforms: Box[] = [];
     private obstacles: Box[] = [];
     private clouds: Cloud[] = [];
-    private speed: number = 300;
-    private gravity: number = 1500;
-    private jumpForce: number = -600;
+    private coins: Coin[] = [];
+    private speed: number = 400;
+    private gravity: number = 1800;
+    private jumpForce: number = -700;
     private score: number = 0;
     private state: "playing" | "gameover" = "playing";
     private width: number;
     private height: number;
+    private maxJumps: number = 2;
 
     constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
         this.player = {
             x: 100,
-            y: height - 300, // Adjusted for higher ground
+            y: height - 300,
             width: 40,
             height: 40,
             vy: 0,
             grounded: false,
+            jumps: 0,
+            isDashing: false
         };
         this.initLevel();
     }
@@ -45,13 +55,14 @@ export class AutorunnerMechanic {
         this.platforms = [];
         this.obstacles = [];
         this.clouds = [];
+        this.coins = [];
 
-        // Initial ground
+        // Initial ground - Lowered (height - 100 instead of -200)
         this.platforms.push({
             x: 0,
-            y: this.height - 200, // Higher ground
+            y: this.height - 100,
             width: this.width * 2,
-            height: 200, // Extend to bottom
+            height: 200,
         });
 
         // Initial clouds
@@ -65,26 +76,37 @@ export class AutorunnerMechanic {
             this.reset();
             return;
         }
-        if (this.player.grounded) {
+
+        if (this.player.grounded || this.player.jumps < this.maxJumps) {
             this.player.vy = this.jumpForce;
             this.player.grounded = false;
+            this.player.jumps++;
+            this.player.isDashing = false; // Cancel dash on jump
+        }
+    }
+
+    public dash() {
+        if (this.state === "playing" && !this.player.grounded) {
+            this.player.vy = 1200; // Fast fall
+            this.player.isDashing = true;
         }
     }
 
     public reset() {
         this.state = "playing";
         this.score = 0;
-        this.speed = 300;
+        this.speed = 400;
         this.player.y = this.height - 300;
         this.player.vy = 0;
+        this.player.jumps = 0;
         this.initLevel();
     }
 
     public update(dt: number) {
         if (this.state !== "playing") return;
 
-        this.score += this.speed * dt * 0.1;
-        this.speed += dt * 5; // Increase speed over time
+        this.score += this.speed * dt * 0.05;
+        this.speed += dt * 10; // Faster progression
 
         // Player Physics
         this.player.vy += this.gravity * dt;
@@ -93,23 +115,21 @@ export class AutorunnerMechanic {
         // Ground Collision
         this.player.grounded = false;
         for (const plat of this.platforms) {
-            // AABB Check
             if (
                 this.player.x < plat.x + plat.width &&
                 this.player.x + this.player.width > plat.x &&
                 this.player.y + this.player.height > plat.y &&
                 this.player.y < plat.y + plat.height
             ) {
-                // Landing Logic
-                // We check if the player is falling and if their feet are within a reasonable distance of the platform top.
-                // This "maxPenetration" accounts for high velocity (tunneling) and frame time variations.
                 const penetration = this.player.y + this.player.height - plat.y;
-                const maxPenetration = Math.max(40, this.player.vy * dt + 10);
+                const maxPenetration = Math.max(40, this.player.vy * dt + 20);
 
                 if (this.player.vy > 0 && penetration > 0 && penetration <= maxPenetration) {
                     this.player.y = plat.y - this.player.height;
                     this.player.vy = 0;
                     this.player.grounded = true;
+                    this.player.jumps = 0;
+                    this.player.isDashing = false;
                 }
             }
         }
@@ -123,8 +143,9 @@ export class AutorunnerMechanic {
         const moveX = this.speed * dt;
         this.platforms.forEach((p) => (p.x -= moveX));
         this.obstacles.forEach((o) => (o.x -= moveX));
+        this.coins.forEach((c) => (c.x -= moveX));
 
-        // Move Clouds (Parallax)
+        // Move Clouds
         this.clouds.forEach((c) => {
             c.x -= moveX * c.speedFactor;
             if (c.x + c.width < -100) {
@@ -133,21 +154,20 @@ export class AutorunnerMechanic {
             }
         });
 
-        // Cleanup offscreen (buffer of 200px)
+        // Cleanup
         this.platforms = this.platforms.filter((p) => p.x + p.width > -200);
         this.obstacles = this.obstacles.filter((o) => o.x + o.width > -200);
+        this.coins = this.coins.filter((c) => c.x + c.width > -200 && !c.collected);
 
         // Spawning
-        // Ensure we always have platforms ahead
         const lastPlat = this.platforms[this.platforms.length - 1];
         if (lastPlat && lastPlat.x + lastPlat.width < this.width + 500) {
             this.spawnChunk();
         }
 
-        // Obstacle Collision
+        // Collision: Obstacles
+        const hitboxPadding = 8;
         for (const obs of this.obstacles) {
-            // Shrink hitbox slightly for fairness
-            const hitboxPadding = 5;
             if (
                 this.player.x + hitboxPadding < obs.x + obs.width - hitboxPadding &&
                 this.player.x + this.player.width - hitboxPadding > obs.x + hitboxPadding &&
@@ -157,43 +177,85 @@ export class AutorunnerMechanic {
                 this.state = "gameover";
             }
         }
+
+        // Collision: Coins
+        for (const coin of this.coins) {
+            if (
+                !coin.collected &&
+                this.player.x < coin.x + coin.width &&
+                this.player.x + this.player.width > coin.x &&
+                this.player.y < coin.y + coin.height &&
+                this.player.y + this.player.height > coin.y
+            ) {
+                coin.collected = true;
+                this.score += 100; // Bonus points
+            }
+        }
     }
 
     private spawnChunk() {
         const lastPlat = this.platforms[this.platforms.length - 1];
-        // Start spawning well off-screen
         const startX = lastPlat ? lastPlat.x + lastPlat.width : this.width;
 
-        // Gap or Platform
-        if (Math.random() > 0.3) {
-            // Platform
-            const width = 400 + Math.random() * 400; // Longer platforms
-            const y = this.height - 200 - (Math.random() > 0.7 ? 80 : 0); // Higher base ground
+        const gapSize = 100 + Math.random() * 150;
+        const platWidth = 400 + Math.random() * 600;
 
-            this.platforms.push({
-                x: startX + Math.random() * 150, // Small gap
-                y,
-                width,
-                height: 400, // Extend well below screen
-            });
+        // Lower base height
+        let y = this.height - 100;
+        if (lastPlat) {
+            // Can go up or down, but clamp to screen lower half
+            const delta = (Math.random() - 0.5) * 150;
+            // Keep it in the bottom 40% of the screen roughly
+            const minY = this.height - 250;
+            const maxY = this.height - 80;
+            y = Math.max(minY, Math.min(maxY, lastPlat.y + delta));
+        }
 
-            // Obstacle on platform
-            if (Math.random() > 0.5) {
+        this.platforms.push({
+            x: startX + gapSize,
+            y,
+            width: platWidth,
+            height: 400,
+        });
+
+        // Spawn Obstacles & Coins
+        const numObstacles = Math.floor(platWidth / 300);
+        // More varied coin patterns
+        const coinPattern = Math.random();
+
+        for (let i = 0; i < numObstacles; i++) {
+            const obsX = startX + gapSize + 200 + i * 300 + Math.random() * 100;
+
+            if (Math.random() > 0.4) {
+                // Obstacle
                 this.obstacles.push({
-                    x: startX + width / 2,
+                    x: obsX,
                     y: y - 40,
                     width: 30,
                     height: 40,
                 });
+
+                // Coins over obstacle
+                this.coins.push({ x: obsX, y: y - 120, width: 20, height: 20, collected: false });
+                this.coins.push({ x: obsX - 30, y: y - 100, width: 20, height: 20, collected: false });
+                this.coins.push({ x: obsX + 30, y: y - 100, width: 20, height: 20, collected: false });
+            } else {
+                // No obstacle, maybe a coin pattern?
+                if (coinPattern < 0.3) {
+                    // Line
+                    this.coins.push({ x: obsX, y: y - 30, width: 20, height: 20, collected: false });
+                    this.coins.push({ x: obsX + 30, y: y - 30, width: 20, height: 20, collected: false });
+                    this.coins.push({ x: obsX + 60, y: y - 30, width: 20, height: 20, collected: false });
+                } else if (coinPattern < 0.6) {
+                    // Wave
+                    this.coins.push({ x: obsX, y: y - 30, width: 20, height: 20, collected: false });
+                    this.coins.push({ x: obsX + 30, y: y - 60, width: 20, height: 20, collected: false });
+                    this.coins.push({ x: obsX + 60, y: y - 30, width: 20, height: 20, collected: false });
+                } else {
+                    // High jump reward
+                    this.coins.push({ x: obsX + 30, y: y - 150, width: 20, height: 20, collected: false });
+                }
             }
-        } else {
-            // Big Gap
-            this.platforms.push({
-                x: startX + 200 + Math.random() * 100,
-                y: this.height - 200,
-                width: 400,
-                height: 400,
-            });
         }
     }
 
@@ -218,6 +280,7 @@ export class AutorunnerMechanic {
             platforms: this.platforms,
             obstacles: this.obstacles,
             clouds: this.clouds,
+            coins: this.coins,
             score: Math.floor(this.score),
             state: this.state,
             speed: this.speed,
