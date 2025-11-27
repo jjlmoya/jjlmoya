@@ -18,19 +18,19 @@ const { allTags } = Astro.props;
 
         <div class="flex flex-wrap gap-2" id="filters">
             <button
-                class="filter-btn px-3 py-1 rounded-full text-xs md:text-sm border border-transparent bg-[var(--color-gamebob-primary)] text-black shadow-[0_0_20px_rgba(29,218,188,0.3)] hover:bg-[var(--color-gamebob-primary)]/80 transition-all"
+                class="filter-btn active px-3 py-1 rounded-full text-xs md:text-sm transition-all"
                 data-filter="all"
             >
                 Todos
             </button>
             <button
-                class="filter-btn px-3 py-1 rounded-full text-xs md:text-sm border border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
+                class="filter-btn px-3 py-1 rounded-full text-xs md:text-sm transition-colors"
                 data-filter="mobile"
             >
                 <Icon name="mdi:cellphone" class="inline w-3 h-3 md:w-4 md:h-4 mr-1" /> Mobile
             </button>
             <button
-                class="filter-btn px-3 py-1 rounded-full text-xs md:text-sm border border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
+                class="filter-btn px-3 py-1 rounded-full text-xs md:text-sm transition-colors"
                 data-filter="desktop"
             >
                 <Icon name="mdi:monitor" class="inline w-3 h-3 md:w-4 md:h-4 mr-1" /> Desktop
@@ -42,7 +42,7 @@ const { allTags } = Astro.props;
         {
             allTags.map((tag) => (
                 <button
-                    class="tag-filter-btn whitespace-nowrap px-2 py-1 rounded text-[10px] md:text-xs border border-zinc-800 bg-zinc-900/50 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700 transition-colors flex-shrink-0"
+                    class="tag-filter-btn whitespace-nowrap px-2 py-1 rounded text-[10px] md:text-xs transition-colors flex-shrink-0"
                     data-tag={tag}
                 >
                     #{tag}
@@ -59,5 +59,33 @@ const { allTags } = Astro.props;
     .no-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
+    }
+
+    /* Button Styles */
+    .filter-btn,
+    .tag-filter-btn {
+        background-color: var(--color-ui-surface);
+        color: var(--color-ui-text-muted);
+        border: 1px solid var(--color-ui-border);
+    }
+
+    .filter-btn:hover,
+    .tag-filter-btn:hover {
+        background-color: var(--color-ui-surface-hover);
+        color: white;
+    }
+
+    /* Active State */
+    .filter-btn.active,
+    .tag-filter-btn.active {
+        background-color: var(--color-gamebob-primary);
+        color: black;
+        box-shadow: 0 0 20px rgba(29, 218, 188, 0.3);
+        border-color: transparent;
+    }
+
+    .filter-btn.active:hover,
+    .tag-filter-btn.active:hover {
+        background-color: rgba(29, 218, 188, 0.8);
     }
 </style>
