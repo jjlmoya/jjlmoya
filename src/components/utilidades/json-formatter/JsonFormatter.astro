@@ -1,0 +1,281 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-6xl mx-auto space-y-6">
+    <!-- Toolbar -->
+    <div
+        class="flex flex-wrap items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm"
+    >
+        <div class="flex items-center gap-2">
+            <div
+                class="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-mono text-slate-500 uppercase tracking-wider"
+            >
+                <span id="status-badge" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                <span id="status-text">Esperando entrada...</span>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <button
+                id="btn-minify"
+                class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-2"
+            >
+                <Icon name="mdi:arrow-collapse-horizontal" class="w-4 h-4" />
+                Minificar
+            </button>
+            <button
+                id="btn-fix"
+                class="px-4 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors flex items-center gap-2"
+            >
+                <Icon name="mdi:magic-staff" class="w-4 h-4" />
+                Intentar Arreglar
+            </button>
+            <div class="w-px h-8 bg-slate-200 dark:bg-slate-700 mx-2"></div>
+            <button
+                id="btn-copy"
+                class="px-6 py-2 text-sm font-bold text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg shadow-lg shadow-emerald-500/20 transition-all active:scale-95 flex items-center gap-2"
+            >
+                <Icon name="mdi:content-copy" class="w-4 h-4" />
+                Copiar
+            </button>
+        </div>
+    </div>
+
+    <!-- Editor Area -->
+    <div class="grid lg:grid-cols-2 gap-6">
+        <!-- Input -->
+        <div class="relative group h-[600px] flex flex-col">
+            <div
+                class="absolute -inset-1 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-700 rounded-3xl blur opacity-20 group-focus-within:opacity-40 transition duration-500"
+            >
+            </div>
+            <div
+                class="relative h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col"
+            >
+                <div
+                    class="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-500 uppercase tracking-wider"
+                >
+                    Entrada (JSON)
+                </div>
+                <textarea
+                    id="input-editor"
+                    placeholder="Pega tu JSON aquí..."
+                    class="flex-1 w-full p-4 bg-transparent text-sm font-mono leading-relaxed text-slate-700 dark:text-slate-300 resize-none focus:outline-none placeholder:text-slate-300 dark:placeholder:text-slate-700"
+                    spellcheck="false"></textarea>
+            </div>
+        </div>
+
+        <!-- Output -->
+        <div class="relative group h-[600px] flex flex-col">
+            <div
+                class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-10 transition duration-500"
+            >
+            </div>
+            <div
+                class="relative h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col"
+            >
+                <div
+                    class="px-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-500 uppercase tracking-wider flex justify-between items-center"
+                >
+                    <span>Resultado</span>
+                    <span id="size-info" class="text-slate-400">0 KB</span>
+                </div>
+                <pre
+                    id="output-viewer"
+                    tabindex="0"
+                    class="flex-1 w-full min-h-0 p-4 overflow-auto text-sm font-mono leading-relaxed bg-slate-50 dark:bg-[#0d1117] text-slate-700 dark:text-slate-300 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/50 transition-shadow whitespace-pre-wrap break-words"><code id="output-code" /></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div
+        id="toast"
+        class="fixed bottom-8 right-8 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none font-medium text-sm z-50"
+    >
+        ¡Copiado!
+    </div>
+</div>
+
+<script>
+    const inputEditor = document.getElementById("input-editor") as HTMLTextAreaElement;
+    const outputCode = document.getElementById("output-code");
+    const statusBadge = document.getElementById("status-badge");
+    const statusText = document.getElementById("status-text");
+    const sizeInfo = document.getElementById("size-info");
+    const btnMinify = document.getElementById("btn-minify");
+    const btnFix = document.getElementById("btn-fix");
+    const btnCopy = document.getElementById("btn-copy");
+    const toast = document.getElementById("toast");
+
+    let currentJSON = null;
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return "0 B";
+        const k = 1024;
+        const sizes = ["B", "KB", "MB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    }
+
+    function setStatus(type: "valid" | "invalid" | "empty") {
+        if (!statusBadge || !statusText) return;
+
+        if (type === "valid") {
+            statusBadge.className =
+                "w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]";
+            statusText.textContent = "JSON Válido";
+            statusText.className = "text-emerald-600 dark:text-emerald-400 font-medium";
+        } else if (type === "invalid") {
+            statusBadge.className =
+                "w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]";
+            statusText.textContent = "JSON Inválido";
+            statusText.className = "text-red-600 dark:text-red-400 font-medium";
+        } else {
+            statusBadge.className = "w-2 h-2 rounded-full bg-slate-400";
+            statusText.textContent = "Esperando entrada...";
+            statusText.className = "text-slate-500";
+        }
+    }
+
+    function highlightJSON(jsonStr) {
+        if (!jsonStr) return "";
+
+        return jsonStr.replace(
+            /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+            function (match) {
+                let cls = "text-orange-600 dark:text-orange-400"; // number
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = "text-purple-600 dark:text-purple-400"; // key
+                    } else {
+                        cls = "text-green-600 dark:text-green-400"; // string
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = "text-blue-600 dark:text-blue-400"; // boolean
+                } else if (/null/.test(match)) {
+                    cls = "text-red-600 dark:text-red-400"; // null
+                }
+                return '<span class="' + cls + '">' + match + "</span>";
+            }
+        );
+    }
+
+    function processJSON(minify = isMinified) {
+        const raw = inputEditor.value;
+        if (!raw.trim()) {
+            outputCode.innerHTML = "";
+            setStatus("empty");
+            currentJSON = null;
+            sizeInfo.textContent = "0 B";
+            return;
+        }
+
+        try {
+            const parsed = JSON.parse(raw);
+            currentJSON = parsed;
+            const formatted = JSON.stringify(parsed, null, minify ? 0 : 2);
+            outputCode.innerHTML = highlightJSON(formatted);
+            setStatus("valid");
+            sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
+        } catch (e) {
+            currentJSON = null;
+            outputCode.innerHTML = `<span class="text-red-500 font-mono">${e.message}</span>`;
+            setStatus("invalid");
+            sizeInfo.textContent = formatBytes(new Blob([raw]).size);
+        }
+    }
+
+    function fixJSON() {
+        let raw = inputEditor.value;
+
+        // Basic Heuristics
+        try {
+            // 1. Try to fix single quotes
+            // Replace 'key': with "key":
+            raw = raw.replace(/'([^']+)'\s*:/g, '"$1":');
+            // Replace : 'value' with : "value"
+            raw = raw.replace(/:\s*'([^']+)'/g, ': "$1"');
+
+            // 3. Remove trailing commas
+            raw = raw.replace(/,\s*([}\]])/g, "$1");
+
+            // 4. Try parsing
+            const parsed = JSON.parse(raw);
+            currentJSON = parsed;
+
+            // If successful, update OUTPUT only (do not touch input)
+            const formatted = JSON.stringify(parsed, null, isMinified ? 0 : 2);
+            outputCode.innerHTML = highlightJSON(formatted);
+            setStatus("valid");
+            sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
+
+            showToast("JSON reparado (Visualización)");
+        } catch (e) {
+            showToast("No se pudo reparar automáticamente");
+        }
+    }
+
+    function showToast(msg = "¡Copiado!") {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.remove("translate-y-20", "opacity-0");
+        setTimeout(() => {
+            toast.classList.add("translate-y-20", "opacity-0");
+        }, 2000);
+    }
+
+    // Event Listeners
+    inputEditor.addEventListener("input", () => processJSON());
+
+    let isMinified = false;
+
+    btnMinify?.addEventListener("click", () => {
+        if (currentJSON) {
+            isMinified = !isMinified;
+            // inputEditor.value = ... REMOVED
+            // Re-render output with new state
+            const formatted = JSON.stringify(currentJSON, null, isMinified ? 0 : 2);
+            outputCode.innerHTML = highlightJSON(formatted);
+            sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
+
+            // Update button state
+            if (isMinified) {
+                btnMinify.innerHTML =
+                    '<span class="iconify w-4 h-4" data-icon="mdi:arrow-expand-horizontal"></span> Embellecer';
+            } else {
+                btnMinify.innerHTML =
+                    '<span class="iconify w-4 h-4" data-icon="mdi:arrow-collapse-horizontal"></span> Minificar';
+            }
+        }
+    });
+
+    btnFix?.addEventListener("click", fixJSON);
+
+    btnCopy?.addEventListener("click", async () => {
+        if (outputCode.textContent) {
+            await navigator.clipboard.writeText(outputCode.textContent);
+            showToast();
+        }
+    });
+
+    // Ctrl+A Selection for Output
+    const outputViewer = document.getElementById("output-viewer");
+
+    outputViewer?.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+            e.preventDefault();
+            const selection = window.getSelection();
+            const range = document.createRange();
+            if (outputCode) {
+                range.selectNodeContents(outputCode);
+                selection?.removeAllRanges();
+                selection?.addRange(range);
+            }
+        }
+    });
+
+    // Initial process
+    processJSON();
+</script>
