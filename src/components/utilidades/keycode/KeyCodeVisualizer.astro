@@ -1,0 +1,419 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+    class="w-full max-w-4xl mx-auto min-h-[500px] flex flex-col items-center justify-center relative perspective-1000"
+>
+    <!-- Initial State -->
+    <div
+        id="initial-state"
+        class="text-center space-y-8 animate-in fade-in zoom-in duration-500 py-20"
+    >
+        <div class="relative group cursor-pointer inline-block">
+            <!-- Glow Effect -->
+            <div
+                class="absolute -inset-8 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 animate-pulse"
+            >
+            </div>
+
+            <!-- Floating Key -->
+            <div
+                class="relative w-40 h-40 bg-white dark:bg-slate-800 rounded-3xl border-b-[12px] border-slate-200 dark:border-slate-950 shadow-2xl flex items-center justify-center transform transition-all duration-500 hover:-translate-y-2 hover:shadow-violet-500/20"
+            >
+                <Icon
+                    name="mdi:keyboard-outline"
+                    class="w-20 h-20 text-slate-300 dark:text-slate-600 group-hover:text-violet-500 transition-colors duration-300"
+                />
+
+                <!-- Animated Click Indicator -->
+                <div
+                    class="absolute -top-2 -right-2 w-6 h-6 bg-violet-500 rounded-full animate-bounce shadow-lg"
+                >
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            <h2
+                class="text-3xl md:text-4xl font-black text-slate-800 dark:text-white tracking-tight"
+            >
+                Presiona una tecla
+            </h2>
+            <p class="text-lg text-slate-500 dark:text-slate-400 font-light">
+                Cualquier tecla de tu teclado para ver su código
+            </p>
+        </div>
+
+        <div class="flex justify-center gap-2 pt-8 opacity-50">
+            <div
+                class="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 animate-bounce"
+                style="animation-delay: 0ms"
+            >
+            </div>
+            <div
+                class="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 animate-bounce"
+                style="animation-delay: 150ms"
+            >
+            </div>
+            <div
+                class="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 animate-bounce"
+                style="animation-delay: 300ms"
+            >
+            </div>
+        </div>
+    </div>
+
+    <!-- Active State (Hidden by default) -->
+    <div id="active-state" class="hidden w-full space-y-12 animate-in fade-in zoom-in duration-300">
+        <!-- The Giant 3D Key -->
+        <div class="flex justify-center">
+            <div id="main-key" class="relative group">
+                <div
+                    class="absolute -inset-4 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-3xl blur-xl opacity-20 transition-opacity duration-300"
+                >
+                </div>
+                <div
+                    class="relative min-w-[200px] min-h-[200px] px-12 py-8 bg-white dark:bg-slate-800 rounded-3xl border-b-[16px] border-slate-200 dark:border-slate-950 shadow-2xl flex flex-col items-center justify-center transform transition-all duration-75 key-3d"
+                >
+                    <span
+                        id="display-key"
+                        class="text-8xl font-black text-slate-800 dark:text-white mb-2"></span>
+                    <span
+                        id="display-code"
+                        class="text-sm font-mono text-slate-400 uppercase tracking-widest"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div
+                class="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 text-center flex flex-col items-center justify-between min-h-[130px] group hover:border-violet-500/50 transition-colors"
+            >
+                <div class="text-xs font-mono text-slate-500 uppercase tracking-wider">
+                    event.key
+                </div>
+                <div
+                    id="info-key"
+                    class="text-xl font-bold text-violet-600 dark:text-violet-400 font-mono my-1 break-all"
+                >
+                </div>
+                <button
+                    class="copy-value-btn p-1.5 rounded-lg hover:bg-violet-100 dark:hover:bg-violet-900/30 text-slate-400 hover:text-violet-500 transition-all"
+                    data-target="info-key"
+                    aria-label="Copiar event.key"
+                    title="Copiar valor"
+                >
+                    <Icon name="mdi:content-copy" class="w-4 h-4" />
+                </button>
+            </div>
+            <div
+                class="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 text-center flex flex-col items-center justify-between min-h-[130px] group hover:border-violet-500/50 transition-colors"
+            >
+                <div class="text-xs font-mono text-slate-500 uppercase tracking-wider">
+                    event.code
+                </div>
+                <div
+                    id="info-code"
+                    class="text-xl font-bold text-violet-600 dark:text-violet-400 font-mono my-1 break-all"
+                >
+                </div>
+                <button
+                    class="copy-value-btn p-1.5 rounded-lg hover:bg-violet-100 dark:hover:bg-violet-900/30 text-slate-400 hover:text-violet-500 transition-all"
+                    data-target="info-code"
+                    aria-label="Copiar event.code"
+                    title="Copiar valor"
+                >
+                    <Icon name="mdi:content-copy" class="w-4 h-4" />
+                </button>
+            </div>
+            <div
+                class="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 text-center flex flex-col items-center justify-between min-h-[130px] group hover:border-violet-500/50 transition-colors"
+            >
+                <div class="text-xs font-mono text-slate-500 uppercase tracking-wider">
+                    event.which
+                </div>
+                <div
+                    id="info-which"
+                    class="text-xl font-bold text-violet-600 dark:text-violet-400 font-mono my-1"
+                >
+                </div>
+                <button
+                    class="copy-value-btn p-1.5 rounded-lg hover:bg-violet-100 dark:hover:bg-violet-900/30 text-slate-400 hover:text-violet-500 transition-all"
+                    data-target="info-which"
+                    aria-label="Copiar event.which"
+                    title="Copiar valor"
+                >
+                    <Icon name="mdi:content-copy" class="w-4 h-4" />
+                </button>
+            </div>
+            <div
+                class="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 text-center flex flex-col items-center justify-between min-h-[130px] group hover:border-violet-500/50 transition-colors"
+            >
+                <div class="text-xs font-mono text-slate-500 uppercase tracking-wider">
+                    location
+                </div>
+                <div
+                    id="info-location"
+                    class="text-xl font-bold text-violet-600 dark:text-violet-400 font-mono my-1"
+                >
+                </div>
+                <button
+                    class="copy-value-btn p-1.5 rounded-lg hover:bg-violet-100 dark:hover:bg-violet-900/30 text-slate-400 hover:text-violet-500 transition-all"
+                    data-target="info-location"
+                    aria-label="Copiar location"
+                    title="Copiar valor"
+                >
+                    <Icon name="mdi:content-copy" class="w-4 h-4" />
+                </button>
+            </div>
+        </div>
+
+        <!-- Modifiers -->
+        <div class="flex justify-center gap-4">
+            <div
+                id="mod-ctrl"
+                class="px-6 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 text-slate-400 font-bold transition-all duration-200"
+            >
+                CTRL
+            </div>
+            <div
+                id="mod-shift"
+                class="px-6 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 text-slate-400 font-bold transition-all duration-200"
+            >
+                SHIFT
+            </div>
+            <div
+                id="mod-alt"
+                class="px-6 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 text-slate-400 font-bold transition-all duration-200"
+            >
+                ALT
+            </div>
+            <div
+                id="mod-meta"
+                class="px-6 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-800 text-slate-400 font-bold transition-all duration-200"
+            >
+                META
+            </div>
+        </div>
+
+        <!-- Quick Copy Snippets -->
+        <div class="space-y-4 pt-8 border-t border-slate-200 dark:border-slate-800">
+            <h3 class="text-sm font-mono uppercase tracking-widest text-slate-500 text-center mb-6">
+                Snippets Rápidos
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                <button
+                    class="snippet-btn group relative flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-violet-500 dark:hover:border-violet-500 transition-all text-left"
+                >
+                    <code
+                        id="snippet-key"
+                        class="font-mono text-sm text-slate-700 dark:text-slate-300"></code>
+                    <div
+                        class="opacity-0 group-hover:opacity-100 transition-opacity bg-violet-500 text-white text-xs px-2 py-1 rounded"
+                    >
+                        Copiar
+                    </div>
+                </button>
+                <button
+                    class="snippet-btn group relative flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-violet-500 dark:hover:border-violet-500 transition-all text-left"
+                >
+                    <code
+                        id="snippet-code"
+                        class="font-mono text-sm text-slate-700 dark:text-slate-300"></code>
+                    <div
+                        class="opacity-0 group-hover:opacity-100 transition-opacity bg-violet-500 text-white text-xs px-2 py-1 rounded"
+                    >
+                        Copiar
+                    </div>
+                </button>
+                <button
+                    class="snippet-btn group relative flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-violet-500 dark:hover:border-violet-500 transition-all text-left"
+                >
+                    <code
+                        id="snippet-which"
+                        class="font-mono text-sm text-slate-700 dark:text-slate-300"></code>
+                    <div
+                        class="opacity-0 group-hover:opacity-100 transition-opacity bg-violet-500 text-white text-xs px-2 py-1 rounded"
+                    >
+                        Copiar
+                    </div>
+                </button>
+                <button
+                    class="snippet-btn group relative flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-violet-500 dark:hover:border-violet-500 transition-all text-left"
+                >
+                    <code
+                        id="snippet-json"
+                        class="font-mono text-sm text-slate-700 dark:text-slate-300 truncate pr-4"
+                    ></code>
+                    <div
+                        class="opacity-0 group-hover:opacity-100 transition-opacity bg-violet-500 text-white text-xs px-2 py-1 rounded"
+                    >
+                        Copiar
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+    .key-pressed {
+        transform: translateY(16px) !important;
+        border-bottom-width: 0px !important;
+        box-shadow: none !important;
+    }
+</style>
+
+<script>
+    const initialState = document.getElementById("initial-state");
+    const activeState = document.getElementById("active-state");
+    const mainKey = document.querySelector(".key-3d");
+
+    // Display elements
+    const displayKey = document.getElementById("display-key");
+    const displayCode = document.getElementById("display-code");
+    const infoKey = document.getElementById("info-key");
+    const infoCode = document.getElementById("info-code");
+    const infoWhich = document.getElementById("info-which");
+    const infoLocation = document.getElementById("info-location");
+
+    // Snippet elements
+    const snippetKey = document.getElementById("snippet-key");
+    const snippetCode = document.getElementById("snippet-code");
+    const snippetWhich = document.getElementById("snippet-which");
+    const snippetJson = document.getElementById("snippet-json");
+    const snippetBtns = document.querySelectorAll(".snippet-btn");
+
+    // Modifiers
+    const mods = {
+        ctrl: document.getElementById("mod-ctrl"),
+        shift: document.getElementById("mod-shift"),
+        alt: document.getElementById("mod-alt"),
+        meta: document.getElementById("mod-meta"),
+    };
+
+    function updateVisuals(e: KeyboardEvent) {
+        e.preventDefault();
+
+        // Switch to active state if not already
+        if (initialState && !initialState.classList.contains("hidden")) {
+            initialState.classList.add("hidden");
+            activeState?.classList.remove("hidden");
+        }
+
+        // Visual "Explosion" / Press effect
+        if (mainKey) {
+            mainKey.classList.add("key-pressed");
+            setTimeout(() => mainKey.classList.remove("key-pressed"), 150);
+        }
+
+        // Update main display
+        let keyDisplay = e.key;
+        if (keyDisplay === " ") keyDisplay = "Space";
+        if (keyDisplay.length === 1) keyDisplay = keyDisplay.toUpperCase();
+
+        if (displayKey) displayKey.textContent = keyDisplay;
+        if (displayCode) displayCode.textContent = e.code;
+
+        // Update Info Grid
+        if (infoKey) infoKey.textContent = e.key === " " ? "(space)" : e.key;
+        if (infoCode) infoCode.textContent = e.code;
+        if (infoWhich) infoWhich.textContent = e.which.toString();
+
+        // Location mapping
+        const locations = ["Standard", "Left", "Right", "Numpad"];
+        if (infoLocation) infoLocation.textContent = locations[e.location] || "Standard";
+
+        // Update Modifiers
+        updateModifier(mods.ctrl, e.ctrlKey);
+        updateModifier(mods.shift, e.shiftKey);
+        updateModifier(mods.alt, e.altKey);
+        updateModifier(mods.meta, e.metaKey);
+
+        // Update Snippets
+        const keyQuote = e.key === "'" ? '"' : "'";
+        if (snippetKey) snippetKey.textContent = `if (e.key === ${keyQuote}${e.key}${keyQuote})`;
+        if (snippetCode) snippetCode.textContent = `if (e.code === '${e.code}')`;
+        if (snippetWhich) snippetWhich.textContent = `if (e.which === ${e.which})`;
+        if (snippetJson)
+            snippetJson.textContent = `{ key: '${e.key}', code: '${e.code}', which: ${e.which} }`;
+    }
+
+    function updateModifier(el: HTMLElement | null, isActive: boolean) {
+        if (!el) return;
+        if (isActive) {
+            el.classList.remove("border-slate-200", "dark:border-slate-800", "text-slate-400");
+            el.classList.add(
+                "border-violet-500",
+                "bg-violet-500/10",
+                "text-violet-600",
+                "dark:text-violet-400",
+                "scale-110"
+            );
+        } else {
+            el.classList.add("border-slate-200", "dark:border-slate-800", "text-slate-400");
+            el.classList.remove(
+                "border-violet-500",
+                "bg-violet-500/10",
+                "text-violet-600",
+                "dark:text-violet-400",
+                "scale-110"
+            );
+        }
+    }
+
+    // Copy functionality
+    snippetBtns.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const code = btn.querySelector("code");
+            if (code && code.textContent) {
+                await navigator.clipboard.writeText(code.textContent);
+
+                // Visual feedback
+                const originalBg = btn.classList.contains("dark:bg-slate-900/50")
+                    ? "dark:bg-slate-900/50"
+                    : "bg-slate-100";
+                btn.classList.remove("bg-slate-100", "dark:bg-slate-900/50");
+                btn.classList.add("bg-green-500/10", "border-green-500", "text-green-600");
+
+                setTimeout(() => {
+                    btn.classList.remove("bg-green-500/10", "border-green-500", "text-green-600");
+                    btn.classList.add("bg-slate-100", "dark:bg-slate-900/50");
+                }, 500);
+            }
+        });
+    });
+
+    // Value Copy functionality
+    const valueBtns = document.querySelectorAll(".copy-value-btn");
+    valueBtns.forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const targetId = btn.getAttribute("data-target");
+            if (!targetId) return;
+
+            const targetEl = document.getElementById(targetId);
+
+            if (targetEl && targetEl.textContent) {
+                await navigator.clipboard.writeText(targetEl.textContent);
+
+                // Visual feedback
+                btn.classList.add("text-green-500", "bg-green-500/10");
+                btn.classList.remove("text-slate-400", "hover:text-violet-500");
+
+                setTimeout(() => {
+                    btn.classList.remove("text-green-500", "bg-green-500/10");
+                    btn.classList.add("text-slate-400", "hover:text-violet-500");
+                }, 1000);
+            }
+        });
+    });
+
+    // Listen to window events
+    window.addEventListener("keydown", updateVisuals);
+</script>

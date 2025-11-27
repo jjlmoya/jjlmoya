@@ -1,0 +1,131 @@
+<section
+    class="mt-32 max-w-3xl mx-auto text-slate-600 dark:text-slate-400 leading-relaxed space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300"
+>
+    <div class="flex items-center gap-4 opacity-50">
+        <div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div>
+        <span class="text-xs font-mono uppercase tracking-widest">Documentación Técnica</span>
+        <div class="h-px bg-slate-300 dark:bg-slate-700 flex-1"></div>
+    </div>
+
+    <div
+        class="bg-slate-50 dark:bg-white/5 rounded-3xl p-8 md:p-12 border border-slate-200 dark:border-white/10"
+    >
+        <article class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                Entendiendo los Eventos de Teclado
+            </h2>
+            <p class="mb-4">
+                El manejo de eventos de teclado en JavaScript puede ser confuso debido a las
+                múltiples propiedades disponibles. Esta herramienta te ayuda a visualizar
+                exactamente qué datos recibe el navegador cuando interactúas con el hardware.
+            </p>
+            <p>
+                Es fundamental distinguir entre la intención del usuario (qué carácter quiere
+                escribir) y la acción física (qué botón presionó).
+            </p>
+        </article>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <article>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+                    Propiedad event.code
+                </h3>
+                <p class="text-sm mb-2">
+                    Representa la tecla física en el teclado. Esta propiedad es invariable y no se
+                    ve afectada por la distribución del teclado (QWERTY, AZERTY, etc.).
+                </p>
+                <p class="text-sm font-medium text-violet-600 dark:text-violet-400">
+                    Uso ideal: Controles de videojuegos (WASD) y atajos de teclado posicionales.
+                </p>
+            </article>
+            <article>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">
+                    Propiedad event.key
+                </h3>
+                <p class="text-sm mb-2">
+                    Representa el valor del carácter generado. Este valor cambia si se presiona
+                    Shift o AltGr, y depende del idioma configurado en el sistema operativo.
+                </p>
+                <p class="text-sm font-medium text-violet-600 dark:text-violet-400">
+                    Uso ideal: Campos de texto, formularios y atajos semánticos (Ctrl+C).
+                </p>
+            </article>
+        </div>
+
+        <article class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                Tabla de Referencia Rápida
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="border-b border-slate-200 dark:border-slate-700">
+                        <tr>
+                            <th class="py-3 font-mono text-slate-900 dark:text-white">Propiedad</th>
+                            <th class="py-3">Descripción</th>
+                            <th class="py-3">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                        <tr>
+                            <td class="py-3 font-mono font-bold">event.key</td>
+                            <td class="py-3">Valor del carácter resultante.</td>
+                            <td class="py-3 text-green-600 dark:text-green-400">Estándar Moderno</td
+                            >
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-mono font-bold">event.code</td>
+                            <td class="py-3">Código físico de la tecla.</td>
+                            <td class="py-3 text-green-600 dark:text-green-400">Estándar Moderno</td
+                            >
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-mono font-bold text-slate-400">event.which</td>
+                            <td class="py-3 text-slate-500">Código numérico ASCII.</td>
+                            <td class="py-3 text-red-500">Obsoleto (Deprecated)</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 font-mono font-bold text-slate-400">event.keyCode</td>
+                            <td class="py-3 text-slate-500">Código numérico antiguo.</td>
+                            <td class="py-3 text-red-500">Obsoleto (Deprecated)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+
+        <article>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">
+                Notas sobre Implementación
+            </h2>
+            <div class="space-y-4">
+                <div
+                    class="bg-white dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800"
+                >
+                    <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">
+                        Teclas Modificadoras
+                    </h4>
+                    <p class="text-sm text-slate-500">
+                        Para detectar combinaciones de teclas, no confíes en la lógica manual.
+                        Utiliza las propiedades booleanas nativas del evento:
+                        <code
+                            class="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded ml-1"
+                            >e.ctrlKey</code
+                        >,
+                        <code
+                            class="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded ml-1"
+                            >e.shiftKey</code
+                        >,
+                        <code
+                            class="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded ml-1"
+                            >e.altKey</code
+                        > y
+                        <code
+                            class="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded ml-1"
+                            >e.metaKey</code
+                        >.
+                    </p>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
