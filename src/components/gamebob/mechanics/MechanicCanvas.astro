@@ -1,0 +1,46 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    id: string; // ID for the canvas element
+    instruction?: string; // Instruction text for the overlay
+    subInstruction?: string; // Secondary instruction text
+    aspectRatio?: "video" | "square" | "portrait"; // Aspect ratio of the canvas
+    verticalOnMobile?: boolean; // If true, takes full height on mobile
+}
+
+const {
+    id,
+    instruction = "Haz click para empezar",
+    subInstruction = "Click / Tap para interactuar",
+    aspectRatio = "video",
+    verticalOnMobile = false,
+} = Astro.props;
+
+const aspectRatioClasses = {
+    video: "aspect-video",
+    square: "aspect-square",
+    portrait: "aspect-[9/16]",
+};
+
+const containerClasses = [
+    "relative w-full bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 shadow-2xl",
+    verticalOnMobile ? "h-[60vh] md:h-auto" : "",
+    !verticalOnMobile ? aspectRatioClasses[aspectRatio] : "md:" + aspectRatioClasses[aspectRatio],
+].join(" ");
+---
+
+<div class={containerClasses}>
+    <canvas id={id} class="w-full h-full block touch-none"></canvas>
+
+    <div
+        id={`${id}-overlay`}
+        class="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10 transition-opacity duration-300"
+    >
+        <Icon name="mdi:cursor-default-click" class="w-16 h-16 text-white mb-4 animate-bounce" />
+        <p class="text-white text-xl font-bold text-center px-4">{instruction}</p>
+        <p class="text-zinc-400 mt-2 text-sm text-center px-4">{subInstruction}</p>
+    </div>
+
+    <slot />
+</div>
