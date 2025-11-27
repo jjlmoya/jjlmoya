@@ -5,19 +5,26 @@ export class PlatformerGame {
     constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
-        this.width = canvas.width = 800;
-        this.height = canvas.height = 600;
+
+        // Initial size
+        const rect = canvas.getBoundingClientRect();
+        this.width = canvas.width = rect.width;
+        this.height = canvas.height = rect.height;
 
         this.input = new InputHandler();
         this.player = new Player(this);
 
         this.particles = [];
 
+        // Scale platforms relative to screen or keep fixed? 
+        // For now, let's keep them somewhat fixed but ensure they are visible
         this.platforms = [
             { x: 200, y: 400, width: 200, height: 20 },
             { x: 500, y: 300, width: 200, height: 20 },
             { x: 50, y: 250, width: 100, height: 20 },
-            { x: 700, y: 150, width: 20, height: 200 }
+            { x: 700, y: 150, width: 20, height: 200 },
+            // Ground
+            { x: 0, y: this.height - 50, width: this.width, height: 50 }
         ];
 
         this.debugState = document.getElementById('debug-state');
@@ -27,6 +34,22 @@ export class PlatformerGame {
         this.lastTime = 0;
         this.animate = this.animate.bind(this);
         requestAnimationFrame(this.animate);
+    }
+
+    resize() {
+        if (!this.canvas) return;
+        const rect = this.canvas.getBoundingClientRect();
+        this.width = this.canvas.width = rect.width;
+        this.height = this.canvas.height = rect.height;
+
+        // Update ground platform
+        const ground = this.platforms.find(p => p.height === 50 && p.y >= this.height - 100);
+        if (ground) {
+            ground.y = this.height - 50;
+            ground.width = this.width;
+        } else {
+            this.platforms.push({ x: 0, y: this.height - 50, width: this.width, height: 50 });
+        }
     }
 
     update(deltaTime) {
@@ -45,10 +68,11 @@ export class PlatformerGame {
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        this.ctx.fillStyle = '#1e293b';
-        this.ctx.fillRect(0, this.height - 50, this.width, 50);
+        // Background
+        this.ctx.fillStyle = '#1e293b'; // Slate 800
+        this.ctx.fillRect(0, 0, this.width, this.height);
 
-        this.ctx.fillStyle = '#334155';
+        this.ctx.fillStyle = '#334155'; // Slate 700
         this.platforms.forEach(platform => {
             this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
         });

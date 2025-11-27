@@ -1,159 +1,94 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import LinkButtons from "../../../components/ui/LinkButtons.astro";
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/platformer";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/platformer/PlatformerGame.js";
 ---
 
-<Layout
-    title="Mecánicas de Plataformas | jjlmoya"
-    description="Demo de mecánicas fluidas de plataformas: salto, doble salto, deslizamiento."
-    bodyClass="bg-slate-950 text-white overflow-hidden"
-    showBackground={false}
-    mainClass="p-0"
-    headerClass="text-white z-50"
+<MechanicPage
+    title="Plataformas"
+    description="Demo de mecánicas fluidas: salto, doble salto, deslizamiento y partículas."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
 >
-    <div class="relative w-full h-screen flex flex-col bg-slate-900">
-        <div
-            class="absolute inset-0 opacity-20 pointer-events-none"
-            style="background-image: linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px); background-size: 40px 40px;"
-        >
-        </div>
+    <Icon slot="icon" name="mdi:controller-classic" class="text-indigo-400" />
 
-        <div
-            class="relative z-10 flex flex-col gap-4 items-center max-w-7xl mx-auto p-4 pt-20 pb-4 flex-1 min-h-0 overflow-y-auto w-full"
-        >
-            <div class="relative group w-full max-w-2xl">
-                <div
-                    class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"
-                >
-                </div>
-                <canvas
-                    id="game-canvas"
-                    class="relative block border border-slate-700/50 bg-slate-900 rounded-lg shadow-2xl w-full"
-                ></canvas>
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Usa las Flechas"
+        subInstruction="Muévete y Salta"
+        verticalOnMobile={false}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Máquina de estados finitos para el jugador.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Física de movimiento con inercia y fricción.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Sistema de partículas para feedback visual.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">← / →</span>
+                <span class="text-xs text-zinc-400">Moverse</span>
             </div>
-
-            <div class="w-full max-w-2xl flex flex-col gap-4">
-                <div
-                    class="bg-slate-900/80 backdrop-blur-xl rounded-xl border border-white/10 p-4 md:p-6 shadow-xl"
-                >
-                    <div class="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
-                        <div
-                            class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                class="md:w-6 md:h-6"
-                                ><path d="M20,6H4V4H20V6M20,18V20H4V18H20M20,11H4V13H20V11Z"
-                                ></path></svg
-                            >
-                        </div>
-                        <div>
-                            <h1 class="text-white font-bold text-base md:text-lg leading-none">
-                                Controles
-                            </h1>
-                            <span class="text-xs text-slate-500 font-mono uppercase tracking-wider"
-                                >Teclado</span
-                            >
-                        </div>
-                    </div>
-
-                    <ul class="space-y-3 font-mono text-xs md:text-sm">
-                        <li class="flex flex-col gap-2">
-                            <span class="text-slate-400 text-xs uppercase tracking-wide"
-                                >Movimiento</span
-                            >
-                            <div class="flex gap-2">
-                                <kbd
-                                    class="flex-1 py-2 rounded bg-slate-800 border border-slate-700 text-center font-bold text-indigo-300 shadow-[0_2px_0_#1e293b]"
-                                    >←</kbd
-                                >
-                                <kbd
-                                    class="flex-1 py-2 rounded bg-slate-800 border border-slate-700 text-center font-bold text-indigo-300 shadow-[0_2px_0_#1e293b]"
-                                    >→</kbd
-                                >
-                            </div>
-                        </li>
-                        <li class="flex flex-col gap-2">
-                            <span class="text-slate-400 text-xs uppercase tracking-wide"
-                                >Acciones</span
-                            >
-                            <div class="space-y-2">
-                                <div
-                                    class="flex items-center justify-between bg-slate-800/50 p-2 rounded border border-white/5"
-                                >
-                                    <span class="text-slate-300">Saltar</span>
-                                    <kbd
-                                        class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-xs font-bold text-indigo-300"
-                                        >Espacio</kbd
-                                    >
-                                </div>
-                                <div
-                                    class="flex items-center justify-between bg-slate-800/50 p-2 rounded border border-white/5"
-                                >
-                                    <span class="text-slate-300">Deslizar</span>
-                                    <kbd
-                                        class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-xs font-bold text-indigo-300"
-                                        >Shift</kbd
-                                    >
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div
-                    class="bg-slate-900/80 backdrop-blur-xl rounded-xl border border-white/10 p-4 md:p-6 shadow-xl"
-                >
-                    <h2 class="text-xs text-slate-500 font-mono uppercase tracking-wider mb-3">
-                        Debug Info
-                    </h2>
-                    <div class="space-y-3 font-mono text-xs md:text-sm">
-                        <div class="flex justify-between items-center border-b border-white/5 pb-2">
-                            <span class="text-slate-400">Estado</span>
-                            <span
-                                id="debug-state"
-                                class="text-emerald-400 font-bold bg-emerald-400/10 px-2 py-0.5 rounded text-xs"
-                                >Idle</span
-                            >
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <span class="text-[10px] text-slate-500 uppercase block mb-1"
-                                    >Velocidad X</span
-                                >
-                                <span id="debug-vel-x" class="text-indigo-300">0.00</span>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-slate-500 uppercase block mb-1"
-                                    >Velocidad Y</span
-                                >
-                                <span id="debug-vel-y" class="text-indigo-300">0.00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Espacio</span>
+                <span class="text-xs text-zinc-400">Saltar</span>
             </div>
-        </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Shift + ↓</span>
+                <span class="text-xs text-zinc-400">Deslizar / Caer</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 pb-4">
-            <LinkButtons
-                codeUrl="https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/platformer"
-                docsUrl="#"
-                mode="static"
-            />
-        </div>
+    <!-- Debug Overlay -->
+    <div
+        class="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded text-xs font-mono text-white pointer-events-none z-20 hidden md:block"
+    >
+        <div>State: <span id="debug-state" class="text-green-400">Idle</span></div>
+        <div>VX: <span id="debug-vel-x" class="text-blue-400">0.00</span></div>
+        <div>VY: <span id="debug-vel-y" class="text-red-400">0.00</span></div>
     </div>
-</Layout>
+</MechanicPage>
 
 <script>
     import { PlatformerGame } from "../../../lib/mechanics/platformer/PlatformerGame.js";
 
     const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
-    if (canvas) {
-        new PlatformerGame(canvas);
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: PlatformerGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new PlatformerGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
     }
 </script>
