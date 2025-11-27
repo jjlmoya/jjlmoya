@@ -14,6 +14,7 @@ const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
 >
     <div class="min-h-screen flex flex-col items-center justify-start py-6 md:py-12 px-4">
         <div class="z-10 w-full max-w-5xl mt-4 md:mt-8">
+            <h1 class="sr-only">Colección de Mecánicas de Juego y Prototipos</h1>
             <MechanicsFilter allTags={allTags} />
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mechanics-grid">
@@ -64,34 +65,8 @@ const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
 
     filterBtns.forEach((btn) => {
         btn.addEventListener("click", () => {
-            filterBtns.forEach((b) => {
-                b.classList.remove(
-                    "bg-[var(--color-gamebob-primary)]",
-                    "text-black",
-                    "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
-                    "hover:bg-[var(--color-gamebob-primary)]/80",
-                    "border-transparent"
-                );
-                b.classList.add(
-                    "bg-zinc-800",
-                    "text-zinc-300",
-                    "border-zinc-700",
-                    "hover:bg-zinc-700"
-                );
-            });
-            btn.classList.remove(
-                "bg-zinc-800",
-                "text-zinc-300",
-                "border-zinc-700",
-                "hover:bg-zinc-700"
-            );
-            btn.classList.add(
-                "bg-[var(--color-gamebob-primary)]",
-                "text-black",
-                "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
-                "hover:bg-[var(--color-gamebob-primary)]/80",
-                "border-transparent"
-            );
+            filterBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
 
             currentPlatform = (btn as HTMLElement).dataset.filter || "all";
             filterCards();
@@ -105,54 +80,39 @@ const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
 
             if (activeTags.includes(tag)) {
                 activeTags = activeTags.filter((t) => t !== tag);
-                btn.classList.remove(
-                    "bg-[var(--color-gamebob-primary)]",
-                    "text-black",
-                    "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
-                    "hover:bg-[var(--color-gamebob-primary)]/80",
-                    "border-transparent"
-                );
-                btn.classList.add(
-                    "bg-zinc-900/50",
-                    "text-zinc-500",
-                    "border-zinc-800",
-                    "hover:border-zinc-700"
-                );
+                btn.classList.remove("active");
             } else {
                 activeTags.push(tag);
-                btn.classList.remove(
-                    "bg-zinc-900/50",
-                    "text-zinc-500",
-                    "border-zinc-800",
-                    "hover:border-zinc-700"
-                );
-                btn.classList.add(
-                    "bg-[var(--color-gamebob-primary)]",
-                    "text-black",
-                    "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
-                    "hover:bg-[var(--color-gamebob-primary)]/80",
-                    "border-transparent"
-                );
+                btn.classList.add("active");
             }
 
             filterCards();
         });
     });
 
+    // Set initial active state
     const allBtn = document.querySelector('[data-filter="all"]');
-    if (allBtn) {
-        allBtn.classList.remove(
-            "bg-zinc-800",
-            "text-zinc-300",
-            "border-zinc-700",
-            "hover:bg-zinc-700"
-        );
-        allBtn.classList.add(
-            "bg-[var(--color-gamebob-primary)]",
-            "text-black",
-            "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
-            "hover:bg-[var(--color-gamebob-primary)]/80",
-            "border-transparent"
-        );
-    }
+    if (allBtn) allBtn.classList.add("active");
 </script>
+
+<style>
+    /* Default state for buttons (defined in component or here) */
+    .filter-btn,
+    .tag-filter-btn {
+        @apply bg-zinc-800 text-zinc-300 border-zinc-700 hover:bg-zinc-700 transition-all duration-300;
+    }
+
+    /* Active state using CSS variables */
+    .filter-btn.active,
+    .tag-filter-btn.active {
+        background-color: var(--color-gamebob-primary);
+        color: black;
+        box-shadow: 0 0 20px rgba(29, 218, 188, 0.3);
+        border-color: transparent;
+    }
+
+    .filter-btn.active:hover,
+    .tag-filter-btn.active:hover {
+        background-color: rgba(29, 218, 188, 0.8);
+    }
+</style>
