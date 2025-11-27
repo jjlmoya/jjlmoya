@@ -1,0 +1,39 @@
+---
+interface Props {
+    title: string;
+    subtitle?: string;
+    id: string;
+    statId: string;
+    minHeight?: string;
+    extraClasses?: string;
+}
+
+const { title, subtitle, id, statId, minHeight = "min-h-[200px]", extraClasses = "" } = Astro.props;
+---
+
+<section class="shelf-section">
+    <h2
+        class="text-2xl font-sans uppercase tracking-widest mb-4 border-b border-[#dcd9d2] pb-2 flex justify-between items-center"
+    >
+        <span>{title}</span>
+        {
+            subtitle && (
+                <span class="text-sm opacity-50 normal-case font-serif italic">{subtitle}</span>
+            )
+        }
+    </h2>
+    <div
+        class={`shelf bg-[#e8e5de] p-8 shadow-inner rounded-sm flex flex-wrap gap-1 items-end ${minHeight} ${extraClasses}`}
+        id={id}
+    >
+        <slot />
+    </div>
+    <p class="mt-4 text-right font-sans text-sm opacity-50" id={statId}></p>
+</section>
+
+<style>
+    .shelf {
+        box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.05);
+        border-bottom: 12px solid #dcd9d2;
+    }
+</style>
