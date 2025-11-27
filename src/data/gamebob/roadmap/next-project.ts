@@ -6,5 +6,5 @@ export const nextProject: Project = {
     image: "", // No image yet
     statusLabel: "En Investigación",
     progress: 0,
-    tasks: [{ name: "Explorando posibles mecánicas", status: "false" }],
+    tasks: [{ name: "Explorando posibles mecánicas", status: "pending" }],
 };
