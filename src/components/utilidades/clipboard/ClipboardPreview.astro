@@ -1,0 +1,47 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div id="preview-container" class="w-full relative mt-8 hidden">
+    <div
+        class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 bg-[url('/grid.svg')] bg-center"
+    >
+        <img
+            id="pasted-image"
+            src=""
+            alt="Pasted content"
+            class="w-full h-auto object-contain max-h-[70vh]"
+        />
+
+        <div
+            class="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-mono"
+        >
+            <span id="image-dimensions">0 x 0</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById("preview-container");
+    const img = document.getElementById("pasted-image") as HTMLImageElement;
+    const dimensions = document.getElementById("image-dimensions");
+
+    document.addEventListener("clipboard-image-pasted", ((e: CustomEvent) => {
+        if (container && img && dimensions) {
+            img.src = e.detail.url;
+            container.classList.remove("hidden");
+
+            img.onload = () => {
+                dimensions.textContent = `${img.naturalWidth} x ${img.naturalHeight}`;
+                container.scrollIntoView({ behavior: "smooth", block: "center" });
+            };
+        }
+    }) as EventListener);
+
+    document.addEventListener("clipboard-clear", () => {
+        if (container && img) {
+            container.classList.add("hidden");
+            img.src = "";
+        }
+    });
+</script>

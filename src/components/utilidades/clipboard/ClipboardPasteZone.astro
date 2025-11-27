@@ -1,0 +1,70 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+    id="paste-zone"
+    class="w-full h-64 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:bg-[var(--color-accent)]/5 transition-all duration-300 cursor-pointer group p-6 gap-4 text-center"
+>
+    <Icon
+        name="mdi:clipboard-text-outline"
+        class="w-16 h-16 group-hover:scale-110 transition-transform duration-300"
+    />
+    <div class="space-y-2">
+        <p class="text-lg font-medium">Presiona Ctrl + V en cualquier lugar</p>
+        <p class="text-sm opacity-70">o haz clic aquí para pegar</p>
+    </div>
+</div>
+
+<script>
+    const pasteZone = document.getElementById("paste-zone");
+
+    function handlePaste(event: ClipboardEvent) {
+        const items = event.clipboardData?.items;
+        if (!items) return;
+
+        for (const item of items) {
+            if (item.type.indexOf("image") !== -1) {
+                const blob = item.getAsFile();
+                if (blob) {
+                    const url = URL.createObjectURL(blob);
+                    const timestamp = new Date();
+
+                    const detail = {
+                        url,
+                        timestamp,
+                        blob,
+                    };
+
+                    document.dispatchEvent(new CustomEvent("clipboard-image-pasted", { detail }));
+                }
+            }
+        }
+    }
+
+    window.addEventListener("paste", handlePaste);
+
+    pasteZone?.addEventListener("click", async () => {
+        try {
+            const clipboardItems = await navigator.clipboard.read();
+            for (const item of clipboardItems) {
+                const imageTypes = item.types.filter((type) => type.startsWith("image/"));
+                for (const type of imageTypes) {
+                    const blob = await item.getType(type);
+                    const url = URL.createObjectURL(blob);
+                    const timestamp = new Date();
+
+                    const detail = {
+                        url,
+                        timestamp,
+                        blob,
+                    };
+
+                    document.dispatchEvent(new CustomEvent("clipboard-image-pasted", { detail }));
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    });
+</script>
