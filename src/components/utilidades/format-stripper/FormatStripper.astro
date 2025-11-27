@@ -1,0 +1,147 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto space-y-6">
+    <!-- Toolbar -->
+    <div
+        class="flex flex-wrap items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm"
+    >
+        <div class="flex items-center gap-2">
+            <div
+                class="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-mono text-slate-500 uppercase tracking-wider"
+            >
+                <span id="char-count">0</span> chars
+            </div>
+            <div
+                class="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-mono text-slate-500 uppercase tracking-wider"
+            >
+                <span id="word-count">0</span> words
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <button
+                id="btn-uppercase"
+                class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-2"
+            >
+                <Icon name="mdi:format-letter-case-upper" class="w-4 h-4" />
+                MAYÚS
+            </button>
+            <button
+                id="btn-lowercase"
+                class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-2"
+            >
+                <Icon name="mdi:format-letter-case-lower" class="w-4 h-4" />
+                minús
+            </button>
+
+            <div class="w-px h-8 bg-slate-200 dark:bg-slate-700 mx-2"></div>
+            <button
+                id="btn-copy"
+                class="px-6 py-2 text-sm font-bold text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg shadow-lg shadow-emerald-500/20 transition-all active:scale-95 flex items-center gap-2"
+            >
+                <Icon name="mdi:content-copy" class="w-4 h-4" />
+                Copiar
+            </button>
+        </div>
+    </div>
+
+    <!-- Editor Area -->
+    <div class="relative group">
+        <div
+            class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-10 group-focus-within:opacity-30 transition duration-500"
+        >
+        </div>
+        <textarea
+            id="editor"
+            placeholder="Pega tu texto aquí para limpiarlo..."
+            class="relative w-full h-96 bg-white dark:bg-slate-900 rounded-2xl p-8 text-lg leading-relaxed text-slate-700 dark:text-slate-300 font-mono resize-none focus:outline-none focus:ring-0 shadow-2xl placeholder:text-slate-300 dark:placeholder:text-slate-700 transition-colors"
+            spellcheck="false"></textarea>
+
+        <!-- Floating Action Message -->
+        <div
+            id="toast"
+            class="absolute bottom-8 right-8 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg shadow-lg transform translate-y-4 opacity-0 transition-all duration-300 pointer-events-none font-medium text-sm"
+        >
+            ¡Copiado!
+        </div>
+    </div>
+</div>
+
+<script>
+    const editor = document.getElementById("editor") as HTMLTextAreaElement;
+    const charCount = document.getElementById("char-count");
+    const wordCount = document.getElementById("word-count");
+    const toast = document.getElementById("toast");
+
+    // Buttons
+    const btnUpper = document.getElementById("btn-uppercase");
+    const btnLower = document.getElementById("btn-lowercase");
+
+    const btnCopy = document.getElementById("btn-copy");
+
+    function cleanText(text) {
+        return (
+            text
+                // Replace multiple spaces with single space
+                .replace(/\s+/g, " ")
+                // Remove spaces before punctuation
+                .replace(/\s+([.,;?!:])/g, "$1")
+                // Trim edges
+                .trim()
+        );
+    }
+
+    function updateStats() {
+        const text = editor.value;
+        charCount.textContent = text.length.toString();
+        wordCount.textContent =
+            text.trim() === "" ? "0" : text.trim().split(/\s+/).length.toString();
+    }
+
+    function showToast(msg = "¡Copiado!") {
+        toast.textContent = msg;
+        toast.classList.remove("translate-y-4", "opacity-0");
+        setTimeout(() => {
+            toast.classList.add("translate-y-4", "opacity-0");
+        }, 2000);
+    }
+
+    // Auto-clean on paste
+    editor.addEventListener("paste", (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData("text");
+        const cleaned = cleanText(text);
+
+        // Insert cleaned text at cursor position
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        const currentText = editor.value;
+
+        editor.value = currentText.substring(0, start) + cleaned + currentText.substring(end);
+        editor.selectionStart = editor.selectionEnd = start + cleaned.length;
+
+        updateStats();
+        showToast("Texto limpiado automáticamente");
+    });
+
+    editor.addEventListener("input", updateStats);
+
+    // Transformers
+    btnUpper.addEventListener("click", () => {
+        editor.value = editor.value.toUpperCase();
+        updateStats();
+    });
+
+    btnLower.addEventListener("click", () => {
+        editor.value = editor.value.toLowerCase();
+        updateStats();
+    });
+
+    // Copy
+    btnCopy.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(editor.value);
+        showToast();
+    });
+</script>
