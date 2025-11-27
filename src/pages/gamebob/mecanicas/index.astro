@@ -1,437 +1,158 @@
 ---
 import GameBobLayout from "../../../layouts/GameBobLayout.astro";
 import { Icon } from "astro-icon/components";
+import { mechanics } from "../../../data/mechanics";
+import MechanicCard from "../../../components/gamebob/mechanics/MechanicCard.astro";
+import MechanicsFilter from "../../../components/gamebob/mechanics/MechanicsFilter.astro";
+
+const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
 ---
 
 <GameBobLayout
     title="Mecánicas | GameBob"
     description="Colección de prototipos y experimentos de mecánicas de juego."
 >
-    <div class="min-h-screen flex flex-col items-center justify-start py-12 px-4">
-        <div class="z-10 w-full max-w-5xl mt-8">
-            <h1
-                class="text-4xl font-bold mb-12 border-l-4 border-[var(--color-gamebob-accent)] pl-4 lowercase text-[var(--color-gamebob-text)]"
-            >
-                mecánicas
-            </h1>
+    <div class="min-h-screen flex flex-col items-center justify-start py-6 md:py-12 px-4">
+        <div class="z-10 w-full max-w-5xl mt-4 md:mt-8">
+            <MechanicsFilter allTags={allTags} />
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Slingshot Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/slingshot"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:gesture-swipe"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Slingshot
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            arrastra, estira y lanza. física de tirachinas con rebotes dinámicos y
-                            control táctil preciso.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mechanics-grid">
+                {mechanics.map((mechanic) => <MechanicCard mechanic={mechanic} />)}
+            </div>
 
-                <!-- Swipe Gesture Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/swipe"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:gesture-swipe-horizontal"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Swipe Gesture
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            detecta gestos de deslizamiento en 4 u 8 direcciones con seguimiento de
-                            velocidad y sensibilidad configurable.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Gravity Well Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/gravity-well"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:magnet"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Gravity Well
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            simulación de partículas con pozos de gravedad interactivos. crea campos
-                            de fuerza y observa el caos.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Flocking Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/flocking"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:bird"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Flocking
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            simulación de comportamiento de bandada. separación, alineación y
-                            cohesión en acción.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Tap & Fly Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/tap-fly"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:arrow-up-bold"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Tap & Fly
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            control de un toque. desafía la gravedad y esquiva obstáculos con
-                            precisión.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Hold to Jump Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/hold-jump"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:arrow-collapse-down"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Hold to Jump
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            carga tu salto. controla la fuerza y la trayectoria para alcanzar nuevas
-                            alturas.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Clicker Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/clicker"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:cursor-default-click"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Clicker
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            mecánica incremental. haz clic, gana recursos y automatiza tu progreso.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Autorunner Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/autorunner"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:run-fast"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Autorunner
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            carrera infinita. salta obstáculos y plataformas en este runner
-                            procedural.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Platformer Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/plataformas"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:gamepad-variant"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Platformer
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            mecánicas de plataformas fluidas. salto variable, doble salto y
-                            deslizamiento.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- Size Matters Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/size-matters"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:arrow-expand-all"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                Size Matters
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            el tamaño importa. crece para romper, encoge para flotar. física de masa
-                            variable.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
-
-                <!-- One Bullet Shooter Mechanic Card -->
-                <a
-                    href="/gamebob/mecanicas/one-bullet"
-                    class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-[var(--color-gamebob-accent)]/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[var(--color-gamebob-accent)]/20"
-                >
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-[var(--color-gamebob-accent)]/10 flex items-center justify-center"
-                            >
-                                <Icon
-                                    name="mdi:bullet"
-                                    class="w-6 h-6 text-[var(--color-gamebob-accent)]"
-                                />
-                            </div>
-                            <h3
-                                class="text-xl font-bold text-[var(--color-gamebob-text)] group-hover:text-[var(--color-gamebob-accent)] transition-colors"
-                            >
-                                One Bullet Shooter
-                            </h3>
-                        </div>
-                        <p class="text-gray-400 text-sm leading-relaxed lowercase">
-                            un disparo. una oportunidad. recupera tu bala para sobrevivir.
-                        </p>
-                        <div
-                            class="flex items-center gap-2 text-xs text-[var(--color-gamebob-accent)]/70"
-                        >
-                            <Icon name="mdi:play-circle-outline" class="w-4 h-4" />
-                            <span>demo interactiva</span>
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[var(--color-gamebob-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    >
-                    </div>
-                </a>
+            <div id="no-results" class="hidden text-center py-12 text-zinc-500">
+                <Icon name="mdi:ghost-off" class="w-12 h-12 mx-auto mb-2 opacity-50" />
+                <p>No se encontraron mecánicas con estos filtros.</p>
             </div>
         </div>
     </div>
 </GameBobLayout>
+
+<script>
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const tagBtns = document.querySelectorAll(".tag-filter-btn");
+    const cards = document.querySelectorAll(".mechanic-card");
+    const noResults = document.getElementById("no-results");
+
+    let currentPlatform = "all";
+    let activeTags: string[] = [];
+
+    function filterCards() {
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+            const platforms = (card as HTMLElement).dataset.platforms;
+            const tags = (card as HTMLElement).dataset.tags?.split(",") || [];
+
+            const platformMatch =
+                currentPlatform === "all" || platforms === "all" || platforms === currentPlatform;
+            const tagsMatch =
+                activeTags.length === 0 || activeTags.every((tag) => tags.includes(tag));
+
+            if (platformMatch && tagsMatch) {
+                (card as HTMLElement).style.display = "block";
+                visibleCount++;
+            } else {
+                (card as HTMLElement).style.display = "none";
+            }
+        });
+
+        if (noResults) {
+            noResults.classList.toggle("hidden", visibleCount > 0);
+        }
+    }
+
+    filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            filterBtns.forEach((b) => {
+                b.classList.remove(
+                    "bg-[var(--color-gamebob-primary)]",
+                    "text-black",
+                    "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
+                    "hover:bg-[var(--color-gamebob-primary)]/80",
+                    "border-transparent"
+                );
+                b.classList.add(
+                    "bg-zinc-800",
+                    "text-zinc-300",
+                    "border-zinc-700",
+                    "hover:bg-zinc-700"
+                );
+            });
+            btn.classList.remove(
+                "bg-zinc-800",
+                "text-zinc-300",
+                "border-zinc-700",
+                "hover:bg-zinc-700"
+            );
+            btn.classList.add(
+                "bg-[var(--color-gamebob-primary)]",
+                "text-black",
+                "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
+                "hover:bg-[var(--color-gamebob-primary)]/80",
+                "border-transparent"
+            );
+
+            currentPlatform = (btn as HTMLElement).dataset.filter || "all";
+            filterCards();
+        });
+    });
+
+    tagBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const tag = (btn as HTMLElement).dataset.tag;
+            if (!tag) return;
+
+            if (activeTags.includes(tag)) {
+                activeTags = activeTags.filter((t) => t !== tag);
+                btn.classList.remove(
+                    "bg-[var(--color-gamebob-primary)]",
+                    "text-black",
+                    "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
+                    "hover:bg-[var(--color-gamebob-primary)]/80",
+                    "border-transparent"
+                );
+                btn.classList.add(
+                    "bg-zinc-900/50",
+                    "text-zinc-500",
+                    "border-zinc-800",
+                    "hover:border-zinc-700"
+                );
+            } else {
+                activeTags.push(tag);
+                btn.classList.remove(
+                    "bg-zinc-900/50",
+                    "text-zinc-500",
+                    "border-zinc-800",
+                    "hover:border-zinc-700"
+                );
+                btn.classList.add(
+                    "bg-[var(--color-gamebob-primary)]",
+                    "text-black",
+                    "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
+                    "hover:bg-[var(--color-gamebob-primary)]/80",
+                    "border-transparent"
+                );
+            }
+
+            filterCards();
+        });
+    });
+
+    const allBtn = document.querySelector('[data-filter="all"]');
+    if (allBtn) {
+        allBtn.classList.remove(
+            "bg-zinc-800",
+            "text-zinc-300",
+            "border-zinc-700",
+            "hover:bg-zinc-700"
+        );
+        allBtn.classList.add(
+            "bg-[var(--color-gamebob-primary)]",
+            "text-black",
+            "shadow-[0_0_20px_rgba(29,218,188,0.3)]",
+            "hover:bg-[var(--color-gamebob-primary)]/80",
+            "border-transparent"
+        );
+    }
+</script>
