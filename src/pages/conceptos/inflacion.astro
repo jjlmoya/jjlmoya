@@ -1,6 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { Icon } from "astro-icon/components";
+import InflationHeader from "../../components/pages/inflacion/InflationHeader.astro";
+import InflationBill from "../../components/pages/inflacion/InflationBill.astro";
+import InflationSlider from "../../components/pages/inflacion/InflationSlider.astro";
+import InflationIconRegistry from "../../components/pages/inflacion/InflationIconRegistry.astro";
 import itemsData from "../../data/inflacion-items.json";
 ---
 
@@ -8,62 +11,10 @@ import itemsData from "../../data/inflacion-items.json";
     <div
         class="min-h-screen flex flex-col items-center justify-center bg-amber-50 text-amber-900 p-4 relative overflow-hidden"
     >
-        <div class="max-w-4xl w-full text-center z-10">
-            <h1 class="text-4xl md:text-6xl font-black mb-2 tracking-tighter">LA INFLACIÓN</h1>
-            <p class="text-xl opacity-70 mb-12 font-mono">¿Qué podías comprar con 100€?</p>
-
-            <div
-                class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-12 relative"
-            >
-                <div
-                    class="absolute -top-6 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-1 font-bold border-2 border-black transform -rotate-2"
-                >
-                    BILLETE DE 100€
-                </div>
-
-                <div
-                    id="items-container"
-                    class="flex flex-wrap gap-4 min-h-[300px] content-start justify-center p-4"
-                >
-                    <!-- Items will be injected here -->
-                </div>
-
-                <div
-                    class="mt-8 pt-4 border-t-2 border-dashed border-gray-300 flex justify-between items-end"
-                >
-                    <div class="text-left">
-                        <div class="text-xs uppercase tracking-widest text-gray-500">Año</div>
-                        <div id="year-display" class="text-5xl font-black tabular-nums">2025</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs uppercase tracking-widest text-gray-500">
-                            Valor equivalente hoy
-                        </div>
-                        <div
-                            id="value-display"
-                            class="text-3xl font-bold text-green-600 tabular-nums"
-                        >
-                            100€
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative px-4 max-w-xl mx-auto">
-                <input
-                    type="range"
-                    min="1970"
-                    max="2025"
-                    value="2025"
-                    class="w-full h-4 bg-gray-200 rounded-lg appearance-none cursor-pointer border-2 border-black accent-black"
-                    id="year-slider"
-                />
-                <div class="flex justify-between text-xs font-mono mt-2 opacity-50">
-                    <span>1970</span>
-                    <span>2025</span>
-                </div>
-            </div>
-        </div>
+        <InflationHeader>
+            <InflationBill />
+            <InflationSlider />
+        </InflationHeader>
 
         <!-- Background Pattern -->
         <div
@@ -74,157 +25,42 @@ import itemsData from "../../data/inflacion-items.json";
     </div>
 </Layout>
 
-<!-- Hidden icon templates -->
-<div id="icon-templates" class="hidden">
-    <div id="icon-bread"><Icon name="mdi:bread-slice" class="w-8 h-8" /></div>
-    <div id="icon-milk"><Icon name="mdi:cup" class="w-8 h-8" /></div>
-    <div id="icon-beer"><Icon name="mdi:beer" class="w-8 h-8" /></div>
-    <div id="icon-coffee"><Icon name="mdi:coffee" class="w-8 h-8" /></div>
-    <div id="icon-burger"><Icon name="mdi:hamburger" class="w-8 h-8" /></div>
-    <div id="icon-movie"><Icon name="mdi:movie" class="w-8 h-8" /></div>
-    <div id="icon-book"><Icon name="mdi:book" class="w-8 h-8" /></div>
-    <div id="icon-vinyl"><Icon name="mdi:disc" class="w-8 h-8" /></div>
-    <div id="icon-shirt"><Icon name="mdi:tshirt-crew" class="w-8 h-8" /></div>
-    <div id="icon-shoe"><Icon name="mdi:shoe-formal" class="w-8 h-8" /></div>
-    <div id="icon-game">
-        <Icon name="mdi:gamepad-variant" class="w-8 h-8" />
-    </div>
-    <div id="icon-fuel"><Icon name="mdi:gas-station" class="w-8 h-8" /></div>
-    <div id="icon-pizza"><Icon name="mdi:pizza" class="w-8 h-8" /></div>
-    <div id="icon-concert"><Icon name="mdi:music" class="w-8 h-8" /></div>
-    <div id="icon-flight"><Icon name="mdi:airplane" class="w-8 h-8" /></div>
-    <div id="icon-house"><Icon name="mdi:home" class="w-8 h-8" /></div>
-    <div id="icon-diamond">
-        <Icon name="mdi:diamond-stone" class="w-8 h-8" />
-    </div>
-    <div id="icon-car"><Icon name="mdi:car" class="w-8 h-8" /></div>
-    <div id="icon-restaurant">
-        <Icon name="mdi:silverware-fork-knife" class="w-8 h-8" />
-    </div>
-    <div id="icon-newspaper"><Icon name="mdi:newspaper" class="w-8 h-8" /></div>
-    <div id="icon-mail"><Icon name="mdi:email" class="w-8 h-8" /></div>
-    <div id="icon-watch"><Icon name="mdi:watch" class="w-8 h-8" /></div>
-    <div id="icon-theater"><Icon name="mdi:theater" class="w-8 h-8" /></div>
-    <div id="icon-photo_roll"><Icon name="mdi:film" class="w-8 h-8" /></div>
-    <div id="icon-camera"><Icon name="mdi:camera" class="w-8 h-8" /></div>
-    <div id="icon-cigarette"><Icon name="mdi:smoking" class="w-8 h-8" /></div>
-    <div id="icon-single"><Icon name="mdi:album" class="w-8 h-8" /></div>
-    <div id="icon-tv_old">
-        <Icon name="mdi:television-classic" class="w-8 h-8" />
-    </div>
-    <div id="icon-tv_color"><Icon name="mdi:television" class="w-8 h-8" /></div>
-    <div id="icon-turntable">
-        <Icon name="mdi:record-player" class="w-8 h-8" />
-    </div>
-    <div id="icon-football"><Icon name="mdi:soccer" class="w-8 h-8" /></div>
-    <div id="icon-alarm"><Icon name="mdi:alarm" class="w-8 h-8" /></div>
-    <div id="icon-radio"><Icon name="mdi:radio" class="w-8 h-8" /></div>
-    <div id="icon-walkman"><Icon name="mdi:cassette" class="w-8 h-8" /></div>
-    <div id="icon-calculator">
-        <Icon name="mdi:calculator" class="w-8 h-8" />
-    </div>
-    <div id="icon-cassette"><Icon name="mdi:cassette" class="w-8 h-8" /></div>
-    <div id="icon-vhs"><Icon name="mdi:video-vintage" class="w-8 h-8" /></div>
-    <div id="icon-vhs_rental">
-        <Icon name="mdi:video-vintage" class="w-8 h-8" />
-    </div>
-    <div id="icon-console_8bit">
-        <Icon name="mdi:gamepad" class="w-8 h-8" />
-    </div>
-    <div id="icon-phone"><Icon name="mdi:phone-classic" class="w-8 h-8" /></div>
-    <div id="icon-videocamera"><Icon name="mdi:video" class="w-8 h-8" /></div>
-    <div id="icon-encyclopedia">
-        <Icon name="mdi:book-multiple" class="w-8 h-8" />
-    </div>
-    <div id="icon-floppy"><Icon name="mdi:floppy" class="w-8 h-8" /></div>
-    <div id="icon-cd"><Icon name="mdi:disc" class="w-8 h-8" /></div>
-    <div id="icon-mobile"><Icon name="mdi:cellphone" class="w-8 h-8" /></div>
-    <div id="icon-computer">
-        <Icon name="mdi:desktop-classic" class="w-8 h-8" />
-    </div>
-    <div id="icon-playstation">
-        <Icon name="mdi:sony-playstation" class="w-8 h-8" />
-    </div>
-    <div id="icon-gameboy">
-        <Icon name="mdi:gamepad-variant" class="w-8 h-8" />
-    </div>
-    <div id="icon-internet"><Icon name="mdi:web" class="w-8 h-8" /></div>
-    <div id="icon-digital_camera">
-        <Icon name="mdi:camera" class="w-8 h-8" />
-    </div>
-    <div id="icon-coffee_premium">
-        <Icon name="mdi:coffee" class="w-8 h-8" />
-    </div>
-    <div id="icon-dvd"><Icon name="mdi:disc" class="w-8 h-8" /></div>
-    <div id="icon-ipod"><Icon name="mdi:ipod" class="w-8 h-8" /></div>
-    <div id="icon-gym"><Icon name="mdi:dumbbell" class="w-8 h-8" /></div>
-    <div id="icon-amazon">
-        <Icon name="mdi:package-variant" class="w-8 h-8" />
-    </div>
-    <div id="icon-coffee_tag"><Icon name="mdi:coffee" class="w-8 h-8" /></div>
-    <div id="icon-ringtone"><Icon name="mdi:music-note" class="w-8 h-8" /></div>
-    <div id="icon-xbox"><Icon name="mdi:microsoft-xbox" class="w-8 h-8" /></div>
-    <div id="icon-sms"><Icon name="mdi:message-text" class="w-8 h-8" /></div>
-    <div id="icon-tv_plasma">
-        <Icon name="mdi:television" class="w-8 h-8" />
-    </div>
-    <div id="icon-mp3"><Icon name="mdi:music" class="w-8 h-8" /></div>
-    <div id="icon-smartphone">
-        <Icon name="mdi:cellphone" class="w-8 h-8" />
-    </div>
-    <div id="icon-tablet"><Icon name="mdi:tablet" class="w-8 h-8" /></div>
-    <div id="icon-netflix"><Icon name="mdi:netflix" class="w-8 h-8" /></div>
-    <div id="icon-spotify"><Icon name="mdi:spotify" class="w-8 h-8" /></div>
-    <div id="icon-delivery"><Icon name="mdi:moped" class="w-8 h-8" /></div>
-    <div id="icon-uber"><Icon name="mdi:car" class="w-8 h-8" /></div>
-    <div id="icon-headphones">
-        <Icon name="mdi:headphones" class="w-8 h-8" />
-    </div>
-    <div id="icon-smart_tv"><Icon name="mdi:television" class="w-8 h-8" /></div>
-    <div id="icon-app"><Icon name="mdi:application" class="w-8 h-8" /></div>
-    <div id="icon-youtube"><Icon name="mdi:youtube" class="w-8 h-8" /></div>
-    <div id="icon-twitch"><Icon name="mdi:twitch" class="w-8 h-8" /></div>
-    <div id="icon-chatgpt"><Icon name="mdi:robot" class="w-8 h-8" /></div>
-    <div id="icon-cloud"><Icon name="mdi:cloud" class="w-8 h-8" /></div>
-    <div id="icon-disney"><Icon name="mdi:castle" class="w-8 h-8" /></div>
-    <div id="icon-hbo"><Icon name="mdi:television-play" class="w-8 h-8" /></div>
-    <div id="icon-airbnb"><Icon name="mdi:home-city" class="w-8 h-8" /></div>
-    <div id="icon-discord"><Icon name="mdi:discord" class="w-8 h-8" /></div>
-    <div id="icon-vr"><Icon name="mdi:virtual-reality" class="w-8 h-8" /></div>
-    <div id="icon-ps5">
-        <Icon name="mdi:sony-playstation" class="w-8 h-8" />
-    </div>
-    <div id="icon-zoom"><Icon name="mdi:video" class="w-8 h-8" /></div>
-    <div id="icon-airpods"><Icon name="mdi:headphones" class="w-8 h-8" /></div>
-    <div id="icon-apple_music"><Icon name="mdi:music" class="w-8 h-8" /></div>
-    <div id="icon-laptop"><Icon name="mdi:laptop" class="w-8 h-8" /></div>
-    <div id="icon-onlyfans">
-        <Icon name="mdi:account-circle" class="w-8 h-8" />
-    </div>
-    <div id="icon-apple_watch"><Icon name="mdi:watch" class="w-8 h-8" /></div>
-</div>
+<InflationIconRegistry />
 
-<script is:inline define:vars={{ itemsData }}>
-    const slider = document.getElementById("year-slider");
+<script>
+    import { getPurchasingPower, calculateBasket } from "../../utils/inflationLogic";
+    import itemsData from "../../data/inflacion-items.json";
+
+    const slider = document.getElementById("year-slider") as HTMLInputElement;
     const yearDisplay = document.getElementById("year-display");
     const valueDisplay = document.getElementById("value-display");
     const itemsContainer = document.getElementById("items-container");
 
-    const getPurchasingPower = (year) => {
-        const yearsDiff = 2025 - year;
-        if (year < 1980) return Math.pow(1.06, yearsDiff);
-        if (year < 2000) return Math.pow(1.04, yearsDiff);
-        return Math.pow(1.025, yearsDiff);
-    };
-
-    // Map item icon names to icon container IDs
-    const getIconHtml = (iconName) => {
+    const getIconHtml = (iconName: string) => {
         const iconContainer = document.getElementById(`icon-${iconName}`);
         return iconContainer ? iconContainer.innerHTML : "";
     };
 
     const items = itemsData;
+
+    const createItemHtml = (item: any, count: number, delay: number) => {
+        const scale = item.price > 50 ? "scale-110" : "scale-100";
+        const bg = item.price > 50 ? "bg-amber-200/50" : "bg-amber-100/50";
+
+        const countBadge =
+            count > 1
+                ? `<div class="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">${count}</div>`
+                : "";
+
+        return `<div class="relative animate-pop text-amber-900 flex flex-col items-center p-2 ${bg} rounded-lg border border-amber-200/50 ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€) ${count > 1 ? `x${count}` : ""}">
+        ${countBadge}
+        ${getIconHtml(item.icon)}
+        <span class="text-[10px] font-bold mt-1 opacity-60">${item.name}</span>
+      </div>`;
+    };
+
     const update = () => {
+        if (!slider) return;
         const year = parseInt(slider.value);
         const power = getPurchasingPower(year);
         const totalValue = 100 * power;
@@ -232,52 +68,12 @@ import itemsData from "../../data/inflacion-items.json";
         if (yearDisplay) yearDisplay.innerText = year.toString();
         if (valueDisplay) valueDisplay.innerText = `${Math.round(totalValue)}€`;
 
-        // Filter items available in the selected year
-        const availableItems = items.filter((item) => item.minYear <= year && item.maxYear >= year);
+        const itemCounts = calculateBasket(totalValue, items, year);
 
-        // Generate items that fit in the budget
-        let currentBudget = totalValue;
-
-        // Create a map to count how many of each item we can buy
-        const itemCounts = new Map();
-
-        // Create a "shopping basket"
-        // Logic: If we have a lot of money (past), we prioritize big purchases first.
-
-        // Sort items by price descending
-        const sortedItems = [...availableItems].sort((a, b) => b.price - a.price);
-
-        // 1. Try to buy expensive items first if we have a lot of budget
-        sortedItems.forEach((item) => {
-            // Only buy expensive stuff if we have > 500€ budget or if it's the only thing we can buy
-            if (currentBudget >= item.price) {
-                // If item is expensive (>50€) and we have budget, buy it with 50% chance to add variety
-                // Or if it's cheap, buy it later
-                if (item.price > 50 && Math.random() > 0.3) {
-                    itemCounts.set(item.name, (itemCounts.get(item.name) || 0) + 1);
-                    currentBudget -= item.price;
-                }
-            }
-        });
-
-        // 2. Fill the rest with affordable items mixed
-        let safety = 0;
-        while (currentBudget > 1 && safety < 100) {
-            const affordable = availableItems.filter((i) => i.price <= currentBudget);
-            if (affordable.length === 0) break;
-
-            // Prefer more expensive items in the affordable list to fill budget faster
-            // but keep some randomness
-            const randomItem = affordable[Math.floor(Math.random() * affordable.length)];
-
-            itemCounts.set(randomItem.name, (itemCounts.get(randomItem.name) || 0) + 1);
-            currentBudget -= randomItem.price;
-            safety++;
-        }
-
-        // Generate HTML from grouped items
         let html = "";
         let animationDelay = 0;
+        const availableItems = items.filter((item) => item.minYear <= year && item.maxYear >= year);
+
         itemCounts.forEach((count, itemName) => {
             const item = availableItems.find((i) => i.name === itemName);
             if (item) {
@@ -289,27 +85,8 @@ import itemsData from "../../data/inflacion-items.json";
         if (itemsContainer) itemsContainer.innerHTML = html;
     };
 
-    function createItemHtml(item, count, delay) {
-        // Scale size based on price roughly
-        const scale = item.price > 50 ? "scale-110" : "scale-100";
-        const bg = item.price > 50 ? "bg-amber-200/50" : "bg-amber-100/50";
-
-        // Show count badge if more than 1
-        const countBadge =
-            count > 1
-                ? `<div class="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">${count}</div>`
-                : "";
-
-        return `<div class="relative animate-pop text-amber-900 flex flex-col items-center p-2 ${bg} rounded-lg border border-amber-200/50 ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€) ${count > 1 ? `x${count}` : ""}">
-        ${countBadge}
-        ${getIconHtml(item.icon)}
-        <span class="text-[10px] font-bold mt-1 opacity-60">${item.name}</span>
-      </div>`;
-    }
-
     slider?.addEventListener("input", update);
 
-    // Init
     update();
 </script>
 
@@ -331,28 +108,5 @@ import itemsData from "../../data/inflacion-items.json";
     .animate-pop {
         animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         opacity: 0;
-    }
-
-    /* Custom Range Slider Styling */
-    input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        height: 24px;
-        width: 24px;
-        border-radius: 50%;
-        background: #000;
-        cursor: pointer;
-        margin-top: -10px;
-        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.1s;
-    }
-    input[type="range"]::-webkit-slider-thumb:hover {
-        transform: scale(1.2);
-    }
-    input[type="range"]::-webkit-slider-runnable-track {
-        width: 100%;
-        height: 4px;
-        cursor: pointer;
-        background: #000;
-        border-radius: 2px;
     }
 </style>
