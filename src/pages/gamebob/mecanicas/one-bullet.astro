@@ -1,0 +1,81 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/one-bullet";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/one-bullet/OneBulletGame.js";
+---
+
+<MechanicPage
+    title="One Bullet Shooter"
+    description="Un shooter donde solo tienes una bala y debes recuperarla."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+>
+    <Icon slot="icon" name="mdi:bullet" class="text-yellow-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Haz click para empezar"
+        subInstruction="WASD para moverte • Click para disparar"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Gestión de estado de la bala (Ready, Fired, Stuck).</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Física de rebote y colisión simple.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>IA de enemigos básica (Persecución).</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">WASD</span>
+                <span class="text-xs text-zinc-400">Moverse</span>
+            </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Click</span>
+                <span class="text-xs text-zinc-400">Disparar</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { OneBulletGame } from "../../../lib/mechanics/one-bullet/OneBulletGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: OneBulletGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new OneBulletGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+    }
+</script>
