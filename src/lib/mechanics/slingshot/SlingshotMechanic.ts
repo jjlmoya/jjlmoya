@@ -95,7 +95,8 @@ export class SlingshotMechanic {
 
         this.callbacks = callbacks;
 
-        this.updateBounds(window.innerWidth, window.innerHeight);
+        // Bounds should be set by the caller via updateBounds()
+        // this.updateBounds(window.innerWidth, window.innerHeight);
     }
 
     updateBounds(width: number, height: number): void {
