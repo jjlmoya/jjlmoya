@@ -1,6 +1,5 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-// Force rebuild: Trigo Refactor
 import TrigoHeader from "../../components/pages/trigo/TrigoHeader.astro";
 import TrigoDeepTime from "../../components/pages/trigo/TrigoDeepTime.astro";
 import TrigoRachis from "../../components/pages/trigo/TrigoRachis.astro";
@@ -50,7 +49,6 @@ import TrigoPositiveDocumentation from "../../components/pages/trigo/TrigoPositi
             content: counter(trigo-positive-chapter, upper-roman) ". ";
         }
 
-        /* Dynamic Background Colors & Scroll Snap */
         main > section {
             min-height: 100vh;
             scroll-snap-align: start;
@@ -64,7 +62,6 @@ import TrigoPositiveDocumentation from "../../components/pages/trigo/TrigoPositi
     </style>
     <TrigoTableOfContents />
     <main class="h-screen overflow-y-auto snap-y snap-mandatory text-[#e7e5e4]">
-        <!-- Positive History (Scroll Up) -->
         <TrigoPositiveDocumentation />
         <TrigoPositiveExpansion />
         <TrigoPositiveKnowledge />
@@ -76,10 +73,8 @@ import TrigoPositiveDocumentation from "../../components/pages/trigo/TrigoPositi
         <TrigoPositiveCity />
         <TrigoPositiveSecurity />
 
-        <!-- Center Point -->
         <TrigoHeader />
 
-        <!-- Negative History (Scroll Down) -->
         <TrigoDeepTime />
         <TrigoRachis />
         <TrigoTrap />
@@ -97,28 +92,79 @@ import TrigoPositiveDocumentation from "../../components/pages/trigo/TrigoPositi
         <TrigoDocumentation />
     </main>
 
+    <div
+        id="splash-screen"
+        class="fixed inset-0 z-[100] bg-[#0c0a09] flex items-center justify-center transition-opacity duration-1000"
+    >
+        <div class="text-center space-y-6 animate-pulse">
+            <div class="relative">
+                <div class="absolute inset-0 bg-amber-500/20 blur-3xl rounded-full"></div>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1"
+                    stroke="currentColor"
+                    class="w-20 h-20 mx-auto text-amber-500 relative"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                    ></path>
+                </svg>
+            </div>
+            <h1
+                class="text-3xl md:text-4xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-b from-amber-100 to-amber-600"
+            >
+                La Historia del Trigo
+            </h1>
+            <div class="flex items-center gap-2 justify-center text-amber-500/60">
+                <div
+                    class="w-2 h-2 bg-amber-500 rounded-full animate-bounce"
+                    style="animation-delay: 0s"
+                >
+                </div>
+                <div
+                    class="w-2 h-2 bg-amber-500 rounded-full animate-bounce"
+                    style="animation-delay: 0.2s"
+                >
+                </div>
+                <div
+                    class="w-2 h-2 bg-amber-500 rounded-full animate-bounce"
+                    style="animation-delay: 0.4s"
+                >
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function scrollToStart() {
-            const introSection = document.getElementById("intro");
-            if (introSection) {
-                // Instant jump, no smooth scroll for initialization
-                introSection.scrollIntoView({ behavior: "auto", block: "start" });
-            }
+        const introSection = document.getElementById("intro");
+        const splash = document.getElementById("splash-screen");
+        const mainElement = document.querySelector("main");
+
+        if (mainElement) {
+            mainElement.style.visibility = "hidden";
         }
 
-        // Try immediately
-        scrollToStart();
+        if (introSection) {
+            introSection.scrollIntoView({ behavior: "auto", block: "start" });
+        }
 
-        // Try on DOM ready
-        document.addEventListener("DOMContentLoaded", scrollToStart);
+        setTimeout(() => {
+            if (mainElement) {
+                mainElement.style.visibility = "visible";
+            }
+        }, 100);
 
-        // Try on full load (images etc)
-        window.addEventListener("load", () => {
-            // Only if we haven't scrolled yet (optional check, but forcing is safer for this specific UX)
-            scrollToStart();
-        });
-
-        // Support Astro View Transitions
-        document.addEventListener("astro:page-load", scrollToStart);
+        setTimeout(() => {
+            if (splash) {
+                splash.style.opacity = "0";
+                setTimeout(() => {
+                    splash.style.display = "none";
+                }, 1000);
+            }
+        }, 1500);
     </script>
 </Layout>
