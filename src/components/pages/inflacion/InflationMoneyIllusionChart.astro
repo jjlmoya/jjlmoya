@@ -1,23 +1,50 @@
 <div
     class="chart-container relative w-full my-8 p-6 bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm"
 >
-    <h3 class="text-xl font-bold text-white text-center mb-6">La Ilusión Monetaria (2000-2024)</h3>
+    <h3 class="text-xl font-bold text-white text-center mb-2">La Trampa del "Aumento" de Sueldo</h3>
+    <p class="text-slate-300 text-center mb-6 text-sm">
+        Imagina que en el año 2000 ganabas <strong class="text-emerald-400">1.000€</strong>. Así ha
+        evolucionado tu vida:
+    </p>
 
     <div class="relative w-full h-[300px] md:h-[400px]">
         <canvas id="moneyIllusionChart"></canvas>
     </div>
 
-    <p class="text-sm text-slate-400 text-center mt-6 italic">
-        La línea verde muestra cuánto ha subido tu nómina. La línea roja muestra lo que realmente
-        puedes comprar con ella.
+    <p class="text-sm text-slate-400 text-center mt-6 italic bg-black/20 p-4 rounded-lg">
+        <span class="text-emerald-400 font-bold">Línea Verde:</span> Tu jefe te dice "¡Te hemos subido
+        el sueldo a 1.780€!".<br />
+        <span class="text-rose-400 font-bold">Línea Roja:</span> Vas al súper y descubres que compras
+        menos cosas que cuando ganabas 1.000€.
     </p>
+
+    <div class="mt-8 pt-6 border-t border-white/5 max-w-2xl mx-auto">
+        <p class="text-[10px] uppercase tracking-widest text-slate-500 text-center mb-2 font-bold">
+            Nota del Autor
+        </p>
+        <p class="text-sm text-slate-400 text-center italic leading-relaxed">
+            "Como la gráfica me dio bastante susto cuando la vi, pensé que había cometido un error y
+            fui a doble-checkear con la IA: <span class="text-white not-italic font-medium"
+                >«A ver crack, que no es un error, Tienes más pavinis, pero valen mucho menos.
+                Espabila que la vida te va a comer».</span
+            > Menudo bicho sin sentimientos"
+        </p>
+    </div>
 </div>
 
-<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script is:inline>
-    document.addEventListener("DOMContentLoaded", () => {
-        const canvas = document.getElementById("moneyIllusionChart");
+<script>
+    import { Chart, registerables } from "chart.js";
+    Chart.register(...registerables);
+
+    document.addEventListener("astro:page-load", () => {
+        const canvas = document.getElementById("moneyIllusionChart") as HTMLCanvasElement;
         if (!canvas) return;
+
+        // Destroy existing chart if it exists to avoid duplicates/errors
+        const existingChart = Chart.getChart(canvas);
+        if (existingChart) {
+            existingChart.destroy();
+        }
 
         const initChart = () => {
             new Chart(canvas, {
@@ -26,26 +53,28 @@
                     labels: ["2000", "2004", "2008", "2012", "2016", "2020", "2024"],
                     datasets: [
                         {
-                            label: "Sueldo Nominal",
-                            data: [100, 115, 132, 138, 142, 155, 178],
-                            borderColor: "#00ffaa",
-                            backgroundColor: "#00ffaa",
+                            label: "  Lo que ingresas",
+                            // Multiplied by 10 to simulate a 1000€ salary base
+                            data: [1000, 1150, 1320, 1380, 1420, 1550, 1780],
+                            borderColor: "#34d399", // emerald-400
+                            backgroundColor: "#34d399",
                             tension: 0.3,
                             borderWidth: 3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: "#00ffaa",
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: "#34d399",
                         },
                         {
-                            label: "Poder de Compra Real",
-                            data: [100, 101, 102, 98, 99, 97, 95],
-                            borderColor: "#ff6b6b",
-                            backgroundColor: "#ff6b6b",
+                            label: "  Para lo que te da",
+                            // Multiplied by 10
+                            data: [1000, 1010, 1020, 980, 990, 970, 950],
+                            borderColor: "#fb7185", // rose-400
+                            backgroundColor: "#fb7185",
                             tension: 0.3,
                             borderWidth: 3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: "#ff6b6b",
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: "#fb7185",
                         },
                     ],
                 },
@@ -63,10 +92,10 @@
                                 color: "#e2e8f0",
                                 font: {
                                     family: "'Inter', sans-serif",
-                                    size: 12,
+                                    size: 14,
                                 },
                                 usePointStyle: true,
-                                boxWidth: 8,
+                                boxWidth: 10,
                                 padding: 20,
                             },
                         },
@@ -77,6 +106,7 @@
                             borderColor: "rgba(255, 255, 255, 0.1)",
                             borderWidth: 1,
                             padding: 12,
+                            usePointStyle: true,
                             titleFont: {
                                 size: 14,
                                 weight: "bold",
@@ -95,7 +125,7 @@
                                         label += ": ";
                                     }
                                     if (context.parsed.y !== null) {
-                                        label += context.parsed.y;
+                                        label += context.parsed.y + "€";
                                     }
                                     return label;
                                 },
@@ -104,30 +134,37 @@
                     },
                     scales: {
                         x: {
+                            border: {
+                                display: false,
+                            },
                             grid: {
                                 display: false,
-                                drawBorder: false,
                             },
                             ticks: {
                                 color: "#94a3b8",
                                 font: {
-                                    size: 11,
+                                    size: 12,
                                 },
                             },
                         },
                         y: {
+                            border: {
+                                display: false,
+                            },
                             grid: {
                                 color: "rgba(255, 255, 255, 0.05)",
-                                drawBorder: false,
                             },
                             ticks: {
                                 color: "#94a3b8",
                                 font: {
-                                    size: 11,
+                                    size: 12,
+                                },
+                                callback: function (value) {
+                                    return value + "€";
                                 },
                             },
-                            suggestedMin: 80,
-                            suggestedMax: 190,
+                            suggestedMin: 800,
+                            suggestedMax: 1900,
                         },
                     },
                     animation: {

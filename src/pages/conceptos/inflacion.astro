@@ -35,78 +35,83 @@ import InflationPersonalNote from "../../components/pages/inflacion/InflationPer
 
     <InflationSources />
     <InflationPersonalNote />
+    <InflationIconRegistry />
 </Layout>
-
-<InflationIconRegistry />
 
 <script>
     import { getPurchasingPower, calculateBasket } from "../../utils/inflationLogic";
     import { handleGlobalShare } from "../../utils/share";
     import itemsData from "../../data/inflacion-items.json";
 
-    // Initialize share buttons
-    document.addEventListener("click", handleGlobalShare);
+    document.addEventListener("astro:page-load", () => {
+        // Initialize share buttons
+        document.removeEventListener("click", handleGlobalShare);
+        document.addEventListener("click", handleGlobalShare);
 
-    const slider = document.getElementById("year-slider") as HTMLInputElement;
-    const yearDisplay = document.getElementById("year-display");
-    const valueDisplay = document.getElementById("value-display");
-    const itemsContainer = document.getElementById("items-container");
+        const slider = document.getElementById("year-slider") as HTMLInputElement;
+        const yearDisplay = document.getElementById("year-display");
+        const valueDisplay = document.getElementById("value-display");
+        const itemsContainer = document.getElementById("items-container");
 
-    const getIconHtml = (iconName: string) => {
-        const iconContainer = document.getElementById(`icon-${iconName}`);
-        return iconContainer ? iconContainer.innerHTML : "";
-    };
+        const getIconHtml = (iconName: string) => {
+            const iconContainer = document.getElementById(`icon-${iconName}`);
+            return iconContainer ? iconContainer.innerHTML : "";
+        };
 
-    const items = itemsData;
+        const items = itemsData;
 
-    const createItemHtml = (item: any, count: number, delay: number) => {
-        const scale = item.price > 50 ? "scale-110" : "scale-100";
-        const bg = item.price > 50 ? "bg-amber-200/50" : "bg-amber-100/50";
+        const createItemHtml = (item: any, count: number, delay: number) => {
+            const scale = item.price > 50 ? "scale-110" : "scale-100";
+            const bg = item.price > 50 ? "bg-amber-200/50" : "bg-amber-100/50";
 
-        const countBadge =
-            count > 1
-                ? `<div class="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">${count}</div>`
-                : "";
+            const countBadge =
+                count > 1
+                    ? `<div class="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">${count}</div>`
+                    : "";
 
-        return `<div class="relative animate-pop text-amber-900 flex flex-col items-center p-2 ${bg} rounded-lg border border-amber-200/50 ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€) ${count > 1 ? `x${count}` : ""}">
-        ${countBadge}
-        ${getIconHtml(item.icon)}
-        <span class="text-[10px] font-bold mt-1 opacity-60">${item.name}</span>
-      </div>`;
-    };
+            return `<div class="relative animate-pop text-amber-900 flex flex-col items-center p-2 ${bg} rounded-lg border border-amber-200/50 ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€) ${count > 1 ? `x${count}` : ""}">
+            ${countBadge}
+            ${getIconHtml(item.icon)}
+            <span class="text-[10px] font-bold mt-1 opacity-60">${item.name}</span>
+          </div>`;
+        };
 
-    const update = () => {
-        if (!slider) return;
-        const year = parseInt(slider.value);
-        const power = getPurchasingPower(year);
-        const totalValue = 100 * power;
+        const update = () => {
+            if (!slider) return;
+            const year = parseInt(slider.value);
+            const power = getPurchasingPower(year);
+            const totalValue = 100 * power;
 
-        if (yearDisplay) yearDisplay.innerText = year.toString();
-        if (valueDisplay) valueDisplay.innerText = `${Math.round(totalValue)}€`;
+            if (yearDisplay) yearDisplay.innerText = year.toString();
+            if (valueDisplay) valueDisplay.innerText = `${Math.round(totalValue)}€`;
 
-        // Update Chart Marker
-        // Chart removed as per user request
+            // Update Chart Marker
+            // Chart removed as per user request
 
-        const itemCounts = calculateBasket(totalValue, items, year);
+            const itemCounts = calculateBasket(totalValue, items, year);
 
-        let html = "";
-        let animationDelay = 0;
-        const availableItems = items.filter((item) => item.minYear <= year && item.maxYear >= year);
+            let html = "";
+            let animationDelay = 0;
+            const availableItems = items.filter(
+                (item) => item.minYear <= year && item.maxYear >= year
+            );
 
-        itemCounts.forEach((count, itemName) => {
-            const item = availableItems.find((i) => i.name === itemName);
-            if (item) {
-                html += createItemHtml(item, count, animationDelay);
-                animationDelay += 30;
-            }
-        });
+            itemCounts.forEach((count, itemName) => {
+                const item = availableItems.find((i) => i.name === itemName);
+                if (item) {
+                    html += createItemHtml(item, count, animationDelay);
+                    animationDelay += 30;
+                }
+            });
 
-        if (itemsContainer) itemsContainer.innerHTML = html;
-    };
+            if (itemsContainer) itemsContainer.innerHTML = html;
+        };
 
-    slider?.addEventListener("input", update);
+        slider?.addEventListener("input", update);
 
-    update();
+        // Initial update
+        update();
+    });
 </script>
 
 <style>

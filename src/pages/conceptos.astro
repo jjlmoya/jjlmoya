@@ -9,7 +9,7 @@ const concepts = [
         subtitle: "Erosión de Valor",
         href: "/conceptos/inflacion/",
         icon: "mdi:finance",
-        color: "255, 215, 0", // Gold
+        color: "255, 215, 0",
         desc: "Visualiza cómo el tiempo devora el dinero.",
     },
     {
@@ -18,7 +18,7 @@ const concepts = [
         subtitle: "Datos Vitales",
         href: "/conceptos/biblioteca/",
         icon: "mdi:bookshelf",
-        color: "255, 100, 100", // Red/Pink
+        color: "255, 100, 100",
         desc: "Tu existencia convertida en catálogo.",
     },
 ];
@@ -26,232 +26,205 @@ const concepts = [
 
 <Layout
     title="Conceptos"
-    bodyClass="bg-black text-white"
+    bodyClass="bg-neutral-950 text-white"
     showBackground={false}
     mainClass="p-0"
-    headerClass="text-white mix-blend-difference"
 >
-    <div class="relative w-full min-h-screen overflow-x-hidden bg-black selection:bg-white/20">
-        <!-- The Canvas: Stardust -->
-        <canvas id="stardust" class="fixed inset-0 z-0 opacity-60"></canvas>
-
-        <!-- Vignette -->
+    <!-- Background Art -->
+    <div class="fixed inset-0 z-0 bg-neutral-950">
         <div
-            class="fixed inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,#000000_120%)]"
+            class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.05),transparent_70%)]"
         >
         </div>
+        <canvas id="stardust" class="absolute inset-0 opacity-30"></canvas>
+    </div>
 
-        <!-- Content Layer -->
-        <div
-            class="relative z-20 w-full min-h-screen flex flex-col items-center justify-center p-4 md:p-6 py-24 md:py-6"
-        >
-            <header
-                class="absolute top-24 md:top-32 left-0 w-full text-center pointer-events-none z-30"
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-6">
+        <header class="mb-20 text-center">
+            <h1 class="text-5xl md:text-7xl font-light tracking-tight text-white mb-6">
+                Conceptos
+            </h1>
+            <div class="w-16 h-[1px] bg-white/30 mx-auto mb-6"></div>
+            <p
+                class="text-base md:text-lg font-serif italic text-white/60 max-w-2xl mx-auto leading-relaxed"
             >
-                <h1 class="text-4xl md:text-6xl font-black tracking-tighter text-white mb-2">
-                    CONCEPTOS
-                </h1>
-                <p class="text-xs md:text-sm font-mono tracking-[0.5em] text-white/60 uppercase">
-                    Colección Experimental
-                </p>
-            </header>
+                Aterrizando ideas vagas que tengo en la cabeza, dándoles cuerpo y forma para que
+                todo el mundo sea capaz de comprenderlo. ¡Incluso yo!
+            </p>
+        </header>
 
-            <div
-                class="flex flex-col md:flex-row gap-6 md:gap-12 items-center justify-center w-full max-w-4xl"
-            >
-                {
-                    concepts.map((concept) => (
-                        <a
-                            href={concept.href}
-                            class="concept-card group relative w-full max-w-xs h-80 md:h-96 flex flex-col transition-transform duration-500 hover:scale-[1.02]"
-                            data-color={concept.color}
-                        >
-                            <div
-                                class="absolute inset-0 rounded-2xl opacity-20 blur-[50px] animate-pulse-slow"
-                                style={`background-color: rgb(${concept.color})`}
-                            />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full px-4">
+            {
+                concepts.map((concept) => (
+                    <a
+                        href={concept.href}
+                        class="concept-card group relative block w-full max-w-sm mx-auto overflow-hidden bg-neutral-900/40 border border-white/10 transition-all duration-500 hover:bg-neutral-900/60"
+                        data-color={concept.color}
+                    >
+                        {/* Subtle Permanent Glow */}
+                        <div
+                            class="absolute inset-0 opacity-10"
+                            style={`background: radial-gradient(circle at center, rgb(${concept.color}), transparent 70%);`}
+                        />
 
-                            <div class="relative w-full h-full bg-neutral-900/80 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between shadow-2xl">
-                                <div class="absolute inset-0 z-0 overflow-hidden">
-                                    <div class="absolute top-0 -left-[100%] w-[200%] h-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shimmer" />
-                                </div>
-
-                                <div class="relative z-10 flex flex-col items-center justify-center p-8 text-center min-h-[280px] md:min-h-[320px]">
-                                    <div class="mb-6 p-4 rounded-full bg-white/5 border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-                                        <Icon
-                                            name={concept.icon}
-                                            class="w-10 h-10 md:w-12 md:h-12 text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
-                                        />
-                                    </div>
-
-                                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight mb-2">
-                                        {concept.title}
-                                    </h2>
-                                    <p class="text-[10px] font-mono text-white/50 tracking-[0.2em] uppercase mb-4">
-                                        {concept.subtitle}
-                                    </p>
-
-                                    <div class="w-8 h-[1px] bg-white/20 mb-4" />
-
-                                    <p class="text-sm text-white/60 leading-relaxed font-light">
-                                        {concept.desc}
-                                    </p>
-                                </div>
-
-                                <div class="relative z-10 py-3 px-6 bg-black/20 border-t border-white/5 flex justify-between items-center flex-shrink-0">
-                                    <div class="flex gap-1">
-                                        <div class="w-1 h-1 rounded-full bg-white/40" />
-                                        <div class="w-1 h-1 rounded-full bg-white/20" />
-                                        <div class="w-1 h-1 rounded-full bg-white/10" />
-                                    </div>
-                                    <span class="text-[9px] font-mono uppercase tracking-widest text-white/30 group-hover:text-white/60 transition-colors">
-                                        Iniciar Sistema
-                                    </span>
-                                </div>
+                        <div class="relative h-full flex flex-col items-center justify-center p-8 text-center min-h-[400px]">
+                            {/* Icon */}
+                            <div class="mb-8 text-white/80">
+                                <Icon name={concept.icon} class="w-16 h-16 drop-shadow-2xl" />
                             </div>
-                        </a>
-                    ))
-                }
-            </div>
+
+                            {/* Text Content */}
+                            <div class="flex flex-col items-center">
+                                <h2 class="text-2xl font-light tracking-widest text-white mb-3 uppercase">
+                                    {concept.title}
+                                </h2>
+                                <p class="text-[10px] font-mono uppercase tracking-[0.3em] text-white/40 mb-6">
+                                    {concept.subtitle}
+                                </p>
+
+                                <div class="w-12 h-[1px] bg-white/20 mb-6" />
+
+                                <p class="font-serif text-lg text-white/70 italic leading-relaxed">
+                                    "{concept.desc}"
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Elegant Border Frame */}
+                        <div class="absolute inset-4 border border-white/5 pointer-events-none" />
+                    </a>
+                ))
+            }
         </div>
     </div>
 </Layout>
 
-<style>
-    @keyframes shimmer {
-        0% {
-            transform: translateX(-100%);
-        }
-        100% {
-            transform: translateX(100%);
-        }
-    }
-    .animate-shimmer {
-        animation: shimmer 3s infinite linear;
-    }
-    @keyframes pulse-slow {
-        0%,
-        100% {
-            opacity: 0.15;
-        }
-        50% {
-            opacity: 0.3;
-        }
-    }
-    .animate-pulse-slow {
-        animation: pulse-slow 4s ease-in-out infinite;
-    }
-</style>
-
 <script>
-    // Stardust Effect
-    const canvas = document.getElementById("stardust") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d");
+    document.addEventListener("astro:page-load", () => {
+        // Stardust Effect
+        const canvas = document.getElementById("stardust") as HTMLCanvasElement;
+        if (!canvas) return;
 
-    let width = 0;
-    let height = 0;
-    let particles: Star[] = [];
-    let mouse = { x: 0, y: 0 };
-    // Default to a neutral blueish-white for the background dust
-    let targetColor = { r: 200, g: 220, b: 255 };
-    let currentColor = { ...targetColor };
+        const ctx = canvas.getContext("2d");
 
-    const PARTICLE_COUNT = 200;
+        let width = 0;
+        let height = 0;
+        let particles: Star[] = [];
+        let mouse = { x: 0, y: 0 };
+        // Default to a neutral elegant white/blue
+        let targetColor = { r: 220, g: 220, b: 230 };
+        let currentColor = { ...targetColor };
 
-    class Star {
-        x: number;
-        y: number;
-        z: number;
-        size: number;
-        baseAlpha: number;
+        const PARTICLE_COUNT = 150; // Slightly reduced for elegance
 
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.z = Math.random() * 2 + 0.5;
-            this.size = Math.random() * 1.5;
-            this.baseAlpha = Math.random() * 0.5 + 0.1;
-        }
+        class Star {
+            x: number;
+            y: number;
+            z: number;
+            size: number;
+            baseAlpha: number;
 
-        update() {
-            this.y -= 0.1 * (1 / this.z);
-
-            if (this.y < 0) this.y = height;
-            if (this.x < 0) this.x = width;
-            if (this.x > width) this.x = 0;
-        }
-
-        draw(offsetX: number, offsetY: number) {
-            if (!ctx) return;
-            const drawX = this.x + offsetX * (1 / this.z);
-            const drawY = this.y + offsetY * (1 / this.z);
-            ctx.fillStyle = `rgba(${Math.round(currentColor.r)}, ${Math.round(currentColor.g)}, ${Math.round(currentColor.b)}, ${this.baseAlpha})`;
-            ctx.beginPath();
-            ctx.arc(drawX, drawY, this.size * (1 / this.z), 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function init() {
-        resize();
-        particles = [];
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-            particles.push(new Star());
-        }
-        animate();
-    }
-
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-    }
-
-    function animate() {
-        if (!ctx) return;
-        ctx.clearRect(0, 0, width, height);
-
-        currentColor.r += (targetColor.r - currentColor.r) * 0.05;
-        currentColor.g += (targetColor.g - currentColor.g) * 0.05;
-        currentColor.b += (targetColor.b - currentColor.b) * 0.05;
-
-        const offsetX = (mouse.x - width / 2) * 0.05;
-        const offsetY = (mouse.y - height / 2) * 0.05;
-
-        particles.forEach((p) => {
-            p.update();
-            p.draw(offsetX, offsetY);
-        });
-
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener("resize", () => {
-        resize();
-        init();
-    });
-
-    window.addEventListener("mousemove", (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    // Change stardust color on card interaction
-    const cards = document.querySelectorAll(".concept-card");
-    cards.forEach((card) => {
-        card.addEventListener("mouseenter", () => {
-            const color = card.getAttribute("data-color");
-            if (color) {
-                const [r, g, b] = color.split(",").map(Number);
-                targetColor = { r, g, b };
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.z = Math.random() * 2 + 0.5;
+                this.size = Math.random() * 1.5;
+                this.baseAlpha = Math.random() * 0.4 + 0.1;
             }
+
+            update() {
+                this.y -= 0.05 * (1 / this.z); // Slower, more majestic movement
+
+                if (this.y < 0) this.y = height;
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+            }
+
+            draw(offsetX: number, offsetY: number) {
+                if (!ctx) return;
+                const drawX = this.x + offsetX * (1 / this.z);
+                const drawY = this.y + offsetY * (1 / this.z);
+                ctx.fillStyle = `rgba(${Math.round(currentColor.r)}, ${Math.round(currentColor.g)}, ${Math.round(currentColor.b)}, ${this.baseAlpha})`;
+                ctx.beginPath();
+                ctx.arc(drawX, drawY, this.size * (1 / this.z), 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        let animationFrameId: number;
+
+        function init() {
+            resize();
+            particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push(new Star());
+            }
+            animate();
+        }
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        function animate() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, width, height);
+
+            currentColor.r += (targetColor.r - currentColor.r) * 0.02;
+            currentColor.g += (targetColor.g - currentColor.g) * 0.02;
+            currentColor.b += (targetColor.b - currentColor.b) * 0.02;
+
+            const offsetX = (mouse.x - width / 2) * 0.02;
+            const offsetY = (mouse.y - height / 2) * 0.02;
+
+            particles.forEach((p) => {
+                p.update();
+                p.draw(offsetX, offsetY);
+            });
+
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        window.addEventListener("resize", () => {
+            resize();
+            init();
         });
 
-        card.addEventListener("mouseleave", () => {
-            targetColor = { r: 200, g: 220, b: 255 };
+        window.addEventListener("mousemove", (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
         });
+
+        // Change stardust color on card interaction
+        const cards = document.querySelectorAll(".concept-card");
+        cards.forEach((card) => {
+            card.addEventListener("mouseenter", () => {
+                const color = card.getAttribute("data-color");
+                if (color) {
+                    const [r, g, b] = color.split(",").map(Number);
+                    targetColor = { r, g, b };
+                }
+            });
+
+            card.addEventListener("mouseleave", () => {
+                targetColor = { r: 220, g: 220, b: 230 };
+            });
+        });
+
+        init();
+
+        // Cleanup function to stop animation when leaving the page
+        document.addEventListener(
+            "astro:before-swap",
+            () => {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+            },
+            { once: true }
+        );
     });
-
-    init();
 </script>
