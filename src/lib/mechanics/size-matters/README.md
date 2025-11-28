@@ -64,7 +64,7 @@ MIT - Use freely in your projects
 
 ## 🔗 Demo
 
-[View interactive demo](https://jjlmoya.vercel.app/gamebob/mecanicas/size-matters)
+[View interactive demo](https://www.jjlmoya.es/gamebob/mecanicas/size-matters)
 
 ---
 

@@ -2,7 +2,7 @@
 
 A platformer mechanic where jump height and distance are determined by how long the player holds the input.
 
-> **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/hold-jump)**
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/hold-jump)**
 
 ## How it works
 

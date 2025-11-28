@@ -2,7 +2,7 @@
 
 A particle physics simulation where users can place gravity wells that attract floating particles.
 
-> **[🎮 Play Live Demo](https://jjlmoya.vercel.app/gamebob/mecanicas/gravity-well)**
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/gravity-well)**
 
 ## How it works
 
