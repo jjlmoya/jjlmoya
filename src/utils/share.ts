@@ -44,3 +44,9 @@ export async function handleGlobalShare(e: MouseEvent) {
         }
     }
 }
+
+
+// Auto-initialize if running in the browser
+if (typeof window !== "undefined") {
+    document.addEventListener("click", handleGlobalShare);
+}
