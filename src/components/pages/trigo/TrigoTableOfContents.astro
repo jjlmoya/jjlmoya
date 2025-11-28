@@ -1,0 +1,75 @@
+---
+const sections = [
+    { id: "intro", label: "Inicio" },
+    { id: "deep-time", label: "Tiempo Profundo" },
+    { id: "rachis", label: "El Raquis" },
+    { id: "trap", label: "La Trampa" },
+    { id: "grinding", label: "La Rutina" },
+    { id: "skeletons", label: "Cuerpos Rotos" },
+    { id: "calories-hunter", label: "Calorías: Cazador" },
+    { id: "calories-farmer", label: "Calorías: Agricultor" },
+    { id: "surplus", label: "El Excedente" },
+    { id: "social-contract", label: "Contrato Social" },
+    { id: "population", label: "Explosión Demográfica" },
+    { id: "work-hours", label: "Jornada Laboral" },
+    { id: "counterpoint", label: "La Otra Cara" },
+    { id: "future", label: "El Futuro" },
+    { id: "modern-map", label: "Mapa Moderno" },
+    { id: "epilogue", label: "Epílogo" },
+    { id: "documentation", label: "Referencias" },
+];
+---
+
+<nav
+    class="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4"
+    aria-label="Table of Contents"
+>
+    {
+        sections.map((section) => (
+            <a
+                href={`#${section.id}`}
+                class="group flex items-center justify-end gap-3"
+                aria-label={`Ir a ${section.label}`}
+            >
+                <span class="text-[10px] uppercase tracking-widest text-stone-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 bg-black/50 backdrop-blur-sm px-2 py-1 rounded">
+                    {section.label}
+                </span>
+                <div class="w-2 h-2 rounded-full bg-stone-700 border border-stone-600 transition-all duration-300 group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:scale-125" />
+            </a>
+        ))
+    }
+</nav>
+
+<script>
+    // Optional: Highlight active section
+    const observerOptions = {
+        root: null,
+        rootMargin: "-50% 0px",
+        threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                const navDot = document.querySelector(`a[href="#${id}"] div`);
+
+                // Reset all dots
+                document.querySelectorAll("nav a div").forEach((dot) => {
+                    dot.classList.remove("bg-amber-500", "border-amber-500", "scale-125");
+                    dot.classList.add("bg-stone-700", "border-stone-600");
+                });
+
+                // Highlight active
+                if (navDot) {
+                    navDot.classList.remove("bg-stone-700", "border-stone-600");
+                    navDot.classList.add("bg-amber-500", "border-amber-500", "scale-125");
+                }
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll("section[id]").forEach((section) => {
+        observer.observe(section);
+    });
+</script>
