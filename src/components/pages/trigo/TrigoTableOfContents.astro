@@ -66,6 +66,72 @@ const sections = [
     }
 </nav>
 
+<!-- Mobile Toggle Button -->
+<button
+    id="toc-mobile-toggle"
+    class="fixed bottom-6 right-6 z-50 lg:hidden w-12 h-12 bg-stone-900/80 backdrop-blur border border-stone-700 rounded-full flex items-center justify-center text-amber-500 shadow-lg hover:scale-105 transition-transform"
+    aria-label="Abrir índice"
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+    >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+    </svg>
+</button>
+
+<!-- Mobile Menu Overlay -->
+<div
+    id="toc-mobile-menu"
+    class="fixed inset-0 z-[60] bg-stone-950/95 backdrop-blur-sm transform translate-y-full transition-transform duration-300 lg:hidden flex flex-col"
+>
+    <div class="flex justify-end p-6">
+        <button id="toc-mobile-close" class="text-stone-400 hover:text-white p-2">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-8 h-8"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"
+                ></path>
+            </svg>
+        </button>
+    </div>
+    <div class="flex-1 overflow-y-auto px-8 pb-12">
+        <h3
+            class="text-amber-500 text-xs uppercase tracking-[0.2em] mb-8 font-bold border-b border-stone-800 pb-4"
+        >
+            Índice de Contenidos
+        </h3>
+        <nav class="flex flex-col gap-6">
+            {
+                sections.map((section) => (
+                    <a
+                        href={`#${section.id}`}
+                        class="toc-mobile-link text-lg font-serif text-stone-300 hover:text-amber-500 transition-colors flex items-center gap-4"
+                        data-target={section.id}
+                    >
+                        <span
+                            class={`w-1.5 h-1.5 rounded-full ${section.theme === "emerald" ? "bg-emerald-500" : section.theme === "amber" ? "bg-amber-500" : "bg-stone-500"}`}
+                        />
+                        {section.label}
+                    </a>
+                ))
+            }
+        </nav>
+    </div>
+</div>
+
 <script>
     const observerOptions = {
         root: null,
@@ -104,5 +170,23 @@ const sections = [
 
     document.querySelectorAll("section[id]").forEach((section) => {
         observer.observe(section);
+    });
+
+    // Mobile Menu Logic
+    const toggleBtn = document.getElementById("toc-mobile-toggle");
+    const closeBtn = document.getElementById("toc-mobile-close");
+    const menu = document.getElementById("toc-mobile-menu");
+    const links = document.querySelectorAll(".toc-mobile-link");
+
+    function toggleMenu() {
+        menu?.classList.toggle("translate-y-full");
+        document.body.classList.toggle("overflow-hidden");
+    }
+
+    toggleBtn?.addEventListener("click", toggleMenu);
+    closeBtn?.addEventListener("click", toggleMenu);
+
+    links.forEach((link) => {
+        link.addEventListener("click", toggleMenu);
     });
 </script>
