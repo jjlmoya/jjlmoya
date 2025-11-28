@@ -4,27 +4,34 @@ import InflationHeader from "../../components/pages/inflacion/InflationHeader.as
 import InflationBill from "../../components/pages/inflacion/InflationBill.astro";
 import InflationSlider from "../../components/pages/inflacion/InflationSlider.astro";
 import InflationIconRegistry from "../../components/pages/inflacion/InflationIconRegistry.astro";
+import InflationInfo from "../../components/pages/inflacion/InflationInfo.astro";
+import InflationCases from "../../components/pages/inflacion/InflationCases.astro";
+import InflationDarkSection from "../../components/pages/inflacion/InflationDarkSection.astro";
+import InflationSources from "../../components/pages/inflacion/InflationSources.astro";
+import InflationPersonalNote from "../../components/pages/inflacion/InflationPersonalNote.astro";
 ---
 
 <Layout
-    title="inflación"
+    title="Inflación - La memoria es frágil, pero los datos permanecen"
     description="Calculadora de inflación histórica. Visualiza cómo el valor del dinero ha cambiado a lo largo del tiempo."
+    fullWidth={true}
 >
     <div
-        class="min-h-screen flex flex-col items-center justify-center bg-amber-50 text-amber-900 p-4 relative overflow-hidden"
+        class="flex flex-col items-center justify-center bg-amber-50 text-amber-900 p-4 relative overflow-hidden"
     >
         <InflationHeader>
             <InflationBill />
             <InflationSlider />
+            <InflationCases />
         </InflationHeader>
 
-        <!-- Background Pattern -->
-        <div
-            class="absolute inset-0 opacity-5 pointer-events-none"
-            style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"
-        >
-        </div>
+        <InflationInfo />
     </div>
+
+    <InflationDarkSection />
+
+    <InflationSources />
+    <InflationPersonalNote />
 </Layout>
 
 <InflationIconRegistry />
@@ -69,6 +76,9 @@ import InflationIconRegistry from "../../components/pages/inflacion/InflationIco
 
         if (yearDisplay) yearDisplay.innerText = year.toString();
         if (valueDisplay) valueDisplay.innerText = `${Math.round(totalValue)}€`;
+
+        // Update Chart Marker
+        // Chart removed as per user request
 
         const itemCounts = calculateBasket(totalValue, items, year);
 

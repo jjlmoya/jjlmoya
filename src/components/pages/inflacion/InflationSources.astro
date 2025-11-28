@@ -1,0 +1,612 @@
+---
+import { Icon } from "astro-icon/components";
+
+const sources = [
+    {
+        name: "INE (Instituto Nacional de Estadística)",
+        description: "Series históricas del IPC y Encuesta de Presupuestos Familiares.",
+        url: "https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176802&menu=ultiDatos&idp=1254735976607",
+        icon: "mdi:chart-box-outline",
+    },
+    {
+        name: "Banco de España",
+        description: "Informes anuales y estadísticas sobre salarios medios y coste de la vida.",
+        url: "https://www.bde.es/wbe/es/estadisticas/temas/economia-empleo/precios-costes-laborales/",
+        icon: "mdi:bank-outline",
+    },
+    {
+        name: "Hemeroteca Digital",
+        description:
+            "Recopilación de precios en anuncios y noticias de prensa histórica (ABC, La Vanguardia).",
+        url: "https://www.bne.es/es/catalogos/hemeroteca-digital",
+        icon: "mdi:newspaper-variant-outline",
+    },
+    {
+        name: "Ministerio de Vivienda",
+        description: "Estadísticas sobre el precio del m² y esfuerzo de acceso a la vivienda.",
+        url: "https://www.mivau.gob.es/",
+        icon: "mdi:home-analytics",
+    },
+];
+---
+
+<section
+    class="bg-[#e8e4d9] text-stone-800 py-24 relative overflow-hidden border-t-8 border-stone-300"
+>
+    <!-- Texture -->
+    <div
+        class="absolute inset-0 opacity-40 bg-[url('/noise.png')] mix-blend-multiply pointer-events-none"
+    >
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+            <div class="inline-block border-2 border-stone-800 px-4 py-1 mb-4 transform -rotate-2">
+                <span class="font-mono font-bold tracking-widest uppercase text-xs"
+                    >Documentación</span
+                >
+            </div>
+            <h2 class="text-4xl md:text-5xl font-serif font-bold text-stone-900 mb-4">
+                Fuentes y Referencias
+            </h2>
+            <p class="font-serif italic text-stone-600 max-w-2xl mx-auto">
+                "La memoria es frágil, pero los datos permanecen." — Recopilación de las fuentes
+                utilizadas para los cálculos y comparativas.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            {
+                sources.map((source) => (
+                    <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group bg-white/50 hover:bg-white p-6 rounded-sm border border-stone-300 hover:border-stone-800 transition-all duration-300 shadow-sm hover:shadow-md flex items-start gap-4"
+                    >
+                        <div class="p-3 bg-stone-200 text-stone-700 rounded-sm group-hover:bg-stone-800 group-hover:text-white transition-colors">
+                            <Icon name={source.icon} class="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-stone-900 group-hover:underline decoration-2 decoration-stone-400 underline-offset-4">
+                                {source.name}
+                            </h3>
+                            <p class="text-sm text-stone-600 mt-1 leading-relaxed">
+                                {source.description}
+                            </p>
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+
+        <!-- Scientific Data Section -->
+        <div class="mt-24 bg-white p-4 md:p-12 shadow-xl border border-stone-200 relative">
+            <!-- Decorative Stamp -->
+            <div
+                class="absolute top-6 right-6 opacity-10 pointer-events-none rotate-12 hidden md:block"
+            >
+                <Icon name="mdi:file-certificate" class="w-48 h-48 text-stone-900" />
+            </div>
+
+            <div class="border-b-4 border-stone-800 pb-6 mb-12">
+                <h3 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-2">
+                    Anexo I: Informe Macroeconómico
+                </h3>
+                <p class="text-stone-600 italic font-serif text-lg">
+                    Análisis comparativo de la evolución de precios y poder adquisitivo en España
+                    (1980-2025).
+                </p>
+            </div>
+
+            <!-- Table 1: Price Evolution -->
+            <div class="mb-16">
+                <div class="flex items-center justify-between mb-6">
+                    <h4 class="font-bold text-xl flex items-center gap-2 text-stone-800 font-serif">
+                        <span class="bg-stone-800 text-white px-3 py-1 text-sm font-mono mr-2"
+                            >TABLA A.1</span
+                        >
+                        Evolución del Coste de la Vida
+                    </h4>
+                    <span class="text-xs font-mono text-stone-500 hidden md:block"
+                        >Ref: INE / Hemeroteca / Ministerios</span
+                    >
+                </div>
+
+                <div class="overflow-x-auto border border-stone-300">
+                    <table class="w-full text-sm text-left border-collapse">
+                        <thead
+                            class="bg-stone-100 text-stone-900 font-bold uppercase text-xs tracking-wider font-mono"
+                        >
+                            <tr>
+                                <th
+                                    class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200"
+                                    >Concepto</th
+                                >
+                                <th
+                                    class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200 w-20 text-center"
+                                    >Año</th
+                                >
+                                <th
+                                    class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200 text-right"
+                                    >Precio Histórico</th
+                                >
+                                <th
+                                    class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200 text-right"
+                                    >Precio 2025</th
+                                >
+                                <th
+                                    class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200 text-right"
+                                    >Var. %</th
+                                >
+                                <th
+                                    class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 text-center"
+                                    >Fuente</th
+                                >
+                            </tr>
+                        </thead>
+                        <tbody
+                            class="font-mono text-stone-700 text-xs md:text-sm divide-y divide-stone-200"
+                        >
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Vivienda (Piso 80m²)</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1985</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >27.000€ <span class="text-[10px] text-stone-400 block"
+                                        >(4.5M ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >287.000€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+963%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <a
+                                        href="https://www.mivau.gob.es/"
+                                        target="_blank"
+                                        class="text-blue-600 hover:underline">M. Vivienda</a
+                                    >
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Salario Mínimo (SMI)</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1980</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >154€ <span class="text-[10px] text-stone-400 block"
+                                        >(25.620 ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >1.134€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-green-700 bg-green-50 border-r border-stone-200"
+                                    >+636%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <a
+                                        href="https://www.boe.es/buscar/doc.php?id=BOE-A-2024-2088"
+                                        target="_blank"
+                                        class="text-blue-600 hover:underline">BOE (SMI '24)</a
+                                    >
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Pan (Barra 250g)</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1985</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >0,12€ <span class="text-[10px] text-stone-400 block"
+                                        >(20 ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >1,20€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+900%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <a
+                                        href="https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176802&menu=ultiDatos&idp=1254735976607"
+                                        target="_blank"
+                                        class="text-blue-600 hover:underline">INE (IPC)</a
+                                    >
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Gasolina (Litro)</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1980</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >0,27€ <span class="text-[10px] text-stone-400 block"
+                                        >(45 ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >1,65€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+511%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <a
+                                        href="https://www.miteco.gob.es/es/energia/hidrocarburos-nuevos-combustibles/petroleo/informes/informes-anuales.html"
+                                        target="_blank"
+                                        class="text-blue-600 hover:underline">M. Energía</a
+                                    >
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Cine (Entrada)</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1980</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >1,20€ <span class="text-[10px] text-stone-400 block"
+                                        >(200 ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >9,00€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+650%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <span
+                                        class="text-stone-400 cursor-help"
+                                        title="Hemeroteca ABC/La Vanguardia">Hemeroteca</span
+                                    >
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Coche Utilitario</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1985</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >4.500€ <span class="text-[10px] text-stone-400 block"
+                                        >(750k ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >24.000€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+433%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <span
+                                        class="text-stone-400 cursor-help"
+                                        title="Revistas Motor Clásico / Autopista">Revistas</span
+                                    >
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Periódico</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1985</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >0,27€ <span class="text-[10px] text-stone-400 block"
+                                        >(45 ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >1,80€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+566%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <span class="text-stone-400">Hemeroteca</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Aceite Oliva (1L)</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >2000</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >1,20€ <span class="text-[10px] text-stone-400 block"
+                                        >(200 ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >10,00€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+733%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <a
+                                        href="https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176802&menu=ultiDatos&idp=1254735976607"
+                                        target="_blank"
+                                        class="text-blue-600 hover:underline">INE (IPC)</a
+                                    >
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-amber-50/50 transition-colors">
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 font-bold border-r border-stone-200"
+                                    >Café (Bar)</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-center border-r border-stone-200"
+                                    >1990</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >0,48€ <span class="text-[10px] text-stone-400 block"
+                                        >(80 ptas)</span
+                                    ></td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right border-r border-stone-200"
+                                    >1,50€</td
+                                >
+                                <td
+                                    class="px-2 py-2 md:px-4 md:py-3 text-right font-bold text-red-700 bg-red-50 border-r border-stone-200"
+                                    >+212%</td
+                                >
+                                <td class="px-2 py-2 md:px-4 md:py-3 text-center">
+                                    <span class="text-stone-400">Hostelería</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Table 2: Salaries -->
+                <div>
+                    <h4
+                        class="font-bold text-xl mb-6 flex items-center gap-2 text-stone-800 font-serif"
+                    >
+                        <span class="bg-stone-800 text-white px-3 py-1 text-sm font-mono mr-2"
+                            >TABLA A.2</span
+                        >
+                        Evolución Salarial
+                    </h4>
+                    <div class="overflow-x-auto border border-stone-300">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead
+                                class="bg-stone-100 text-stone-900 font-bold uppercase text-xs tracking-wider font-mono"
+                            >
+                                <tr>
+                                    <th
+                                        class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200"
+                                        >Año</th
+                                    >
+                                    <th
+                                        class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200 text-right"
+                                        >Salario Medio <span
+                                            class="text-[10px] normal-case block text-stone-500"
+                                            >(Anual)</span
+                                        ></th
+                                    >
+                                    <th
+                                        class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 border-r border-stone-200 text-right"
+                                        >SMI <span
+                                            class="text-[10px] normal-case block text-stone-500"
+                                            >(Mensual 14p)</span
+                                        ></th
+                                    >
+                                    <th
+                                        class="px-2 py-2 md:px-4 md:py-3 border-b-2 border-stone-300 text-right"
+                                        >SMI <span
+                                            class="text-[10px] normal-case block text-stone-500"
+                                            >(Anual Total)</span
+                                        ></th
+                                    >
+                                </tr>
+                            </thead>
+                            <tbody class="font-mono text-stone-700 divide-y divide-stone-200">
+                                <tr class="hover:bg-stone-50">
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 font-bold border-r border-stone-200"
+                                        >1980</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >~7.000€</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >154€</td
+                                    >
+                                    <td class="px-2 py-2 md:px-4 md:py-2 text-right">2.156€</td>
+                                </tr>
+                                <tr class="hover:bg-stone-50">
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 font-bold border-r border-stone-200"
+                                        >1990</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >~11.000€</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >300€</td
+                                    >
+                                    <td class="px-2 py-2 md:px-4 md:py-2 text-right">4.200€</td>
+                                </tr>
+                                <tr class="hover:bg-stone-50">
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 font-bold border-r border-stone-200"
+                                        >2000</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >16.500€</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >424€</td
+                                    >
+                                    <td class="px-2 py-2 md:px-4 md:py-2 text-right">5.936€</td>
+                                </tr>
+                                <tr class="hover:bg-stone-50">
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 font-bold border-r border-stone-200"
+                                        >2010</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >22.700€</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >633€</td
+                                    >
+                                    <td class="px-2 py-2 md:px-4 md:py-2 text-right">8.866€</td>
+                                </tr>
+                                <tr class="hover:bg-stone-50">
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 font-bold border-r border-stone-200"
+                                        >2020</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >24.300€</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >950€</td
+                                    >
+                                    <td class="px-2 py-2 md:px-4 md:py-2 text-right">13.300€</td>
+                                </tr>
+                                <tr class="hover:bg-stone-50">
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 font-bold border-r border-stone-200"
+                                        >2024</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >28.500€*</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >1.134€</td
+                                    >
+                                    <td class="px-2 py-2 md:px-4 md:py-2 text-right">15.876€</td>
+                                </tr>
+                                <tr class="bg-amber-50 font-bold">
+                                    <td class="px-2 py-2 md:px-4 md:py-2 border-r border-stone-200"
+                                        >2025 (Proj.)</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >~29.500€*</td
+                                    >
+                                    <td
+                                        class="px-2 py-2 md:px-4 md:py-2 text-right border-r border-stone-200"
+                                        >~1.184€*</td
+                                    >
+                                    <td class="px-2 py-2 md:px-4 md:py-2 text-right">~16.576€*</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Methodology Box -->
+                <div class="bg-stone-50 p-6 border border-stone-200 flex flex-col justify-between">
+                    <div>
+                        <h4
+                            class="font-bold text-stone-900 mb-4 font-serif flex items-center gap-2"
+                        >
+                            <Icon name="mdi:scale-balance" class="w-5 h-5" />
+                            Nota Metodológica
+                        </h4>
+                        <p class="text-sm text-stone-600 leading-relaxed mb-4 text-justify">
+                            Los datos presentados en este informe han sido normalizados a Euros
+                            corrientes para facilitar la comparación, utilizando el tipo de cambio
+                            fijo (1€ = 166,386 ptas).
+                        </p>
+                        <p class="text-sm text-stone-600 leading-relaxed mb-4 text-justify">
+                            <strong>Importante:</strong> La columna "Var. %" refleja el incremento nominal
+                            del precio. Para entender la pérdida real de poder adquisitivo, se debe contrastar
+                            con la evolución salarial (Tabla A.2). Mientras que algunos bienes básicos
+                            han subido un 900%, los salarios medios apenas se han triplicado en el mismo
+                            periodo.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-stone-200">
+                        <p class="text-xs font-mono text-stone-500">
+                            Fuentes: INE (Series históricas IPC), Banco de España (Boletines
+                            estadísticos), Ministerio de Vivienda (Series de precios m²), BOE
+                            (Decretos SMI) y Hemerotecas digitales (ABC, La Vanguardia, El País).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
