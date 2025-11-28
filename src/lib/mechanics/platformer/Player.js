@@ -1,5 +1,3 @@
-
-
 export class Player {
     constructor(game) {
         this.game = game;
@@ -23,10 +21,10 @@ export class Player {
         this.isSliding = false;
         this.onWall = false;
         this.wallDir = 0; // -1 left, 1 right
-        this.state = 'IDLE'; // IDLE, RUN, JUMP, FALL, SLIDE, WALL_SLIDE
+        this.state = "IDLE"; // IDLE, RUN, JUMP, FALL, SLIDE, WALL_SLIDE
 
         // Visuals
-        this.color = '#6366f1'; // Indigo-500
+        this.color = "#6366f1"; // Indigo-500
         this.squash = 1;
         this.stretch = 1;
     }
@@ -44,10 +42,10 @@ export class Player {
 
     handleMovement(input, dt) {
         if (input.keys.left) {
-            if (this.vx > 0 && this.onGround) this.createParticles(1, '#cbd5e1');
+            if (this.vx > 0 && this.onGround) this.createParticles(1, "#cbd5e1");
             this.vx -= this.acceleration * dt;
         } else if (input.keys.right) {
-            if (this.vx < 0 && this.onGround) this.createParticles(1, '#cbd5e1');
+            if (this.vx < 0 && this.onGround) this.createParticles(1, "#cbd5e1");
             this.vx += this.acceleration * dt;
         } else {
             this.vx *= this.friction;
@@ -91,7 +89,7 @@ export class Player {
         this.canDoubleJump = false;
         this.squash = 0.7;
         this.stretch = 1.3;
-        this.createParticles(5, '#a855f7'); // Purple particles
+        this.createParticles(5, "#a855f7"); // Purple particles
     }
 
     wallJump() {
@@ -99,7 +97,7 @@ export class Player {
         this.vx = -this.wallDir * 10; // Kick off wall
         this.onWall = false;
         this.canDoubleJump = true; // Reset double jump on wall jump
-        this.createParticles(5, '#fbbf24'); // Amber particles
+        this.createParticles(5, "#fbbf24"); // Amber particles
     }
 
     handleSlide(input) {
@@ -125,10 +123,10 @@ export class Player {
             this.friction = 0.98;
 
             // Boost if starting slide
-            if (this.state !== 'SLIDE') {
+            if (this.state !== "SLIDE") {
                 this.vx *= 1.2;
                 this.y += 25; // Snap down to floor
-                this.createParticles(8, '#cbd5e1');
+                this.createParticles(8, "#cbd5e1");
             }
         } else {
             if (this.isSliding) {
@@ -162,7 +160,7 @@ export class Player {
             this.handleLanding();
         }
 
-        this.game.platforms.forEach(platform => {
+        this.game.platforms.forEach((platform) => {
             if (this.checkRectCollision(this, platform)) {
                 const prevY = this.y - this.vy * dt;
                 const prevX = this.x - this.vx * dt;
@@ -173,18 +171,15 @@ export class Player {
                     this.onGround = true;
                     this.canDoubleJump = true;
                     this.handleLanding();
-                }
-                else if (prevY >= platform.y + platform.height && this.vy < 0) {
+                } else if (prevY >= platform.y + platform.height && this.vy < 0) {
                     this.y = platform.y + platform.height;
                     this.vy = 0;
-                }
-                else if (prevX + this.width <= platform.x && this.vx > 0) {
+                } else if (prevX + this.width <= platform.x && this.vx > 0) {
                     this.x = platform.x - this.width;
                     this.vx = 0;
                     this.onWall = true;
                     this.wallDir = 1;
-                }
-                else if (prevX >= platform.x + platform.width && this.vx < 0) {
+                } else if (prevX >= platform.x + platform.width && this.vx < 0) {
                     this.x = platform.x + platform.width;
                     this.vx = 0;
                     this.onWall = true;
@@ -192,7 +187,6 @@ export class Player {
                 }
             }
         });
-
 
         // World Bounds
         if (this.x < 0) {
@@ -224,7 +218,7 @@ export class Player {
     }
 
     handleLanding() {
-        if (this.state === 'FALL' || this.state === 'JUMP') {
+        if (this.state === "FALL" || this.state === "JUMP") {
             this.squash = 1.3;
             this.stretch = 0.7;
             this.createParticles(5);
@@ -233,17 +227,17 @@ export class Player {
 
     updateState() {
         if (this.isSliding) {
-            this.state = 'SLIDE';
+            this.state = "SLIDE";
         } else if (this.onWall && !this.onGround) {
-            this.state = 'WALL_SLIDE';
+            this.state = "WALL_SLIDE";
         } else if (this.vy < 0) {
-            this.state = 'JUMP';
+            this.state = "JUMP";
         } else if (this.vy > 0) {
-            this.state = 'FALL';
+            this.state = "FALL";
         } else if (Math.abs(this.vx) > 0.1) {
-            this.state = 'RUN';
+            this.state = "RUN";
         } else {
-            this.state = 'IDLE';
+            this.state = "IDLE";
         }
     }
 
@@ -265,7 +259,7 @@ export class Player {
         ctx.fillRect(x, y, w, h);
 
         // Draw eyes to see direction
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = "white";
         const eyeOffset = this.vx >= 0 ? 5 : -5;
         // If on wall, look away from wall?
         if (this.onWall && !this.onGround) {
@@ -280,7 +274,7 @@ export class Player {
         ctx.fillRect(x + w / 2 + eyeOffset, y + h / 4, 10, 10);
     }
 
-    createParticles(count, color = '#ffffff') {
+    createParticles(count, color = "#ffffff") {
         this.game.createParticles(this.x + this.width / 2, this.y + this.height, count, color);
     }
 }

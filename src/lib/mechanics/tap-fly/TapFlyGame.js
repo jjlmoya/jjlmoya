@@ -19,14 +19,18 @@ export class TapFlyGame {
 
     initInput() {
         // We attach listeners to the canvas/window
-        // Note: In the new UI, the overlay handles the first click, 
+        // Note: In the new UI, the overlay handles the first click,
         // so we can assume audio/interaction is ready if needed.
 
         this.canvas.addEventListener("mousedown", this.handleInput);
-        this.canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault(); // Prevent scrolling
-            this.handleInput(e);
-        }, { passive: false });
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault(); // Prevent scrolling
+                this.handleInput(e);
+            },
+            { passive: false }
+        );
 
         window.addEventListener("keydown", this.handleKey);
     }

@@ -22,16 +22,20 @@ export class AutorunnerGame {
 
     initInput() {
         this.canvas.addEventListener("mousedown", this.handleJump);
-        this.canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            this.handleJump(e);
-        }, { passive: false });
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                this.handleJump(e);
+            },
+            { passive: false }
+        );
 
         window.addEventListener("keydown", this.handleKey);
     }
 
     handleJump(e) {
-        if (e.type === 'touchstart') e.preventDefault();
+        if (e.type === "touchstart") e.preventDefault();
 
         const state = this.mechanic.getState();
         if (state.state === "gameover") {
@@ -163,13 +167,7 @@ export class AutorunnerGame {
                 0,
                 Math.PI * 2
             );
-            this.ctx.arc(
-                cloud.x + cloud.width * 0.6,
-                cloud.y,
-                cloud.height * 0.9,
-                0,
-                Math.PI * 2
-            );
+            this.ctx.arc(cloud.x + cloud.width * 0.6, cloud.y, cloud.height * 0.9, 0, Math.PI * 2);
             this.ctx.fill();
         }
 

@@ -25,10 +25,14 @@ export class FlockingGame {
         window.addEventListener("mouseleave", this.handleLeave);
 
         // Touch events
-        window.addEventListener("touchmove", (e) => {
-            // e.preventDefault(); // Don't block scroll on window
-            this.handleMove(e.touches[0]);
-        }, { passive: false });
+        window.addEventListener(
+            "touchmove",
+            (e) => {
+                // e.preventDefault(); // Don't block scroll on window
+                this.handleMove(e.touches[0]);
+            },
+            { passive: false }
+        );
 
         window.addEventListener("touchend", this.handleLeave);
     }

@@ -22,32 +22,36 @@ The **Platformer** mechanic provides responsive, satisfying movement controls ty
 
 The platformer is built with three main classes:
 
-- **Source Code**: 
-  - [`PlatformerGame.js`](./PlatformerGame.js) - Main game loop, rendering, and particle system
-  - [`Player.js`](./Player.js) - Player physics, movement, and collision detection
-  - [`InputHandler.js`](./InputHandler.js) - Keyboard input management
+- **Source Code**:
+    - [`PlatformerGame.js`](./PlatformerGame.js) - Main game loop, rendering, and particle system
+    - [`Player.js`](./Player.js) - Player physics, movement, and collision detection
+    - [`InputHandler.js`](./InputHandler.js) - Keyboard input management
 - **Demo UI**: [`plataformas.astro`](../../../pages/gamebob/mecanicas/plataformas.astro)
 
 ### Core Mechanics
 
 #### Movement
+
 - Horizontal acceleration with friction
 - Maximum speed capping
 - Skid particles when changing direction
 
 #### Jumping
+
 - **Ground Jump**: Standard jump from ground
 - **Double Jump**: Additional jump in mid-air
 - **Wall Jump**: Jump off walls with horizontal boost
 - **Variable Height**: Release jump button early to fall faster
 
 #### Collision Detection
+
 - AABB (Axis-Aligned Bounding Box) collision
 - Platform collision with direction resolution
 - Wall detection for wall sliding and jumping
 - Floor collision with landing detection
 
 #### Sliding
+
 - Activated while moving on ground
 - Reduces player height (ducking)
 - Momentum boost on slide start
@@ -73,11 +77,11 @@ The game handles its own input, update loop, and rendering automatically.
 ## 🎨 Visual Feedback
 
 - **Squash & Stretch**: Player deforms on jumps and landings
-- **Particles**: 
-  - White particles on jump/landing
-  - Purple particles on double jump
-  - Amber particles on wall jump
-  - Gray particles on slide and direction change
+- **Particles**:
+    - White particles on jump/landing
+    - Purple particles on double jump
+    - Amber particles on wall jump
+    - Gray particles on slide and direction change
 - **State-based rendering**: Eyes follow movement direction
 
 ## 🔧 Customization
@@ -85,9 +89,9 @@ The game handles its own input, update loop, and rendering automatically.
 Key parameters in `Player.js`:
 
 ```javascript
-this.acceleration = 1;        // Movement acceleration
-this.maxSpeed = 10;           // Maximum horizontal speed
-this.jumpStrength = -20;      // Jump force
-this.weight = 1;              // Gravity strength
-this.friction = 0.92;         // Ground friction
+this.acceleration = 1; // Movement acceleration
+this.maxSpeed = 10; // Maximum horizontal speed
+this.jumpStrength = -20; // Jump force
+this.weight = 1; // Gravity strength
+this.friction = 0.92; // Ground friction
 ```

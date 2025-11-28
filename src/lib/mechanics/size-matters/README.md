@@ -27,7 +27,7 @@ const canvas = document.getElementById("gameCanvas");
 const game = new SizeMattersGame(canvas);
 
 // Handle resizing
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
     game.resize();
 });
 ```

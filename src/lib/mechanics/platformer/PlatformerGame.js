@@ -1,10 +1,10 @@
-import { Player } from './Player.js';
-import { InputHandler } from './InputHandler.js';
+import { Player } from "./Player.js";
+import { InputHandler } from "./InputHandler.js";
 
 export class PlatformerGame {
     constructor(canvas) {
         this.canvas = canvas;
-        this.ctx = canvas.getContext('2d');
+        this.ctx = canvas.getContext("2d");
 
         // Initial size
         const rect = canvas.getBoundingClientRect();
@@ -16,7 +16,7 @@ export class PlatformerGame {
 
         this.particles = [];
 
-        // Scale platforms relative to screen or keep fixed? 
+        // Scale platforms relative to screen or keep fixed?
         // For now, let's keep them somewhat fixed but ensure they are visible
         this.platforms = [
             { x: 200, y: 400, width: 200, height: 20 },
@@ -24,12 +24,12 @@ export class PlatformerGame {
             { x: 50, y: 250, width: 100, height: 20 },
             { x: 700, y: 150, width: 20, height: 200 },
             // Ground
-            { x: 0, y: this.height - 50, width: this.width, height: 50 }
+            { x: 0, y: this.height - 50, width: this.width, height: 50 },
         ];
 
-        this.debugState = document.getElementById('debug-state');
-        this.debugVelX = document.getElementById('debug-vel-x');
-        this.debugVelY = document.getElementById('debug-vel-y');
+        this.debugState = document.getElementById("debug-state");
+        this.debugVelX = document.getElementById("debug-vel-x");
+        this.debugVelY = document.getElementById("debug-vel-y");
 
         this.lastTime = 0;
         this.animate = this.animate.bind(this);
@@ -43,7 +43,7 @@ export class PlatformerGame {
         this.height = this.canvas.height = rect.height;
 
         // Update ground platform
-        const ground = this.platforms.find(p => p.height === 50 && p.y >= this.height - 100);
+        const ground = this.platforms.find((p) => p.height === 50 && p.y >= this.height - 100);
         if (ground) {
             ground.y = this.height - 50;
             ground.width = this.width;
@@ -69,17 +69,17 @@ export class PlatformerGame {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         // Background
-        this.ctx.fillStyle = '#1e293b'; // Slate 800
+        this.ctx.fillStyle = "#1e293b"; // Slate 800
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        this.ctx.fillStyle = '#334155'; // Slate 700
-        this.platforms.forEach(platform => {
+        this.ctx.fillStyle = "#334155"; // Slate 700
+        this.platforms.forEach((platform) => {
             this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
         });
 
         this.player.draw(this.ctx);
 
-        this.particles.forEach(particle => particle.draw(this.ctx));
+        this.particles.forEach((particle) => particle.draw(this.ctx));
     }
 
     animate(timeStamp) {

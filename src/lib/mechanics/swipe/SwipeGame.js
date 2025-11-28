@@ -9,8 +9,14 @@ export class SwipeGame {
 
         this.trailPoints = [];
         this.swipeCounts = {
-            up: 0, down: 0, left: 0, right: 0,
-            "up-left": 0, "up-right": 0, "down-left": 0, "down-right": 0
+            up: 0,
+            down: 0,
+            left: 0,
+            right: 0,
+            "up-left": 0,
+            "up-right": 0,
+            "down-left": 0,
+            "down-right": 0,
         };
         this.lastDirection = "-";
         this.lastVelocity = 0;
@@ -150,10 +156,10 @@ export class SwipeGame {
             { dir: "up-left", x: -0.7, y: -0.7, color: "#c084fc" },
             { dir: "up-right", x: 0.7, y: -0.7, color: "#fb923c" },
             { dir: "down-left", x: -0.7, y: 0.7, color: "#2dd4bf" },
-            { dir: "down-right", x: 0.7, y: 0.7, color: "#fb7185" }
+            { dir: "down-right", x: 0.7, y: 0.7, color: "#fb7185" },
         ];
 
-        arrows.forEach(arrow => {
+        arrows.forEach((arrow) => {
             const isActive = this.activeArrow === arrow.dir;
             const scale = isActive ? 1.5 : 1;
             const alpha = isActive ? 1 : 0.2;

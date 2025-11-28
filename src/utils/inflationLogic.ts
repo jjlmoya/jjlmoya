@@ -16,11 +16,9 @@ export const getPurchasingPower = (year: number): number => {
 export const calculateBasket = (
     budget: number,
     items: InflationItem[],
-    year: number,
+    year: number
 ): Map<string, number> => {
-    const availableItems = items.filter(
-        (item) => item.minYear <= year && item.maxYear >= year,
-    );
+    const availableItems = items.filter((item) => item.minYear <= year && item.maxYear >= year);
 
     let currentBudget = budget;
     const itemCounts = new Map<string, number>();
@@ -41,8 +39,7 @@ export const calculateBasket = (
         const affordable = availableItems.filter((i) => i.price <= currentBudget);
         if (affordable.length === 0) break;
 
-        const randomItem =
-            affordable[Math.floor(Math.random() * affordable.length)];
+        const randomItem = affordable[Math.floor(Math.random() * affordable.length)];
 
         itemCounts.set(randomItem.name, (itemCounts.get(randomItem.name) || 0) + 1);
         currentBudget -= randomItem.price;

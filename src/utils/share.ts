@@ -33,7 +33,8 @@ export async function handleGlobalShare(e: MouseEvent) {
 
             // Visual feedback
             const originalContent = btn.innerHTML;
-            btn.innerHTML = '<span style="font-size: 0.75em; font-weight: bold; color: #10b981;">¡Copiado!</span>';
+            btn.innerHTML =
+                '<span style="font-size: 0.75em; font-weight: bold; color: #10b981;">¡Copiado!</span>';
 
             setTimeout(() => {
                 btn.innerHTML = originalContent;

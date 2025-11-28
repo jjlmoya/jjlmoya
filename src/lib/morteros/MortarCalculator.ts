@@ -10,8 +10,7 @@ export const VITRUVIAN_PHASES: Record<PhaseKey, VitruvianPhase> = {
         density: 1.6,
         color: "#d4c5b0",
         texture: "texture-rough",
-        description:
-            "Capa base rugosa. 2 manos de 15mm. Proporción 1:3 (Cal:Arena de río).",
+        description: "Capa base rugosa. 2 manos de 15mm. Proporción 1:3 (Cal:Arena de río).",
     },
     arenato: {
         name: "Arenato",
@@ -33,8 +32,7 @@ export const VITRUVIAN_PHASES: Record<PhaseKey, VitruvianPhase> = {
         density: 1.2,
         color: "#f8f8f8",
         texture: "texture-smooth",
-        description:
-            "Acabado fino. 1 mano doble de 4mm. Proporción 1:1 (Cal:Polvo de mármol).",
+        description: "Acabado fino. 1 mano doble de 4mm. Proporción 1:1 (Cal:Polvo de mármol).",
     },
 };
 
@@ -53,7 +51,7 @@ export class MortarCalculator {
 
         return {
             coverageArea: coverage,
-            ...complementary
+            ...complementary,
         };
     }
 
@@ -83,7 +81,10 @@ export class MortarCalculator {
         return Math.max(0, area);
     }
 
-    private static calculateComplementary(state: MortarState, phase: VitruvianPhase): { complementaryAmount: number, complementaryName: string, ratioText: string } {
+    private static calculateComplementary(
+        state: MortarState,
+        phase: VitruvianPhase
+    ): { complementaryAmount: number; complementaryName: string; ratioText: string } {
         let complementaryAmount = 0;
         let complementaryName = "";
         let ratioText = "";
@@ -122,7 +123,7 @@ export class MortarCalculator {
         return {
             complementaryAmount,
             complementaryName,
-            ratioText
+            ratioText,
         };
     }
 }

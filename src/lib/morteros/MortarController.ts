@@ -154,8 +154,7 @@ export class MortarController {
             this.elements.complementaryValue.textContent = Math.round(
                 result.complementaryAmount
             ).toString();
-        if (this.elements.ratioDisplay)
-            this.elements.ratioDisplay.textContent = result.ratioText;
+        if (this.elements.ratioDisplay) this.elements.ratioDisplay.textContent = result.ratioText;
 
         // Update technical details
         if (this.elements.thicknessValue)

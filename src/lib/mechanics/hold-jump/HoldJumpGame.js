@@ -23,10 +23,14 @@ export class HoldJumpGame {
         this.canvas.addEventListener("mousedown", this.handleDown);
         window.addEventListener("mouseup", this.handleUp);
 
-        this.canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            this.handleDown(e);
-        }, { passive: false });
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                this.handleDown(e);
+            },
+            { passive: false }
+        );
         window.addEventListener("touchend", this.handleUp);
 
         window.addEventListener("keydown", this.handleKey);
@@ -34,7 +38,7 @@ export class HoldJumpGame {
     }
 
     handleDown(e) {
-        if (e.type === 'touchstart') e.preventDefault();
+        if (e.type === "touchstart") e.preventDefault();
 
         const rect = this.canvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;

@@ -46,7 +46,7 @@ export class AutorunnerMechanic {
             vy: 0,
             grounded: false,
             jumps: 0,
-            isDashing: false
+            isDashing: false,
         };
         this.initLevel();
     }
@@ -237,23 +237,77 @@ export class AutorunnerMechanic {
 
                 // Coins over obstacle
                 this.coins.push({ x: obsX, y: y - 120, width: 20, height: 20, collected: false });
-                this.coins.push({ x: obsX - 30, y: y - 100, width: 20, height: 20, collected: false });
-                this.coins.push({ x: obsX + 30, y: y - 100, width: 20, height: 20, collected: false });
+                this.coins.push({
+                    x: obsX - 30,
+                    y: y - 100,
+                    width: 20,
+                    height: 20,
+                    collected: false,
+                });
+                this.coins.push({
+                    x: obsX + 30,
+                    y: y - 100,
+                    width: 20,
+                    height: 20,
+                    collected: false,
+                });
             } else {
                 // No obstacle, maybe a coin pattern?
                 if (coinPattern < 0.3) {
                     // Line
-                    this.coins.push({ x: obsX, y: y - 30, width: 20, height: 20, collected: false });
-                    this.coins.push({ x: obsX + 30, y: y - 30, width: 20, height: 20, collected: false });
-                    this.coins.push({ x: obsX + 60, y: y - 30, width: 20, height: 20, collected: false });
+                    this.coins.push({
+                        x: obsX,
+                        y: y - 30,
+                        width: 20,
+                        height: 20,
+                        collected: false,
+                    });
+                    this.coins.push({
+                        x: obsX + 30,
+                        y: y - 30,
+                        width: 20,
+                        height: 20,
+                        collected: false,
+                    });
+                    this.coins.push({
+                        x: obsX + 60,
+                        y: y - 30,
+                        width: 20,
+                        height: 20,
+                        collected: false,
+                    });
                 } else if (coinPattern < 0.6) {
                     // Wave
-                    this.coins.push({ x: obsX, y: y - 30, width: 20, height: 20, collected: false });
-                    this.coins.push({ x: obsX + 30, y: y - 60, width: 20, height: 20, collected: false });
-                    this.coins.push({ x: obsX + 60, y: y - 30, width: 20, height: 20, collected: false });
+                    this.coins.push({
+                        x: obsX,
+                        y: y - 30,
+                        width: 20,
+                        height: 20,
+                        collected: false,
+                    });
+                    this.coins.push({
+                        x: obsX + 30,
+                        y: y - 60,
+                        width: 20,
+                        height: 20,
+                        collected: false,
+                    });
+                    this.coins.push({
+                        x: obsX + 60,
+                        y: y - 30,
+                        width: 20,
+                        height: 20,
+                        collected: false,
+                    });
                 } else {
                     // High jump reward
-                    this.coins.push({ x: obsX + 30, y: y - 150, width: 20, height: 20, collected: false });
+                    this.coins.push({
+                        x: obsX + 30,
+                        y: y - 150,
+                        width: 20,
+                        height: 20,
+                        collected: false,
+                    });
                 }
             }
         }

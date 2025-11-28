@@ -76,14 +76,18 @@ export class OneBulletGame {
         });
 
         // Touch support
-        this.canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            const rect = this.canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            this.mouse.x = touch.clientX - rect.left;
-            this.mouse.y = touch.clientY - rect.top;
-            this.shoot();
-        }, { passive: false });
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                const rect = this.canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                this.mouse.x = touch.clientX - rect.left;
+                this.mouse.y = touch.clientY - rect.top;
+                this.shoot();
+            },
+            { passive: false }
+        );
     }
 
     shoot() {
@@ -98,10 +102,7 @@ export class OneBulletGame {
             this.bullet.x = this.player.x;
             this.bullet.y = this.player.y;
 
-            const angle = Math.atan2(
-                this.mouse.y - this.player.y,
-                this.mouse.x - this.player.x
-            );
+            const angle = Math.atan2(this.mouse.y - this.player.y, this.mouse.x - this.player.x);
 
             this.bullet.vx = Math.cos(angle) * this.bullet.speed;
             this.bullet.vy = Math.sin(angle) * this.bullet.speed;
@@ -151,15 +152,18 @@ export class OneBulletGame {
             this.player.y += dy * this.player.speed * dt;
 
             // Boundary checks
-            this.player.x = Math.max(this.player.radius, Math.min(this.width - this.player.radius, this.player.x));
-            this.player.y = Math.max(this.player.radius, Math.min(this.height - this.player.radius, this.player.y));
+            this.player.x = Math.max(
+                this.player.radius,
+                Math.min(this.width - this.player.radius, this.player.x)
+            );
+            this.player.y = Math.max(
+                this.player.radius,
+                Math.min(this.height - this.player.radius, this.player.y)
+            );
         }
 
         // Player Rotation
-        this.player.angle = Math.atan2(
-            this.mouse.y - this.player.y,
-            this.mouse.x - this.player.x
-        );
+        this.player.angle = Math.atan2(this.mouse.y - this.player.y, this.mouse.x - this.player.x);
 
         // Bullet Logic
         if (this.bullet.state === "fired") {
@@ -177,8 +181,14 @@ export class OneBulletGame {
                 this.bullet.vx = 0;
                 this.bullet.vy = 0;
                 // Clamp position
-                this.bullet.x = Math.max(this.bullet.radius, Math.min(this.width - this.bullet.radius, this.bullet.x));
-                this.bullet.y = Math.max(this.bullet.radius, Math.min(this.height - this.bullet.radius, this.bullet.y));
+                this.bullet.x = Math.max(
+                    this.bullet.radius,
+                    Math.min(this.width - this.bullet.radius, this.bullet.x)
+                );
+                this.bullet.y = Math.max(
+                    this.bullet.radius,
+                    Math.min(this.height - this.bullet.radius, this.bullet.y)
+                );
 
                 this.createParticles(this.bullet.x, this.bullet.y, 10, "#facc15");
             }
@@ -273,7 +283,7 @@ export class OneBulletGame {
             x,
             y,
             radius: 15,
-            speed: 100 + Math.random() * 50 + (this.score * 5),
+            speed: 100 + Math.random() * 50 + this.score * 5,
             color: "#ef4444",
         });
     }
@@ -300,7 +310,7 @@ export class OneBulletGame {
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         // Draw Particles
-        this.particles.forEach(p => {
+        this.particles.forEach((p) => {
             this.ctx.globalAlpha = p.life;
             this.ctx.fillStyle = p.color;
             this.ctx.beginPath();
@@ -351,7 +361,7 @@ export class OneBulletGame {
         }
 
         // Draw Enemies
-        this.enemies.forEach(enemy => {
+        this.enemies.forEach((enemy) => {
             this.ctx.fillStyle = enemy.color;
             this.ctx.beginPath();
             this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);

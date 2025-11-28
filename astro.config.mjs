@@ -14,5 +14,5 @@ export default defineConfig({
             exclude: ["date-fns"],
         },
     },
-    trailingSlash: 'always',
+    trailingSlash: "always",
 });

@@ -58,7 +58,12 @@ export class HoldJumpMechanic {
     private generatePlatforms() {
         this.platforms = [];
         // Ground
-        this.platforms.push({ x: 0, y: this.bounds.height - 20, width: this.bounds.width, height: 20 });
+        this.platforms.push({
+            x: 0,
+            y: this.bounds.height - 20,
+            width: this.bounds.width,
+            height: 20,
+        });
 
         // Tower
         let currentY = this.bounds.height - 150;
@@ -67,15 +72,16 @@ export class HoldJumpMechanic {
         // Generate 50 platforms going up
         for (let i = 0; i < 50; i++) {
             const width = 100 + Math.random() * 50;
-            const x = side === 0
-                ? 50 + Math.random() * 50
-                : this.bounds.width - width - 50 - Math.random() * 50;
+            const x =
+                side === 0
+                    ? 50 + Math.random() * 50
+                    : this.bounds.width - width - 50 - Math.random() * 50;
 
             this.platforms.push({
                 x: x,
                 y: currentY,
                 width: width,
-                height: 20
+                height: 20,
             });
 
             currentY -= 120 + Math.random() * 40; // Gap between platforms
@@ -104,9 +110,10 @@ export class HoldJumpMechanic {
             const force = Math.max(0.2, this.player.charge);
 
             // Jump
-            const xForce = this.jumpDirection !== 0
-                ? this.jumpDirection * this.config.maxJumpForce.x
-                : (Math.random() - 0.5) * 5; // Slight random if no direction
+            const xForce =
+                this.jumpDirection !== 0
+                    ? this.jumpDirection * this.config.maxJumpForce.x
+                    : (Math.random() - 0.5) * 5; // Slight random if no direction
 
             this.player.vel.x = xForce * force;
             this.player.vel.y = this.config.maxJumpForce.y * force;

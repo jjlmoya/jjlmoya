@@ -19,7 +19,7 @@ export class SlingshotGame {
                 bounceDamping: 0.8,
                 dragPower: 0.15,
                 maxDragDistance: 300,
-                padding: { top: 0, bottom: 0, x: 0 }
+                padding: { top: 0, bottom: 0, x: 0 },
             },
             {
                 onBounce: (speed) => this.playBounce(speed),
@@ -29,7 +29,7 @@ export class SlingshotGame {
                 },
                 onDragEnd: () => {
                     this.canvas.style.cursor = "grab";
-                }
+                },
             }
         );
 
@@ -52,19 +52,31 @@ export class SlingshotGame {
         window.addEventListener("mousemove", this.handleMove);
         window.addEventListener("mouseup", this.handleEnd);
 
-        this.canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            this.handleStart(e.touches[0]);
-        }, { passive: false });
-        window.addEventListener("touchmove", () => {
-            // e.preventDefault(); // Don't prevent default on window, might block scroll? 
-            // Actually for game we want to prevent scroll if touching canvas
-        }, { passive: false });
-        // We attach touchmove to window to track drag outside canvas? 
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                this.handleStart(e.touches[0]);
+            },
+            { passive: false }
+        );
+        window.addEventListener(
+            "touchmove",
+            () => {
+                // e.preventDefault(); // Don't prevent default on window, might block scroll?
+                // Actually for game we want to prevent scroll if touching canvas
+            },
+            { passive: false }
+        );
+        // We attach touchmove to window to track drag outside canvas?
         // Better to attach to window for drag continuity
-        window.addEventListener("touchmove", (e) => {
-            this.handleMove(e.touches[0]);
-        }, { passive: false });
+        window.addEventListener(
+            "touchmove",
+            (e) => {
+                this.handleMove(e.touches[0]);
+            },
+            { passive: false }
+        );
         window.addEventListener("touchend", this.handleEnd);
     }
 
@@ -88,7 +100,7 @@ export class SlingshotGame {
 
     initAudio() {
         if (!this.audioCtx) {
-            this.audioCtx = new (window.AudioContext || window['webkitAudioContext'])();
+            this.audioCtx = new (window.AudioContext || window["webkitAudioContext"])();
         }
     }
 
@@ -198,7 +210,7 @@ export class SlingshotGame {
             face = ">_<";
         }
 
-        // Rotate text back so it's upright relative to the body rotation? 
+        // Rotate text back so it's upright relative to the body rotation?
         // Or let it rotate with body? Original rotated with body.
         this.ctx.fillText(face, 0, 0);
 

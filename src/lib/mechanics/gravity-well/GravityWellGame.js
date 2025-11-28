@@ -23,15 +23,19 @@ export class GravityWellGame {
 
     initInput() {
         this.canvas.addEventListener("mousedown", this.handleInput);
-        this.canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            this.handleInput(e);
-        }, { passive: false });
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                this.handleInput(e);
+            },
+            { passive: false }
+        );
     }
 
     handleInput(e) {
         // Prevent default if it's a touch event to stop scrolling/zooming
-        if (e.type === 'touchstart') {
+        if (e.type === "touchstart") {
             e.preventDefault();
         }
 
@@ -74,7 +78,13 @@ export class GravityWellGame {
         for (const well of wells) {
             const opacity = well.lifetime / well.maxLifetime;
             this.ctx.beginPath();
-            this.ctx.arc(well.pos.x, well.pos.y, well.radius * (0.5 + 0.5 * opacity), 0, Math.PI * 2);
+            this.ctx.arc(
+                well.pos.x,
+                well.pos.y,
+                well.radius * (0.5 + 0.5 * opacity),
+                0,
+                Math.PI * 2
+            );
             this.ctx.fillStyle = `rgba(255, 255, 255, ${0.1 * opacity})`;
             this.ctx.fill();
             this.ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * opacity})`;

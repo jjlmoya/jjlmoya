@@ -1,8 +1,7 @@
 export const ingredients = [
     {
         name: "Harina Caputo Pizzeria",
-        description:
-            "La auténtica harina napolitana. W260-270, elasticidad perfecta.",
+        description: "La auténtica harina napolitana. W260-270, elasticidad perfecta.",
         url: "https://amzn.to/3X9U9eF",
         icon: "mdi:sack",
         color: "text-blue-500",
@@ -26,8 +25,7 @@ export const ingredients = [
     },
     {
         name: "Piedra Refractaria",
-        description:
-            "Retiene el calor para un cornicione explosivo en horno doméstico.",
+        description: "Retiene el calor para un cornicione explosivo en horno doméstico.",
         url: "https://www.amazon.es/s?k=piedra+pizza+horno&tag=jardineraamable-21",
         icon: "mdi:toaster-oven",
         color: "text-orange-500",

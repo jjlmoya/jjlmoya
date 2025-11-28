@@ -85,7 +85,7 @@ export class SizeMattersGame {
                 type: "gap",
                 gapX: gapX,
                 gapWidth: gapWidth,
-                passed: false
+                passed: false,
             });
         } else {
             // A breakable block in the middle
@@ -98,7 +98,7 @@ export class SizeMattersGame {
                 h: 20,
                 type: "breakable",
                 broken: false,
-                passed: false
+                passed: false,
             });
         }
     }
@@ -117,7 +117,6 @@ export class SizeMattersGame {
         // Physics
         // Mass is proportional to size area (roughly)
         // Let's say mass = size / 10
-
 
         // Gravity: Heavier falls faster (simplified physics for fun)
         // Small = floaty (low gravity), Big = heavy (high gravity)
@@ -139,13 +138,14 @@ export class SizeMattersGame {
 
         // Bounds
         if (this.player.x < this.player.size) this.player.x = this.player.size;
-        if (this.player.x > this.width - this.player.size) this.player.x = this.width - this.player.size;
+        if (this.player.x > this.width - this.player.size)
+            this.player.x = this.width - this.player.size;
 
         // Camera follow
         this.cameraY = this.player.y - 200;
 
         // Obstacle Logic
-        this.obstacles.forEach(obs => {
+        this.obstacles.forEach((obs) => {
             if (obs.y < this.cameraY - 100) {
                 // Remove old obstacles and add new ones
                 obs.remove = true;
@@ -157,7 +157,17 @@ export class SizeMattersGame {
             // Obstacles are rects
 
             if (obs.type === "breakable" && !obs.broken) {
-                if (this.checkRectCircle(obs.x, obs.y, obs.w, obs.h, this.player.x, this.player.y, this.player.size / 2)) {
+                if (
+                    this.checkRectCircle(
+                        obs.x,
+                        obs.y,
+                        obs.w,
+                        obs.h,
+                        this.player.x,
+                        this.player.y,
+                        this.player.size / 2
+                    )
+                ) {
                     if (this.player.size > 40) {
                         // Smash!
                         obs.broken = true;
@@ -173,42 +183,70 @@ export class SizeMattersGame {
                 }
             } else if (obs.type === "gap") {
                 // Left wall
-                if (this.checkRectCircle(0, obs.y, obs.gapX, obs.h, this.player.x, this.player.y, this.player.size / 2)) {
+                if (
+                    this.checkRectCircle(
+                        0,
+                        obs.y,
+                        obs.gapX,
+                        obs.h,
+                        this.player.x,
+                        this.player.y,
+                        this.player.size / 2
+                    )
+                ) {
                     this.player.y = obs.y - this.player.size / 2;
                     this.player.vy = 0;
                 }
                 // Right wall
-                if (this.checkRectCircle(obs.gapX + obs.gapWidth, obs.y, this.width - (obs.gapX + obs.gapWidth), obs.h, this.player.x, this.player.y, this.player.size / 2)) {
+                if (
+                    this.checkRectCircle(
+                        obs.gapX + obs.gapWidth,
+                        obs.y,
+                        this.width - (obs.gapX + obs.gapWidth),
+                        obs.h,
+                        this.player.x,
+                        this.player.y,
+                        this.player.size / 2
+                    )
+                ) {
                     this.player.y = obs.y - this.player.size / 2;
                     this.player.vy = 0;
                 }
             }
         });
 
-        this.obstacles = this.obstacles.filter(o => !o.remove);
+        this.obstacles = this.obstacles.filter((o) => !o.remove);
 
         // Particles
-        this.particles.forEach(p => {
+        this.particles.forEach((p) => {
             p.x += p.vx * dt;
             p.y += p.vy * dt;
             p.life -= dt;
         });
-        this.particles = this.particles.filter(p => p.life > 0);
+        this.particles = this.particles.filter((p) => p.life > 0);
     }
 
     checkRectCircle(rx, ry, rw, rh, cx, cy, cr) {
         const distX = Math.abs(cx - rx - rw / 2);
         const distY = Math.abs(cy - ry - rh / 2);
 
-        if (distX > (rw / 2 + cr)) { return false; }
-        if (distY > (rh / 2 + cr)) { return false; }
+        if (distX > rw / 2 + cr) {
+            return false;
+        }
+        if (distY > rh / 2 + cr) {
+            return false;
+        }
 
-        if (distX <= (rw / 2)) { return true; }
-        if (distY <= (rh / 2)) { return true; }
+        if (distX <= rw / 2) {
+            return true;
+        }
+        if (distY <= rh / 2) {
+            return true;
+        }
 
         const dx = distX - rw / 2;
         const dy = distY - rh / 2;
-        return (dx * dx + dy * dy <= (cr * cr));
+        return dx * dx + dy * dy <= cr * cr;
     }
 
     createParticles(x, y, color) {
@@ -219,7 +257,7 @@ export class SizeMattersGame {
                 vx: (Math.random() - 0.5) * 200,
                 vy: (Math.random() - 0.5) * 200,
                 life: 0.5,
-                color: color
+                color: color,
             });
         }
     }
@@ -251,7 +289,7 @@ export class SizeMattersGame {
         this.ctx.translate(0, -this.cameraY);
 
         // Draw Obstacles
-        this.obstacles.forEach(obs => {
+        this.obstacles.forEach((obs) => {
             if (obs.type === "breakable") {
                 if (!obs.broken) {
                     this.ctx.fillStyle = "#ef4444"; // Red
@@ -266,12 +304,17 @@ export class SizeMattersGame {
             } else if (obs.type === "gap") {
                 this.ctx.fillStyle = "#3b82f6"; // Blue
                 this.ctx.fillRect(0, obs.y, obs.gapX, obs.h);
-                this.ctx.fillRect(obs.gapX + obs.gapWidth, obs.y, this.width - (obs.gapX + obs.gapWidth), obs.h);
+                this.ctx.fillRect(
+                    obs.gapX + obs.gapWidth,
+                    obs.y,
+                    this.width - (obs.gapX + obs.gapWidth),
+                    obs.h
+                );
             }
         });
 
         // Draw Particles
-        this.particles.forEach(p => {
+        this.particles.forEach((p) => {
             this.ctx.fillStyle = p.color;
             this.ctx.globalAlpha = p.life * 2;
             this.ctx.fillRect(p.x, p.y, 4, 4);
