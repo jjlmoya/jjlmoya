@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+// Force rebuild: Trigo Refactor
 import TrigoHeader from "../../components/pages/trigo/TrigoHeader.astro";
 import TrigoDeepTime from "../../components/pages/trigo/TrigoDeepTime.astro";
 import TrigoRachis from "../../components/pages/trigo/TrigoRachis.astro";
@@ -17,7 +18,16 @@ import TrigoEpilogue from "../../components/pages/trigo/TrigoEpilogue.astro";
 import TrigoDocumentation from "../../components/pages/trigo/TrigoDocumentation.astro";
 import TrigoTableOfContents from "../../components/pages/trigo/TrigoTableOfContents.astro";
 import TrigoWorkHoursChart from "../../components/pages/trigo/TrigoWorkHoursChart.astro";
-import TrigoCounterpoint from "../../components/pages/trigo/TrigoCounterpoint.astro";
+import TrigoPositiveSecurity from "../../components/pages/trigo/TrigoPositiveSecurity.astro";
+import TrigoPositiveSpecialization from "../../components/pages/trigo/TrigoPositiveSpecialization.astro";
+import TrigoPositiveWriting from "../../components/pages/trigo/TrigoPositiveWriting.astro";
+import TrigoPositiveCity from "../../components/pages/trigo/TrigoPositiveCity.astro";
+import TrigoPositiveTrade from "../../components/pages/trigo/TrigoPositiveTrade.astro";
+import TrigoPositiveBeer from "../../components/pages/trigo/TrigoPositiveBeer.astro";
+import TrigoPositiveLaw from "../../components/pages/trigo/TrigoPositiveLaw.astro";
+import TrigoPositiveKnowledge from "../../components/pages/trigo/TrigoPositiveKnowledge.astro";
+import TrigoPositiveExpansion from "../../components/pages/trigo/TrigoPositiveExpansion.astro";
+import TrigoPositiveDocumentation from "../../components/pages/trigo/TrigoPositiveDocumentation.astro";
 ---
 
 <Layout
@@ -49,7 +59,22 @@ import TrigoCounterpoint from "../../components/pages/trigo/TrigoCounterpoint.as
     </style>
     <TrigoTableOfContents />
     <main class="h-screen overflow-y-auto snap-y snap-mandatory text-[#e7e5e4]">
+        <!-- Positive History (Scroll Up) -->
+        <TrigoPositiveDocumentation />
+        <TrigoPositiveExpansion />
+        <TrigoPositiveKnowledge />
+        <TrigoPositiveSpecialization />
+        <TrigoPositiveLaw />
+        <TrigoPositiveBeer />
+        <TrigoPositiveTrade />
+        <TrigoPositiveCity />
+        <TrigoPositiveSecurity />
+        <TrigoPositiveWriting />
+
+        <!-- Center Point -->
         <TrigoHeader />
+
+        <!-- Negative History (Scroll Down) -->
         <TrigoDeepTime />
         <TrigoRachis />
         <TrigoTrap />
@@ -61,10 +86,36 @@ import TrigoCounterpoint from "../../components/pages/trigo/TrigoCounterpoint.as
         <TrigoSurplus />
         <TrigoSocialContract />
         <TrigoPopulationGraph />
-        <TrigoCounterpoint />
+
+        <!-- Conclusion -->
         <TrigoFuture />
         <TrigoModernMap />
         <TrigoEpilogue />
         <TrigoDocumentation />
     </main>
+
+    <script>
+        function scrollToStart() {
+            const introSection = document.getElementById("intro");
+            if (introSection) {
+                // Instant jump, no smooth scroll for initialization
+                introSection.scrollIntoView({ behavior: "auto", block: "start" });
+            }
+        }
+
+        // Try immediately
+        scrollToStart();
+
+        // Try on DOM ready
+        document.addEventListener("DOMContentLoaded", scrollToStart);
+
+        // Try on full load (images etc)
+        window.addEventListener("load", () => {
+            // Only if we haven't scrolled yet (optional check, but forcing is safer for this specific UX)
+            scrollToStart();
+        });
+
+        // Support Astro View Transitions
+        document.addEventListener("astro:page-load", scrollToStart);
+    </script>
 </Layout>

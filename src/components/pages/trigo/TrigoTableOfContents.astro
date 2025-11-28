@@ -1,22 +1,31 @@
 ---
 const sections = [
-    { id: "intro", label: "Inicio" },
-    { id: "deep-time", label: "Tiempo Profundo" },
-    { id: "rachis", label: "El Raquis" },
-    { id: "trap", label: "La Trampa" },
-    { id: "grinding", label: "La Rutina" },
-    { id: "skeletons", label: "Cuerpos Rotos" },
-    { id: "calories-hunter", label: "Calorías: Cazador" },
-    { id: "calories-farmer", label: "Calorías: Agricultor" },
-    { id: "surplus", label: "El Excedente" },
-    { id: "social-contract", label: "Contrato Social" },
-    { id: "population", label: "Explosión Demográfica" },
-    { id: "work-hours", label: "Jornada Laboral" },
-    { id: "counterpoint", label: "La Otra Cara" },
-    { id: "future", label: "El Futuro" },
-    { id: "modern-map", label: "Mapa Moderno" },
-    { id: "epilogue", label: "Epílogo" },
-    { id: "documentation", label: "Referencias" },
+    { id: "positive-documentation", label: "Referencias", theme: "emerald" },
+    { id: "positive-expansion", label: "IX. La Expansión", theme: "emerald" },
+    { id: "positive-knowledge", label: "VIII. La Ciencia", theme: "emerald" },
+    { id: "positive-specialization", label: "VII. El Genio", theme: "emerald" },
+    { id: "positive-law", label: "VI. La Ley", theme: "emerald" },
+    { id: "positive-beer", label: "V. La Fiesta", theme: "emerald" },
+    { id: "positive-trade", label: "IV. El Comercio", theme: "emerald" },
+    { id: "positive-writing", label: "III. La Escritura", theme: "emerald" },
+    { id: "positive-city", label: "II. La Ciudad", theme: "emerald" },
+    { id: "positive-security", label: "I. La Seguridad", theme: "emerald" },
+    { id: "intro", label: "Inicio", theme: "neutral" },
+    { id: "deep-time", label: "I. Tiempo Profundo", theme: "amber" },
+    { id: "rachis", label: "II. El Raquis", theme: "amber" },
+    { id: "trap", label: "III. La Trampa", theme: "amber" },
+    { id: "grinding", label: "IV. La Rutina", theme: "amber" },
+    { id: "skeletons", label: "V. Cuerpos Rotos", theme: "amber" },
+    { id: "calories-hunter", label: "VI. Calorías (Cazador)", theme: "amber" },
+    { id: "calories-farmer", label: "VII. Calorías (Agricultor)", theme: "amber" },
+    { id: "surplus", label: "VIII. El Excedente", theme: "amber" },
+    { id: "social-contract", label: "IX. Contrato Social", theme: "amber" },
+    { id: "population", label: "X. Demografía", theme: "amber" },
+    { id: "work-hours", label: "XI. Jornada Laboral", theme: "amber" },
+    { id: "future", label: "XII. El Futuro", theme: "amber" },
+    { id: "modern-map", label: "XIII. Mapa Moderno", theme: "amber" },
+    { id: "epilogue", label: "Epílogo", theme: "neutral" },
+    { id: "documentation", label: "Referencias", theme: "neutral" },
 ];
 ---
 
@@ -30,18 +39,34 @@ const sections = [
                 href={`#${section.id}`}
                 class="group flex items-center justify-end gap-3"
                 aria-label={`Ir a ${section.label}`}
+                data-theme={section.theme}
             >
-                <span class="text-[10px] uppercase tracking-widest text-stone-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 bg-black/50 backdrop-blur-sm px-2 py-1 rounded">
+                <span
+                    class:list={[
+                        "text-[10px] uppercase tracking-widest opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 bg-black/50 backdrop-blur-sm px-2 py-1 rounded",
+                        section.theme === "emerald"
+                            ? "text-emerald-400"
+                            : section.theme === "amber"
+                              ? "text-amber-400"
+                              : "text-stone-400",
+                    ]}
+                >
                     {section.label}
                 </span>
-                <div class="w-2 h-2 rounded-full bg-stone-700 border border-stone-600 transition-all duration-300 group-hover:bg-amber-500 group-hover:border-amber-500 group-hover:scale-125" />
+                <div
+                    class:list={[
+                        "w-2 h-2 rounded-full border transition-all duration-300 group-hover:scale-125",
+                        "bg-stone-800 border-stone-700", // Default state
+                        `group-hover:bg-${section.theme === "neutral" ? "stone" : section.theme}-500`,
+                        `group-hover:border-${section.theme === "neutral" ? "stone" : section.theme}-500`,
+                    ]}
+                />
             </a>
         ))
     }
 </nav>
 
 <script>
-    // Optional: Highlight active section
     const observerOptions = {
         root: null,
         rootMargin: "-50% 0px",
@@ -52,19 +77,27 @@ const sections = [
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 const id = entry.target.id;
-                const navDot = document.querySelector(`a[href="#${id}"] div`);
+                const link = document.querySelector(`a[href="#${id}"]`);
+                const navDot = link?.querySelector("div");
+
+                if (!link || !navDot) return;
+
+                const theme = link.getAttribute("data-theme");
 
                 // Reset all dots
                 document.querySelectorAll("nav a div").forEach((dot) => {
-                    dot.classList.remove("bg-amber-500", "border-amber-500", "scale-125");
-                    dot.classList.add("bg-stone-700", "border-stone-600");
+                    dot.className =
+                        "w-2 h-2 rounded-full border transition-all duration-300 group-hover:scale-125 bg-stone-800 border-stone-700";
                 });
 
                 // Highlight active
-                if (navDot) {
-                    navDot.classList.remove("bg-stone-700", "border-stone-600");
-                    navDot.classList.add("bg-amber-500", "border-amber-500", "scale-125");
-                }
+                let activeClass = "";
+                if (theme === "emerald")
+                    activeClass = "bg-emerald-500 border-emerald-500 scale-125";
+                else if (theme === "amber") activeClass = "bg-amber-500 border-amber-500 scale-125";
+                else activeClass = "bg-stone-500 border-stone-500 scale-125";
+
+                navDot.className = `w-2 h-2 rounded-full border transition-all duration-300 ${activeClass}`;
             }
         });
     }, observerOptions);
