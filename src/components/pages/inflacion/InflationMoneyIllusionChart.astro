@@ -1,0 +1,156 @@
+<div
+    class="chart-container relative w-full my-8 p-6 bg-white/5 rounded-lg border border-white/10 backdrop-blur-sm"
+>
+    <h3 class="text-xl font-bold text-white text-center mb-6">La Ilusión Monetaria (2000-2024)</h3>
+
+    <div class="relative w-full h-[300px] md:h-[400px]">
+        <canvas id="moneyIllusionChart"></canvas>
+    </div>
+
+    <p class="text-sm text-slate-400 text-center mt-6 italic">
+        La línea verde muestra cuánto ha subido tu nómina. La línea roja muestra lo que realmente
+        puedes comprar con ella.
+    </p>
+</div>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById("moneyIllusionChart");
+        if (!canvas) return;
+
+        const initChart = () => {
+            new Chart(canvas, {
+                type: "line",
+                data: {
+                    labels: ["2000", "2004", "2008", "2012", "2016", "2020", "2024"],
+                    datasets: [
+                        {
+                            label: "Sueldo Nominal",
+                            data: [100, 115, 132, 138, 142, 155, 178],
+                            borderColor: "#00ffaa",
+                            backgroundColor: "#00ffaa",
+                            tension: 0.3,
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: "#00ffaa",
+                        },
+                        {
+                            label: "Poder de Compra Real",
+                            data: [100, 101, 102, 98, 99, 97, 95],
+                            borderColor: "#ff6b6b",
+                            backgroundColor: "#ff6b6b",
+                            tension: 0.3,
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: "#ff6b6b",
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: "index",
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: {
+                                color: "#e2e8f0",
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 12,
+                                },
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                padding: 20,
+                            },
+                        },
+                        tooltip: {
+                            backgroundColor: "rgba(15, 23, 42, 0.95)",
+                            titleColor: "#f8fafc",
+                            bodyColor: "#e2e8f0",
+                            borderColor: "rgba(255, 255, 255, 0.1)",
+                            borderWidth: 1,
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: "bold",
+                            },
+                            bodyFont: {
+                                size: 13,
+                            },
+                            displayColors: true,
+                            callbacks: {
+                                title: function (context) {
+                                    return "Año " + context[0].label;
+                                },
+                                label: function (context) {
+                                    let label = context.dataset.label || "";
+                                    if (label) {
+                                        label += ": ";
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y;
+                                    }
+                                    return label;
+                                },
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                color: "#94a3b8",
+                                font: {
+                                    size: 11,
+                                },
+                            },
+                        },
+                        y: {
+                            grid: {
+                                color: "rgba(255, 255, 255, 0.05)",
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                color: "#94a3b8",
+                                font: {
+                                    size: 11,
+                                },
+                            },
+                            suggestedMin: 80,
+                            suggestedMax: 190,
+                        },
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: "easeOutQuart",
+                    },
+                },
+            });
+        };
+
+        // Intersection Observer to trigger animation on scroll
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        initChart();
+                        observer.disconnect(); // Only initialize once
+                    }
+                });
+            },
+            { threshold: 0.2 }
+        );
+
+        observer.observe(canvas);
+    });
+</script>
