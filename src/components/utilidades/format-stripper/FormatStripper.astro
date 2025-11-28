@@ -81,7 +81,7 @@ import { Icon } from "astro-icon/components";
 
     const btnCopy = document.getElementById("btn-copy");
 
-    function cleanText(text) {
+    function cleanText(text: string) {
         return (
             text
                 // Replace multiple spaces with single space
@@ -95,12 +95,14 @@ import { Icon } from "astro-icon/components";
 
     function updateStats() {
         const text = editor.value;
-        charCount.textContent = text.length.toString();
-        wordCount.textContent =
-            text.trim() === "" ? "0" : text.trim().split(/\s+/).length.toString();
+        if (charCount) charCount.textContent = text.length.toString();
+        if (wordCount)
+            wordCount.textContent =
+                text.trim() === "" ? "0" : text.trim().split(/\s+/).length.toString();
     }
 
     function showToast(msg = "¡Copiado!") {
+        if (!toast) return;
         toast.textContent = msg;
         toast.classList.remove("translate-y-4", "opacity-0");
         setTimeout(() => {
@@ -111,7 +113,8 @@ import { Icon } from "astro-icon/components";
     // Auto-clean on paste
     editor.addEventListener("paste", (e) => {
         e.preventDefault();
-        const text = (e.clipboardData || window.clipboardData).getData("text");
+        const clipboardData = e.clipboardData || (window as any).clipboardData;
+        const text = clipboardData.getData("text");
         const cleaned = cleanText(text);
 
         // Insert cleaned text at cursor position
@@ -129,19 +132,25 @@ import { Icon } from "astro-icon/components";
     editor.addEventListener("input", updateStats);
 
     // Transformers
-    btnUpper.addEventListener("click", () => {
-        editor.value = editor.value.toUpperCase();
-        updateStats();
-    });
+    if (btnUpper) {
+        btnUpper.addEventListener("click", () => {
+            editor.value = editor.value.toUpperCase();
+            updateStats();
+        });
+    }
 
-    btnLower.addEventListener("click", () => {
-        editor.value = editor.value.toLowerCase();
-        updateStats();
-    });
+    if (btnLower) {
+        btnLower.addEventListener("click", () => {
+            editor.value = editor.value.toLowerCase();
+            updateStats();
+        });
+    }
 
     // Copy
-    btnCopy.addEventListener("click", async () => {
-        await navigator.clipboard.writeText(editor.value);
-        showToast();
-    });
+    if (btnCopy) {
+        btnCopy.addEventListener("click", async () => {
+            await navigator.clipboard.writeText(editor.value);
+            showToast();
+        });
+    }
 </script>

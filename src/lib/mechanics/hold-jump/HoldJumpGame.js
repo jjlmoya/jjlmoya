@@ -43,7 +43,7 @@ export class HoldJumpGame {
         this.mechanic.startCharge(x);
     }
 
-    handleUp(e) {
+    handleUp() {
         this.mechanic.releaseCharge();
     }
 

@@ -1,0 +1,97 @@
+---
+interface Props {
+    id?: string;
+}
+
+const { id = "toast-container" } = Astro.props;
+---
+
+<div id={id} class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+<style is:global>
+    .toast {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.25rem;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 0.75rem;
+        box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        color: #1f2937;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transform: translateY(100%);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dark .toast {
+        background: rgba(30, 41, 59, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #f1f5f9;
+    }
+
+    .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .toast-success .toast-icon {
+        color: #10b981;
+    }
+
+    .toast-error .toast-icon {
+        color: #ef4444;
+    }
+</style>
+
+<script>
+    class ToastManager {
+        container: HTMLElement | null;
+
+        constructor() {
+            this.container = document.getElementById("toast-container");
+        }
+
+        show(message: string, type: "success" | "error" | "info" = "info") {
+            if (!this.container) return;
+
+            const toast = document.createElement("div");
+            toast.className = `toast toast-${type}`;
+
+            let icon = "";
+            if (type === "success") {
+                icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+            } else if (type === "error") {
+                icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
+            } else {
+                icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            }
+
+            toast.innerHTML = `${icon}<span>${message}</span>`;
+            this.container.appendChild(toast);
+
+            // Trigger reflow
+            toast.offsetHeight;
+
+            requestAnimationFrame(() => {
+                toast.classList.add("show");
+            });
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+    }
+
+    // Expose globally
+    (window as any).toast = new ToastManager();
+</script>

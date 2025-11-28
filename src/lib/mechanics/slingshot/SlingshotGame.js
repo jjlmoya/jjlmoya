@@ -56,7 +56,7 @@ export class SlingshotGame {
             e.preventDefault();
             this.handleStart(e.touches[0]);
         }, { passive: false });
-        window.addEventListener("touchmove", (e) => {
+        window.addEventListener("touchmove", () => {
             // e.preventDefault(); // Don't prevent default on window, might block scroll? 
             // Actually for game we want to prevent scroll if touching canvas
         }, { passive: false });
@@ -88,7 +88,7 @@ export class SlingshotGame {
 
     initAudio() {
         if (!this.audioCtx) {
-            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            this.audioCtx = new (window.AudioContext || window['webkitAudioContext'])();
         }
     }
 

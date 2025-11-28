@@ -1,5 +1,5 @@
 import { MortarCalculator, VITRUVIAN_PHASES } from "./MortarCalculator";
-import type { MortarState, PhaseKey, MaterialType, CalType } from "./types";
+import type { MortarState, PhaseKey, MaterialType } from "./types";
 
 export class MortarController {
     private state: MortarState = {

@@ -234,7 +234,7 @@ export class AutorunnerGame {
         );
 
         // UI - Styled Badge
-        const padding = 20;
+
         const badgeHeight = 50;
         const badgeWidth = 180;
         const badgeX = 20;

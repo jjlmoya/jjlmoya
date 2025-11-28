@@ -109,9 +109,9 @@ import { Icon } from "astro-icon/components";
     const btnCopy = document.getElementById("btn-copy");
     const toast = document.getElementById("toast");
 
-    let currentJSON = null;
+    let currentJSON: any = null;
 
-    function formatBytes(bytes) {
+    function formatBytes(bytes: number) {
         if (bytes === 0) return "0 B";
         const k = 1024;
         const sizes = ["B", "KB", "MB"];
@@ -139,12 +139,12 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    function highlightJSON(jsonStr) {
+    function highlightJSON(jsonStr: string) {
         if (!jsonStr) return "";
 
         return jsonStr.replace(
             /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-            function (match) {
+            function (match: string) {
                 let cls = "text-orange-600 dark:text-orange-400"; // number
                 if (/^"/.test(match)) {
                     if (/:$/.test(match)) {
@@ -165,10 +165,10 @@ import { Icon } from "astro-icon/components";
     function processJSON(minify = isMinified) {
         const raw = inputEditor.value;
         if (!raw.trim()) {
-            outputCode.innerHTML = "";
+            if (outputCode) outputCode.innerHTML = "";
             setStatus("empty");
             currentJSON = null;
-            sizeInfo.textContent = "0 B";
+            if (sizeInfo) sizeInfo.textContent = "0 B";
             return;
         }
 
@@ -176,14 +176,15 @@ import { Icon } from "astro-icon/components";
             const parsed = JSON.parse(raw);
             currentJSON = parsed;
             const formatted = JSON.stringify(parsed, null, minify ? 0 : 2);
-            outputCode.innerHTML = highlightJSON(formatted);
+            if (outputCode) outputCode.innerHTML = highlightJSON(formatted);
             setStatus("valid");
-            sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
+            if (sizeInfo) sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
         } catch (e) {
             currentJSON = null;
-            outputCode.innerHTML = `<span class="text-red-500 font-mono">${e.message}</span>`;
+            if (outputCode)
+                outputCode.innerHTML = `<span class="text-red-500 font-mono">${(e as Error).message}</span>`;
             setStatus("invalid");
-            sizeInfo.textContent = formatBytes(new Blob([raw]).size);
+            if (sizeInfo) sizeInfo.textContent = formatBytes(new Blob([raw]).size);
         }
     }
 
@@ -207,9 +208,9 @@ import { Icon } from "astro-icon/components";
 
             // If successful, update OUTPUT only (do not touch input)
             const formatted = JSON.stringify(parsed, null, isMinified ? 0 : 2);
-            outputCode.innerHTML = highlightJSON(formatted);
+            if (outputCode) outputCode.innerHTML = highlightJSON(formatted);
             setStatus("valid");
-            sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
+            if (sizeInfo) sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
 
             showToast("JSON reparado (Visualización)");
         } catch (e) {
@@ -237,8 +238,8 @@ import { Icon } from "astro-icon/components";
             // inputEditor.value = ... REMOVED
             // Re-render output with new state
             const formatted = JSON.stringify(currentJSON, null, isMinified ? 0 : 2);
-            outputCode.innerHTML = highlightJSON(formatted);
-            sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
+            if (outputCode) outputCode.innerHTML = highlightJSON(formatted);
+            if (sizeInfo) sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
 
             // Update button state
             if (isMinified) {
@@ -254,7 +255,7 @@ import { Icon } from "astro-icon/components";
     btnFix?.addEventListener("click", fixJSON);
 
     btnCopy?.addEventListener("click", async () => {
-        if (outputCode.textContent) {
+        if (outputCode && outputCode.textContent) {
             await navigator.clipboard.writeText(outputCode.textContent);
             showToast();
         }

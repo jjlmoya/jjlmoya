@@ -323,7 +323,7 @@ import { Icon } from "astro-icon/components";
         // Update Info Grid
         if (infoKey) infoKey.textContent = e.key === " " ? "(space)" : e.key;
         if (infoCode) infoCode.textContent = e.code;
-        if (infoWhich) infoWhich.textContent = e.which.toString();
+        if (infoWhich) infoWhich.textContent = (e as any).which.toString();
 
         // Location mapping
         const locations = ["Standard", "Left", "Right", "Numpad"];
@@ -339,9 +339,9 @@ import { Icon } from "astro-icon/components";
         const keyQuote = e.key === "'" ? '"' : "'";
         if (snippetKey) snippetKey.textContent = `if (e.key === ${keyQuote}${e.key}${keyQuote})`;
         if (snippetCode) snippetCode.textContent = `if (e.code === '${e.code}')`;
-        if (snippetWhich) snippetWhich.textContent = `if (e.which === ${e.which})`;
+        if (snippetWhich) snippetWhich.textContent = `if (e.which === ${(e as any).which})`;
         if (snippetJson)
-            snippetJson.textContent = `{ key: '${e.key}', code: '${e.code}', which: ${e.which} }`;
+            snippetJson.textContent = `{ key: '${e.key}', code: '${e.code}', which: ${(e as any).which} }`;
     }
 
     function updateModifier(el: HTMLElement | null, isActive: boolean) {
@@ -375,9 +375,6 @@ import { Icon } from "astro-icon/components";
                 await navigator.clipboard.writeText(code.textContent);
 
                 // Visual feedback
-                const originalBg = btn.classList.contains("dark:bg-slate-900/50")
-                    ? "dark:bg-slate-900/50"
-                    : "bg-slate-100";
                 btn.classList.remove("bg-slate-100", "dark:bg-slate-900/50");
                 btn.classList.add("bg-green-500/10", "border-green-500", "text-green-600");
 

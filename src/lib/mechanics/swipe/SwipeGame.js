@@ -139,7 +139,7 @@ export class SwipeGame {
     drawArrows() {
         const cx = this.width / 2;
         const cy = this.height / 2;
-        const size = 40;
+
         const offset = 60;
 
         const arrows = [

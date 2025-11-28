@@ -117,7 +117,7 @@ export class SizeMattersGame {
         // Physics
         // Mass is proportional to size area (roughly)
         // Let's say mass = size / 10
-        const mass = this.player.size / 10;
+
 
         // Gravity: Heavier falls faster (simplified physics for fun)
         // Small = floaty (low gravity), Big = heavy (high gravity)
@@ -126,7 +126,7 @@ export class SizeMattersGame {
         this.player.vy += gravity * dt;
 
         // Air resistance / Terminal velocity
-        const drag = this.player.isGrowing ? 0.99 : 0.95; // Small is more affected by air? No, let's keep simple
+
         this.player.vy *= 0.99;
 
         this.player.y += this.player.vy * dt;

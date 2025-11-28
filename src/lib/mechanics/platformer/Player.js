@@ -1,4 +1,4 @@
-import { InputHandler } from './InputHandler.js';
+
 
 export class Player {
     constructor(game) {
