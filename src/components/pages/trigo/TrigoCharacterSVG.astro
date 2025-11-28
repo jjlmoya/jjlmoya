@@ -1,0 +1,106 @@
+---
+interface Props {
+    role: "hunter" | "gatherer";
+}
+
+const { role } = Astro.props;
+
+const isHunter = role === "hunter";
+---
+
+<svg viewBox="0 0 100 100" class="w-full h-full overflow-visible">
+    <defs>
+        <filter id="rough-paper" x="0%" y="0%" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" />
+            <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="2">
+                <feDistantLight azimuth="45" elevation="60" />
+            </feDiffuseLighting>
+            <feComposite operator="in" in2="SourceGraphic" />
+        </filter>
+    </defs>
+
+    {isHunter ? (
+        <!-- HUNTER -->
+        <g class="character hunter">
+            <!-- Body -->
+            <path d="M20,100 L25,70 C25,70 15,60 20,50 L80,50 C85,60 75,70 75,70 L80,100 Z" fill="#5D4037" stroke="black" stroke-width="2" />
+            <!-- Spear (Behind) -->
+            <line x1="85" y1="40" x2="85" y2="100" stroke="#8D6E63" stroke-width="3" />
+            <path d="M85,40 L80,25 L90,25 Z" fill="#B0BEC5" stroke="black" stroke-width="1" />
+            
+            <!-- Head Group -->
+            <g class="head-group origin-bottom">
+                <!-- Hair/Head Base -->
+                <circle cx="50" cy="35" r="25" fill="#FFCCBC" stroke="black" stroke-width="2" />
+                <!-- Wild Hair -->
+                <path d="M25,35 C20,20 30,10 50,5 C70,10 80,20 75,35" fill="#212121" stroke="black" stroke-width="2" />
+                
+                <!-- Eyes -->
+                <g transform="translate(0, 0)">
+                    <circle cx="42" cy="30" r="6" fill="white" stroke="black" stroke-width="1" />
+                    <circle cx="42" cy="30" r="1" fill="black" />
+                    <circle cx="58" cy="30" r="6" fill="white" stroke="black" stroke-width="1" />
+                    <circle cx="58" cy="30" r="1" fill="black" />
+                </g>
+
+                <!-- Jaw/Mouth (Animated) -->
+                <g class="jaw animate-talk">
+                    <path d="M40,45 Q50,55 60,45" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" />
+                </g>
+            </g>
+        </g>
+    ) : (
+        <!-- GATHERER -->
+        <g class="character gatherer">
+            <!-- Body -->
+            <path d="M25,100 L30,60 C20,60 25,50 30,50 L70,50 C75,50 80,60 70,60 L75,100 Z" fill="#C5E1A5" stroke="black" stroke-width="2" />
+            <!-- Wheat Stalk -->
+            <path d="M20,60 Q10,40 15,20" fill="none" stroke="#FFB300" stroke-width="2" />
+            <circle cx="15" cy="20" r="3" fill="#FFB300" />
+            
+            <!-- Head Group -->
+            <g class="head-group origin-bottom">
+                <!-- Head Base -->
+                <circle cx="50" cy="35" r="23" fill="#FFE0B2" stroke="black" stroke-width="2" />
+                <!-- Simple Hair/Hat -->
+                <path d="M27,35 C27,20 35,15 50,15 C65,15 73,20 73,35" fill="#795548" stroke="black" stroke-width="2" />
+                
+                <!-- Eyes -->
+                <g transform="translate(0, 0)">
+                    <circle cx="43" cy="32" r="5" fill="white" stroke="black" stroke-width="1" />
+                    <circle cx="43" cy="32" r="1" fill="black" />
+                    <circle cx="57" cy="32" r="5" fill="white" stroke="black" stroke-width="1" />
+                    <circle cx="57" cy="32" r="1" fill="black" />
+                </g>
+
+                <!-- Jaw/Mouth (Animated) -->
+                <g class="jaw animate-talk">
+                    <path d="M42,45 L58,45 L50,52 Z" fill="#3E2723" stroke="black" stroke-width="1" />
+                </g>
+            </g>
+        </g>
+    )}
+</svg>
+
+<style>
+    .animate-talk {
+        animation: talk 0.2s infinite alternate;
+        transform-origin: 50% 45px;
+    }
+    
+    @keyframes talk {
+        0% { transform: translateY(0) scaleY(1); }
+        100% { transform: translateY(3px) scaleY(0.5); }
+    }
+
+    /* Slight head bob for liveliness */
+    .head-group {
+        animation: bob 2s infinite ease-in-out;
+        transform-origin: 50% 50px;
+    }
+
+    @keyframes bob {
+        0%, 100% { transform: rotate(-2deg); }
+        50% { transform: rotate(2deg); }
+    }
+</style>
