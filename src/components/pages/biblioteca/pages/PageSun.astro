@@ -7,19 +7,34 @@ const { side } = Astro.props;
 
 {side === 'left' ? (
     <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-        <!-- Sun Visual -->
+        <!-- Sun Visual: The Living Star -->
         <div class="relative w-full h-full flex items-center justify-center">
-             <!-- Sun Circle -->
-             <div class="w-32 h-32 rounded-full bg-amber-500/20 blur-xl absolute animate-pulse"></div>
-             <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-300 shadow-[0_0_50px_rgba(245,158,11,0.5)] relative z-10"></div>
              
-             <!-- Rays -->
-             <div class="absolute inset-0 flex items-center justify-center animate-spin-slow">
-                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-0"></div>
-                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-45"></div>
-                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-90"></div>
-                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-[135deg]"></div>
+             <!-- Solar Corona (Outer Glow) -->
+             <div class="absolute w-64 h-64 bg-amber-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
+             <div class="absolute w-48 h-48 bg-yellow-500/10 rounded-full blur-2xl animate-pulse-slower"></div>
+
+             <!-- The Sun Body -->
+             <div class="relative w-32 h-32 rounded-full overflow-hidden shadow-[0_0_60px_rgba(245,158,11,0.6)]">
+                 <!-- Surface Texture (CSS Gradient Animation) -->
+                 <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 via-amber-500 to-red-600 animate-solar-flare"></div>
+                 
+                 <!-- Sunspots / Surface Activity -->
+                 <div class="absolute top-0 left-0 w-full h-full opacity-50 mix-blend-overlay animate-spin-slow">
+                     <div class="absolute top-4 left-8 w-4 h-4 bg-black/20 rounded-full blur-[2px]"></div>
+                     <div class="absolute bottom-6 right-6 w-6 h-6 bg-black/10 rounded-full blur-[3px]"></div>
+                     <div class="absolute top-1/2 left-1/2 w-8 h-8 bg-yellow-200/40 rounded-full blur-md"></div>
+                 </div>
              </div>
+
+             <!-- Solar Flares (Rays) -->
+             <div class="absolute inset-0 flex items-center justify-center animate-spin-very-slow opacity-40">
+                 <div class="absolute w-1 h-48 bg-gradient-to-b from-transparent via-amber-400/50 to-transparent blur-[1px]"></div>
+                 <div class="absolute w-48 h-1 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent blur-[1px]"></div>
+                 <div class="absolute w-1 h-40 bg-gradient-to-b from-transparent via-yellow-300/30 to-transparent rotate-45 blur-[1px]"></div>
+                 <div class="absolute w-40 h-1 bg-gradient-to-r from-transparent via-yellow-300/30 to-transparent rotate-45 blur-[1px]"></div>
+             </div>
+
         </div>
     </div>
 ) : (
@@ -34,19 +49,39 @@ const { side } = Astro.props;
         </div>
         
         <p class="text-xl leading-relaxed text-[#e7e5e4]" style="font-family: 'Cinzel', serif; font-variant: small-caps;">
-            LA BOLA DE FUEGO GIGANTE GIRA PARA VOSOTROS. <span id="sun-text-count" class="text-yellow-600">0 VECES</span> HA VUELTO A SALIR PARA VER SI SEGUÍAIS AHÍ. PERSISTENTE.
+            LA BOLA DE FUEGO GIGANTE GIRA PARA VOSOTROS. <span id="sun-text-count" class="text-yellow-600">0 VECES</span> HA VUELTO A SALIR PARA VER SI SEGUÍAIS AHÍ. QUÉ TOZUDEZ.
         </p>
     </div>
 )}
 
 <style>
+    @keyframes solar-flare {
+        0% { transform: scale(1.2) translate(0,0); }
+        50% { transform: scale(1.3) translate(-5px, -5px); }
+        100% { transform: scale(1.2) translate(0,0); }
+    }
     @keyframes spin-slow {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
     }
-    .animate-spin-slow {
-        animation: spin-slow 60s linear infinite;
+    @keyframes spin-very-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
+    @keyframes pulse-slow {
+        0%, 100% { opacity: 0.5; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.1); }
+    }
+    @keyframes pulse-slower {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.2); }
+    }
+
+    .animate-solar-flare { animation: solar-flare 10s ease-in-out infinite alternate; }
+    .animate-spin-slow { animation: spin-slow 30s linear infinite; }
+    .animate-spin-very-slow { animation: spin-very-slow 120s linear infinite; }
+    .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
+    .animate-pulse-slower { animation: pulse-slower 7s ease-in-out infinite; }
 </style>
 
 <script>

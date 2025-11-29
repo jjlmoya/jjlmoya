@@ -6,25 +6,40 @@ const { side } = Astro.props;
 ---
 
 {side === 'left' ? (
-    <div class="flex items-center justify-center h-full w-full overflow-hidden relative">
-        <!-- Winding Path Visual -->
-        <svg viewBox="0 0 200 200" class="w-full h-full opacity-20 text-[#e7e5e4]">
-            <path d="M10,190 C50,190 50,150 90,150 C130,150 130,110 170,110 C210,110 210,70 170,70 C130,70 130,30 90,30" 
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
+    <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
+        <!-- Steps Visual: Literal Walking Footprints -->
+        <div class="relative w-full h-full flex items-center justify-center">
             
-            <!-- Footprints along the path (Static for now) -->
-            <circle cx="20" cy="190" r="2" fill="currentColor" />
-            <circle cx="50" cy="180" r="2" fill="currentColor" />
-            <circle cx="80" cy="160" r="2" fill="currentColor" />
-        </svg>
-        
-        <div class="absolute inset-0 flex items-center justify-center">
-             <span class="text-6xl opacity-40">👣</span>
+            <!-- Walking Path Container -->
+            <div class="relative w-32 h-64 flex flex-col items-center justify-end overflow-hidden">
+                <!-- Footprints generated via loop for animation -->
+                <div class="absolute bottom-0 w-full h-full">
+                    <!-- Right Foot 1 -->
+                    <svg class="absolute bottom-4 right-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-r" viewBox="0 0 100 250" style="animation-delay: 0s;">
+                         <path fill="currentColor" d="M30,0 C50,0 70,20 70,50 L70,180 C70,220 50,250 30,250 C10,250 0,220 0,180 L0,50 C0,20 10,0 30,0 Z" />
+                    </svg>
+                    
+                    <!-- Left Foot 1 -->
+                    <svg class="absolute bottom-20 left-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-l" viewBox="0 0 100 250" style="animation-delay: 1s;">
+                         <path fill="currentColor" d="M30,0 C50,0 70,20 70,50 L70,180 C70,220 50,250 30,250 C10,250 0,220 0,180 L0,50 C0,20 10,0 30,0 Z" />
+                    </svg>
+
+                    <!-- Right Foot 2 -->
+                    <svg class="absolute bottom-36 right-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-r" viewBox="0 0 100 250" style="animation-delay: 2s;">
+                         <path fill="currentColor" d="M30,0 C50,0 70,20 70,50 L70,180 C70,220 50,250 30,250 C10,250 0,220 0,180 L0,50 C0,20 10,0 30,0 Z" />
+                    </svg>
+
+                    <!-- Left Foot 2 -->
+                    <svg class="absolute bottom-52 left-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-l" viewBox="0 0 100 250" style="animation-delay: 3s;">
+                         <path fill="currentColor" d="M30,0 C50,0 70,20 70,50 L70,180 C70,220 50,250 30,250 C10,250 0,220 0,180 L0,50 C0,20 10,0 30,0 Z" />
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 ) : (
     <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-        <h3 class="font-serif text-3xl text-orange-400/60 uppercase tracking-widest">El Camino</h3>
+        <h3 class="font-serif text-3xl text-orange-500/60 uppercase tracking-widest">El Camino</h3>
         
         <div class="space-y-2">
             <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="steps-count">
@@ -34,17 +49,32 @@ const { side } = Astro.props;
         </div>
         
         <p class="text-xl leading-relaxed text-[#e7e5e4]" style="font-family: 'Cinzel', serif; font-variant: small-caps;">
-            ...<span id="steps-km" class="text-orange-400">0 KM</span> RECORRIDOS. AL FINAL LLEGÁIS AL MISMO SITIO, PERO PARECE QUE OS GUSTA DAR RODEOS. SUPONGO QUE ESO ES VIVIR. YO PREFIERO VIAJAR A CABALLO. EL MÍO SE LLAMA BINKY. ES UN BUEN CHICO.
+            ...<span id="steps-km" class="text-orange-500">0 KM</span> RECORRIDOS. AL FINAL LLEGÁIS AL MISMO SITIO, PERO PARECE QUE OS GUSTA DAR RODEOS. SUPONGO QUE ESO ES VIVIR. YO PREFIERO VIAJAR A CABALLO. EL MÍO SE LLAMA BINKY. ES UN BUEN CHICO.
         </p>
     </div>
 )}
+
+<style>
+    @keyframes step-appear {
+        0% { opacity: 0; transform: scale(0.9); }
+        20% { opacity: 0.6; transform: scale(1); }
+        80% { opacity: 0.6; transform: scale(1); }
+        100% { opacity: 0; transform: scale(0.95); }
+    }
+
+    .animate-step-l {
+        animation: step-appear 4s ease-in-out infinite;
+    }
+    .animate-step-r {
+        animation: step-appear 4s ease-in-out infinite;
+    }
+</style>
 
 <script>
     import { calculateStepsStats } from "../../../../utils/libraryLogic";
 
     const countEl = document.getElementById('steps-count');
     const kmEl = document.getElementById('steps-km');
-    const worldEl = document.getElementById('steps-world');
 
     document.addEventListener('update-life-stats', (e: any) => {
         const { stats } = e.detail;
@@ -53,11 +83,8 @@ const { side } = Astro.props;
         const { stepsTaken } = calculateStepsStats(stats.daysAlive);
         // Avg step length ~0.762m
         const km = (stepsTaken * 0.762) / 1000;
-        const worldCircumference = 40075;
-        const worldTrips = (km / worldCircumference).toFixed(1);
 
         countEl.innerText = stepsTaken.toLocaleString();
         if (kmEl) kmEl.innerText = `${Math.floor(km).toLocaleString()} KM`;
-        if (worldEl) worldEl.innerText = `${worldTrips} VUELTAS`;
     });
 </script>

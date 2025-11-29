@@ -7,7 +7,7 @@ const { side } = Astro.props;
 
 {side === 'left' ? (
     <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-        <!-- Growth Visual -->
+        <!-- Hair Visual -->
         <div class="relative w-full h-full flex items-center justify-center">
              <!-- Abstract Hair Strands -->
              <svg viewBox="0 0 200 200" class="w-64 h-64 opacity-30 text-[#e7e5e4]">
@@ -19,7 +19,7 @@ const { side } = Astro.props;
     </div>
 ) : (
     <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-        <h3 class="font-serif text-3xl text-emerald-700/60 uppercase tracking-widest">El Crecimiento</h3>
+        <h3 class="font-serif text-3xl text-emerald-700/60 uppercase tracking-widest">El Cabello</h3>
         
         <div class="space-y-2">
             <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="hair-count">
@@ -29,7 +29,7 @@ const { side } = Astro.props;
         </div>
         
         <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
-            LO CORTÁIS Y VUELVE A SALIR. <span id="nails-count" class="text-emerald-700">0 METROS</span> DE UÑAS HAN ARAÑADO EL TIEMPO. PERSISTENTE.
+            LO CORTÁIS Y VUELVE A SALIR. UNA Y OTRA VEZ. PERSISTENTE.
         </p>
     </div>
 )}
@@ -48,15 +48,13 @@ const { side } = Astro.props;
     import { calculateGrowthStats } from "../../../../utils/libraryLogic";
 
     const countEl = document.getElementById('hair-count');
-    const nailsEl = document.getElementById('nails-count');
 
     document.addEventListener('update-life-stats', (e: any) => {
         const { stats } = e.detail;
         if (!countEl || !stats) return;
 
-        const { hairMeters, nailsMeters } = calculateGrowthStats(stats.daysAlive);
+        const { hairMeters } = calculateGrowthStats(stats.daysAlive);
         
         countEl.innerText = hairMeters.toFixed(2).replace('.', ',');
-        if (nailsEl) nailsEl.innerText = `${nailsMeters.toFixed(2)} METROS`;
     });
 </script>
