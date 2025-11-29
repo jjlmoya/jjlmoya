@@ -230,21 +230,36 @@ export const shareElementAsImage = async ({
                 navigator.canShare({ files: [file] })
             ) {
                 try {
-                    // Backup: Copy text to clipboard silently in case the app drops it (common in WhatsApp/Instagram)
-                    try {
-                        if (navigator.clipboard && navigator.clipboard.writeText) {
-                            await navigator.clipboard.writeText(fullShareText);
-                            console.log("[Share] Text copied to clipboard as backup.");
-                        }
-                    } catch (e) {
-                        console.warn("[Share] Failed to copy backup text:", e);
+                    // Backup: Copy text to clipboard silently in case the app drops it (common in WhatsApp/Instagram/iOS)
+                    // We use the robust copyToClipboard helper to ensure fallback to execCommand if needed
+                    console.log("[Share] Creating text backup in clipboard...");
+                    await copyToClipboard(fullShareText);
+
+                    if ((window as any).toast) {
+                        (window as any).toast.show("Texto copiado. Pégalo al compartir.", "success");
                     }
 
-                    await navigator.share({
-                        title: title,
-                        text: fullShareText,
-                        files: [file],
-                    });
+                    console.log(`DEBUG: Intentando compartir.\nTexto: ${fullShareText}\nURL: ${url}`);
+
+                    // OS Detection for Share Quirks
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+
+                    const shareData: any = {
+                        files: [file]
+                    };
+
+                    if (isIOS) {
+                        // iOS often fails if we mix types. We prioritize the file.
+                        // The text is already in the clipboard.
+                        console.log("[Share] iOS detected. Sharing file only.");
+                    } else {
+                        // Android/Windows: Try to send text and title.
+                        // We DO NOT send 'url' as a separate param because it causes some Androids to drop the file.
+                        shareData.text = fullShareText;
+                        shareData.title = title;
+                    }
+
+                    await navigator.share(shareData);
                     onSuccess?.();
                 } catch (err: any) {
                     console.error("[Share] Image share failed:", err);
