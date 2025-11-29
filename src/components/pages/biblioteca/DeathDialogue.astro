@@ -46,14 +46,12 @@ const { text, onComplete, speed = 50, delay = 0, autoStart = true, mode = "char"
     </p>
 </div>
 
-<script>
-    // Use a unique identifier for this script execution to avoid duplicate listeners if possible,
-    // though Astro scripts run once per page load usually.
-
-    function initDeathDialogue() {
+<script is:inline>
+    document.addEventListener("astro:page-load", () => {
         const containers = document.querySelectorAll(".death-dialogue-container");
 
         containers.forEach((container) => {
+            // Check if already initialized to prevent double-binding in some edge cases
             if (container.hasAttribute("data-initialized")) return;
             container.setAttribute("data-initialized", "true");
 
@@ -87,17 +85,12 @@ const { text, onComplete, speed = 50, delay = 0, autoStart = true, mode = "char"
             }
 
             // Listen for manual trigger
+            // We use a named handler if we wanted to remove it, but since these are fresh elements, it's fine.
             container.addEventListener("start-typing", () => {
                 startTyping();
             });
         });
-    }
-
-    // Run on load
-    initDeathDialogue();
-
-    // Run on view transitions if applicable (optional safety)
-    document.addEventListener("astro:page-load", initDeathDialogue);
+    });
 </script>
 
 <style>

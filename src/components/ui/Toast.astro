@@ -50,48 +50,50 @@ const { id = "toast-container" } = Astro.props;
     }
 </style>
 
-<script>
-    class ToastManager {
-        container: HTMLElement | null;
-
-        constructor() {
-            this.container = document.getElementById("toast-container");
-        }
-
-        show(message: string, type: "success" | "error" | "info" = "info") {
-            if (!this.container) return;
-
-            const toast = document.createElement("div");
-            toast.className = `toast toast-${type}`;
-
-            let icon = "";
-            if (type === "success") {
-                icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
-            } else if (type === "error") {
-                icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
-            } else {
-                icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+<script is:inline>
+    document.addEventListener("astro:page-load", () => {
+        class ToastManager {
+            constructor() {
+                this.container = document.getElementById("toast-container");
             }
 
-            toast.innerHTML = `${icon}<span>${message}</span>`;
-            this.container.appendChild(toast);
+            show(message, type = "info") {
+                if (!this.container) {
+                    this.container = document.getElementById("toast-container");
+                    if (!this.container) return;
+                }
 
-            // Trigger reflow
-            toast.offsetHeight;
+                const toast = document.createElement("div");
+                toast.className = `toast toast-${type}`;
 
-            requestAnimationFrame(() => {
-                toast.classList.add("show");
-            });
+                let icon = "";
+                if (type === "success") {
+                    icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+                } else if (type === "error") {
+                    icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
+                } else {
+                    icon = `<svg class="w-5 h-5 toast-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                }
 
-            setTimeout(() => {
-                toast.classList.remove("show");
+                toast.innerHTML = `${icon}<span>${message}</span>`;
+                this.container.appendChild(toast);
+
+                // Trigger reflow
+                toast.offsetHeight;
+
+                requestAnimationFrame(() => {
+                    toast.classList.add("show");
+                });
+
                 setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 3000);
+                    toast.classList.remove("show");
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }, 3000);
+            }
         }
-    }
 
-    // Expose globally
-    (window as any).toast = new ToastManager();
+        window.toast = new ToastManager();
+    });
 </script>

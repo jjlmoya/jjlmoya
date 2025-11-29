@@ -296,280 +296,348 @@ import BookNavigation from "./BookNavigation.astro";
     import { calculateLifeStats } from "../../../utils/libraryLogic";
     import { shareElementAsImage } from "../../../utils/share";
 
-    let currentPage = 0;
-    const totalPages = 18;
-    const container = document.getElementById("life-book-container");
-    const bookInner = document.getElementById("book-inner-content");
-    const visuals = document.querySelectorAll(".book-page-visual");
-    const texts = document.querySelectorAll(".book-page-text");
-    const prevBtn = document.getElementById("prev-page") as HTMLButtonElement;
-    const nextBtn = document.getElementById("next-page") as HTMLButtonElement;
-    const leftNum = document.getElementById("page-num-left");
-    const rightNum = document.getElementById("page-num-right");
-    const shareBtn = document.getElementById("share-tear-btn");
-    const warningModal = document.getElementById("tear-warning-modal");
-    const warningContent = document.getElementById("tear-warning-content");
-    const cancelTearBtn = document.getElementById("cancel-tear");
-    const confirmTearBtn = document.getElementById("confirm-tear");
+    (window as any).calculateLifeStats = calculateLifeStats;
+    (window as any).shareElementAsImage = shareElementAsImage;
+</script>
 
-    // State for torn pages (persisted in localStorage)
-    const getTornPages = () => JSON.parse(localStorage.getItem("life-book-torn-pages") || "[]");
-    const addTornPage = (pageIndex: number) => {
-        const torn = getTornPages();
-        if (!torn.includes(pageIndex)) {
-            torn.push(pageIndex);
-            localStorage.setItem("life-book-torn-pages", JSON.stringify(torn));
-        }
-    };
+<script is:inline>
+    document.addEventListener("astro:page-load", () => {
+        let currentPage = 0;
+        const totalPages = 18;
 
-    // Initialize
-    document.addEventListener("init-life-book", (e: any) => {
-        const { year, month } = e.detail;
-        const birthdate = new Date(year, month, 1);
-        const stats = calculateLifeStats(birthdate);
+        // Define variables for DOM elements
+        let container = null;
+        let bookInner = null;
+        let visuals = null;
+        let texts = null;
+        let prevBtn = null;
+        let nextBtn = null;
+        let leftNum = null;
+        let rightNum = null;
+        let shareBtn = null;
+        let warningModal = null;
+        let warningContent = null;
+        let cancelTearBtn = null;
+        let confirmTearBtn = null;
 
-        if (container) container.classList.remove("opacity-0");
+        // State for torn pages
+        const getTornPages = () => JSON.parse(localStorage.getItem("life-book-torn-pages") || "[]");
+        const addTornPage = (pageIndex) => {
+            const torn = getTornPages();
+            if (!torn.includes(pageIndex)) {
+                torn.push(pageIndex);
+                localStorage.setItem("life-book-torn-pages", JSON.stringify(torn));
+            }
+        };
 
-        // Broadcast stats to all pages
-        const event = new CustomEvent("update-life-stats", {
-            detail: { stats, birthdate },
-        });
-        document.dispatchEvent(event);
+        // Helper to refresh DOM references
+        const refreshDOMRefs = () => {
+            container = document.getElementById("life-book-container");
+            bookInner = document.getElementById("book-inner-content");
+            visuals = document.querySelectorAll(".book-page-visual");
+            texts = document.querySelectorAll(".book-page-text");
+            prevBtn = document.getElementById("prev-page");
+            nextBtn = document.getElementById("next-page");
+            leftNum = document.getElementById("page-num-left");
+            rightNum = document.getElementById("page-num-right");
+            shareBtn = document.getElementById("share-tear-btn");
+            warningModal = document.getElementById("tear-warning-modal");
+            warningContent = document.getElementById("tear-warning-content");
+            cancelTearBtn = document.getElementById("cancel-tear");
+            confirmTearBtn = document.getElementById("confirm-tear");
+        };
 
-        showPage(0);
-    });
-
-    const showPage = (index: number) => {
-        // Check if page is torn
-        const tornPages = getTornPages();
-        if (tornPages.includes(index)) {
-            // If torn, show empty/torn state or skip?
-            // Let's show a "torn" placeholder
-            showTornPage(index);
-        } else {
-            renderPageContent(index);
-        }
-
-        // Update Buttons
-        if (prevBtn) {
-            prevBtn.disabled = index === 0;
-            prevBtn.style.opacity = index === 0 ? "0" : "1";
-            prevBtn.style.pointerEvents = index === 0 ? "none" : "auto";
-        }
-        if (nextBtn) {
-            nextBtn.disabled = index === totalPages - 1;
-            nextBtn.style.opacity = index === totalPages - 1 ? "0" : "1";
-            nextBtn.style.pointerEvents = index === totalPages - 1 ? "none" : "auto";
-        }
-
-        currentPage = index;
-    };
-
-    const renderPageContent = (index: number) => {
-        // Hide all
-        visuals.forEach((el) => el.classList.add("hidden"));
-        texts.forEach((el) => el.classList.add("hidden"));
-
-        // Reset book style if it was torn previously
-        if (bookInner) {
-            bookInner.style.transform = "none";
-            bookInner.style.opacity = "1";
-        }
-
-        // Show current
-        const currentVisual = document.querySelector(`.book-page-visual[data-page="${index}"]`);
-        const currentText = document.querySelector(`.book-page-text[data-page="${index}"]`);
-
-        if (currentVisual) {
-            currentVisual.classList.remove("hidden");
-            currentVisual.classList.add("animate-fade-in");
-        }
-        if (currentText) {
-            currentText.classList.remove("hidden");
-            currentText.classList.add("animate-fade-in");
-        }
-
-        // Update Numbers
-        if (leftNum) leftNum.innerText = index === 0 ? "" : (index * 2).toString();
-        if (rightNum) rightNum.innerText = index === 0 ? "" : (index * 2 + 1).toString();
-
-        // Show Share Button (only for content pages, not intro or final)
-        if (shareBtn) {
-            if (index > 0 && index < totalPages - 1) {
-                shareBtn.style.opacity = "1";
-                shareBtn.style.pointerEvents = "auto";
+        // Navigation Logic
+        const handleNavigation = (direction) => {
+            if (direction === "prev") {
+                if (currentPage > 0) showPage(currentPage - 1);
             } else {
+                if (currentPage < totalPages - 1) showPage(currentPage + 1);
+            }
+        };
+
+        const attachListener = (btn, direction) => {
+            // Clone to remove old listeners if any (simple way to clear previous event handlers)
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode?.replaceChild(newBtn, btn);
+
+            // Update reference
+            if (direction === "prev") prevBtn = newBtn;
+            else nextBtn = newBtn;
+
+            newBtn.addEventListener(
+                "touchstart",
+                (e) => {
+                    if (newBtn.disabled) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleNavigation(direction);
+                },
+                { passive: false }
+            );
+
+            newBtn.addEventListener("click", (e) => {
+                if (newBtn.disabled) return;
+                e.preventDefault();
+                handleNavigation(direction);
+            });
+        };
+
+        // Initialization Logic
+        const initBook = (year, month) => {
+            refreshDOMRefs(); // Ensure we have the latest DOM
+
+            const birthdate = new Date(year, month, 1);
+
+            // Use global function
+            const stats = window.calculateLifeStats ? window.calculateLifeStats(birthdate) : {};
+
+            if (container) {
+                container.classList.remove("opacity-0");
+            }
+
+            // Broadcast stats
+            const event = new CustomEvent("update-life-stats", {
+                detail: { stats, birthdate },
+            });
+            document.dispatchEvent(event);
+
+            // Setup Navigation
+            if (prevBtn) attachListener(prevBtn, "prev");
+            if (nextBtn) attachListener(nextBtn, "next");
+
+            // Setup Tear Logic
+            if (shareBtn) {
+                shareBtn.onclick = () => {
+                    if (warningModal && warningContent) {
+                        warningModal.classList.remove("hidden");
+                        setTimeout(() => {
+                            warningModal?.classList.remove("opacity-0");
+                            warningContent?.classList.remove("scale-95");
+                            warningContent?.classList.add("scale-100");
+                        }, 10);
+                    }
+                };
+            }
+
+            if (cancelTearBtn) {
+                cancelTearBtn.onclick = () => {
+                    if (warningModal && warningContent) {
+                        warningModal.classList.add("opacity-0");
+                        warningContent.classList.remove("scale-100");
+                        warningContent.classList.add("scale-95");
+                        setTimeout(() => {
+                            warningModal?.classList.add("hidden");
+                        }, 300);
+                    }
+                };
+            }
+
+            if (confirmTearBtn) {
+                confirmTearBtn.onclick = async () => {
+                    await performTear();
+                };
+            }
+
+            // Reset and Show
+            currentPage = 0;
+            showPage(0);
+        };
+
+        const handleInitEvent = (e) => {
+            const { year, month } = e.detail;
+            initBook(year, month);
+        };
+
+        const showPage = (index) => {
+            const tornPages = getTornPages();
+            if (tornPages.includes(index)) {
+                showTornPage(index);
+            } else {
+                renderPageContent(index);
+            }
+
+            if (prevBtn) {
+                prevBtn.disabled = index === 0;
+                prevBtn.style.opacity = index === 0 ? "0" : "1";
+                prevBtn.style.pointerEvents = index === 0 ? "none" : "auto";
+            }
+            if (nextBtn) {
+                nextBtn.disabled = index === totalPages - 1;
+                nextBtn.style.opacity = index === totalPages - 1 ? "0" : "1";
+                nextBtn.style.pointerEvents = index === totalPages - 1 ? "none" : "auto";
+            }
+
+            currentPage = index;
+        };
+
+        const renderPageContent = (index) => {
+            if (!visuals || !texts) return;
+
+            visuals.forEach((el) => el.classList.add("hidden"));
+            texts.forEach((el) => el.classList.add("hidden"));
+
+            if (bookInner) {
+                bookInner.style.transform = "none";
+                bookInner.style.opacity = "1";
+            }
+
+            const currentVisual = document.querySelector(`.book-page-visual[data-page="${index}"]`);
+            const currentText = document.querySelector(`.book-page-text[data-page="${index}"]`);
+
+            if (currentVisual) {
+                currentVisual.classList.remove("hidden");
+                currentVisual.classList.add("animate-fade-in");
+            }
+            if (currentText) {
+                currentText.classList.remove("hidden");
+                currentText.classList.add("animate-fade-in");
+            }
+
+            if (leftNum) leftNum.innerText = index === 0 ? "" : (index * 2).toString();
+            if (rightNum) rightNum.innerText = index === 0 ? "" : (index * 2 + 1).toString();
+
+            if (shareBtn) {
+                if (index > 0 && index < totalPages - 1) {
+                    shareBtn.style.opacity = "1";
+                    shareBtn.style.pointerEvents = "auto";
+                } else {
+                    shareBtn.style.opacity = "0";
+                    shareBtn.style.pointerEvents = "none";
+                }
+            }
+        };
+
+        const showTornPage = (index) => {
+            if (!visuals || !texts) return;
+            visuals.forEach((el) => el.classList.add("hidden"));
+            texts.forEach((el) => el.classList.add("hidden"));
+
+            if (leftNum) leftNum.innerText = "";
+            if (rightNum) rightNum.innerText = "";
+            if (shareBtn) {
                 shareBtn.style.opacity = "0";
                 shareBtn.style.pointerEvents = "none";
             }
-        }
-    };
 
-    const showTornPage = (index: number) => {
-        // Hide content
-        visuals.forEach((el) => el.classList.add("hidden"));
-        texts.forEach((el) => el.classList.add("hidden"));
+            const currentText = document.querySelector(`.book-page-text[data-page="${index}"]`);
+            if (currentText) {
+                currentText.classList.remove("hidden");
+                currentText.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full opacity-30">
+                        <p class="font-serif text-xl uppercase tracking-widest text-[#a8a29e]">
+                            Página Arrancada
+                        </p>
+                        <p class="font-serif text-sm mt-4 italic text-[#57534e]">
+                            (Ya no está aquí)
+                        </p>
+                    </div>
+                `;
+            }
+        };
 
-        // Show "Torn" message
-        if (leftNum) leftNum.innerText = "";
-        if (rightNum) rightNum.innerText = "";
-        if (shareBtn) {
-            shareBtn.style.opacity = "0";
-            shareBtn.style.pointerEvents = "none";
+        const performTear = async () => {
+            if (warningModal) warningModal.classList.add("hidden");
+
+            let shareTitle = "Un Sacrificio";
+            let shareText = "He arrancado una página del libro de mi vida para mostrárosla.";
+
+            const currentTextEl = document.querySelector(
+                `.book-page-text[data-page="${currentPage}"]`
+            );
+
+            if (currentTextEl) {
+                const title = currentTextEl.querySelector("h3")?.textContent || "Una Página";
+                const mainStat =
+                    currentTextEl.querySelector(".font-variant-numeric")?.textContent?.trim() || "";
+
+                // Custom poetic messages based on page index
+                const messages = {
+                    1: `Di mis ${mainStat} latidos para que encontraras tu volumen en la biblioteca de la vida.`, // Heart
+                    2: `Sacrifiqué ${mainStat} horas de sueño eterno para despertar vuestra curiosidad.`, // Sleep
+                    3: `He exhalado mi último aliento, ${mainStat} veces, para que podáis respirar esta página.`, // Breath
+                    4: `Caminé ${mainStat} pasos hasta el fin del mundo solo para traeros este recuerdo.`, // Steps
+                    5: `He silenciado ${mainStat} palabras. Ahora solo queda el silencio y esta página.`, // Words
+                    6: `Cerré los ojos ${mainStat} veces. En esa oscuridad encontré esto para vosotros.`, // Blinks
+                    7: `Lloré ${mainStat} litros de lágrimas. Un mar salado que ahora os pertenece.`, // Tears
+                    8: `Me desollé vivo. ${mainStat} kilos de piel dejados atrás para revelar esta verdad.`, // Skin
+                    9: `Aullé a ${mainStat} lunas llenas. La locura fue el precio de este conocimiento.`, // Moon
+                    10: `Me bebí ${mainStat} litros de olvido. Ahora tengo sed de verdad.`, // Water
+                    11: `Devoré ${mainStat} toneladas de vida. El hambre persiste, pero esta página os alimentará.`, // Food
+                    12: `Corté ${mainStat} metros de mi propio ser. Crecerá de nuevo, pero este trozo es vuestro.`, // Hair
+                    13: `Me arranqué ${mainStat} metros de uñas. Una defensa que ya no necesito, entregada a vosotros.`, // Nails
+                    14: `Vi morir al sol ${mainStat} veces. Os regalo este amanecer eterno.`, // Sun
+                    15: `Olvidé ${mainStat} pensamientos para recordar solo esto.`, // Mind
+                    16: "He arrancado a los gatos. Ahora el universo es un lugar un poco más frío y silencioso.", // Cats
+                };
+
+                shareTitle = `El Sacrificio de ${title}`;
+                shareText =
+                    messages[currentPage] ||
+                    `He arrancado la página de ${title}. "Todo tiene un precio."`;
+            }
+
+            if (bookInner) {
+                // 3. Start Share Process (Capture first to preserve user activation context if possible)
+                // Animate Tearing concurrently
+                bookInner.style.transition = "transform 1s ease-in, opacity 1s ease-in";
+                bookInner.style.transform = "rotate(5deg) translateY(100px) scale(0.9)";
+                bookInner.style.opacity = "0";
+
+                // Perform Share
+                if (window.shareElementAsImage) {
+                    await window.shareElementAsImage({
+                        element: bookInner,
+                        title: shareTitle,
+                        text: shareText,
+                        url: window.location.href,
+                        fileName: "pagina-sacrificada.png",
+                        onSuccess: () => {
+                            // Optional: Show success toast
+                        },
+                        onError: () => {
+                            // Already handled in share.ts fallback
+                        },
+                    });
+                }
+
+                // 4. Update UI State after animation/share
+                setTimeout(() => {
+                    addTornPage(currentPage);
+                    showTornPage(currentPage);
+
+                    // Restore book style for next time
+                    bookInner.style.transition = "none";
+                    bookInner.style.transform = "none";
+                    bookInner.style.opacity = "1";
+                }, 1000); // Wait for the visual animation to finish
+            }
+        };
+
+        refreshDOMRefs();
+
+        // 1. Check LocalStorage immediately
+        const storedData = localStorage.getItem("life-birthdate");
+        if (storedData) {
+            try {
+                const { year, month } = JSON.parse(storedData);
+                if (year && month !== undefined) {
+                    // Initialize immediately if data exists
+                    initBook(year, month);
+                }
+            } catch (e) {
+                console.error("Error parsing stored birthdate", e);
+            }
         }
 
-        // We can inject a specific visual for "Missing Page"
-        // For now, let's just leave it empty with a message
-        const currentText = document.querySelector(`.book-page-text[data-page="${index}"]`);
-        if (currentText) {
-            currentText.classList.remove("hidden");
-            currentText.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full opacity-30">
-                    <p class="font-serif text-xl uppercase tracking-widest text-[#a8a29e]">
-                        Página Arrancada
-                    </p>
-                    <p class="font-serif text-sm mt-4 italic text-[#57534e]">
-                        (Ya no está aquí)
-                    </p>
-                </div>
-            `;
+        // 2. Listen for event (for manual entry flow)
+        // Clean up previous listener
+        if (window._handleInitLifeBook) {
+            document.removeEventListener("init-life-book", window._handleInitLifeBook);
         }
-    };
-
-    // Tear Logic
-    shareBtn?.addEventListener("click", () => {
-        if (warningModal && warningContent) {
-            warningModal.classList.remove("hidden");
-            // Small delay to allow display:block to apply before opacity transition
-            setTimeout(() => {
-                warningModal.classList.remove("opacity-0");
-                warningContent.classList.remove("scale-95");
-                warningContent.classList.add("scale-100");
-            }, 10);
-        }
+        window._handleInitLifeBook = handleInitEvent;
+        document.addEventListener("init-life-book", handleInitEvent);
     });
-
-    cancelTearBtn?.addEventListener("click", () => {
-        if (warningModal && warningContent) {
-            warningModal.classList.add("opacity-0");
-            warningContent.classList.remove("scale-100");
-            warningContent.classList.add("scale-95");
-            setTimeout(() => {
-                warningModal.classList.add("hidden");
-            }, 300);
-        }
-    });
-
-    confirmTearBtn?.addEventListener("click", async () => {
-        // 1. Close modal
-        if (warningModal) warningModal.classList.add("hidden");
-
-        // 2. Generate Share Content (Text)
-        let shareTitle = "Un Sacrificio";
-        let shareText = "He arrancado una página del libro de mi vida para mostrárosla.";
-
-        // Extract data from current page for the summary
-        const currentTextEl = document.querySelector(`.book-page-text[data-page="${currentPage}"]`);
-
-        if (currentTextEl) {
-            const title = currentTextEl.querySelector("h3")?.textContent || "Una Página";
-            const mainStat =
-                currentTextEl.querySelector(".font-variant-numeric")?.textContent?.trim() || "";
-
-            // Custom poetic messages based on page index
-            const messages: Record<number, string> = {
-                1: `Di mis ${mainStat} latidos para que encontraras tu volumen en la biblioteca de la vida.`, // Heart
-                2: `Sacrifiqué ${mainStat} horas de sueño eterno para despertar vuestra curiosidad.`, // Sleep
-                3: `He exhalado mi último aliento, ${mainStat} veces, para que podáis respirar esta página.`, // Breath
-                4: `Caminé ${mainStat} pasos hasta el fin del mundo solo para traeros este recuerdo.`, // Steps
-                5: `He silenciado ${mainStat} palabras. Ahora solo queda el silencio y esta página.`, // Words
-                6: `Cerré los ojos ${mainStat} veces. En esa oscuridad encontré esto para vosotros.`, // Blinks
-                7: `Lloré ${mainStat} litros de lágrimas. Un mar salado que ahora os pertenece.`, // Tears
-                8: `Me desollé vivo. ${mainStat} kilos de piel dejados atrás para revelar esta verdad.`, // Skin
-                9: `Aullé a ${mainStat} lunas llenas. La locura fue el precio de este conocimiento.`, // Moon
-                10: `Me bebí ${mainStat} litros de olvido. Ahora tengo sed de verdad.`, // Water
-                11: `Devoré ${mainStat} toneladas de vida. El hambre persiste, pero esta página os alimentará.`, // Food
-                12: `Corté ${mainStat} metros de mi propio ser. Crecerá de nuevo, pero este trozo es vuestro.`, // Hair
-                13: `Me arranqué ${mainStat} metros de uñas. Una defensa que ya no necesito, entregada a vosotros.`, // Nails
-                14: `Vi morir al sol ${mainStat} veces. Os regalo este amanecer eterno.`, // Sun
-                15: `Olvidé ${mainStat} pensamientos para recordar solo esto.`, // Mind
-                16: "He arrancado a los gatos. Ahora el universo es un lugar un poco más frío y silencioso.", // Cats
-            };
-
-            shareTitle = `El Sacrificio de ${title}`;
-            shareText =
-                messages[currentPage] ||
-                `He arrancado la página de ${title}. "Todo tiene un precio."`;
-        }
-
-        if (bookInner) {
-            // 3. Start Share Process (Capture first to preserve user activation context if possible)
-            // Animate Tearing concurrently
-            bookInner.style.transition = "transform 1s ease-in, opacity 1s ease-in";
-            bookInner.style.transform = "rotate(5deg) translateY(100px) scale(0.9)";
-            bookInner.style.opacity = "0";
-
-            // Perform Share
-            await shareElementAsImage({
-                element: bookInner,
-                title: shareTitle,
-                text: shareText,
-                url: window.location.href,
-                fileName: "pagina-sacrificada.png",
-                onSuccess: () => {
-                    // Optional: Show success toast
-                },
-                onError: () => {
-                    // Already handled in share.ts fallback
-                },
-            });
-
-            // 4. Update UI State after animation/share
-            setTimeout(() => {
-                addTornPage(currentPage);
-                showTornPage(currentPage);
-
-                // Restore book style for next time
-                bookInner.style.transition = "none";
-                bookInner.style.transform = "none";
-                bookInner.style.opacity = "1";
-            }, 1000); // Wait for the visual animation to finish
-        }
-    });
-
-    // Navigation Logic with Touch Support
-    const handleNavigation = (direction: "prev" | "next") => {
-        if (direction === "prev") {
-            if (currentPage > 0) showPage(currentPage - 1);
-        } else {
-            if (currentPage < totalPages - 1) showPage(currentPage + 1);
-        }
-    };
-
-    const attachListener = (btn: HTMLElement, direction: "prev" | "next") => {
-        // Use touchstart for immediate response on mobile
-        // This also allows us to preventDefault() immediately to stop zoom/scroll
-        btn.addEventListener(
-            "touchstart",
-            (e) => {
-                if ((btn as HTMLButtonElement).disabled) return;
-                e.preventDefault(); // Critical: stops double-tap zoom and mouse emulation
-                e.stopPropagation();
-                handleNavigation(direction);
-            },
-            { passive: false }
-        );
-
-        // Keep click for desktop/mouse users
-        btn.addEventListener("click", (e) => {
-            if ((btn as HTMLButtonElement).disabled) return;
-            e.preventDefault();
-            handleNavigation(direction);
-        });
-    };
-
-    if (prevBtn) attachListener(prevBtn, "prev");
-    if (nextBtn) attachListener(nextBtn, "next");
 </script>
 
 <style>
