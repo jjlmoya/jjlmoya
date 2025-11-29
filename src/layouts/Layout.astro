@@ -5,7 +5,6 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Toast from "../components/ui/Toast.astro";
 
-import { ClientRouter } from "astro:transitions";
 import "@fontsource/inter/300.css";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";
@@ -42,7 +41,7 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
 <html lang="es">
     <head>
         <SEO title={title} description={description} image={image} />
-        <ClientRouter />
+
         <script is:inline>
             // Theme initialization
             const theme = (() => {
@@ -63,8 +62,8 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
 
             window.localStorage.setItem("theme", theme);
 
-            // Listener for toggle button (runs on every page navigation)
-            document.addEventListener("astro:page-load", () => {
+            // Listener for toggle button
+            document.addEventListener("DOMContentLoaded", () => {
                 const themeToggle = document.getElementById("theme-toggle");
                 themeToggle?.addEventListener("click", () => {
                     const html = document.documentElement;
@@ -77,7 +76,7 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
         <script>
             import { handleGlobalShare } from "../utils/share";
 
-            document.addEventListener("astro:page-load", () => {
+            document.addEventListener("DOMContentLoaded", () => {
                 // Use a delegated listener on document to catch clicks on any share button
                 // We remove it first to avoid duplicates if the page is reloaded/navigated
                 document.removeEventListener("click", handleGlobalShare);
