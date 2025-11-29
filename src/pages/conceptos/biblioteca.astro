@@ -28,21 +28,28 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
         <div id="stage-intro" class="z-10 w-full max-w-4xl transition-opacity duration-1000">
             <div id="intro-initial" class="transition-opacity duration-1000">
                 <DeathDialogue
-                    text="Disculpa... no quería importunarte pero i mis libros ordenados por año de nacimiento..."
-                    speed={75}
+                    text="Disculpa... no quería importunarte pero mis libros están ordenados por año de nacimiento..."
+                    speed={150}
                     delay={400}
+                    mode="word"
                 />
             </div>
             <div id="intro-next" class="hidden transition-opacity duration-1000 opacity-0">
-                <DeathDialogue text="¿De qué año eras?" speed={60} delay={0} autoStart={false} />
+                <DeathDialogue
+                    text="¿De qué año eras?"
+                    speed={150}
+                    delay={0}
+                    autoStart={false}
+                    mode="word"
+                />
             </div>
 
             <div id="intro-month" class="hidden transition-opacity duration-1000 opacity-0">
                 <DeathDialogue
                     text="Ya veo... ¿Y el mes?"
-                    speed={60}
-                    delay={1000}
+                    speed={150}
                     autoStart={false}
+                    mode="word"
                 />
             </div>
 
@@ -54,7 +61,12 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             id="stage-confirmation"
             class="hidden z-10 w-full max-w-4xl transition-opacity duration-1000"
         >
-            <DeathDialogue text="Ahh, ya te veo... <br> Un momento..." speed={50} delay={500} />
+            <DeathDialogue
+                text="Ahh, ya te veo... <br> Un momento..."
+                speed={150}
+                delay={500}
+                mode="word"
+            />
         </div>
 
         <!-- STAGE 3: THE BOOK -->
@@ -110,35 +122,44 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
     // Sequence Logic (Only if not skipped)
     if (!hasSkippedIntro) {
         const firstDialogue = document.querySelector("#intro-initial .death-dialogue-container");
+        const nextDialogue = document.querySelector("#intro-next .death-dialogue-container");
+        const monthDialogue = document.querySelector("#intro-month .death-dialogue-container");
 
-        // 1. After first sentence, ask for year
+        // 1. After first sentence, wait, then ask for year
         firstDialogue?.addEventListener("dialogue-complete", () => {
-            if (introInitial) introInitial.style.opacity = "0";
-
+            // Wait for user to read
             setTimeout(() => {
-                if (introInitial) introInitial.classList.add("hidden");
-                if (introNext) {
-                    introNext.classList.remove("hidden");
-                    void introNext.offsetWidth;
-                    introNext.classList.remove("opacity-0");
+                if (introInitial) introInitial.style.opacity = "0";
 
-                    setTimeout(() => {
-                        const dialogue = introNext.querySelector(".death-dialogue-container");
-                        dialogue?.dispatchEvent(new Event("start-typing"));
-                    }, 2000);
-                }
-            }, 1000);
+                setTimeout(() => {
+                    if (introInitial) introInitial.classList.add("hidden");
+                    if (introNext) {
+                        introNext.classList.remove("hidden");
+                        void introNext.offsetWidth;
+                        introNext.classList.remove("opacity-0");
 
+                        setTimeout(() => {
+                            nextDialogue?.dispatchEvent(new Event("start-typing"));
+                        }, 500);
+                    }
+                }, 1000);
+            }, 2000);
+        });
+
+        // 2. Show year input after question
+        nextDialogue?.addEventListener("dialogue-complete", () => {
             setTimeout(() => {
                 const event = new Event("show-death-year-input");
                 document.dispatchEvent(event);
-            }, 4000);
+            }, 500);
         });
 
-        const monthDialogue = document.querySelector("#intro-month .death-dialogue-container");
+        // 3. Show month input after question
         monthDialogue?.addEventListener("dialogue-complete", () => {
-            const event = new Event("show-death-month-input");
-            document.dispatchEvent(event);
+            setTimeout(() => {
+                const event = new Event("show-death-month-input");
+                document.dispatchEvent(event);
+            }, 500);
         });
 
         document.addEventListener("year-selected", () => {
@@ -153,9 +174,8 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     introMonth.classList.remove("opacity-0");
 
                     setTimeout(() => {
-                        const dialogue = introMonth.querySelector(".death-dialogue-container");
-                        dialogue?.dispatchEvent(new Event("start-typing"));
-                    }, 800);
+                        monthDialogue?.dispatchEvent(new Event("start-typing"));
+                    }, 500);
                 }
             }, 1000);
         });

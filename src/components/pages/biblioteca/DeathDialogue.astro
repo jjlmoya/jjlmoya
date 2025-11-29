@@ -5,9 +5,10 @@ interface Props {
     speed?: number;
     delay?: number;
     autoStart?: boolean;
+    mode?: "char" | "word";
 }
 
-const { text, onComplete, speed = 50, delay = 0, autoStart = true } = Astro.props;
+const { text, onComplete, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.props;
 ---
 
 <div
@@ -20,14 +21,24 @@ const { text, onComplete, speed = 50, delay = 0, autoStart = true } = Astro.prop
         {
             text.split(/<br\s*\/?>/i).map((part, index, array) => (
                 <>
-                    {part
-                        .toUpperCase()
-                        .split("")
-                        .map((char) => (
-                            <span class="death-char opacity-0 transition-opacity duration-75">
-                                {char === " " ? "\u00A0" : char}
-                            </span>
-                        ))}
+                    {mode === "char"
+                        ? part
+                              .toUpperCase()
+                              .split("")
+                              .map((char) => (
+                                  <span class="death-anim-unit opacity-0 transition-opacity duration-75">
+                                      {char === " " ? "\u00A0" : char}
+                                  </span>
+                              ))
+                        : part
+                              .toUpperCase()
+                              .split(" ")
+                              .map((word, wIndex, wArray) => (
+                                  <span class="death-anim-unit opacity-0 transition-all duration-700 ease-out">
+                                      {word}
+                                      {wIndex < wArray.length - 1 ? " " : ""}
+                                  </span>
+                              ))}
                     {index < array.length - 1 && <br />}
                 </>
             ))
@@ -46,28 +57,28 @@ const { text, onComplete, speed = 50, delay = 0, autoStart = true } = Astro.prop
             if (container.hasAttribute("data-initialized")) return;
             container.setAttribute("data-initialized", "true");
 
-            const chars = container.querySelectorAll(".death-char");
+            const units = container.querySelectorAll(".death-anim-unit");
             const speed = parseInt(container.getAttribute("data-speed") || "50");
             const delay = parseInt(container.getAttribute("data-delay") || "0");
             const autoStart = container.getAttribute("data-auto-start") === "true";
 
             const startTyping = () => {
                 // Reset opacity
-                chars.forEach((c) => c.classList.add("opacity-0"));
+                units.forEach((c) => c.classList.add("opacity-0"));
 
                 setTimeout(() => {
                     let i = 0;
-                    const revealChar = () => {
-                        if (i < chars.length) {
-                            chars[i].classList.remove("opacity-0");
+                    const revealUnit = () => {
+                        if (i < units.length) {
+                            units[i].classList.remove("opacity-0");
                             i++;
-                            setTimeout(revealChar, speed);
+                            setTimeout(revealUnit, speed);
                         } else {
                             const event = new CustomEvent("dialogue-complete");
                             container.dispatchEvent(event);
                         }
                     };
-                    revealChar();
+                    revealUnit();
                 }, delay);
             };
 
@@ -94,5 +105,16 @@ const { text, onComplete, speed = 50, delay = 0, autoStart = true } = Astro.prop
         font-family: "Cinzel", serif;
         font-variant: small-caps;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Ghostly reveal effect */
+    .death-anim-unit.opacity-0 {
+        filter: blur(8px);
+        transform: scale(0.95);
+    }
+
+    .death-anim-unit {
+        filter: blur(0);
+        transform: scale(1);
     }
 </style>
