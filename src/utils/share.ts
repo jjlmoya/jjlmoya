@@ -207,68 +207,79 @@ export const shareElementAsImage = async ({
         element.style.opacity = originalOpacity;
         element.style.background = originalBackground; // Restore the original background
 
-        // Convert to blob/file
-        canvas.toBlob(async (blob) => {
-            if (blob) {
-                const file = new File([blob], fileName, { type: "image/png" });
+        // Convert to blob/file SYNCHRONOUSLY to try and save the user gesture
+        // canvas.toBlob is async and kills the gesture on iOS often.
+        // toDataURL is sync.
+        const dataUrl = canvas.toDataURL("image/png");
 
-                if (
-                    navigator.share &&
-                    navigator.canShare &&
-                    navigator.canShare({ files: [file] })
-                ) {
-                    try {
-                        await navigator.share({
-                            title: title,
-                            text: fullShareText,
-                            files: [file],
-                        });
-                        onSuccess?.();
-                    } catch (err: any) {
-                        console.error("[Share] Image share failed:", err);
+        // Manual Base64 to Blob conversion (Sync)
+        const byteString = atob(dataUrl.split(',')[1]);
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], { type: 'image/png' });
 
-                        if (err.name === 'AbortError') {
-                            console.log("[Share] User cancelled share.");
-                            return;
-                        }
+        if (blob) {
+            const file = new File([blob], fileName, { type: "image/png" });
 
-                        console.log("[Share] Falling back to download due to error.");
-                        downloadBlob(blob, fileName);
-                    }
-                } else {
-                    console.log("[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context).");
+            if (
+                navigator.share &&
+                navigator.canShare &&
+                navigator.canShare({ files: [file] })
+            ) {
+                try {
+                    await navigator.share({
+                        title: title,
+                        text: fullShareText,
+                        files: [file],
+                    });
+                    onSuccess?.();
+                } catch (err: any) {
+                    console.error("[Share] Image share failed:", err);
 
-                    // Fallback: Browser doesn't support file share
-                    // Try to share text natively first!
-                    let textShared = false;
-                    if (navigator.share) {
-                        try {
-                            console.log("[Share] Attempting text-only share...");
-                            await navigator.share({
-                                title: title,
-                                text: fullShareText,
-                            });
-                            textShared = true;
-                            console.log("[Share] Text-only share successful.");
-                        } catch (err) {
-                            console.warn("[Share] Text-only share failed:", err);
-                        }
+                    if (err.name === 'AbortError') {
+                        console.log("[Share] User cancelled share.");
+                        return;
                     }
 
-                    if (!textShared) {
-                        console.log("[Share] Copying text to clipboard as last resort.");
-                        copyToClipboard();
-                    }
-
-                    console.log("[Share] Downloading image as fallback.");
+                    console.log("[Share] Falling back to download due to error.");
                     downloadBlob(blob, fileName);
                 }
             } else {
-                // Blob generation failed
-                console.warn("Blob generation failed, falling back to text share");
-                await shareTextOnly();
+                console.log("[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context).");
+
+                // Fallback: Browser doesn't support file share
+                // Try to share text natively first!
+                let textShared = false;
+                if (navigator.share) {
+                    try {
+                        console.log("[Share] Attempting text-only share...");
+                        await navigator.share({
+                            title: title,
+                            text: fullShareText,
+                        });
+                        textShared = true;
+                        console.log("[Share] Text-only share successful.");
+                    } catch (err) {
+                        console.warn("[Share] Text-only share failed:", err);
+                    }
+                }
+
+                if (!textShared) {
+                    console.log("[Share] Copying text to clipboard as last resort.");
+                    copyToClipboard();
+                }
+
+                console.log("[Share] Downloading image as fallback.");
+                downloadBlob(blob, fileName);
             }
-        }, "image/png");
+        } else {
+            // Blob generation failed
+            console.warn("Blob generation failed, falling back to text share");
+            await shareTextOnly();
+        }
     } catch (error: any) {
         console.error("Capture failed:", error);
         // Debug for iOS
