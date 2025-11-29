@@ -364,9 +364,24 @@ export async function handleGlobalShare(e: MouseEvent) {
             });
         } catch (err) {
             console.error("Error sharing:", err);
+            // If user cancelled, do nothing.
+            if ((err as Error).name === 'AbortError') return;
+
+            // If other error, try fallback? No, usually better to just fail or let user retry.
         }
     } else {
         // Fallback for browsers that don't support Web Share API
+
+        // Check if we are on mobile but in an insecure context (common dev issue)
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isSecure = window.isSecureContext;
+
+        if (isMobile && !isSecure) {
+            if ((window as any).toast) {
+                (window as any).toast.show("⚠️ Compartir requiere HTTPS. Copiado al portapapeles.", "warning");
+            }
+        }
+
         try {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(fullText);
@@ -385,12 +400,19 @@ export async function handleGlobalShare(e: MouseEvent) {
 
             // Visual feedback
             const originalContent = element.innerHTML;
-            element.innerHTML =
-                '<span style="font-size: 0.75em; font-weight: bold; color: #10b981;">¡Copiado!</span>';
+            // Only change text if it's not the warning case above (or maybe always?)
+            // Let's keep it simple.
 
-            setTimeout(() => {
-                element.innerHTML = originalContent;
-            }, 2000);
+            // If we didn't show the warning toast, show the "Copiado" feedback on the element
+            if (!isMobile || isSecure) {
+                element.innerHTML =
+                    '<span style="font-size: 0.75em; font-weight: bold; color: #10b981;">¡Copiado!</span>';
+
+                setTimeout(() => {
+                    element.innerHTML = originalContent;
+                }, 2000);
+            }
+
         } catch (err) {
             console.error("Clipboard failed", err);
         }
