@@ -45,10 +45,29 @@ export const shareElementAsImage = async ({
         }
     };
 
-    const copyToClipboard = async () => {
+    const copyToClipboard = async (customMessage?: string) => {
         try {
-            await navigator.clipboard.writeText(fullShareText);
-            alert("No se pudo generar la imagen. El texto se ha copiado al portapapeles.");
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(fullShareText);
+            } else {
+                // Fallback for HTTP/Dev environments where navigator.clipboard is undefined
+                const textArea = document.createElement("textarea");
+                textArea.value = fullShareText;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+
+            if (customMessage) {
+                console.log(`[Share] Clipboard success: ${customMessage}`);
+            } else {
+                console.log("[Share] Text copied to clipboard.");
+            }
+
             onSuccess?.();
         } catch (err) {
             console.error("Clipboard failed:", err);
@@ -81,99 +100,100 @@ export const shareElementAsImage = async ({
                 return element.classList.contains("ignore-capture");
             },
             onclone: (clonedDoc) => {
-                console.log("[Share] Starting aggressive oklab/oklch sanitization...");
-                const allElements = clonedDoc.querySelectorAll("*");
-                const ctx = document.createElement("canvas").getContext("2d");
+                try {
+                    console.log("[Share] Starting aggressive oklab/oklch sanitization...");
 
-                // Helper to convert a single color string (e.g. "oklab(...)") to RGB/Hex via Canvas
-                const toRgb = (color: string) => {
-                    if (!ctx) return "#000000"; // Fallback if no context
-                    try {
-                        ctx.fillStyle = color;
-                        const computed = ctx.fillStyle;
-                        // If browser doesn't support oklab/oklch or conversion failed, it might return the input or empty
-                        // If it still contains oklab/oklch, force a fallback to avoid crash
-                        if (!computed || computed.includes("oklab") || computed.includes("oklch")) {
-                            return "#000000"; // Safe fallback
-                        }
-                        return computed;
-                    } catch (e) {
-                        return "#000000"; // Safe fallback
-                    }
-                };
-
-                // Helper to replace all oklab(...)/oklch(...) occurrences in a string
-                const sanitizeString = (value: string) => {
-                    if (!value || typeof value !== 'string') return value;
-                    if (!value.includes("oklab") && !value.includes("oklch")) return value;
-
-                    // Regex to capture oklab(...) or oklch(...) blocks. 
-                    return value.replace(/(oklab|oklch)\([^)]+\)/g, (match) => {
-                        return toRgb(match);
-                    });
-                };
-
-                let replacements = 0;
-
-                // 1. Sanitize Computed Styles (Inline Styles)
-                allElements.forEach((el) => {
-                    const element = el as HTMLElement;
-                    const style = clonedDoc.defaultView?.getComputedStyle(element) || window.getComputedStyle(element);
-
-                    const props = [
-                        'backgroundColor', 'color', 'borderColor', 'boxShadow', 'backgroundImage',
-                        'fill', 'stroke', 'stopColor', 'floodColor', 'lightingColor',
-                        'borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor',
-                        'outlineColor', 'textDecorationColor', 'columnRuleColor', 'caretColor'
-                    ];
-
-                    props.forEach(prop => {
-                        // @ts-ignore
-                        const val = style[prop];
-                        if (val && val !== 'none' && val !== 'rgba(0, 0, 0, 0)' && val !== 'transparent') {
-                            // Special handling for text color that is oklab/oklch (Accents)
-                            // User requested these to be white and bold
-                            if (prop === 'color' && (val.includes('oklab') || val.includes('oklch'))) {
-                                element.style.color = '#ffffff';
-                                element.style.fontWeight = 'bold';
-                                replacements++;
-                                return;
+                    // Helper to convert a single color string (e.g. "oklab(...)") to RGB/Hex via Canvas
+                    const toRgb = (color: string) => {
+                        if (!ctx) return "#000000";
+                        try {
+                            ctx.fillStyle = color;
+                            const computed = ctx.fillStyle;
+                            if (!computed || computed.includes("oklab") || computed.includes("oklch")) {
+                                return "#000000";
                             }
+                            return computed;
+                        } catch (e) {
+                            return "#000000";
+                        }
+                    };
 
-                            const safeVal = sanitizeString(val);
+                    // Helper to replace all oklab(...)/oklch(...) occurrences in a string
+                    const sanitizeString = (value: string) => {
+                        if (!value || typeof value !== 'string') return value;
+                        if (!value.includes("oklab") && !value.includes("oklch")) return value;
+                        return value.replace(/(oklab|oklch)\([^)]+\)/g, (match) => {
+                            return toRgb(match);
+                        });
+                    };
+
+                    const ctx = document.createElement("canvas").getContext("2d");
+                    let replacements = 0;
+
+                    // 1. Sanitize <style> tags content (CRITICAL for CSS variables)
+                    const styleTags = clonedDoc.querySelectorAll("style");
+                    styleTags.forEach(styleTag => {
+                        if (styleTag.innerHTML.includes('oklab') || styleTag.innerHTML.includes('oklch')) {
+                            // Simple regex replacement for the whole block
+                            const newCss = styleTag.innerHTML.replace(/(oklab|oklch)\([^)]+\)/g, "#000000");
+                            styleTag.innerHTML = newCss;
+                            replacements++;
+                        }
+                    });
+
+                    // 2. Sanitize Computed Styles (Inline Styles)
+                    const allElements = clonedDoc.querySelectorAll("*");
+                    allElements.forEach((el) => {
+                        const element = el as HTMLElement;
+                        // We iterate styles that might contain colors
+                        const props = [
+                            'color', 'backgroundColor', 'borderColor', 'boxShadow', 'background', 'backgroundImage',
+                            'borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor',
+                            'outlineColor', 'textDecorationColor', 'fill', 'stroke'
+                        ];
+
+                        const style = window.getComputedStyle(element);
+
+                        props.forEach(prop => {
                             // @ts-ignore
-                            element.style[prop] = safeVal;
-
-                            if (val.includes('oklab') || val.includes('oklch')) {
-                                replacements++;
-                            }
-                        }
-                    });
-
-                    // 2. Sanitize SVG Attributes
-                    if (element instanceof SVGElement) {
-                        const svgAttrs = ['fill', 'stroke', 'stop-color', 'flood-color', 'lighting-color'];
-                        svgAttrs.forEach(attr => {
-                            const val = element.getAttribute(attr);
+                            const val = style[prop];
                             if (val && (val.includes('oklab') || val.includes('oklch'))) {
-                                const safeVal = sanitizeString(val);
-                                element.setAttribute(attr, safeVal);
+                                // Force override with a safe color (white for text, transparent/black for others)
+                                let safeVal = '#000000';
+                                if (prop === 'color') safeVal = '#ffffff';
+                                if (prop.includes('background')) safeVal = 'rgba(0,0,0,0)'; // Default to transparent for bg to avoid blocks
+
+                                // Specific overrides for our app's look
+                                if (prop === 'color') {
+                                    element.style.color = '#e7e5e4'; // Stone-200
+                                } else if (prop === 'backgroundColor') {
+                                    // Try to keep transparency if possible, otherwise dark
+                                    element.style.backgroundColor = '#0c0a09'; // Stone-950
+                                } else {
+                                    // @ts-ignore
+                                    element.style[prop] = safeVal;
+                                }
                                 replacements++;
                             }
                         });
-                    }
-                });
 
-                // 3. Sanitize <style> tags content
-                const styleTags = clonedDoc.querySelectorAll("style");
-                styleTags.forEach(styleTag => {
-                    if (styleTag.innerHTML.includes('oklab') || styleTag.innerHTML.includes('oklch')) {
-                        styleTag.innerHTML = sanitizeString(styleTag.innerHTML);
-                        replacements++;
-                    }
-                });
+                        // 3. Sanitize SVG Attributes explicitly
+                        if (element instanceof SVGElement) {
+                            const svgAttrs = ['fill', 'stroke'];
+                            svgAttrs.forEach(attr => {
+                                const val = element.getAttribute(attr);
+                                if (val && (val.includes('oklab') || val.includes('oklch'))) {
+                                    element.setAttribute(attr, '#3f1d1d'); // Default dark red for heart/blood
+                                    replacements++;
+                                }
+                            });
+                        }
+                    });
 
-                console.log(`[Share] Sanitization finished. Fixed ${replacements} oklab/oklch instances.`);
+                    console.log(`[Share] Sanitization finished. Replaced ~${replacements} instances.`);
+                } catch (e) {
+                    console.error("Sanitization error:", e);
+                }
             },
         });
 
@@ -200,19 +220,44 @@ export const shareElementAsImage = async ({
                             files: [file],
                         });
                         onSuccess?.();
-                    } catch (err) {
-                        console.error("Image share failed:", err);
-                        // Fallback to text share if image share fails (e.g. user cancelled or not supported)
-                        // But if user cancelled, maybe we shouldn't force text? 
-                        // Let's assume if it failed, we try text or download.
-                        // Actually, if share fails, it might be user cancellation. 
-                        // Let's try to download the image as a "Plan B" for the user.
+                    } catch (err: any) {
+                        console.error("[Share] Image share failed:", err);
+
+                        if (err.name === 'AbortError') {
+                            console.log("[Share] User cancelled share.");
+                            return;
+                        }
+
+                        console.log("[Share] Falling back to download due to error.");
                         downloadImage(canvas, fileName);
                     }
                 } else {
-                    // Fallback: Download image + Copy text (Browser doesn't support file share)
+                    console.log("[Share] Navigator.share not supported or file sharing not allowed.");
+
+                    // Fallback: Browser doesn't support file share
+                    // Try to share text natively first!
+                    let textShared = false;
+                    if (navigator.share) {
+                        try {
+                            console.log("[Share] Attempting text-only share...");
+                            await navigator.share({
+                                title: title,
+                                text: fullShareText,
+                            });
+                            textShared = true;
+                            console.log("[Share] Text-only share successful.");
+                        } catch (err) {
+                            console.warn("[Share] Text-only share failed:", err);
+                        }
+                    }
+
+                    if (!textShared) {
+                        console.log("[Share] Copying text to clipboard as last resort.");
+                        copyToClipboard();
+                    }
+
+                    console.log("[Share] Downloading image as fallback.");
                     downloadImage(canvas, fileName);
-                    copyToClipboard();
                 }
             } else {
                 // Blob generation failed
@@ -220,8 +265,11 @@ export const shareElementAsImage = async ({
                 await shareTextOnly();
             }
         }, "image/png");
-    } catch (error) {
+    } catch (error: any) {
         console.error("Capture failed:", error);
+        // Debug for iOS
+        // alert(`Capture Error: ${error.message}`);
+
         // Fallback to text only share if capture crashes (e.g. oklab error)
         await shareTextOnly();
     }
@@ -280,7 +328,20 @@ export async function handleGlobalShare(e: MouseEvent) {
     } else {
         // Fallback for browsers that don't support Web Share API
         try {
-            await navigator.clipboard.writeText(fullText);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(fullText);
+            } else {
+                // Fallback for HTTP/Dev environments
+                const textArea = document.createElement("textarea");
+                textArea.value = fullText;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
 
             // Visual feedback
             const originalContent = element.innerHTML;
