@@ -227,9 +227,19 @@ export const shareElementAsImage = async ({
             if (
                 navigator.share &&
                 navigator.canShare &&
-                navigator.canShare({ files: [file] })
+                navigator.canShare({ files: [file], text: fullShareText })
             ) {
                 try {
+                    // Backup: Copy text to clipboard silently in case the app drops it (common in WhatsApp/Instagram)
+                    try {
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            await navigator.clipboard.writeText(fullShareText);
+                            console.log("[Share] Text copied to clipboard as backup.");
+                        }
+                    } catch (e) {
+                        console.warn("[Share] Failed to copy backup text:", e);
+                    }
+
                     await navigator.share({
                         title: title,
                         text: fullShareText,
