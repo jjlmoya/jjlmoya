@@ -1,0 +1,68 @@
+---
+interface Props {
+    side: 'left' | 'right';
+}
+const { side } = Astro.props;
+---
+
+{side === 'left' ? (
+    <div class="flex items-center justify-center h-full w-full overflow-hidden relative">
+        <!-- Abstract Book Stack Visual -->
+        <div class="flex flex-col-reverse items-center gap-1 opacity-60" id="sleep-stack">
+            <!-- Books will be generated here -->
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#151312] to-transparent pointer-events-none"></div>
+    </div>
+) : (
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+        <h3 class="font-serif text-3xl text-blue-400/60 uppercase tracking-widest">El Letargo</h3>
+        
+        <div class="space-y-2">
+            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="sleep-hours">
+                0
+            </div>
+            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Horas Dormidas</div>
+        </div>
+        
+        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            EL ENSAYO GENERAL. PASÁIS <span id="sleep-years" class="text-blue-400">0 AÑOS</span> PRACTICANDO PARA EL FINAL. Y AÚN ASÍ, OS SORPRENDE.
+        </p>
+    </div>
+)}
+
+<script>
+    import { calculateSleepStats } from "../../../../utils/libraryLogic";
+
+    const hoursEl = document.getElementById('sleep-hours');
+    const yearsEl = document.getElementById('sleep-years');
+    const stackEl = document.getElementById('sleep-stack');
+
+    document.addEventListener('update-life-stats', (e: any) => {
+        const { stats } = e.detail;
+        if (!hoursEl || !stats) return;
+
+        const { hoursSlept, booksCount } = calculateSleepStats(stats.hoursAlive);
+        const yearsSlept = (hoursSlept / 24 / 365).toFixed(1);
+
+        hoursEl.innerText = hoursSlept.toLocaleString();
+        if (yearsEl) yearsEl.innerText = `${yearsSlept} AÑOS`;
+
+        // Generate Visual Stack
+        if (stackEl) {
+            let html = '';
+            // Limit visual stack to avoid DOM overload, just enough to look tall
+            const visualCount = Math.min(booksCount, 40); 
+            const colors = ["bg-[#4a6fa5]", "bg-[#3e5c8a]", "bg-[#2d456b]", "bg-[#1f304a]"];
+            
+            for(let i=0; i<visualCount; i++) {
+                const width = 100 + Math.random() * 100;
+                const height = 8 + Math.random() * 12;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const offset = (Math.random() - 0.5) * 20;
+                
+                html += `<div class="${color} rounded-sm shadow-sm border-l border-white/10" style="width: ${width}px; height: ${height}px; transform: translateX(${offset}px)"></div>`;
+            }
+            stackEl.innerHTML = html;
+        }
+    });
+</script>

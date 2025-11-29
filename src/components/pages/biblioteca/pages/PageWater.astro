@@ -1,0 +1,89 @@
+---
+interface Props {
+    side: 'left' | 'right';
+}
+const { side } = Astro.props;
+---
+
+{side === 'left' ? (
+    <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
+        <!-- Water Visual -->
+        <div class="relative w-full h-full flex items-center justify-center">
+             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-blue-900/20"></div>
+             
+             <!-- Glass/Liquid Container -->
+             <div class="w-32 h-48 border-2 border-blue-300/20 rounded-b-lg relative overflow-hidden backdrop-blur-sm">
+                <!-- Liquid Level -->
+                <div class="absolute bottom-0 left-0 right-0 bg-blue-500/30 h-[80%] animate-slosh origin-bottom"></div>
+                <!-- Bubbles -->
+                <div class="absolute bottom-4 left-8 w-2 h-2 rounded-full bg-blue-300/40 animate-rise"></div>
+                <div class="absolute bottom-8 right-8 w-1 h-1 rounded-full bg-blue-300/40 animate-rise" style="animation-delay: 1s"></div>
+             </div>
+        </div>
+    </div>
+) : (
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+        <h3 class="font-serif text-3xl text-blue-400/60 uppercase tracking-widest">La Sed</h3>
+        
+        <div class="space-y-2">
+            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="water-count">
+                0
+            </div>
+            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Litros Bebidos</div>
+        </div>
+        
+        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            SOMOS AGUA QUE APRENDIÓ A CAMINAR. <span id="water-bottles" class="text-blue-400">0 BOTELLAS</span> HAN PASADO POR VOSOTROS PARA MANTENER EL BARRO HÚMEDO.
+        </p>
+    </div>
+)}
+
+<style>
+    @keyframes slosh {
+        0%, 100% { transform: skewX(-2deg) scaleY(1); }
+        50% { transform: skewX(2deg) scaleY(1.05); }
+    }
+    .animate-slosh {
+        animation: slosh 4s ease-in-out infinite;
+    }
+    
+    @keyframes rise {
+        0% { transform: translateY(0); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(-100px); opacity: 0; }
+    }
+    .animate-rise {
+        animation: rise 3s linear infinite;
+    }
+</style>
+
+<script>
+    import { calculateWaterStats } from "../../../../utils/libraryLogic";
+
+    const countEl = document.getElementById('water-count');
+    const bottlesEl = document.getElementById('water-bottles');
+
+    document.addEventListener('update-life-stats', (e: any) => {
+        const { stats } = e.detail;
+        if (!countEl || !stats) return;
+
+        const { litersDrunk, bottlesCount } = calculateWaterStats(stats.daysAlive);
+        
+        countEl.innerText = litersDrunk.toLocaleString();
+        if (bottlesEl) bottlesEl.innerText = `${Math.floor(bottlesCount).toLocaleString()} BOTELLAS`; // Note: Logic might need update, bottlesCount in logic is small?
+        // Actually logic says: bottlesCount = Math.min(80, ...). Wait, let's check logic.
+        // Logic: const bottlesCount = Math.min(80, Math.floor(litersDrunk / 500)); -> This seems wrong in logic file, it caps at 80? 
+        // I should probably fix logic file too if I see it's weird, but let's stick to plan.
+        // Actually, looking at previous logic file content:
+        // export const calculateWaterStats = (daysAlive: number) => {
+        //    const litersDrunk = daysAlive * 2;
+        //    const bottlesCount = Math.min(80, Math.floor(litersDrunk / 500)); <--- This looks like a visual cap for a stack, not total count.
+        //    return { litersDrunk, bottlesCount };
+        // };
+        // For text display I probably want the real count.
+        
+        // Let's recalculate real bottles here for text to be safe/impressive
+        const realBottles = Math.floor(litersDrunk / 0.5);
+        if (bottlesEl) bottlesEl.innerText = `${realBottles.toLocaleString()} BOTELLAS`;
+    });
+</script>

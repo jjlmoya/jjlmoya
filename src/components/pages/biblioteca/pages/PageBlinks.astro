@@ -1,0 +1,62 @@
+---
+interface Props {
+    side: 'left' | 'right';
+}
+const { side } = Astro.props;
+---
+
+{side === 'left' ? (
+    <div class="flex items-center justify-center h-full w-full relative">
+        <!-- Shutter/Eye Visual -->
+        <div class="relative w-32 h-32 border-4 border-[#e7e5e4]/20 rounded-full flex items-center justify-center overflow-hidden">
+            <div class="w-full h-full bg-[#e7e5e4]/10 animate-blink origin-top"></div>
+        </div>
+    </div>
+) : (
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+        <h3 class="font-serif text-3xl text-purple-400/60 uppercase tracking-widest">El Parpadeo</h3>
+        
+        <div class="space-y-2">
+            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="blinks-count">
+                0
+            </div>
+            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Veces que cerraste los ojos</div>
+        </div>
+        
+        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            PEQUEÑOS MOMENTOS DE OSCURIDAD. SI LOS SUMAS TODOS, HAS PASADO <span id="darkness-time" class="text-purple-400">0 DÍAS</span> SIN VER NADA EN ABSOLUTO. FASCINANTE.
+        </p>
+    </div>
+)}
+
+<style>
+    @keyframes blink {
+        0%, 90%, 100% { transform: scaleY(0); }
+        95% { transform: scaleY(1); }
+    }
+    .animate-blink {
+        animation: blink 4s infinite;
+    }
+</style>
+
+<script>
+    import { calculateBlinkStats } from "../../../../utils/libraryLogic";
+
+    const countEl = document.getElementById('blinks-count');
+    const timeEl = document.getElementById('darkness-time');
+
+    document.addEventListener('update-life-stats', (e: any) => {
+        const { stats } = e.detail;
+        if (!countEl || !stats) return;
+
+        const { totalBlinks, darknessDays, darknessHours } = calculateBlinkStats(stats.minutesAlive);
+        
+        countEl.innerText = Math.floor(totalBlinks).toLocaleString();
+        
+        let timeString = "";
+        if (darknessDays > 0) timeString = `${darknessDays} DÍAS`;
+        else timeString = `${darknessHours} HORAS`;
+        
+        if (timeEl) timeEl.innerText = timeString;
+    });
+</script>

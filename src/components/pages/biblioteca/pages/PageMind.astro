@@ -1,0 +1,70 @@
+---
+interface Props {
+    side: 'left' | 'right';
+}
+const { side } = Astro.props;
+---
+
+{side === 'left' ? (
+    <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
+        <!-- Mind Visual -->
+        <div class="relative w-full h-full flex items-center justify-center">
+             <!-- Synapses -->
+             <div class="absolute inset-0 opacity-40">
+                <svg width="100%" height="100%">
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <path d="M50,150 Q100,50 150,150 T250,150" stroke="#a855f7" stroke-width="2" fill="none" class="animate-pulse-path" filter="url(#glow)" />
+                    <path d="M150,50 Q200,150 250,50 T350,50" stroke="#a855f7" stroke-width="1" fill="none" class="animate-pulse-path" style="animation-delay: 0.5s" filter="url(#glow)" />
+                    <circle cx="150" cy="150" r="3" fill="#d8b4fe" class="animate-ping" />
+                    <circle cx="250" cy="50" r="2" fill="#d8b4fe" class="animate-ping" style="animation-delay: 1s" />
+                </svg>
+             </div>
+        </div>
+    </div>
+) : (
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+        <h3 class="font-serif text-3xl text-purple-600/60 uppercase tracking-widest">La Mente</h3>
+        
+        <div class="space-y-2">
+            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="mind-count">
+                0
+            </div>
+            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Pensamientos</div>
+        </div>
+        
+        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            RUIDO ELÉCTRICO. UNA TORMENTA ETERNA EN UN CRÁNEO OSCURO. ¿CUÁNTOS DE ESTOS PENSAMIENTOS ERAN VUESTROS?
+        </p>
+    </div>
+)}
+
+<style>
+    @keyframes pulse-path {
+        0%, 100% { opacity: 0.3; stroke-width: 1; }
+        50% { opacity: 1; stroke-width: 2; }
+    }
+    .animate-pulse-path {
+        animation: pulse-path 3s ease-in-out infinite;
+    }
+</style>
+
+<script>
+    import { calculateMindStats } from "../../../../utils/libraryLogic";
+
+    const countEl = document.getElementById('mind-count');
+
+    document.addEventListener('update-life-stats', (e: any) => {
+        const { stats } = e.detail;
+        if (!countEl || !stats) return;
+
+        const { thoughts } = calculateMindStats(stats.daysAlive);
+        
+        countEl.innerText = Math.floor(thoughts).toLocaleString();
+    });
+</script>

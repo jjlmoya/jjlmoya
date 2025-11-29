@@ -1,0 +1,70 @@
+---
+interface Props {
+    side: 'left' | 'right';
+}
+const { side } = Astro.props;
+---
+
+{side === 'left' ? (
+    <div class="flex items-center justify-center h-full">
+        <div class="relative w-64 h-64 flex items-center justify-center">
+            <!-- Breathing Circle -->
+            <div class="w-32 h-32 bg-sky-200/10 rounded-full blur-xl animate-breathe"></div>
+            <div class="absolute w-48 h-48 border border-sky-200/20 rounded-full animate-breathe" style="animation-delay: 0.2s"></div>
+            
+            <!-- Cloud Icon -->
+            <div class="absolute text-sky-200/60 animate-breathe">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16">
+                    <path d="M17.5,19C19.97,19 22,16.97 22,14.5C22,12.12 20.18,10.17 17.85,10.04C17.46,6.86 14.75,4.5 11.5,4.5C8.13,4.5 5.27,7.05 5.03,10.43C2.72,10.9 1,12.95 1,15.5C1,18.53 3.47,21 6.5,21H17.5V19Z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+) : (
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+        <h3 class="font-serif text-3xl text-sky-200/60 uppercase tracking-widest">El Aliento</h3>
+        
+        <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="breath-counter">
+            0
+        </div>
+        
+        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            TOMÁIS PRESTADO EL AIRE Y LUEGO LO DEVOLVÉIS. UNA Y OTRA VEZ. HASTA QUE OLVIDÁIS DEVOLVERLO.
+        </p>
+    </div>
+)}
+
+<style>
+    @keyframes breathe {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.2); opacity: 0.8; }
+    }
+    .animate-breathe {
+        animation: breathe 4s ease-in-out infinite;
+    }
+</style>
+
+<script>
+    import { calculateBreathStats } from "../../../../utils/libraryLogic";
+
+    const counter = document.getElementById('breath-counter');
+    let animationFrame: number;
+
+    document.addEventListener('update-life-stats', (e: any) => {
+        const { stats, birthdate } = e.detail;
+        if (!counter) return;
+
+        const start = () => {
+            const now = new Date();
+            // Avg breath rate ~20 bpm = 0.33 bps = 0.00033 bpms
+            const msAlive = now.getTime() - new Date(birthdate).getTime();
+            const preciseBreaths = msAlive * (20 / 60000);
+            
+            counter.innerText = Math.floor(preciseBreaths).toLocaleString();
+            animationFrame = requestAnimationFrame(start);
+        };
+        
+        if (animationFrame) cancelAnimationFrame(animationFrame);
+        start();
+    });
+</script>

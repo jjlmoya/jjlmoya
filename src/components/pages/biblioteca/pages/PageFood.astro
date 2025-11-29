@@ -1,0 +1,51 @@
+---
+interface Props {
+    side: 'left' | 'right';
+}
+const { side } = Astro.props;
+---
+
+{side === 'left' ? (
+    <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
+        <!-- Food Visual -->
+        <div class="relative w-full h-full flex items-center justify-center">
+             <div class="w-48 h-48 rounded-full border-4 border-[#292524] flex items-center justify-center bg-[#1a1614] shadow-inner">
+                <!-- Empty Plate / Crumbs -->
+                <div class="absolute w-full h-full opacity-30 bg-[radial-gradient(circle_at_center,transparent_50%,#000_100%)]"></div>
+                <div class="text-[#57534e] opacity-20 text-6xl">🍽️</div>
+             </div>
+        </div>
+    </div>
+) : (
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+        <h3 class="font-serif text-3xl text-amber-700/60 uppercase tracking-widest">El Hambre</h3>
+        
+        <div class="space-y-2">
+            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="food-count">
+                0
+            </div>
+            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Toneladas Ingeridas</div>
+        </div>
+        
+        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            LA MÁQUINA NECESITA COMBUSTIBLE. HABÉIS DEVORADO <span id="food-kg" class="text-amber-700">0 KG</span> DE MATERIA. VIDA QUE SE CONVIERTE EN VIDA.
+        </p>
+    </div>
+)}
+
+<script>
+    import { calculateFoodStats } from "../../../../utils/libraryLogic";
+
+    const countEl = document.getElementById('food-count');
+    const kgEl = document.getElementById('food-kg');
+
+    document.addEventListener('update-life-stats', (e: any) => {
+        const { stats } = e.detail;
+        if (!countEl || !stats) return;
+
+        const { kgEaten, tonsEaten } = calculateFoodStats(stats.daysAlive);
+        
+        countEl.innerText = tonsEaten.toFixed(2).replace('.', ',');
+        if (kgEl) kgEl.innerText = `${Math.floor(kgEaten).toLocaleString()} KG`;
+    });
+</script>

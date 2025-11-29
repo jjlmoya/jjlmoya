@@ -1,0 +1,67 @@
+---
+interface Props {
+    side: 'left' | 'right';
+}
+const { side } = Astro.props;
+---
+
+{side === 'left' ? (
+    <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
+        <!-- Sun Visual -->
+        <div class="relative w-full h-full flex items-center justify-center">
+             <!-- Sun Circle -->
+             <div class="w-32 h-32 rounded-full bg-amber-500/20 blur-xl absolute animate-pulse"></div>
+             <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-600 to-yellow-300 shadow-[0_0_50px_rgba(245,158,11,0.5)] relative z-10"></div>
+             
+             <!-- Rays -->
+             <div class="absolute inset-0 flex items-center justify-center animate-spin-slow">
+                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-0"></div>
+                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-45"></div>
+                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-90"></div>
+                <div class="w-[120%] h-1 bg-amber-500/10 absolute rotate-[135deg]"></div>
+             </div>
+        </div>
+    </div>
+) : (
+    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+        <h3 class="font-serif text-3xl text-yellow-600/60 uppercase tracking-widest">El Sol</h3>
+        
+        <div class="space-y-2">
+            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="sun-count">
+                0
+            </div>
+            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Amaneceres Vistos</div>
+        </div>
+        
+        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            LA ESTRELLA ARDE PARA VOSOTROS. <span id="sun-hours" class="text-yellow-600">0 HORAS</span> DE LUZ OS HAN BAÑADO. ¿CUÁNTAS HABÉIS APROVECHADO?
+        </p>
+    </div>
+)}
+
+<style>
+    @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+        animation: spin-slow 60s linear infinite;
+    }
+</style>
+
+<script>
+    import { calculateSunStats } from "../../../../utils/libraryLogic";
+
+    const countEl = document.getElementById('sun-count');
+    const hoursEl = document.getElementById('sun-hours');
+
+    document.addEventListener('update-life-stats', (e: any) => {
+        const { stats } = e.detail;
+        if (!countEl || !stats) return;
+
+        const { sunrises, sunHours } = calculateSunStats(stats.daysAlive);
+        
+        countEl.innerText = Math.floor(sunrises).toLocaleString();
+        if (hoursEl) hoursEl.innerText = `${Math.floor(sunHours).toLocaleString()} HORAS`;
+    });
+</script>

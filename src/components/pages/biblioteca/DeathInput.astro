@@ -1,0 +1,276 @@
+---
+
+---
+
+<div
+    id="death-input-container"
+    class="hidden flex-col items-center gap-8 mt-8 transition-opacity duration-1000 opacity-0 w-full max-w-3xl mx-auto"
+>
+    <!-- YEAR SLIDER -->
+    <div id="year-section" class="flex flex-col items-center gap-6 w-full">
+        
+        <!-- Wrapper for Slider & Lights (Ensures vertical centering ignores the button) -->
+        <div class="relative w-full group">
+            <!-- Flashlight/Vignette Effect -->
+            <div class="absolute inset-0 pointer-events-none z-20 bg-[radial-gradient(circle_at_center,transparent_10%,rgba(12,10,9,0.5)_30%,rgba(12,10,9,0.95)_70%)]"></div>
+            
+            <!-- Center Light Beam (Candle Glow) -->
+            <div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-40 bg-orange-500/5 blur-3xl z-10 pointer-events-none"></div>
+
+            <!-- Selection Indicator (Subtle) -->
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-56 border-x border-orange-500/20 bg-orange-500/5 z-10 pointer-events-none rounded-lg blur-[1px]"
+            >
+            </div>
+
+            <!-- Scroll Container -->
+            <div 
+                id="year-slider" 
+                class="flex overflow-x-auto snap-x snap-mandatory w-full py-12 px-[50%] gap-4 no-scrollbar cursor-grab active:cursor-grabbing items-center h-80 select-none"
+            >
+                {Array.from({ length: 126 }, (_, i) => 1900 + i).reverse().map(year => (
+                    <div 
+                        class="year-item snap-center shrink-0 transition-all duration-500 select-none flex flex-col items-center justify-center w-12 cursor-pointer group"
+                        data-year={year}
+                    >
+                        <!-- Book Spine Visual -->
+                        <div class="book-spine w-full h-40 bg-[#292524] rounded-sm border-x border-t border-[#44403c] relative shadow-lg group-hover:scale-105 transition-all duration-500 flex items-center justify-center overflow-hidden pointer-events-none">
+                            <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent pointer-events-none"></div>
+                            <!-- Vertical Text -->
+                            <span class="book-text writing-vertical font-serif text-[#e7e5e4]/30 text-lg tracking-widest rotate-180 transition-colors duration-300">{year}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <button
+            id="year-confirm-btn"
+            class="z-30 mt-4 text-[#e7e5e4] border border-[#e7e5e4]/30 px-12 py-3 rounded-sm bg-[#1c1917] hover:bg-[#e7e5e4] hover:text-[#0c0a09] hover:border-[#e7e5e4] transition-all font-serif uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+        >
+            Siguiente
+        </button>
+    </div>
+
+    <!-- MONTH SELECTION -->
+    <div id="month-section" class="hidden flex-col items-center gap-6 animate-fade-in w-full">
+        <div class="grid grid-cols-3 gap-3 md:gap-4 md:grid-cols-4 w-full max-w-2xl">
+            {
+                [
+                    "ENE",
+                    "FEB",
+                    "MAR",
+                    "ABR",
+                    "MAY",
+                    "JUN",
+                    "JUL",
+                    "AGO",
+                    "SEP",
+                    "OCT",
+                    "NOV",
+                    "DIC",
+                ].map((month, index) => (
+                    <button
+                        class="month-btn text-[#e7e5e4]/60 hover:text-[#0c0a09] hover:bg-[#e7e5e4] transition-all px-4 py-3 rounded-sm font-serif text-lg border border-[#e7e5e4]/20 hover:border-[#e7e5e4] hover:scale-105 active:scale-95"
+                        data-month={index}
+                    >
+                        {month}
+                    </button>
+                ))
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById("death-input-container");
+    const yearSlider = document.getElementById("year-slider");
+    const yearItems = document.querySelectorAll(".year-item");
+    const yearConfirmBtn = document.getElementById("year-confirm-btn");
+    const yearSection = document.getElementById("year-section");
+    const monthSection = document.getElementById("month-section");
+    const monthBtns = document.querySelectorAll(".month-btn");
+
+    let selectedYear: number | null = null;
+    let isDragging = false;
+    let startX: number;
+    let scrollLeft: number;
+
+    // Show input when requested
+    document.addEventListener("show-death-year-input", () => {
+        if (container) {
+            container.classList.remove("hidden");
+            setTimeout(() => {
+                container.classList.remove("opacity-0");
+                // Scroll to a reasonable default (e.g., 1990)
+                const defaultYear = document.querySelector('.year-item[data-year="1990"]');
+                defaultYear?.scrollIntoView({
+                    behavior: "smooth",
+                    inline: "center",
+                    block: "nearest",
+                });
+            }, 100);
+        }
+    });
+
+    // Drag to Scroll Logic
+    if (yearSlider) {
+        yearSlider.addEventListener('mousedown', (e) => {
+            isDragging = false;
+            yearSlider.classList.add('cursor-grabbing');
+            yearSlider.classList.remove('cursor-grab');
+            startX = e.pageX - yearSlider.offsetLeft;
+            scrollLeft = yearSlider.scrollLeft;
+            
+            // Disable snap while dragging for smoothness
+            yearSlider.style.scrollSnapType = 'none';
+        });
+
+        yearSlider.addEventListener('mouseleave', () => {
+            yearSlider.classList.remove('cursor-grabbing');
+            yearSlider.classList.add('cursor-grab');
+            // Re-enable snap
+            yearSlider.style.scrollSnapType = 'x mandatory';
+        });
+
+        yearSlider.addEventListener('mouseup', () => {
+            yearSlider.classList.remove('cursor-grabbing');
+            yearSlider.classList.add('cursor-grab');
+            // Re-enable snap
+            yearSlider.style.scrollSnapType = 'x mandatory';
+            
+            // Small timeout to reset dragging flag so click events can check it
+            setTimeout(() => { isDragging = false; }, 50);
+        });
+
+        yearSlider.addEventListener('mousemove', (e) => {
+            if (!yearSlider.classList.contains('cursor-grabbing')) return;
+            e.preventDefault();
+            const x = e.pageX - yearSlider.offsetLeft;
+            const walk = (x - startX) * 2; // Scroll-fast
+            if (Math.abs(walk) > 5) isDragging = true; // Threshold to detect drag vs click
+            yearSlider.scrollLeft = scrollLeft - walk;
+        });
+    }
+
+    // Click to select (only if not dragging)
+    yearItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+            item.scrollIntoView({
+                behavior: 'smooth',
+                inline: 'center',
+                block: 'nearest'
+            });
+        });
+    });
+
+    // Slider Logic (Intersection Observer for center detection)
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                const spine = entry.target.querySelector('.book-spine');
+                const text = entry.target.querySelector('.book-text');
+
+                if (entry.isIntersecting) {
+                    // Highlight (Selected)
+                    spine?.classList.remove('bg-[#292524]', 'h-40', 'opacity-50');
+                    spine?.classList.add('bg-[#57534e]', 'h-64', 'shadow-[0_0_30px_rgba(249,115,22,0.15)]', 'z-10'); // Orange glow
+                    
+                    text?.classList.remove('text-[#e7e5e4]/30');
+                    text?.classList.add('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
+
+                    selectedYear = parseInt((entry.target as HTMLElement).dataset.year || "0");
+                } else {
+                    spine?.classList.add('bg-[#292524]', 'h-40', 'opacity-50');
+                    spine?.classList.remove('bg-[#57534e]', 'h-64', 'shadow-[0_0_30px_rgba(249,115,22,0.15)]', 'z-10');
+                    
+                    text?.classList.add('text-[#e7e5e4]/30');
+                    text?.classList.remove('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
+                }
+            });
+        },
+        {
+            root: yearSlider,
+            threshold: 0.5,
+            rootMargin: "0px -45% 0px -45%", // Very narrow center detection (horizontal)
+        }
+    );
+
+    yearItems.forEach((item) => observer.observe(item));
+
+    // Confirm Year
+    yearConfirmBtn?.addEventListener("click", () => {
+        if (selectedYear) {
+            // Dispatch event with year
+            const event = new CustomEvent("year-selected", { detail: { year: selectedYear } });
+            document.dispatchEvent(event);
+
+            // Hide Year Section
+            if (yearSection) {
+                yearSection.style.opacity = "0";
+                setTimeout(() => {
+                    yearSection.classList.add("hidden");
+                }, 300);
+            }
+        }
+    });
+
+    // Show Month Input when requested
+    document.addEventListener("show-death-month-input", () => {
+        if (monthSection) {
+            monthSection.classList.remove("hidden");
+            monthSection.classList.add("flex");
+        }
+    });
+
+    // Month Input Logic
+    monthBtns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const month = parseInt((e.target as HTMLElement).dataset.month || "0");
+
+            // Dispatch final selection
+            const event = new CustomEvent("birthdate-selected", {
+                detail: { year: selectedYear, month },
+            });
+            document.dispatchEvent(event);
+
+            // Hide everything
+            if (container) container.classList.add("opacity-0");
+            setTimeout(() => {
+                if (container) container.classList.add("hidden");
+            }, 1000);
+        });
+    });
+</script>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .writing-vertical {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+    }
+</style>

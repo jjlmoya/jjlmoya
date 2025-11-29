@@ -1,0 +1,98 @@
+---
+interface Props {
+    text: string;
+    onComplete?: () => void;
+    speed?: number;
+    delay?: number;
+    autoStart?: boolean;
+}
+
+const { text, onComplete, speed = 50, delay = 0, autoStart = true } = Astro.props;
+---
+
+<div
+    class="death-dialogue-container font-serif text-xl md:text-2xl leading-relaxed tracking-wide text-[#e7e5e4] max-w-2xl mx-auto text-center min-h-[100px] flex items-center justify-center"
+    data-auto-start={autoStart.toString()}
+    data-speed={speed}
+    data-delay={delay}
+>
+    <p class="death-text transition-opacity duration-500">
+        {
+            text.split(/<br\s*\/?>/i).map((part, index, array) => (
+                <>
+                    {part
+                        .toUpperCase()
+                        .split("")
+                        .map((char) => (
+                            <span class="death-char opacity-0 transition-opacity duration-75">
+                                {char === " " ? "\u00A0" : char}
+                            </span>
+                        ))}
+                    {index < array.length - 1 && <br />}
+                </>
+            ))
+        }
+    </p>
+</div>
+
+<script>
+    // Use a unique identifier for this script execution to avoid duplicate listeners if possible,
+    // though Astro scripts run once per page load usually.
+
+    function initDeathDialogue() {
+        const containers = document.querySelectorAll(".death-dialogue-container");
+
+        containers.forEach((container) => {
+            if (container.hasAttribute("data-initialized")) return;
+            container.setAttribute("data-initialized", "true");
+
+            const chars = container.querySelectorAll(".death-char");
+            const speed = parseInt(container.getAttribute("data-speed") || "50");
+            const delay = parseInt(container.getAttribute("data-delay") || "0");
+            const autoStart = container.getAttribute("data-auto-start") === "true";
+
+            const startTyping = () => {
+                // Reset opacity
+                chars.forEach((c) => c.classList.add("opacity-0"));
+
+                setTimeout(() => {
+                    let i = 0;
+                    const revealChar = () => {
+                        if (i < chars.length) {
+                            chars[i].classList.remove("opacity-0");
+                            i++;
+                            setTimeout(revealChar, speed);
+                        } else {
+                            const event = new CustomEvent("dialogue-complete");
+                            container.dispatchEvent(event);
+                        }
+                    };
+                    revealChar();
+                }, delay);
+            };
+
+            if (autoStart) {
+                startTyping();
+            }
+
+            // Listen for manual trigger
+            container.addEventListener("start-typing", () => {
+                startTyping();
+            });
+        });
+    }
+
+    // Run on load
+    initDeathDialogue();
+
+    // Run on view transitions if applicable (optional safety)
+    document.addEventListener("astro:page-load", initDeathDialogue);
+</script>
+
+<style>
+    .death-text {
+        font-family: "Cinzel", serif;
+        font-variant: small-caps;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+</style>

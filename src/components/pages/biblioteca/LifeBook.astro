@@ -1,0 +1,603 @@
+---
+import PageIntro from "./pages/PageIntro.astro";
+import PageHeart from "./pages/PageHeart.astro";
+import PageSleep from "./pages/PageSleep.astro";
+import PageBreath from "./pages/PageBreath.astro";
+import PageSteps from "./pages/PageSteps.astro";
+import PageWords from "./pages/PageWords.astro";
+import PageBlinks from "./pages/PageBlinks.astro";
+import PageTears from "./pages/PageTears.astro";
+import PageSkin from "./pages/PageSkin.astro";
+import PageMoon from "./pages/PageMoon.astro";
+import PageWater from "./pages/PageWater.astro";
+import PageFood from "./pages/PageFood.astro";
+import PageGrowth from "./pages/PageGrowth.astro";
+import PageSun from "./pages/PageSun.astro";
+import PageMind from "./pages/PageMind.astro";
+import PageFinal from "./pages/PageFinal.astro";
+---
+
+<div
+    id="life-book-container"
+    class="w-full h-full flex items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-1000"
+>
+    <!-- SVG Filters for Ink Effects -->
+    <svg class="hidden">
+        <defs>
+            <filter id="ink-paper">
+                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise"
+                ></feTurbulence>
+                <feColorMatrix
+                    type="matrix"
+                    values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.1 0"
+                    in="noise"
+                    result="coloredNoise"></feColorMatrix>
+                <feComposite operator="in" in="coloredNoise" in2="SourceGraphic" result="composite"
+                ></feComposite>
+                <feBlend mode="multiply" in="composite" in2="SourceGraphic"></feBlend>
+            </filter>
+            <filter id="rough-edge">
+                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise"
+                ></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2"></feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Book Wrapper (Positioning context, NO overflow hidden) -->
+    <div
+        class="relative w-full max-w-6xl aspect-[1/2.2] md:aspect-[1.6/1] group transition-all duration-500"
+    >
+        <!-- The Book Content (Clipped) -->
+        <div
+            id="book-inner-content"
+            class="absolute inset-0 bg-[#1a1614] rounded-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col md:flex-row border border-[#292524] transition-transform duration-700"
+        >
+            <!-- Paper Texture Overlay -->
+            <div
+                class="absolute inset-0 pointer-events-none opacity-[0.03] z-10 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] mix-blend-overlay ignore-capture"
+            >
+            </div>
+
+            <!-- Book Spine / Gutter Shadow -->
+            <div
+                class="hidden md:block absolute left-1/2 top-0 bottom-0 w-16 -ml-8 z-20 pointer-events-none bg-gradient-to-r from-transparent via-[#0c0a09]/40 to-transparent ignore-capture"
+            >
+            </div>
+            <div
+                class="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#292524]/50 z-20"
+            >
+            </div>
+
+            <!-- Left Page (Visuals) -->
+            <div
+                class="w-full md:w-1/2 h-[40%] md:h-full relative overflow-hidden p-6 md:p-16 flex items-center justify-center bg-[#1a1614]"
+            >
+                <!-- Inner Page Shadow (Left) -->
+                <div
+                    class="absolute inset-0 pointer-events-none bg-gradient-to-b md:bg-gradient-to-r from-black/20 to-transparent h-6 md:h-auto md:w-8 ignore-capture"
+                >
+                </div>
+
+                <div
+                    id="page-visual-container"
+                    class="w-full h-full relative flex items-center justify-center"
+                >
+                    <!-- Visuals will be injected here or toggled -->
+                    <div class="book-page-visual hidden w-full h-full" data-page="0">
+                        <PageIntro side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="1">
+                        <PageHeart side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="2">
+                        <PageSleep side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="3">
+                        <PageBreath side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="4">
+                        <PageSteps side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="5">
+                        <PageWords side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="6">
+                        <PageBlinks side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="7">
+                        <PageTears side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="8">
+                        <PageSkin side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="9">
+                        <PageMoon side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="10">
+                        <PageWater side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="11">
+                        <PageFood side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="12">
+                        <PageGrowth side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="13">
+                        <PageSun side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="14">
+                        <PageMind side="left" />
+                    </div>
+                    <div class="book-page-visual hidden w-full h-full" data-page="15">
+                        <PageFinal side="left" />
+                    </div>
+                </div>
+
+                <!-- Page Number Left -->
+                <div
+                    class="absolute bottom-3 left-6 md:bottom-6 md:left-8 text-[#57534e] font-serif text-[10px] md:text-xs tracking-widest opacity-50"
+                    id="page-num-left"
+                >
+                </div>
+            </div>
+
+            <!-- Right Page (Text) -->
+            <div
+                class="w-full md:w-1/2 h-[60%] md:h-full relative overflow-hidden p-4 md:p-16 flex items-center justify-center text-center md:text-left bg-[#1a1614]"
+            >
+                <!-- Inner Page Shadow (Right) -->
+                <div
+                    class="absolute inset-y-0 left-0 pointer-events-none bg-gradient-to-t md:bg-gradient-to-l from-transparent to-black/10 h-6 md:h-auto md:w-4 ignore-capture"
+                >
+                </div>
+
+                <div
+                    id="page-text-container"
+                    class="w-full h-full relative flex items-center justify-center break-normal hyphens-none"
+                >
+                    <!-- Texts will be injected here or toggled -->
+                    <div class="book-page-text hidden w-full h-full" data-page="0">
+                        <PageIntro side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="1">
+                        <PageHeart side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="2">
+                        <PageSleep side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="3">
+                        <PageBreath side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="4">
+                        <PageSteps side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="5">
+                        <PageWords side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="6">
+                        <PageBlinks side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="7">
+                        <PageTears side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="8">
+                        <PageSkin side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="9">
+                        <PageMoon side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="10">
+                        <PageWater side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="11">
+                        <PageFood side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="12">
+                        <PageGrowth side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="13">
+                        <PageSun side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="14">
+                        <PageMind side="right" />
+                    </div>
+                    <div class="book-page-text hidden w-full h-full" data-page="15">
+                        <PageFinal side="right" />
+                    </div>
+                </div>
+
+                <!-- Page Number Right -->
+                <div
+                    class="absolute bottom-3 right-6 md:bottom-6 md:right-8 text-[#57534e] font-serif text-[10px] md:text-xs tracking-widest opacity-50"
+                    id="page-num-right"
+                >
+                </div>
+
+                <!-- Share/Tear Button -->
+                <button
+                    id="share-tear-btn"
+                    class="absolute top-3 right-6 md:top-6 md:right-8 text-[#57534e] hover:text-red-400 transition-colors opacity-0 pointer-events-none ignore-capture"
+                    title="Arrancar página para compartir"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5 md:w-6 md:h-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Controls (Elegant & Always Visible) -->
+    <button
+        id="prev-page"
+        class="absolute -left-4 md:-left-20 top-[90%] md:top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-24 flex items-center justify-center text-[#a8a29e] hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none group z-50"
+        aria-label="Página anterior"
+    >
+        <div
+            class="hidden md:block absolute inset-0 border-l-2 border-t-2 border-b-2 border-[#57534e] rounded-l-full group-hover:border-[#e7e5e4] transition-colors bg-[#0c0a09] shadow-lg"
+        >
+        </div>
+        <!-- Mobile Circle Background -->
+        <div
+            class="md:hidden absolute inset-0 border-2 border-[#57534e] rounded-full bg-[#0c0a09] shadow-lg group-hover:border-[#e7e5e4] transition-colors"
+        >
+        </div>
+
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform relative z-10"
+        >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"
+            ></path>
+        </svg>
+    </button>
+
+    <button
+        id="next-page"
+        class="absolute -right-4 md:-right-20 top-[90%] md:top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-24 flex items-center justify-center text-[#a8a29e] hover:text-white transition-all duration-300 disabled:opacity-0 disabled:pointer-events-none group z-50"
+        aria-label="Página siguiente"
+    >
+        <div
+            class="hidden md:block absolute inset-0 border-r-2 border-t-2 border-b-2 border-[#57534e] rounded-r-full group-hover:border-[#e7e5e4] transition-colors bg-[#0c0a09] shadow-lg"
+        >
+        </div>
+        <!-- Mobile Circle Background -->
+        <div
+            class="md:hidden absolute inset-0 border-2 border-[#57534e] rounded-full bg-[#0c0a09] shadow-lg group-hover:border-[#e7e5e4] transition-colors"
+        >
+        </div>
+
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform relative z-10"
+        >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            ></path>
+        </svg>
+    </button>
+</div>
+
+<!-- Warning Modal -->
+<div
+    id="tear-warning-modal"
+    class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300"
+>
+    <div
+        class="bg-[#1a1614] border border-[#292524] p-8 max-w-md text-center shadow-2xl transform scale-95 transition-transform duration-300"
+        id="tear-warning-content"
+    >
+        <h3 class="font-serif text-2xl text-red-400 mb-4 uppercase tracking-widest">Advertencia</h3>
+        <p class="font-serif text-[#a8a29e] mb-8 leading-relaxed">
+            ARRANCAR ESTA PÁGINA PARA COMPARTIRLA LA CONSUMIRÁ PARA SIEMPRE.
+            <br /><br />
+            NO PODRÉIS VOLVER A LEERLA JAMÁS.
+            <br /><br />
+            ¿ESTÁIS SEGUROS?
+        </p>
+        <div class="flex justify-center gap-4 font-serif uppercase tracking-wider text-sm">
+            <button
+                id="cancel-tear"
+                class="px-6 py-2 border border-[#57534e] text-[#a8a29e] hover:bg-[#292524] transition-colors"
+            >
+                No, la conservaré
+            </button>
+            <button
+                id="confirm-tear"
+                class="px-6 py-2 bg-red-900/20 border border-red-900/50 text-red-400 hover:bg-red-900/40 transition-colors"
+            >
+                Sí, arrancadla
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { calculateLifeStats } from "../../../utils/libraryLogic";
+    import { shareElementAsImage } from "../../../utils/share";
+
+    let currentPage = 0;
+    const totalPages = 16;
+    const container = document.getElementById("life-book-container");
+    const bookInner = document.getElementById("book-inner-content");
+    const visuals = document.querySelectorAll(".book-page-visual");
+    const texts = document.querySelectorAll(".book-page-text");
+    const prevBtn = document.getElementById("prev-page") as HTMLButtonElement;
+    const nextBtn = document.getElementById("next-page") as HTMLButtonElement;
+    const leftNum = document.getElementById("page-num-left");
+    const rightNum = document.getElementById("page-num-right");
+    const shareBtn = document.getElementById("share-tear-btn");
+    const warningModal = document.getElementById("tear-warning-modal");
+    const warningContent = document.getElementById("tear-warning-content");
+    const cancelTearBtn = document.getElementById("cancel-tear");
+    const confirmTearBtn = document.getElementById("confirm-tear");
+
+    // State for torn pages (persisted in localStorage)
+    const getTornPages = () => JSON.parse(localStorage.getItem("life-book-torn-pages") || "[]");
+    const addTornPage = (pageIndex: number) => {
+        const torn = getTornPages();
+        if (!torn.includes(pageIndex)) {
+            torn.push(pageIndex);
+            localStorage.setItem("life-book-torn-pages", JSON.stringify(torn));
+        }
+    };
+
+    // Initialize
+    document.addEventListener("init-life-book", (e: any) => {
+        const { year, month } = e.detail;
+        const birthdate = new Date(year, month, 1);
+        const stats = calculateLifeStats(birthdate);
+
+        if (container) container.classList.remove("opacity-0");
+
+        // Broadcast stats to all pages
+        const event = new CustomEvent("update-life-stats", {
+            detail: { stats, birthdate },
+        });
+        document.dispatchEvent(event);
+
+        showPage(0);
+    });
+
+    const showPage = (index: number) => {
+        // Check if page is torn
+        const tornPages = getTornPages();
+        if (tornPages.includes(index)) {
+            // If torn, show empty/torn state or skip?
+            // Let's show a "torn" placeholder
+            showTornPage(index);
+        } else {
+            renderPageContent(index);
+        }
+
+        // Update Buttons
+        if (prevBtn) {
+            prevBtn.disabled = index === 0;
+            prevBtn.style.opacity = index === 0 ? "0" : "1";
+            prevBtn.style.pointerEvents = index === 0 ? "none" : "auto";
+        }
+        if (nextBtn) {
+            nextBtn.disabled = index === totalPages - 1;
+            nextBtn.style.opacity = index === totalPages - 1 ? "0" : "1";
+            nextBtn.style.pointerEvents = index === totalPages - 1 ? "none" : "auto";
+        }
+
+        currentPage = index;
+    };
+
+    const renderPageContent = (index: number) => {
+        // Hide all
+        visuals.forEach((el) => el.classList.add("hidden"));
+        texts.forEach((el) => el.classList.add("hidden"));
+
+        // Reset book style if it was torn previously
+        if (bookInner) {
+            bookInner.style.transform = "none";
+            bookInner.style.opacity = "1";
+        }
+
+        // Show current
+        const currentVisual = document.querySelector(`.book-page-visual[data-page="${index}"]`);
+        const currentText = document.querySelector(`.book-page-text[data-page="${index}"]`);
+
+        if (currentVisual) {
+            currentVisual.classList.remove("hidden");
+            currentVisual.classList.add("animate-fade-in");
+        }
+        if (currentText) {
+            currentText.classList.remove("hidden");
+            currentText.classList.add("animate-fade-in");
+        }
+
+        // Update Numbers
+        if (leftNum) leftNum.innerText = index === 0 ? "" : (index * 2).toString();
+        if (rightNum) rightNum.innerText = index === 0 ? "" : (index * 2 + 1).toString();
+
+        // Show Share Button (only for content pages, not intro or final)
+        if (shareBtn) {
+            if (index > 0 && index < totalPages - 1) {
+                shareBtn.style.opacity = "1";
+                shareBtn.style.pointerEvents = "auto";
+            } else {
+                shareBtn.style.opacity = "0";
+                shareBtn.style.pointerEvents = "none";
+            }
+        }
+    };
+
+    const showTornPage = (index: number) => {
+        // Hide content
+        visuals.forEach((el) => el.classList.add("hidden"));
+        texts.forEach((el) => el.classList.add("hidden"));
+
+        // Show "Torn" message
+        if (leftNum) leftNum.innerText = "";
+        if (rightNum) rightNum.innerText = "";
+        if (shareBtn) {
+            shareBtn.style.opacity = "0";
+            shareBtn.style.pointerEvents = "none";
+        }
+
+        // We can inject a specific visual for "Missing Page"
+        // For now, let's just leave it empty with a message
+        const currentText = document.querySelector(`.book-page-text[data-page="${index}"]`);
+        if (currentText) {
+            currentText.classList.remove("hidden");
+            currentText.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full opacity-30">
+                    <p class="font-serif text-xl uppercase tracking-widest text-[#a8a29e]">
+                        Página Arrancada
+                    </p>
+                    <p class="font-serif text-sm mt-4 italic text-[#57534e]">
+                        (Ya no está aquí)
+                    </p>
+                </div>
+            `;
+        }
+    };
+
+    // Tear Logic
+    shareBtn?.addEventListener("click", () => {
+        if (warningModal && warningContent) {
+            warningModal.classList.remove("hidden");
+            // Small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                warningModal.classList.remove("opacity-0");
+                warningContent.classList.remove("scale-95");
+                warningContent.classList.add("scale-100");
+            }, 10);
+        }
+    });
+
+    cancelTearBtn?.addEventListener("click", () => {
+        if (warningModal && warningContent) {
+            warningModal.classList.add("opacity-0");
+            warningContent.classList.remove("scale-100");
+            warningContent.classList.add("scale-95");
+            setTimeout(() => {
+                warningModal.classList.add("hidden");
+            }, 300);
+        }
+    });
+
+    confirmTearBtn?.addEventListener("click", async () => {
+        // 1. Close modal
+        if (warningModal) warningModal.classList.add("hidden");
+
+        // 2. Generate Share Content (Text)
+        let shareTitle = "Un Sacrificio";
+        let shareText = "He arrancado una página del libro de mi vida para mostrárosla.";
+
+        // Extract data from current page for the summary
+        const currentTextEl = document.querySelector(`.book-page-text[data-page="${currentPage}"]`);
+
+        if (currentTextEl) {
+            const title = currentTextEl.querySelector("h3")?.textContent || "Una Página";
+            const mainStat =
+                currentTextEl.querySelector(".font-variant-numeric")?.textContent?.trim() || "";
+
+            // Custom poetic messages based on page index
+            const messages: Record<number, string> = {
+                1: `Di mis ${mainStat} latidos para que encontraras tu volumen en la biblioteca de la vida.`, // Heart
+                2: `Sacrifiqué ${mainStat} horas de sueño eterno para despertar vuestra curiosidad.`, // Sleep
+                3: `He exhalado mi último aliento, ${mainStat} veces, para que podáis respirar esta página.`, // Breath
+                4: `Caminé ${mainStat} pasos hasta el fin del mundo solo para traeros este recuerdo.`, // Steps
+                5: `He silenciado ${mainStat} palabras. Ahora solo queda el silencio y esta página.`, // Words
+                6: `Cerré los ojos ${mainStat} veces. En esa oscuridad encontré esto para vosotros.`, // Blinks
+                7: `Lloré ${mainStat} litros de lágrimas. Un mar salado que ahora os pertenece.`, // Tears
+                8: `Me desollé vivo. ${mainStat} kilos de piel dejados atrás para revelar esta verdad.`, // Skin
+                9: `Aullé a ${mainStat} lunas llenas. La locura fue el precio de este conocimiento.`, // Moon
+                10: `Me bebí ${mainStat} litros de olvido. Ahora tengo sed de verdad.`, // Water
+                11: `Devoré ${mainStat} toneladas de vida. El hambre persiste, pero esta página os alimentará.`, // Food
+                12: `Corté ${mainStat} metros de mi propio ser. Crecerá de nuevo, pero este trozo es vuestro.`, // Growth
+                13: `Vi morir al sol ${mainStat} veces. Os regalo este amanecer eterno.`, // Sun
+                14: `Olvidé ${mainStat} pensamientos para recordar solo esto.`, // Mind
+            };
+
+            shareTitle = `El Sacrificio de ${title}`;
+            shareText =
+                messages[currentPage] ||
+                `He arrancado la página de ${title}. "Todo tiene un precio."`;
+        }
+
+        if (bookInner) {
+            // 3. Start Share Process (Capture first to preserve user activation context if possible)
+            // Animate Tearing concurrently
+            bookInner.style.transition = "transform 1s ease-in, opacity 1s ease-in";
+            bookInner.style.transform = "rotate(5deg) translateY(100px) scale(0.9)";
+            bookInner.style.opacity = "0";
+
+            // Perform Share
+            await shareElementAsImage({
+                element: bookInner,
+                title: shareTitle,
+                text: shareText,
+                url: window.location.href,
+                fileName: "pagina-sacrificada.png",
+                onSuccess: () => {
+                    // Optional: Show success toast
+                },
+                onError: () => {
+                    // Already handled in share.ts fallback
+                },
+            });
+
+            // 4. Update UI State after animation/share
+            setTimeout(() => {
+                addTornPage(currentPage);
+                showTornPage(currentPage);
+
+                // Restore book style for next time
+                bookInner.style.transition = "none";
+                bookInner.style.transform = "none";
+                bookInner.style.opacity = "1";
+
+                if (currentPage > 0) showPage(currentPage - 1);
+            }, 1000); // Wait for the visual animation to finish
+        }
+    });
+
+    prevBtn?.addEventListener("click", () => {
+        if (currentPage > 0) showPage(currentPage - 1);
+    });
+
+    nextBtn?.addEventListener("click", () => {
+        if (currentPage < totalPages - 1) showPage(currentPage + 1);
+    });
+</script>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
