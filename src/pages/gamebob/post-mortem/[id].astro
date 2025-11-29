@@ -13,16 +13,9 @@ export function getStaticPaths() {
 
 const { entry } = Astro.props;
 
-// Dynamic image loading
-const images = import.meta.glob<{ default: ImageMetadata }>(
-    "/src/assets/gamebob/post-mortem/*.{jpeg,jpg,png,gif}"
-);
-const imagePath = entry.image ? `/src/assets/gamebob/post-mortem/${entry.image}` : null;
-let imageSrc = null;
-
-if (imagePath && images[imagePath]) {
-    imageSrc = (await images[imagePath]()).default;
-}
+// Image path (now using public folder for easier OG support)
+const imagePath = entry.image ? `/assets/gamebob/post-mortem/${entry.image}` : null;
+const ogImage = imagePath || "/assets/gamebob/post-mortem/og-post-mortem.png";
 
 const shareText = `Post Mortem: ${entry.title}`;
 ---
@@ -30,7 +23,7 @@ const shareText = `Post Mortem: ${entry.title}`;
 <GameBobLayout
     title={`${entry.title} | Post Mortem`}
     description={`Mis errores y aprendizajes: ${entry.title}`}
-    image={imageSrc ? imageSrc.src : "/assets/gamebob/post-mortem/og-post-mortem.png"}
+    image={ogImage}
 >
     <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4 relative">
         <!-- Background decoration -->
@@ -92,10 +85,10 @@ const shareText = `Post Mortem: ${entry.title}`;
                     }
 
                     {
-                        imageSrc && (
+                        imagePath && (
                             <div class="w-full rounded-xl overflow-hidden border border-white/10 shadow-lg mb-8">
-                                <Image
-                                    src={imageSrc}
+                                <img
+                                    src={imagePath}
                                     alt={`Imagen del error: ${entry.title}`}
                                     class="w-full h-auto object-cover max-h-[300px]"
                                 />
