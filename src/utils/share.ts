@@ -356,67 +356,102 @@ export async function handleGlobalShare(e: MouseEvent) {
 
     const fullText = `${shareText}\n\n${window.location.href}`;
 
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                title: shareTitle,
-                text: fullText,
-            });
-        } catch (err) {
-            console.error("Error sharing:", err);
-            // If user cancelled, do nothing.
-            if ((err as Error).name === 'AbortError') return;
-
-            // If other error, try fallback? No, usually better to just fail or let user retry.
-        }
-    } else {
-        // Fallback for browsers that don't support Web Share API
-
-        // Check if we are on mobile but in an insecure context (common dev issue)
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        const isSecure = window.isSecureContext;
-
-        if (isMobile && !isSecure) {
-            if ((window as any).toast) {
-                (window as any).toast.show("⚠️ Compartir requiere HTTPS. Copiado al portapapeles.", "warning");
+    // Waterfall Share Logic
+    const tryShare = async () => {
+        // 1. Try Native Share
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: shareTitle,
+                    text: fullText,
+                });
+                return true; // Success
+            } catch (err) {
+                // If user cancelled, stop here, don't fallback to clipboard (it's annoying)
+                if ((err as Error).name === 'AbortError') return true;
+                console.warn("Native share failed, falling back to clipboard:", err);
             }
         }
 
+        // 2. Fallback to Clipboard
+        return await copyToClipboard();
+    };
+
+    const copyToClipboard = async () => {
         try {
+            // Check for insecure context on mobile to warn user
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const isSecure = window.isSecureContext;
+
+            if (isMobile && !isSecure) {
+                if ((window as any).toast) {
+                    (window as any).toast.show("⚠️ Compartir requiere HTTPS. Copiado al portapapeles.", "warning");
+                }
+            }
+
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(fullText);
             } else {
-                // Fallback for HTTP/Dev environments
-                const textArea = document.createElement("textarea");
-                textArea.value = fullText;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-9999px";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
+                throw new Error("Clipboard API unavailable");
             }
 
-            // Visual feedback
-            const originalContent = element.innerHTML;
-            // Only change text if it's not the warning case above (or maybe always?)
-            // Let's keep it simple.
-
-            // If we didn't show the warning toast, show the "Copiado" feedback on the element
-            if (!isMobile || isSecure) {
-                element.innerHTML =
-                    '<span style="font-size: 0.75em; font-weight: bold; color: #10b981;">¡Copiado!</span>';
-
-                setTimeout(() => {
-                    element.innerHTML = originalContent;
-                }, 2000);
-            }
-
+            showCopiedFeedback();
+            return true;
         } catch (err) {
-            console.error("Clipboard failed", err);
+            console.warn("Clipboard API failed, trying execCommand fallback:", err);
+            return fallbackCopyTextToClipboard(fullText);
         }
-    }
+    };
+
+    const fallbackCopyTextToClipboard = (text: string) => {
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+
+            // Avoid scrolling to bottom
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0"; // Invisible but present
+
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            if (successful) {
+                showCopiedFeedback();
+                return true;
+            } else {
+                console.error("execCommand copy failed");
+                return false;
+            }
+        } catch (err) {
+            console.error("Fallback copy failed:", err);
+            return false;
+        }
+    };
+
+    const showCopiedFeedback = () => {
+        // Visual feedback
+        const originalContent = element.innerHTML;
+        // Avoid double feedback if we already showed the warning toast
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const isSecure = window.isSecureContext;
+
+        if (!isMobile || isSecure) {
+            element.innerHTML =
+                '<span style="font-size: 0.75em; font-weight: bold; color: #10b981;">¡Copiado!</span>';
+
+            setTimeout(() => {
+                element.innerHTML = originalContent;
+            }, 2000);
+        }
+    };
+
+    await tryShare();
 }
 
 // Auto-initialize if running in the browser
