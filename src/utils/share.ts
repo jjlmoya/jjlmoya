@@ -10,11 +10,15 @@ export interface ShareImageOptions {
     onError?: (error: any) => void;
 }
 
-const downloadImage = (canvas: HTMLCanvasElement, filename: string) => {
+const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.download = filename;
-    link.href = canvas.toDataURL("image/png");
+    link.href = url;
+    document.body.appendChild(link); // Required for some browsers
     link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
 export const shareElementAsImage = async ({
@@ -229,10 +233,10 @@ export const shareElementAsImage = async ({
                         }
 
                         console.log("[Share] Falling back to download due to error.");
-                        downloadImage(canvas, fileName);
+                        downloadBlob(blob, fileName);
                     }
                 } else {
-                    console.log("[Share] Navigator.share not supported or file sharing not allowed.");
+                    console.log("[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context).");
 
                     // Fallback: Browser doesn't support file share
                     // Try to share text natively first!
@@ -257,7 +261,7 @@ export const shareElementAsImage = async ({
                     }
 
                     console.log("[Share] Downloading image as fallback.");
-                    downloadImage(canvas, fileName);
+                    downloadBlob(blob, fileName);
                 }
             } else {
                 // Blob generation failed
