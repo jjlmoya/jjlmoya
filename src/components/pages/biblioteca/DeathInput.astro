@@ -4,10 +4,10 @@
 
 <div
     id="death-input-container"
-    class="hidden flex-col items-center gap-8 mt-8 transition-opacity duration-1000 opacity-0 w-full max-w-3xl mx-auto"
+    class="hidden grid-cols-1 place-items-center mt-8 transition-opacity duration-1000 opacity-0 w-full max-w-3xl mx-auto"
 >
     <!-- YEAR SLIDER -->
-    <div id="year-section" class="flex flex-col items-center gap-6 w-full">
+    <div id="year-section" class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full transition-opacity duration-500 z-20">
         
         <!-- Wrapper for Slider & Lights (Ensures vertical centering ignores the button) -->
         <div class="relative w-full group">
@@ -46,14 +46,15 @@
 
         <button
             id="year-confirm-btn"
-            class="z-30 mt-4 text-[#e7e5e4] border border-[#e7e5e4]/30 px-12 py-3 rounded-sm bg-[#1c1917] hover:bg-[#e7e5e4] hover:text-[#0c0a09] hover:border-[#e7e5e4] transition-all font-serif uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+            class="z-30 mt-4 text-[#e7e5e4] border border-[#e7e5e4]/30 px-12 py-3 rounded-sm bg-[#1c1917] hover:bg-[#e7e5e4] hover:text-[#0c0a09] hover:border-[#e7e5e4] transition-all font-serif uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(0,0,0,0.5)] active:scale-95"
+            style="touch-action: none; -webkit-tap-highlight-color: transparent;"
         >
             Siguiente
         </button>
     </div>
 
     <!-- MONTH SELECTION -->
-    <div id="month-section" class="hidden flex-col items-center gap-6 animate-fade-in w-full">
+    <div id="month-section" class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full opacity-0 pointer-events-none transition-opacity duration-500 z-10">
         <div class="grid grid-cols-3 gap-3 md:gap-4 md:grid-cols-4 w-full max-w-2xl">
             {
                 [
@@ -72,6 +73,7 @@
                 ].map((month, index) => (
                     <button
                         class="month-btn text-[#e7e5e4]/60 hover:text-[#0c0a09] hover:bg-[#e7e5e4] transition-all px-4 py-3 rounded-sm font-serif text-lg border border-[#e7e5e4]/20 hover:border-[#e7e5e4] hover:scale-105 active:scale-95"
+                        style="touch-action: none; -webkit-tap-highlight-color: transparent;"
                         data-month={index}
                     >
                         {month}
@@ -100,6 +102,7 @@
     document.addEventListener("show-death-year-input", () => {
         if (container) {
             container.classList.remove("hidden");
+            container.classList.add("grid"); // Activate grid
             setTimeout(() => {
                 container.classList.remove("opacity-0");
                 // Scroll to a reasonable default (e.g., 1990)
@@ -169,81 +172,125 @@
         });
     });
 
-    // Slider Logic (Intersection Observer for center detection)
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                const spine = entry.target.querySelector('.book-spine');
-                const text = entry.target.querySelector('.book-text');
+    // Slider Logic (Scroll based for precision)
+    const updateActiveYear = () => {
+        if (!yearSlider) return;
+        
+        const sliderRect = yearSlider.getBoundingClientRect();
+        const center = sliderRect.left + sliderRect.width / 2;
+        
+        let closestItem: HTMLElement | null = null;
+        let minDiff = Infinity;
 
-                if (entry.isIntersecting) {
-                    // Highlight (Selected)
-                    spine?.classList.remove('bg-[#292524]', 'h-40', 'opacity-50');
-                    spine?.classList.add('bg-[#78716c]', 'h-64', 'shadow-[0_0_30px_rgba(249,115,22,0.25)]', 'z-10'); // Orange glow
-                    
-                    text?.classList.remove('text-[#e7e5e4]/30');
-                    text?.classList.add('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
+        yearItems.forEach((item) => {
+            const el = item as HTMLElement;
+            const rect = el.getBoundingClientRect();
+            const itemCenter = rect.left + rect.width / 2;
+            const diff = Math.abs(center - itemCenter);
 
-                    selectedYear = parseInt((entry.target as HTMLElement).dataset.year || "0");
-                } else {
-                    spine?.classList.add('bg-[#292524]', 'h-40', 'opacity-50');
-                    spine?.classList.remove('bg-[#57534e]', 'h-64', 'shadow-[0_0_30px_rgba(249,115,22,0.15)]', 'z-10');
-                    
-                    text?.classList.add('text-[#e7e5e4]/60');
-                    text?.classList.remove('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
-                }
-            });
-        },
-        {
-            root: yearSlider,
-            threshold: 0.5,
-            rootMargin: "0px -45% 0px -45%", // Very narrow center detection (horizontal)
+            // Reset styles (Default state)
+            const spine = el.querySelector('.book-spine');
+            const text = el.querySelector('.book-text');
+            
+            spine?.classList.add('bg-[#292524]', 'h-40', 'opacity-50');
+            spine?.classList.remove('bg-[#78716c]', 'h-64', 'shadow-[0_0_30px_rgba(249,115,22,0.25)]', 'z-10');
+            text?.classList.add('text-[#e7e5e4]/60');
+            text?.classList.remove('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
+
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestItem = el;
+            }
+        });
+
+        if (closestItem) {
+            const el = closestItem as HTMLElement;
+            const spine = el.querySelector('.book-spine');
+            const text = el.querySelector('.book-text');
+
+            // Active state
+            spine?.classList.remove('bg-[#292524]', 'h-40', 'opacity-50');
+            spine?.classList.add('bg-[#78716c]', 'h-64', 'shadow-[0_0_30px_rgba(249,115,22,0.25)]', 'z-10');
+            text?.classList.remove('text-[#e7e5e4]/60');
+            text?.classList.add('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
+
+            selectedYear = parseInt(el.dataset.year || "0");
         }
-    );
+    };
 
-    yearItems.forEach((item) => observer.observe(item));
+    if (yearSlider) {
+        yearSlider.addEventListener('scroll', () => {
+            window.requestAnimationFrame(updateActiveYear);
+        });
+        // Initial check
+        setTimeout(updateActiveYear, 500);
+    }
 
-    // Confirm Year
-    yearConfirmBtn?.addEventListener("click", () => {
+    // Confirm Year Logic
+    const handleConfirmYear = () => {
         if (selectedYear) {
             // Dispatch event with year
             const event = new CustomEvent("year-selected", { detail: { year: selectedYear } });
             document.dispatchEvent(event);
 
-            // Hide Year Section
+            // Hide Year Section (Fade out but keep space via Grid)
             if (yearSection) {
-                yearSection.style.opacity = "0";
-                setTimeout(() => {
-                    yearSection.classList.add("hidden");
-                }, 300);
+                yearSection.classList.add("opacity-0", "pointer-events-none");
             }
         }
-    });
+    };
+
+    if (yearConfirmBtn) {
+        yearConfirmBtn.addEventListener("touchstart", (e) => {
+            e.preventDefault(); // Prevent double-tap zoom
+            e.stopPropagation();
+            handleConfirmYear();
+        }, { passive: false });
+
+        yearConfirmBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            handleConfirmYear();
+        });
+    }
 
     // Show Month Input when requested
     document.addEventListener("show-death-month-input", () => {
         if (monthSection) {
-            monthSection.classList.remove("hidden");
-            monthSection.classList.add("flex");
+            // Just fade in, space is already reserved by Grid
+            monthSection.classList.remove("opacity-0", "pointer-events-none");
         }
     });
 
     // Month Input Logic
+    const handleMonthSelect = (btn: HTMLElement) => {
+        const month = parseInt(btn.dataset.month || "0");
+
+        // Dispatch final selection
+        const event = new CustomEvent("birthdate-selected", {
+            detail: { year: selectedYear, month },
+        });
+        document.dispatchEvent(event);
+
+        // Hide everything
+        if (container) container.classList.add("opacity-0");
+        setTimeout(() => {
+            if (container) {
+                container.classList.add("hidden");
+                container.classList.remove("grid");
+            }
+        }, 1000);
+    };
+
     monthBtns.forEach((btn) => {
+        btn.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleMonthSelect(btn as HTMLElement);
+        }, { passive: false });
+
         btn.addEventListener("click", (e) => {
-            const month = parseInt((e.target as HTMLElement).dataset.month || "0");
-
-            // Dispatch final selection
-            const event = new CustomEvent("birthdate-selected", {
-                detail: { year: selectedYear, month },
-            });
-            document.dispatchEvent(event);
-
-            // Hide everything
-            if (container) container.classList.add("opacity-0");
-            setTimeout(() => {
-                if (container) container.classList.add("hidden");
-            }, 1000);
+            e.preventDefault();
+            handleMonthSelect(btn as HTMLElement);
         });
     });
 </script>
