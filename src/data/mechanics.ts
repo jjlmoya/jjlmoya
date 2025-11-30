@@ -143,4 +143,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["física", "dibujo", "simulación"],
         platforms: "all",
     },
+    {
+        title: "Finger Twister",
+        description: "caos multitáctil. usa todos tus dedos para mantener los nodos activos.",
+        url: "/gamebob/mecanicas/finger-twister/",
+        icon: "mdi:hand-back-right",
+        tags: ["multitouch", "arcade", "caos"],
+        platforms: "mobile",
+    },
 ];
