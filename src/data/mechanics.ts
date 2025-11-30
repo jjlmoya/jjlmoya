@@ -111,4 +111,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["puzzle", "experimental", "audio"],
         platforms: "all",
     },
+    {
+        title: "Vibrator Cracker",
+        description: "siente el mecanismo. usa la vibración para encontrar la combinación de la caja fuerte.",
+        url: "/gamebob/mecanicas/vibrator-cracker/",
+        icon: "mdi:safe",
+        tags: ["haptics", "experimental", "mobile"],
+        platforms: "all",
+    },
 ];
