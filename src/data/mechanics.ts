@@ -135,4 +135,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["sigilo", "colores", "acción"],
         platforms: "all",
     },
+    {
+        title: "The Barrier",
+        description: "control de flujo. dibuja líneas para redirigir una cascada de partículas.",
+        url: "/gamebob/mecanicas/the-barrier/",
+        icon: "mdi:vector-line",
+        tags: ["física", "dibujo", "simulación"],
+        platforms: "all",
+    },
 ];
