@@ -13,7 +13,9 @@ export class FingerTwisterMechanic {
     public nodes: Node[] = [];
     public score: number = 0;
     public isGameOver: boolean = false;
+    public isWin: boolean = false;
     public maxNodes: number = 5; // Max simultaneous holds
+    public winTimer: number = 0;
 
     private width: number;
     private height: number;
@@ -31,6 +33,8 @@ export class FingerTwisterMechanic {
         this.nodes = [];
         this.score = 0;
         this.isGameOver = false;
+        this.isWin = false;
+        this.winTimer = 0;
         this.nextNodeId = 0;
         this.spawnTimer = 0;
         this.spawnInterval = 120;
@@ -38,7 +42,7 @@ export class FingerTwisterMechanic {
     }
 
     public update(pointers: { id: number; x: number; y: number }[]) {
-        if (this.isGameOver) return;
+        if (this.isGameOver || this.isWin) return;
 
         // 1. Map pointers to nodes
         // Reset held status for checking
@@ -51,9 +55,6 @@ export class FingerTwisterMechanic {
                 const dy = p.y - node.y;
                 if (dx * dx + dy * dy < node.radius * node.radius) {
                     // This pointer is touching this node
-                    // If node was already held by another pointer, that's fine (multi-touch overlap)
-                    // But ideally one pointer -> one node? 
-                    // For simplicity: if a pointer is in a node, that node is held.
 
                     // If node was not held, mark it held
                     if (!node.isHeld) {
@@ -65,12 +66,6 @@ export class FingerTwisterMechanic {
                     if (node.heldBy === p.id) {
                         activeHolds.add(node.id);
                     }
-
-                    // If it was held by ANOTHER pointer, but that pointer is gone?
-                    // We need to be careful. 
-                    // Let's simplify: A node is held if ANY pointer is on it.
-                    // But "Twister" requires keeping the finger there.
-                    // So we must track continuity.
                 }
             }
         }
@@ -98,8 +93,8 @@ export class FingerTwisterMechanic {
         }
 
         // 3. Spawning
-        // Only spawn if we haven't reached max nodes
-        if (this.nodes.length < this.maxNodes) {
+        // Only spawn if we haven't reached max nodes AND all current nodes are held
+        if (this.nodes.length < this.maxNodes && this.nodes.every(n => n.isHeld)) {
             this.spawnTimer++;
             if (this.spawnTimer >= this.spawnInterval) {
                 this.spawnNode();
@@ -109,11 +104,21 @@ export class FingerTwisterMechanic {
             }
         }
 
-        // 4. Scoring
+        // 4. Scoring & Win Condition
         // Score increases for every frame you hold all active nodes?
         // Or just for surviving.
         if (this.nodes.length > 0 && this.nodes.every(n => n.isHeld)) {
             this.score++;
+        }
+
+        // Win Condition: Hold 5 nodes for 5 seconds (approx 300 frames)
+        if (this.nodes.length === this.maxNodes && this.nodes.every(n => n.isHeld)) {
+            this.winTimer++;
+            if (this.winTimer >= 300) {
+                this.isWin = true;
+            }
+        } else {
+            this.winTimer = 0;
         }
     }
 

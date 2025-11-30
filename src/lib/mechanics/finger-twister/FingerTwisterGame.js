@@ -61,7 +61,7 @@ export class FingerTwisterGame {
     handleStart(e) {
         e.preventDefault();
 
-        if (this.mechanic.isGameOver) {
+        if (this.mechanic.isGameOver || this.mechanic.isWin) {
             this.mechanic.reset();
             this.pointers = []; // Clear pointers on restart
             return;
@@ -172,6 +172,20 @@ export class FingerTwisterGame {
             this.ctx.fillStyle = "#FF0055";
             this.ctx.font = "bold 40px monospace";
             this.ctx.fillText("GAME OVER", this.width / 2, this.height / 2 - 20);
+
+            this.ctx.fillStyle = "#FFFFFF";
+            this.ctx.font = "20px monospace";
+            this.ctx.fillText("Tap to Restart", this.width / 2, this.height / 2 + 30);
+        }
+
+        // Win Screen
+        if (this.mechanic.isWin) {
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+            this.ctx.fillRect(0, 0, this.width, this.height);
+
+            this.ctx.fillStyle = "#00FF55";
+            this.ctx.font = "bold 40px monospace";
+            this.ctx.fillText("YOU WIN!", this.width / 2, this.height / 2 - 20);
 
             this.ctx.fillStyle = "#FFFFFF";
             this.ctx.font = "20px monospace";
