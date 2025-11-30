@@ -103,4 +103,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["shooter", "puzzle", "acción"],
         platforms: "desktop",
     },
+    {
+        title: "Echolocation",
+        description: "navega en la oscuridad. usa el sonido para revelar el mundo invisible.",
+        url: "/gamebob/mecanicas/echolocation/",
+        icon: "mdi:radar",
+        tags: ["puzzle", "experimental", "audio"],
+        platforms: "all",
+    },
 ];

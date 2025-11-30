@@ -1,0 +1,97 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE =
+    "https://github.com/jjlmoya/jjlmoya/tree/main/src/pages/gamebob/mecanicas/echolocation.astro";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/pages/gamebob/mecanicas/echolocation.astro";
+---
+
+<MechanicPage
+    title="Ecolocalización"
+    description="Navega en la oscuridad absoluta. Usa el sonido para revelar tu entorno y encontrar la salida."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+>
+    <Icon slot="icon" name="mdi:radar" class="text-emerald-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Usa las Flechas para Moverte"
+        subInstruction="Haz ruido para ver"
+        verticalOnMobile={false}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Juego de plataformas en oscuridad total.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>El sonido rebota en las superficies revelando su posición.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Saltar, aterrizar y chocar genera ondas de sonido.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Flechas / WASD</span>
+                <span class="text-xs text-zinc-400">Moverse y Saltar</span>
+            </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Z / Enter</span>
+                <span class="text-xs text-zinc-400">Gritar (Sonar)</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+
+    <div
+        id="winMessage"
+        class="hidden absolute inset-0 flex items-center justify-center bg-black/80 z-50 pointer-events-none"
+    >
+        <div class="text-center pointer-events-auto">
+            <h2 class="text-4xl font-bold text-emerald-400 mb-4">¡Salida Encontrada!</h2>
+            <button
+                id="restartBtn"
+                class="px-6 py-3 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform"
+            >
+                Jugar de nuevo
+            </button>
+        </div>
+    </div>
+</MechanicPage>
+
+<script>
+    import { EcholocationGame } from "../../../lib/mechanics/echolocation/EcholocationGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: EcholocationGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new EcholocationGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+    }
+</script>
