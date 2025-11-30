@@ -1,0 +1,79 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE =
+    "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/color-chameleon";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/color-chameleon/ColorChameleonGame.js";
+---
+
+<MechanicPage
+    title="Color Chameleon"
+    description="Camuflaje reactivo. Cambia tu color para absorber a los enemigos del mismo color."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+>
+    <Icon slot="icon" name="mdi:palette" class="text-green-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Click/Tap para cambiar de color"
+        subInstruction="Absorbe enemigos de tu mismo color. ¡Evita los diferentes!"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-green-400 mt-1">•</span>
+                <span>Enemigos de colores se acercan al centro.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-green-400 mt-1">•</span>
+                <span>Debes coincidir con el color del enemigo para absorberlo.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-green-400 mt-1">•</span>
+                <span>Si te toca un color diferente, pierdes.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center w-full">
+                <span class="block text-white font-bold">Click / Tap</span>
+                <span class="text-xs text-zinc-400">Ciclar Color (Rojo -> Verde -> Azul)</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { ColorChameleonGame } from "../../../lib/mechanics/color-chameleon/ColorChameleonGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+
+    let game: ColorChameleonGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new ColorChameleonGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+    }
+</script>

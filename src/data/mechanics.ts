@@ -127,4 +127,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["física", "partículas", "input"],
         platforms: "all",
     },
+    {
+        title: "Color Chameleon",
+        description: "camuflaje activo. cambia tu color para fundirte con el entorno y sobrevivir.",
+        url: "/gamebob/mecanicas/color-chameleon/",
+        icon: "mdi:palette",
+        tags: ["sigilo", "colores", "acción"],
+        platforms: "all",
+    },
 ];
