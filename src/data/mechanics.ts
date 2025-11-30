@@ -119,4 +119,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["haptics", "experimental", "mobile"],
         platforms: "all",
     },
+    {
+        title: "Magnetic Finger",
+        description: "control magnético. atrae o repele partículas con la punta de tus dedos.",
+        url: "/gamebob/mecanicas/magnetic-finger/",
+        icon: "mdi:magnet",
+        tags: ["física", "partículas", "input"],
+        platforms: "all",
+    },
 ];

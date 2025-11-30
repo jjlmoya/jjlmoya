@@ -1,0 +1,120 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE =
+    "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/magnetic-finger";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/magnetic-finger/MagneticFingerMechanic.ts";
+---
+
+<MechanicPage
+    title="Magnetic Finger"
+    description="Controla el magnetismo. Atrae o repele partículas metálicas con tu toque."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+>
+    <Icon slot="icon" name="mdi:magnet" class="text-blue-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Toca para activar el imán"
+        subInstruction="Cambia la polaridad para atraer o repeler"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Simulación de fuerzas magnéticas.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Partículas con masa y fricción variable.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Interacción táctil directa.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="flex gap-4 justify-center w-full">
+                <button
+                    id="btn-attract"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition-colors active-mode"
+                >
+                    Atraer
+                </button>
+                <button
+                    id="btn-repel"
+                    class="bg-zinc-700 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold transition-colors"
+                >
+                    Repeler
+                </button>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<style>
+    .active-mode {
+        outline: 2px solid white;
+        outline-offset: 2px;
+    }
+</style>
+
+<script>
+    import { MagneticFingerGame } from "../../../lib/mechanics/magnetic-finger/MagneticFingerGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    const btnAttract = document.getElementById("btn-attract");
+    const btnRepel = document.getElementById("btn-repel");
+
+    let game: MagneticFingerGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new MagneticFingerGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+
+        if (btnAttract && btnRepel) {
+            btnAttract.addEventListener("click", () => {
+                if (game) game.setPolarity(1);
+
+                btnAttract.classList.add("active-mode", "bg-blue-600");
+                btnAttract.classList.remove("bg-zinc-700");
+
+                btnRepel.classList.remove("active-mode", "bg-red-600");
+                btnRepel.classList.add("bg-zinc-700");
+            });
+
+            btnRepel.addEventListener("click", () => {
+                if (game) game.setPolarity(-1);
+
+                btnRepel.classList.add("active-mode", "bg-red-600");
+                btnRepel.classList.remove("bg-zinc-700");
+
+                btnAttract.classList.remove("active-mode", "bg-blue-600");
+                btnAttract.classList.add("bg-zinc-700");
+            });
+        }
+    }
+</script>
