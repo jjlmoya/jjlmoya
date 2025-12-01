@@ -39,7 +39,7 @@ export class VibratorCrackerGame {
 
         // Bind methods once to allow removal later
         this._boundOnPointerMove = (e: any) => {
-            if (e.type === 'touchmove') {
+            if (e.type === "touchmove") {
                 if (this.isDragging) {
                     e.preventDefault();
                     this.onPointerMove(e.touches[0]);
@@ -72,18 +72,22 @@ export class VibratorCrackerGame {
         window.addEventListener("mouseup", this._boundOnPointerUp);
 
         // Touch
-        this.canvas.addEventListener("touchstart", (e) => {
-            const touch = e.touches[0];
-            const dx = touch.clientX - this.canvas.getBoundingClientRect().left - this.centerX;
-            const dy = touch.clientY - this.canvas.getBoundingClientRect().top - this.centerY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                const touch = e.touches[0];
+                const dx = touch.clientX - this.canvas.getBoundingClientRect().left - this.centerX;
+                const dy = touch.clientY - this.canvas.getBoundingClientRect().top - this.centerY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
 
-            // Only prevent default if touching the dial
-            if (dist < 150) {
-                e.preventDefault();
-                this.onPointerDown(touch);
-            }
-        }, { passive: false });
+                // Only prevent default if touching the dial
+                if (dist < 150) {
+                    e.preventDefault();
+                    this.onPointerDown(touch);
+                }
+            },
+            { passive: false }
+        );
 
         window.addEventListener("touchmove", this._boundOnPointerMove, { passive: false });
         window.addEventListener("touchend", this._boundOnPointerUp);
@@ -251,16 +255,20 @@ export class VibratorCrackerGame {
 
             // Draw progress arc
             this.ctx.beginPath();
-            this.ctx.arc(this.centerX, this.centerY - 140 - indicatorOffset, 15, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * progress));
+            this.ctx.arc(
+                this.centerX,
+                this.centerY - 140 - indicatorOffset,
+                15,
+                -Math.PI / 2,
+                -Math.PI / 2 + Math.PI * 2 * progress
+            );
             this.ctx.strokeStyle = "#4ade80";
             this.ctx.lineWidth = 3;
             this.ctx.stroke();
-
         } else {
             this.ctx.fillStyle = "#e11d48"; // Red indicator
             this.ctx.fill();
         }
-
 
         // Status / Combination Progress
         this.drawStatus();

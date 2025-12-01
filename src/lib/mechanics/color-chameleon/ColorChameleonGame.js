@@ -20,10 +20,14 @@ export class ColorChameleonGame {
 
     initInput() {
         this.canvas.addEventListener("mousedown", this.handleClick);
-        this.canvas.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            this.handleClick(e);
-        }, { passive: false });
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                this.handleClick(e);
+            },
+            { passive: false }
+        );
     }
 
     handleClick(e) {
@@ -89,13 +93,16 @@ export class ColorChameleonGame {
 
             // Draw shape based on color to help colorblindness
             this.ctx.beginPath();
-            if (enemy.colorIndex === 0) { // Red - Square
+            if (enemy.colorIndex === 0) {
+                // Red - Square
                 this.ctx.rect(-10, -10, 20, 20);
-            } else if (enemy.colorIndex === 1) { // Green - Triangle
+            } else if (enemy.colorIndex === 1) {
+                // Green - Triangle
                 this.ctx.moveTo(0, -12);
                 this.ctx.lineTo(12, 10);
                 this.ctx.lineTo(-12, 10);
-            } else { // Blue - Circle
+            } else {
+                // Blue - Circle
                 this.ctx.arc(0, 0, 12, 0, Math.PI * 2);
             }
             this.ctx.fill();

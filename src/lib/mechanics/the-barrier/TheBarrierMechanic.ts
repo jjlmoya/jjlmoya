@@ -44,7 +44,7 @@ export class TheBarrierMechanic {
             start: { ...start },
             end: { ...end },
             life: 300, // 5 seconds at 60fps
-            maxLife: 300
+            maxLife: 300,
         });
     }
 
@@ -55,11 +55,11 @@ export class TheBarrierMechanic {
             prevPos: { x, y },
             vel: {
                 x: (Math.random() - 0.5) * 2,
-                y: Math.random() * 2
+                y: Math.random() * 2,
             },
             color: colors[Math.floor(Math.random() * colors.length)],
             size: Math.random() * 2 + 2,
-            life: 1.0
+            life: 1.0,
         });
     }
 
@@ -105,8 +105,14 @@ export class TheBarrierMechanic {
                 p.vel.y = Math.random() * 2;
                 p.vel.x = (Math.random() - 0.5) * 2;
             }
-            if (p.pos.x < 0) { p.pos.x = 0; p.vel.x *= -1; }
-            if (p.pos.x > this.width) { p.pos.x = this.width; p.vel.x *= -1; }
+            if (p.pos.x < 0) {
+                p.pos.x = 0;
+                p.vel.x *= -1;
+            }
+            if (p.pos.x > this.width) {
+                p.pos.x = this.width;
+                p.vel.x *= -1;
+            }
         }
     }
 

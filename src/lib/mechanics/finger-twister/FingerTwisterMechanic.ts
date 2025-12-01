@@ -94,7 +94,7 @@ export class FingerTwisterMechanic {
 
         // 3. Spawning
         // Only spawn if we haven't reached max nodes AND all current nodes are held
-        if (this.nodes.length < this.maxNodes && this.nodes.every(n => n.isHeld)) {
+        if (this.nodes.length < this.maxNodes && this.nodes.every((n) => n.isHeld)) {
             this.spawnTimer++;
             if (this.spawnTimer >= this.spawnInterval) {
                 this.spawnNode();
@@ -107,12 +107,12 @@ export class FingerTwisterMechanic {
         // 4. Scoring & Win Condition
         // Score increases for every frame you hold all active nodes?
         // Or just for surviving.
-        if (this.nodes.length > 0 && this.nodes.every(n => n.isHeld)) {
+        if (this.nodes.length > 0 && this.nodes.every((n) => n.isHeld)) {
             this.score++;
         }
 
         // Win Condition: Hold 5 nodes for 5 seconds (approx 300 frames)
-        if (this.nodes.length === this.maxNodes && this.nodes.every(n => n.isHeld)) {
+        if (this.nodes.length === this.maxNodes && this.nodes.every((n) => n.isHeld)) {
             this.winTimer++;
             if (this.winTimer >= 300) {
                 this.isWin = true;
@@ -148,12 +148,13 @@ export class FingerTwisterMechanic {
             const colors = ["#FF0055", "#00FF55", "#0055FF", "#FFFF00", "#FF00FF"];
             this.nodes.push({
                 id: this.nextNodeId++,
-                x, y,
+                x,
+                y,
                 radius: 40,
                 color: colors[Math.floor(Math.random() * colors.length)],
                 isHeld: false,
                 heldBy: null,
-                spawnTime: Date.now()
+                spawnTime: Date.now(),
             });
         }
     }

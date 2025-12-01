@@ -12,12 +12,12 @@ A blind navigation mechanic where the player must use sound waves to reveal thei
 
 ## Key Code Concepts
 
-*   **Canvas API**: Used for all rendering. `globalCompositeOperation` or simple alpha blending is used for trails.
-*   **Ray-Circle Intersection**: Simplified here by checking distance from wave center to obstacle boundaries.
-*   **Particle System**: Simple array of particle objects with position and life properties.
+- **Canvas API**: Used for all rendering. `globalCompositeOperation` or simple alpha blending is used for trails.
+- **Ray-Circle Intersection**: Simplified here by checking distance from wave center to obstacle boundaries.
+- **Particle System**: Simple array of particle objects with position and life properties.
 
 ## Future Improvements
 
-*   **Audio**: Add actual sound effects that change pitch/volume based on distance to obstacles.
-*   **Multiple Levels**: Load level data from JSON.
-*   **Enemies**: Moving obstacles that emit their own sound or hunt the player.
+- **Audio**: Add actual sound effects that change pitch/volume based on distance to obstacles.
+- **Multiple Levels**: Load level data from JSON.
+- **Enemies**: Moving obstacles that emit their own sound or hunt the player.

@@ -112,7 +112,8 @@ export class MagneticFingerMechanic {
                 if (dist > 5) {
                     const effectiveDist = Math.max(dist, minDist);
                     // Stronger force but high friction for "snappy" feel
-                    const forceMagnitude = (this.config.magnetStrength * this.magnet.polarity) / (effectiveDist * 0.8);
+                    const forceMagnitude =
+                        (this.config.magnetStrength * this.magnet.polarity) / (effectiveDist * 0.8);
 
                     p.acc.x += (dx / dist) * forceMagnitude;
                     p.acc.y += (dy / dist) * forceMagnitude;
@@ -139,10 +140,22 @@ export class MagneticFingerMechanic {
             p.pos.y += p.vel.y;
 
             // Bounce off walls with damping
-            if (p.pos.x < 0) { p.pos.x = 0; p.vel.x *= -0.5; }
-            if (p.pos.x > this.bounds.width) { p.pos.x = this.bounds.width; p.vel.x *= -0.5; }
-            if (p.pos.y < 0) { p.pos.y = 0; p.vel.y *= -0.5; }
-            if (p.pos.y > this.bounds.height) { p.pos.y = this.bounds.height; p.vel.y *= -0.5; }
+            if (p.pos.x < 0) {
+                p.pos.x = 0;
+                p.vel.x *= -0.5;
+            }
+            if (p.pos.x > this.bounds.width) {
+                p.pos.x = this.bounds.width;
+                p.vel.x *= -0.5;
+            }
+            if (p.pos.y < 0) {
+                p.pos.y = 0;
+                p.vel.y *= -0.5;
+            }
+            if (p.pos.y > this.bounds.height) {
+                p.pos.y = this.bounds.height;
+                p.vel.y *= -0.5;
+            }
         }
     }
 

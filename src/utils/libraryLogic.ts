@@ -13,7 +13,7 @@ export const calculateLifeStats = (birthdate: Date) => {
     return {
         daysAlive,
         hoursAlive,
-        minutesAlive
+        minutesAlive,
     };
 };
 

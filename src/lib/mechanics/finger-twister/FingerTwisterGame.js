@@ -30,22 +30,22 @@ export class FingerTwisterGame {
         // Mouse (for testing)
         this.canvas.addEventListener("mousedown", (e) => {
             this.handleStart({
-                preventDefault: () => { },
-                changedTouches: [{ identifier: 999, clientX: e.clientX, clientY: e.clientY }]
+                preventDefault: () => {},
+                changedTouches: [{ identifier: 999, clientX: e.clientX, clientY: e.clientY }],
             });
         });
         this.canvas.addEventListener("mousemove", (e) => {
-            if (this.pointers.find(p => p.id === 999)) {
+            if (this.pointers.find((p) => p.id === 999)) {
                 this.handleMove({
-                    preventDefault: () => { },
-                    changedTouches: [{ identifier: 999, clientX: e.clientX, clientY: e.clientY }]
+                    preventDefault: () => {},
+                    changedTouches: [{ identifier: 999, clientX: e.clientX, clientY: e.clientY }],
                 });
             }
         });
         this.canvas.addEventListener("mouseup", (e) => {
             this.handleEnd({
-                preventDefault: () => { },
-                changedTouches: [{ identifier: 999, clientX: e.clientX, clientY: e.clientY }]
+                preventDefault: () => {},
+                changedTouches: [{ identifier: 999, clientX: e.clientX, clientY: e.clientY }],
             });
         });
     }
@@ -54,7 +54,7 @@ export class FingerTwisterGame {
         const rect = this.canvas.getBoundingClientRect();
         return {
             x: clientPos.clientX - rect.left,
-            y: clientPos.clientY - rect.top
+            y: clientPos.clientY - rect.top,
         };
     }
 
@@ -80,7 +80,7 @@ export class FingerTwisterGame {
         const touches = e.changedTouches;
         for (let i = 0; i < touches.length; i++) {
             const t = touches[i];
-            const idx = this.pointers.findIndex(p => p.id === t.identifier);
+            const idx = this.pointers.findIndex((p) => p.id === t.identifier);
             if (idx !== -1) {
                 const pos = this.getPos(t);
                 this.pointers[idx].x = pos.x;
@@ -94,7 +94,7 @@ export class FingerTwisterGame {
         const touches = e.changedTouches;
         for (let i = 0; i < touches.length; i++) {
             const t = touches[i];
-            const idx = this.pointers.findIndex(p => p.id === t.identifier);
+            const idx = this.pointers.findIndex((p) => p.id === t.identifier);
             if (idx !== -1) {
                 this.pointers.splice(idx, 1);
             }

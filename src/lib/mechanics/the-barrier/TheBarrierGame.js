@@ -37,7 +37,7 @@ export class TheBarrierGame {
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         return {
             x: clientX - rect.left,
-            y: clientY - rect.top
+            y: clientY - rect.top,
         };
     }
 

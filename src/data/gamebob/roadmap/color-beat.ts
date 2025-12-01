@@ -3,7 +3,7 @@ import type { Project } from "./types";
 export const colorBeatProject: Project = {
     name: "Color Beat",
     description: "Arcade rítmico frenético.",
-    image: "/assets/gamebob/games/color-beat.png",
+    image: "/images/gamebob/games/color-beat.png",
     statusLabel: "En Desarrollo",
     progress: 85,
     tasks: [

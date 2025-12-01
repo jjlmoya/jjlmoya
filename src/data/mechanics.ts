@@ -113,7 +113,8 @@ export const mechanics: MechanicItem[] = [
     },
     {
         title: "Vibrator Cracker",
-        description: "siente el mecanismo. usa la vibración para encontrar la combinación de la caja fuerte.",
+        description:
+            "siente el mecanismo. usa la vibración para encontrar la combinación de la caja fuerte.",
         url: "/gamebob/mecanicas/vibrator-cracker/",
         icon: "mdi:safe",
         tags: ["haptics", "experimental", "mobile"],

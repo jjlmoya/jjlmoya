@@ -35,7 +35,7 @@ export class VibratorCrackerSystem {
         this.combination = [
             Math.floor(Math.random() * 100),
             Math.floor(Math.random() * 100),
-            Math.floor(Math.random() * 100)
+            Math.floor(Math.random() * 100),
         ];
         console.log("Safe Combination:", this.combination);
     }
@@ -49,21 +49,23 @@ export class VibratorCrackerSystem {
     }
 
     // Returns true if a tick happened
-    updateDial(angle: number): { tick: boolean, isCorrect: boolean, unlocked: boolean } {
+    updateDial(angle: number): { tick: boolean; isCorrect: boolean; unlocked: boolean } {
         if (this.isUnlocked) return { tick: false, isCorrect: false, unlocked: true };
 
         this.currentAngle = angle;
 
         // Normalize angle to 0-360 degrees
-        let degrees = (this.currentAngle * 180 / Math.PI) % 360;
+        let degrees = ((this.currentAngle * 180) / Math.PI) % 360;
         if (degrees < 0) degrees += 360;
 
         // Map 0-360 to 0-100 numbers
         const currentNumber = Math.floor((degrees / 360) * 100);
 
         // Check if we moved enough to trigger a tick (every number change)
-        const lastDegrees = (this.lastTickAngle * 180 / Math.PI) % 360;
-        const lastNumber = Math.floor(((lastDegrees < 0 ? lastDegrees + 360 : lastDegrees) / 360) * 100);
+        const lastDegrees = ((this.lastTickAngle * 180) / Math.PI) % 360;
+        const lastNumber = Math.floor(
+            ((lastDegrees < 0 ? lastDegrees + 360 : lastDegrees) / 360) * 100
+        );
 
         if (currentNumber !== lastNumber) {
             this.lastTickAngle = angle;
@@ -92,7 +94,7 @@ export class VibratorCrackerSystem {
         if (this.isUnlocked) return false;
 
         // Normalize angle
-        let degrees = (angle * 180 / Math.PI) % 360;
+        let degrees = ((angle * 180) / Math.PI) % 360;
         if (degrees < 0) degrees += 360;
         const currentNumber = Math.floor((degrees / 360) * 100);
 
@@ -149,14 +151,14 @@ export class VibratorCrackerSystem {
         if (!this.audioCtx) return;
 
         // Resume context if suspended (browser policy)
-        if (this.audioCtx.state === 'suspended') {
+        if (this.audioCtx.state === "suspended") {
             this.audioCtx.resume();
         }
 
         const osc = this.audioCtx.createOscillator();
         const gain = this.audioCtx.createGain();
 
-        osc.type = 'square';
+        osc.type = "square";
         osc.frequency.setValueAtTime(frequency, this.audioCtx.currentTime);
 
         gain.gain.setValueAtTime(0.1, this.audioCtx.currentTime);

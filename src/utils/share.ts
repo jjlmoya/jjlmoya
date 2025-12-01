@@ -62,7 +62,7 @@ export const shareElementAsImage = async ({
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
-                document.execCommand('copy');
+                document.execCommand("copy");
                 document.body.removeChild(textArea);
             }
 
@@ -113,7 +113,11 @@ export const shareElementAsImage = async ({
                         try {
                             ctx.fillStyle = color;
                             const computed = ctx.fillStyle;
-                            if (!computed || computed.includes("oklab") || computed.includes("oklch")) {
+                            if (
+                                !computed ||
+                                computed.includes("oklab") ||
+                                computed.includes("oklch")
+                            ) {
                                 return "#000000";
                             }
                             return computed;
@@ -124,7 +128,7 @@ export const shareElementAsImage = async ({
 
                     // Helper to replace all oklab(...)/oklch(...) occurrences in a string
                     const sanitizeString = (value: string) => {
-                        if (!value || typeof value !== 'string') return value;
+                        if (!value || typeof value !== "string") return value;
                         if (!value.includes("oklab") && !value.includes("oklch")) return value;
                         return value.replace(/(oklab|oklch)\([^)]+\)/g, (match) => {
                             return toRgb(match);
@@ -136,10 +140,16 @@ export const shareElementAsImage = async ({
 
                     // 1. Sanitize <style> tags content (CRITICAL for CSS variables)
                     const styleTags = clonedDoc.querySelectorAll("style");
-                    styleTags.forEach(styleTag => {
-                        if (styleTag.innerHTML.includes('oklab') || styleTag.innerHTML.includes('oklch')) {
+                    styleTags.forEach((styleTag) => {
+                        if (
+                            styleTag.innerHTML.includes("oklab") ||
+                            styleTag.innerHTML.includes("oklch")
+                        ) {
                             // Simple regex replacement for the whole block
-                            const newCss = styleTag.innerHTML.replace(/(oklab|oklch)\([^)]+\)/g, "#000000");
+                            const newCss = styleTag.innerHTML.replace(
+                                /(oklab|oklch)\([^)]+\)/g,
+                                "#000000"
+                            );
                             styleTag.innerHTML = newCss;
                             replacements++;
                         }
@@ -151,28 +161,39 @@ export const shareElementAsImage = async ({
                         const element = el as HTMLElement;
                         // We iterate styles that might contain colors
                         const props = [
-                            'color', 'backgroundColor', 'borderColor', 'boxShadow', 'background', 'backgroundImage',
-                            'borderTopColor', 'borderRightColor', 'borderBottomColor', 'borderLeftColor',
-                            'outlineColor', 'textDecorationColor', 'fill', 'stroke'
+                            "color",
+                            "backgroundColor",
+                            "borderColor",
+                            "boxShadow",
+                            "background",
+                            "backgroundImage",
+                            "borderTopColor",
+                            "borderRightColor",
+                            "borderBottomColor",
+                            "borderLeftColor",
+                            "outlineColor",
+                            "textDecorationColor",
+                            "fill",
+                            "stroke",
                         ];
 
                         const style = window.getComputedStyle(element);
 
-                        props.forEach(prop => {
+                        props.forEach((prop) => {
                             // @ts-ignore
                             const val = style[prop];
-                            if (val && (val.includes('oklab') || val.includes('oklch'))) {
+                            if (val && (val.includes("oklab") || val.includes("oklch"))) {
                                 // Force override with a safe color (white for text, transparent/black for others)
-                                let safeVal = '#000000';
-                                if (prop === 'color') safeVal = '#ffffff';
-                                if (prop.includes('background')) safeVal = 'rgba(0,0,0,0)'; // Default to transparent for bg to avoid blocks
+                                let safeVal = "#000000";
+                                if (prop === "color") safeVal = "#ffffff";
+                                if (prop.includes("background")) safeVal = "rgba(0,0,0,0)"; // Default to transparent for bg to avoid blocks
 
                                 // Specific overrides for our app's look
-                                if (prop === 'color') {
-                                    element.style.color = '#e7e5e4'; // Stone-200
-                                } else if (prop === 'backgroundColor') {
+                                if (prop === "color") {
+                                    element.style.color = "#e7e5e4"; // Stone-200
+                                } else if (prop === "backgroundColor") {
                                     // Try to keep transparency if possible, otherwise dark
-                                    element.style.backgroundColor = '#0c0a09'; // Stone-950
+                                    element.style.backgroundColor = "#0c0a09"; // Stone-950
                                 } else {
                                     // @ts-ignore
                                     element.style[prop] = safeVal;
@@ -183,18 +204,20 @@ export const shareElementAsImage = async ({
 
                         // 3. Sanitize SVG Attributes explicitly
                         if (element instanceof SVGElement) {
-                            const svgAttrs = ['fill', 'stroke'];
-                            svgAttrs.forEach(attr => {
+                            const svgAttrs = ["fill", "stroke"];
+                            svgAttrs.forEach((attr) => {
                                 const val = element.getAttribute(attr);
-                                if (val && (val.includes('oklab') || val.includes('oklch'))) {
-                                    element.setAttribute(attr, '#3f1d1d'); // Default dark red for heart/blood
+                                if (val && (val.includes("oklab") || val.includes("oklch"))) {
+                                    element.setAttribute(attr, "#3f1d1d"); // Default dark red for heart/blood
                                     replacements++;
                                 }
                             });
                         }
                     });
 
-                    console.log(`[Share] Sanitization finished. Replaced ~${replacements} instances.`);
+                    console.log(
+                        `[Share] Sanitization finished. Replaced ~${replacements} instances.`
+                    );
                 } catch (e) {
                     console.error("Sanitization error:", e);
                 }
@@ -213,22 +236,18 @@ export const shareElementAsImage = async ({
         const dataUrl = canvas.toDataURL("image/png");
 
         // Manual Base64 to Blob conversion (Sync)
-        const byteString = atob(dataUrl.split(',')[1]);
+        const byteString = atob(dataUrl.split(",")[1]);
         const ab = new ArrayBuffer(byteString.length);
         const ia = new Uint8Array(ab);
         for (let i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        const blob = new Blob([ab], { type: 'image/png' });
+        const blob = new Blob([ab], { type: "image/png" });
 
         if (blob) {
             const file = new File([blob], fileName, { type: "image/png" });
 
-            if (
-                navigator.share &&
-                navigator.canShare &&
-                navigator.canShare({ files: [file] })
-            ) {
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     // Backup: Copy text to clipboard silently in case the app drops it (common in WhatsApp/Instagram/iOS)
                     // We use the robust copyToClipboard helper to ensure fallback to execCommand if needed
@@ -236,16 +255,22 @@ export const shareElementAsImage = async ({
                     await copyToClipboard(fullShareText);
 
                     if ((window as any).toast) {
-                        (window as any).toast.show("Texto copiado. Pégalo al compartir.", "success");
+                        (window as any).toast.show(
+                            "Texto copiado. Pégalo al compartir.",
+                            "success"
+                        );
                     }
 
-                    console.log(`DEBUG: Intentando compartir.\nTexto: ${fullShareText}\nURL: ${url}`);
+                    console.log(
+                        `DEBUG: Intentando compartir.\nTexto: ${fullShareText}\nURL: ${url}`
+                    );
 
                     // OS Detection for Share Quirks
-                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+                    const isIOS =
+                        /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
 
                     const shareData: any = {
-                        files: [file]
+                        files: [file],
                     };
 
                     if (isIOS) {
@@ -264,7 +289,7 @@ export const shareElementAsImage = async ({
                 } catch (err: any) {
                     console.error("[Share] Image share failed:", err);
 
-                    if (err.name === 'AbortError') {
+                    if (err.name === "AbortError") {
                         console.log("[Share] User cancelled share.");
                         return;
                     }
@@ -273,7 +298,9 @@ export const shareElementAsImage = async ({
                     downloadBlob(blob, fileName);
                 }
             } else {
-                console.log("[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context).");
+                console.log(
+                    "[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context)."
+                );
 
                 // Fallback: Browser doesn't support file share
                 // Try to share text natively first!
@@ -368,7 +395,7 @@ export async function handleGlobalShare(e: MouseEvent) {
                 return true; // Success
             } catch (err) {
                 // If user cancelled, stop here, don't fallback to clipboard (it's annoying)
-                if ((err as Error).name === 'AbortError') return true;
+                if ((err as Error).name === "AbortError") return true;
                 console.warn("Native share failed, falling back to clipboard:", err);
             }
         }
@@ -385,7 +412,10 @@ export async function handleGlobalShare(e: MouseEvent) {
 
             if (isMobile && !isSecure) {
                 if ((window as any).toast) {
-                    (window as any).toast.show("⚠️ Compartir requiere HTTPS. Copiado al portapapeles.", "warning");
+                    (window as any).toast.show(
+                        "⚠️ Compartir requiere HTTPS. Copiado al portapapeles.",
+                        "warning"
+                    );
                 }
             }
 
@@ -418,7 +448,7 @@ export async function handleGlobalShare(e: MouseEvent) {
             textArea.focus();
             textArea.select();
 
-            const successful = document.execCommand('copy');
+            const successful = document.execCommand("copy");
             document.body.removeChild(textArea);
 
             if (successful) {

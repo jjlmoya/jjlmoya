@@ -43,7 +43,7 @@ export class ColorChameleonMechanic {
         this.player = {
             radius: 30,
             colorIndex: 0,
-            angle: 0
+            angle: 0,
         };
         this.enemies = [];
         this.particles = [];
@@ -113,28 +113,42 @@ export class ColorChameleonMechanic {
 
     private spawnEnemy() {
         const side = Math.floor(Math.random() * 4);
-        let x = 0, y = 0;
+        let x = 0,
+            y = 0;
         const offset = 50;
 
         switch (side) {
-            case 0: x = Math.random() * this.width; y = -offset; break;
-            case 1: x = this.width + offset; y = Math.random() * this.height; break;
-            case 2: x = Math.random() * this.width; y = this.height + offset; break;
-            case 3: x = -offset; y = Math.random() * this.height; break;
+            case 0:
+                x = Math.random() * this.width;
+                y = -offset;
+                break;
+            case 1:
+                x = this.width + offset;
+                y = Math.random() * this.height;
+                break;
+            case 2:
+                x = Math.random() * this.width;
+                y = this.height + offset;
+                break;
+            case 3:
+                x = -offset;
+                y = Math.random() * this.height;
+                break;
         }
 
         const centerX = this.width / 2;
         const centerY = this.height / 2;
         const angle = Math.atan2(centerY - y, centerX - x);
-        const speed = 2 + (this.difficultyMultiplier * 1.5);
+        const speed = 2 + this.difficultyMultiplier * 1.5;
 
         this.enemies.push({
-            x, y,
+            x,
+            y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
             radius: 15,
             colorIndex: Math.floor(Math.random() * this.colorCount),
-            angle: angle
+            angle: angle,
         });
     }
 
@@ -143,12 +157,13 @@ export class ColorChameleonMechanic {
             const angle = Math.random() * Math.PI * 2;
             const speed = Math.random() * 3 + 1;
             this.particles.push({
-                x, y,
+                x,
+                y,
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
                 life: 1.0,
                 colorIndex: colorIndex,
-                size: Math.random() * 3 + 1
+                size: Math.random() * 3 + 1,
             });
         }
     }

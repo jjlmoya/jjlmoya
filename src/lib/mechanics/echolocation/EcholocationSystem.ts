@@ -1,5 +1,4 @@
-
-export type MaterialType = 'stone' | 'metal' | 'wood' | 'cloth';
+export type MaterialType = "stone" | "metal" | "wood" | "cloth";
 
 export interface Surface {
     x: number;
@@ -38,14 +37,14 @@ export class EcholocationSystem {
     surfaces: Surface[] = [];
 
     // Material properties - High reflectivity for long bounces
-    materialProps: Record<MaterialType, { reflectivity: number, absorption: number }> = {
+    materialProps: Record<MaterialType, { reflectivity: number; absorption: number }> = {
         stone: { reflectivity: 0.98, absorption: 0 },
         metal: { reflectivity: 1.0, absorption: 0 },
         wood: { reflectivity: 0.9, absorption: 0 },
-        cloth: { reflectivity: 0.6, absorption: 0.1 }
+        cloth: { reflectivity: 0.6, absorption: 0.1 },
     };
 
-    constructor() { }
+    constructor() {}
 
     setSurfaces(surfaces: Surface[]) {
         this.surfaces = surfaces;
@@ -55,7 +54,7 @@ export class EcholocationSystem {
         const pulseRays: PulseRay[] = [];
 
         for (let i = 0; i < rayCount; i++) {
-            const angle = (Math.PI * 2 / rayCount) * i;
+            const angle = ((Math.PI * 2) / rayCount) * i;
             const rayPath = this.calculateRayPath(x, y, angle, radius);
             pulseRays.push(rayPath);
         }
@@ -66,11 +65,16 @@ export class EcholocationSystem {
             speed: speed,
             maxDist: radius,
             color: color,
-            active: true
+            active: true,
         });
     }
 
-    calculateRayPath(startX: number, startY: number, startAngle: number, maxDist: number): PulseRay {
+    calculateRayPath(
+        startX: number,
+        startY: number,
+        startAngle: number,
+        maxDist: number
+    ): PulseRay {
         const segments: RaySegment[] = [];
         let currentX = startX;
         let currentY = startY;
@@ -98,7 +102,7 @@ export class EcholocationSystem {
                     y2: hit.y,
                     angle: currentAngle,
                     length: segLength,
-                    cumulativeDist: cumulativeDist
+                    cumulativeDist: cumulativeDist,
                 });
 
                 cumulativeDist += segLength;
@@ -126,7 +130,6 @@ export class EcholocationSystem {
                 if (Math.random() < props.absorption) {
                     distRemaining = 0;
                 }
-
             } else {
                 // No hit, goes to max distance
                 segments.push({
@@ -136,7 +139,7 @@ export class EcholocationSystem {
                     y2: currentY + dy * distRemaining,
                     angle: currentAngle,
                     length: distRemaining,
-                    cumulativeDist: cumulativeDist
+                    cumulativeDist: cumulativeDist,
                 });
                 break; // Done
             }
@@ -144,19 +147,33 @@ export class EcholocationSystem {
 
         return {
             segments,
-            totalLength: segments.reduce((acc, s) => acc + s.length, 0)
+            totalLength: segments.reduce((acc, s) => acc + s.length, 0),
         };
     }
 
     raycast(x: number, y: number, dx: number, dy: number, maxDist: number) {
-        let closestHit: { x: number, y: number, dist: number, surface: Surface, nx: number, ny: number } | null = null;
+        let closestHit: {
+            x: number;
+            y: number;
+            dist: number;
+            surface: Surface;
+            nx: number;
+            ny: number;
+        } | null = null;
 
         for (const plat of this.surfaces) {
             const hit = this.intersectRayRect(x, y, dx, dy, plat);
             if (hit) {
                 if (hit.dist <= maxDist) {
                     if (!closestHit || hit.dist < closestHit.dist) {
-                        closestHit = { x: hit.x, y: hit.y, dist: hit.dist, surface: plat, nx: hit.nx, ny: hit.ny };
+                        closestHit = {
+                            x: hit.x,
+                            y: hit.y,
+                            dist: hit.dist,
+                            surface: plat,
+                            nx: hit.nx,
+                            ny: hit.ny,
+                        };
                     }
                 }
             }
@@ -233,17 +250,17 @@ export class EcholocationSystem {
 
     draw(ctx: CanvasRenderingContext2D) {
         // Draw Pulses
-        this.pulses.forEach(p => {
+        this.pulses.forEach((p) => {
             const currentDist = p.age * p.speed;
             const prevDist = Math.max(0, (p.age - 1) * p.speed);
 
             // Softer fade out
-            const opacity = Math.max(0, (1 - (currentDist / p.maxDist)) * 0.5);
+            const opacity = Math.max(0, (1 - currentDist / p.maxDist) * 0.5);
 
             ctx.globalAlpha = opacity;
             ctx.strokeStyle = p.color;
             ctx.lineWidth = 1.5; // Thinner, smoother lines
-            ctx.lineCap = 'round';
+            ctx.lineCap = "round";
 
             for (const ray of p.rays) {
                 let segStartDist = 0;
