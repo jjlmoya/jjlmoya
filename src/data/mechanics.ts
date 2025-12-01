@@ -176,4 +176,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["color", "runner", "coordinación"],
         platforms: "all",
     },
+    {
+        title: "Draw The Path",
+        description: "protege al corredor. dibuja escudos contra meteoritos y puentes sobre el vacío.",
+        url: "/gamebob/mecanicas/draw-the-path/",
+        icon: "mdi:draw",
+        tags: ["dibujo", "creatividad", "reflejos"],
+        platforms: "all",
+    },
 ];

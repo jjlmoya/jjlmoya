@@ -1,0 +1,87 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const title = "Draw The Path";
+const description =
+    "Protege al corredor. Dibuja escudos contra meteoritos y puentes sobre el vacío.";
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/draw-the-path";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/draw-the-path/DrawThePathMechanic.ts";
+---
+
+<MechanicPage
+    title={title}
+    description={description}
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/draw-the-path.webp"
+>
+    <Icon slot="icon" name="mdi:draw" class="text-pink-500" />
+
+    <MechanicCanvas
+        id="draw-path-canvas"
+        instruction="Dibuja / Arrastra"
+        subInstruction="Crear camino o escudo"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-pink-500 mt-1">•</span>
+                <span>El personaje corre ciegamente. ¡No dejes que caiga!</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-orange-500 mt-1">•</span>
+                <span>Dibuja techos para bloquear los meteoritos.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-green-500 mt-1">•</span>
+                <span>Bloquea o redirige a los enemigos saltarines.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Arrastrar</span>
+                <span class="text-xs text-zinc-400">Dibujar Línea</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { DrawThePathGame } from "../../../lib/mechanics/draw-the-path/DrawThePathGame";
+
+    const canvas = document.getElementById("draw-path-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("draw-path-canvas-overlay");
+    let game: DrawThePathGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new DrawThePathGame(canvas);
+                game.start();
+            }
+        });
+
+        // Cleanup on navigation
+        document.addEventListener(
+            "astro:before-swap",
+            () => {
+                game?.stop();
+            },
+            { once: true }
+        );
+    }
+</script>

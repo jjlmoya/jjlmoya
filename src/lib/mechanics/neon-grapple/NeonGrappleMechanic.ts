@@ -140,7 +140,7 @@ export class NeonGrappleMechanic {
         this.manageAnchors();
     }
 
-    public grapple(targetX: number, targetY: number): boolean {
+    public grapple(): boolean {
         if (this.player.state === 'dead') return false;
 
         // Find nearest anchor within range
