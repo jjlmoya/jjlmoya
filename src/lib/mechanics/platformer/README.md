@@ -3,6 +3,7 @@
 A fluid platformer mechanic with advanced movement features including double jump, wall sliding, wall jumping, and sliding.
 
 > **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/plataformas)**
+> **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/platformer/PlatformerGame.js)**
 
 ## 🕹️ How it Works
 

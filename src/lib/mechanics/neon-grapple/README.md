@@ -1,22 +1,25 @@
 
 # Neon Grapple
 
-**Neon Grapple** es una mecánica de balanceo basada en físicas donde el jugador debe navegar por un nivel infinito utilizando un gancho de energía.
+**Neon Grapple** is a physics-based swinging mechanic where the player must navigate an infinite level using an energy hook.
 
-## Concepto
-El jugador cae constantemente debido a la gravedad. Para avanzar y evitar caer al vacío (o tocar el techo), debe engancharse a nodos de energía flotantes. La mecánica principal es la gestión del momento: soltarse en el punto justo del arco para salir disparado hacia adelante.
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/neon-grapple)**
+> **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/neon-grapple/NeonGrappleMechanic.ts)**
 
-## Controles
-- **Click / Toque (Mantener):** Lanza el gancho al nodo más cercano y se balancea.
-- **Soltar:** Desengancha el gancho, conservando la inercia.
+## Concept
+The player falls constantly due to gravity. To advance and avoid falling into the void (or hitting the ceiling), they must grapple onto floating energy nodes. The core mechanic is momentum management: releasing at the right point of the arc to launch forward.
 
-## Detalles Técnicos
-- **Físicas de Péndulo:** Implementación simplificada de fuerzas centrípetas y conservación de la velocidad tangencial.
-- **Generación Procedural:** Los nodos se generan infinitamente delante del jugador, variando en altura y distancia.
-- **Cámara:** Seguimiento suave horizontal, manteniendo al jugador en el tercio izquierdo de la pantalla para máxima visibilidad.
+## Controls
+- **Click / Touch (Hold):** Launches the hook to the nearest node and swings.
+- **Release:** Detaches the hook, preserving inertia.
 
-## Configuración
-La clase `NeonGrappleMechanic` permite ajustar:
-- `gravity`: Fuerza de caída.
-- `swingBoost`: Multiplicador de velocidad al balancearse (para compensar fricción).
-- `maxRopeLength`: Distancia máxima de enganche.
+## Technical Details
+- **Pendulum Physics:** Simplified implementation of centripetal forces and conservation of tangential velocity.
+- **Procedural Generation:** Nodes are generated infinitely ahead of the player, varying in height and distance.
+- **Camera:** Smooth horizontal tracking, keeping the player in the left third of the screen for maximum visibility.
+
+## Configuration
+The `NeonGrappleMechanic` class allows adjusting:
+- `gravity`: Downward force.
+- `swingBoost`: Speed multiplier when swinging (to compensate for friction).
+- `maxRopeLength`: Maximum grappling distance.

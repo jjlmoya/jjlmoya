@@ -1,0 +1,91 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const title = "Rhythm Jump";
+const description =
+    "Alterna tu color para sobrevivir. Cyan y Magenta son tus únicos aliados en este runner de precisión.";
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/rhythm-jump";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/rhythm-jump/RhythmJumpMechanic.ts";
+---
+
+<MechanicPage
+    title={title}
+    description={description}
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/rhythm-jump.webp"
+>
+    <Icon slot="icon" name="mdi:palette-swatch" class="text-fuchsia-500" />
+
+    <MechanicCanvas
+        id="rhythm-jump-canvas"
+        instruction="Click / Espacio"
+        subInstruction="Cambiar Color / Saltar"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-fuchsia-500 mt-1">•</span>
+                <span>Solo puedes tocar plataformas de tu mismo color.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-cyan-400 mt-1">•</span>
+                <span>Alterna entre Cyan y Magenta instantáneamente.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-fuchsia-500 mt-1">•</span>
+                <span>Gestos táctiles: Swipe para saltar, Tap para cambiar.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Click / Tap</span>
+                <span class="text-xs text-zinc-400">Cambiar Color</span>
+            </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Espacio / Swipe Up</span>
+                <span class="text-xs text-zinc-400">Saltar</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { RhythmJumpGame } from "../../../lib/mechanics/rhythm-jump/RhythmJumpGame";
+
+    const canvas = document.getElementById("rhythm-jump-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("rhythm-jump-canvas-overlay");
+    let game: RhythmJumpGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new RhythmJumpGame(canvas);
+                game.start();
+            }
+        });
+
+        // Cleanup on navigation
+        document.addEventListener(
+            "astro:before-swap",
+            () => {
+                game?.stop();
+            },
+            { once: true }
+        );
+    }
+</script>

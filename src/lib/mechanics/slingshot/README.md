@@ -205,6 +205,7 @@ Improvements welcome! Pull requests appreciated.
 ## 🔗 Demo
 
 [View interactive demo](https://www.jjlmoya.es/gamebob/mecanicas/slingshot)
+[View Source Code](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/slingshot/SlingshotMechanic.ts)
 
 ---
 

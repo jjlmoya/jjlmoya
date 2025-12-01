@@ -2,6 +2,9 @@
 
 A blind navigation mechanic where the player must use sound waves to reveal their surroundings.
 
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/echolocation)**
+> **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/echolocation/EcholocationMechanic.ts)**
+
 ## How it works
 
 1.  **Rendering**: The canvas is mostly black, simulating total darkness.

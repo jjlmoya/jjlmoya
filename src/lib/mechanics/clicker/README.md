@@ -3,6 +3,7 @@
 A robust incremental game mechanic featuring currency accumulation, passive income, and an upgrade system.
 
 > **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/clicker)**
+> **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/clicker/ClickerMechanic.ts)**
 
 ## 🕹️ How it Works
 

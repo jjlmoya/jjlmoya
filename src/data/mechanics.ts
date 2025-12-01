@@ -168,4 +168,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["física", "skill", "flow"],
         platforms: "all",
     },
+    {
+        title: "Rhythm Jump",
+        description: "alterna tu color para sobrevivir. cyan y magenta son tus únicos aliados en este runner de precisión.",
+        url: "/gamebob/mecanicas/rhythm-jump/",
+        icon: "mdi:palette-swatch",
+        tags: ["color", "runner", "coordinación"],
+        platforms: "all",
+    },
 ];

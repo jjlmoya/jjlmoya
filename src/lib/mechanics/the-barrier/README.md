@@ -3,6 +3,7 @@
 A physics simulation where users can draw temporary barriers to redirect a continuous flow of falling particles.
 
 > **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/the-barrier)**
+> **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/the-barrier/TheBarrierMechanic.ts)**
 
 ## How it works
 

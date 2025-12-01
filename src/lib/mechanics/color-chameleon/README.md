@@ -3,6 +3,7 @@
 A fast-paced arcade mechanic where the player must match their color to absorb incoming enemies.
 
 > **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/color-chameleon)**
+> **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/color-chameleon/ColorChameleonMechanic.ts)**
 
 ## How it works
 
