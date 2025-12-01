@@ -1,0 +1,91 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const title = "Neon Grapple";
+const description =
+    "Spiderman minimalista. Balancéate por un mundo infinito usando ganchos de energía.";
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/neon-grapple";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/neon-grapple/NeonGrappleMechanic.ts";
+---
+
+<MechanicPage
+    title={title}
+    description={description}
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/neon-grapple.webp"
+>
+    <Icon slot="icon" name="mdi:hook" class="text-cyan-400" />
+
+    <MechanicCanvas
+        id="neon-grapple-canvas"
+        instruction="Click / Espacio"
+        subInstruction="Enganchar y Balancear"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-cyan-400 mt-1">•</span>
+                <span>Físicas de péndulo con conservación de momento.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-cyan-400 mt-1">•</span>
+                <span>Generación procedural de puntos de anclaje.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-cyan-400 mt-1">•</span>
+                <span>Cámara con seguimiento suave horizontal.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Click / Espacio</span>
+                <span class="text-xs text-zinc-400">Enganchar (Mantener)</span>
+            </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Soltar</span>
+                <span class="text-xs text-zinc-400">Lanzarse</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { NeonGrappleGame } from "../../../lib/mechanics/neon-grapple/NeonGrappleGame";
+
+    const canvas = document.getElementById("neon-grapple-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("neon-grapple-canvas-overlay");
+    let game: NeonGrappleGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new NeonGrappleGame(canvas);
+                game.start();
+            }
+        });
+
+        // Cleanup on navigation
+        document.addEventListener(
+            "astro:before-swap",
+            () => {
+                game?.stop();
+            },
+            { once: true }
+        );
+    }
+</script>

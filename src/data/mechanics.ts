@@ -160,4 +160,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["arcade", "física", "runner"],
         platforms: "all",
     },
+    {
+        title: "Neon Grapple",
+        description: "spiderman minimalista. balancéate por un mundo infinito usando ganchos de energía.",
+        url: "/gamebob/mecanicas/neon-grapple/",
+        icon: "mdi:hook",
+        tags: ["física", "skill", "flow"],
+        platforms: "all",
+    },
 ];
