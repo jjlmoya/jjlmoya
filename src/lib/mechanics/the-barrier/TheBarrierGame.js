@@ -55,7 +55,7 @@ export class TheBarrierGame {
         this.currentLine.end = pos;
     }
 
-    handleEnd(e) {
+    handleEnd() {
         if (!this.isDrawing) return;
         this.isDrawing = false;
 

@@ -48,7 +48,7 @@ export class VibratorCrackerGame {
                 this.onPointerMove(e);
             }
         };
-        this._boundOnPointerUp = (e: any) => this.onPointerUp();
+        this._boundOnPointerUp = () => this.onPointerUp();
 
         this.bindEvents();
         this.lastTime = performance.now();

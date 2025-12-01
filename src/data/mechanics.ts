@@ -152,4 +152,12 @@ export const mechanics: MechanicItem[] = [
         tags: ["multitouch", "arcade", "caos"],
         platforms: "mobile",
     },
+    {
+        title: "Gravity Flip",
+        description: "el suelo es el techo. invierte la gravedad para esquivar obstáculos en este runner psicodélico.",
+        url: "/gamebob/mecanicas/gravity-flip/",
+        icon: "mdi:flip-vertical",
+        tags: ["arcade", "física", "runner"],
+        platforms: "all",
+    },
 ];

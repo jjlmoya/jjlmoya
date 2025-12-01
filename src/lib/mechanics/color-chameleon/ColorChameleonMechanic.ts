@@ -19,7 +19,7 @@ export interface Particle {
 }
 
 export class ColorChameleonMechanic {
-    public player: { radius: number; colorIndex: number; angle: number };
+    public player!: { radius: number; colorIndex: number; angle: number };
     public enemies: Entity[] = [];
     public particles: Particle[] = [];
     public score: number = 0;

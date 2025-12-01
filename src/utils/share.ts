@@ -62,6 +62,7 @@ export const shareElementAsImage = async ({
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
+                // @ts-ignore
                 document.execCommand("copy");
                 document.body.removeChild(textArea);
             }
@@ -108,34 +109,13 @@ export const shareElementAsImage = async ({
                     console.log("[Share] Starting aggressive oklab/oklch sanitization...");
 
                     // Helper to convert a single color string (e.g. "oklab(...)") to RGB/Hex via Canvas
-                    const toRgb = (color: string) => {
-                        if (!ctx) return "#000000";
-                        try {
-                            ctx.fillStyle = color;
-                            const computed = ctx.fillStyle;
-                            if (
-                                !computed ||
-                                computed.includes("oklab") ||
-                                computed.includes("oklch")
-                            ) {
-                                return "#000000";
-                            }
-                            return computed;
-                        } catch (e) {
-                            return "#000000";
-                        }
-                    };
+
 
                     // Helper to replace all oklab(...)/oklch(...) occurrences in a string
-                    const sanitizeString = (value: string) => {
-                        if (!value || typeof value !== "string") return value;
-                        if (!value.includes("oklab") && !value.includes("oklch")) return value;
-                        return value.replace(/(oklab|oklch)\([^)]+\)/g, (match) => {
-                            return toRgb(match);
-                        });
-                    };
 
-                    const ctx = document.createElement("canvas").getContext("2d");
+
+
+
                     let replacements = 0;
 
                     // 1. Sanitize <style> tags content (CRITICAL for CSS variables)
@@ -448,6 +428,7 @@ export async function handleGlobalShare(e: MouseEvent) {
             textArea.focus();
             textArea.select();
 
+            // @ts-ignore
             const successful = document.execCommand("copy");
             document.body.removeChild(textArea);
 

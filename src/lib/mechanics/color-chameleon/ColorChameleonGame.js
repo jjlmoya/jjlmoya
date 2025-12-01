@@ -30,7 +30,7 @@ export class ColorChameleonGame {
         );
     }
 
-    handleClick(e) {
+    handleClick() {
         if (this.mechanic.isGameOver) {
             this.mechanic.reset();
             return;

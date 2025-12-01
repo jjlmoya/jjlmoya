@@ -1,0 +1,74 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/gravity-flip";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/gravity-flip/GravityFlipMechanic.ts";
+---
+
+<MechanicPage
+    title="Gravity Flip"
+    description="El suelo es el techo. Invierte la gravedad para esquivar obstáculos en este runner psicodélico."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/gravity-flip.webp"
+>
+    <Icon slot="icon" name="mdi:flip-vertical" class="text-cyan-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Toca / Espacio"
+        subInstruction="Invertir Gravedad"
+        verticalOnMobile={false}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-cyan-400 mt-1">•</span>
+                <span>Inversión instantánea del vector de gravedad (g → -g).</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-cyan-400 mt-1">•</span>
+                <span>Generación procedural de obstáculos (pinchos y bloques).</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-cyan-400 mt-1">•</span>
+                <span>Detección de colisiones AABB (Axis-Aligned Bounding Box).</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Tap / Space</span>
+                <span class="text-xs text-zinc-400">Cambiar Gravedad</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { GravityFlipGame } from "../../../lib/mechanics/gravity-flip/GravityFlipGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: GravityFlipGame | null = null;
+
+    if (canvas && overlay) {
+        // Fix canvas resolution
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new GravityFlipGame(canvas);
+            }
+        });
+    }
+</script>
