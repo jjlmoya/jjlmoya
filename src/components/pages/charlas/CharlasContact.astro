@@ -13,12 +13,12 @@
             </p>
         </div>
 
-        <form action="mailto:hola@jjlmoya.com" method="GET" enctype="text/plain" class="space-y-12">
+        <form id="contact-form" class="space-y-12">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div class="relative group">
                     <input
                         type="text"
-                        name="subject"
+                        name="name"
                         id="name"
                         required
                         class="block w-full bg-transparent border-b-2 border-[#ccc] py-4 text-xl font-bold text-[#0a0a0a] focus:outline-none focus:border-[#0a0a0a] transition-colors peer placeholder-transparent"
@@ -52,7 +52,7 @@
 
             <div class="relative group">
                 <textarea
-                    name="body"
+                    name="message"
                     id="message"
                     rows="4"
                     required
@@ -66,17 +66,73 @@
                 </label>
             </div>
 
-            <div class="flex justify-center pt-12">
+            <div class="flex flex-col items-center pt-12">
                 <button
                     type="submit"
-                    class="group relative px-12 py-6 bg-[#0a0a0a] text-white overflow-hidden transition-all hover:bg-[#000]"
+                    id="submit-btn"
+                    class="group relative px-12 py-6 bg-[#0a0a0a] text-white overflow-hidden transition-all hover:bg-[#000] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <span
+                        id="btn-text"
                         class="relative z-10 uppercase tracking-widest text-sm group-hover:tracking-[0.3em] transition-all duration-300"
                         >Enviar Propuesta</span
                     >
                 </button>
+                <p id="form-status" class="mt-4 text-lg font-medium hidden"></p>
             </div>
         </form>
+
+        <script>
+            const _k =
+                "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6MTNwcmZyaWRzN2J1OHZTd3hFdzB6RXZOSGp3T2pBVGhMaGQ5MExGUkdqWk1ycUt0VTZnMk5zazVndHVVbE5uTEI5QS9leGVj";
+
+            const form = document.getElementById("contact-form") as HTMLFormElement;
+            const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+            const btnText = document.getElementById("btn-text") as HTMLSpanElement;
+            const status = document.getElementById("form-status") as HTMLParagraphElement;
+
+            if (form) {
+                form.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    // Loading state
+                    submitBtn.disabled = true;
+                    const originalText = btnText.innerText;
+                    btnText.innerText = "ENVIANDO...";
+                    status.classList.add("hidden");
+                    status.className = "mt-4 text-lg font-medium hidden"; // Reset classes
+
+                    const formData = new FormData(form);
+
+                    try {
+                        // Usamos no-cors porque Google Scripts redirige y causa problemas de CORS por defecto
+                        // Sin embargo, si el script está bien configurado, podemos intentar fetch normal.
+                        // Para máxima compatibilidad con formularios simples a GAS, a veces se usa un iframe oculto o jsonp.
+                        // Pero probaremos con fetch simple primero. Si falla CORS, usaremos mode: 'no-cors'.
+
+                        await fetch(atob(_k), {
+                            method: "POST",
+                            body: formData,
+                            mode: "no-cors", // Importante para evitar errores de CORS con Google Apps Script
+                        });
+
+                        // Con no-cors no podemos leer la respuesta, así que asumimos éxito si no lanza error de red
+                        form.reset();
+                        status.innerText = "¡Mensaje enviado correctamente!";
+                        status.classList.remove("hidden");
+                        status.classList.add("text-green-600");
+                    } catch (error) {
+                        console.error("Error:", error);
+                        status.innerText =
+                            "Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.";
+                        status.classList.remove("hidden");
+                        status.classList.add("text-red-600");
+                    } finally {
+                        submitBtn.disabled = false;
+                        btnText.innerText = originalText;
+                    }
+                });
+            }
+        </script>
     </div>
 </section>
