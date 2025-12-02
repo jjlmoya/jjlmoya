@@ -1,0 +1,173 @@
+---
+
+---
+
+<nav class="boring-toc" id="boring-toc">
+    <div class="toc-title">ÍNDICE ANALÍTICO EXHAUSTIVO (AUTO-GENERADO)</div>
+    <div id="toc-container">
+        <p style="text-align: center; font-style: italic;">Calculando niveles de tedio...</p>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const tocContainer = document.getElementById("toc-container");
+        if (!tocContainer) return;
+
+        const articles = document.querySelectorAll(".article");
+        const tocList = document.createElement("ul");
+        tocList.className = "toc-list";
+
+        articles.forEach((article, artIndex) => {
+            // Article Level
+            const artTitleEl = article.querySelector(".article-title");
+            const artTitle = artTitleEl
+                ? artTitleEl.textContent.trim()
+                : `Artículo ${artIndex + 1}`;
+
+            // Ensure ID exists
+            if (!article.id) {
+                article.id = `generated-art-${artIndex}`;
+            }
+            const artId = article.id;
+
+            const artItem = document.createElement("li");
+            const artLink = document.createElement("a");
+            artLink.href = `#${artId}`;
+            artLink.textContent = artTitle;
+            artItem.appendChild(artLink);
+
+            // Sub-article Level
+            const subArticles = article.querySelectorAll(".sub-article");
+            if (subArticles.length > 0) {
+                const subList = document.createElement("ul");
+                subList.className = "sub-toc-list";
+
+                subArticles.forEach((subArt, subIndex) => {
+                    const subTitleEl = subArt.querySelector(".sub-article-title");
+                    const subTitle = subTitleEl
+                        ? subTitleEl.textContent.trim()
+                        : `Subartículo ${artIndex + 1}.${subIndex + 1}`;
+
+                    if (!subArt.id) {
+                        subArt.id = `generated-sub-${artIndex}-${subIndex}`;
+                    }
+                    const subId = subArt.id;
+
+                    const subItem = document.createElement("li");
+                    const subLink = document.createElement("a");
+                    subLink.href = `#${subId}`;
+                    subLink.textContent = subTitle;
+                    subItem.appendChild(subLink);
+
+                    // Paragraph Level (The most boring part)
+                    const paragraphs = subArt.querySelectorAll("p");
+                    if (paragraphs.length > 0) {
+                        const pList = document.createElement("ul");
+                        pList.className = "paragraph-list";
+
+                        paragraphs.forEach((p, pIndex) => {
+                            const sectionTitleEl = p.querySelector(".section-title");
+                            let pText = "";
+
+                            if (sectionTitleEl) {
+                                pText = sectionTitleEl.textContent.trim();
+                            } else {
+                                // Fallback for paragraphs without title: grab first 40 chars
+                                const rawText = p.textContent.trim();
+                                pText =
+                                    rawText.substring(0, 40) + (rawText.length > 40 ? "..." : "");
+                            }
+
+                            if (!p.id) {
+                                p.id = `generated-p-${artIndex}-${subIndex}-${pIndex}`;
+                            }
+                            const pId = p.id;
+
+                            const pItem = document.createElement("li");
+                            const pLink = document.createElement("a");
+                            pLink.href = `#${pId}`;
+                            pLink.textContent = pText;
+                            pItem.appendChild(pLink);
+                            pList.appendChild(pItem);
+                        });
+                        subItem.appendChild(pList);
+                    }
+                    subList.appendChild(subItem);
+                });
+                artItem.appendChild(subList);
+            }
+            tocList.appendChild(artItem);
+        });
+
+        tocContainer.innerHTML = "";
+        tocContainer.appendChild(tocList);
+    });
+</script>
+
+<style>
+    .boring-toc {
+        margin-bottom: 40px;
+        border: 1px solid #000;
+        padding: 20px;
+        background-color: #fff;
+        font-size: 14px;
+    }
+
+    .toc-title {
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        font-size: 16px;
+        text-align: center;
+        border-bottom: 1px solid #000;
+        padding-bottom: 10px;
+    }
+
+    /* Global styles for generated content */
+    :global(.toc-list) {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+    }
+
+    :global(.toc-list > li) {
+        margin-bottom: 15px;
+    }
+
+    :global(.sub-toc-list) {
+        list-style: none;
+        padding-left: 20px;
+        margin-top: 5px;
+    }
+
+    :global(.sub-toc-list li) {
+        margin-bottom: 3px;
+        font-style: italic;
+        color: #444;
+    }
+
+    :global(.paragraph-list) {
+        list-style: none;
+        padding-left: 20px;
+        margin-top: 5px;
+        border-left: 1px solid #ccc;
+    }
+
+    :global(.paragraph-list li) {
+        margin-bottom: 2px;
+        font-style: normal;
+        font-size: 13px;
+    }
+
+    :global(.toc-list a) {
+        text-decoration: none;
+        color: #000;
+        display: block;
+    }
+
+    :global(.toc-list a:hover) {
+        text-decoration: underline;
+        background-color: #f0f0f0;
+    }
+</style>
