@@ -89,7 +89,7 @@
                         min="0.5"
                         max="10"
                         step="0.1"
-                        value="2.0"
+                        value="1.5"
                         class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-cyan-600 dark:accent-cyan-400 hover:accent-cyan-500 transition-all"
                     />
 
@@ -286,6 +286,42 @@
                         </div>
                     </div>
                 </div>
+
+                <div
+                    class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-amber-200 dark:border-amber-900/50 relative overflow-hidden group"
+                >
+                    <div
+                        class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-16 h-16 text-amber-500"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><circle cx="12" cy="12" r="10"></circle><polyline
+                                points="12 6 12 12 16 14"></polyline></svg
+                        >
+                    </div>
+
+                    <div class="relative z-10">
+                        <span
+                            id="result-time-label"
+                            class="block text-sm font-bold text-amber-500 dark:text-amber-400 uppercase tracking-wider mb-1"
+                            >Tiempo Estimado</span
+                        >
+                        <div class="flex items-baseline gap-2">
+                            <span
+                                id="result-time"
+                                class="text-3xl font-black text-amber-600 dark:text-amber-400 tracking-tight"
+                                >1 - 3 Semanas</span
+                            >
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -331,7 +367,7 @@
     const state = {
         product: 500,
         water: 500,
-        salinity: 2.0,
+        salinity: 1.5,
         sugar: false,
     };
 
@@ -349,6 +385,8 @@
             saltResult: document.getElementById("result-salt"),
             sugarResult: document.getElementById("result-sugar"),
             sugarPanel: document.getElementById("sugar-result-panel"),
+            timeResult: document.getElementById("result-time"),
+            timeLabel: document.getElementById("result-time-label"),
             visTotal: document.getElementById("vis-total-weight"),
         },
         vis: {
@@ -413,6 +451,59 @@
         els.vis.particles.appendChild(p);
     };
 
+    const updatePresets = () => {
+        els.inputs.presets.forEach((btn) => {
+            const val = parseFloat(btn.getAttribute("data-value") || "0");
+            const isSelected = Math.abs(val - state.salinity) < 0.01;
+
+            // Base active classes
+            const activeClasses = ["ring-2", "ring-offset-2", "dark:ring-offset-slate-900"];
+
+            // Specific color classes map
+            let specificClasses: string[] = [];
+            if (val === 1.5)
+                specificClasses = [
+                    "ring-cyan-500",
+                    "bg-cyan-100",
+                    "text-cyan-700",
+                    "dark:bg-cyan-900/30",
+                    "dark:text-cyan-300",
+                ];
+            if (val === 2.0)
+                specificClasses = [
+                    "ring-emerald-500",
+                    "bg-emerald-100",
+                    "text-emerald-700",
+                    "dark:bg-emerald-900/30",
+                    "dark:text-emerald-300",
+                ];
+            if (val === 3.5)
+                specificClasses = [
+                    "ring-orange-500",
+                    "bg-orange-100",
+                    "text-orange-700",
+                    "dark:bg-orange-900/30",
+                    "dark:text-orange-300",
+                ];
+            if (val === 5.0)
+                specificClasses = [
+                    "ring-rose-500",
+                    "bg-rose-100",
+                    "text-rose-700",
+                    "dark:bg-rose-900/30",
+                    "dark:text-rose-300",
+                ];
+
+            if (isSelected) {
+                btn.classList.add(...activeClasses);
+                if (specificClasses.length) btn.classList.add(...specificClasses);
+            } else {
+                btn.classList.remove(...activeClasses);
+                if (specificClasses.length) btn.classList.remove(...specificClasses);
+            }
+        });
+    };
+
     // Main Update Function
     const update = () => {
         const results = calculate();
@@ -432,8 +523,27 @@
             else els.displays.sugarPanel.classList.add("hidden");
         }
 
+        // Update Time Recommendation
+        let timeText = "";
+        let timeLabel = "";
+
+        if (state.salinity < 2.0) {
+            timeLabel = "Tiempo (Carnes)";
+            timeText = "4 - 48 Horas";
+        } else if (state.salinity <= 3.0) {
+            timeLabel = "Tiempo (Vegetales)";
+            timeText = "1 - 3 Semanas";
+        } else {
+            timeLabel = "Tiempo (Conservas)";
+            timeText = "1+ Meses";
+        }
+
+        if (els.displays.timeResult) els.displays.timeResult.textContent = timeText;
+        if (els.displays.timeLabel) els.displays.timeLabel.textContent = timeLabel;
+
         // Update Visualization
         updateVisuals(results);
+        updatePresets();
     };
 
     // Event Listeners
