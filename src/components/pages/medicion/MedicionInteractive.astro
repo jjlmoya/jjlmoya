@@ -232,7 +232,7 @@
     // 1. Intersection Observer for Sections
     // We assume sections have IDs or headings we can use as names
     const observer = new IntersectionObserver(
-        (entries) => {
+        (entries: IntersectionObserverEntry[]) => {
             const now = Date.now();
 
             // Update time for previous section
@@ -244,7 +244,7 @@
 
             // Find the most visible section
             let maxRatio = 0;
-            let bestEntry = null;
+            let bestEntry: IntersectionObserverEntry | null = null;
 
             entries.forEach((entry) => {
                 if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
@@ -255,10 +255,9 @@
 
             if (bestEntry) {
                 // Try to find a title
+                const target = (bestEntry as IntersectionObserverEntry).target;
                 const title =
-                    bestEntry.target.querySelector("h2")?.textContent ||
-                    bestEntry.target.id ||
-                    "Introducción";
+                    target.querySelector("h2")?.textContent || target.id || "Introducción";
 
                 currentSectionId = title;
                 lastSectionEnterTime = now;
@@ -278,7 +277,7 @@
         if (clicksEl) clicksEl.innerText = totalClicks.toString();
     });
 
-    let scrollTimeout: number;
+    let scrollTimeout: number | null = null;
     window.addEventListener("scroll", () => {
         const scrollY = window.scrollY;
         maxScrollY = Math.max(maxScrollY, scrollY);
@@ -288,7 +287,6 @@
             totalScrollEvents++;
             if (scrollsEl) scrollsEl.innerText = totalScrollEvents.toString();
             scrollTimeout = window.setTimeout(() => {
-                // @ts-ignore
                 scrollTimeout = null;
             }, 100);
         }

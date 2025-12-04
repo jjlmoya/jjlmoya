@@ -7,7 +7,6 @@ export class NeonGrappleGame {
     private mechanic: NeonGrappleMechanic;
     private isRunning: boolean = false;
     private animationId: number = 0;
-    private lastTime: number = 0;
 
     // Camera
     private cameraX: number = 0;
@@ -38,7 +37,6 @@ export class NeonGrappleGame {
         if (this.isRunning) return;
         this.isRunning = true;
         this.mechanic.reset();
-        this.lastTime = performance.now();
         this.loop();
     }
 
@@ -52,7 +50,6 @@ export class NeonGrappleGame {
 
         const now = performance.now();
         // const dt = (now - this.lastTime) / 1000; // Not using dt for physics yet, fixed step
-        this.lastTime = now;
 
         this.update();
         this.draw();
@@ -215,7 +212,7 @@ export class NeonGrappleGame {
                 // const x = clientX - rect.left + this.cameraX;
                 // const y = clientY - rect.top;
 
-                this.mechanic.grapple(0, 0);
+                this.mechanic.grapple();
             }
         };
 
@@ -236,7 +233,7 @@ export class NeonGrappleGame {
                 if (this.mechanic.player.state === 'dead') {
                     this.mechanic.reset();
                 } else {
-                    this.mechanic.grapple(0, 0);
+                    this.mechanic.grapple();
                 }
             }
         });
