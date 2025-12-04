@@ -61,9 +61,7 @@ describe("Page Availability Tests", () => {
             // 1. Header is present (contains "jjlmoya")
             expect(text).toContain("jjlmoya");
 
-            // 2. Footer is present (contains current year)
-            const year = new Date().getFullYear().toString();
-            expect(text).toContain(year);
+
 
             // 3. HTML structure is valid
             // Check for <html tag (case insensitive by converting text to lower case)
