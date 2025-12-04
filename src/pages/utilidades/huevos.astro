@@ -1,0 +1,522 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+
+const title = "Cronómetro de Huevos Científico";
+const description =
+    "Calculadora termodinámica para la cocción perfecta de huevos según altitud, temperatura y tamaño.";
+---
+
+<Layout title={title} description={description} image="/images/utilities/huevos.webp">
+    <div class="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-12 text-center">
+                <div
+                    class="inline-flex items-center justify-center p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-full mb-6"
+                >
+                    <Icon name="mdi:egg" class="w-12 h-12 text-yellow-500" />
+                </div>
+                <h1
+                    class="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-slate-900 dark:text-white"
+                >
+                    Cronómetro de <span class="text-yellow-500">Huevos</span>
+                </h1>
+                <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                    La física de la cocción perfecta. Calcula el tiempo exacto basándote en la
+                    termodinámica, no en la suerte.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" id="calculator">
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Configuration Panel -->
+                    <div
+                        class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800"
+                    >
+                        <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                            <Icon name="mdi:tune" class="w-5 h-5 text-yellow-500" />
+                            Parámetros
+                        </h2>
+
+                        <!-- Temperature -->
+                        <div class="mb-6">
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                            >
+                                Temperatura Inicial
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button
+                                    class="temp-btn active flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 [&.active]:border-yellow-500 [&.active]:bg-yellow-50 [&.active]:dark:bg-yellow-900/20 [&.active]:text-yellow-700 [&.active]:dark:text-yellow-400 [&.active]:ring-1 [&.active]:ring-yellow-500"
+                                    data-value="4"
+                                >
+                                    <Icon name="mdi:fridge" class="w-5 h-5 mb-1" />
+                                    Nevera (4°C)
+                                </button>
+                                <button
+                                    class="temp-btn flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 [&.active]:border-yellow-500 [&.active]:bg-yellow-50 [&.active]:dark:bg-yellow-900/20 [&.active]:text-yellow-700 [&.active]:dark:text-yellow-400 [&.active]:ring-1 [&.active]:ring-yellow-500"
+                                    data-value="20"
+                                >
+                                    <Icon name="mdi:thermometer" class="w-5 h-5 mb-1" />
+                                    Ambiente (20°C)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Size -->
+                        <div class="mb-6">
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                            >
+                                Tamaño del Huevo
+                            </label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button
+                                    class="size-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 [&.active]:border-yellow-500 [&.active]:bg-yellow-50 [&.active]:dark:bg-yellow-900/20 [&.active]:text-yellow-700 [&.active]:dark:text-yellow-400 [&.active]:ring-1 [&.active]:ring-yellow-500"
+                                    data-value="53">S</button
+                                >
+                                <button
+                                    class="size-btn active p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 [&.active]:border-yellow-500 [&.active]:bg-yellow-50 [&.active]:dark:bg-yellow-900/20 [&.active]:text-yellow-700 [&.active]:dark:text-yellow-400 [&.active]:ring-1 [&.active]:ring-yellow-500"
+                                    data-value="58">M</button
+                                >
+                                <button
+                                    class="size-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 [&.active]:border-yellow-500 [&.active]:bg-yellow-50 [&.active]:dark:bg-yellow-900/20 [&.active]:text-yellow-700 [&.active]:dark:text-yellow-400 [&.active]:ring-1 [&.active]:ring-yellow-500"
+                                    data-value="63">L</button
+                                >
+                                <button
+                                    class="size-btn p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-400 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 [&.active]:border-yellow-500 [&.active]:bg-yellow-50 [&.active]:dark:bg-yellow-900/20 [&.active]:text-yellow-700 [&.active]:dark:text-yellow-400 [&.active]:ring-1 [&.active]:ring-yellow-500"
+                                    data-value="73">XL</button
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Altitude -->
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                            >
+                                Altitud (metros)
+                            </label>
+                            <div class="relative">
+                                <input
+                                    type="number"
+                                    id="altitude"
+                                    value="0"
+                                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-yellow-500 outline-none transition-all"
+                                    placeholder="0"
+                                />
+                                <div class="absolute right-2 top-2 flex gap-1">
+                                    <button
+                                        id="btn-location"
+                                        class="text-xs p-1.5 bg-slate-200 dark:bg-slate-700 rounded hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors text-slate-600 dark:text-slate-300"
+                                        title="Usar mi ubicación"
+                                    >
+                                        <Icon name="mdi:crosshairs-gps" class="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        id="btn-sea"
+                                        class="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                                        >Mar</button
+                                    >
+                                    <button
+                                        id="btn-madrid"
+                                        class="text-xs px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors"
+                                        >Mad</button
+                                    >
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-2">
+                                El agua hierve a menor temperatura a mayor altitud, afectando el
+                                tiempo de cocción.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <!-- Results -->
+                    <div class="grid gap-4">
+                        <!-- Soft -->
+                        <div
+                            class="result-card group bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 transition-all hover:shadow-lg hover:border-yellow-500/50 cursor-default"
+                        >
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-yellow-500 transition-colors"
+                                    >
+                                        Clara Cuajada
+                                    </h3>
+                                    <p class="text-sm text-slate-500">
+                                        Yema líquida, clara blanca y suave.
+                                    </p>
+                                </div>
+                                <Icon
+                                    name="mdi:egg-easter"
+                                    class="w-8 h-8 text-yellow-200 group-hover:text-yellow-500 transition-colors"
+                                />
+                            </div>
+                            <div
+                                class="text-4xl font-black text-slate-900 dark:text-white font-mono tracking-tight"
+                                id="time-soft"
+                            >
+                                00:00
+                            </div>
+                        </div>
+
+                        <!-- Mollet -->
+                        <div
+                            class="result-card group ring-2 ring-yellow-500/20 bg-yellow-50/50 dark:bg-yellow-900/10 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 transition-all hover:shadow-lg hover:border-yellow-500/50 cursor-default"
+                        >
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-yellow-500 transition-colors"
+                                    >
+                                        Mollet
+                                    </h3>
+                                    <p class="text-sm text-slate-500">Yema cremosa, clara firme.</p>
+                                </div>
+                                <Icon
+                                    name="mdi:egg"
+                                    class="w-8 h-8 text-yellow-400 group-hover:text-yellow-500 transition-colors"
+                                />
+                            </div>
+                            <div
+                                class="text-5xl font-black text-yellow-600 dark:text-yellow-400 font-mono tracking-tight"
+                                id="time-mollet"
+                            >
+                                00:00
+                            </div>
+                        </div>
+
+                        <!-- Hard -->
+                        <div
+                            class="result-card group bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 transition-all hover:shadow-lg hover:border-yellow-500/50 cursor-default"
+                        >
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-yellow-500 transition-colors"
+                                    >
+                                        Duro
+                                    </h3>
+                                    <p class="text-sm text-slate-500">
+                                        Totalmente cocido, yema firme.
+                                    </p>
+                                </div>
+                                <Icon
+                                    name="mdi:egg-off"
+                                    class="w-8 h-8 text-yellow-700 group-hover:text-yellow-500 transition-colors"
+                                />
+                            </div>
+                            <div
+                                class="text-4xl font-black text-slate-900 dark:text-white font-mono tracking-tight"
+                                id="time-hard"
+                            >
+                                00:00
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Content & Educational Section -->
+            <div class="mt-24 prose prose-slate dark:prose-invert max-w-none">
+                <div
+                    class="p-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800"
+                >
+                    <h2 class="text-3xl font-bold mb-6 text-slate-900 dark:text-white">
+                        La Ciencia del Huevo Perfecto
+                    </h2>
+                    <p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400 mb-8">
+                        Cocer un huevo parece la tarea culinaria más simple, pero es un problema de
+                        termodinámica compleja. La diferencia entre un huevo perfecto y uno mediocre
+                        es cuestión de grados y segundos. Esta herramienta no es un simple
+                        temporizador; es una calculadora física basada en el modelo de <strong
+                            >Charles Williams</strong
+                        >
+                        de la Universidad de Exeter.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div>
+                            <h3
+                                class="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-white"
+                            >
+                                <Icon name="mdi:mountain" class="w-6 h-6 text-yellow-500" />
+                                ¿Por qué importa la altitud?
+                            </h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-6">
+                                El agua no siempre hierve a 100°C. A medida que subimos en altitud,
+                                la presión atmosférica disminuye, facilitando que las moléculas de
+                                agua escapen al aire. Por cada 300 metros de elevación, el punto de
+                                ebullición desciende aproximadamente 1°C.
+                            </p>
+                            <p class="text-slate-600 dark:text-slate-400 mb-6">
+                                En el Everest, el agua hierve a 70°C, lo que hace imposible cocer un
+                                huevo duro (las proteínas necesitan más temperatura para
+                                desnaturalizarse completamente). En Madrid (600m), el agua hierve a
+                                98°C, requiriendo más tiempo de cocción que en Alicante.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3
+                                class="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-white"
+                            >
+                                <Icon name="mdi:function-variant" class="w-6 h-6 text-yellow-500" />
+                                La Fórmula
+                            </h3>
+                            <div
+                                class="bg-slate-100 dark:bg-slate-800 p-4 rounded-xl font-mono text-xs md:text-sm text-slate-600 dark:text-slate-400 mb-4 overflow-x-auto"
+                            >
+                                t = 0.451 * M^(2/3) * ln((Tw - To) / (Tw - Ty))
+                            </div>
+                            <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                                <li>
+                                    <strong class="text-slate-900 dark:text-slate-200">M:</strong> Masa
+                                    del huevo
+                                </li>
+                                <li>
+                                    <strong class="text-slate-900 dark:text-slate-200">Tw:</strong> Temperatura
+                                    de ebullición del agua (varía con altitud)
+                                </li>
+                                <li>
+                                    <strong class="text-slate-900 dark:text-slate-200">To:</strong> Temperatura
+                                    inicial del huevo
+                                </li>
+                                <li>
+                                    <strong class="text-slate-900 dark:text-slate-200">Ty:</strong> Temperatura
+                                    objetivo de la yema
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <hr class="my-12 border-slate-200 dark:border-slate-700" />
+
+                    <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">
+                        Guía de Temperaturas Internas
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl">
+                            <div class="text-yellow-500 font-bold mb-2">62°C - 65°C</div>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">
+                                Clara Cuajada
+                            </h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">
+                                La proteína <em>ovotransferrina</em> comienza a coagular. La clara se
+                                vuelve blanca y gelatinosa, pero la yema sigue líquida y caliente.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl">
+                            <div class="text-yellow-500 font-bold mb-2">65°C - 70°C</div>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">
+                                Mollet / Ceroso
+                            </h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">
+                                La yema empieza a espesar. La <em>ovalbúmina</em> (la principal proteína
+                                de la clara) coagula, dando una estructura firme pero tierna.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl">
+                            <div class="text-yellow-500 font-bold mb-2">> 77°C</div>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">
+                                Huevo Duro
+                            </h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">
+                                Coagulación total. Si superas los 80°C por mucho tiempo, el azufre
+                                de la clara reacciona con el hierro de la yema creando ese anillo
+                                verde desagradable (sulfuro ferroso).
+                            </p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">
+                        Consejos Profesionales
+                    </h3>
+                    <ul
+                        class="list-disc list-inside space-y-3 text-slate-600 dark:text-slate-400 mb-12"
+                    >
+                        <li>
+                            <strong>Choque Térmico:</strong> Sumerge los huevos en agua con hielo inmediatamente
+                            después de cocerlos. Esto detiene la cocción al instante y contrae el huevo
+                            dentro de la cáscara, facilitando el pelado.
+                        </li>
+                        <li>
+                            <strong>Huevos Viejos vs Nuevos:</strong> Los huevos muy frescos son difíciles
+                            de pelar porque el pH de la clara es bajo, lo que la adhiere a la membrana.
+                            Para huevos duros, usa huevos de 1-2 semanas.
+                        </li>
+                        <li>
+                            <strong>Empieza con agua hirviendo:</strong> Introducir el huevo en agua
+                            ya hirviendo (en lugar de agua fría) facilita el pelado y ofrece un control
+                            de tiempo más preciso.
+                        </li>
+                    </ul>
+
+                    <div
+                        class="text-xs text-slate-400 dark:text-slate-500 border-t border-slate-200 dark:border-slate-800 pt-6"
+                    >
+                        <p class="font-bold mb-2">Referencias y Lectura Adicional:</p>
+                        <ul class="space-y-1">
+                            <li>
+                                <a
+                                    href="https://newton.ex.ac.uk/teaching/CDHW/Egg/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="hover:text-yellow-500 transition-colors"
+                                    >The Science of Boiling an Egg - Charles D. H. Williams</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://www.seriouseats.com/the-food-lab-hard-boiled-eggs-recipe"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="hover:text-yellow-500 transition-colors"
+                                    >The Food Lab: The Science of the Best Hard Boiled Eggs - J.
+                                    Kenji López-Alt</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                let currentTemp = 4;
+                let currentSize = 58;
+                let currentAltitude = 0;
+
+                const tempBtns = document.querySelectorAll(".temp-btn");
+                const sizeBtns = document.querySelectorAll(".size-btn");
+                const altitudeInput = document.getElementById("altitude") as HTMLInputElement;
+                const btnLocation = document.getElementById("btn-location");
+                const btnSea = document.getElementById("btn-sea");
+                const btnMadrid = document.getElementById("btn-madrid");
+
+                function calculateTime(mass, tempStart, tempTarget, altitude) {
+                    const waterBoilingPoint = 100 - 0.0034 * altitude;
+
+                    // Formula: t = 0.451 * M^(2/3) * ln((Tw - To) / (Tw - Ty))
+                    // mass in grams
+                    // temps in Celsius
+
+                    const term1 = 0.451 * Math.pow(mass, 2 / 3);
+                    const term2 = Math.log(
+                        (waterBoilingPoint - tempStart) / (waterBoilingPoint - tempTarget)
+                    );
+
+                    const minutes = term1 * term2;
+                    return minutes * 60; // seconds
+                }
+
+                function formatTime(seconds) {
+                    const m = Math.floor(seconds / 60);
+                    const s = Math.floor(seconds % 60);
+                    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+                }
+
+                function updateCalculations() {
+                    currentAltitude = parseInt(altitudeInput.value) || 0;
+
+                    // Targets: Soft (62), Mollet (67), Hard (77)
+                    const tSoft = calculateTime(currentSize, currentTemp, 62, currentAltitude);
+                    const tMollet = calculateTime(currentSize, currentTemp, 67, currentAltitude);
+                    const tHard = calculateTime(currentSize, currentTemp, 77, currentAltitude);
+
+                    document.getElementById("time-soft").textContent = formatTime(tSoft);
+                    document.getElementById("time-mollet").textContent = formatTime(tMollet);
+                    document.getElementById("time-hard").textContent = formatTime(tHard);
+                }
+
+                tempBtns.forEach((btn) => {
+                    btn.addEventListener("click", () => {
+                        tempBtns.forEach((b) => b.classList.remove("active"));
+                        btn.classList.add("active");
+                        currentTemp = parseInt(btn.getAttribute("data-value"));
+                        updateCalculations();
+                    });
+                });
+
+                sizeBtns.forEach((btn) => {
+                    btn.addEventListener("click", () => {
+                        sizeBtns.forEach((b) => b.classList.remove("active"));
+                        btn.classList.add("active");
+                        currentSize = parseInt(btn.getAttribute("data-value"));
+                        updateCalculations();
+                    });
+                });
+
+                altitudeInput.addEventListener("input", updateCalculations);
+
+                btnSea?.addEventListener("click", () => {
+                    altitudeInput.value = "0";
+                    updateCalculations();
+                });
+
+                btnMadrid?.addEventListener("click", () => {
+                    altitudeInput.value = "600";
+                    updateCalculations();
+                });
+
+                if (btnLocation) {
+                    btnLocation.addEventListener("click", () => {
+                        if (!navigator.geolocation) {
+                            alert("Tu navegador no soporta geolocalización");
+                            return;
+                        }
+
+                        const icon = btnLocation.querySelector("svg");
+                        if (icon) icon.classList.add("animate-spin");
+                        btnLocation.classList.add("text-yellow-500");
+
+                        navigator.geolocation.getCurrentPosition(
+                            async (position) => {
+                                let altitude = position.coords.altitude;
+
+                                if (altitude === null) {
+                                    try {
+                                        const { latitude, longitude } = position.coords;
+                                        const response = await fetch(
+                                            `https://api.open-meteo.com/v1/elevation?latitude=${latitude}&longitude=${longitude}`
+                                        );
+                                        const data = await response.json();
+                                        if (data.elevation !== undefined) {
+                                            altitude = data.elevation;
+                                        }
+                                    } catch (e) {
+                                        console.error("Error fetching elevation API:", e);
+                                    }
+                                }
+
+                                if (altitude !== null) {
+                                    altitudeInput.value = Math.round(altitude).toString();
+                                    updateCalculations();
+                                } else {
+                                    alert(
+                                        "No pudimos obtener tu altitud exacta. Intenta introducirla manualmente."
+                                    );
+                                }
+
+                                if (icon) icon.classList.remove("animate-spin");
+                                btnLocation.classList.remove("text-yellow-500");
+                            },
+                            (error) => {
+                                console.error(error);
+                                alert("Error al obtener la ubicación. Asegúrate de dar permisos.");
+                                if (icon) icon.classList.remove("animate-spin");
+                                btnLocation.classList.remove("text-yellow-500");
+                            }
+                        );
+                    });
+                }
+
+                // Initial calculation
+                updateCalculations();
+            </script>
+        </div>
+    </div></Layout
+>
