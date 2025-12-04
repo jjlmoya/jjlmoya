@@ -1,0 +1,126 @@
+---
+import "leaflet/dist/leaflet.css";
+import RutasSidebar from "./RutasSidebar.astro";
+import RutasMapVisual from "./RutasMapVisual.astro";
+---
+
+<div class="flex flex-col lg:grid lg:grid-cols-3 gap-0 h-[calc(100vh-100px)] lg:h-[800px]">
+    <div class="order-2 lg:order-1 h-1/2 lg:h-full overflow-hidden">
+        <RutasSidebar />
+    </div>
+    <div class="order-1 lg:order-2 h-1/2 lg:h-full lg:col-span-2 relative">
+        <RutasMapVisual />
+    </div>
+</div>
+
+<script>
+    import { RouteManager, type RoutePoint } from "../../../lib/rutas/RouteManager";
+
+    const manager = new RouteManager();
+
+    const els = {
+        list: document.getElementById("points-list"),
+        empty: document.getElementById("empty-state"),
+        btnOptimize: document.getElementById("btn-optimize") as HTMLButtonElement,
+        btnClear: document.getElementById("btn-clear"),
+        stats: document.getElementById("stats-panel"),
+        distance: document.getElementById("total-distance"),
+    };
+
+    // Initialize Map
+    manager.initMap("map");
+
+    // UI Updates
+    manager.addEventListener("update", (e: any) => {
+        const points = e.detail as RoutePoint[];
+        renderList(points);
+        updateButtons(points);
+    });
+
+    manager.addEventListener("loading", (e: any) => {
+        const isLoading = e.detail;
+        if (els.btnOptimize) {
+            if (isLoading) {
+                els.btnOptimize.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Calculando...`;
+                els.btnOptimize.disabled = true;
+            } else {
+                els.btnOptimize.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg> Calcular Ruta Óptima`;
+                els.btnOptimize.disabled = false;
+            }
+        }
+    });
+
+    manager.addEventListener("routeCalculated", (e: any) => {
+        const { distance } = e.detail;
+        if (els.stats && els.distance) {
+            els.stats.classList.remove("hidden");
+            els.distance.textContent = `${(distance / 1000).toFixed(2)} km`;
+        }
+    });
+
+    manager.addEventListener("routeCleared", () => {
+        if (els.stats) els.stats.classList.add("hidden");
+    });
+
+    manager.addEventListener("error", (e: any) => {
+        alert(e.detail);
+    });
+
+    // Button Listeners
+    els.btnOptimize?.addEventListener("click", () => manager.optimizeRoute());
+    els.btnClear?.addEventListener("click", () => manager.clearAll());
+
+    function renderList(points: RoutePoint[]) {
+        if (!els.list || !els.empty) return;
+
+        if (points.length === 0) {
+            els.empty.style.display = "block";
+            els.list.innerHTML = "";
+            els.list.appendChild(els.empty);
+            return;
+        }
+
+        els.empty.style.display = "none";
+        els.list.innerHTML = "";
+
+        points.forEach((point, index) => {
+            const li = document.createElement("li");
+            li.className =
+                "flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700 shadow-sm group hover:border-cyan-500/50 transition-colors";
+            li.innerHTML = `
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <span class="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 flex items-center justify-center text-xs font-bold border border-cyan-200 dark:border-cyan-800">
+                        ${index + 1}
+                    </span>
+                    <div class="min-w-0">
+                        <span class="block text-sm font-medium text-slate-700 dark:text-slate-200 truncate" title="${point.address || point.name}">
+                            ${point.address || point.name}
+                        </span>
+                    </div>
+                </div>
+                <button class="flex-shrink-0 text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 p-1" aria-label="Eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            `;
+
+            const deleteBtn = li.querySelector("button");
+            deleteBtn?.addEventListener("click", (e) => {
+                e.stopPropagation();
+                manager.deletePoint(point.id);
+            });
+
+            // Click list item to pan to map
+            li.addEventListener("click", () => {
+                manager.panToPoint(point.id);
+            });
+
+            els.list?.appendChild(li);
+        });
+    }
+
+    function updateButtons(points: RoutePoint[]) {
+        if (els.btnOptimize) {
+            els.btnOptimize.disabled = points.length < 2;
+        }
+    }
+</script>
