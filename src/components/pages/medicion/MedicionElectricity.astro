@@ -1,0 +1,180 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#1e1b4b] text-[#e0e7ff] overflow-hidden"
+>
+    <!-- Magnetic Field Background -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+        <svg class="w-full h-full">
+            <pattern
+                id="fieldPattern"
+                x="0"
+                y="0"
+                width="50"
+                height="50"
+                patternUnits="userSpaceOnUse"
+            >
+                <path
+                    d="M 10 25 L 40 25 M 35 20 L 40 25 L 35 30"
+                    stroke="#6366f1"
+                    stroke-width="1"
+                    fill="none"
+                    opacity="0.5"></path>
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#fieldPattern)"></rect>
+        </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#818cf8] font-mono text-xs tracking-widest uppercase border-b border-[#4338ca] pb-2"
+                    >La Aguja Magnética</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#e0e7ff]">
+                    El Galvanómetro
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#c7d2fe]/90">
+                    Sabíamos generar chispas, pero no sabíamos *cuánta* electricidad fluía. No
+                    podíamos pesarla ni medirla con una regla.
+                </p>
+
+                <div
+                    class="bg-[#312e81]/50 p-6 rounded-sm border border-[#4f46e5]/50 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#a5b4fc] font-bold mb-2">Convertir Flujo en Ángulo</h3>
+                    <p class="text-sm text-[#e0e7ff] leading-relaxed">
+                        André-Marie Ampère descubrió que la electricidad crea magnetismo. Si pasas
+                        corriente por una bobina alrededor de una brújula, la aguja se mueve.
+                    </p>
+                    <p class="mt-4 text-sm text-[#818cf8] italic">
+                        Cuanta más corriente, más se desvía la aguja. Por primera vez, lo invisible
+                        se tradujo en un número en un dial.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Galvanometer Visualization (SVG) -->
+                <div class="relative w-64 h-full flex items-center justify-center">
+                    <svg
+                        viewBox="0 0 300 300"
+                        class="w-full h-full drop-shadow-[0_0_30px_rgba(99,102,241,0.3)] overflow-visible"
+                    >
+                        <!-- Copper Coil -->
+                        <g transform="translate(150, 150)">
+                            {
+                                Array.from({ length: 12 }).map((_, i) => (
+                                    <ellipse
+                                        cx="0"
+                                        cy="0"
+                                        rx="120"
+                                        ry={60 + i * 2}
+                                        fill="none"
+                                        stroke="#b45309"
+                                        stroke-width="2"
+                                        transform={`rotate(${i * 5})`}
+                                        opacity="0.8"
+                                    />
+                                ))
+                            }
+                        </g>
+
+                        <!-- The Dial Scale -->
+                        <path
+                            d="M 50 150 A 100 100 0 0 1 250 150"
+                            fill="none"
+                            stroke="#e0e7ff"
+                            stroke-width="2"></path>
+                        <g stroke="#e0e7ff" stroke-width="1">
+                            {
+                                Array.from({ length: 11 }).map((_, i) => {
+                                    const angle = 180 + i * 18;
+                                    const r1 = 90;
+                                    const r2 = 100;
+                                    const x1 = 150 + r1 * Math.cos((angle * Math.PI) / 180);
+                                    const y1 = 150 + r1 * Math.sin((angle * Math.PI) / 180);
+                                    const x2 = 150 + r2 * Math.cos((angle * Math.PI) / 180);
+                                    const y2 = 150 + r2 * Math.sin((angle * Math.PI) / 180);
+                                    return <line x1={x1} y1={y1} x2={x2} y2={y2} />;
+                                })
+                            }
+                        </g>
+
+                        <!-- The Needle -->
+                        <g transform="translate(150, 150)">
+                            <g class="animate-needle-deflect">
+                                <polygon points="-5,-20 0,-100 5,-20 0,20" fill="#ef4444"></polygon>
+                                <circle
+                                    cx="0"
+                                    cy="0"
+                                    r="8"
+                                    fill="#4b5563"
+                                    stroke="#e0e7ff"
+                                    stroke-width="1"></circle>
+                            </g>
+                        </g>
+
+                        <!-- Current Flow Indicators -->
+                        <circle cx="30" cy="250" r="4" fill="#fbbf24" class="animate-electron-flow"
+                        ></circle>
+                        <circle
+                            cx="270"
+                            cy="250"
+                            r="4"
+                            fill="#fbbf24"
+                            class="animate-electron-flow"
+                            style="animation-delay: 1s"></circle>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes needleDeflect {
+        0% {
+            transform: rotate(-45deg);
+        }
+        20% {
+            transform: rotate(45deg);
+        }
+        40% {
+            transform: rotate(30deg);
+        }
+        60% {
+            transform: rotate(40deg);
+        }
+        80% {
+            transform: rotate(35deg);
+        }
+        100% {
+            transform: rotate(-45deg);
+        }
+    }
+    .animate-needle-deflect {
+        animation: needleDeflect 4s ease-in-out infinite;
+    }
+
+    @keyframes electronFlow {
+        0% {
+            opacity: 0;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: scale(2);
+        }
+    }
+    .animate-electron-flow {
+        animation: electronFlow 1s linear infinite;
+    }
+</style>

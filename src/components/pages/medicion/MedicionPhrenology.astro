@@ -1,0 +1,177 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#271a12] text-[#e7e5e4] overflow-hidden"
+>
+    <div class="container mx-auto px-6 max-w-4xl">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#d6d3d1] font-mono text-xs tracking-widest uppercase border-b border-[#a8a29e] pb-2"
+                    >La Ciencia Muerta</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#f5f5f4]">
+                    El Mapa del Alma
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#d6d3d1]/90">
+                    En el siglo XIX, creímos que podíamos medir la personalidad con un calibre. Si
+                    tenías un bulto aquí, eras un genio. Si lo tenías allá, eras un criminal.
+                </p>
+
+                <div
+                    class="bg-[#451a03]/50 p-6 rounded-sm border border-[#78350f]/30 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#fdba74] font-bold mb-2">Frenología</h3>
+                    <p class="text-sm text-[#e7e5e4] leading-relaxed">
+                        Se usaba para justificar el racismo, decidir matrimonios y contratar
+                        empleados. Era "ciencia" aceptada. Se medía el cráneo para juzgar el
+                        contenido.
+                    </p>
+                    <p class="mt-4 text-sm text-[#fb923c] italic">
+                        Hoy sabemos que es una pseudociencia absurda. Pero nos recuerda el peligro
+                        de medir lo que queremos ver, no lo que hay.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative">
+                <!-- Abstract Lidar/Scan Visualization -->
+                <div class="relative w-80 h-80">
+                    <svg viewBox="0 0 400 400" class="w-full h-full">
+                        <defs>
+                            <linearGradient id="scanGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#fdba74" stop-opacity="0"></stop>
+                                <stop offset="50%" stop-color="#fdba74" stop-opacity="1"></stop>
+                                <stop offset="100%" stop-color="#fdba74" stop-opacity="0"></stop>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- The Head formed by horizontal data lines -->
+                        <g stroke="#57534e" stroke-width="1" stroke-linecap="round">
+                            {
+                                Array.from({ length: 40 }).map((_, i) => {
+                                    const y = 50 + i * 8;
+                                    // Simple math to create a head profile shape
+                                    let width = 0;
+                                    let startX = 200;
+
+                                    // Forehead to Nose
+                                    if (i < 15) {
+                                        width = 100 + Math.sin(i * 0.5) * 20;
+                                        startX = 150;
+                                    }
+                                    // Nose to Chin
+                                    else if (i < 25) {
+                                        width = 110 + Math.cos((i - 15) * 0.5) * 30;
+                                        startX = 140;
+                                    }
+                                    // Neck
+                                    else {
+                                        width = 60;
+                                        startX = 180;
+                                    }
+
+                                    return (
+                                        <line
+                                            x1={startX}
+                                            y1={y}
+                                            x2={startX + width}
+                                            y2={y}
+                                            class="opacity-30"
+                                        />
+                                    );
+                                })
+                            }
+                        </g>
+
+                        <!-- The "Active" Scan Line -->
+                        <rect
+                            x="0"
+                            y="0"
+                            width="400"
+                            height="40"
+                            fill="url(#scanGradient)"
+                            opacity="0.2"
+                            class="animate-scan"></rect>
+                        <line
+                            x1="0"
+                            y1="20"
+                            x2="400"
+                            y2="20"
+                            stroke="#fdba74"
+                            stroke-width="2"
+                            class="animate-scan-line"></line>
+
+                        <!-- Data Points appearing on the "bumps" -->
+                        <g class="animate-pulse-data">
+                            <circle cx="200" cy="100" r="3" fill="#fb923c"></circle>
+                            <text
+                                x="210"
+                                y="105"
+                                fill="#fb923c"
+                                font-family="monospace"
+                                font-size="10">BENEVOLENCE: 84%</text
+                            >
+                        </g>
+
+                        <g class="animate-pulse-data" style="animation-delay: 2s">
+                            <circle cx="240" cy="80" r="3" fill="#fb923c"></circle>
+                            <text
+                                x="250"
+                                y="85"
+                                fill="#fb923c"
+                                font-family="monospace"
+                                font-size="10">VENERATION: 12%</text
+                            >
+                        </g>
+
+                        <g class="animate-pulse-data" style="animation-delay: 4s">
+                            <circle cx="160" cy="180" r="3" fill="#fb923c"></circle>
+                            <text
+                                x="40"
+                                y="185"
+                                fill="#fb923c"
+                                font-family="monospace"
+                                font-size="10">DESTRUCTIVENESS: 99%</text
+                            >
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes scan {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(360px);
+        }
+    }
+    .animate-scan {
+        animation: scan 4s linear infinite;
+    }
+    .animate-scan-line {
+        animation: scan 4s linear infinite;
+    }
+
+    @keyframes pulseData {
+        0%,
+        100% {
+            opacity: 0;
+        }
+        10%,
+        90% {
+            opacity: 1;
+        }
+    }
+    .animate-pulse-data {
+        animation: pulseData 4s linear infinite;
+    }
+</style>

@@ -1,0 +1,203 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#450a0a] text-[#fecaca] overflow-hidden"
+>
+    <!-- Vein Pattern Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-10">
+        <svg class="w-full h-full">
+            <pattern id="veins" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <path
+                    d="M 0 50 Q 25 25 50 50 T 100 50"
+                    fill="none"
+                    stroke="#ef4444"
+                    stroke-width="1"></path>
+                <path
+                    d="M 50 0 Q 75 25 50 50 T 50 100"
+                    fill="none"
+                    stroke="#ef4444"
+                    stroke-width="1"></path>
+            </pattern>
+            <rect width="100%" height="100%" fill="#7f1d1d" filter="url(#veins)"></rect>
+        </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#f87171] font-mono text-xs tracking-widest uppercase border-b border-[#991b1b] pb-2"
+                    >El Reloj de Sangre</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#fee2e2]">El Pulso</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#fca5a5]/90">
+                    Antes de medir el tiempo con precisión, el cuerpo era el reloj. Herófilo de
+                    Alejandría usó una clepsidra portátil para medir los latidos de sus pacientes.
+                </p>
+
+                <div
+                    class="bg-[#7f1d1d]/40 p-6 rounded-sm border border-[#ef4444]/30 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#fecaca] font-bold mb-2">El Ritmo de la Vida</h3>
+                    <p class="text-sm text-[#fca5a5] leading-relaxed">
+                        Descubrió que el pulso no solo indicaba la velocidad del corazón, sino su
+                        fuerza y ritmo. Fue la primera vez que convertimos la vida en un número.
+                    </p>
+                    <p class="mt-4 text-sm text-[#f87171] italic">
+                        La música y la medicina comparten la misma unidad: el tempo.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Pulse Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 300" class="w-full h-full overflow-visible">
+                        <!-- ECG Line Background (Faint Grid) -->
+                        <defs>
+                            <pattern
+                                id="ecgGrid"
+                                width="20"
+                                height="20"
+                                patternUnits="userSpaceOnUse"
+                            >
+                                <rect
+                                    width="20"
+                                    height="20"
+                                    fill="none"
+                                    stroke="#ef4444"
+                                    stroke-width="0.5"
+                                    opacity="0.2"></rect>
+                            </pattern>
+                        </defs>
+                        <rect
+                            x="0"
+                            y="50"
+                            width="400"
+                            height="200"
+                            fill="url(#ecgGrid)"
+                            opacity="0.3"></rect>
+                        <line x1="0" y1="150" x2="400" y2="150" stroke="#7f1d1d" stroke-width="1"
+                        ></line>
+
+                        <!-- The Heart/Pulse Animation -->
+                        <g transform="translate(200, 150)">
+                            <!-- Heart Shape (Abstract) -->
+                            <path
+                                d="M 0 20 Q -40 -20 -20 -50 Q 0 -40 0 -20 Q 0 -40 20 -50 Q 40 -20 0 20"
+                                fill="#ef4444"
+                                opacity="0.2"
+                                class="animate-heartbeat-bg"></path>
+
+                            <!-- The Pulse Wave (ECG Style) -->
+                            <!-- Using pathLength="1" for perfect sync -->
+                            <path
+                                id="pulsePath"
+                                d="M -150 0 L -40 0 L -30 -30 L -20 30 L -10 0 L 10 0 L 20 -80 L 30 40 L 40 0 L 150 0"
+                                fill="none"
+                                stroke="#fecaca"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                pathLength="1"
+                                stroke-dasharray="1"
+                                stroke-dashoffset="1"
+                                class="animate-draw-pulse"></path>
+                        </g>
+
+                        <!-- Water Clock Reference (Clepsydra) - Subtle -->
+                        <g transform="translate(350, 250)" opacity="0.5">
+                            <path
+                                d="M -10 0 L 10 0 L 5 20 L -5 20 Z"
+                                fill="none"
+                                stroke="#fca5a5"
+                                stroke-width="1"></path>
+                            <circle cx="0" cy="25" r="2" fill="#fca5a5" class="animate-drop"
+                            ></circle>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* 
+       Sync Logic:
+       Path goes from x=-150 to x=150. Total width ~300.
+       Small bump (P wave) at x=-30. (-150 to -30 = 120px). 120/300 = 40%.
+       Big spike (QRS) at x=20. (-150 to 20 = 170px). 170/300 = 56.6%.
+       
+       Heartbeat animation should pump at these moments.
+    */
+
+    @keyframes heartbeatBg {
+        0% {
+            transform: scale(1);
+            opacity: 0.2;
+        }
+        35% {
+            transform: scale(1);
+            opacity: 0.2;
+        }
+        40% {
+            transform: scale(1.1);
+            opacity: 0.3;
+        } /* Lub (P wave) */
+        45% {
+            transform: scale(1);
+            opacity: 0.2;
+        }
+        56% {
+            transform: scale(1.4);
+            opacity: 0.5;
+        } /* Dub (QRS Spike) */
+        70% {
+            transform: scale(1);
+            opacity: 0.2;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.2;
+        }
+    }
+    .animate-heartbeat-bg {
+        animation: heartbeatBg 2s linear infinite;
+    }
+
+    @keyframes drawPulse {
+        0% {
+            stroke-dashoffset: 1;
+            opacity: 1;
+        }
+        90% {
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
+        100% {
+            stroke-dashoffset: 0;
+            opacity: 0;
+        } /* Fade out at end */
+    }
+    .animate-draw-pulse {
+        animation: drawPulse 2s linear infinite;
+    }
+
+    @keyframes drop {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(10px);
+            opacity: 0;
+        }
+    }
+    .animate-drop {
+        animation: drop 1s linear infinite;
+    }
+</style>

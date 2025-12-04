@@ -1,0 +1,159 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#374151] text-[#f3f4f6] overflow-hidden"
+>
+    <!-- Wind Lines Background -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        {
+            Array.from({ length: 15 }).map((_, i) => (
+                <div
+                    class="absolute h-px bg-gray-400 opacity-20 animate-wind-line"
+                    style={`top: ${Math.random() * 100}%; width: ${Math.random() * 50 + 20}%; animation-duration: ${Math.random() * 2 + 1}s; animation-delay: ${Math.random()}s;`}
+                ></div>
+            ))
+        }
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#9ca3af] font-mono text-xs tracking-widest uppercase border-b border-[#6b7280] pb-2"
+                    >Cazando la Brisa</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-white">El Anemómetro</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#e5e7eb]/90">
+                    El viento es invisible y caótico. Puedes sentirlo, pero no puedes verlo. ¿Cómo
+                    mides la velocidad de algo que no puedes tocar?
+                </p>
+
+                <div
+                    class="bg-[#1f2937]/50 p-6 rounded-sm border border-[#4b5563]/50 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#d1d5db] font-bold mb-2">Atrapar y Girar</h3>
+                    <p class="text-sm text-[#f3f4f6] leading-relaxed">
+                        John Thomas Romney Robinson inventó en 1846 el anemómetro de cazoletas. La
+                        idea es simple: convertir el movimiento lineal del viento en movimiento
+                        rotatorio.
+                    </p>
+                    <p class="mt-4 text-sm text-[#9ca3af] italic">
+                        Contando las vueltas por minuto, sabemos exactamente a qué velocidad viaja
+                        el aire.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Anemometer Visualization (SVG) -->
+                <div class="relative w-64 h-full flex items-center justify-center">
+                    <svg viewBox="0 0 300 300" class="w-full h-full overflow-visible">
+                        <!-- Pole -->
+                        <rect x="145" y="150" width="10" height="150" fill="#4b5563"></rect>
+
+                        <!-- Spinning Head -->
+                        <g transform="translate(150, 150)" class="animate-spin-wind">
+                            <!-- Arms -->
+                            <line x1="-100" y1="0" x2="100" y2="0" stroke="#9ca3af" stroke-width="4"
+                            ></line>
+                            <line x1="0" y1="-100" x2="0" y2="100" stroke="#9ca3af" stroke-width="4"
+                            ></line>
+
+                            <!-- Cups -->
+                            <!-- Right Cup (Catching wind) -->
+                            <path
+                                d="M 100 -20 A 20 20 0 0 1 100 20 L 120 20 L 120 -20 Z"
+                                fill="#ef4444"
+                                transform="rotate(0)"></path>
+                            <!-- Bottom Cup -->
+                            <path
+                                d="M -20 100 A 20 20 0 0 1 20 100 L 20 120 L -20 120 Z"
+                                fill="#3b82f6"
+                                transform="rotate(0)"></path>
+                            <!-- Left Cup (Back of cup) -->
+                            <path
+                                d="M -100 -20 A 20 20 0 0 0 -100 20 L -120 20 L -120 -20 Z"
+                                fill="#eab308"
+                                transform="rotate(0)"></path>
+                            <!-- Top Cup -->
+                            <path
+                                d="M -20 -100 A 20 20 0 0 0 20 -100 L 20 -120 L -20 -120 Z"
+                                fill="#22c55e"
+                                transform="rotate(0)"></path>
+
+                            <!-- Center Cap -->
+                            <circle
+                                cx="0"
+                                cy="0"
+                                r="10"
+                                fill="#1f2937"
+                                stroke="#9ca3af"
+                                stroke-width="2"></circle>
+                        </g>
+
+                        <!-- Wind Stream Lines -->
+                        <g opacity="0.5">
+                            <path
+                                d="M -50 100 L 50 100"
+                                stroke="white"
+                                stroke-width="1"
+                                stroke-dasharray="5 5"
+                                class="animate-wind-stream"></path>
+                            <path
+                                d="M -50 180 L 100 180"
+                                stroke="white"
+                                stroke-width="1"
+                                stroke-dasharray="5 5"
+                                class="animate-wind-stream"
+                                style="animation-delay: 0.5s"></path>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes windLine {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(200%);
+        }
+    }
+    .animate-wind-line {
+        animation: windLine linear infinite;
+    }
+
+    @keyframes spinWind {
+        from {
+            transform: translate(150px, 150px) rotate(0deg);
+        }
+        to {
+            transform: translate(150px, 150px) rotate(360deg);
+        }
+    }
+    .animate-spin-wind {
+        animation: spinWind 2s linear infinite;
+    }
+    /* Speed up on hover or interaction could be cool, but sticking to auto for now */
+
+    @keyframes windStream {
+        from {
+            stroke-dashoffset: 10;
+            opacity: 0;
+        }
+        to {
+            stroke-dashoffset: -10;
+            opacity: 1;
+        }
+    }
+    .animate-wind-stream {
+        animation: windStream 1s linear infinite;
+    }
+</style>

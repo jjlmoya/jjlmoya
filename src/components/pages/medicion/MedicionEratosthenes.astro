@@ -1,0 +1,213 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#fff7ed] text-[#7c2d12] overflow-hidden"
+>
+    <!-- Sun Rays Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-30">
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[150%] bg-[conic-gradient(from_180deg,transparent_0deg,#fdba74_20deg,transparent_40deg)] animate-spin-slow"
+        >
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#ea580c] font-mono text-xs tracking-widest uppercase border-b border-[#9a3412] pb-2"
+                    >La Sombra del Mundo</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#431407]">
+                    El Palo y la Tierra
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#9a3412]/90">
+                    Hace 2.200 años, Eratóstenes midió el tamaño de la Tierra sin salir de Egipto.
+                    Solo necesitó un palo, un pozo y un camello.
+                </p>
+
+                <div
+                    class="bg-[#ffedd5]/50 p-6 rounded-sm border border-[#fdba74] mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#c2410c] font-bold mb-2">7 Grados de Diferencia</h3>
+                    <p class="text-sm text-[#7c2d12] leading-relaxed">
+                        En Siena, el sol de mediodía iluminaba el fondo de un pozo (0° sombra). A la
+                        misma hora en Alejandría, un obelisco proyectaba una sombra de 7.2°.
+                    </p>
+                    <p class="mt-4 text-sm text-[#ea580c] italic">
+                        Por geometría simple, si la sombra es de 7.2° (1/50 de un círculo), la
+                        distancia entre las ciudades es 1/50 de la Tierra.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Eratosthenes Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 300" class="w-full h-full overflow-hidden rounded-lg">
+                        <defs>
+                            <linearGradient id="earthGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#fdba74"></stop>
+                                <stop offset="100%" stop-color="#7c2d12"></stop>
+                            </linearGradient>
+                            <linearGradient id="rayGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.6"></stop>
+                                <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"></stop>
+                            </linearGradient>
+                            <clipPath id="earthClip">
+                                <rect x="0" y="0" width="400" height="300"></rect>
+                            </clipPath>
+                        </defs>
+
+                        <!-- The Earth Surface (Circular Arc) -->
+                        <!-- Center at (150, 800) with Radius 600. Peak at (150, 200). -->
+                        <!-- This ensures Siena at x=150 is exactly at the top (tangent horizontal) -->
+                        <g clip-path="url(#earthClip)">
+                            <circle cx="150" cy="800" r="600" fill="url(#earthGradient)"></circle>
+                        </g>
+
+                        <!-- Sun Rays (Vertical & Parallel) -->
+                        <g stroke="url(#rayGradient)" stroke-width="1.5">
+                            {
+                                Array.from({ length: 20 }).map((_, i) => (
+                                    <line x1={i * 25} y1="-50" x2={i * 25} y2="250" />
+                                ))
+                            }
+                        </g>
+
+                        <!-- Syene (The Well) - Placed at Peak (150, 200) -->
+                        <g transform="translate(150, 200)">
+                            <!-- Well Structure -->
+                            <rect x="-12" y="0" width="24" height="8" fill="#7c2d12"></rect>
+                            <rect x="-8" y="0" width="16" height="8" fill="#431407"></rect>
+                            <!-- Hole -->
+
+                            <!-- Sun Ray going straight in (Vertical) -->
+                            <line
+                                x1="0"
+                                y1="-100"
+                                x2="0"
+                                y2="8"
+                                stroke="#fbbf24"
+                                stroke-width="3"
+                                stroke-opacity="0.8"></line>
+
+                            <text
+                                x="0"
+                                y="25"
+                                text-anchor="middle"
+                                fill="#7c2d12"
+                                font-size="10"
+                                font-family="monospace"
+                                font-weight="bold">SIENA</text
+                            >
+                            <text
+                                x="0"
+                                y="35"
+                                text-anchor="middle"
+                                fill="#ea580c"
+                                font-size="9"
+                                font-family="monospace">0°</text
+                            >
+                        </g>
+
+                        <!-- Alexandria (The Obelisk) -->
+                        <!-- Placed at 20 degrees right along the circle -->
+                        <!-- x = 150 + 600*sin(20deg) = 150 + 205 = 355 -->
+                        <!-- y = 800 - 600*cos(20deg) = 800 - 564 = 236 -->
+                        <g transform="translate(355, 236) rotate(20)">
+                            <!-- Obelisk (Perpendicular to surface) -->
+                            <path d="M -4 0 L 0 -50 L 4 0 Z" fill="#7c2d12"></path>
+
+                            <!-- Shadow -->
+                            <!-- Light is vertical. Ground is tilted 20deg. -->
+                            <!-- Shadow length calculation or visual approximation. -->
+                            <!-- It falls to the 'North' (Right in local coords) -->
+                            <path d="M 0 0 L 18 0" stroke="#431407" stroke-width="3" opacity="0.5"
+                            ></path>
+
+                            <!-- Reference Vertical Ray (Dashed) -->
+                            <!-- We rotate -20 to be vertical again -->
+                            <line
+                                x1="0"
+                                y1="-70"
+                                x2="0"
+                                y2="0"
+                                stroke="#fbbf24"
+                                stroke-width="1"
+                                stroke-dasharray="3 3"
+                                transform="rotate(-20)"></line>
+
+                            <!-- Angle Arc -->
+                            <path
+                                d="M 0 -30 Q 4 -30 6 -24"
+                                fill="none"
+                                stroke="#ea580c"
+                                stroke-width="2"></path>
+                            <text
+                                x="12"
+                                y="-30"
+                                fill="#ea580c"
+                                font-size="12"
+                                font-weight="bold"
+                                transform="rotate(-20)">7.2°</text
+                            >
+
+                            <text
+                                x="0"
+                                y="20"
+                                text-anchor="middle"
+                                fill="#7c2d12"
+                                font-size="10"
+                                font-family="monospace">ALEJANDRÍA</text
+                            >
+                        </g>
+
+                        <!-- Distance Arc -->
+                        <!-- Arc from 150 to 355 with radius ~620 (floating above surface) -->
+                        <path
+                            d="M 150 180 Q 252 160 355 216"
+                            fill="none"
+                            stroke="#ea580c"
+                            stroke-width="2"
+                            stroke-dasharray="4 4"></path>
+                        <rect
+                            x="230"
+                            y="170"
+                            width="80"
+                            height="16"
+                            fill="#fff7ed"
+                            rx="4"
+                            opacity="0.9"></rect>
+                        <text
+                            x="270"
+                            y="181"
+                            text-anchor="middle"
+                            fill="#ea580c"
+                            font-size="10"
+                            font-family="monospace"
+                            font-weight="bold">5000 ESTADIOS</text
+                        >
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes spinSlow {
+        from {
+            transform: translate(-50%, 0) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, 0) rotate(360deg);
+        }
+    }
+    .animate-spin-slow {
+        animation: spinSlow 60s linear infinite;
+    }
+</style>

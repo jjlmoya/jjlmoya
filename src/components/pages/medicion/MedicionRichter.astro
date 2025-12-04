@@ -1,0 +1,322 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#1f2937] text-[#e5e7eb] overflow-hidden"
+>
+    <!-- Grid Background -->
+    <div
+        class="absolute inset-0 opacity-10"
+        style="background-image: linear-gradient(#4b5563 1px, transparent 1px), linear-gradient(90deg, #4b5563 1px, transparent 1px); background-size: 40px 40px;"
+    >
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#9ca3af] font-mono text-xs tracking-widest uppercase border-b border-[#4b5563] pb-2"
+                    >La Tierra Tiembla</span
+                >
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-white">
+                    La Escala Richter
+                </h2>
+
+                <p class="text-lg leading-relaxed text-[#d1d5db]">
+                    La tierra se mueve constantemente, pero solo sentimos lo catastrófico. Charles
+                    Richter quería medir la energía liberada, no solo el daño visible.
+                </p>
+
+                <div class="bg-[#374151]/80 p-6 rounded border border-[#4b5563] backdrop-blur-sm">
+                    <h3 class="text-white font-bold mb-2">Logaritmos de Destrucción</h3>
+                    <p class="text-sm text-[#d1d5db] leading-relaxed">
+                        Como el sonido, los terremotos crecen exponencialmente. Un terremoto de
+                        magnitud 5 es <strong>10 veces</strong> más fuerte que uno de 4. Y libera <strong
+                            >32 veces</strong
+                        > más energía.
+                    </p>
+                    <div class="mt-4 h-1 w-full bg-gray-600 rounded overflow-hidden">
+                        <div class="h-full bg-red-500 w-[1%] animate-quake-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[300px]">
+                <!-- Seismograph Visualization (SVG) -->
+                <div
+                    class="relative w-full h-full bg-[#111827] border border-[#374151] rounded-lg overflow-hidden flex items-center shadow-2xl"
+                >
+                    <svg viewBox="0 0 400 200" class="w-full h-full">
+                        <defs>
+                            <clipPath id="paperClip">
+                                <rect x="0" y="0" width="350" height="200"></rect>
+                            </clipPath>
+                            <!-- The Wave Segment (200px wide) -->
+                            <!-- Matches the needle animation keyframes exactly -->
+                            <path
+                                id="waveSegment"
+                                d="M 0 100 
+                                     L 20 100 
+                                     L 30 95 L 40 105 L 50 100 
+                                     L 80 100 
+                                     L 90 50 L 100 150 L 110 100 
+                                     L 200 100"
+                                fill="none"
+                                stroke="#ef4444"
+                                stroke-width="2"
+                                stroke-linejoin="round"></path>
+                        </defs>
+
+                        <!-- Scrolling Grid & Line (Paper) -->
+                        <g clip-path="url(#paperClip)">
+                            <g class="animate-scroll-paper">
+                                <!-- Grid Lines -->
+                                {
+                                    Array.from({ length: 20 }).map((_, i) => (
+                                        <line
+                                            x1={i * 40}
+                                            y1="0"
+                                            x2={i * 40}
+                                            y2="200"
+                                            stroke="#1f2937"
+                                            stroke-width="1"
+                                        />
+                                    ))
+                                }
+                                <line
+                                    x1="0"
+                                    y1="100"
+                                    x2="800"
+                                    y2="100"
+                                    stroke="#1f2937"
+                                    stroke-width="1"></line>
+
+                                <!-- Repeated Wave Segments -->
+                                <!-- We position them so that at t=0, the segment at 350 starts passing the needle -->
+                                <use href="#waveSegment" x="-250"></use>
+                                <use href="#waveSegment" x="-50"></use>
+                                <use href="#waveSegment" x="150"></use>
+                                <use href="#waveSegment" x="350"></use>
+                                <use href="#waveSegment" x="550"></use>
+                            </g>
+                        </g>
+
+                        <!-- The Drum (Right Side) -->
+                        <rect
+                            x="350"
+                            y="10"
+                            width="40"
+                            height="180"
+                            rx="5"
+                            fill="#374151"
+                            stroke="#4b5563"></rect>
+                        <line x1="370" y1="10" x2="370" y2="190" stroke="#1f2937" stroke-width="2"
+                        ></line>
+
+                        <!-- The Needle Arm -->
+                        <g>
+                            <!-- Pivot Base -->
+                            <circle cx="370" cy="100" r="5" fill="#9ca3af"></circle>
+                            <!-- Arm -->
+                            <line
+                                x1="370"
+                                y1="100"
+                                x2="350"
+                                y2="100"
+                                stroke="#9ca3af"
+                                stroke-width="3"
+                                class="animate-needle-arm"></line>
+                            <!-- Needle Tip -->
+                            <circle
+                                cx="350"
+                                cy="100"
+                                r="3"
+                                fill="#ef4444"
+                                class="animate-needle-tip"></circle>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes quakeBar {
+        0%,
+        90% {
+            width: 1%;
+            background-color: #22c55e;
+        }
+        92% {
+            width: 40%;
+            background-color: #eab308;
+        }
+        95% {
+            width: 90%;
+            background-color: #ef4444;
+        }
+        100% {
+            width: 1%;
+            background-color: #22c55e;
+        }
+    }
+    .animate-quake-bar {
+        animation: quakeBar 4s infinite;
+    }
+
+    /* Moves the paper left by exactly one wave width (200px) */
+    @keyframes scrollPaper {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-200px);
+        }
+    }
+    .animate-scroll-paper {
+        animation: scrollPaper 2s linear infinite;
+    }
+
+    /* Matches the Y-values of the waveSegment path */
+    @keyframes needleMove {
+        0% {
+            cy: 100;
+            y2: 100;
+        }
+        10% {
+            cy: 100;
+            y2: 100;
+        }
+        15% {
+            cy: 95;
+            y2: 95;
+        }
+        20% {
+            cy: 105;
+            y2: 105;
+        }
+        25% {
+            cy: 100;
+            y2: 100;
+        }
+        40% {
+            cy: 100;
+            y2: 100;
+        }
+        45% {
+            cy: 50;
+            y2: 50;
+        } /* Peak Up */
+        50% {
+            cy: 150;
+            y2: 150;
+        } /* Peak Down */
+        55% {
+            cy: 100;
+            y2: 100;
+        }
+        100% {
+            cy: 100;
+            y2: 100;
+        }
+    }
+
+    .animate-needle-tip {
+        animation: needleMove 2s linear infinite;
+    }
+    /* For the line, we need to animate y2 specifically, but CSS SVG animation is tricky with properties.
+       Using transform translateY is easier but the pivot is fixed.
+       Let's use a specific animation for the line y2 attribute if possible, or transform.
+       Since the arm is horizontal, rotating it is better.
+    */
+
+    @keyframes armRotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        10% {
+            transform: rotate(0deg);
+        }
+        15% {
+            transform: rotate(1.5deg);
+        } /* approx for 5px up at 20px length */
+        20% {
+            transform: rotate(-1.5deg);
+        }
+        25% {
+            transform: rotate(0deg);
+        }
+        40% {
+            transform: rotate(0deg);
+        }
+        45% {
+            transform: rotate(14deg);
+        } /* approx for 50px up */
+        50% {
+            transform: rotate(-14deg);
+        }
+        55% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(0deg);
+        }
+    }
+    .animate-needle-arm {
+        transform-origin: 370px 100px;
+        animation: armRotate 2s linear infinite;
+    }
+    /* We need the tip to follow the rotation exactly. 
+       50px height at 20px radius is impossible (arm is too short for that amplitude).
+       Wait, arm length is 370-350 = 20px. Wave amplitude is 50px.
+       The arm would have to stretch or rotate wildly.
+       Let's adjust the arm logic. The arm should be sliding or pivoting from far away?
+       Or just animate y1/y2 directly.
+    */
+</style>
+
+<!-- Re-defining the arm animation to be purely vertical translation for simplicity and sync -->
+<style>
+    @keyframes needleVertical {
+        0% {
+            transform: translateY(0);
+        }
+        10% {
+            transform: translateY(0);
+        }
+        15% {
+            transform: translateY(-5px);
+        }
+        20% {
+            transform: translateY(5px);
+        }
+        25% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(0);
+        }
+        45% {
+            transform: translateY(-50px);
+        }
+        50% {
+            transform: translateY(50px);
+        }
+        55% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+    .animate-needle-tip {
+        animation: needleVertical 2s linear infinite;
+    }
+    .animate-needle-arm {
+        animation: needleVertical 2s linear infinite;
+        /* Fix the pivot point moving issue by just moving the whole line */
+        transform-box: fill-box;
+    }
+</style>

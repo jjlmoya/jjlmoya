@@ -1,0 +1,168 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#2c241b] text-[#e7e5e4] overflow-hidden"
+>
+    <!-- Perspective Grid Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+        <svg class="w-full h-full" preserveAspectRatio="none">
+            <defs>
+                <pattern
+                    id="perspectiveGrid"
+                    x="0"
+                    y="0"
+                    width="100"
+                    height="100"
+                    patternUnits="userSpaceOnUse"
+                >
+                    <path
+                        d="M 0 0 L 100 0 M 0 0 L 0 100"
+                        fill="none"
+                        stroke="#a8a29e"
+                        stroke-width="0.5"></path>
+                </pattern>
+            </defs>
+            <!-- A simple grid, but we will do the perspective in the main SVG -->
+        </svg>
+        <!-- Radial gradient to fade edges -->
+        <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#2c241b_100%)]"
+        >
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#d6d3d1] font-mono text-xs tracking-widest uppercase border-b border-[#78716c] pb-2"
+                    >La Ventana de Alberti</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#f5f5f4]">
+                    La Perspectiva
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#d6d3d1]/90">
+                    El mundo es tridimensional, pero nuestros lienzos son planos. Durante siglos, el
+                    arte fue plano. Hasta que aprendimos a medir la profundidad.
+                </p>
+
+                <div
+                    class="bg-[#44403c]/50 p-6 rounded-sm border border-[#57534e] mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#e7e5e4] font-bold mb-2">El Punto de Fuga</h3>
+                    <p class="text-sm text-[#a8a29e] leading-relaxed">
+                        Brunelleschi y Alberti matematizaron la visión. Todas las líneas paralelas
+                        convergen en un solo punto en el infinito.
+                    </p>
+                    <p class="mt-4 text-sm text-[#d6d3d1] italic">
+                        No medían objetos, medían el espacio entre ellos. Fue la primera realidad
+                        virtual: engañar al ojo con geometría.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Perspective Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 300" class="w-full h-full overflow-visible">
+                        <!-- Vanishing Point -->
+                        <circle cx="200" cy="150" r="2" fill="#ef4444" z-index="10"></circle>
+
+                        <!-- Horizon Line -->
+                        <line x1="0" y1="150" x2="400" y2="150" stroke="#78716c" stroke-width="1"
+                        ></line>
+
+                        <!-- Converging Lines (Floor) -->
+                        <g stroke="#57534e" stroke-width="1" opacity="0.5">
+                            {
+                                Array.from({ length: 11 }).map((_, i) => (
+                                    <line x1={i * 40} y1="300" x2="200" y2="150" />
+                                ))
+                            }
+                        </g>
+
+                        <!-- Converging Lines (Ceiling - Optional/Subtle) -->
+                        <g stroke="#57534e" stroke-width="1" opacity="0.2">
+                            {
+                                Array.from({ length: 5 }).map((_, i) => (
+                                    <line x1={i * 100} y1="0" x2="200" y2="150" />
+                                ))
+                            }
+                        </g>
+
+                        <!-- Transversal Lines (Creating the grid illusion) -->
+                        <!-- Distance between lines gets smaller as they approach horizon -->
+                        <g stroke="#57534e" stroke-width="1" opacity="0.5">
+                            <line x1="0" y1="280" x2="400" y2="280"></line>
+                            <line x1="40" y1="240" x2="360" y2="240"></line>
+                            <line x1="80" y1="210" x2="320" y2="210"></line>
+                            <line x1="110" y1="190" x2="290" y2="190"></line>
+                            <line x1="130" y1="175" x2="270" y2="175"></line>
+                        </g>
+
+                        <!-- 3D Object (Cube) -->
+                        <g transform="translate(100, 200)" class="animate-draw-cube">
+                            <!-- Front Face -->
+                            <rect
+                                x="0"
+                                y="0"
+                                width="40"
+                                height="40"
+                                fill="none"
+                                stroke="#e7e5e4"
+                                stroke-width="2"></rect>
+
+                            <!-- Lines to Vanishing Point (200, 150) -->
+                            <!-- Local (0,0) is (100, 200). Vanishing point relative is (100, -50) -->
+                            <!-- Wait, global coords are easier for lines -->
+                        </g>
+
+                        <!-- Dynamic Cube Lines -->
+                        <g stroke="#e7e5e4" stroke-width="1" stroke-dasharray="2 2" opacity="0.5">
+                            <line x1="100" y1="200" x2="200" y2="150"></line>
+                            <!-- Top Left -->
+                            <line x1="140" y1="200" x2="200" y2="150"></line>
+                            <!-- Top Right -->
+                            <!-- Bottom lines hidden by ground usually, but let's show wireframe -->
+                        </g>
+
+                        <!-- The "Illusion" Frame -->
+                        <rect
+                            x="50"
+                            y="50"
+                            width="300"
+                            height="200"
+                            fill="none"
+                            stroke="#d6d3d1"
+                            stroke-width="4"></rect>
+                        <text
+                            x="200"
+                            y="40"
+                            text-anchor="middle"
+                            fill="#78716c"
+                            font-family="monospace"
+                            font-size="10">PICTURA</text
+                        >
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes drawCube {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    .animate-draw-cube {
+        animation: drawCube 2s ease-in forwards;
+    }
+</style>

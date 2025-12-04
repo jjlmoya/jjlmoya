@@ -1,0 +1,130 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#1e1b4b] text-[#e0e7ff] overflow-hidden"
+>
+    <!-- Spiral Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-10">
+        <svg class="w-full h-full">
+            <pattern
+                id="spiralPattern"
+                x="0"
+                y="0"
+                width="100"
+                height="100"
+                patternUnits="userSpaceOnUse"
+            >
+                <path d="M 50 50 Q 80 50 80 80" fill="none" stroke="#6366f1" stroke-width="1"
+                ></path>
+            </pattern>
+            <rect width="100%" height="100%" fill="#312e81" filter="url(#spiralPattern)"></rect>
+        </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#818cf8] font-mono text-xs tracking-widest uppercase border-b border-[#4338ca] pb-2"
+                    >La Firma de Dios</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#c7d2fe]">
+                    La Proporción Áurea
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#a5b4fc]/90">
+                    ¿Se puede medir la belleza? Los griegos creían que sí. Un número irracional
+                    (1,618...) que aparece en las galaxias, en las flores y en tu propio ADN.
+                </p>
+
+                <div
+                    class="bg-[#312e81]/50 p-6 rounded-sm border border-[#6366f1]/30 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#e0e7ff] font-bold mb-2">Phi (φ)</h3>
+                    <p class="text-sm text-[#c7d2fe] leading-relaxed">
+                        No es una invención humana, es una eficiencia de la naturaleza. Es la forma
+                        óptima de empaquetar semillas en un girasol o brazos en una espiral
+                        galáctica.
+                    </p>
+                    <p class="mt-4 text-sm text-[#818cf8] italic">
+                        Medir el mundo es descubrir que el caos tiene reglas secretas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Golden Spiral Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 300" class="w-full h-full overflow-visible">
+                        <!-- Golden Rectangles -->
+                        <g stroke="#6366f1" stroke-width="1" fill="none" opacity="0.5">
+                            <rect x="100" y="50" width="200" height="200"></rect>
+                            <!-- Main Square -->
+                            <rect x="300" y="50" width="123.6" height="200"></rect>
+                            <!-- Side Rect -->
+                            <!-- Subdivisions -->
+                            <rect x="300" y="50" width="123.6" height="123.6"></rect>
+                            <rect x="300" y="173.6" width="76.4" height="76.4"></rect>
+                            <!-- And so on... simplified for visual -->
+                        </g>
+
+                        <!-- The Spiral -->
+                        <!-- 
+                           Approximation using quadrants of circles.
+                           Center 1: (100, 250) R=200 -> Arc from (100, 50) to (300, 250)
+                           Wait, standard Fibonacci spiral:
+                           Square 1 (Size 1): Bottom Right
+                           Square 2 (Size 1): Top Right
+                           Square 3 (Size 2): Left
+                           Square 4 (Size 3): Bottom
+                           Square 5 (Size 5): Right
+                           Square 6 (Size 8): Top
+                           
+                           Let's just draw a smooth path that looks like it.
+                        -->
+                        <path
+                            d="M 200 180 
+                                 Q 210 180 210 190
+                                 Q 210 200 200 200
+                                 Q 180 200 180 180
+                                 Q 180 150 210 150
+                                 Q 250 150 250 190
+                                 Q 250 250 190 250
+                                 Q 100 250 100 160
+                                 Q 100 50 250 50"
+                            fill="none"
+                            stroke="#c7d2fe"
+                            stroke-width="2"
+                            class="animate-draw-spiral"></path>
+
+                        <!-- Nature overlay (Leaf/Shell hint) -->
+                        <g opacity="0.1" fill="#818cf8">
+                            <circle cx="200" cy="190" r="2"></circle>
+                            <circle cx="210" cy="185" r="3"></circle>
+                            <circle cx="220" cy="170" r="5"></circle>
+                            <circle cx="230" cy="140" r="8"></circle>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes drawSpiral {
+        0% {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+        100% {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 0;
+        }
+    }
+    .animate-draw-spiral {
+        animation: drawSpiral 5s ease-out infinite;
+    }
+</style>

@@ -1,0 +1,168 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#262626] text-[#e5e5e5] overflow-hidden"
+>
+    <!-- Scratch Texture Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+        <svg class="w-full h-full">
+            <filter id="scratches">
+                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3"></feTurbulence>
+                <feColorMatrix type="saturate" values="0"></feColorMatrix>
+            </filter>
+            <rect width="100%" height="100%" fill="#404040" filter="url(#scratches)"></rect>
+        </svg>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#a3a3a3] font-mono text-xs tracking-widest uppercase border-b border-[#525252] pb-2"
+                    >¿Quién Raya a Quién?</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-white">La Escala de Mohs</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#d4d4d4]/90">
+                    No puedes medir la dureza apretando. Tienes que destruir. Friedrich Mohs
+                    organizó el mundo mineral en una pelea de patio de colegio.
+                </p>
+
+                <div
+                    class="bg-[#171717]/60 p-6 rounded-sm border border-[#404040] mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#e5e5e5] font-bold mb-2">Del Talco al Diamante</h3>
+                    <p class="text-sm text-[#a3a3a3] leading-relaxed">
+                        Si A raya a B, A es más duro. Simple. Tu uña (2.5) raya el yeso (2). El
+                        cuarzo (7) raya el vidrio (5.5).
+                    </p>
+                    <p class="mt-4 text-sm text-[#d4d4d4] italic">
+                        El diamante (10) era el rey invicto, hasta que empezamos a crear materiales
+                        que ni la naturaleza imaginó.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Scratch Test Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 300" class="w-full h-full overflow-visible">
+                        <!-- Material Sample (Glass/Stone) -->
+                        <rect
+                            x="50"
+                            y="100"
+                            width="300"
+                            height="150"
+                            fill="#525252"
+                            stroke="#737373"
+                            stroke-width="2"></rect>
+                        <text
+                            x="200"
+                            y="280"
+                            text-anchor="middle"
+                            fill="#a3a3a3"
+                            font-family="monospace">MUESTRA (DUREZA 5)</text
+                        >
+
+                        <!-- Scratches already made -->
+                        <path
+                            d="M 60 120 L 150 140"
+                            fill="none"
+                            stroke="#262626"
+                            stroke-width="2"
+                            opacity="0.5"></path>
+                        <path
+                            d="M 70 200 L 120 180"
+                            fill="none"
+                            stroke="#262626"
+                            stroke-width="2"
+                            opacity="0.5"></path>
+
+                        <!-- The Tool (Diamond Tip) -->
+                        <g class="animate-scratch-move">
+                            <!-- Tool Handle -->
+                            <rect x="-5" y="-60" width="10" height="60" fill="#a3a3a3"></rect>
+                            <!-- Diamond Tip -->
+                            <path d="M 0 0 L -5 -10 L 5 -10 Z" fill="#bbf7d0"></path>
+                            <!-- Diamond colorish -->
+
+                            <!-- Spark/Dust Effect at tip -->
+                            <circle
+                                cx="0"
+                                cy="0"
+                                r="15"
+                                fill="white"
+                                opacity="0"
+                                class="animate-scratch-spark"></circle>
+                        </g>
+
+                        <!-- The New Scratch (Revealing) -->
+                        <path
+                            d="M 100 150 L 300 150"
+                            fill="none"
+                            stroke="#e5e5e5"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            stroke-dasharray="200"
+                            stroke-dashoffset="200"
+                            class="animate-draw-scratch"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes scratchMove {
+        0% {
+            transform: translate(100px, 150px) rotate(-10deg);
+        }
+        50% {
+            transform: translate(300px, 150px) rotate(-10deg);
+        }
+        100% {
+            transform: translate(300px, 150px) rotate(-10deg);
+            opacity: 0;
+        } /* Disappear at end */
+    }
+    .animate-scratch-move {
+        animation: scratchMove 2s ease-out infinite;
+    }
+
+    @keyframes drawScratch {
+        0% {
+            stroke-dashoffset: 200;
+        }
+        50% {
+            stroke-dashoffset: 0;
+        }
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+    .animate-draw-scratch {
+        animation: drawScratch 2s ease-out infinite;
+    }
+
+    @keyframes scratchSpark {
+        0%,
+        10% {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        25% {
+            opacity: 0.8;
+            transform: scale(1.2);
+        }
+        50% {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+    }
+    .animate-scratch-spark {
+        animation: scratchSpark 2s ease-out infinite;
+    }
+</style>

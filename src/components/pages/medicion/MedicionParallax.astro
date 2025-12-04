@@ -1,0 +1,188 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#020617] text-[#e2e8f0] overflow-hidden"
+>
+    <!-- Starfield Background -->
+    <div class="absolute inset-0 pointer-events-none">
+        {
+            Array.from({ length: 100 }).map(() => (
+                <div
+                    class="absolute rounded-full bg-white animate-twinkle"
+                    style={`
+                    left: ${Math.random() * 100}%; 
+                    top: ${Math.random() * 100}%; 
+                    width: ${Math.random() * 2 + 1}px; 
+                    height: ${Math.random() * 2 + 1}px; 
+                    opacity: ${Math.random()};
+                    animation-duration: ${Math.random() * 3 + 2}s;
+                 `}
+                ></div>
+            ))
+        }
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#38bdf8] font-mono text-xs tracking-widest uppercase border-b border-[#0ea5e9] pb-2"
+                    >La Escalera al Cielo</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#f0f9ff]">El Paralaje</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#cbd5e1]/90">
+                    Durante milenios, las estrellas fueron un telón de fondo fijo e inalcanzable.
+                    ¿Cómo mides la distancia a algo que no puedes tocar ni triangular desde el
+                    suelo?
+                </p>
+
+                <div
+                    class="bg-[#0f172a]/50 p-6 rounded-sm border border-[#1e293b] mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#7dd3fc] font-bold mb-2">El Guiño de la Tierra</h3>
+                    <p class="text-sm text-[#e2e8f0] leading-relaxed">
+                        En 1838, Friedrich Bessel usó la órbita de la Tierra como regla. Miró una
+                        estrella (61 Cygni) en enero y luego en julio.
+                    </p>
+                    <p class="mt-4 text-sm text-[#e2e8f0] leading-relaxed">
+                        La estrella parecía moverse mínimamente contra el fondo lejano. Ese ángulo
+                        infinitesimal reveló una distancia aterradora: 10 años luz. El universo
+                        acababa de volverse gigante.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Parallax Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 400" class="w-full h-full overflow-visible">
+                        <!-- Sun (Center) -->
+                        <circle cx="200" cy="350" r="20" fill="#fbbf24" class="blur-sm"></circle>
+
+                        <!-- Earth Orbit -->
+                        <ellipse
+                            cx="200"
+                            cy="350"
+                            rx="100"
+                            ry="30"
+                            fill="none"
+                            stroke="#334155"
+                            stroke-width="1"
+                            stroke-dasharray="4 4"></ellipse>
+
+                        <!-- Earth Animation -->
+                        <circle r="8" fill="#3b82f6">
+                            <animateMotion
+                                dur="6s"
+                                repeatCount="indefinite"
+                                path="M 100 350 A 100 30 0 1 1 300 350 A 100 30 0 1 1 100 350"
+                            ></animateMotion>
+                        </circle>
+
+                        <!-- Distant Stars (Fixed Background) -->
+                        <g opacity="0.5">
+                            <circle cx="50" cy="50" r="1" fill="white"></circle>
+                            <circle cx="350" cy="50" r="1" fill="white"></circle>
+                            <circle cx="200" cy="20" r="1" fill="white"></circle>
+                        </g>
+
+                        <!-- The Target Star (Nearby) -->
+                        <!-- It appears to move left/right relative to background based on Earth's position -->
+                        <!-- We simulate this by moving the star slightly opposite to Earth's X movement -->
+                        <g transform="translate(200, 100)">
+                            <circle
+                                cx="0"
+                                cy="0"
+                                r="4"
+                                fill="#fff"
+                                stroke="#38bdf8"
+                                stroke-width="2"
+                                class="animate-parallax-star"></circle>
+                            <!-- Sight lines from Earth would be cool but complex to animate perfectly in sync without JS -->
+                        </g>
+
+                        <!-- Viewfinder / Telescope View (Inset) -->
+                        <g transform="translate(280, 50)">
+                            <circle
+                                cx="0"
+                                cy="0"
+                                r="40"
+                                fill="#0f172a"
+                                stroke="#38bdf8"
+                                stroke-width="2"></circle>
+                            <line
+                                x1="0"
+                                y1="-40"
+                                x2="0"
+                                y2="40"
+                                stroke="#38bdf8"
+                                stroke-width="1"
+                                opacity="0.5"></line>
+                            <line
+                                x1="-40"
+                                y1="0"
+                                x2="40"
+                                y2="0"
+                                stroke="#38bdf8"
+                                stroke-width="1"
+                                opacity="0.5"></line>
+
+                            <!-- Star in viewfinder moving -->
+                            <circle r="3" fill="#fff">
+                                <animate
+                                    attributeName="cx"
+                                    values="10; -10; 10"
+                                    dur="6s"
+                                    repeatCount="indefinite"></animate>
+                            </circle>
+                        </g>
+                        <text
+                            x="280"
+                            y="110"
+                            text-anchor="middle"
+                            fill="#38bdf8"
+                            font-size="10"
+                            font-family="monospace">TELESCOPE VIEW</text
+                        >
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes twinkle {
+        0%,
+        100% {
+            opacity: 0.2;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+    }
+    .animate-twinkle {
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes parallaxStar {
+        0% {
+            transform: translateX(20px);
+        } /* Earth Left -> Star looks Right */
+        50% {
+            transform: translateX(-20px);
+        } /* Earth Right -> Star looks Left */
+        100% {
+            transform: translateX(20px);
+        }
+    }
+    .animate-parallax-star {
+        animation: parallaxStar 6s ease-in-out infinite;
+    }
+</style>

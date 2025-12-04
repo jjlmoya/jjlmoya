@@ -1,0 +1,257 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#1a1a1a] text-[#a3e635] overflow-hidden"
+>
+    <!-- Radiation Particles Background -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        {
+            Array.from({ length: 30 }).map(() => (
+                <div
+                    class="absolute w-1 h-1 bg-[#bef264] rounded-full animate-particle"
+                    style={`
+                    left: ${Math.random() * 100}%; 
+                    top: ${Math.random() * 100}%; 
+                    animation-duration: ${Math.random() * 0.5 + 0.2}s;
+                    animation-delay: ${Math.random() * 5}s;
+                 `}
+                ></div>
+            ))
+        }
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#84cc16] font-mono text-xs tracking-widest uppercase border-b border-[#4d7c0f] pb-2"
+                    >El Click de la Muerte</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#ecfccb]">
+                    El Contador Geiger
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#d9f99d]/90">
+                    La radiación es el asesino perfecto: inodoro, incoloro, silencioso. No podíamos
+                    protegernos de lo que no podíamos percibir.
+                </p>
+
+                <div
+                    class="bg-[#3f6212]/30 p-6 rounded-sm border border-[#65a30d]/50 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#bef264] font-bold mb-2">Ionización Audible</h3>
+                    <p class="text-sm text-[#ecfccb] leading-relaxed">
+                        Hans Geiger y Walther Müller crearon un tubo lleno de gas inerte con un
+                        cable de alto voltaje. Cuando una partícula radiactiva entra, ioniza el gas
+                        y cierra el circuito por un instante.
+                    </p>
+                    <p class="mt-4 text-sm text-[#84cc16] font-mono">CLICK. CLICK-CLICK. CLICK.</p>
+                    <p class="text-xs text-[#d9f99d] mt-1">
+                        El sonido de lo invisible chocando con la realidad.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Geiger Counter Visualization (SVG) -->
+                <div class="relative w-80 h-full flex items-center justify-center">
+                    <svg viewBox="0 0 300 200" class="w-full h-full overflow-visible">
+                        <!-- The Tube -->
+                        <rect
+                            x="50"
+                            y="80"
+                            width="200"
+                            height="40"
+                            rx="5"
+                            fill="#262626"
+                            stroke="#525252"
+                            stroke-width="2"></rect>
+                        <line
+                            x1="50"
+                            y1="100"
+                            x2="250"
+                            y2="100"
+                            stroke="#a3e635"
+                            stroke-width="1"
+                            stroke-dasharray="2 2"
+                            opacity="0.3"></line>
+
+                        <!-- Wire to Box -->
+                        <path
+                            d="M 50 100 C 20 100 20 150 50 180"
+                            fill="none"
+                            stroke="#171717"
+                            stroke-width="4"></path>
+
+                        <!-- The Box (Meter) -->
+                        <rect
+                            x="50"
+                            y="150"
+                            width="100"
+                            height="60"
+                            rx="2"
+                            fill="#facc15"
+                            stroke="#ca8a04"
+                            stroke-width="2"></rect>
+                        <!-- Dial -->
+                        <path
+                            d="M 60 190 A 30 30 0 0 1 140 190"
+                            fill="none"
+                            stroke="#000"
+                            stroke-width="1"></path>
+                        <line
+                            x1="100"
+                            y1="190"
+                            x2="100"
+                            y2="170"
+                            stroke="#dc2626"
+                            stroke-width="2"
+                            class="animate-needle-twitch"></line>
+
+                        <!-- Incoming Particles -->
+                        <g>
+                            <circle cx="300" cy="90" r="2" fill="#fff" class="animate-particle-hit"
+                            ></circle>
+                            <circle
+                                cx="320"
+                                cy="110"
+                                r="2"
+                                fill="#fff"
+                                class="animate-particle-hit"
+                                style="animation-delay: 1.2s"></circle>
+                            <circle
+                                cx="280"
+                                cy="100"
+                                r="2"
+                                fill="#fff"
+                                class="animate-particle-hit"
+                                style="animation-delay: 2.5s"></circle>
+                        </g>
+
+                        <!-- Spark/Flash inside tube -->
+                        <circle
+                            cx="150"
+                            cy="100"
+                            r="10"
+                            fill="#a3e635"
+                            opacity="0"
+                            class="animate-flash"></circle>
+                        <circle
+                            cx="150"
+                            cy="100"
+                            r="10"
+                            fill="#a3e635"
+                            opacity="0"
+                            class="animate-flash"
+                            style="animation-delay: 1.2s"></circle>
+                        <circle
+                            cx="150"
+                            cy="100"
+                            r="10"
+                            fill="#a3e635"
+                            opacity="0"
+                            class="animate-flash"
+                            style="animation-delay: 2.5s"></circle>
+
+                        <!-- Sound Wave Visual -->
+                        <g transform="translate(160, 160)" opacity="0">
+                            <circle r="10" fill="none" stroke="#a3e635" stroke-width="2"></circle>
+                            <circle r="20" fill="none" stroke="#a3e635" stroke-width="1"></circle>
+                            <animate
+                                attributeName="opacity"
+                                values="0;1;0"
+                                dur="0.2s"
+                                begin="0.5s; 1.7s; 3.0s"></animate>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes particle {
+        0% {
+            opacity: 0;
+            transform: scale(0);
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: scale(2);
+        }
+    }
+    .animate-particle {
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    @keyframes particleHit {
+        0% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        40% {
+            transform: translateX(-150px);
+            opacity: 1;
+        } /* Hits center */
+        41% {
+            opacity: 0;
+        } /* Disappears */
+        100% {
+            opacity: 0;
+        }
+    }
+    .animate-particle-hit {
+        animation: particleHit 3s linear infinite;
+    }
+
+    @keyframes flash {
+        0%,
+        40% {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        41% {
+            opacity: 0.8;
+            transform: scale(1.5);
+        }
+        45% {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+    .animate-flash {
+        animation: flash 3s linear infinite;
+    }
+
+    @keyframes needleTwitch {
+        0%,
+        40% {
+            transform: rotate(0deg);
+        }
+        41% {
+            transform: rotate(45deg);
+        }
+        45% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(0deg);
+        }
+    }
+    .animate-needle-twitch {
+        transform-origin: 100px 190px;
+        animation: needleTwitch 3s linear infinite;
+        /* Need separate animations for each particle hit, or a complex keyframe. 
+           For simplicity, this syncs with the first particle stream. */
+    }
+</style>

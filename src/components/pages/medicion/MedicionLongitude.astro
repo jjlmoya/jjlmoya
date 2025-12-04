@@ -1,0 +1,214 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#082f49] text-[#e0f2fe] overflow-hidden"
+>
+    <!-- Ocean Background Effect -->
+    <div class="absolute inset-0 opacity-30">
+        <div
+            class="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-[#0c4a6e] to-transparent animate-wave-slow"
+        >
+        </div>
+        <div
+            class="absolute bottom-[-20px] left-0 right-0 h-64 bg-gradient-to-t from-[#075985] to-transparent animate-wave-fast opacity-70"
+        >
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#7dd3fc] font-mono text-xs tracking-widest uppercase border-b border-[#0ea5e9] pb-2"
+                    >Vida o Muerte</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-white">El Reloj del Mar</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#bae6fd]/90">
+                    Saber la latitud (norte-sur) era fácil: mirabas las estrellas. Pero la longitud
+                    (este-oeste) era el mayor misterio de la navegación.
+                </p>
+
+                <div
+                    class="bg-[#0c4a6e]/50 p-6 rounded-sm border border-[#38bdf8]/30 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#38bdf8] font-bold mb-2">Tiempo = Distancia</h3>
+                    <p class="text-sm text-[#e0f2fe] leading-relaxed">
+                        Si sabes qué hora es en Londres y qué hora es en tu barco (por el sol),
+                        sabes cuán lejos estás. Pero los relojes de péndulo no funcionan en un barco
+                        que se mueve.
+                    </p>
+                    <p class="mt-4 text-sm text-[#7dd3fc] italic">
+                        John Harrison dedicó su vida a construir un reloj que desafiara al mar.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Chronometer Visualization (SVG) -->
+                <div class="relative w-64 h-64 animate-float-ship">
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-2xl">
+                        <!-- Outer Case -->
+                        <circle
+                            cx="100"
+                            cy="100"
+                            r="95"
+                            fill="#1e293b"
+                            stroke="#ca8a04"
+                            stroke-width="8"></circle>
+                        <circle
+                            cx="100"
+                            cy="100"
+                            r="88"
+                            fill="none"
+                            stroke="#fef08a"
+                            stroke-width="1"
+                            opacity="0.5"></circle>
+
+                        <!-- Clock Face -->
+                        <circle cx="100" cy="100" r="85" fill="#fefce8" opacity="0.95"></circle>
+
+                        <!-- Ticks -->
+                        <g stroke="black" stroke-width="2" stroke-linecap="round">
+                            {
+                                Array.from({ length: 12 }).map((_, i) => (
+                                    <line
+                                        x1="100"
+                                        y1="25"
+                                        x2="100"
+                                        y2="35"
+                                        transform={`rotate(${i * 30} 100 100)`}
+                                    />
+                                ))
+                            }
+                        </g>
+                        <g stroke="black" stroke-width="1" opacity="0.5">
+                            {
+                                Array.from({ length: 60 }).map((_, i) => (
+                                    <line
+                                        x1="100"
+                                        y1="25"
+                                        x2="100"
+                                        y2="28"
+                                        transform={`rotate(${i * 6} 100 100)`}
+                                    />
+                                ))
+                            }
+                        </g>
+
+                        <!-- Hands Group -->
+                        <g>
+                            <!-- Hour Hand -->
+                            <line
+                                x1="100"
+                                y1="100"
+                                x2="100"
+                                y2="50"
+                                stroke="black"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                            >
+                                <animateTransform
+                                    attributeName="transform"
+                                    type="rotate"
+                                    from="0 100 100"
+                                    to="360 100 100"
+                                    dur="60s"
+                                    repeatCount="indefinite"></animateTransform>
+                            </line>
+
+                            <!-- Minute Hand -->
+                            <line
+                                x1="100"
+                                y1="100"
+                                x2="100"
+                                y2="35"
+                                stroke="black"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            >
+                                <animateTransform
+                                    attributeName="transform"
+                                    type="rotate"
+                                    from="0 100 100"
+                                    to="360 100 100"
+                                    dur="5s"
+                                    repeatCount="indefinite"></animateTransform>
+                            </line>
+
+                            <!-- Second Hand (Red) -->
+                            <line
+                                x1="100"
+                                y1="110"
+                                x2="100"
+                                y2="30"
+                                stroke="#dc2626"
+                                stroke-width="1"
+                            >
+                                <animateTransform
+                                    attributeName="transform"
+                                    type="rotate"
+                                    from="0 100 100"
+                                    to="360 100 100"
+                                    dur="1s"
+                                    repeatCount="indefinite"></animateTransform>
+                            </line>
+
+                            <!-- Center Pin -->
+                            <circle
+                                cx="100"
+                                cy="100"
+                                r="3"
+                                fill="#ca8a04"
+                                stroke="black"
+                                stroke-width="1"></circle>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes waveSlow {
+        0%,
+        100% {
+            transform: translateY(0) scaleY(1);
+        }
+        50% {
+            transform: translateY(-20px) scaleY(1.1);
+        }
+    }
+    .animate-wave-slow {
+        animation: waveSlow 8s ease-in-out infinite;
+    }
+
+    @keyframes waveFast {
+        0%,
+        100% {
+            transform: translateY(0) scaleY(1);
+        }
+        50% {
+            transform: translateY(-15px) scaleY(1.2);
+        }
+    }
+    .animate-wave-fast {
+        animation: waveFast 5s ease-in-out infinite reverse;
+    }
+
+    @keyframes floatShip {
+        0%,
+        100% {
+            transform: rotate(-5deg) translateY(0);
+        }
+        50% {
+            transform: rotate(5deg) translateY(-10px);
+        }
+    }
+    .animate-float-ship {
+        animation: floatShip 4s ease-in-out infinite;
+    }
+</style>

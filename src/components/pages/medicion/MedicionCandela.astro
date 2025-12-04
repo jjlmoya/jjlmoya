@@ -1,0 +1,172 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#2a2a2a] text-[#fef08a] overflow-hidden"
+>
+    <!-- Light Rays Background -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div
+            class="absolute top-1/2 left-1/2 w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0deg,#fef08a_10deg,transparent_20deg)] opacity-10 animate-spin-slow -translate-x-1/2 -translate-y-1/2"
+        >
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#fde047] font-mono text-xs tracking-widest uppercase border-b border-[#ca8a04] pb-2"
+                    >Brillo Estándar</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-white">La Candela</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#fef9c3]/90">
+                    ¿Cómo de brillante es una luz? Durante siglos, la respuesta fue literal: "Brilla
+                    como una vela". Pero no todas las velas son iguales.
+                </p>
+
+                <div
+                    class="bg-[#422006]/50 p-6 rounded-sm border border-[#eab308]/30 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#fde047] font-bold mb-2">De la Ballena al Átomo</h3>
+                    <p class="text-sm text-[#fef08a] leading-relaxed">
+                        Originalmente, la unidad era una vela de esperma de ballena de un sexto de
+                        libra, quemando a 120 granos por hora.
+                    </p>
+                    <p class="mt-4 text-sm text-[#fef08a] leading-relaxed">
+                        Hoy, la <strong>Candela</strong> es una de las 7 unidades base del sistema internacional,
+                        definida por la radiación monocromática de frecuencia 540×10¹² Hz.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Photometer Visualization (SVG) -->
+                <div class="relative w-64 h-full flex items-center justify-center">
+                    <svg viewBox="0 0 200 300" class="w-full h-full overflow-visible">
+                        <!-- Old Candle -->
+                        <g transform="translate(50, 200)">
+                            <rect x="-10" y="0" width="20" height="60" fill="#fef3c7"></rect>
+                            <path
+                                d="M 0 0 Q 5 -20 0 -40 Q -5 -20 0 0"
+                                fill="#fbbf24"
+                                class="animate-flame"></path>
+                            <text
+                                x="0"
+                                y="80"
+                                text-anchor="middle"
+                                fill="#fde047"
+                                font-size="10"
+                                font-family="monospace">1860</text
+                            >
+                        </g>
+
+                        <!-- Comparison Arrows -->
+                        <path
+                            d="M 80 200 L 120 200"
+                            stroke="#fef08a"
+                            stroke-width="1"
+                            stroke-dasharray="4 4"></path>
+                        <text x="100" y="190" text-anchor="middle" fill="#fef08a" font-size="8"
+                            >VS</text
+                        >
+
+                        <!-- Modern Bulb/Source -->
+                        <g transform="translate(150, 200)">
+                            <circle
+                                cx="0"
+                                cy="-20"
+                                r="20"
+                                fill="#fef9c3"
+                                fill-opacity="0.2"
+                                stroke="#fef08a"
+                                stroke-width="1"></circle>
+                            <path
+                                d="M -5 -20 L 5 -20 M 0 -25 L 0 -15"
+                                stroke="#fef08a"
+                                stroke-width="2"
+                                class="animate-pulse-light"></path>
+                            <rect x="-8" y="0" width="16" height="20" fill="#525252"></rect>
+                            <text
+                                x="0"
+                                y="80"
+                                text-anchor="middle"
+                                fill="#fde047"
+                                font-size="10"
+                                font-family="monospace">SI UNIT</text
+                            >
+                        </g>
+
+                        <!-- Light Rays Emitting -->
+                        <g transform="translate(100, 100)" opacity="0.5">
+                            {
+                                Array.from({ length: 8 }).map((_, i) => (
+                                    <line
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="-40"
+                                        stroke="#fef08a"
+                                        stroke-width="2"
+                                        transform={`rotate(${i * 45})`}
+                                    >
+                                        <animate
+                                            attributeName="stroke-opacity"
+                                            values="0;1;0"
+                                            dur="2s"
+                                            begin={`${i * 0.2}s`}
+                                            repeatCount="indefinite"
+                                        />
+                                    </line>
+                                ))
+                            }
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes spinSlow {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+    .animate-spin-slow {
+        animation: spinSlow 20s linear infinite;
+    }
+
+    @keyframes flame {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1) rotate(2deg);
+        }
+    }
+    .animate-flame {
+        transform-origin: center bottom;
+        animation: flame 0.5s ease-in-out infinite;
+    }
+
+    @keyframes pulseLight {
+        0%,
+        100% {
+            opacity: 0.5;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+    .animate-pulse-light {
+        animation: pulseLight 0.1s linear infinite;
+    }
+</style>

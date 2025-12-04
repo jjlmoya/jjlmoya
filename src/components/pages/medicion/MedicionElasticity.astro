@@ -1,0 +1,179 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#1c1917] text-[#e7e5e4] overflow-hidden"
+>
+    <!-- Grid Background -->
+    <div
+        class="absolute inset-0 opacity-10"
+        style="background-image: radial-gradient(#d6d3d1 1px, transparent 1px); background-size: 20px 20px;"
+    >
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#a8a29e] font-mono text-xs tracking-widest uppercase border-b border-[#57534e] pb-2"
+                    >La Fuerza Invisible</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#f5f5f4]">
+                    Ut Tensio, Sic Vis
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#d6d3d1]/90">
+                    "Como la extensión, así la fuerza". Robert Hooke descubrió en 1660 que la
+                    naturaleza es elástica.
+                </p>
+
+                <div
+                    class="bg-[#292524]/50 p-6 rounded-sm border border-[#44403c] mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#d6d3d1] font-bold mb-2">La Constante Elástica (k)</h3>
+                    <p class="text-sm text-[#e7e5e4] leading-relaxed">
+                        Hooke nos dio la fórmula: <strong>F = -kx</strong>. Ahora no solo sabíamos
+                        que se estiraba, podíamos medir exactamente <em>cuánto</em> se resistía un material.
+                    </p>
+                    <p class="mt-4 text-sm text-[#e7e5e4] leading-relaxed">
+                        Medimos la rigidez en <strong>Newtons por metro (N/m)</strong>. Esta
+                        linealidad permitió crear balanzas precisas y el volante regulador de los
+                        relojes.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Spring Visualization (SVG) -->
+                <div class="relative w-48 h-full flex justify-center">
+                    <svg viewBox="0 0 100 400" class="w-full h-full overflow-visible">
+                        <!-- Ceiling Mount -->
+                        <rect x="30" y="0" width="40" height="10" fill="#57534e"></rect>
+
+                        <!-- The Spring -->
+                        <path
+                            fill="none"
+                            stroke="#d6d3d1"
+                            stroke-width="4"
+                            stroke-linecap="round"
+                            class="animate-spring-stretch"></path>
+
+                        <!-- The Weight -->
+                        <g class="animate-weight-bob">
+                            <rect
+                                x="25"
+                                y="0"
+                                width="50"
+                                height="50"
+                                rx="5"
+                                fill="#44403c"
+                                stroke="#a8a29e"
+                                stroke-width="2"></rect>
+                            <text
+                                x="50"
+                                y="30"
+                                text-anchor="middle"
+                                fill="#d6d3d1"
+                                font-family="monospace"
+                                font-size="12"
+                                font-weight="bold">10N</text
+                            >
+                        </g>
+
+                        <!-- Ruler -->
+                        <g transform="translate(80, 0)">
+                            <line x1="0" y1="0" x2="0" y2="400" stroke="#57534e" stroke-width="1"
+                            ></line>
+                            {
+                                Array.from({ length: 20 }).map((_, i) => (
+                                    <line
+                                        x1="0"
+                                        y1={i * 20}
+                                        x2={i % 5 === 0 ? 10 : 5}
+                                        y2={i * 20}
+                                        stroke="#78716c"
+                                        stroke-width="1"
+                                    />
+                                ))
+                            }
+                            <!-- Indicator Arrow -->
+                            <path
+                                d="M -5 0 L -15 -5 L -15 5 Z"
+                                fill="#ef4444"
+                                class="animate-indicator"></path>
+
+                            <!-- Measurement Label -->
+                            <text
+                                x="10"
+                                y="200"
+                                fill="#a8a29e"
+                                font-family="monospace"
+                                font-size="10"
+                                transform="rotate(90 10 200)">Δx (m)</text
+                            >
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* 
+       We need to animate the 'd' attribute of the path to simulate stretching coils.
+       A simple spring is a sine wave or zig-zag.
+       Let's use a zig-zag for simplicity in SVG path.
+    */
+    @keyframes springStretch {
+        0% {
+            d: path(
+                "M 50 10 L 70 20 L 30 30 L 70 40 L 30 50 L 70 60 L 30 70 L 70 80 L 30 90 L 50 100"
+            );
+        }
+        50% {
+            d: path(
+                "M 50 10 L 70 30 L 30 50 L 70 70 L 30 90 L 70 110 L 30 130 L 70 150 L 30 170 L 50 190"
+            );
+        }
+        100% {
+            d: path(
+                "M 50 10 L 70 20 L 30 30 L 70 40 L 30 50 L 70 60 L 30 70 L 70 80 L 30 90 L 50 100"
+            );
+        }
+    }
+    .animate-spring-stretch {
+        animation: springStretch 2s ease-in-out infinite;
+    }
+
+    @keyframes weightBob {
+        0% {
+            transform: translateY(100px);
+        }
+        50% {
+            transform: translateY(190px);
+        }
+        100% {
+            transform: translateY(100px);
+        }
+    }
+    .animate-weight-bob {
+        animation: weightBob 2s ease-in-out infinite;
+    }
+
+    @keyframes indicatorMove {
+        0% {
+            transform: translateY(125px);
+        } /* Weight height + half height */
+        50% {
+            transform: translateY(215px);
+        }
+        100% {
+            transform: translateY(125px);
+        }
+    }
+    .animate-indicator {
+        animation: indicatorMove 2s ease-in-out infinite;
+    }
+</style>

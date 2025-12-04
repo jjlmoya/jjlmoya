@@ -1,0 +1,277 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#2e1065] text-[#e9d5ff] overflow-hidden"
+>
+    <!-- Chemical Bubbles Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-20">
+        {
+            Array.from({ length: 20 }).map((_, i) => (
+                <div
+                    class="absolute rounded-full bg-purple-500 animate-bubble"
+                    style={`left: ${Math.random() * 100}%; bottom: -20px; width: ${Math.random() * 20 + 5}px; height: ${Math.random() * 20 + 5}px; animation-duration: ${Math.random() * 5 + 5}s; animation-delay: ${Math.random() * 5}s;`}
+                ></div>
+            ))
+        }
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#d8b4fe] font-mono text-xs tracking-widest uppercase border-b border-[#7e22ce] pb-2"
+                    >El Color Químico</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#f3e8ff]">La Escala pH</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#e9d5ff]/90">
+                    Antes, para saber si algo era ácido, los químicos lo probaban con la lengua.
+                    Muchos murieron. Necesitábamos una forma segura de medir lo invisible.
+                </p>
+
+                <div
+                    class="bg-[#581c87]/50 p-6 rounded-sm border border-[#a855f7]/50 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#c084fc] font-bold mb-2">Potencial de Hidrógeno</h3>
+                    <p class="text-sm text-[#e9d5ff] leading-relaxed">
+                        Sörensen inventó en 1909 una escala logarítmica para contar iones de
+                        hidrógeno. Pero lo genial fue el papel tornasol: convertir un número atómico
+                        en un color visible.
+                    </p>
+                    <div
+                        class="mt-4 h-4 w-full rounded-full bg-gradient-to-r from-red-500 via-green-500 to-blue-600 border border-white/20"
+                    >
+                    </div>
+                    <div class="flex justify-between text-[10px] font-mono mt-1 text-[#d8b4fe]">
+                        <span>ACID (0)</span>
+                        <span>NEUTRAL (7)</span>
+                        <span>BASE (14)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- pH Test Visualization (SVG) - Redesigned as Test Tube -->
+                <div class="relative w-64 h-full flex items-center justify-center">
+                    <svg viewBox="0 0 200 400" class="w-full h-full overflow-visible">
+                        <defs>
+                            <!-- Liquid Gradient -->
+                            <linearGradient id="liquidGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="currentColor" stop-opacity="0.8"
+                                ></stop>
+                                <stop offset="100%" stop-color="currentColor" stop-opacity="0.4"
+                                ></stop>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Test Tube Body -->
+                        <g transform="translate(70, 50)">
+                            <!-- Back Glass -->
+                            <path
+                                d="M 0 0 L 0 250 A 30 30 0 0 0 60 250 L 60 0"
+                                fill="#4c1d95"
+                                fill-opacity="0.2"
+                                stroke="#a78bfa"
+                                stroke-width="2"></path>
+
+                            <!-- Liquid Level -->
+                            <path
+                                d="M 2 150 L 2 250 A 28 28 0 0 0 58 250 L 58 150 Z"
+                                class="animate-liquid-color"
+                                opacity="0.8"></path>
+
+                            <!-- Litmus Strip -->
+                            <g class="animate-strip-move">
+                                <rect
+                                    x="20"
+                                    y="-50"
+                                    width="20"
+                                    height="180"
+                                    fill="#f3f4f6"
+                                    stroke="#d1d5db"
+                                    stroke-width="1"></rect>
+                                <!-- The part that changes color -->
+                                <rect
+                                    x="20"
+                                    y="100"
+                                    width="20"
+                                    height="30"
+                                    class="animate-strip-reaction"
+                                    opacity="0"></rect>
+                            </g>
+
+                            <!-- Front Glass Reflection/Highlight -->
+                            <path
+                                d="M 0 0 L 0 250 A 30 30 0 0 0 60 250 L 60 0"
+                                fill="none"
+                                stroke="#e9d5ff"
+                                stroke-width="2"
+                                stroke-opacity="0.3"></path>
+                            <path
+                                d="M 10 20 L 10 240"
+                                stroke="white"
+                                stroke-width="2"
+                                stroke-opacity="0.1"
+                                stroke-linecap="round"></path>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes bubble {
+        0% {
+            transform: translateY(0) scale(1);
+            opacity: 0;
+        }
+        50% {
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateY(-400px) scale(1.5);
+            opacity: 0;
+        }
+    }
+    .animate-bubble {
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    /* Cycle: Red (Acid) -> Green (Neutral) -> Blue (Base) */
+    @keyframes liquidColor {
+        0%,
+        30% {
+            fill: #ef4444;
+        }
+        33%,
+        63% {
+            fill: #22c55e;
+        }
+        66%,
+        100% {
+            fill: #3b82f6;
+        }
+    }
+    .animate-liquid-color {
+        animation: liquidColor 9s step-end infinite;
+    }
+
+    @keyframes stripMove {
+        0% {
+            transform: translateY(0);
+        }
+        10% {
+            transform: translateY(80px);
+        } /* Dip */
+        25% {
+            transform: translateY(80px);
+        } /* Hold */
+        35% {
+            transform: translateY(0);
+        } /* Remove */
+        100% {
+            transform: translateY(0);
+        }
+    }
+    .animate-strip-move {
+        animation: stripMove 3s ease-in-out infinite;
+    }
+
+    @keyframes stripReaction {
+        0%,
+        10% {
+            opacity: 0;
+            fill: #ef4444;
+        }
+        15% {
+            opacity: 1;
+            fill: #ef4444;
+        } /* Reacts Red */
+        30% {
+            opacity: 1;
+            fill: #ef4444;
+        }
+        35% {
+            opacity: 1;
+            fill: #ef4444;
+        } /* Stays Red while moving up */
+
+        /* Reset for next cycle (Green) */
+        36% {
+            opacity: 0;
+            fill: #22c55e;
+        }
+        45% {
+            opacity: 0;
+            fill: #22c55e;
+        }
+        48% {
+            opacity: 1;
+            fill: #22c55e;
+        }
+        63% {
+            opacity: 1;
+            fill: #22c55e;
+        }
+
+        /* Reset for next cycle (Blue) */
+        69% {
+            opacity: 0;
+            fill: #3b82f6;
+        }
+        81% {
+            opacity: 1;
+            fill: #3b82f6;
+        }
+        100% {
+            opacity: 1;
+            fill: #3b82f6;
+        }
+    }
+    /* 
+       Syncing complex multi-step animations in pure CSS is brittle. 
+       Let's simplify: The strip always turns the CURRENT liquid color when dipped.
+       We can use 'currentColor' if we could pass it, but we can't easily.
+       Instead, we'll just animate the strip color to match the liquid cycle.
+    */
+    .animate-strip-reaction {
+        animation:
+            stripColorCycle 9s step-end infinite,
+            stripOpacityCycle 3s ease-in-out infinite;
+    }
+
+    @keyframes stripColorCycle {
+        0%,
+        30% {
+            fill: #ef4444;
+        }
+        33%,
+        63% {
+            fill: #22c55e;
+        }
+        66%,
+        100% {
+            fill: #3b82f6;
+        }
+    }
+
+    @keyframes stripOpacityCycle {
+        0% {
+            opacity: 0;
+        }
+        15% {
+            opacity: 1;
+        } /* Turns on when dipped */
+        90% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        } /* Fades out before next dip */
+    }
+</style>

@@ -1,0 +1,152 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#0ea5e9] text-[#f0f9ff] overflow-hidden"
+>
+    <!-- Sky Gradient Background -->
+    <div
+        class="absolute inset-0 pointer-events-none opacity-50 bg-gradient-to-b from-[#0284c7] to-[#e0f2fe]"
+    >
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#0369a1] font-mono text-xs tracking-widest uppercase border-b border-[#0284c7] pb-2"
+                    >La Sombra del Tiempo</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#0c4a6e]">El Gnomon</h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#075985]/90">
+                    Antes de los engranajes, el tiempo era geometría. Un simple palo clavado en la
+                    tierra fue el primer instrumento científico de la humanidad.
+                </p>
+
+                <div
+                    class="bg-[#bae6fd]/40 p-6 rounded-sm border border-[#7dd3fc] mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#0c4a6e] font-bold mb-2">El Sol Escribe</h3>
+                    <p class="text-sm text-[#0369a1] leading-relaxed">
+                        La longitud de la sombra te dice la hora. Su dirección, el norte. Su cambio
+                        durante el año, las estaciones y los solsticios.
+                    </p>
+                    <p class="mt-4 text-sm text-[#0284c7] italic">
+                        No necesitaban baterías. Solo necesitaban que el cielo no se cayera.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Gnomon Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 300" class="w-full h-full overflow-visible">
+                        <!-- Ground -->
+                        <path
+                            d="M 50 200 L 350 200 L 300 250 L 0 250 Z"
+                            fill="#e0f2fe"
+                            stroke="#bae6fd"
+                            stroke-width="1"></path>
+
+                        <!-- Curved Hour Lines on Ground (Sundial markings) -->
+                        <g stroke="#94a3b8" stroke-width="1" fill="none" opacity="0.5">
+                            <path d="M 200 200 L 150 240"></path>
+                            <path d="M 200 200 L 200 240"></path>
+                            <path d="M 200 200 L 250 240"></path>
+                        </g>
+
+                        <!-- The Gnomon (Stick) -->
+                        <line
+                            x1="200"
+                            y1="200"
+                            x2="200"
+                            y2="100"
+                            stroke="#0c4a6e"
+                            stroke-width="4"
+                            stroke-linecap="round"></line>
+
+                        <!-- The Sun (Moving) -->
+                        <g class="animate-sun-arc">
+                            <circle
+                                cx="0"
+                                cy="0"
+                                r="15"
+                                fill="#fbbf24"
+                                stroke="#f59e0b"
+                                stroke-width="2"></circle>
+                            <!-- Rays -->
+                            <g stroke="#fbbf24" stroke-width="2">
+                                <line x1="0" y1="-20" x2="0" y2="-25"></line>
+                                <line x1="0" y1="20" x2="0" y2="25"></line>
+                                <line x1="-20" y1="0" x2="-25" y2="0"></line>
+                                <line x1="20" y1="0" x2="25" y2="0"></line>
+                            </g>
+                        </g>
+
+                        <!-- The Shadow (Projected) -->
+                        <!-- Shadow is opposite to Sun. Pivot at (200, 200) -->
+                        <!-- If Sun is at Angle A, Shadow is at Angle A + 180 -->
+                        <!-- Length depends on Sun height (Altitude) -->
+                        <line
+                            x1="200"
+                            y1="200"
+                            x2="200"
+                            y2="200"
+                            stroke="#000"
+                            stroke-width="4"
+                            opacity="0.3"
+                            stroke-linecap="round"
+                            class="animate-shadow-cast"></line>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Sun Arc: Rises Left, Sets Right. High at noon. */
+    @keyframes sunArc {
+        0% {
+            transform: translate(50px, 150px);
+        } /* Morning */
+        50% {
+            transform: translate(200px, 50px);
+        } /* Noon */
+        100% {
+            transform: translate(350px, 150px);
+        } /* Evening */
+    }
+    .animate-sun-arc {
+        animation: sunArc 5s ease-in-out infinite;
+    }
+
+    /* Shadow: Long Left -> Short Center -> Long Right */
+    /* Wait, if Sun is Left, Shadow is Right. */
+    /* Morning (Sun Left): Shadow points Right (Long). */
+    /* Noon (Sun Top): Shadow points Down/North (Short). */
+    /* Evening (Sun Right): Shadow points Left (Long). */
+
+    @keyframes shadowCast {
+        0% {
+            x2: 300px;
+            y2: 220px;
+            opacity: 0.3;
+        } /* Shadow Right */
+        50% {
+            x2: 200px;
+            y2: 210px;
+            opacity: 0.5;
+        } /* Shadow Short */
+        100% {
+            x2: 100px;
+            y2: 220px;
+            opacity: 0.3;
+        } /* Shadow Left */
+    }
+    .animate-shadow-cast {
+        animation: shadowCast 5s ease-in-out infinite;
+    }
+</style>

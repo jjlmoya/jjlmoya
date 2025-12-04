@@ -1,0 +1,161 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#000000] text-[#22c55e] overflow-hidden font-mono"
+>
+    <!-- Binary Matrix Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
+        {
+            Array.from({ length: 20 }).map((_, i) => (
+                <div
+                    class="absolute text-xs animate-matrix-rain"
+                    style={`left: ${i * 5}%; animation-duration: ${Math.random() * 2 + 2}s; animation-delay: ${Math.random() * 2}s;`}
+                >
+                    101101001
+                </div>
+            ))
+        }
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#4ade80] text-xs tracking-widest uppercase border-b border-[#15803d] pb-2"
+                    >La Medida de la Sorpresa</span
+                >
+                <h2 class="text-4xl md:text-5xl italic text-white font-serif">El Bit</h2>
+
+                <p class="text-lg leading-relaxed text-[#bbf7d0]/90 font-sans">
+                    ¿Cómo mides la información? ¿Cómo pesas una conversación telefónica o una
+                    imagen? Claude Shannon se dio cuenta de que la información es la resolución de
+                    la incertidumbre.
+                </p>
+
+                <div
+                    class="bg-[#14532d]/30 p-6 rounded-sm border border-[#22c55e]/50 mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#86efac] font-bold mb-2">Cara o Cruz</h3>
+                    <p class="text-sm text-[#dcfce7] leading-relaxed font-sans">
+                        La unidad mínima es la respuesta a una pregunta de Sí/No con 50% de
+                        probabilidad. Eso es 1 Bit.
+                    </p>
+                    <p class="mt-4 text-sm text-[#4ade80]">
+                        Todo lo digital, desde este texto hasta el video más complejo, es solo una
+                        montaña masiva de monedas lanzadas al aire.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Bit Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 300 300" class="w-full h-full overflow-visible">
+                        <!-- The Coin / Bit -->
+                        <g transform="translate(150, 150)">
+                            <circle
+                                cx="0"
+                                cy="0"
+                                r="50"
+                                fill="#14532d"
+                                stroke="#22c55e"
+                                stroke-width="2"
+                                class="animate-coin-flip"></circle>
+
+                            <!-- Text 1 -->
+                            <text
+                                x="0"
+                                y="15"
+                                text-anchor="middle"
+                                fill="#22c55e"
+                                font-size="40"
+                                font-weight="bold"
+                                class="animate-text-1">1</text
+                            >
+                            <!-- Text 0 -->
+                            <text
+                                x="0"
+                                y="15"
+                                text-anchor="middle"
+                                fill="#22c55e"
+                                font-size="40"
+                                font-weight="bold"
+                                class="animate-text-0"
+                                opacity="0">0</text
+                            >
+                        </g>
+
+                        <!-- Decision Tree Lines -->
+                        <g opacity="0.3" stroke="#22c55e" stroke-width="1">
+                            <line x1="150" y1="210" x2="100" y2="260"></line>
+                            <line x1="150" y1="210" x2="200" y2="260"></line>
+                            <circle cx="100" cy="260" r="5" fill="#22c55e"></circle>
+                            <circle cx="200" cy="260" r="5" fill="none"></circle>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes matrixRain {
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(100vh);
+        }
+    }
+    .animate-matrix-rain {
+        writing-mode: vertical-rl;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes coinFlip {
+        0% {
+            transform: scaleY(1);
+        }
+        50% {
+            transform: scaleY(0);
+        } /* Edge on */
+        100% {
+            transform: scaleY(1);
+        }
+    }
+    .animate-coin-flip {
+        animation: coinFlip 2s ease-in-out infinite;
+    }
+
+    @keyframes showOne {
+        0%,
+        49% {
+            opacity: 1;
+        }
+        50%,
+        100% {
+            opacity: 0;
+        }
+    }
+    .animate-text-1 {
+        animation: showOne 2s step-end infinite;
+    }
+
+    @keyframes showZero {
+        0%,
+        49% {
+            opacity: 0;
+        }
+        50%,
+        100% {
+            opacity: 1;
+        }
+    }
+    .animate-text-0 {
+        animation: showZero 2s step-end infinite;
+    }
+</style>

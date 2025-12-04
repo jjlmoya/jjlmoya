@@ -1,0 +1,232 @@
+---
+
+---
+
+<section
+    class="min-h-screen flex flex-col items-center justify-center relative py-32 bg-[#020617] text-[#e2e8f0] overflow-hidden"
+>
+    <!-- Starfield Background -->
+    <div class="absolute inset-0 pointer-events-none">
+        {
+            Array.from({ length: 50 }).map(() => (
+                <div
+                    class="absolute rounded-full bg-white opacity-50"
+                    style={`left: ${Math.random() * 100}%; top: ${Math.random() * 100}%; width: ${Math.random() * 2}px; height: ${Math.random() * 2}px;`}
+                ></div>
+            ))
+        }
+    </div>
+
+    <div class="container mx-auto px-6 max-w-4xl relative z-10">
+        <div class="flex flex-col md:flex-row gap-16 items-center">
+            <div class="w-full md:w-1/2 space-y-8">
+                <span
+                    class="text-[#38bdf8] font-mono text-xs tracking-widest uppercase border-b border-[#0ea5e9] pb-2"
+                    >El Sonido de la Luz</span
+                >
+                <h2 class="text-4xl md:text-5xl font-serif italic text-[#f0f9ff]">
+                    El Efecto Doppler
+                </h2>
+
+                <p class="text-lg leading-relaxed font-serif text-[#bae6fd]/90">
+                    Si una ambulancia se acerca, suena aguda. Si se aleja, grave. Christian Doppler
+                    vio que esto también pasa con la luz.
+                </p>
+
+                <div
+                    class="bg-[#0f172a]/50 p-6 rounded-sm border border-[#1e293b] mt-4 backdrop-blur-sm"
+                >
+                    <h3 class="text-[#7dd3fc] font-bold mb-2">Corrimiento al Rojo</h3>
+                    <p class="text-sm text-[#e2e8f0] leading-relaxed">
+                        Cuando una estrella se aleja de nosotros, sus ondas de luz se estiran hacia
+                        el rojo.
+                    </p>
+                    <p class="mt-4 text-sm text-[#38bdf8] italic">
+                        Midiendo este cambio de color, Hubble descubrió que el universo no está
+                        quieto: está explotando hacia afuera. Medimos la velocidad de la creación
+                        misma.
+                    </p>
+                </div>
+            </div>
+
+            <div class="w-full md:w-1/2 flex justify-center relative h-[400px]">
+                <!-- Doppler Visualization (SVG) -->
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <svg viewBox="0 0 400 300" class="w-full h-full overflow-visible">
+                        <!-- Observer (Earth) -->
+                        <circle
+                            cx="50"
+                            cy="150"
+                            r="10"
+                            fill="#3b82f6"
+                            stroke="#60a5fa"
+                            stroke-width="2"></circle>
+                        <text
+                            x="50"
+                            y="180"
+                            text-anchor="middle"
+                            fill="#60a5fa"
+                            font-size="10"
+                            font-family="monospace">OBSERVADOR</text
+                        >
+
+                        <!-- Moving Source (Star) -->
+                        <g class="animate-move-source">
+                            <circle
+                                cx="0"
+                                cy="0"
+                                r="15"
+                                fill="#fbbf24"
+                                stroke="#f59e0b"
+                                stroke-width="2"></circle>
+
+                            <!-- Waves Emitted -->
+                            <!-- As it moves Right, waves behind (Left) are stretched (Red), waves in front (Right) are compressed (Blue) -->
+                            <!-- But here we are observing from the Left. So the star is moving AWAY (Right). -->
+                            <!-- So waves reaching Observer should be Stretched (Red). -->
+
+                            <!-- Let's animate concentric circles expanding from the source's PAST positions -->
+                            <!-- This is hard in pure CSS SVG. -->
+                            <!-- Alternative: Stylized representation. -->
+
+                            <!-- Waves trailing behind (Red Shift) -->
+                            <path
+                                d="M -20 -20 Q -40 0 -20 20"
+                                fill="none"
+                                stroke="#ef4444"
+                                stroke-width="2"
+                                opacity="0.8"
+                            >
+                                <animate
+                                    attributeName="d"
+                                    values="M -20 -20 Q -40 0 -20 20; M -60 -40 Q -100 0 -60 40"
+                                    dur="1s"
+                                    repeatCount="indefinite"></animate>
+                                <animate
+                                    attributeName="opacity"
+                                    values="0.8; 0"
+                                    dur="1s"
+                                    repeatCount="indefinite"></animate>
+                            </path>
+                            <path
+                                d="M -20 -20 Q -40 0 -20 20"
+                                fill="none"
+                                stroke="#ef4444"
+                                stroke-width="2"
+                                opacity="0.8"
+                            >
+                                <animate
+                                    attributeName="d"
+                                    values="M -20 -20 Q -40 0 -20 20; M -60 -40 Q -100 0 -60 40"
+                                    dur="1s"
+                                    begin="0.5s"
+                                    repeatCount="indefinite"></animate>
+                                <animate
+                                    attributeName="opacity"
+                                    values="0.8; 0"
+                                    dur="1s"
+                                    begin="0.5s"
+                                    repeatCount="indefinite"></animate>
+                            </path>
+
+                            <!-- Waves in front (Blue Shift - Compressed) -->
+                            <path
+                                d="M 20 -10 Q 30 0 20 10"
+                                fill="none"
+                                stroke="#3b82f6"
+                                stroke-width="2"
+                                opacity="0.8"
+                            >
+                                <animate
+                                    attributeName="d"
+                                    values="M 20 -10 Q 30 0 20 10; M 30 -15 Q 45 0 30 15"
+                                    dur="0.5s"
+                                    repeatCount="indefinite"></animate>
+                                <animate
+                                    attributeName="opacity"
+                                    values="0.8; 0"
+                                    dur="0.5s"
+                                    repeatCount="indefinite"></animate>
+                            </path>
+                        </g>
+
+                        <!-- Spectrum Bar (Bottom) -->
+                        <g transform="translate(100, 250)">
+                            <rect x="0" y="0" width="200" height="20" fill="url(#spectrum)" rx="2"
+                            ></rect>
+                            <!-- Spectral Lines (Hydrogen) -->
+                            <g class="animate-shift-lines">
+                                <line x1="40" y1="0" x2="40" y2="20" stroke="black" stroke-width="2"
+                                ></line>
+                                <line
+                                    x1="150"
+                                    y1="0"
+                                    x2="150"
+                                    y2="20"
+                                    stroke="black"
+                                    stroke-width="2"></line>
+                                <line
+                                    x1="180"
+                                    y1="0"
+                                    x2="180"
+                                    y2="20"
+                                    stroke="black"
+                                    stroke-width="2"></line>
+                            </g>
+                            <text
+                                x="100"
+                                y="35"
+                                text-anchor="middle"
+                                fill="#94a3b8"
+                                font-size="10"
+                                font-family="monospace">ESPECTRO (REDSHIFT)</text
+                            >
+                        </g>
+
+                        <defs>
+                            <linearGradient id="spectrum" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#3b82f6"></stop>
+                                <!-- Blue -->
+                                <stop offset="50%" stop-color="#22c55e"></stop>
+                                <stop offset="100%" stop-color="#ef4444"></stop>
+                                <!-- Red -->
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes moveSource {
+        0% {
+            transform: translate(150px, 150px);
+        }
+        50% {
+            transform: translate(300px, 150px);
+        }
+        100% {
+            transform: translate(150px, 150px);
+        }
+    }
+    .animate-move-source {
+        animation: moveSource 4s ease-in-out infinite;
+    }
+
+    @keyframes shiftLines {
+        0% {
+            transform: translateX(0);
+        } /* Normal */
+        50% {
+            transform: translateX(15px);
+        } /* Red Shifted (Right) */
+        100% {
+            transform: translateX(0);
+        }
+    }
+    .animate-shift-lines {
+        animation: shiftLines 4s ease-in-out infinite;
+    }
+</style>
