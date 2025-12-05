@@ -1,0 +1,279 @@
+---
+
+---
+
+<div
+    class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden"
+>
+    <!-- Tool Header -->
+    <div
+        class="p-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 flex items-center justify-between"
+    >
+        <div class="flex items-center gap-3">
+            <div
+                class="p-2.5 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path
+                        d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 5.68 1.33 10.27 4 13l8 8 8-8c2.67-2.73 2.54-7.32.42-8.42z"
+                    ></path><path d="M12 5.36 8.35 9l3.65 3.66 3.65-3.66L12 5.36z"></path></svg
+                >
+            </div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Calculadora de IMC</h2>
+        </div>
+    </div>
+
+    <div
+        class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-700"
+    >
+        <!-- Controls -->
+        <div class="p-8 space-y-8 bg-slate-50/30 dark:bg-slate-900/10 flex flex-col justify-center">
+            <!-- Height Input -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-end">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest"
+                        >Altura</label
+                    >
+                    <span class="text-2xl font-black text-slate-700 dark:text-white" id="val-height"
+                        >175 <span class="text-sm text-slate-400 font-medium">cm</span></span
+                    >
+                </div>
+                <input
+                    type="range"
+                    id="imc-height"
+                    min="100"
+                    max="230"
+                    value="175"
+                    class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                />
+            </div>
+
+            <!-- Weight Input -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-end">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest"
+                        >Peso</label
+                    >
+                    <span class="text-2xl font-black text-slate-700 dark:text-white" id="val-weight"
+                        >70 <span class="text-sm text-slate-400 font-medium">kg</span></span
+                    >
+                </div>
+                <input
+                    type="range"
+                    id="imc-weight"
+                    min="30"
+                    max="180"
+                    value="70"
+                    class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                />
+            </div>
+
+            <div class="flex gap-2 justify-center">
+                <button
+                    id="btn-minus-weight"
+                    class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-xl shadow-sm transition-colors"
+                    >-</button
+                >
+                <button
+                    id="btn-plus-weight"
+                    class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-xl shadow-sm transition-colors"
+                    >+</button
+                >
+            </div>
+        </div>
+
+        <!-- Result -->
+        <div
+            class="p-8 flex flex-col items-center justify-center text-center relative overflow-hidden"
+        >
+            <!-- Background pulse effect -->
+            <div
+                id="result-bg"
+                class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent transition-colors duration-500"
+            >
+            </div>
+
+            <div class="relative z-10 space-y-2">
+                <span class="text-sm font-bold text-slate-400 uppercase tracking-widest"
+                    >Tu IMC es</span
+                >
+                <div
+                    id="imc-value"
+                    class="text-6xl md:text-7xl font-black text-slate-800 dark:text-white tracking-tighter"
+                >
+                    22.9
+                </div>
+            </div>
+
+            <div class="relative z-10 mt-8 space-y-3">
+                <div
+                    id="imc-label"
+                    class="inline-block px-4 py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 font-bold text-lg border border-emerald-200 dark:border-emerald-800 transition-colors duration-300"
+                >
+                    Peso Normal
+                </div>
+                <p
+                    id="imc-desc"
+                    class="text-slate-500 dark:text-slate-400 text-sm max-w-xs mx-auto leading-relaxed"
+                >
+                    ¡Buen trabajo! Mantén una dieta equilibrada y ejercicio regular.
+                </p>
+            </div>
+
+            <!-- Gauge visual -->
+            <div
+                class="relative z-10 mt-8 w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden flex"
+            >
+                <!-- Underweight -->
+                <div class="h-full bg-blue-400 w-[18.5%] opacity-50"></div>
+                <!-- Normal -->
+                <div class="h-full bg-emerald-400 w-[16.5%] opacity-50"></div>
+                <!-- 18.5 to 25 = 6.5 units. total range approx 40. Say 16%-->
+                <!-- Overweight -->
+                <div class="h-full bg-amber-400 w-[12.5%] opacity-50"></div>
+                <!-- 25 to 30 -->
+                <!-- Obese -->
+                <div class="h-full bg-rose-400 flex-1 opacity-50"></div>
+
+                <!-- Marker -->
+                <div
+                    id="imc-marker"
+                    class="absolute top-0 bottom-0 w-1 bg-slate-900 dark:bg-white shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-all duration-500"
+                    style="left: 50%"
+                >
+                </div>
+            </div>
+            <div
+                class="relative z-10 w-full flex justify-between text-[10px] text-slate-400 font-bold mt-1 px-1"
+            >
+                <span>15</span>
+                <span>18.5</span>
+                <span>25</span>
+                <span>30</span>
+                <span>40+</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { BMICalculator } from "../../../lib/health/BMICalculator";
+
+    // Elements
+    const heightInput = document.getElementById("imc-height") as HTMLInputElement;
+    const weightInput = document.getElementById("imc-weight") as HTMLInputElement;
+    const heightVal = document.getElementById("val-height")!;
+    const weightVal = document.getElementById("val-weight")!;
+    const btnPlus = document.getElementById("btn-plus-weight");
+    const btnMinus = document.getElementById("btn-minus-weight");
+
+    // Result Elements
+    const imcValue = document.getElementById("imc-value");
+    const imcLabel = document.getElementById("imc-label");
+    const imcDesc = document.getElementById("imc-desc");
+    const imcMarker = document.getElementById("imc-marker");
+    const resultBg = document.getElementById("result-bg");
+
+    const update = () => {
+        const h = Number(heightInput.value);
+        const w = Number(weightInput.value);
+
+        // Update displays
+        heightVal.innerHTML = `${h} <span class="text-sm text-slate-400 font-medium">cm</span>`;
+        weightVal.innerHTML = `${w} <span class="text-sm text-slate-400 font-medium">kg</span>`;
+
+        const result = BMICalculator.calculate(w, h);
+
+        if (imcValue) imcValue.innerText = result.bmi.toString();
+
+        if (imcLabel) {
+            imcLabel.innerText = result.label;
+            // Reset classes
+            imcLabel.className = `inline-block px-4 py-2 rounded-xl font-bold text-lg border transition-colors duration-300`;
+
+            // Add categorical classes
+            if (result.category === "underweight") {
+                imcLabel.classList.add(
+                    "bg-blue-100",
+                    "dark:bg-blue-900/30",
+                    "text-blue-600",
+                    "dark:text-blue-400",
+                    "border-blue-200",
+                    "dark:border-blue-800"
+                );
+                if (resultBg)
+                    resultBg.className =
+                        "absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent transition-colors duration-500";
+            } else if (result.category === "normal") {
+                imcLabel.classList.add(
+                    "bg-emerald-100",
+                    "dark:bg-emerald-900/30",
+                    "text-emerald-600",
+                    "dark:text-emerald-400",
+                    "border-emerald-200",
+                    "dark:border-emerald-800"
+                );
+                if (resultBg)
+                    resultBg.className =
+                        "absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent transition-colors duration-500";
+            } else if (result.category === "overweight") {
+                imcLabel.classList.add(
+                    "bg-amber-100",
+                    "dark:bg-amber-900/30",
+                    "text-amber-600",
+                    "dark:text-amber-400",
+                    "border-amber-200",
+                    "dark:border-amber-800"
+                );
+                if (resultBg)
+                    resultBg.className =
+                        "absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent transition-colors duration-500";
+            } else {
+                imcLabel.classList.add(
+                    "bg-rose-100",
+                    "dark:bg-rose-900/30",
+                    "text-rose-600",
+                    "dark:text-rose-400",
+                    "border-rose-200",
+                    "dark:border-rose-800"
+                );
+                if (resultBg)
+                    resultBg.className =
+                        "absolute inset-0 bg-gradient-to-br from-rose-500/10 to-transparent transition-colors duration-500";
+            }
+        }
+
+        if (imcDesc) imcDesc.innerText = result.description;
+
+        // Update Marker Position (Gauge)
+        if (imcMarker) {
+            // Map BMI 15 -> 0%, BMI 40 -> 100%
+            let percent = ((result.bmi - 15) / (40 - 15)) * 100;
+            if (percent < 0) percent = 0;
+            if (percent > 100) percent = 100;
+            imcMarker.style.left = `${percent}%`;
+        }
+    };
+
+    [heightInput, weightInput].forEach((el) => el.addEventListener("input", update));
+
+    btnPlus?.addEventListener("click", () => {
+        weightInput.value = (Number(weightInput.value) + 1).toString();
+        update();
+    });
+
+    btnMinus?.addEventListener("click", () => {
+        weightInput.value = (Number(weightInput.value) - 1).toString();
+        update();
+    });
+
+    update();
+</script>
