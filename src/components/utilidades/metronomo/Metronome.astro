@@ -1,0 +1,463 @@
+---
+
+---
+
+<div
+    class="w-full max-w-md mx-auto p-6 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800"
+>
+    <!-- Visual Display -->
+    <div class="relative mb-8 flex justify-center items-center">
+        <div
+            id="visual-beat"
+            class="w-48 h-48 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center transition-all duration-75 relative overflow-hidden shadow-inner"
+        >
+            <div
+                id="visual-inner"
+                class="w-40 h-40 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center relative z-10"
+            >
+                <span
+                    id="bpm-display"
+                    class="text-5xl font-black text-slate-700 dark:text-slate-200 tabular-nums tracking-tighter"
+                    >120</span
+                >
+            </div>
+            <!-- Ripple Effect Container -->
+            <div id="ripple" class="absolute inset-0 rounded-full bg-cyan-500 opacity-0 scale-50">
+            </div>
+        </div>
+
+        <!-- Beat Dots -->
+        <div id="beat-dots" class="absolute bottom-[-1.5rem] flex gap-2">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="space-y-6">
+        <!-- Play/Stop Button -->
+        <div class="flex justify-center">
+            <button
+                id="play-btn"
+                class="group relative w-20 h-20 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-cyan-500/50"
+            >
+                <!-- Play Icon -->
+                <svg
+                    id="icon-play"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-10 h-10 ml-1"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                <!-- Stop Icon (Hidden) -->
+                <svg
+                    id="icon-stop"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-10 h-10 hidden"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M4.5 7.5a3 3 0 013-3h9a3 3 0 013 3v9a3 3 0 01-3 3h-9a3 3 0 01-3-3v-9z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- BPM Slider -->
+        <div class="space-y-2">
+            <div
+                class="flex justify-between text-sm font-medium text-slate-500 dark:text-slate-400"
+            >
+                <span>40 BPM</span>
+                <span>Tempo</span>
+                <span>240 BPM</span>
+            </div>
+            <input
+                type="range"
+                id="bpm-slider"
+                min="40"
+                max="240"
+                value="120"
+                class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-500 [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:duration-100 hover:[&::-webkit-slider-thumb]:scale-110 active:[&::-webkit-slider-thumb]:scale-95"
+            />
+        </div>
+
+        <!-- Adjust Buttons -->
+        <div class="flex justify-between gap-4">
+            <button
+                class="w-12 h-10 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-colors flex items-center justify-center adjust-btn"
+                data-change="-1">-</button
+            >
+            <button
+                class="w-12 h-10 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-colors flex items-center justify-center adjust-btn"
+                data-change="-5">-5</button
+            >
+            <div class="flex-1"></div>
+            <button
+                class="w-12 h-10 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-colors flex items-center justify-center adjust-btn"
+                data-change="+5">+5</button
+            >
+            <button
+                class="w-12 h-10 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-colors flex items-center justify-center adjust-btn"
+                data-change="+1">+</button
+            >
+        </div>
+
+        <!-- Time Signature -->
+        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div class="space-y-1">
+                <label
+                    for="beats-input"
+                    class="text-xs font-bold text-slate-400 uppercase tracking-wider">Compás</label
+                >
+                <div class="flex items-center gap-2">
+                    <button
+                        id="beats-minus"
+                        class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-colors"
+                        >-</button
+                    >
+                    <span
+                        id="beats-display"
+                        class="font-bold text-xl text-slate-900 dark:text-white tabular-nums w-4 text-center"
+                        >4</span
+                    >
+                    <button
+                        id="beats-plus"
+                        class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-colors"
+                        >+</button
+                    >
+                </div>
+            </div>
+            <div class="space-y-1 flex flex-col items-end">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider"
+                    >Tap Tempo</label
+                >
+                <button
+                    id="tap-btn"
+                    class="px-6 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-colors w-full"
+                    >TAP</button
+                >
+            </div>
+        </div>
+    </div>
+</div>
+
+<style is:global>
+    /* 
+      We moved component-specific styles to inline classes where possible 
+      to avoid @apply issues. 
+    */
+
+    @keyframes ripple-anim {
+        0% {
+            transform: scale(0.8);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1.5);
+            opacity: 0;
+        }
+    }
+
+    .animate-ripple {
+        animation: ripple-anim 0.3s ease-out forwards;
+    }
+</style>
+
+<script>
+    class Metronome {
+        audioContext: AudioContext | null = null;
+        isPlaying = false;
+        tempo = 120;
+        lookahead = 25.0; // ms
+        scheduleAheadTime = 0.1; // sec
+        nextNoteTime = 0.0;
+        noteResolution = 1; // 0 == 16th, 1 == 8th, 2 == quarter note
+        noteLength = 0.05;
+        timerWorker: Worker | null = null;
+        beatsPerBar = 4;
+        currentBeatInBar = 0;
+
+        // Visuals
+        ui = {
+            playBtn: document.getElementById("play-btn") as HTMLButtonElement,
+            iconPlay: document.getElementById("icon-play") as HTMLElement,
+            iconStop: document.getElementById("icon-stop") as HTMLElement,
+            bpmDisplay: document.getElementById("bpm-display") as HTMLElement,
+            bpmSlider: document.getElementById("bpm-slider") as HTMLInputElement,
+            visualBeat: document.getElementById("visual-beat") as HTMLElement,
+            ripple: document.getElementById("ripple") as HTMLElement,
+            beatDotsContainer: document.getElementById("beat-dots") as HTMLElement,
+            beatsDisplay: document.getElementById("beats-display") as HTMLElement,
+            tapBtn: document.getElementById("tap-btn") as HTMLButtonElement,
+            adjustBtns: document.querySelectorAll(".adjust-btn"),
+            beatsMinus: document.getElementById("beats-minus") as HTMLButtonElement,
+            beatsPlus: document.getElementById("beats-plus") as HTMLButtonElement,
+        };
+
+        tapTimes: number[] = [];
+
+        constructor() {
+            this.initListeners();
+            this.renderDots();
+        }
+
+        initListeners() {
+            this.ui.playBtn?.addEventListener("click", () => this.toggle());
+
+            this.ui.bpmSlider?.addEventListener("input", (e) => {
+                const bpm = parseInt((e.target as HTMLInputElement).value);
+                this.setTempo(bpm);
+            });
+
+            this.ui.adjustBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const change = parseInt(btn.getAttribute("data-change") || "0");
+                    this.setTempo(this.tempo + change);
+                });
+            });
+
+            this.ui.beatsMinus?.addEventListener("click", () => {
+                if (this.beatsPerBar > 1) {
+                    this.beatsPerBar--;
+                    this.renderDots();
+                    this.updateBeatsUI();
+                }
+            });
+
+            this.ui.beatsPlus?.addEventListener("click", () => {
+                if (this.beatsPerBar < 12) {
+                    this.beatsPerBar++;
+                    this.renderDots();
+                    this.updateBeatsUI();
+                }
+            });
+
+            this.ui.tapBtn?.addEventListener("mousedown", () => this.handleTap());
+        }
+
+        handleTap() {
+            const now = performance.now();
+            // Reset if tap was long ago (> 2s)
+            if (this.tapTimes.length > 0 && now - this.tapTimes[this.tapTimes.length - 1] > 2000) {
+                this.tapTimes = [];
+            }
+
+            this.tapTimes.push(now);
+            if (this.tapTimes.length > 4) {
+                this.tapTimes.shift(); // Keep last 4 taps
+            }
+
+            if (this.tapTimes.length > 1) {
+                let intervals = 0;
+                for (let i = 1; i < this.tapTimes.length; i++) {
+                    intervals += this.tapTimes[i] - this.tapTimes[i - 1];
+                }
+                const avgInterval = intervals / (this.tapTimes.length - 1);
+                const bpm = Math.round(60000 / avgInterval);
+                this.setTempo(bpm);
+            }
+
+            // Visual feedback for tap button
+            this.ui.tapBtn.classList.add("scale-95", "bg-cyan-100", "dark:bg-cyan-900");
+            setTimeout(
+                () =>
+                    this.ui.tapBtn.classList.remove("scale-95", "bg-cyan-100", "dark:bg-cyan-900"),
+                100
+            );
+        }
+
+        setTempo(bpm: number) {
+            const minBpm = 40;
+            const maxBpm = 240;
+            this.tempo = Math.min(maxBpm, Math.max(minBpm, bpm));
+
+            if (this.ui.bpmDisplay) this.ui.bpmDisplay.innerText = this.tempo.toString();
+            if (this.ui.bpmSlider) this.ui.bpmSlider.value = this.tempo.toString();
+        }
+
+        updateBeatsUI() {
+            if (this.ui.beatsDisplay) this.ui.beatsDisplay.innerText = this.beatsPerBar.toString();
+        }
+
+        renderDots() {
+            if (!this.ui.beatDotsContainer) return;
+            this.ui.beatDotsContainer.innerHTML = "";
+            for (let i = 0; i < this.beatsPerBar; i++) {
+                const dot = document.createElement("div");
+                // Applied inline classes here for dynamically created elements
+                dot.className = `w-3 h-3 rounded-full bg-slate-200 dark:bg-slate-700 transition-colors duration-[50ms] beat-dot ${i === 0 ? "accent" : ""}`;
+                if (i === 0) {
+                    dot.classList.add("w-4", "h-4");
+                    dot.classList.remove("w-3", "h-3");
+                }
+                dot.id = `beat-dot-${i}`;
+                this.ui.beatDotsContainer.appendChild(dot);
+            }
+        }
+
+        toggle() {
+            this.isPlaying = !this.isPlaying;
+            if (this.isPlaying) {
+                if (!this.audioContext) {
+                    this.audioContext = new (window.AudioContext ||
+                        (window as any).webkitAudioContext)();
+                }
+                if (this.audioContext.state === "suspended") {
+                    this.audioContext.resume();
+                }
+
+                this.currentBeatInBar = 0;
+                this.nextNoteTime = this.audioContext.currentTime;
+                this.timerWorker = new Worker(
+                    URL.createObjectURL(
+                        new Blob(
+                            [
+                                "let timerID=null;let interval=25;self.onmessage=function(e){if(e.data=='start'){console.log('starting');timerID=setInterval(function(){postMessage('tick');},interval)}else if(e.data.interval){interval=e.data.interval;console.log('interval='+interval);if(timerID){clearInterval(timerID);timerID=setInterval(function(){postMessage('tick');},interval)}}else if(e.data=='stop'){console.log('stopping');clearInterval(timerID);timerID=null}};",
+                            ],
+                            { type: "text/javascript" }
+                        )
+                    )
+                );
+
+                this.timerWorker.onmessage = (e) => {
+                    if (e.data == "tick") {
+                        this.scheduler();
+                    } else {
+                        console.log("message: " + e.data);
+                    }
+                };
+                this.timerWorker.postMessage({ interval: this.lookahead });
+                this.timerWorker.postMessage("start");
+
+                this.ui.iconPlay?.classList.add("hidden");
+                this.ui.iconStop?.classList.remove("hidden");
+                this.ui.playBtn?.classList.add(
+                    "bg-red-500",
+                    "hover:bg-red-600",
+                    "dark:bg-red-500",
+                    "text-white"
+                );
+                this.ui.playBtn?.classList.remove(
+                    "bg-slate-900",
+                    "dark:bg-white",
+                    "text-white",
+                    "dark:text-slate-900"
+                );
+            } else {
+                this.timerWorker?.postMessage("stop");
+                this.timerWorker?.terminate();
+                this.timerWorker = null;
+
+                this.ui.iconPlay?.classList.remove("hidden");
+                this.ui.iconStop?.classList.add("hidden");
+                this.ui.playBtn?.classList.remove(
+                    "bg-red-500",
+                    "hover:bg-red-600",
+                    "dark:bg-red-500",
+                    "text-white"
+                );
+                this.ui.playBtn?.classList.add(
+                    "bg-slate-900",
+                    "dark:bg-white",
+                    "text-white",
+                    "dark:text-slate-900"
+                );
+            }
+        }
+
+        scheduler() {
+            while (
+                this.audioContext &&
+                this.nextNoteTime < this.audioContext.currentTime + this.scheduleAheadTime
+            ) {
+                this.scheduleNote(this.currentBeatInBar, this.nextNoteTime);
+                this.nextNote();
+            }
+        }
+
+        scheduleNote(beatNumber: number, time: number) {
+            // Audio
+            const osc = this.audioContext!.createOscillator();
+            const envelope = this.audioContext!.createGain();
+
+            const isAccent = beatNumber === 0;
+
+            osc.frequency.value = isAccent ? 1000 : 800;
+            envelope.gain.value = 1;
+            envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
+            envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.02);
+
+            osc.connect(envelope);
+            envelope.connect(this.audioContext!.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.03);
+
+            // Visual Scheduling (draw using requestAnimationFrame/setTimeout for sync)
+            const delay = (time - this.audioContext!.currentTime) * 1000;
+            setTimeout(() => {
+                this.animateBeat(beatNumber);
+            }, delay);
+        }
+
+        nextNote() {
+            const secondsPerBeat = 60.0 / this.tempo;
+            this.nextNoteTime += secondsPerBeat;
+            this.currentBeatInBar++;
+            if (this.currentBeatInBar == this.beatsPerBar) {
+                this.currentBeatInBar = 0;
+            }
+        }
+
+        animateBeat(beatNumber: number) {
+            const isAccent = beatNumber === 0;
+
+            // Visual Flash
+            if (this.ui.ripple) {
+                // Reset animation
+                this.ui.ripple.classList.remove("animate-ripple");
+                void this.ui.ripple.offsetWidth; // trigger reflow
+                this.ui.ripple.classList.add("animate-ripple");
+
+                if (isAccent) {
+                    this.ui.visualBeat?.classList.add(
+                        "scale-105",
+                        "bg-cyan-100",
+                        "dark:bg-slate-700"
+                    );
+                    setTimeout(() => {
+                        this.ui.visualBeat?.classList.remove(
+                            "scale-105",
+                            "bg-cyan-100",
+                            "dark:bg-slate-700"
+                        );
+                    }, 50);
+                }
+            }
+
+            // Dots
+            this.ui.beatDotsContainer?.querySelectorAll(".beat-dot").forEach((d) => {
+                d.classList.remove("bg-cyan-500", "scale-125"); // Remove active formatting
+                d.classList.add("bg-slate-200", "dark:bg-slate-700"); // Reset base
+            });
+
+            const activeDot = document.getElementById(`beat-dot-${beatNumber}`);
+            if (activeDot) {
+                activeDot.classList.remove("bg-slate-200", "dark:bg-slate-700");
+                activeDot.classList.add("bg-cyan-500", "scale-125");
+            }
+        }
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+        new Metronome();
+    });
+</script>
