@@ -35,8 +35,9 @@
     <div
         class="grid lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-slate-700"
     >
-        <!-- Form -->
-        <div class="lg:col-span-5 p-6 space-y-6 bg-slate-50/30 dark:bg-slate-900/10">
+        <!-- Form Section -->
+        <div class="lg:col-span-4 p-6 space-y-8 bg-slate-50/30 dark:bg-slate-900/10">
+            <!-- Basic Inputs -->
             <div class="space-y-4">
                 <div>
                     <label
@@ -92,6 +93,43 @@
                 </div>
             </div>
 
+            <!-- Extra Payment Section -->
+            <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
+                <label
+                    class="block text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-2"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M12 2v20"></path><path d="m17 5-5-5-5 5"></path><path
+                            d="m5 19 5 5 5-5"></path></svg
+                    >
+                    Añadir Ahorro Mensual
+                </label>
+                <div class="relative group">
+                    <span
+                        class="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-600/50 font-bold"
+                        >€</span
+                    >
+                    <input
+                        type="number"
+                        id="loan-extra"
+                        value="0"
+                        placeholder="0"
+                        class="w-full pl-8 pr-4 py-3 bg-emerald-50 dark:bg-emerald-900/10 border-2 border-emerald-100 dark:border-emerald-900/30 rounded-xl focus:border-emerald-500 focus:ring-0 outline-none transition-all text-emerald-700 dark:text-emerald-400 font-bold text-lg placeholder-emerald-800/20"
+                    />
+                </div>
+                <p class="text-[10px] text-slate-400 mt-2 leading-relaxed">
+                    Escriba una cantidad para ver cuánto tiempo e intereses se ahorra.
+                </p>
+            </div>
+
             <!-- Main Result Card -->
             <div
                 class="bg-indigo-600 rounded-2xl p-6 text-white shadow-lg shadow-indigo-500/20 text-center transform transition-transform hover:scale-[1.02] duration-300"
@@ -104,39 +142,149 @@
                     >Durante <span id="loan-months-count">0</span> meses</span
                 >
             </div>
+
+            <!-- Savings Card (Conditional) -->
+            <div
+                id="savings-card"
+                class="bg-white dark:bg-slate-800 rounded-2xl p-6 border-2 border-dashed border-slate-200 dark:border-slate-700 transition-all duration-500 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 hover:border-emerald-500 dark:hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10"
+            >
+                <h4
+                    class="text-sm font-bold text-emerald-700 dark:text-emerald-400 uppercase mb-4 flex items-center gap-2"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M12 2v20"></path><path
+                            d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg
+                    >
+                    Tu Ahorro Potencial
+                </h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="block text-xs text-slate-500 dark:text-slate-400 mb-1"
+                            >Intereses</span
+                        >
+                        <span
+                            id="saved-interest"
+                            class="block text-xl font-black text-slate-900 dark:text-white"
+                            >0 €</span
+                        >
+                    </div>
+                    <div>
+                        <span class="block text-xs text-slate-500 dark:text-slate-400 mb-1"
+                            >Tiempo</span
+                        >
+                        <span
+                            id="saved-time"
+                            class="block text-xl font-black text-slate-900 dark:text-white"
+                            >0 años</span
+                        >
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Breakdown & Analysis -->
-        <div class="lg:col-span-7 p-6 space-y-8">
-            <!-- The Reality Check -->
+        <!-- Analysis Section -->
+        <div class="lg:col-span-8 p-6 space-y-10">
+            <!-- Timeline Comparison -->
+            <div>
+                <h3
+                    class="text-sm font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-slate-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M3 3v18h18"></path><path d="M7 16h8"></path><path d="M7 11h12"
+                        ></path><path d="M7 6h3"></path></svg
+                    >
+                    Comparativa Temporal
+                </h3>
+                <div class="space-y-6">
+                    <!-- Original -->
+                    <div class="relative">
+                        <div
+                            class="flex justify-between text-xs text-slate-500 mb-2 uppercase tracking-wide font-medium"
+                        >
+                            <span>Duración Original</span>
+                            <span id="timeline-original-text">30 años</span>
+                        </div>
+                        <div
+                            class="h-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"
+                        >
+                            <div class="h-full bg-slate-400 dark:bg-slate-500 w-full rounded-full">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Optimized -->
+                    <div class="relative">
+                        <div
+                            class="flex justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-2 uppercase tracking-wide"
+                        >
+                            <span>Duración con Amortización</span>
+                            <span id="timeline-optimized-text">30 años</span>
+                        </div>
+                        <div
+                            class="h-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"
+                        >
+                            <div
+                                id="timeline-optimized-bar"
+                                class="h-full bg-emerald-500 w-full transition-all duration-1000 rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                            >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-px bg-slate-100 dark:bg-slate-700/50"></div>
+
+            <!-- Cost Breakdown -->
             <div>
                 <h3
                     class="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2"
                 >
-                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> La Realidad del Préstamo
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> Desglose de Costes Totales
                 </h3>
 
                 <!-- Visual Bar -->
                 <div
-                    class="w-full h-12 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden flex mb-3 relative group cursor-help"
+                    class="w-full h-14 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden flex mb-3 relative group text-xs font-bold text-white/90"
                 >
                     <div
                         id="bar-principal"
-                        class="h-full bg-slate-400 dark:bg-slate-600 transition-all duration-700 relative flex items-center justify-center text-xs font-bold text-white/90"
+                        class="h-full bg-slate-400 dark:bg-slate-600 transition-all duration-700 flex items-center justify-center relative hover:brightness-110"
                         style="width: 70%"
                     >
-                        Prestado
+                        <span>Prestado</span>
+                        <span
+                            id="bar-principal-val"
+                            class="ml-2 font-light opacity-80 hidden md:inline"></span>
                     </div>
                     <div
                         id="bar-interest"
-                        class="h-full bg-rose-500 dark:bg-rose-500 transition-all duration-700 relative flex items-center justify-center text-xs font-bold text-white/90"
+                        class="h-full bg-rose-500 dark:bg-rose-500 transition-all duration-700 flex items-center justify-center relative hover:brightness-110"
                         style="width: 30%"
                     >
-                        Intereses
+                        <span>Intereses</span>
+                        <span
+                            id="bar-interest-val"
+                            class="ml-2 font-light opacity-80 hidden md:inline"></span>
                     </div>
                 </div>
 
-                <div class="flex justify-between text-sm">
+                <div class="flex justify-between text-sm mt-3">
                     <div class="text-slate-500 dark:text-slate-400">
                         Total Prestado: <span
                             id="loan-total-amount"
@@ -149,35 +297,56 @@
                 </div>
             </div>
 
-            <!-- Mini Amortization Table (Preview) -->
+            <!-- Amortization Table -->
             <div
-                class="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 h-64 flex flex-col"
+                class="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-1 flex flex-col transition-all duration-500"
+                id="table-container"
             >
-                <div class="flex justify-between items-center mb-3">
+                <div
+                    class="p-4 flex justify-between items-center border-b border-slate-200 dark:border-slate-700"
+                >
                     <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                        Primer Año (Desglose)
+                        Tabla de Amortización
                     </h3>
-                    <span
-                        class="text-[10px] bg-slate-200 dark:bg-slate-800 px-2 py-1 rounded text-slate-500"
-                        >Lo que pagas realmente</span
+                    <button
+                        id="toggle-table-btn"
+                        class="text-[10px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 font-bold transition-all shadow-sm hover:shadow active:scale-95"
+                        >Ver tabla completa</button
                     >
                 </div>
-                <div class="overflow-y-auto flex-1 pr-1 custom-scrollbar">
-                    <table class="w-full text-xs text-left">
-                        <thead
-                            class="sticky top-0 bg-slate-50 dark:bg-slate-900 text-slate-400 z-10"
-                        >
-                            <tr>
-                                <th class="py-2 pl-2">Mes</th>
-                                <th class="py-2 text-right text-rose-500">Interés</th>
-                                <th class="py-2 text-right text-emerald-500">Capital</th>
-                                <th class="py-2 text-right">Pendiente</th>
-                            </tr>
-                        </thead>
-                        <tbody id="loan-table-body" class="text-slate-600 dark:text-slate-300">
-                            <!-- JS filled -->
-                        </tbody>
-                    </table>
+
+                <!-- Table Wrapper with Scroll -->
+                <div class="overflow-x-auto custom-scrollbar relative max-h-[500px]">
+                    <div class="min-w-[600px] p-2">
+                        <!-- Ensure min-width for grid -->
+                        <table class="w-full text-xs text-left border-collapse">
+                            <thead
+                                class="sticky top-0 bg-slate-50 dark:bg-slate-900 text-slate-400 z-10 shadow-sm"
+                            >
+                                <tr>
+                                    <th class="py-3 pl-2 font-medium">Mes</th>
+                                    <th class="py-3 text-right text-rose-500 font-medium"
+                                        >Interés</th
+                                    >
+                                    <th class="py-3 text-right text-emerald-500 font-medium"
+                                        >Capital</th
+                                    >
+                                    <th class="py-3 text-right text-purple-500 font-medium"
+                                        >Extra</th
+                                    >
+                                    <th class="py-3 text-right text-slate-500 font-medium pr-2"
+                                        >Pendiente</th
+                                    >
+                                </tr>
+                            </thead>
+                            <tbody
+                                id="loan-table-body"
+                                class="text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800"
+                            >
+                                <!-- JS filled -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,11 +355,13 @@
 
 <script>
     import { LoanCalculator } from "../../../lib/finance/LoanCalculator";
+    import type { LoanResult } from "../../../lib/finance/LoanCalculator";
 
     // Inputs
     const amountEl = document.getElementById("loan-amount") as HTMLInputElement;
     const rateEl = document.getElementById("loan-rate") as HTMLInputElement;
     const yearsEl = document.getElementById("loan-years") as HTMLInputElement;
+    const extraEl = document.getElementById("loan-extra") as HTMLInputElement;
 
     // Outputs
     const monthlyEl = document.getElementById("loan-monthly");
@@ -199,9 +370,26 @@
     const monthsCountEl = document.getElementById("loan-months-count");
     const tableBody = document.getElementById("loan-table-body");
 
+    // Savings Cards
+    const savingsCard = document.getElementById("savings-card");
+    const savedInterestEl = document.getElementById("saved-interest");
+    const savedTimeEl = document.getElementById("saved-time");
+
+    // Timeline
+    const timelineOriginalText = document.getElementById("timeline-original-text");
+    const timelineOptimizedText = document.getElementById("timeline-optimized-text");
+    const timelineOptimizedBar = document.getElementById("timeline-optimized-bar");
+
     // Bars
     const barPrincipal = document.getElementById("bar-principal");
+    const barPrincipalVal = document.getElementById("bar-principal-val");
     const barInterest = document.getElementById("bar-interest");
+    const barInterestVal = document.getElementById("bar-interest-val");
+
+    // Table
+    const toggleTableBtn = document.getElementById("toggle-table-btn");
+    let isTableExpanded = false;
+    let currentResult: LoanResult | null = null;
 
     const formatMoney = (val: number) =>
         new Intl.NumberFormat("es-ES", {
@@ -210,18 +398,143 @@
             maximumFractionDigits: 0,
         }).format(val);
 
+    // Efficiently render table rows
+    const renderTable = (result: LoanResult) => {
+        if (!tableBody) return;
+
+        // If collapsed, show 2 years (24 months) + snippet, sufficient for preview
+        const limit = 24;
+        const rows = isTableExpanded
+            ? result.amortizationTable
+            : result.amortizationTable.slice(0, limit);
+
+        const html = rows
+            .map(
+                (row) => `
+                <tr class="hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors group">
+                    <td class="py-2.5 pl-2 font-medium text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">Mes ${row.month}</td>
+                    <td class="py-2.5 text-right font-bold text-rose-500">${formatMoney(row.interest)}</td>
+                    <td class="py-2.5 text-right font-bold text-emerald-500">${formatMoney(row.principal)}</td>
+                     <td class="py-2.5 text-right font-bold text-purple-500">${row.extraPayment > 0 ? formatMoney(row.extraPayment) : "<span class='opacity-20'>-</span>"}</td>
+                    <td class="py-2.5 text-right text-slate-400 pr-2">${formatMoney(row.remainingBalance)}</td>
+                </tr>
+            `
+            )
+            .join("");
+
+        let footer = "";
+        if (!isTableExpanded && result.amortizationTable.length > limit) {
+            const remaining = result.amortizationTable.length - limit;
+            footer = `<tr><td colspan="5" class="py-6 text-center text-xs text-slate-400 italic bg-slate-50/50 dark:bg-slate-900/50">... y otros ${remaining} meses más. <button class="underline ml-1 font-bold text-indigo-500 cursor-pointer" onclick="document.getElementById('toggle-table-btn').click()">Ver todo</button></td></tr>`;
+        } else if (isTableExpanded) {
+            footer = `<tr><td colspan="5" class="py-6 text-center text-xs text-slate-400 uppercase tracking-widest font-bold">🎉 Hipoteca Pagada 🎉</td></tr>`;
+        }
+
+        tableBody.innerHTML = html + footer;
+    };
+
     const update = () => {
         const input = {
             amount: Number(amountEl.value) || 0,
             annualInterestRate: Number(rateEl.value) || 0,
             years: Number(yearsEl.value) || 0,
+            monthlyExtraPayment: Number(extraEl?.value) || 0,
         };
 
         const result = LoanCalculator.calculate(input);
+        currentResult = result;
 
         // Main Card
         if (monthlyEl) monthlyEl.innerText = formatMoney(result.monthlyPayment);
-        if (monthsCountEl) monthsCountEl.innerText = input.years * 12 + "";
+        if (monthsCountEl) monthsCountEl.innerText = result.actualDurationMonths + "";
+
+        // Comparison / Savings Logic
+        if (savingsCard) {
+            if (input.monthlyExtraPayment > 0) {
+                // Active State
+                savingsCard.classList.remove(
+                    "opacity-60",
+                    "grayscale",
+                    "border-dashed",
+                    "border-slate-200",
+                    "dark:border-slate-700"
+                );
+                savingsCard.classList.add(
+                    "border-emerald-500",
+                    "bg-emerald-50/20",
+                    "dark:bg-emerald-900/10",
+                    "shadow-lg",
+                    "shadow-emerald-500/10"
+                );
+
+                // Colorize texts
+                const interestTitle = savingsCard.querySelector("span:first-child");
+                if (interestTitle)
+                    interestTitle.classList.replace("text-slate-500", "text-emerald-600");
+                const interestVal = document.getElementById("saved-interest");
+                if (interestVal) {
+                    interestVal.classList.replace("text-slate-900", "text-emerald-600");
+                    interestVal.classList.replace("dark:text-white", "dark:text-emerald-400");
+                }
+            } else {
+                // Inactive State
+                savingsCard.classList.add(
+                    "opacity-60",
+                    "grayscale",
+                    "border-dashed",
+                    "border-slate-200",
+                    "dark:border-slate-700"
+                );
+                savingsCard.classList.remove(
+                    "border-emerald-500",
+                    "bg-emerald-50/20",
+                    "dark:bg-emerald-900/10",
+                    "shadow-lg",
+                    "shadow-emerald-500/10"
+                );
+
+                // Revert texts
+                const interestVal = document.getElementById("saved-interest");
+                if (interestVal) {
+                    interestVal.classList.replace("text-emerald-600", "text-slate-900");
+                    interestVal.classList.replace("dark:text-emerald-400", "dark:text-white");
+                }
+            }
+            if (savedInterestEl) savedInterestEl.innerText = formatMoney(result.interestSaved);
+            if (savedTimeEl) savedTimeEl.innerText = result.yearsSaved + " años";
+        }
+
+        // Timeline visualization
+        if (timelineOriginalText)
+            timelineOriginalText.innerText = input.years + " años (" + input.years * 12 + " meses)";
+        if (timelineOptimizedText)
+            timelineOptimizedText.innerText =
+                result.yearsSaved > 0
+                    ? (result.actualDurationMonths / 12).toFixed(1) +
+                      " años (" +
+                      result.actualDurationMonths +
+                      " meses)"
+                    : "-";
+
+        if (timelineOptimizedBar) {
+            const percent = (result.actualDurationMonths / (input.years * 12)) * 100;
+            timelineOptimizedBar.style.width = `${Math.min(percent, 100)}%`;
+
+            // Change color if optimized
+            if (result.yearsSaved > 0) {
+                timelineOptimizedBar.classList.add(
+                    "bg-emerald-500",
+                    "shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                );
+                timelineOptimizedBar.classList.remove("bg-slate-400", "dark:bg-slate-500");
+            } else {
+                timelineOptimizedBar.classList.remove(
+                    "bg-emerald-500",
+                    "shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                );
+                timelineOptimizedBar.classList.add("bg-slate-400", "dark:bg-slate-500");
+            }
+        }
 
         // Breakdown Analysis
         if (totalAmountEl) totalAmountEl.innerText = formatMoney(input.amount);
@@ -232,27 +545,26 @@
         const pPercent = grandTotal > 0 ? (input.amount / grandTotal) * 100 : 0;
         const iPercent = grandTotal > 0 ? (result.totalInterest / grandTotal) * 100 : 0;
 
-        if (barPrincipal) barPrincipal.style.width = `${pPercent}%`;
-        if (barInterest) barInterest.style.width = `${iPercent}%`;
-
-        // Table Preview (First 12 months)
-        if (tableBody) {
-            tableBody.innerHTML = result.amortizationTable
-                .slice(0, 12)
-                .map(
-                    (row) => `
-                <tr class="border-b border-slate-100 dark:border-slate-800 last:border-0 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors">
-                    <td class="py-2 pl-2 font-medium">Mes ${row.month}</td>
-                    <td class="py-2 text-right font-bold text-rose-500">${formatMoney(row.interest)}</td>
-                    <td class="py-2 text-right font-bold text-emerald-500">${formatMoney(row.principal)}</td>
-                    <td class="py-2 text-right text-slate-400">${formatMoney(row.remainingBalance)}</td>
-                </tr>
-            `
-                )
-                .join("");
+        if (barPrincipal) {
+            barPrincipal.style.width = `${pPercent}%`;
+            if (barPrincipalVal) barPrincipalVal.innerText = formatMoney(input.amount);
         }
+        if (barInterest) {
+            barInterest.style.width = `${iPercent}%`;
+            if (barInterestVal) barInterestVal.innerText = formatMoney(result.totalInterest);
+        }
+
+        renderTable(result);
     };
 
-    [amountEl, rateEl, yearsEl].forEach((el) => el?.addEventListener("input", update));
+    toggleTableBtn?.addEventListener("click", () => {
+        isTableExpanded = !isTableExpanded;
+        if (toggleTableBtn)
+            toggleTableBtn.innerText = isTableExpanded ? "Contraer tabla" : "Ver tabla completa";
+        if (currentResult) renderTable(currentResult);
+    });
+
+    [amountEl, rateEl, yearsEl, extraEl].forEach((el) => el?.addEventListener("input", update));
+    // Initial Calc
     update();
 </script>
