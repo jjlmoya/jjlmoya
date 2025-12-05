@@ -1,0 +1,191 @@
+---
+
+---
+
+<div
+    class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl border border-slate-100 dark:border-slate-700"
+>
+    <div class="flex items-center gap-3 mb-6">
+        <div
+            class="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-xl text-amber-600 dark:text-amber-400"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg
+            >
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Calculadora de Inflación</h2>
+    </div>
+
+    <!-- Intro Text -->
+    <p class="text-slate-600 dark:text-slate-400 text-sm mb-8">
+        Simulación basada en el IPC histórico de España (1980-2025). Calcula cuánto valía tu dinero
+        en el pasado o cuánto necesitas hoy para comprar lo mismo.
+    </p>
+
+    <!-- Main Tool UI -->
+    <div class="flex flex-col md:flex-row gap-4 items-stretch justify-center">
+        <!-- CARD 1: Origin -->
+        <div
+            class="flex-1 bg-white dark:bg-slate-900 rounded-2xl border-2 border-slate-100 dark:border-slate-700 p-6 flex flex-col items-center justify-between shadow-sm relative overflow-hidden group hover:border-amber-300 dark:hover:border-amber-700 transition-colors"
+        >
+            <div class="absolute top-0 left-0 w-full h-1 bg-slate-200 dark:bg-slate-700"></div>
+
+            <label
+                class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4"
+                >Dinero Inicial</label
+            >
+
+            <div class="w-full relative mb-4">
+                <input
+                    type="number"
+                    id="inf-amount"
+                    value="1000"
+                    class="w-full text-center text-4xl font-black bg-transparent border-none outline-none text-slate-900 dark:text-white placeholder-slate-200"
+                    placeholder="0"
+                />
+                <span class="block text-center text-xs text-slate-400 mt-1">Euros (€)</span>
+            </div>
+
+            <div class="w-full">
+                <label class="block text-center text-xs font-bold text-slate-400 mb-2"
+                    >En el año</label
+                >
+                <select
+                    id="inf-year"
+                    class="w-full bg-slate-50 dark:bg-slate-800 border-none text-slate-900 dark:text-white text-lg font-bold rounded-xl focus:ring-2 focus:ring-amber-500 block p-3 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                >
+                    <!-- JS filled -->
+                </select>
+            </div>
+        </div>
+
+        <!-- Arrow Indicator -->
+        <div
+            class="flex items-center justify-center text-amber-500 dark:text-amber-500 z-10 -my-4 md:-my-0 md:-mx-4"
+        >
+            <div
+                class="bg-white dark:bg-slate-800 rounded-full p-2 shadow-lg border border-slate-100 dark:border-slate-700"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-8 h-8 rotate-90 md:rotate-0 animate-pulse"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg
+                >
+            </div>
+        </div>
+
+        <!-- CARD 2: Result -->
+        <div
+            class="flex-1 bg-amber-50 dark:bg-amber-950/30 rounded-2xl border-2 border-amber-200 dark:border-amber-800 p-6 flex flex-col items-center justify-between shadow-md relative overflow-hidden"
+        >
+            <div class="absolute top-0 left-0 w-full h-1 bg-amber-500"></div>
+
+            <label
+                class="text-xs font-bold text-amber-600 dark:text-amber-500 uppercase tracking-widest mb-4"
+                >Equivalencia Hoy</label
+            >
+
+            <div class="w-full relative mb-4 flex-1 flex items-center justify-center">
+                <div
+                    id="inf-result"
+                    class="text-4xl md:text-5xl font-black text-amber-600 dark:text-amber-400 tracking-tight"
+                >
+                    0 €
+                </div>
+            </div>
+
+            <div class="w-full text-center">
+                <div
+                    class="inline-flex items-center justify-center px-4 py-2 bg-white dark:bg-slate-900 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 shadow-sm border border-slate-100 dark:border-slate-700"
+                >
+                    Año 2025
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Footnote -->
+    <div class="mt-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+        <div
+            id="inf-change-percent"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl text-lg font-bold border border-red-100 dark:border-red-900/30"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline
+                    points="17 18 23 18 23 12"></polyline></svg
+            >
+            <span>+0% Inflación Acumulada</span>
+        </div>
+        <p class="mt-4 text-xs text-slate-400 max-w-md mx-auto">
+            *Cálculo realizado utilizando datos oficiales del INE hasta 2024 y proyecciones
+            estimadas para el cierre de 2025.
+        </p>
+    </div>
+</div>
+
+<script>
+    import { InflationCalculator } from "../../../lib/finance/InflationCalculator";
+
+    const amountEl = document.getElementById("inf-amount") as HTMLInputElement;
+    const yearEl = document.getElementById("inf-year") as HTMLSelectElement;
+    const resultEl = document.getElementById("inf-result");
+    const percentEl = document.getElementById("inf-change-percent");
+
+    // Populate years
+    const years = InflationCalculator.getAvailableYears();
+    years.forEach((year) => {
+        const opt = document.createElement("option");
+        opt.value = year.toString();
+        opt.text = year.toString();
+        if (year === 2000) opt.selected = true; // Default
+        yearEl?.appendChild(opt);
+    });
+
+    const formatMoney = (val: number) =>
+        new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(val);
+
+    const update = () => {
+        const val = Number(amountEl.value) || 0;
+        const year = Number(yearEl.value);
+
+        // Calculate to 2025 as the updated target
+        const res = InflationCalculator.calculate(val, year, 2025);
+
+        if (resultEl) resultEl.innerText = formatMoney(res);
+
+        if (percentEl && val > 0) {
+            const change = ((res - val) / val) * 100;
+            const sign = change > 0 ? "+" : "";
+            percentEl.querySelector("span")!.innerText =
+                `${sign}${change.toFixed(1)}% Inflación Acumulada`;
+        }
+    };
+
+    amountEl?.addEventListener("input", update);
+    yearEl?.addEventListener("change", update);
+
+    // Initial update
+    if (amountEl && yearEl) update();
+</script>
