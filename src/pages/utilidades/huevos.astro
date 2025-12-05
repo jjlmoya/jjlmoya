@@ -390,14 +390,19 @@ const description =
                 let currentSize = 58;
                 let currentAltitude = 0;
 
-                const tempBtns = document.querySelectorAll(".temp-btn");
-                const sizeBtns = document.querySelectorAll(".size-btn");
+                const tempBtns = document.querySelectorAll(".temp-btn") as NodeListOf<HTMLElement>;
+                const sizeBtns = document.querySelectorAll(".size-btn") as NodeListOf<HTMLElement>;
                 const altitudeInput = document.getElementById("altitude") as HTMLInputElement;
                 const btnLocation = document.getElementById("btn-location");
                 const btnSea = document.getElementById("btn-sea");
                 const btnMadrid = document.getElementById("btn-madrid");
 
-                function calculateTime(mass, tempStart, tempTarget, altitude) {
+                function calculateTime(
+                    mass: number,
+                    tempStart: number,
+                    tempTarget: number,
+                    altitude: number
+                ) {
                     const waterBoilingPoint = 100 - 0.0034 * altitude;
 
                     // Formula: t = 0.451 * M^(2/3) * ln((Tw - To) / (Tw - Ty))
@@ -413,7 +418,7 @@ const description =
                     return minutes * 60; // seconds
                 }
 
-                function formatTime(seconds) {
+                function formatTime(seconds: number) {
                     const m = Math.floor(seconds / 60);
                     const s = Math.floor(seconds % 60);
                     return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
@@ -427,16 +432,20 @@ const description =
                     const tMollet = calculateTime(currentSize, currentTemp, 67, currentAltitude);
                     const tHard = calculateTime(currentSize, currentTemp, 77, currentAltitude);
 
-                    document.getElementById("time-soft").textContent = formatTime(tSoft);
-                    document.getElementById("time-mollet").textContent = formatTime(tMollet);
-                    document.getElementById("time-hard").textContent = formatTime(tHard);
+                    const elSoft = document.getElementById("time-soft");
+                    const elMollet = document.getElementById("time-mollet");
+                    const elHard = document.getElementById("time-hard");
+
+                    if (elSoft) elSoft.textContent = formatTime(tSoft);
+                    if (elMollet) elMollet.textContent = formatTime(tMollet);
+                    if (elHard) elHard.textContent = formatTime(tHard);
                 }
 
                 tempBtns.forEach((btn) => {
                     btn.addEventListener("click", () => {
                         tempBtns.forEach((b) => b.classList.remove("active"));
                         btn.classList.add("active");
-                        currentTemp = parseInt(btn.getAttribute("data-value"));
+                        currentTemp = parseInt(btn.getAttribute("data-value") || "0");
                         updateCalculations();
                     });
                 });
@@ -445,7 +454,7 @@ const description =
                     btn.addEventListener("click", () => {
                         sizeBtns.forEach((b) => b.classList.remove("active"));
                         btn.classList.add("active");
-                        currentSize = parseInt(btn.getAttribute("data-value"));
+                        currentSize = parseInt(btn.getAttribute("data-value") || "0");
                         updateCalculations();
                     });
                 });

@@ -1,0 +1,176 @@
+---
+import QRTabs from "./QRTabs.astro";
+import WifiForm from "./forms/WifiForm.astro";
+import UrlForm from "./forms/UrlForm.astro";
+import VCardForm from "./forms/VCardForm.astro";
+import QRPreview from "./QRPreview.astro";
+---
+
+<div
+    class="w-full max-w-3xl mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20 dark:border-slate-700/30"
+>
+    <div class="flex flex-col">
+        <!-- Controls Section -->
+        <div class="p-8 border-b border-slate-200 dark:border-slate-700/50">
+            <QRTabs />
+
+            <div class="space-y-6">
+                <WifiForm />
+                <UrlForm />
+                <VCardForm />
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <QRPreview />
+    </div>
+</div>
+
+<script>
+    import QRCode from "qrcode";
+    import { QRPayloadGenerator } from "../../../lib/qr/QRPayloadGenerator";
+
+    class QRManager {
+        private currentType: string = "wifi";
+        private canvas: HTMLCanvasElement;
+        private downloadBtn: HTMLElement | null;
+        private tabs: NodeListOf<HTMLElement>;
+        private forms: { [key: string]: HTMLElement | null };
+
+        constructor() {
+            this.canvas = document.getElementById("qr-canvas") as HTMLCanvasElement;
+            this.downloadBtn = document.getElementById("download-png");
+            this.tabs = document.querySelectorAll(".tab-btn");
+
+            this.forms = {
+                wifi: document.getElementById("form-wifi"),
+                url: document.getElementById("form-url"),
+                vcard: document.getElementById("form-vcard"),
+            };
+
+            this.init();
+        }
+
+        private init() {
+            this.setupTabs();
+            this.setupInputs();
+            this.setupDownload();
+            this.generate(); // Initial generation
+        }
+
+        private setupTabs() {
+            this.tabs.forEach((tab) => {
+                tab.addEventListener("click", () => {
+                    const type = tab.dataset.tab;
+                    if (type) this.switchTab(type);
+                });
+            });
+        }
+
+        private setupInputs() {
+            const inputs = document.querySelectorAll(".qr-input");
+            inputs.forEach((input) => {
+                input.addEventListener("input", () => this.generate());
+            });
+        }
+
+        private setupDownload() {
+            if (this.downloadBtn) {
+                this.downloadBtn.addEventListener("click", () => {
+                    const link = document.createElement("a");
+                    link.download = `qr-code-${this.currentType}.png`;
+                    link.href = this.canvas.toDataURL("image/png");
+                    link.click();
+                });
+            }
+        }
+
+        private switchTab(type: string) {
+            this.currentType = type;
+
+            // Update Tabs UI
+            this.tabs.forEach((tab) => {
+                tab.dataset.active = (tab.dataset.tab === type).toString();
+            });
+
+            // Update Forms Visibility
+            Object.keys(this.forms).forEach((key) => {
+                const form = this.forms[key];
+                if (!form) return;
+
+                if (key === type) {
+                    form.classList.remove("hidden");
+                    form.animate(
+                        [
+                            { opacity: 0, transform: "translateY(10px)" },
+                            { opacity: 1, transform: "translateY(0)" },
+                        ],
+                        { duration: 300, easing: "ease-out" }
+                    );
+                } else {
+                    form.classList.add("hidden");
+                }
+            });
+
+            this.generate();
+        }
+
+        private async generate() {
+            let text = "";
+
+            try {
+                if (this.currentType === "wifi") {
+                    const form = this.forms.wifi;
+                    if (form) {
+                        const ssid = (form.querySelector('[name="ssid"]') as HTMLInputElement)
+                            .value;
+                        const password = (
+                            form.querySelector('[name="password"]') as HTMLInputElement
+                        ).value;
+                        const encryption = (
+                            form.querySelector('[name="encryption"]') as HTMLSelectElement
+                        ).value;
+                        const hidden = (form.querySelector('[name="hidden"]') as HTMLInputElement)
+                            .checked;
+                        text = QRPayloadGenerator.wifi(ssid, password, encryption, hidden);
+                    }
+                } else if (this.currentType === "url") {
+                    const form = this.forms.url;
+                    if (form) {
+                        text = QRPayloadGenerator.url(
+                            (form.querySelector('[name="url"]') as HTMLInputElement).value
+                        );
+                    }
+                } else if (this.currentType === "vcard") {
+                    const form = this.forms.vcard;
+                    if (form) {
+                        text = QRPayloadGenerator.vcard({
+                            name: (form.querySelector('[name="name"]') as HTMLInputElement).value,
+                            surname: (form.querySelector('[name="surname"]') as HTMLInputElement)
+                                .value,
+                            phone: (form.querySelector('[name="phone"]') as HTMLInputElement).value,
+                            email: (form.querySelector('[name="email"]') as HTMLInputElement).value,
+                            org: (form.querySelector('[name="org"]') as HTMLInputElement).value,
+                        });
+                    }
+                }
+
+                if (!text) text = "https://jjlmoya.com";
+
+                await QRCode.toCanvas(this.canvas, text, {
+                    width: 1024,
+                    margin: 2,
+                    color: {
+                        dark: "#000000",
+                        light: "#ffffff",
+                    },
+                });
+            } catch (err) {
+                console.error("Error generating QR:", err);
+            }
+        }
+    }
+
+    // Initialize on load
+    new QRManager();
+</script>
