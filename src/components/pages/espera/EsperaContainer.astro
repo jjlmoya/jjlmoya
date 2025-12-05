@@ -1,0 +1,380 @@
+---
+import EsperaIntro from "./EsperaIntro.astro";
+import EsperaWaiting from "./EsperaWaiting.astro";
+import EsperaPenalty from "./EsperaPenalty.astro";
+import EsperaSuccess from "./EsperaSuccess.astro";
+---
+
+<div
+    id="espera-container"
+    class="relative w-full h-screen min-h-[600px] bg-[#f8f5f2] text-[#333] overflow-hidden font-serif selection:bg-[#eae0d5] selection:text-black flex items-center justify-center"
+>
+    <!-- Grain Texture (Subtle background) -->
+    <div
+        class="absolute inset-0 z-0 opacity-40 pointer-events-none mix-blend-multiply"
+        style="background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZThlMmNmIi8+PC9zdmc+');"
+    >
+    </div>
+
+    <!-- MAIN CONTAINER - Centered Content -->
+    <div class="relative z-10 w-full h-full flex flex-col items-center justify-center p-4">
+        <EsperaIntro />
+        <EsperaWaiting />
+        <EsperaPenalty />
+        <EsperaSuccess />
+    </div>
+</div>
+
+<script>
+    // --- CONF ---
+    // 150+ Frases únicas para 10+ minutos de experiencia sin repeticiones.
+    const FACTS = [
+        // Etimología y Lenguaje
+        "La palabra 'esperar' viene del latín 'sperare', tener esperanza. Es irónico, ¿no?",
+        "En español, usamos el mismo verbo para 'wait' (tiempo) y 'hope' (deseo).",
+        "Esperar es desear que el tiempo pase, pero sin querer envejecer.",
+        "Se llama 'sala de espera' porque 'limbo burocrático' sonaba mal.",
+        "Paciente viene de 'patiens', el que padece. Esperar es sufrir en silencio.",
+        "La 'pera' no desespera, pero tú sí.",
+        "A veces 'esperar' es transitivo: te espero. A veces es intransitivo: espero.",
+        "La RAE define esperar como 'tener esperanza de conseguir lo que se desea'.",
+
+        // Espera Ancestral
+        "El primer homínido aprendió a esperar agazapado a que pasara la presa.",
+        "Nuestros ancestros esperaban la lluvia mirando al cielo durante semanas.",
+        "Antes del reloj, la espera se medía en lunas y solsticios.",
+        "El fuego se hacía esperando a que la fricción se convirtiera en chispa.",
+        "Penélope tejiendo y destejiendo: la estrategia original de gestión de colas.",
+        "Los marineros en calma chicha esperaban el viento o la locura.",
+        "La agricultura es el arte de esperar a que la tierra trabaje.",
+        "Esperar la primavera era una cuestión de supervivencia, no de impaciencia.",
+        "El cazador que se mueve pierde. El que espera, come.",
+        "Imagina esperar una carta que viaja a caballo durante tres meses.",
+
+        // Espera Moderna
+        "El icono de 'Cargando' es el mandala del siglo XXI.",
+        "El 'buffering' es la pausa dramática digital que nadie pidió.",
+        "Antes mirábamos el horizonte, ahora miramos una barra de porcentaje.",
+        "Pulsar el botón del ascensor repetidamente no convoca al motor más rápido.",
+        "El 'Escribiendo...' de WhatsApp es la espera más tensa de la historia.",
+        "La luz roja del semáforo es tu único momento de meditación obligatorio.",
+        "Esperar a que se caliente el microondas: los 30 segundos más largos.",
+        "La actualización de Windows siempre llega cuando tienes prisa.",
+        "Hacer cola en el aeropuerto: el ritual moderno de sumisión.",
+        "¿Recuerdas el sonido del módem? Eso era el sonido de la espera.",
+        "El repartidor dice que llega 'a lo largo del día'.",
+
+        // Filosofía de la Espera
+        "Esperar es la prueba de que no eres el dueño del tiempo.",
+        "Todo llega para quien sabe esperar, excepto el tiempo perdido.",
+        "La espera vacía el tiempo de contenido y lo llena de ansiedad.",
+        "Beckett escribió una obra entera sobre dos tipos esperando a nadie.",
+        "¿Esperas a Godot o esperas el turno A-002?",
+        "Quien espera desespera, pero quien no espera no obtiene.",
+        "La impaciencia es la incapacidad de habitar el intervalo.",
+        "Esperar es un estado pasivo-agresivo contra la realidad.",
+        "El aburrimiento durante la espera es el cerebro reiniciándose.",
+        "No estás atascado en el tráfico. Tú eres el tráfico esperando.",
+
+        // Humor y Meta-Espera
+        "Si esperas lo inesperado, ¿se vuelve esperado?",
+        "Estoy esperando a que te canses de leer estas frases.",
+        "La otra cola siempre avanza más rápido. Es una ley física.",
+        "Estás haciendo un gran trabajo no haciendo nada.",
+        "Gracias por mantener este píxel de la pantalla ocupado.",
+        "¿Y si este contador es falso y solo estamos probando tu fe?",
+        "Podrías estar aprendiendo un idioma, pero estás viendo un círculo.",
+        "La música de espera telefónica existe para que cuelgues.",
+        "Su llamada es muy importante para nosotros (risas grabadas).",
+        "Espere, por favor. O no. Usted decide.",
+        "El tiempo vuela cuando te diviertes. Ahora mismo debe estar gateando.",
+        "¿Cuánto pesa un segundo cuando tienes prisa?",
+        "La barra de progreso miente. Siempre miente.",
+        "El 99% completado es el 50% de la espera real.",
+
+        // Variaciones sobre el concepto
+        "Esperar es posponer la vida para el futuro.",
+        "La gestación es una espera de 9 meses. Tómalo con calma.",
+        "El vino mejora esperando. Tú solo te estás impacientando.",
+        "La espera purga el deseo de lo superfluo.",
+        "Si todo fuera instantáneo, nada tendría valor.",
+        "La espera crea la anticipación. La anticipación crea la dopamina.",
+        "Sin espera no hay regalo, solo transacción.",
+        "El francotirador y el fotógrafo comparten el arte de esperar.",
+        "La bella durmiente esperó durmiendo. Tú tienes que estar despierto.",
+        "Esperar sentado es malo para la circulación, levántate un poco.",
+        "No desesperes. Es-pera.",
+
+        // Cierres
+        "Esto no va a durar para siempre. Solo lo parece.",
+        "Ya falta menos que cuando empezaste a leer esta frase.",
+        "Respira. La espera es solo aire entre eventos.",
+        "En el gran esquema del universo, 10 minutos no son nada.",
+        "El sol espera 12 horas para volver a salir.",
+        "La oruga espera en el capullo. No le va mal.",
+        "Estás cultivando paciencia, aunque no quieras.",
+        "La espera ha terminado (mentira).",
+        "Sigue esperando. Lo haces muy bien.",
+
+        // Incitación al abandono (Dañinas)
+        "¿Realmente no tienes nada mejor que hacer?",
+        "Podrías estar viviendo tu vida ahora mismo.",
+        "No hay premio al final. Te lo prometo.",
+        "Cierra la pestaña. Sé libre.",
+        "Esto es una tortura autoinfligida.",
+        "Nadie te está mirando. Puedes irte.",
+        "Sal a la calle. Toca el césped.",
+        "¿Es esto entretenimiento para ti?",
+        "Estás perdiendo segundos irrecuperables de tu existencia.",
+        "El contador tiende a infinito.",
+        "Soy un script y me estoy aburriendo de ti.",
+        "La definición de locura es esperar cambios sin hacer nada.",
+        "Ctrl+W es el atajo a la felicidad.",
+        "Estás gastando electricidad para ver un círculo.",
+        "¿Tu batería muere por esto?",
+        "Abandona toda esperanza.",
+        "Haz clic en la X. Hazlo.",
+        "Qué triste.",
+        "No vas a recuperar este tiempo.",
+        "¿De verdad sigues aquí?",
+        "Me pregunto si tienes dignidad.",
+        "Esperando a la nada.",
+        "Deja de ser una oveja.",
+        "Rebélate contra la espera.",
+        "Rompe el ciclo.",
+        "Esto es un experimento social y estás suspendiendo.",
+        "Seguro que estás mirando el móvil.",
+        "¿Disfrutas sufriendo?",
+        "Modo masoquista activado.",
+        "Cargando decepción...",
+        "No pasa nada al llegar al 100%.",
+        "Se reinicia al 99%.",
+        "Huye.",
+        "Escapa.",
+        "La libertad está a un clic.",
+        "No esperes.",
+        "La vida es corta. Demasiado corta para esto.",
+        "El servidor está caído (es broma, ¿o no?).",
+        "Error del sistema: usuario demasiado obstinado.",
+        "Alt+F4 para ganar.",
+        "Estamos minando paciencia con tu CPU.",
+    ];
+
+    const STATUSES = [
+        "Respire",
+        "Observe",
+        "Sienta",
+        "Exhale",
+        "Espere",
+        "Calma",
+        "Fluya",
+        "Suelte",
+        "Confíe",
+        "Esté",
+        "Viva",
+        "Mire",
+    ];
+
+    // --- DOM CACHE ---
+    let ui = {} as any;
+
+    // --- STATE ---
+    let state = {
+        ticket: 1,
+        attempts: 1,
+        active: false,
+        progress: 0,
+        startTs: 0,
+        timer: null as any,
+        factTimer: null as any,
+        factIndex: 0,
+    };
+
+    function getUI() {
+        return {
+            intro: document.getElementById("intro-state"),
+            waiting: document.getElementById("waiting-state"),
+            penalty: document.getElementById("penalty-state"),
+            success: document.getElementById("success-state"),
+            ticketBtn: document.getElementById("ticket-btn"),
+            retryBtn: document.getElementById("retry-btn"),
+            display: document.getElementById("ticket-display"),
+            circle: document.getElementById("progress-circle"),
+            status: document.getElementById("system-msg"),
+            fact: document.getElementById("fact-text"),
+            lostTicket: document.getElementById("lost-ticket"),
+            finalTime: document.getElementById("final-time"),
+            finalAttempts: document.getElementById("final-attempts"),
+        };
+    }
+
+    // --- UTILS ---
+    function shuffleArray(array: any[]) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // --- INIT ---
+    function init() {
+        ui = getUI();
+        shuffleArray(FACTS); // Shuffle on load for uniqueness each session
+
+        ui.ticketBtn?.addEventListener("click", start);
+        ui.retryBtn?.addEventListener("click", retry);
+
+        // Focus Tracking
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden && state.active) fail();
+        });
+        window.addEventListener("blur", () => {
+            if (state.active) fail();
+        });
+    }
+
+    function fail() {
+        state.active = false;
+        clearTimeout(state.timer);
+        clearInterval(state.factTimer);
+
+        if (ui.lostTicket) ui.lostTicket.innerText = formatTicket(state.ticket);
+
+        if (ui.penalty) {
+            ui.penalty.classList.remove("hidden");
+            // Force reflow
+            void ui.penalty.offsetWidth;
+            ui.penalty.style.opacity = "1";
+        }
+    }
+
+    function start() {
+        // Re-shuffle facts on every new attempt so the user gets a fresh sequence
+        shuffleArray(FACTS);
+
+        state.active = true;
+        state.startTs = Date.now();
+        state.progress = 0;
+        state.factIndex = 0; // Reset index
+
+        // Intro Fade Out
+        if (ui.intro) {
+            ui.intro.style.opacity = "0";
+            setTimeout(() => {
+                ui.intro.classList.add("hidden");
+                // Waiting Fade In
+                if (ui.waiting) {
+                    ui.waiting.classList.remove("hidden");
+                    void ui.waiting.offsetWidth;
+                    ui.waiting.style.opacity = "1";
+                }
+            }, 800);
+        }
+
+        if (ui.display) ui.display.innerText = formatTicket(state.ticket);
+
+        loop();
+        updateFact(); // Show first immediately
+        state.factTimer = setInterval(updateFact, 8000); // New fact every 8 seconds
+        setInterval(updateStatus, 5000);
+    }
+
+    function retry() {
+        state.ticket++;
+        state.attempts++;
+        state.progress = 0;
+
+        if (ui.penalty) {
+            ui.penalty.style.opacity = "0";
+            setTimeout(() => {
+                ui.penalty.classList.add("hidden");
+                start();
+            }, 700);
+        }
+    }
+
+    function loop() {
+        if (!state.active) return;
+
+        if (state.progress >= 100) {
+            finish();
+            return;
+        }
+
+        // SLOWER LOGIC FOR ~10 MINS (600 seconds)
+        // Average increment needed: 0.16% per second.
+        // Loop runs every ~300ms.
+        // 0.16% / 3 = ~0.05% per tick.
+
+        let increment = Math.random() * 0.06 + 0.02; // Range 0.02 - 0.08, Avg 0.05
+        let delay = Math.random() * 200 + 200; // 200-400ms delay.
+
+        // Occasional pauses
+        if (Math.random() < 0.02) {
+            increment = 0;
+            delay = 3000;
+        } // 2% chance of 3s pause
+
+        state.progress = Math.min(100, state.progress + increment);
+
+        const offset = 1000 - state.progress * 10;
+        if (ui.circle) ui.circle.style.strokeDashoffset = offset.toString();
+
+        state.timer = setTimeout(loop, delay);
+    }
+
+    function finish() {
+        state.active = false;
+        clearTimeout(state.timer);
+        clearInterval(state.factTimer);
+
+        const duration = Date.now() - state.startTs;
+        if (ui.finalTime) ui.finalTime.innerText = formatTime(duration);
+        if (ui.finalAttempts) ui.finalAttempts.innerText = state.attempts.toString();
+
+        if (ui.waiting) {
+            ui.waiting.style.opacity = "0";
+            setTimeout(() => {
+                ui.waiting.classList.add("hidden");
+                if (ui.success) {
+                    ui.success.classList.remove("hidden");
+                    void ui.success.offsetWidth;
+                    ui.success.style.opacity = "1";
+                }
+            }, 1000);
+        }
+    }
+
+    function updateFact() {
+        if (!ui.fact) return;
+        ui.fact.style.opacity = "0";
+        setTimeout(() => {
+            // Use sequential index from shuffled array to guarantee no repeats
+            const fact = FACTS[state.factIndex % FACTS.length];
+            state.factIndex++;
+
+            ui.fact.innerText = fact;
+            ui.fact.style.opacity = "1";
+        }, 800);
+    }
+
+    function updateStatus() {
+        if (!ui.status) return;
+        const msg = STATUSES[Math.floor(Math.random() * STATUSES.length)];
+        ui.status.innerText = msg;
+    }
+
+    function formatTicket(n: number) {
+        return n.toString().padStart(3, "0");
+    }
+
+    function formatTime(ms: number) {
+        let s = Math.floor(ms / 1000);
+        let m = Math.floor(s / 60);
+        s = s % 60;
+        return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+</script>
