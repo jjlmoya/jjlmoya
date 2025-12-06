@@ -109,6 +109,29 @@
             >
         </div>
 
+        <!-- Volume Control -->
+        <div class="flex items-center gap-3 px-1 pt-2">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-5 h-5 text-slate-400 dark:text-slate-500"
+            >
+                <path
+                    fill-rule="evenodd"
+                    d="M11.26 3.691A1.2 1.2 0 0112 4.8v14.4a1.199 1.199 0 01-2.048.848L5.503 15.6H2.4a1.2 1.2 0 01-1.2-1.2V9.6a1.2 1.2 0 011.2-1.2h3.103l4.449-4.448a1.2 1.2 0 011.308-.261zM15.394 10.43a.75.75 0 011.06-1.06 5.25 5.25 0 010 7.425.75.75 0 01-1.06-1.06 3.75 3.75 0 000-5.304zM19.121 7.42a.75.75 0 011.06-1.06 9.75 9.75 0 010 13.809.75.75 0 11-1.06-1.06 8.25 8.25 0 000-11.689z"
+                    clip-rule="evenodd"></path>
+            </svg>
+            <input
+                type="range"
+                id="volume-slider"
+                min="0"
+                max="100"
+                value="80"
+                class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-slate-400 dark:[&::-webkit-slider-thumb]:bg-slate-500 [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:duration-100 hover:[&::-webkit-slider-thumb]:scale-110 active:[&::-webkit-slider-thumb]:scale-95"
+            />
+        </div>
+
         <!-- Time Signature -->
         <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
             <div class="space-y-1">
@@ -148,6 +171,31 @@
     </div>
 </div>
 
+<!-- Mobile Silent Switch Warning -->
+<div
+    class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 hidden"
+    id="mobile-warning"
+>
+    <div class="flex items-start gap-3">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-5 h-5 mt-0.5 flex-shrink-0"
+        >
+            <path
+                fill-rule="evenodd"
+                d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                clip-rule="evenodd"></path>
+        </svg>
+        <p>
+            <strong>¿No se oye?</strong> Si estás en iPhone/iPad, asegúrate de desactivar el <strong
+                >Modo Silencio</strong
+            > (interruptor lateral) o subir el volumen del timbre.
+        </p>
+    </div>
+</div>
+
 <style is:global>
     /* 
       We moved component-specific styles to inline classes where possible 
@@ -172,17 +220,18 @@
 
 <script>
     class Metronome {
+        // State
         audioContext: AudioContext | null = null;
+        masterGainNode: GainNode | null = null;
         isPlaying = false;
         tempo = 120;
         lookahead = 25.0; // ms
         scheduleAheadTime = 0.1; // sec
         nextNoteTime = 0.0;
-        noteResolution = 1; // 0 == 16th, 1 == 8th, 2 == quarter note
-        noteLength = 0.05;
         timerWorker: Worker | null = null;
         beatsPerBar = 4;
         currentBeatInBar = 0;
+        volume = 0.8;
 
         // Visuals
         ui = {
@@ -199,17 +248,62 @@
             adjustBtns: document.querySelectorAll(".adjust-btn"),
             beatsMinus: document.getElementById("beats-minus") as HTMLButtonElement,
             beatsPlus: document.getElementById("beats-plus") as HTMLButtonElement,
+            volumeSlider: document.getElementById("volume-slider") as HTMLInputElement,
         };
 
         tapTimes: number[] = [];
+        silentAudio: HTMLAudioElement | null = null;
 
         constructor() {
+            console.log("Metronome: Constructor initialized");
             this.initListeners();
             this.renderDots();
+
+            // Initialize silent audio for session keeping (iOS Silent Switch Bypass)
+            // We use a simple silent WAV. Loop is FALSE to avoid "machine gun" buzzing.
+            // We will play it on every interaction to keep session active.
+            this.silentAudio = new Audio(
+                "data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YRAAAAAAAAAAAAAAAAAAAA=="
+            );
+            this.silentAudio.loop = false;
+
+            // Global unlock attempt on any interaction
+            const unlockHandler = () => {
+                console.log("Metronome: User interaction detected (global unlock)");
+                this.initAudioContext();
+                this.playSilentUnlock();
+
+                document.removeEventListener("touchstart", unlockHandler);
+                document.removeEventListener("click", unlockHandler);
+                console.log("Metronome: Global unlock listeners removed");
+            };
+            document.addEventListener("touchstart", unlockHandler, { passive: true });
+            document.addEventListener("click", unlockHandler);
+
+            // Show mobile warning if touch device
+            const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+
+            if (isTouch || isIOS) {
+                const warning = document.getElementById("mobile-warning");
+                if (warning) warning.classList.remove("hidden");
+            }
+        }
+
+        playSilentUnlock() {
+            if (this.silentAudio) {
+                this.silentAudio.volume = 0.01; // Minimum volume
+                this.silentAudio
+                    .play()
+                    .catch((e) => console.error("Metronome: Silent HTML5 Audio play failed", e));
+            }
         }
 
         initListeners() {
-            this.ui.playBtn?.addEventListener("click", () => this.toggle());
+            this.ui.playBtn?.addEventListener("click", () => {
+                console.log("Metronome: Play button clicked");
+                this.toggle();
+            });
 
             this.ui.bpmSlider?.addEventListener("input", (e) => {
                 const bpm = parseInt((e.target as HTMLInputElement).value);
@@ -221,6 +315,10 @@
                     const change = parseInt(btn.getAttribute("data-change") || "0");
                     this.setTempo(this.tempo + change);
                 });
+            });
+
+            this.ui.volumeSlider?.addEventListener("input", (e) => {
+                this.volume = parseInt((e.target as HTMLInputElement).value) / 100;
             });
 
             this.ui.beatsMinus?.addEventListener("click", () => {
@@ -240,19 +338,19 @@
             });
 
             this.ui.tapBtn?.addEventListener("mousedown", () => this.handleTap());
+            this.ui.tapBtn?.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                this.handleTap();
+            });
         }
 
         handleTap() {
             const now = performance.now();
-            // Reset if tap was long ago (> 2s)
             if (this.tapTimes.length > 0 && now - this.tapTimes[this.tapTimes.length - 1] > 2000) {
                 this.tapTimes = [];
             }
-
             this.tapTimes.push(now);
-            if (this.tapTimes.length > 4) {
-                this.tapTimes.shift(); // Keep last 4 taps
-            }
+            if (this.tapTimes.length > 4) this.tapTimes.shift();
 
             if (this.tapTimes.length > 1) {
                 let intervals = 0;
@@ -264,7 +362,9 @@
                 this.setTempo(bpm);
             }
 
-            // Visual feedback for tap button
+            // Init audio on tap too just in case
+            this.initAudioContext();
+
             this.ui.tapBtn.classList.add("scale-95", "bg-cyan-100", "dark:bg-cyan-900");
             setTimeout(
                 () =>
@@ -291,7 +391,6 @@
             this.ui.beatDotsContainer.innerHTML = "";
             for (let i = 0; i < this.beatsPerBar; i++) {
                 const dot = document.createElement("div");
-                // Applied inline classes here for dynamically created elements
                 dot.className = `w-3 h-3 rounded-full bg-slate-200 dark:bg-slate-700 transition-colors duration-[50ms] beat-dot ${i === 0 ? "accent" : ""}`;
                 if (i === 0) {
                     dot.classList.add("w-4", "h-4");
@@ -302,24 +401,79 @@
             }
         }
 
-        toggle() {
-            this.isPlaying = !this.isPlaying;
-            if (this.isPlaying) {
-                if (!this.audioContext) {
+        initAudioContext() {
+            console.log(
+                `Metronome: initAudioContext called. Current ctx: ${this.audioContext ? "exists" : "null"}`
+            );
+            if (!this.audioContext) {
+                try {
                     this.audioContext = new (window.AudioContext ||
                         (window as any).webkitAudioContext)();
+                    console.log("Metronome: AudioContext created");
+
+                    // Create master gain to valid clipping/volume issues
+                    this.masterGainNode = this.audioContext.createGain();
+                    this.masterGainNode.gain.value = 1.0;
+                    this.masterGainNode.connect(this.audioContext.destination);
+                    console.log("Metronome: MasterGainNode connected");
+                } catch (e) {
+                    console.error("Metronome: Failed to create AudioContext", e);
+                    return;
                 }
+            }
+            if (this.audioContext) {
+                console.log(`Metronome: AudioContext state is '${this.audioContext.state}'`);
+                // Always try to resume on interaction, just in case
                 if (this.audioContext.state === "suspended") {
-                    this.audioContext.resume();
+                    console.log("Metronome: Attempting to resume AudioContext...");
+                    this.audioContext
+                        .resume()
+                        .then(() =>
+                            console.log(
+                                `Metronome: Resume promise resolved. New state: ${this.audioContext?.state}`
+                            )
+                        )
+                        .catch((e) => console.error("Metronome: AudioContext resume failed", e));
                 }
 
+                // MAGIC MOMENT: Play a silent buffer.
+                // This is the most reliable way to unlock AudioContext on iOS/Android
+                // We do this EVERY time init is called (on click/touch) to ensure it stays awake
+                try {
+                    const buffer = this.audioContext.createBuffer(1, 1, 22050);
+                    const source = this.audioContext.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(this.audioContext.destination);
+                    source.start(0);
+                    console.log("Metronome: Silent buffer played (Watchdog)");
+                } catch (e) {
+                    // console.error("Metronome: Silent buffer failed", e);
+                }
+            }
+        }
+
+        toggle() {
+            console.log("Metronome: Toggle called");
+            this.initAudioContext();
+
+            // Play unlock sound once on toggle start
+            if (!this.isPlaying) {
+                this.playSilentUnlock();
+            }
+
+            this.isPlaying = !this.isPlaying;
+            console.log(`Metronome: isPlaying set to ${this.isPlaying}`);
+
+            if (this.isPlaying) {
                 this.currentBeatInBar = 0;
-                this.nextNoteTime = this.audioContext.currentTime;
+                this.nextNoteTime = this.audioContext!.currentTime;
+                console.log(`Metronome: Starting playback. NextNoteTime: ${this.nextNoteTime}`);
+
                 this.timerWorker = new Worker(
                     URL.createObjectURL(
                         new Blob(
                             [
-                                "let timerID=null;let interval=25;self.onmessage=function(e){if(e.data=='start'){console.log('starting');timerID=setInterval(function(){postMessage('tick');},interval)}else if(e.data.interval){interval=e.data.interval;console.log('interval='+interval);if(timerID){clearInterval(timerID);timerID=setInterval(function(){postMessage('tick');},interval)}}else if(e.data=='stop'){console.log('stopping');clearInterval(timerID);timerID=null}};",
+                                "let timerID=null;let interval=25;self.onmessage=function(e){if(e.data=='start'){timerID=setInterval(function(){postMessage('tick');},interval)}else if(e.data.interval){interval=e.data.interval;if(timerID){clearInterval(timerID);timerID=setInterval(function(){postMessage('tick');},interval)}}else if(e.data=='stop'){clearInterval(timerID);timerID=null}};",
                             ],
                             { type: "text/javascript" }
                         )
@@ -328,13 +482,15 @@
 
                 this.timerWorker.onmessage = (e) => {
                     if (e.data == "tick") {
+                        // console.log("Metronome: Tick received from worker");
                         this.scheduler();
                     } else {
-                        console.log("message: " + e.data);
+                        console.log("Metronome: Worker message: " + e.data);
                     }
                 };
                 this.timerWorker.postMessage({ interval: this.lookahead });
                 this.timerWorker.postMessage("start");
+                console.log("Metronome: Worker started");
 
                 this.ui.iconPlay?.classList.add("hidden");
                 this.ui.iconStop?.classList.remove("hidden");
@@ -351,6 +507,7 @@
                     "dark:text-slate-900"
                 );
             } else {
+                console.log("Metronome: Stopping playback");
                 this.timerWorker?.postMessage("stop");
                 this.timerWorker?.terminate();
                 this.timerWorker = null;
@@ -373,6 +530,10 @@
         }
 
         scheduler() {
+            if (this.audioContext && this.audioContext.state === "suspended") {
+                console.warn("Metronome: Scheduler found suspended context. Resuming...");
+                this.audioContext.resume();
+            }
             while (
                 this.audioContext &&
                 this.nextNoteTime < this.audioContext.currentTime + this.scheduleAheadTime
@@ -384,24 +545,31 @@
 
         scheduleNote(beatNumber: number, time: number) {
             // Audio
-            const osc = this.audioContext!.createOscillator();
-            const envelope = this.audioContext!.createGain();
+            if (!this.audioContext) return;
+
+            console.log(`Metronome: Scheduling note for beat ${beatNumber} at time ${time}`);
+
+            const osc = this.audioContext.createOscillator();
+            const envelope = this.audioContext.createGain();
 
             const isAccent = beatNumber === 0;
 
+            // Revert to original Sine wave and pitch/duration
+            // osc.type is 'sine' by default
             osc.frequency.value = isAccent ? 1000 : 800;
-            envelope.gain.value = 1;
-            envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
+
+            envelope.gain.value = this.volume; // Apply volume state
+            envelope.gain.exponentialRampToValueAtTime(this.volume, time + 0.001);
             envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.02);
 
             osc.connect(envelope);
-            envelope.connect(this.audioContext!.destination);
+            envelope.connect(this.audioContext.destination);
 
             osc.start(time);
             osc.stop(time + 0.03);
 
-            // Visual Scheduling (draw using requestAnimationFrame/setTimeout for sync)
-            const delay = (time - this.audioContext!.currentTime) * 1000;
+            // Visual Sync
+            const delay = Math.max(0, (time - this.audioContext.currentTime) * 1000);
             setTimeout(() => {
                 this.animateBeat(beatNumber);
             }, delay);
