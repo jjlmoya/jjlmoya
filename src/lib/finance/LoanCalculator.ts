@@ -71,7 +71,7 @@ export class LoanCalculator {
             // Check if we are finishing the loan
             if ((principalPayment + currentExtra) > remainingBalance) {
                 // Adjust final payment
-                const totalNeeded = remainingBalance;
+                // const totalNeeded = remainingBalance;
                 // Priority: Pay interest first, then principal
                 // Actually, interest is calculated on start balance, so it's fixed for this month.
                 // We just reduce the principal payment to exactly clear the debt.

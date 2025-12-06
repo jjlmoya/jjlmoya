@@ -48,7 +48,7 @@ export class NeonGrappleGame {
     private loop() {
         if (!this.isRunning) return;
 
-        const now = performance.now();
+        // const now = performance.now();
         // const dt = (now - this.lastTime) / 1000; // Not using dt for physics yet, fixed step
 
         this.update();
