@@ -44,6 +44,14 @@ export const cookingSection: SectionData = {
             title: "Re-escalador de Recetas",
             description: "Regla de tres automática para adaptar ingredientes a más o menos comensales.",
             color: "#fbbf24"
+        },
+        {
+            href: "/utilidades/temporizador-cocina/",
+            iconBg: "mdi:clock-outline",
+            iconFg: "mdi:alarm-multiple",
+            title: "Temporizador Múltiple",
+            description: "Controla horno, fuego y reposo a la vez. Crea tantos temporizadores como necesites.",
+            color: "#f97316"
         }
     ]
 };

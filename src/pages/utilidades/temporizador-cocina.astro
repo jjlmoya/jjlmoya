@@ -1,0 +1,315 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import SingleTimer from "../../components/utilidades/kitchen-timer/SingleTimer.astro";
+import MobileTimerDock from "../../components/utilidades/kitchen-timer/MobileTimerDock.astro";
+import { Icon } from "astro-icon/components";
+
+const title = "Temporizador de Cocina Múltiple";
+const description =
+    "Gestiona múltiples tiempos de cocción simultáneamente. Alarmas independientes, ideal para chefs y organización en la cocina (Mise en Place).";
+
+// Updated defaults
+const timers = [
+    { defaultName: "Temporizador 1" },
+    { defaultName: "Temporizador 2" },
+    { defaultName: "Temporizador 3" },
+];
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/kitchen-timer.png"
+    category="Cocina"
+    gradientFrom="from-orange-100"
+>
+    <!-- Header -->
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Cocina"
+            titleBase="Temporizador de"
+            description="El asistente definitivo para tu cocina. Controla múltiples preparaciones simultáneas. Añade tantos temporizadores como necesites."
+            gradientFrom="from-orange-500"
+            gradientTo="to-amber-600"
+            reverse={true}
+        />
+    </div>
+
+    <!-- Timers Area -->
+    <div class="max-w-7xl mx-auto mb-16">
+        <!-- Grid -->
+        <div
+            id="timers-grid"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 transition-all"
+        >
+            {
+                timers.map((timer, index) => (
+                    <SingleTimer index={index} defaultName={timer.defaultName} />
+                ))
+            }
+        </div>
+
+        <!-- Add Button -->
+        <div class="flex justify-center">
+            <button
+                id="add-timer-btn"
+                class="group flex flex-col items-center gap-3 p-6 rounded-3xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-orange-500 dark:hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-all text-slate-400 hover:text-orange-500"
+            >
+                <div
+                    class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-orange-100 dark:group-hover:bg-orange-900/30 flex items-center justify-center transition-colors"
+                >
+                    <Icon name="mdi:plus" class="w-6 h-6" />
+                </div>
+                <span class="font-medium">Añadir Temporizador</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Dock -->
+    <MobileTimerDock />
+
+    <!-- Global Controls -->
+    <div class="flex justify-center gap-4 mb-24 sticky bottom-6 z-50 pointer-events-none">
+        <button
+            id="stop-all"
+            class="pointer-events-auto px-8 py-4 rounded-full bg-red-600 text-white font-bold shadow-xl hover:bg-red-700 transition-all hover:scale-105 active:scale-95 flex items-center gap-2 ring-4 ring-white dark:ring-slate-900"
+        >
+            <Icon name="mdi:stop-circle-outline" class="w-6 h-6" />
+            Detener Todas
+        </button>
+    </div>
+
+    <!-- Hidden Template for JS cloning -->
+    <template id="timer-template">
+        <SingleTimer index={-1} defaultName="Nuevo Temporizador" />
+    </template>
+
+    <!-- SEO Content -->
+    <div slot="seo">
+        <div
+            class="p-8 md:p-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800"
+        >
+            <h2 class="text-3xl md:text-4xl font-black mb-8 text-slate-900 dark:text-white">
+                Maestría Temporal en la Cocina
+            </h2>
+            <div
+                class="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-400"
+            >
+                <p>
+                    La cocina profesional no se base solo en recetas, sino en la <strong
+                        >gestión precisa del tiempo</strong
+                    >. El concepto francés <em>"Mise en Place"</em> (todo en su lugar) incluye el tiempo
+                    como un ingrediente más. Un filete que reposa 5 minutos redistribuye sus jugos y
+                    se vuelve tierno; uno que no reposa, los pierde al primer corte.
+                </p>
+                <p>
+                    Esta herramienta de <strong>Temporizador Múltiple</strong> ha sido diseñada para
+                    chefs caseros y profesionales que necesitan orquestar una sinfonía de platos: la
+                    pasta hirviendo, el asado en el horno, y la reducción de salsa, todo ocurriendo simultáneamente.
+                </p>
+
+                <h3
+                    class="text-2xl font-bold mt-12 mb-6 text-slate-900 dark:text-white flex items-center gap-3"
+                >
+                    <Icon name="mdi:fire" class="text-orange-500" />
+                    El Papel de la Temperatura y el Tiempo
+                </h3>
+                <p>
+                    Cocinar es esencialmente aplicar calor durante un tiempo determinado para
+                    transformar la estructura química de los alimentos. La desnaturalización de las
+                    proteínas y la reacción de Maillard (que da el color dorado y sabor) dependen
+                    críticamente del cronómetro.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8 my-8 not-prose">
+                    <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl">
+                        <h4
+                            class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2"
+                        >
+                            <Icon name="mdi:egg-fried" class="text-yellow-500" />
+                            Huevos (Tiempos Precisos)
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li
+                                class="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2"
+                            >
+                                <span>Pasados por agua (Yema líquida)</span>
+                                <span class="font-mono font-bold text-orange-600">3-4 min</span>
+                            </li>
+                            <li
+                                class="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2"
+                            >
+                                <span>Mollet (Yema densa)</span>
+                                <span class="font-mono font-bold text-orange-600">5-6 min</span>
+                            </li>
+                            <li
+                                class="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2"
+                            >
+                                <span>Duro (Cuajado total)</span>
+                                <span class="font-mono font-bold text-orange-600">9-11 min</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl">
+                        <h4
+                            class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2"
+                        >
+                            <Icon name="mdi:food-steak" class="text-red-500" />
+                            Carnes y Reposo
+                        </h4>
+                        <ul class="space-y-2 text-sm">
+                            <li
+                                class="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2"
+                            >
+                                <span>Sellado (Alta temperatura)</span>
+                                <span class="font-mono font-bold text-orange-600">1-2 min/lado</span
+                                >
+                            </li>
+                            <li
+                                class="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2"
+                            >
+                                <span>Reposo (Filete fino)</span>
+                                <span class="font-mono font-bold text-orange-600">5 min</span>
+                            </li>
+                            <li
+                                class="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2"
+                            >
+                                <span>Reposo (Pieza asada >1kg)</span>
+                                <span class="font-mono font-bold text-orange-600">15-20 min</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold mt-12 mb-6 text-slate-900 dark:text-white">
+                    Seguridad Alimentaria: La Zona de Peligro
+                </h3>
+                <p>
+                    El tiempo no solo afecta la calidad, sino la seguridad. La "Zona de Peligro"
+                    bacteriana se sitúa entre los 5°C y los 65°C. Los alimentos cocinados no deben
+                    permanecer en este rango por más de <strong>2 horas</strong> (o 1 hora si la temperatura
+                    ambiente supera los 30°C). Usa un temporizador para controlar el enfriamiento antes
+                    de guardar la comida en la nevera.
+                </p>
+
+                <h3 class="text-2xl font-bold mt-12 mb-6 text-slate-900 dark:text-white">
+                    Consejos Profesionales de Organización
+                </h3>
+                <ul class="list-none space-y-4 pl-0">
+                    <li class="flex items-start gap-4">
+                        <div
+                            class="min-w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-sm"
+                        >
+                            1
+                        </div>
+                        <div>
+                            <strong class="block text-slate-900 dark:text-white mb-1"
+                                >Escalona los tiempos de finalización</strong
+                            >
+                            <p class="mt-0">
+                                Si todo termina a la vez, te agobiarás emplatando. Intenta que los
+                                acompañamientos estén listos 5 minutos antes que el plato principal.
+                            </p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div
+                            class="min-w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-sm"
+                        >
+                            2
+                        </div>
+                        <div>
+                            <strong class="block text-slate-900 dark:text-white mb-1"
+                                >Usa el calor residual</strong
+                            >
+                            <p class="mt-0">
+                                Apaga el fuego de las verduras o pastas 1-2 minutos antes de que el
+                                temporizador suene. El calor residual terminará la cocción
+                                suavemente.
+                            </p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div
+                            class="min-w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-sm"
+                        >
+                            3
+                        </div>
+                        <div>
+                            <strong class="block text-slate-900 dark:text-white mb-1"
+                                >Nombra tus temporizadores</strong
+                            >
+                            <p class="mt-0">
+                                En una cocina ajetreada es fácil olvidar qué alarma es cual. Usa la
+                                función de renombrado de esta herramienta para etiquetar "Horno",
+                                "Arroz" o "Salsa".
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</LayoutUtility>
+
+<script>
+    import { KitchenTimer } from "../../lib/utilidades/kitchen-timer/KitchenTimer";
+    import { DockManager } from "../../lib/utilidades/kitchen-timer/DockManager";
+
+    // --- Global Logic ---
+    const timersGrid = document.getElementById("timers-grid");
+    const timerTemplate = document.getElementById("timer-template") as HTMLTemplateElement;
+    const activeTimers: KitchenTimer[] = [];
+
+    // Init Dock Manager
+    const dockManager = new DockManager("mobile-dock", "mobile-dock-container");
+
+    function initTimer(element: HTMLElement) {
+        const timer = new KitchenTimer(element);
+        activeTimers.push(timer);
+        dockManager.registerTimer(timer);
+        return timer;
+    }
+
+    // Initialize existing
+    document.querySelectorAll(".timer-card").forEach((card) => {
+        initTimer(card as HTMLElement);
+    });
+
+    // Add Timer Logic
+    document.getElementById("add-timer-btn")?.addEventListener("click", () => {
+        if (!timerTemplate || !timersGrid) return;
+
+        // Clone template
+        const clone = timerTemplate.content.cloneNode(true) as DocumentFragment;
+        const newCard = clone.querySelector(".timer-card") as HTMLElement;
+
+        // Update index/name if needed (optional visual polish)
+        const count = activeTimers.length + 1;
+        newCard.setAttribute("data-index", count.toString());
+        const nameInput = newCard.querySelector(".timer-name") as HTMLInputElement;
+        if (nameInput) nameInput.value = `Temporizador ${count}`;
+
+        // Append
+        timersGrid.appendChild(newCard);
+
+        // Init logic
+        initTimer(newCard);
+
+        // Scroll to it
+        newCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    // Stop All
+    document.getElementById("stop-all")?.addEventListener("click", () => {
+        activeTimers.forEach((t) => t.pause());
+    });
+
+    // Permission
+    if ("Notification" in window) {
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+    }
+</script>
