@@ -20,6 +20,14 @@ export const filesSection: SectionData = {
             title: "Format Stripper",
             description: "Limpia texto basura, elimina formatos ocultos y normaliza espacios.",
             color: "#10b981"
+        },
+        {
+            href: "/utilidades/contador-caracteres/",
+            iconBg: "mdi:text-box-search-outline",
+            iconFg: "mdi:chart-bar",
+            title: "Contador de Caracteres",
+            description: "Cuentapalabras y caracteres visual. Analiza tiempos de lectura y voz.",
+            color: "#6366f1"
         }
     ]
 };

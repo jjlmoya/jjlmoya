@@ -36,6 +36,14 @@ export const cookingSection: SectionData = {
             title: "Escalador de Moldes",
             description: "Adapta recetas a cualquier molde. Calcula el factor multiplicador exacto.",
             color: "#f43f5e"
+        },
+        {
+            href: "/utilidades/reescalador-ingredientes/",
+            iconBg: "mdi:scale",
+            iconFg: "mdi:calculator",
+            title: "Re-escalador de Recetas",
+            description: "Regla de tres automática para adaptar ingredientes a más o menos comensales.",
+            color: "#fbbf24"
         }
     ]
 };

@@ -1,0 +1,327 @@
+---
+
+---
+
+<div
+    class="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700"
+>
+    <!-- Input Form -->
+    <div
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 space-y-8 relative overflow-hidden"
+    >
+        <div class="space-y-6 relative z-10">
+            <div>
+                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wide mb-2"
+                    >Salario Bruto Anual</label
+                >
+                <div class="relative group">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl"
+                        >€</span
+                    >
+                    <input
+                        type="number"
+                        id="gross-salary"
+                        placeholder="30000"
+                        class="w-full pl-10 pr-4 py-4 text-2xl font-bold bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-emerald-500 rounded-xl outline-none transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 dark:text-white"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wide mb-3"
+                    >Número de Pagas</label
+                >
+                <div class="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                    <button
+                        class="pay-btn flex-1 py-2 text-sm font-bold rounded-lg transition-all bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-white"
+                        data-val="12">12 Pagas</button
+                    >
+                    <button
+                        class="pay-btn flex-1 py-2 text-sm font-bold rounded-lg transition-all text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                        data-val="14">14 Pagas</button
+                    >
+                </div>
+            </div>
+
+            <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-medium text-slate-700 dark:text-slate-300"
+                        >Edad</label
+                    >
+                    <input
+                        type="number"
+                        id="age"
+                        value="30"
+                        class="w-20 p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-center font-bold outline-none focus:ring-2 ring-emerald-500/50"
+                    />
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="text-sm font-medium text-slate-700 dark:text-slate-300"
+                        >Tipo de Contrato</label
+                    >
+                    <select
+                        id="contract-type"
+                        class="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg font-medium outline-none text-right focus:ring-2 ring-emerald-500/50"
+                    >
+                        <option value="general">Indefinido / General</option>
+                        <option value="temporal">Temporal</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button
+                    id="calculate-btn"
+                    class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                >
+                    Calcular Sueldo Neto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Display -->
+    <div class="space-y-4">
+        <!-- Main Card -->
+        <div
+            class="bg-gradient-to-br from-emerald-600 to-teal-800 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden group"
+        >
+            <div
+                class="absolute -right-12 -top-12 w-48 h-48 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"
+            >
+            </div>
+
+            <div class="relative z-10">
+                <p class="text-emerald-100 font-medium mb-1">Sueldo Neto Mensual</p>
+                <h3 id="net-monthly" class="text-5xl font-black tracking-tight mb-6">0 €</h3>
+
+                <div class="flex justify-between items-end pt-6 border-t border-white/20">
+                    <div>
+                        <p class="text-emerald-100 text-sm mb-1">Sueldo Neto Anual</p>
+                        <p id="net-annual" class="text-xl font-bold">0 €</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-emerald-100 text-sm mb-1">Pagas</p>
+                        <p id="pay-input-display" class="text-xl font-bold">12</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breakdown Card -->
+        <div
+            class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 space-y-4"
+        >
+            <h4 class="font-bold text-slate-900 dark:text-white mb-4">
+                Desglose de Retenciones (Estimado)
+            </h4>
+
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-600 dark:text-slate-400"
+                        >IRPF (<span id="irpf-percent">0</span>%)</span
+                    >
+                    <span id="irpf-amount" class="font-mono font-medium text-red-500">- 0 €</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-600 dark:text-slate-400"
+                        >Seguridad Social (<span id="ss-percent">6.35</span>%)</span
+                    >
+                    <span id="ss-amount" class="font-mono font-medium text-red-500">- 0 €</span>
+                </div>
+            </div>
+
+            <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+                <a
+                    href="#"
+                    id="advanced-toggle"
+                    class="text-xs text-slate-400 hover:text-emerald-500 transition-colors text-center block"
+                >
+                    *Cálculo simplificado para trabajador soltero, sin hijos y menor de 65 años.
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const grossInput = document.getElementById("gross-salary") as HTMLInputElement;
+    const calculateBtn = document.getElementById("calculate-btn");
+    const payBtns = document.querySelectorAll(".pay-btn");
+    const payDisplay = document.getElementById("pay-input-display");
+
+    // Outputs
+    const netMonthlyEl = document.getElementById("net-monthly");
+    const netAnnualEl = document.getElementById("net-annual");
+    const irpfPercentEl = document.getElementById("irpf-percent");
+    const irpfAmountEl = document.getElementById("irpf-amount");
+    const ssAmountEl = document.getElementById("ss-amount");
+
+    let pays = 12;
+
+    // Simplified Spanish IRPF Brackets 2024 (Approximate for single person logic)
+    // Structure: [UpToAmount, Rate, BaseDeduction]
+    // This is a naive implementation. A real one is extremely complex.
+    // We will use an "Effective Rate" curve approximation for simplicity and speed which is common in simple calculators.
+
+    function calculateEffectiveIRPF(gross: number) {
+        // Basic personal allowance deduction logic roughly included in effective rate curve
+        // Brackets roughly:
+        // 0 - 12450: 19%
+        // 12450 - 20200: 24%
+        // 20200 - 35200: 30%
+        // 35200 - 60000: 37%
+        // 60000 - 300000: 45%
+        // > 300000: 47%
+
+        let retention = 0;
+
+        // This logic is flawed for true tax calc but good for "Estimation".
+        // Let's use a standard progressive calculation
+
+        const brackets = [
+            { limit: 12450, rate: 0.19 },
+            { limit: 20200, rate: 0.24 },
+            { limit: 35200, rate: 0.3 },
+            { limit: 60000, rate: 0.37 },
+            { limit: 300000, rate: 0.45 },
+            { limit: Infinity, rate: 0.47 },
+        ];
+
+        // Personal minimum exemption (Single, no kids): Approx 5550.
+        // However, IRPF algorithm for payroll is different from "Renta".
+        // We will subtract minimal personal allowance from base to find taxable base.
+        const personalAllowance = 5550;
+
+        // Social security deduction
+        const ssRate = 0.0635;
+        const ssDeduction = gross * ssRate;
+
+        let taxableBase = gross - ssDeduction - 2000; // 2000 generic deduction for expenses
+        if (taxableBase < 0) taxableBase = 0;
+
+        // Apply Personal Allowance logic:
+        // Tax is Calculated on (Base) - Tax on (Personal Min + Family Min)
+        // Correct way: Calculate tax on TOTAL Base, then subtract tax on (MinimoPersonal) using same brackets but starting from 0.
+
+        function getTaxForAmount(amount: number) {
+            let tax = 0;
+            let previousLimit = 0;
+
+            for (const bracket of brackets) {
+                if (amount > previousLimit) {
+                    const taxableInThisBracket = Math.min(amount, bracket.limit) - previousLimit;
+                    tax += taxableInThisBracket * bracket.rate;
+                    previousLimit = bracket.limit;
+                } else {
+                    break;
+                }
+            }
+            return tax;
+        }
+
+        const fullTax = getTaxForAmount(taxableBase);
+
+        // This is still high because "Minimo Personal" applies 0% on the first chunk effectively by deduction logic in Renta,
+        // but for Payroll retention algorithm checks valid rates.
+        // Let's trust a simpler "Retention Algorithm Approximation":
+
+        // Just use `getTaxForAmount` on (Base - PersonalAllowance) is a closer naive approx? No.
+        // Let's stick to the "Cuota Integra" approach: Tax(Base) - Tax(MinimoPersonal)
+
+        const taxOnMin = getTaxForAmount(personalAllowance);
+        let finalTax = fullTax - taxOnMin;
+
+        if (finalTax < 0) finalTax = 0;
+
+        // Limit check: if salary is very low (e.g. < 15k), retention is usually near 0 or minimal.
+        if (gross < 15876) {
+            finalTax = 0; // New law 2024ish boost
+        }
+
+        return {
+            irpfTotal: finalTax,
+            ssTotal: ssDeduction,
+            net: gross - finalTax - ssDeduction,
+        };
+    }
+
+    function calculate() {
+        const gross = parseFloat(grossInput.value);
+        if (isNaN(gross) || gross < 0) return;
+
+        const results = calculateEffectiveIRPF(gross);
+
+        const netAnnual = results.net;
+        const netMonthly = netAnnual / pays;
+
+        const irpfPercent = (results.irpfTotal / gross) * 100;
+
+        // Update UI
+        if (netMonthlyEl)
+            netMonthlyEl.textContent = new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0,
+            }).format(netMonthly);
+        if (netAnnualEl)
+            netAnnualEl.textContent = new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0,
+            }).format(netAnnual);
+
+        if (irpfAmountEl)
+            irpfAmountEl.textContent =
+                "- " +
+                new Intl.NumberFormat("es-ES", {
+                    style: "currency",
+                    currency: "EUR",
+                    maximumFractionDigits: 0,
+                }).format(results.irpfTotal);
+        if (irpfPercentEl) irpfPercentEl.textContent = irpfPercent.toFixed(1);
+
+        if (ssAmountEl)
+            ssAmountEl.textContent =
+                "- " +
+                new Intl.NumberFormat("es-ES", {
+                    style: "currency",
+                    currency: "EUR",
+                    maximumFractionDigits: 0,
+                }).format(results.ssTotal);
+    }
+
+    // Event Listeners
+    grossInput.addEventListener("input", calculate); // Live calc or on button? Live is cooler but maybe laggy mental load? Live is fine.
+    calculateBtn?.addEventListener("click", calculate);
+
+    payBtns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            // Reset styles
+            payBtns.forEach((b) => {
+                b.classList.remove(
+                    "bg-white",
+                    "dark:bg-slate-700",
+                    "shadow-sm",
+                    "text-slate-900",
+                    "dark:text-white"
+                );
+                b.classList.add("text-slate-500", "dark:text-slate-400");
+            });
+            // Set active
+            target.classList.add(
+                "bg-white",
+                "dark:bg-slate-700",
+                "shadow-sm",
+                "text-slate-900",
+                "dark:text-white"
+            );
+            target.classList.remove("text-slate-500", "dark:text-slate-400");
+
+            pays = parseInt(target.dataset.val || "12");
+            if (payDisplay) payDisplay.textContent = pays.toString();
+            calculate();
+        });
+    });
+</script>

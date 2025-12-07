@@ -20,6 +20,14 @@ export const toolsSection: SectionData = {
             title: "Regla de Tres",
             description: "Calculadora rápida para resolver proporciones y escalas.",
             color: "#8b5cf6"
+        },
+        {
+            href: "/utilidades/generador-contrasenas/",
+            iconBg: "mdi:shield-lock-outline",
+            iconFg: "mdi:password",
+            title: "Generador de Contraseñas",
+            description: "Crea claves seguras y aleatorias imposibles de hackear. Ciberseguridad básica.",
+            color: "#10b981"
         }
     ]
 };

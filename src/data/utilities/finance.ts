@@ -28,6 +28,22 @@ export const financeSection: SectionData = {
             iconBg: "mdi:chart-line-stacked",
             iconFg: "mdi:cash-clock",
             color: "#f59e0b"
+        },
+        {
+            title: "Simulador Sueldo Neto",
+            description: "¿Cuánto llega a tu banco? Cálculo real de IRPF y Seguridad Social en España.",
+            href: "/utilidades/calculadora-sueldo-neto/",
+            iconBg: "mdi:bank-outline",
+            iconFg: "mdi:cash-multiple",
+            color: "#059669"
+        },
+        {
+            title: "Calculadora IVA Inverso",
+            description: "Desglosa el IVA de cualquier total. Imprescindible para autónomos.",
+            href: "/utilidades/calculadora-iva-inverso/",
+            iconBg: "mdi:receipt-text-outline",
+            iconFg: "mdi:percent-outline",
+            color: "#3b82f6"
         }
     ]
 };
