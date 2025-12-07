@@ -21,10 +21,44 @@ It must contain at least two files:
 2.  **`SuperCalculatorSEO.astro`**: A semantic HTML section that appears *below* the tool. It should explain the concepts, math, or methodology in depth for SEO purposes.
 
 ### B. The Page (`src/pages/utilidades/super-calculator.astro`)
-This is the entry point. It wraps your components in the main Layout.
-*   It must import `BackToUtilities`.
-*   It must use unique Title and Meta Description.
-*   It must reference a custom OG Image.
+This is the entry point. It must use **`LayoutUtility`**.
+
+```astro
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import SuperCalculator from "../../components/utilidades/super-calculator/SuperCalculator.astro";
+import SuperCalculatorSEO from "../../components/utilidades/super-calculator/SuperCalculatorSEO.astro";
+---
+
+<LayoutUtility
+    title="Extended Title for SEO"
+    description="Short description"
+    image="/images/utilities/my-tool.webp"
+    category="Category Name"
+    gradientFrom="from-color-100"
+>
+    <!-- 1. Header Slot using Standard Component -->
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Highlight World"
+            titleBase="Base Word"
+            description="Punchy, 2-line description that sits under the title."
+            gradientFrom="from-color-500"
+            gradientTo="to-color-600"
+            reverse={false} <!-- Optional: swaps order of highlight/base -->
+        />
+    </div>
+
+    <!-- 2. The Tool -->
+    <SuperCalculator />
+
+    <!-- 3. SEO Content Slot -->
+    <div slot="seo">
+        <SuperCalculatorSEO />
+    </div>
+</LayoutUtility>
+```
 
 ### C. The Configuration (`src/data/utilities/`)
 You must register the new tool in the appropriate category file (e.g., `files.ts`, `finance.ts`, `tools.ts`).
@@ -55,6 +89,7 @@ You must register the new tool in the appropriate category file (e.g., `files.ts
 ## 5. Development Checklist
 - [ ] Logic works completely offline (client-side JS).
 - [ ] "Wow" factor achieved (animations, gradients).
+- [ ] **Uses `LayoutUtility` and `UtilityHeader` components.**
 - [ ] SEO Component written in rich Spanish.
 - [ ] Added to `src/data/utilities`.
 - [ ] OG Image added and linked.
