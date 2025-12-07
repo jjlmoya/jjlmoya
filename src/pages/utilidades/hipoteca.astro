@@ -1,42 +1,39 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import LoanSimulator from "../../components/utilidades/finance/LoanSimulator.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
 ---
 
-<Layout
+<LayoutUtility
     title="Simulador de Hipoteca 2025 | Calcula tu Cuota y Tabla de Amortización"
     description="Calculadora de préstamos precisa (Sistema Francés). Descubre cuánto pagarás de cuota mensual y cuántos intereses puedes ahorrarte amortizando anticipadamente."
     image="/images/utilities/hipoteca.webp"
+    category="Finanzas"
+    gradientFrom="from-indigo-100"
 >
-    <!-- Background Gradient -->
-    <div class="fixed inset-0 bg-slate-50 dark:bg-slate-950 -z-20"></div>
-    <div
-        class="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-100/50 via-transparent to-transparent dark:from-indigo-900/20 dark:via-transparent dark:to-transparent -z-10"
-    >
+    <!-- Custom Header -->
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Bajo Control"
+            titleBase="Tu Hipoteca"
+            description="Antes de firmar nada con el banco, haz los números. Entiende exactamente cuánto vas a pagar mes a mes y descubre el coste real de los intereses en el sistema de pago español (Francés)."
+            gradientFrom="from-indigo-500"
+            gradientTo="to-violet-600"
+            reverse={true}
+        />
     </div>
 
-    <main class="container mx-auto px-4 py-20 max-w-6xl space-y-16">
-        <!-- Header -->
-        <div class="text-center space-y-6">
-            <h1
-                class="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter"
-            >
-                Tu Hipoteca <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-violet-600"
-                    >Bajo Control</span
-                >
-            </h1>
-            <p class="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
-                Antes de firmar nada con el banco, haz los números. Entiende exactamente cuánto vas
-                a pagar mes a mes y descubre el coste real de los intereses en el sistema de pago
-                español (Francés).
-            </p>
-        </div>
+    <!-- Tool -->
+    <LoanSimulator />
 
-        <LoanSimulator />
-
-        <!-- Educational Content -->
-        <div class="grid md:grid-cols-2 gap-12">
+    <!-- Educational Content (SEO) -->
+    <div slot="seo">
+        <!-- Wrap in not-prose if we want to keep custom grid styling exactly as is, OR adapt to prose.
+             The LayoutUtility enforces 'prose' on this slot. To break out or use custom grid cleanly,
+             we can use 'not-prose' class from Tailwind Typography if available, or just standard divs.
+             The slot width is max-w-3xl.
+        -->
+        <div class="grid md:grid-cols-2 gap-8 not-prose">
             <article
                 class="bg-white dark:bg-slate-900/50 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm"
             >
@@ -113,5 +110,5 @@ import LoanSimulator from "../../components/utilidades/finance/LoanSimulator.ast
                 </div>
             </div>
         </div>
-    </main>
-</Layout>
+    </div>
+</LayoutUtility>

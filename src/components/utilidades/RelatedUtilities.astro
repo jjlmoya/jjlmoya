@@ -1,0 +1,33 @@
+---
+import { sections } from "../../data/utilities";
+import CardUtility from "./CardUtility.astro";
+
+interface Props {
+    category: string;
+    currentPath: string;
+}
+
+const { category, currentPath } = Astro.props;
+
+// Find the section for the given category
+const section = sections.find((s) => s.title === category);
+
+// Get related utilities, excluding the current one
+const relatedUtilities = section ? section.utilities.filter((u) => u.href !== currentPath) : [];
+---
+
+{
+    relatedUtilities.length > 0 && (
+        <section class="mt-24 border-t border-slate-200 dark:border-slate-800 pt-16">
+            <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-8">
+                Más utilidades de{" "}
+                <span class="text-indigo-600 dark:text-indigo-400">{category}</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedUtilities.map((u) => (
+                    <CardUtility {...u} />
+                ))}
+            </div>
+        </section>
+    )
+}

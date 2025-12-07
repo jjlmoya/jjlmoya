@@ -1,0 +1,67 @@
+---
+import Layout from "./Layout.astro";
+import BackToUtilities from "../components/ui/BackToUtilities.astro";
+import RelatedUtilities from "../components/utilidades/RelatedUtilities.astro";
+
+interface Props {
+    title: string;
+    description: string;
+    image?: string;
+    category: string;
+    gradientFrom?: string;
+    gradientTo?: string;
+}
+
+const {
+    title,
+    description,
+    image,
+    category,
+    gradientFrom = "from-slate-100",
+    gradientTo = "to-white",
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<Layout title={title} description={description} image={image}>
+    <div class="relative min-h-screen pt-16 px-4 pb-20 overflow-x-hidden">
+        <!-- Background -->
+        <div
+            class={`absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${gradientFrom} via-white ${gradientTo} dark:from-slate-900/40 dark:via-zinc-950 dark:to-black -z-10`}
+        >
+        </div>
+
+        <div class="max-w-6xl mx-auto">
+            <!-- Header -->
+            <div class="mb-12 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                <BackToUtilities class="mb-8" />
+                <slot name="header">
+                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6">
+                        {title}
+                    </h1>
+                    <p
+                        class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-light"
+                    >
+                        {description}
+                    </p>
+                </slot>
+            </div>
+
+            <!-- Tool Space -->
+            <div class="mb-16">
+                <slot />
+            </div>
+
+            <!-- Text SEO Space -->
+            <div
+                class="prose prose-lg dark:prose-invert mx-auto mb-20 prose-headings:font-bold prose-a:text-indigo-600 dark:prose-a:text-indigo-400"
+            >
+                <slot name="seo" />
+            </div>
+
+            <!-- Related Utilities Space -->
+            <RelatedUtilities category={category} currentPath={currentPath} />
+        </div>
+    </div>
+</Layout>

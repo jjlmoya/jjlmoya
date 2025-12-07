@@ -1,0 +1,50 @@
+---
+interface Props {
+    titleHighlight: string;
+    titleBase: string;
+    description: string;
+    gradientFrom?: string;
+    gradientTo?: string;
+    reverse?: boolean;
+}
+
+const {
+    titleHighlight,
+    titleBase,
+    description,
+    gradientFrom = "from-emerald-500",
+    gradientTo = "to-teal-600",
+    reverse = false,
+} = Astro.props;
+---
+
+<div class="text-center mb-16">
+    <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6 break-words hyphens-auto">
+        {
+            reverse ? (
+                <>
+                    <span class="text-slate-900 dark:text-white mr-3">{titleBase}</span>
+                    <span
+                        class={`text-transparent bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo} px-2`}
+                    >
+                        {titleHighlight}
+                    </span>
+                </>
+            ) : (
+                <>
+                    <span
+                        class={`text-transparent bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo} mr-3`}
+                    >
+                        {titleHighlight}
+                    </span>
+                    <span class="text-slate-900 dark:text-white">{titleBase}</span>
+                </>
+            )
+        }
+    </h1>
+    <p
+        class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-light leading-relaxed"
+    >
+        {description}
+    </p>
+</div>

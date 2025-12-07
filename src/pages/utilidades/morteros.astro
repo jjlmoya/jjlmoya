@@ -1,35 +1,40 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
 
 import VitruvianColumn from "../../components/utilidades/morteros/VitruvianColumn.astro";
 import MaterialControls from "../../components/utilidades/morteros/MaterialControls.astro";
 import LivingWall from "../../components/utilidades/morteros/LivingWall.astro";
 import GranulometrySection from "../../components/utilidades/morteros/GranulometrySection.astro";
 import EducationalSection from "../../components/utilidades/morteros/EducationalSection.astro";
-import BackToUtilities from "../../components/ui/BackToUtilities.astro";
 import "../../styles/morteros.css";
 ---
 
-<Layout
+<LayoutUtility
     title="Proporciones Morteros de Cal Tradicionales: Enfoscados y Revocos"
     description="Calculadora gratuita para morteros de cal y arena. Obtén las proporciones exactas para enfoscados, revocos y enlucidos según métodos tradicionales (Vitruvio)"
     image="/images/utilities/morteros.webp"
+    category="Hogar"
+    gradientFrom="from-purple-100"
 >
-    <div class="vitruvian-container">
-        <!-- Background -->
+    <!-- Custom Header -->
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Vitruvio"
+            titleBase="La Calculadora"
+            description="El arte de la proporción según el Libro VII. Descubre cuánto muro puedes restaurar con los materiales que tienes."
+            gradientFrom="from-amber-600"
+            gradientTo="to-stone-600"
+            reverse={true}
+        />
+    </div>
+
+    <!-- Tool -->
+    <div class="vitruvian-container relative">
+        <!-- Background preserved but positioned absolutely or fixed inside this container if needed, or let LayoutUtility handle bg -->
+        <!-- Keeping vitruvian-bg just in case it has specific styles (texture) -->
         <div class="vitruvian-bg"></div>
 
-        <!-- Header -->
-        <div class="vitruvian-header">
-            <BackToUtilities class="mb-6 py-10" />
-            <h1 class="vitruvian-title">La Calculadora Vitruvio</h1>
-            <p class="vitruvian-subtitle">
-                El arte de la proporción según el Libro VII. Descubre cuánto muro puedes restaurar
-                con los materiales que tienes.
-            </p>
-        </div>
-
-        <!-- Main Three-Panel Layout -->
         <div class="vitruvian-canvas">
             <!-- LEFT PANEL: Roman Column Selector -->
             <VitruvianColumn />
@@ -40,33 +45,33 @@ import "../../styles/morteros.css";
             <!-- RIGHT PANEL: The Living Wall -->
             <LivingWall />
         </div>
-
-        <!-- GRANULOMETRY INFORMATION SECTION -->
-        <GranulometrySection />
-
-        <!-- EDUCATIONAL SECTION: Vitruvius and Mortar Science -->
-        <EducationalSection />
     </div>
 
-    <script>
-        import { MortarController } from "../../lib/morteros/MortarController";
+    <!-- SEO -->
+    <div slot="seo">
+        <GranulometrySection />
+        <EducationalSection />
+    </div>
+</LayoutUtility>
 
-        // Initialize controller
-        function init() {
-            console.log("Initializing MortarController...");
-            try {
-                new MortarController();
-                console.log("MortarController initialized successfully.");
-            } catch (e) {
-                console.error("Error initializing MortarController:", e);
-            }
-        }
+<script>
+    import { MortarController } from "../../lib/morteros/MortarController";
 
-        // Support both standard load and View Transitions (if added later)
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", init);
-        } else {
-            init();
+    // Initialize controller
+    function init() {
+        console.log("Initializing MortarController...");
+        try {
+            new MortarController();
+            console.log("MortarController initialized successfully.");
+        } catch (e) {
+            console.error("Error initializing MortarController:", e);
         }
-    </script>
-</Layout>
+    }
+
+    // Support both standard load and View Transitions (if added later)
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+</script>
