@@ -80,15 +80,17 @@ export class MobileBracketRenderer {
         const p1 = match.player1;
         const p2 = match.player2;
         const winnerId = match.winner?.id;
-        const isBye = match.isBye;
         const hasWinner = !!winnerId;
 
-        if (isBye) {
+        const isDefinitiveBye = match.isBye || (match.winner && !p1) || (match.winner && !p2);
+
+        if (isDefinitiveBye) {
+            const player = p1 || p2;
             return `
              <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative w-full flex flex-col justify-center py-3 px-4">
                 <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-400"></div>
                  <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1">Pase Directo</span>
-                 <div class="font-bold text-slate-800 text-base truncate">${p1?.name}</div>
+                 <div class="font-bold text-slate-800 text-base truncate">${player?.name || 'Esperando...'}</div>
              </div>
              `;
         }

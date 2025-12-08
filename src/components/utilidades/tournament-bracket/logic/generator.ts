@@ -5,38 +5,35 @@ export class BracketGenerator {
         const playerCount = players.length;
         if (playerCount < 2) return [];
 
-        // 1. Calculate dimensions
         const roundsCount = Math.ceil(Math.log2(playerCount));
         const bracketSize = Math.pow(2, roundsCount);
-        const matchesCount = bracketSize / 2;
+        const firstRoundMatches = bracketSize / 2;
         const byesCount = bracketSize - playerCount;
 
         const rounds: Round[] = [];
 
-        // 2. Create Round 0 (Sequential and Sparse)
         const round0Matches: Match[] = [];
 
-        // We only create matches that strictly have at least one player
-        // But we must respect the grid alignment (matchIndex)
-        // For 5 players: A,B, C,D, E.
-        // M0: A,B. M1: C,D. M2: E.
-        // We need M0, M1, M2.
+        for (let m = 0; m < firstRoundMatches; m++) {
+            const p1Index = m * 2;
+            const p2Index = m * 2 + 1;
 
-        // We iterate players pair by pair
-        for (let i = 0; i < playerCount; i += 2) {
-            const matchIndex = i / 2;
-            const p1 = players[i];
-            const p2 = players[i + 1] || null;
+            const p1 = p1Index < playerCount ? players[p1Index] : null;
+            const p2 = p2Index < playerCount ? players[p2Index] : null;
+
+            if (!p1 && !p2) {
+                continue;
+            }
 
             const match: Match = {
-                id: `r0-m${matchIndex}`,
+                id: `r0-m${m}`,
                 roundIndex: 0,
-                matchIndex: matchIndex,
+                matchIndex: m,
                 player1: p1,
                 player2: p2,
                 winner: null,
                 nextMatchId: null,
-                isBye: !p2
+                isBye: (p1 !== null && p2 === null) || (p1 === null && p2 !== null)
             };
             round0Matches.push(match);
         }
@@ -47,13 +44,24 @@ export class BracketGenerator {
             matches: round0Matches
         });
 
-        // 5. Generate Subsequent Rounds Structure
-        let currentMatchCount = matchesCount;
         for (let r = 1; r < roundsCount; r++) {
-            currentMatchCount /= 2;
+            const prevRound = rounds[r - 1];
             const roundMatches: Match[] = [];
 
-            for (let m = 0; m < currentMatchCount; m++) {
+            const maxMatchIndex = Math.max(...prevRound.matches.map(m => m.matchIndex));
+            const expectedMatchCount = Math.ceil((maxMatchIndex + 1) / 2);
+
+            for (let m = 0; m < expectedMatchCount; m++) {
+                const source1Index = m * 2;
+                const source2Index = m * 2 + 1;
+
+                const hasSource1 = prevRound.matches.some(match => match.matchIndex === source1Index);
+                const hasSource2 = prevRound.matches.some(match => match.matchIndex === source2Index);
+
+                if (!hasSource1 && !hasSource2) {
+                    continue;
+                }
+
                 roundMatches.push({
                     id: `r${r}-m${m}`,
                     roundIndex: r,
@@ -72,7 +80,6 @@ export class BracketGenerator {
             });
         }
 
-        // 6. Link Rounds
         for (let r = 0; r < roundsCount - 1; r++) {
             const currentRound = rounds[r];
             currentRound.matches.forEach(match => {

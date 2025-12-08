@@ -22,34 +22,39 @@ export class DesktopBracketRenderer {
         if (!this.container) return;
 
         this.container.innerHTML = "";
-        this.container.classList.remove("flex", "flex-row", "justify-between", "items-stretch", "gap-8", "overflow-x-auto", "p-8", "overflow-hidden");
-        this.container.classList.add("relative", "w-full", "h-full", "overflow-auto", "min-h-[600px]", "bg-slate-50", "cursor-grab");
 
         const rounds = data.rounds;
         const columnWidth = 260;
         const gapX = 80;
 
+        const totalWidth = rounds.length * (columnWidth + gapX) + 120;
+        const maxMatches = rounds[0]?.matches.length || 0;
+        const totalHeight = maxMatches * 110 + 200;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "relative";
+        wrapper.style.width = `${totalWidth}px`;
+        wrapper.style.height = `${totalHeight}px`;
+        wrapper.style.minWidth = "100%";
+        wrapper.style.minHeight = "100%";
+
         rounds.forEach((round, rIndex) => {
             const matches = round.matches;
 
-            // Column
             const roundColumn = document.createElement("div");
             roundColumn.style.position = "absolute";
             roundColumn.style.left = `${rIndex * (columnWidth + gapX) + 60}px`;
             roundColumn.style.top = "40px";
             roundColumn.style.width = `${columnWidth}px`;
 
-            // Header
             const header = document.createElement("div");
             header.className = "text-center font-bold text-slate-400 mb-6 uppercase tracking-wider text-xs border-b border-slate-200 pb-2 bg-slate-50/80 backdrop-blur sticky top-0 z-30";
             header.textContent = round.name;
             roundColumn.appendChild(header);
 
-            // Matches
             matches.forEach((match, mIndex) => {
                 const matchEl = document.createElement("div");
 
-                // Position Calc
                 const cardHeight = 100;
                 const unitHeight = 110;
                 const roundSpacing = unitHeight * Math.pow(2, rIndex);
@@ -65,33 +70,29 @@ export class DesktopBracketRenderer {
                 roundColumn.appendChild(matchEl);
             });
 
-            this.container?.appendChild(roundColumn);
+            wrapper.appendChild(roundColumn);
         });
 
-        this.renderConnectors(data, columnWidth, gapX);
+        this.container.appendChild(wrapper);
+        this.renderConnectors(data, columnWidth, gapX, wrapper);
         this.enableDragScroll(this.container);
     }
 
-    private renderConnectors(data: TournamentData, colWidth: number, colGap: number) {
-        if (!this.container) return;
-
-        // Calculate SVG Size
-        // Width: rounds * (width+gap)
-        // Height: max matches * spacing
+    private renderConnectors(data: TournamentData, colWidth: number, colGap: number, wrapper: HTMLElement) {
         const rounds = data.rounds;
-        const totalWidth = rounds.length * (colWidth + colGap) + 200;
+        const unitHeight = 110;
+        const cardHeight = 100;
+
+        const totalWidth = rounds.length * (colWidth + colGap) + 120;
         const maxMatches = rounds[0]?.matches.length || 0;
-        const totalHeight = maxMatches * 110 + 200;
+        const totalHeight = maxMatches * unitHeight + 200;
 
         const svgns = "http://www.w3.org/2000/svg";
         const svg = document.createElementNS(svgns, "svg");
         svg.setAttribute("class", "absolute inset-0 pointer-events-none");
-        svg.style.width = `${Math.max(2000, totalWidth)}px`;
-        svg.style.height = `${Math.max(2000, totalHeight)}px`;
+        svg.style.width = `${totalWidth}px`;
+        svg.style.height = `${totalHeight}px`;
         svg.style.zIndex = "0";
-
-        const unitHeight = 110;
-        const cardHeight = 100;
 
         rounds.forEach((round, rIndex) => {
             if (rIndex === rounds.length - 1) return;
@@ -102,46 +103,45 @@ export class DesktopBracketRenderer {
             const nextOffset = (nextSpacing / 2) - (cardHeight / 2);
 
             round.matches.forEach((match, mIndex) => {
-                // My Coordinates (Right)
-                const myX = (rIndex * (colWidth + colGap)) + colWidth + 60;
+                const myX = (rIndex * (colWidth + colGap)) + colWidth + 60 + 6;
                 const myY = (mIndex * spacing) + offset + 40 + (cardHeight / 2);
 
-                // Target Coordinates (Left)
                 const nextMatchIdx = Math.floor(mIndex / 2);
-                const nextX = ((rIndex + 1) * (colWidth + colGap)) + 60;
+                const nextX = ((rIndex + 1) * (colWidth + colGap)) + 60 - 6;
                 const nextY = (nextMatchIdx * nextSpacing) + nextOffset + 40 + (cardHeight / 2);
 
-                // Draw Path
-                const midX = myX + (colGap / 2);
+                const midX = myX + (colGap / 2) - 6;
 
                 const path = document.createElementNS(svgns, "path");
                 const d = `M ${myX} ${myY} L ${midX} ${myY} L ${midX} ${nextY} L ${nextX} ${nextY}`;
 
                 path.setAttribute("d", d);
-                path.setAttribute("stroke", "#cbd5e1"); // slate-300
+                path.setAttribute("stroke", "#cbd5e1");
                 path.setAttribute("stroke-width", "2");
                 path.setAttribute("fill", "none");
                 svg.appendChild(path);
             });
         });
 
-        this.container.appendChild(svg);
+        wrapper.appendChild(svg);
     }
 
     private getMatchCardHTML(match: Match, scoreEnabled?: boolean): string {
         const p1 = match.player1;
         const p2 = match.player2;
         const winnerId = match.winner?.id;
-        const isBye = match.isBye;
 
-        if (isBye) {
+        const isDefinitiveBye = match.isBye || (match.winner && !p1) || (match.winner && !p2);
+
+        if (isDefinitiveBye) {
+            const player = p1 || p2;
             return `
              <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative group w-full h-[100px] flex flex-col justify-center">
                 <div class="absolute top-1/2 -right-1.5 w-3 h-3 bg-indigo-200 rounded-full transform -translate-y-1/2 border-2 border-white box-content"></div>
                 <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-400"></div>
                 <div class="px-4 py-3">
                      <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1 block">Pase Directo</span>
-                     <div class="font-bold text-slate-800 text-base truncate">${p1?.name}</div>
+                     <div class="font-bold text-slate-800 text-base truncate">${player?.name || 'Esperando...'}</div>
                 </div>
              </div>
              `;

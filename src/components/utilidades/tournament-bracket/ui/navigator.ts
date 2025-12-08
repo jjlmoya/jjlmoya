@@ -38,27 +38,48 @@ export class TournamentNavigator {
         const targetBtn = container.querySelector(`button[data-match-id="${matchId}"]`) as HTMLElement;
 
         if (targetBtn) {
-            const matchCard = targetBtn.closest('.group') as HTMLElement || targetBtn;
+            const matchCard = targetBtn.closest('div[style*="position: absolute"]') as HTMLElement || targetBtn;
 
-            const targetRect = matchCard.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
+            if (matchCard && matchCard.style.position === 'absolute') {
+                const targetTop = parseInt(matchCard.style.top || '0');
+                const targetLeft = parseInt(matchCard.parentElement?.style.left || '0');
 
-            const targetCenterX = targetRect.left + (targetRect.width / 2);
-            const targetCenterY = targetRect.top + (targetRect.height / 2);
+                const containerWidth = container.clientWidth;
+                const containerHeight = container.clientHeight;
+                const cardWidth = matchCard.offsetWidth;
+                const cardHeight = matchCard.offsetHeight;
 
-            const containerCenterX = containerRect.left + (containerRect.width / 2);
-            const containerCenterY = containerRect.top + (containerRect.height / 2);
+                const scrollLeft = targetLeft - (containerWidth / 2) + (cardWidth / 2);
+                const scrollTop = targetTop - (containerHeight / 2) + (cardHeight / 2);
 
-            const deltaX = targetCenterX - containerCenterX;
-            const deltaY = targetCenterY - containerCenterY;
+                container.scrollTo({
+                    left: Math.max(0, scrollLeft),
+                    top: Math.max(0, scrollTop),
+                    behavior: 'smooth'
+                });
 
-            container.scrollTo({
-                left: container.scrollLeft + deltaX,
-                top: container.scrollTop + deltaY,
-                behavior: 'smooth'
-            });
+                this.highlightElement(matchCard);
+            } else {
+                const targetRect = matchCard.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
 
-            this.highlightElement(matchCard);
+                const targetCenterX = targetRect.left + (targetRect.width / 2);
+                const targetCenterY = targetRect.top + (targetRect.height / 2);
+
+                const containerCenterX = containerRect.left + (containerRect.width / 2);
+                const containerCenterY = containerRect.top + (containerRect.height / 2);
+
+                const deltaX = targetCenterX - containerCenterX;
+                const deltaY = targetCenterY - containerCenterY;
+
+                container.scrollTo({
+                    left: container.scrollLeft + deltaX,
+                    top: container.scrollTop + deltaY,
+                    behavior: 'smooth'
+                });
+
+                this.highlightElement(matchCard);
+            }
         } else {
             console.warn("[TournamentNavigator] Target button not found in desktop container");
         }
