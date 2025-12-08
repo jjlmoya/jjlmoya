@@ -81,6 +81,7 @@ export class MobileBracketRenderer {
         const p2 = match.player2;
         const winnerId = match.winner?.id;
         const isBye = match.isBye;
+        const hasWinner = !!winnerId;
 
         if (isBye) {
             return `
@@ -101,31 +102,58 @@ export class MobileBracketRenderer {
         const p1Disabled = !p1 ? "disabled" : "";
         const p2Disabled = !p2 ? "disabled" : "";
 
+        const score1 = match.score1 !== undefined && match.score1 !== null ? match.score1 : '';
+        const score2 = match.score2 !== undefined && match.score2 !== null ? match.score2 : '';
+
         return `
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative w-full flex flex-col justify-center">
            <div class="absolute left-0 top-0 bottom-0 w-1 bg-slate-200"></div>
-           <div class="px-2 py-2 flex flex-col gap-1 w-full">
-               <button 
-                    class="match-btn w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p1Class} ${p1Disabled ? 'cursor-default' : ''}"
-                    data-match-id="${match.id}"
-                    data-winner-id="${p1?.id || ""}"
-                    ${p1Disabled}
-               >
-                    <span class="${p1 ? "text-slate-800 font-medium" : "text-slate-300 italic"} truncate text-sm max-w-[80%]">${p1?.name || "..."}</span>
-                    ${p1Icon}
-               </button>
+           <div class="px-3 py-3 flex flex-col gap-2 w-full">
+               <div class="flex items-center gap-2">
+                   <button 
+                        class="match-btn flex-grow flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p1Class} ${p1Disabled ? 'cursor-default' : ''}"
+                        data-match-id="${match.id}"
+                        data-winner-id="${p1?.id || ""}"
+                        ${p1Disabled}
+                   >
+                        <span class="${p1 ? "text-slate-800 font-medium" : "text-slate-300 italic"} truncate text-sm flex-grow">${p1?.name || "..."}</span>
+                        ${p1Icon}
+                   </button>
+                   <input 
+                        type="number" 
+                        class="score-input w-12 h-9 text-center border border-slate-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none ${hasWinner ? 'bg-slate-50 text-slate-400' : 'bg-white'}"
+                        data-match-id="${match.id}"
+                        data-player="1"
+                        value="${score1}"
+                        placeholder="-"
+                        min="0"
+                        ${!p1 || hasWinner ? 'disabled' : ''}
+                   />
+               </div>
                
-               <div class="h-px bg-slate-50 w-full mx-auto"></div>
+               <div class="h-px bg-slate-100 w-full"></div>
                
-               <button 
-                    class="match-btn w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p2Class} ${p2Disabled ? 'cursor-default' : ''}"
-                    data-match-id="${match.id}"
-                    data-winner-id="${p2?.id || ""}"
-                    ${p2Disabled}
-               >
-                    <span class="${p2 ? "text-slate-800 font-medium" : "text-slate-300 italic"} truncate text-sm max-w-[80%]">${p2?.name || "..."}</span>
-                    ${p2Icon}
-               </button>
+               <div class="flex items-center gap-2">
+                   <button 
+                        class="match-btn flex-grow flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p2Class} ${p2Disabled ? 'cursor-default' : ''}"
+                        data-match-id="${match.id}"
+                        data-winner-id="${p2?.id || ""}"
+                        ${p2Disabled}
+                   >
+                        <span class="${p2 ? "text-slate-800 font-medium" : "text-slate-300 italic"} truncate text-sm flex-grow">${p2?.name || "..."}</span>
+                        ${p2Icon}
+                   </button>
+                   <input 
+                        type="number" 
+                        class="score-input w-12 h-9 text-center border border-slate-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none ${hasWinner ? 'bg-slate-50 text-slate-400' : 'bg-white'}"
+                        data-match-id="${match.id}"
+                        data-player="2"
+                        value="${score2}"
+                        placeholder="-"
+                        min="0"
+                        ${!p2 || hasWinner ? 'disabled' : ''}
+                   />
+               </div>
            </div>
         </div>`;
     }
