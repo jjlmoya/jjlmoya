@@ -1,0 +1,140 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="relative w-full max-w-xl mx-auto mb-12 group">
+    <div
+        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors"
+    >
+        <Icon name="mdi:magnify" class="w-6 h-6" />
+    </div>
+    <input
+        type="text"
+        id="utility-search"
+        placeholder="Buscar utilidad..."
+        class="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl text-lg outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white"
+        autocomplete="off"
+    />
+    <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+        <div
+            class="w-8 h-8 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-900 text-slate-400 text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+            /
+        </div>
+    </div>
+</div>
+
+<!-- No results message -->
+<div id="no-results" class="hidden text-center py-12">
+    <div
+        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4"
+    >
+        <Icon name="mdi:emoticon-sad-outline" class="w-8 h-8 text-slate-400" />
+    </div>
+    <h3 class="text-xl font-medium text-slate-900 dark:text-white mb-2">
+        No se encontraron resultados
+    </h3>
+    <p class="text-slate-500 dark:text-slate-400">
+        Intenta con otros términos o revisa la ortografía.
+    </p>
+</div>
+
+<script>
+    function normalizeText(text: string): string {
+        if (!text) return "";
+        return text
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .trim();
+    }
+
+    function initSearch() {
+        const searchInput = document.getElementById("utility-search") as HTMLInputElement;
+        const sections = document.querySelectorAll("[data-utility-section]");
+        const noResults = document.getElementById("no-results");
+
+        if (!searchInput) return;
+
+        // Prevent adding duplicate listeners on same element
+        if (searchInput.getAttribute("data-search-initialized")) return;
+        searchInput.setAttribute("data-search-initialized", "true");
+
+        console.log(`Search initialized. Found ${sections.length} sections.`);
+
+        // Focus shortcut
+        const handleKeydown = (e: KeyboardEvent) => {
+            if (e.key === "/" && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeydown);
+
+        searchInput.addEventListener("input", (e) => {
+            const rawValue = (e.target as HTMLInputElement).value;
+            const query = normalizeText(rawValue);
+
+            let hasResults = false;
+
+            // Iterate through sections first
+            sections.forEach((section) => {
+                const sectionEl = section as HTMLElement;
+                const sectionTitle = normalizeText(
+                    section.getAttribute("data-section-title") || ""
+                );
+                const sectionMatches = sectionTitle.includes(query);
+
+                const sectionCards = section.querySelectorAll("[data-utility-card]");
+                let visibleCardsCount = 0;
+
+                sectionCards.forEach((card) => {
+                    const title = normalizeText(card.getAttribute("data-title") || "");
+                    const description = normalizeText(card.getAttribute("data-description") || "");
+
+                    // Card matches if:
+                    // 1. Its own content matches OR
+                    // 2. Its parent section matches (user searched for category)
+                    const isMatch =
+                        sectionMatches || title.includes(query) || description.includes(query);
+                    const el = card as HTMLElement;
+
+                    if (isMatch) {
+                        el.style.display = ""; // Revert to CSS (flex)
+                        hasResults = true;
+                        visibleCardsCount++;
+                    } else {
+                        el.style.display = "none"; // Override CSS
+                    }
+                });
+
+                // Hide empty sections
+                if (visibleCardsCount === 0) {
+                    sectionEl.style.display = "none";
+                } else {
+                    sectionEl.style.display = "";
+                }
+            });
+
+            // Show/Hide No Results
+            if (!hasResults && query.length > 0) {
+                noResults?.classList.remove("hidden");
+            } else {
+                noResults?.classList.add("hidden");
+            }
+        });
+    }
+
+    // Run when DOM is ready
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initSearch);
+    } else {
+        initSearch();
+    }
+
+    // Support Astro View Transitions
+    document.addEventListener("astro:page-load", () => {
+        initSearch();
+    });
+</script>
