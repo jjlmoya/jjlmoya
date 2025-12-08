@@ -1,0 +1,116 @@
+---
+import type { Round } from "./tournament.logic";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    rounds: Round[];
+    activeRoundIndex: number;
+}
+
+const { rounds, activeRoundIndex } = Astro.props;
+
+// Filter to only show the active round
+// In a real reactive implementation (React/Svelte), this would be state.
+// Since this is Astro (server-side mostly), we might need client-side JS for the tabs
+// or pass all rounds and hide/show via CSS/JS.
+// We will render ALL rounds and toggle visibility.
+---
+
+<div class="bracket-mobile w-full flex flex-col gap-4">
+    <!-- Round Tabs -->
+    <div class="flex overflow-x-auto gap-2 p-1 no-scrollbar snap-x">
+        {
+            rounds.map((round, i) => (
+                <button
+                    class={`round-tab snap-center whitespace-nowrap px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-300 ${i === activeRoundIndex ? "bg-indigo-600 text-white shadow-md" : "bg-white text-slate-500 hover:bg-indigo-50"}`}
+                    data-round={i}
+                >
+                    {round.name}
+                </button>
+            ))
+        }
+    </div>
+
+    <!-- Matches List -->
+    <div class="relative min-h-[400px]">
+        {
+            rounds.map((round, i) => (
+                <div
+                    class={`round-content absolute inset-0 w-full transition-opacity duration-300 ${i === activeRoundIndex ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"}`}
+                    data-round={i}
+                >
+                    <div class="flex flex-col gap-3">
+                        {round.matches.map((match) => (
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative group">
+                                {/* Decorative Ink Splash or simple sidebar */}
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500/20 group-hover:bg-indigo-500 transition-colors" />
+
+                                <div class="p-4 flex flex-col gap-2">
+                                    {/* Player 1 */}
+                                    <button
+                                        class={`flex items-center justify-between p-2 rounded-lg transition-colors ${match.winner && match.winner.id === match.player1?.id ? "bg-indigo-100 text-indigo-900 font-bold" : "hover:bg-slate-50"}`}
+                                        data-match-id={match.id}
+                                        data-player-id={match.player1?.id}
+                                        disabled={!match.player1 || !!match.winner}
+                                    >
+                                        <span
+                                            class={
+                                                match.player1
+                                                    ? "text-slate-800"
+                                                    : "text-slate-300 italic"
+                                            }
+                                        >
+                                            {match.player1?.name || "Esperando..."}
+                                        </span>
+                                        {match.winner && match.winner.id === match.player1?.id && (
+                                            <Icon name="mdi:trophy" class="text-indigo-600" />
+                                        )}
+                                    </button>
+
+                                    <div class="h-px bg-slate-100 w-full" />
+
+                                    {/* Player 2 */}
+                                    <button
+                                        class={`flex items-center justify-between p-2 rounded-lg transition-colors ${match.winner && match.winner.id === match.player2?.id ? "bg-indigo-100 text-indigo-900 font-bold" : "hover:bg-slate-50"}`}
+                                        data-match-id={match.id}
+                                        data-player-id={match.player2?.id}
+                                        disabled={!match.player2 || !!match.winner}
+                                    >
+                                        <span
+                                            class={
+                                                match.player2
+                                                    ? "text-slate-800"
+                                                    : "text-slate-300 italic"
+                                            }
+                                        >
+                                            {match.player2?.name || "Esperando..."}
+                                        </span>
+                                        {match.winner && match.winner.id === match.player2?.id && (
+                                            <Icon name="mdi:trophy" class="text-indigo-600" />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+
+                        {round.matches.length === 0 && (
+                            <div class="text-center p-8 text-slate-400 italic">
+                                Esta ronda aún no tiene partidos definidos.
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</div>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
