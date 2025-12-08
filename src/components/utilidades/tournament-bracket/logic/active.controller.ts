@@ -3,11 +3,11 @@ import { TournamentRenderer } from "../tournament.renderer";
 import { TournamentManager } from "./manager";
 import { TournamentStorage } from "./storage";
 import { TournamentNavigator } from "../ui/navigator";
+import { TournamentSharing } from "./sharing";
 
 export class ActiveController {
     private activeRoundMobile: number = 0;
     private manager: TournamentManager | null = null;
-    // We need to keep history updated when matches change
     private history: any[] = [];
 
     constructor(
@@ -32,12 +32,14 @@ export class ActiveController {
                 this.saveCurrentState();
                 this.render();
             } else {
-                // Even if unchanged, re-render to restore view from input
                 this.render();
             }
         });
 
-        // Match listeners are dynamic, so they are attached during render
+        const shareBtn = document.getElementById('share-tournament-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => this.shareTournament());
+        }
     }
 
     public render() {
@@ -169,4 +171,32 @@ export class ActiveController {
             }
         );
     }
+
+    private async shareTournament() {
+        if (!this.manager) return;
+
+        if (!TournamentSharing.canShare(this.manager)) {
+            this.mediator.showToast(
+                `Solo se pueden compartir torneos de hasta ${32} jugadores`,
+                'error'
+            );
+            return;
+        }
+
+        const shareUrl = TournamentSharing.generateShareUrl(this.manager);
+
+        if (!shareUrl) {
+            this.mediator.showToast('Error al generar el enlace', 'error');
+            return;
+        }
+
+        const copied = await TournamentSharing.copyToClipboard(shareUrl);
+
+        if (copied) {
+            this.mediator.showToast('Enlace copiado al portapapeles', 'success');
+        } else {
+            this.mediator.showToast('No se pudo copiar. URL: ' + shareUrl, 'error');
+        }
+    }
 }
+

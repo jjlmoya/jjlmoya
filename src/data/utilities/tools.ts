@@ -28,14 +28,6 @@ export const toolsSection: SectionData = {
             title: "Generador de Contraseñas",
             description: "Crea claves seguras y aleatorias imposibles de hackear. Ciberseguridad básica.",
             color: "#10b981"
-        },
-        {
-            href: "/utilidades/torneo/",
-            iconBg: "mdi:sitemap", // tournament like tree
-            iconFg: "mdi:trophy",
-            title: "Organizador de Torneos",
-            description: "Crea cuadros de enfrentamientos y gestiona eliminatorias. Ideal para deportes y eSports.",
-            color: "#6366f1"
         }
     ]
 };

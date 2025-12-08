@@ -139,4 +139,28 @@ export class TournamentUIMediator {
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
+
+    showToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+        const colors = {
+            success: 'bg-emerald-600',
+            error: 'bg-red-600',
+            info: 'bg-indigo-600'
+        };
+
+        const icons = {
+            success: 'mdi--check-circle',
+            error: 'mdi--alert-circle',
+            info: 'mdi--information'
+        };
+
+        const toast = document.createElement("div");
+        toast.className = `fixed bottom-8 left-1/2 transform -translate-x-1/2 ${colors[type]} text-white px-6 py-3 rounded-xl shadow-lg text-sm font-medium z-50 flex items-center gap-2 animate-fade-in`;
+        toast.innerHTML = `<span class="icon-[${icons[type]}] text-lg"></span> <span>${message}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 300ms';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
 }

@@ -4,12 +4,12 @@ import { TournamentStorage } from "./logic/storage";
 import { TournamentUIMediator } from "./ui/mediator";
 import { SetupController } from "./logic/setup.controller";
 import { ActiveController } from "./logic/active.controller";
+import { TournamentSharing } from "./logic/sharing";
 
 export class TournamentController {
     private renderer: TournamentRenderer;
     private mediator: TournamentUIMediator;
 
-    // Sub-controllers
     private setupController: SetupController;
     private activeController: ActiveController;
 
@@ -48,12 +48,10 @@ export class TournamentController {
     private startTournament(manager: TournamentManager) {
         this.currentView = 'ACTIVE';
 
-        // Save initial state
         TournamentStorage.saveCurrentId(manager.id);
         const history = TournamentStorage.loadHistory();
         TournamentStorage.saveTournament(manager, history);
 
-        // Init active controller
         this.activeController.setManager(manager);
 
         this.updateView();
@@ -65,12 +63,21 @@ export class TournamentController {
 
     private resetToSetup() {
         TournamentStorage.removeCurrentId();
+        TournamentSharing.clearHash();
         this.currentView = 'SETUP';
         this.setupController.refreshHistory();
         this.updateView();
     }
 
     private loadCurrentTournament() {
+        const sharedTournament = TournamentSharing.loadFromHash();
+        if (sharedTournament) {
+            const manager = TournamentManager.fromJSON(sharedTournament);
+            this.startTournament(manager);
+            TournamentSharing.clearHash();
+            return;
+        }
+
         const currentId = TournamentStorage.loadCurrentId();
         if (currentId) {
             const history = TournamentStorage.loadHistory();
