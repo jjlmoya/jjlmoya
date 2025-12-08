@@ -104,11 +104,11 @@ export class DesktopBracketRenderer {
 
             round.matches.forEach((match, mIndex) => {
                 const myX = (rIndex * (colWidth + colGap)) + colWidth + 60 + 6;
-                const myY = (mIndex * spacing) + offset + 40 + (cardHeight / 2);
+                const myY = (mIndex * spacing) + offset + 40 + (cardHeight / 2) + 40;
 
                 const nextMatchIdx = Math.floor(mIndex / 2);
                 const nextX = ((rIndex + 1) * (colWidth + colGap)) + 60 - 6;
-                const nextY = (nextMatchIdx * nextSpacing) + nextOffset + 40 + (cardHeight / 2);
+                const nextY = (nextMatchIdx * nextSpacing) + nextOffset + 40 + (cardHeight / 2) + 40;
 
                 const midX = myX + (colGap / 2) - 6;
 
