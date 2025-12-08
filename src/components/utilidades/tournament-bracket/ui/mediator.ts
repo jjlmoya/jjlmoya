@@ -67,14 +67,14 @@ export class TournamentUIMediator {
     enableTitleEditing(onSave: (newName: string) => void) {
         if (!this.titleDisplay) return;
 
-        this.titleDisplay.addEventListener("click", (e) => {
+        this.titleDisplay.addEventListener("click", () => {
             // Prevent if already editing
             if (this.titleDisplay?.querySelector('input')) return;
 
-            const icon = e.target as HTMLElement;
+
             // Allow clicking container or icon
 
-            const currentName = this.titleDisplay?.innerText.trim().replace('Editar Nombre', '') || "";
+
             // innerText might include the icon text if accessible? No, icon is span. 
             // Actually innerText of container includes "name". 
 

@@ -8,7 +8,7 @@ export class BracketGenerator {
         const roundsCount = Math.ceil(Math.log2(playerCount));
         const bracketSize = Math.pow(2, roundsCount);
         const firstRoundMatches = bracketSize / 2;
-        const byesCount = bracketSize - playerCount;
+
 
         const rounds: Round[] = [];
 

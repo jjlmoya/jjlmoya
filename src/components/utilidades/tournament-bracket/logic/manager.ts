@@ -36,13 +36,13 @@ export class TournamentManager implements TournamentData {
 
     public setScore(matchId: string, score1: number | null, score2: number | null): void {
         let match: Match | undefined;
-        let roundIndex = -1;
+
 
         for (let i = 0; i < this.rounds.length; i++) {
             const m = this.rounds[i].matches.find((m) => m.id === matchId);
             if (m) {
                 match = m;
-                roundIndex = i;
+
                 break;
             }
         }

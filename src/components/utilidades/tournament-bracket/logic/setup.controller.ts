@@ -6,6 +6,7 @@ import { TournamentManager } from "./manager";
 export class SetupController {
     private players: string[] = [];
     private isScoreEnabled: boolean = false;
+    private isShuffleEnabled: boolean = false;
     private history: any[] = [];
 
     constructor(
