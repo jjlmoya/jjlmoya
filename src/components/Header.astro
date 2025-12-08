@@ -22,7 +22,6 @@ const { className = "" } = Astro.props;
             >jjlmoya</a
         >
 
-        <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center gap-6">
             <a
                 href="/proyectos/"
@@ -54,9 +53,34 @@ const { className = "" } = Astro.props;
                 aria-current={currentPath.startsWith("charlas") ? "page" : undefined}
                 data-astro-prefetch>charlas</a
             >
+
+            <div class="h-4 w-px bg-white/20 mx-2"></div>
+
+            <div class="flex items-center gap-2">
+                <button
+                    id="header-search-btn"
+                    class="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all"
+                    aria-label="Buscar (Ctrl + K / Espacio)"
+                    title="Buscar (Ctrl + K / Espacio)"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-search"
+                        ><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"
+                        ></path></svg
+                    >
+                </button>
+            </div>
         </div>
 
-        <!-- Mobile Menu Button (High Contrast) -->
         <button
             id="menu-toggle"
             class="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-1.5 group z-[100]"
@@ -69,7 +93,6 @@ const { className = "" } = Astro.props;
         </button>
     </div>
 
-    <!-- Premium Full-Screen Overlay -->
     <div
         id="mobile-menu-overlay"
         class="fixed top-0 left-0 w-screen h-screen z-[90] pointer-events-none opacity-0 transition-opacity duration-500"
@@ -102,7 +125,6 @@ const { className = "" } = Astro.props;
 </nav>
 
 <style>
-    /* Menu Toggle Animation */
     :global(body.menu-open) .line-1 {
         transform: translateY(4px) rotate(45deg);
     }
@@ -110,19 +132,16 @@ const { className = "" } = Astro.props;
         transform: translateY(-4px) rotate(-45deg);
     }
 
-    /* Prevent Scroll */
     :global(html.menu-open),
     :global(body.menu-open) {
         overflow: hidden;
     }
 
-    /* Overlay Visibility */
     :global(body.menu-open) #mobile-menu-overlay {
         opacity: 1;
         pointer-events: auto;
     }
 
-    /* Link Styles */
     .menu-link {
         display: flex;
         align-items: baseline;
@@ -181,12 +200,11 @@ const { className = "" } = Astro.props;
 
         if (!menuToggle) return;
 
-        // Clone to remove existing listeners
         const newToggle = menuToggle.cloneNode(true);
         menuToggle.parentNode?.replaceChild(newToggle, menuToggle);
 
         newToggle.addEventListener("click", (e) => {
-            e.stopPropagation(); // Prevent bubbling issues
+            e.stopPropagation();
             body.classList.toggle("menu-open");
             html.classList.toggle("menu-open");
         });
@@ -199,11 +217,14 @@ const { className = "" } = Astro.props;
         });
     }
 
-    // Initialize on load
     setupMenu();
 
-    // Re-initialize on Astro page swaps
     document.addEventListener("DOMContentLoaded", () => {
         setupMenu();
+
+        const searchBtn = document.getElementById("header-search-btn");
+        searchBtn?.addEventListener("click", () => {
+            document.dispatchEvent(new CustomEvent("open-search"));
+        });
     });
 </script>
