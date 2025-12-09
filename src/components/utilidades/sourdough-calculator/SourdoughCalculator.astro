@@ -1,0 +1,422 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto mb-20">
+    <!-- Calculator Card -->
+    <div
+        class="relative bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-800"
+    >
+        <!-- Decorative Top Bar -->
+        <div
+            class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-500"
+        >
+        </div>
+
+        <div class="p-8 md:p-12">
+            <!-- Controls Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <!-- Left Column: Inputs -->
+                <div class="lg:col-span-5 space-y-10">
+                    <!-- 1. Total Amount Input -->
+                    <div class="relative group">
+                        <label
+                            for="totalAmount"
+                            class="flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3"
+                        >
+                            <Icon name="mdi:scale-balance" class="text-lg" />
+                            Cantidad Final
+                        </label>
+                        <div class="relative flex items-center">
+                            <input
+                                type="number"
+                                id="totalAmount"
+                                value="300"
+                                min="1"
+                                class="peer w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-4 text-3xl font-black text-slate-900 dark:text-white placeholder-slate-300 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all"
+                            />
+                            <div
+                                class="absolute right-6 text-slate-400 font-bold text-xl pointer-events-none peer-focus:text-amber-500 transition-colors"
+                            >
+                                g
+                            </div>
+                        </div>
+                        <p class="mt-2 text-xs text-slate-400 dark:text-slate-500 font-medium">
+                            Peso total de masa madre que necesitas.
+                        </p>
+                    </div>
+
+                    <!-- 2. Ratio Selector -->
+                    <div>
+                        <label
+                            class="flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4"
+                        >
+                            <Icon name="mdi:tune" class="text-lg" />
+                            Ratio de Refresco
+                        </label>
+
+                        <!-- Grid of Ratios -->
+                        <div class="grid grid-cols-3 gap-3 mb-4">
+                            <!-- Active Button (Default 1:1:1) -->
+                            <button
+                                class="ratio-btn group active flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-amber-50 dark:bg-amber-900/20 border-amber-500 text-amber-700 dark:text-amber-400 shadow-lg shadow-amber-500/10 ring-1 ring-amber-500"
+                                data-ratio="1:1:1"
+                            >
+                                <span
+                                    class="text-xs font-bold opacity-60 group-hover:opacity-100 dark:text-slate-300"
+                                    >Mantener</span
+                                >
+                                <span class="text-lg font-black">1:1:1</span>
+                            </button>
+
+                            <!-- Inactive Buttons -->
+                            <button
+                                class="ratio-btn group flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500"
+                                data-ratio="1:2:2"
+                            >
+                                <span
+                                    class="text-xs font-bold opacity-60 group-hover:opacity-100 dark:text-slate-300"
+                                    >Activar</span
+                                >
+                                <span class="text-lg font-black">1:2:2</span>
+                            </button>
+                            <button
+                                class="ratio-btn group flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500"
+                                data-ratio="1:3:3"
+                            >
+                                <span
+                                    class="text-xs font-bold opacity-60 group-hover:opacity-100 dark:text-slate-300"
+                                    >Retardar</span
+                                >
+                                <span class="text-lg font-black">1:3:3</span>
+                            </button>
+                            <button
+                                class="ratio-btn group flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500"
+                                data-ratio="1:4:4"
+                            >
+                                <span
+                                    class="text-xs font-bold opacity-60 group-hover:opacity-100 dark:text-slate-300"
+                                    >Fuerte</span
+                                >
+                                <span class="text-lg font-black">1:4:4</span>
+                            </button>
+                            <button
+                                class="ratio-btn group flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500"
+                                data-ratio="1:5:5"
+                            >
+                                <span
+                                    class="text-xs font-bold opacity-60 group-hover:opacity-100 dark:text-slate-300"
+                                    >Sweet Spot</span
+                                >
+                                <span class="text-lg font-black">1:5:5</span>
+                            </button>
+                            <button
+                                class="ratio-btn group border-dashed flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500"
+                                id="customRatioBtn"
+                            >
+                                <span
+                                    class="text-xs font-bold opacity-60 group-hover:opacity-100 dark:text-slate-300"
+                                    >Custom</span
+                                >
+                                <Icon name="mdi:cog" class="text-xl" />
+                            </button>
+                        </div>
+
+                        <!-- Custom Inputs Panel -->
+                        <div
+                            id="customRatioInputs"
+                            class="hidden bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 animate-in slide-in-from-top-2 duration-300"
+                        >
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 text-center">
+                                    <span
+                                        class="block text-[10px] uppercase font-bold text-slate-400 mb-1"
+                                        >MM</span
+                                    >
+                                    <input
+                                        type="number"
+                                        id="customS"
+                                        value="1"
+                                        min="1"
+                                        class="custom-input w-full text-center font-bold bg-white dark:bg-slate-700 rounded-lg py-2 border border-slate-200 dark:border-slate-600 focus:border-amber-500 outline-none text-slate-900 dark:text-white"
+                                    />
+                                </div>
+                                <span class="text-slate-300 font-bold">:</span>
+                                <div class="flex-1 text-center">
+                                    <span
+                                        class="block text-[10px] uppercase font-bold text-slate-400 mb-1"
+                                        >Harina</span
+                                    >
+                                    <input
+                                        type="number"
+                                        id="customF"
+                                        value="1"
+                                        min="1"
+                                        class="custom-input w-full text-center font-bold bg-white dark:bg-slate-700 rounded-lg py-2 border border-slate-200 dark:border-slate-600 focus:border-amber-500 outline-none text-slate-900 dark:text-white"
+                                    />
+                                </div>
+                                <span class="text-slate-300 font-bold">:</span>
+                                <div class="flex-1 text-center">
+                                    <span
+                                        class="block text-[10px] uppercase font-bold text-slate-400 mb-1"
+                                        >Agua</span
+                                    >
+                                    <input
+                                        type="number"
+                                        id="customW"
+                                        value="1"
+                                        min="1"
+                                        class="custom-input w-full text-center font-bold bg-white dark:bg-slate-700 rounded-lg py-2 border border-slate-200 dark:border-slate-600 focus:border-amber-500 outline-none text-slate-900 dark:text-white"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Visual Interaction & Results -->
+                <div class="lg:col-span-7 flex flex-col justify-center">
+                    <div
+                        class="bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-2 border border-slate-100 dark:border-slate-700/50"
+                    >
+                        <!-- Header of Receipt -->
+                        <div
+                            class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700/50"
+                        >
+                            <h3 class="text-xs font-black uppercase tracking-widest text-slate-400">
+                                Formula de Hoy
+                            </h3>
+                            <span
+                                class="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 px-3 py-1 rounded-full"
+                            >
+                                Hidratación 100%
+                            </span>
+                        </div>
+
+                        <!-- The 3 Ingredients Rows -->
+                        <div class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                            <!-- Starter Row -->
+                            <div
+                                class="group p-4 flex items-center justify-between hover:bg-white dark:hover:bg-slate-800 transition-colors rounded-xl"
+                            >
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shadow-sm group-hover:scale-110 transition-transform duration-300"
+                                    >
+                                        <Icon name="mdi:bacteria" class="text-2xl" />
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="font-extrabold text-slate-800 dark:text-white text-lg"
+                                        >
+                                            Masa Madre
+                                        </div>
+                                        <div
+                                            class="text-xs font-medium text-slate-500 dark:text-slate-400"
+                                        >
+                                            Cultivo activo
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div
+                                        class="text-3xl font-black text-slate-900 dark:text-white tabular-nums tracking-tight"
+                                    >
+                                        <span id="valStarter">100</span><span
+                                            class="text-lg text-slate-400 ml-1">g</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flour Row -->
+                            <div
+                                class="group p-4 flex items-center justify-between hover:bg-white dark:hover:bg-slate-800 transition-colors rounded-xl"
+                            >
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-sm group-hover:scale-110 transition-transform duration-300"
+                                    >
+                                        <Icon name="mdi:barley" class="text-2xl" />
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="font-extrabold text-slate-800 dark:text-white text-lg"
+                                        >
+                                            Harina
+                                        </div>
+                                        <div
+                                            class="text-xs font-medium text-slate-500 dark:text-slate-400"
+                                        >
+                                            Fuerza o Integral
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div
+                                        class="text-3xl font-black text-slate-900 dark:text-white tabular-nums tracking-tight"
+                                    >
+                                        <span id="valFlour">100</span><span
+                                            class="text-lg text-slate-400 ml-1">g</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Water Row -->
+                            <div
+                                class="group p-4 flex items-center justify-between hover:bg-white dark:hover:bg-slate-800 transition-colors rounded-xl"
+                            >
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-2xl bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center text-sky-600 dark:text-sky-400 shadow-sm group-hover:scale-110 transition-transform duration-300"
+                                    >
+                                        <Icon name="mdi:water-outline" class="text-2xl" />
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="font-extrabold text-slate-800 dark:text-white text-lg"
+                                        >
+                                            Agua
+                                        </div>
+                                        <div
+                                            class="text-xs font-medium text-slate-500 dark:text-slate-400"
+                                        >
+                                            Sin cloro
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div
+                                        class="text-3xl font-black text-slate-900 dark:text-white tabular-nums tracking-tight"
+                                    >
+                                        <span id="valWater">100</span><span
+                                            class="text-lg text-slate-400 ml-1">g</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Confirmation -->
+                    <div class="mt-6 flex justify-end items-center gap-3 opacity-60">
+                        <span class="text-sm font-bold text-slate-500 uppercase tracking-widest"
+                            >Total Masa:</span
+                        >
+                        <span
+                            class="text-xl font-black text-slate-700 dark:text-slate-300"
+                            id="valTotalDisplay">300g</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Input numbering arrows removal */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+
+<script>
+    import { SourdoughCalculator } from "../../../lib/utilidades/sourdough-calculator/SourdoughCalculator";
+
+    // Elements
+    const totalAmountInput = document.getElementById("totalAmount") as HTMLInputElement;
+    const ratioBtns = document.querySelectorAll(".ratio-btn");
+    const customInputsDiv = document.getElementById("customRatioInputs");
+    const customInputs = document.querySelectorAll(".custom-input") as NodeListOf<HTMLInputElement>;
+
+    // Outputs
+    const outStarter = document.getElementById("valStarter");
+    const outFlour = document.getElementById("valFlour");
+    const outWater = document.getElementById("valWater");
+    const outTotal = document.getElementById("valTotalDisplay");
+
+    // State
+    // Default to 1:1:1
+    let currentRatio = { s: 1, f: 1, w: 1 };
+
+    // Class strings for state management (since we can't use @apply)
+    // We maintain 'ratio-btn' as a selector hook, but manage visuals manually
+    const baseClasses =
+        "group flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500";
+    const activeClasses =
+        "group active flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-amber-50 dark:bg-amber-900/20 border-amber-500 text-amber-700 dark:text-amber-400 shadow-lg shadow-amber-500/10 ring-1 ring-amber-500";
+
+    function calculate() {
+        // Get value
+        let total = parseInt(totalAmountInput.value);
+        if (isNaN(total) || total < 1) total = 0;
+
+        // Calculate Logic
+        const result = SourdoughCalculator.calculate(
+            total,
+            currentRatio.s,
+            currentRatio.f,
+            currentRatio.w
+        );
+
+        // Update DOM with simple animation effect (just text replacement for now, robust enough)
+        if (outStarter) outStarter.textContent = result.starter.toString();
+        if (outFlour) outFlour.textContent = result.flour.toString();
+        if (outWater) outWater.textContent = result.water.toString();
+
+        // Confirm total (sanity check for user)
+        if (outTotal) outTotal.textContent = result.starter + result.flour + result.water + "g";
+    }
+
+    // Toggle Custom Logic
+    function handleRatioClick(btn: Element) {
+        // Reset styles for ALL buttons
+        ratioBtns.forEach((b) => {
+            b.className = baseClasses + " ratio-btn";
+        });
+
+        // Apply active to current
+        btn.className = activeClasses + " ratio-btn";
+
+        // Logic
+        if (btn.id === "customRatioBtn") {
+            customInputsDiv?.classList.remove("hidden");
+            // Trigger recalculation based on custom inputs
+            updateFromCustom();
+        } else {
+            customInputsDiv?.classList.add("hidden");
+            const ratioStr = btn.getAttribute("data-ratio");
+            if (ratioStr) {
+                const parts = ratioStr.split(":").map(Number);
+                currentRatio = { s: parts[0], f: parts[1], w: parts[2] };
+                calculate();
+            }
+        }
+    }
+
+    function updateFromCustom() {
+        const s = parseFloat((document.getElementById("customS") as HTMLInputElement).value) || 1;
+        const f = parseFloat((document.getElementById("customF") as HTMLInputElement).value) || 1;
+        const w = parseFloat((document.getElementById("customW") as HTMLInputElement).value) || 1;
+        currentRatio = { s, f, w };
+        calculate();
+    }
+
+    // Bind Events
+    totalAmountInput.addEventListener("input", calculate);
+
+    ratioBtns.forEach((btn) => {
+        btn.addEventListener("click", () => handleRatioClick(btn));
+    });
+
+    customInputs.forEach((inp) => {
+        inp.addEventListener("input", updateFromCustom);
+    });
+
+    // Init
+    calculate();
+</script>

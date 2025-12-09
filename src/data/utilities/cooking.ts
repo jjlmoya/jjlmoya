@@ -52,6 +52,14 @@ export const cookingSection: SectionData = {
             title: "Temporizador Múltiple",
             description: "Controla horno, fuego y reposo a la vez. Crea tantos temporizadores como necesites.",
             color: "#f97316"
+        },
+        {
+            href: "/utilidades/masa-madre/",
+            iconBg: "mdi:bacteria",
+            iconFg: "mdi:water-percent",
+            title: "Calculadora Masa Madre",
+            description: "Calcula los refrescos perfectos. Control total sobre ratios, hidratación y desperdicio.",
+            color: "#f59e0b"
         }
     ]
 };
