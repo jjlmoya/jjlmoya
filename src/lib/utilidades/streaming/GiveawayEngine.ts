@@ -1,50 +1,85 @@
 export class GiveawayEngine {
-    private participants: string[] = [];
+    private rawParticipants: string[] = [];
+    private excludeList: string[] = [];
+    private allowDuplicates: boolean = false;
     private winner: string | null = null;
+    private processedParticipants: string[] = [];
 
-    constructor(initialParticipants: string[] = []) {
-        this.participants = this.cleanList(initialParticipants);
+    constructor() {
+        this.process();
     }
 
-    /**
-     * Parse a raw string (e.g. from textarea) into a list of names.
-     * Splits by newlines and commas.
-     */
     public setParticipantsFromText(text: string): void {
-        const raw = text.split(/[\n,]/).map(s => s.trim()).filter(s => s.length > 0);
-        this.participants = [...new Set(raw)]; // Remove duplicates
+        // Split by newline and remove empty lines
+        this.rawParticipants = text.split(/\n/).map(s => s.trim()).filter(s => s.length > 0);
+        this.process();
+    }
+
+    public setBlacklistFromText(text: string): void {
+        this.excludeList = text.split(/[\n,]/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+        this.process();
+    }
+
+    public setAllowDuplicates(allow: boolean): void {
+        this.allowDuplicates = allow;
+        this.process();
+    }
+
+    private process(): void {
+        let list = [...this.rawParticipants];
+
+        // 1. Filter Blacklist
+        if (this.excludeList.length > 0) {
+            list = list.filter(p => !this.excludeList.includes(p.toLowerCase()));
+        }
+
+        // 2. Handle Duplicates
+        if (!this.allowDuplicates) {
+            list = [...new Set(list)];
+        }
+
+        this.processedParticipants = list;
     }
 
     public getParticipants(): string[] {
-        return this.participants;
+        return this.processedParticipants;
     }
 
     public getCount(): number {
-        return this.participants.length;
+        return this.processedParticipants.length;
     }
 
     public pickWinner(): string | null {
-        if (this.participants.length === 0) return null;
+        const winners = this.pickWinners(1);
+        return winners.length > 0 ? winners[0] : null;
+    }
 
-        // Use crypto.getRandomValues if available for better randomness
-        let index;
-        if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
-            const array = new Uint32Array(1);
-            crypto.getRandomValues(array);
-            index = array[0] % this.participants.length;
-        } else {
-            index = Math.floor(Math.random() * this.participants.length);
+    public pickWinners(count: number = 1): string[] {
+        if (this.processedParticipants.length === 0) return [];
+
+        // Pool of available indices to avoid picking the exact same "ticket" twice
+        const availableIndices = Array.from({ length: this.processedParticipants.length }, (_, i) => i);
+        const winners: string[] = [];
+        const numToPick = Math.min(count, availableIndices.length);
+
+        for (let i = 0; i < numToPick; i++) {
+            let randomIndex;
+            // Secure random index selection
+            if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+                const array = new Uint32Array(1);
+                crypto.getRandomValues(array);
+                randomIndex = array[0] % availableIndices.length;
+            } else {
+                randomIndex = Math.floor(Math.random() * availableIndices.length);
+            }
+
+            const winningIndex = availableIndices[randomIndex];
+            winners.push(this.processedParticipants[winningIndex]);
+
+            // Remove used index from pool
+            availableIndices.splice(randomIndex, 1);
         }
 
-        this.winner = this.participants[index];
-        return this.winner;
-    }
-
-    public removeParticipant(name: string): void {
-        this.participants = this.participants.filter(p => p !== name);
-    }
-
-    private cleanList(list: string[]): string[] {
-        return [...new Set(list.map(s => s.trim()).filter(s => s.length > 0))];
+        return winners;
     }
 }
