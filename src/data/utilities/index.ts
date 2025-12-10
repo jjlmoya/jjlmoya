@@ -9,8 +9,10 @@ import { musicSection } from "./music";
 import { healthSection } from "./health";
 import { devSection } from "./developer";
 import { toolsSection } from "./tools";
+import { streamingSection } from "./streaming";
 
 export const sections: SectionData[] = [
+    streamingSection,
     cookingSection,
     homeSection,
     filesSection,
