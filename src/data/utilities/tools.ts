@@ -28,14 +28,6 @@ export const toolsSection: SectionData = {
             title: "Generador de Contraseñas",
             description: "Crea claves seguras y aleatorias imposibles de hackear. Ciberseguridad básica.",
             color: "#10b981"
-        },
-        {
-            href: "/utilidades/pixeles-pantalla/",
-            iconBg: "mdi:monitor-dashboard",
-            iconFg: "mdi:monitor-shimmer",
-            title: "Test de Píxeles Muertos",
-            description: "Diagnóstico de pantalla y reparador de píxeles atascados (Strobe).",
-            color: "#3b82f6"
         }
     ]
 };

@@ -10,6 +10,7 @@ import { healthSection } from "./health";
 import { devSection } from "./developer";
 import { toolsSection } from "./tools";
 import { streamingSection } from "./streaming";
+import { hardwareSection } from "./hardware";
 
 export const sections: SectionData[] = [
     streamingSection,
@@ -19,6 +20,7 @@ export const sections: SectionData[] = [
     musicSection,
     healthSection,
     devSection,
+    hardwareSection,
     toolsSection,
     financeSection,
 ];

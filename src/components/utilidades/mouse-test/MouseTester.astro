@@ -1,0 +1,185 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-5xl mx-auto p-4 font-sans text-slate-900 dark:text-slate-100">
+    <div
+        class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-200 dark:border-slate-800"
+    >
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2"
+                >
+                    <Icon name="mdi:mouse" class="w-4 h-4" />
+                    Mouse Test
+                </div>
+                <h2 class="text-3xl font-black tracking-tight">Polling Rate Checker</h2>
+                <p class="text-slate-500 dark:text-slate-400">
+                    Mueve el ratón en círculos rápidos para medir los Hz.
+                </p>
+            </div>
+
+            <div class="flex gap-4 text-center">
+                <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl min-w-[120px]">
+                    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                        Promedio
+                    </div>
+                    <div
+                        class="text-4xl font-black text-emerald-600 dark:text-emerald-400 flex items-baseline justify-center gap-1"
+                    >
+                        <span id="hz-avg">0</span>
+                        <span class="text-base text-slate-400">Hz</span>
+                    </div>
+                </div>
+                <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl min-w-[120px]">
+                    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                        Pico
+                    </div>
+                    <div
+                        class="text-4xl font-black text-emerald-600 dark:text-emerald-400 flex items-baseline justify-center gap-1"
+                    >
+                        <span id="hz-max">0</span>
+                        <span class="text-base text-slate-400">Hz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE -->
+        <div
+            class="relative w-full h-[400px] bg-slate-50 dark:bg-slate-950 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 overflow-hidden cursor-crosshair group flex items-center justify-center"
+            id="test-area"
+        >
+            <div
+                class="text-slate-300 dark:text-slate-700 font-bold text-xl pointer-events-none group-hover:opacity-0 transition-opacity"
+            >
+                Mueve el ratón aquí
+            </div>
+
+            <canvas id="graph-canvas" class="absolute inset-0 w-full h-full opacity-50"></canvas>
+
+            <!-- Floating Hz Indicator -->
+            <div
+                id="cursor-follower"
+                class="absolute pointer-events-none bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg opacity-0 transition-opacity duration-75"
+                style="transform: translate(0,0);"
+            >
+                0 Hz
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const elArea = document.getElementById("test-area");
+    const elAvg = document.getElementById("hz-avg");
+    const elMax = document.getElementById("hz-max");
+    const elFollower = document.getElementById("cursor-follower");
+    const canvas = document.getElementById("graph-canvas") as HTMLCanvasElement;
+    const ctx = canvas?.getContext("2d");
+
+    let history: number[] = [];
+    const MAX_HISTORY = 100;
+
+    let lastTime = 0;
+    let maxHz = 0;
+    let isActive = false;
+    let idleTimer: ReturnType<typeof setTimeout>;
+
+    // Resize Canvas
+    function resize() {
+        if (!elArea || !canvas) return;
+        const rect = elArea.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+    }
+    window.addEventListener("resize", resize);
+    resize(); // Init
+
+    function updateGraph() {
+        if (!ctx || !canvas) return;
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        ctx.beginPath();
+        ctx.strokeStyle = "#10b981"; // emerald-500
+        ctx.lineWidth = 2;
+
+        const maxVal = 1200; // Common Polling rates: 125, 500, 1000. Gaming 2000, 4000, 8000.
+        // Let's cap visual graph at 1200 for normal users, or dynamic?
+        // Dynamic is better.
+
+        const currentMax = Math.max(1000, ...history);
+        const stepX = w / MAX_HISTORY;
+
+        history.forEach((hz, i) => {
+            const x = i * stepX;
+            // Invert Y: 0 is bottom
+            const y = h - (hz / currentMax) * (h * 0.8); // Use 80% height
+
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+
+        ctx.stroke();
+    }
+
+    function processMove(e: MouseEvent) {
+        const now = performance.now();
+        if (lastTime > 0) {
+            const delta = now - lastTime;
+            if (delta > 0) {
+                // Ignore very long pauses (e.g. stopped moving)
+                if (delta < 100) {
+                    const instantaneousHz = 1000 / delta;
+                    history.push(instantaneousHz);
+                    if (history.length > MAX_HISTORY) history.shift();
+
+                    // Update Max
+                    if (instantaneousHz > maxHz) {
+                        maxHz = instantaneousHz;
+                        if (elMax) elMax.textContent = Math.round(maxHz).toString();
+                    }
+
+                    // Update Avg
+                    const sum = history.reduce((a, b) => a + b, 0);
+                    const avg = sum / history.length;
+                    if (elAvg) elAvg.textContent = Math.round(avg).toString();
+
+                    updateGraph();
+
+                    // Update Follower
+                    if (elFollower) {
+                        elFollower.textContent = `${Math.round(instantaneousHz)} Hz`;
+                        // Relative to parent
+                        // e.offsetX/Y gives pos relative to target, but target might be canvas
+                        // Safer to use client rect logic?
+                        // Or just css logic inside the relative container.
+                        const rect = elArea!.getBoundingClientRect();
+                        const x = e.clientX - rect.left + 15;
+                        const y = e.clientY - rect.top + 15;
+                        elFollower.style.transform = `translate(${x}px, ${y}px)`;
+                        elFollower.style.opacity = "1";
+                    }
+                }
+            }
+        }
+        lastTime = now;
+
+        // Idle detection to hide follower
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            if (elFollower) elFollower.style.opacity = "0";
+            lastTime = 0; // Reset logic on stop
+        }, 100);
+    }
+
+    elArea?.addEventListener("mousemove", processMove);
+    elArea?.addEventListener("mouseleave", () => {
+        if (elFollower) elFollower.style.opacity = "0";
+        lastTime = 0;
+    });
+</script>

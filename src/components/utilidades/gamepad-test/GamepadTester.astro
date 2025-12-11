@@ -1,0 +1,469 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto p-6 font-sans text-slate-900 dark:text-white">
+    <!-- HEADER -->
+    <div class="text-center mb-10">
+        <div
+            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4 shadow-sm"
+        >
+            <Icon name="mdi:gamepad-variant" class="w-8 h-8 text-slate-500" />
+        </div>
+        <h1 class="text-4xl font-bold tracking-tight mb-2">Monitor De Mando</h1>
+        <p class="text-slate-500 dark:text-slate-400" id="connection-msg">
+            Conecta tu dispositivo USB o Bluetooth
+        </p>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div
+        class="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl p-8 relative overflow-hidden min-h-[500px] flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800"
+    >
+        <!-- VISUALIZER LAYER -->
+        <!-- Pure geometric layout. No shell. Floating buttons. -->
+        <div
+            id="gamepad-stage"
+            class="relative w-[600px] h-[360px] opacity-25 grayscale transition-all duration-500 scale-90 sm:scale-100"
+        >
+            <!-- TRIGGERS (Wide bars at top) -->
+            <div
+                class="absolute top-0 left-8 w-32 h-16 bg-slate-100 dark:bg-slate-800 rounded-t-2xl border-x border-t border-slate-200 dark:border-slate-700 flex flex-col justify-end p-2"
+            >
+                <!-- L2 Pressure Bar -->
+                <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                    <div id="bar-6" class="h-full bg-sky-500 w-0"></div>
+                </div>
+                <div
+                    id="btn-6"
+                    class="mt-2 w-full h-8 rounded-lg border-2 border-slate-300 dark:border-slate-600 transition-colors"
+                >
+                </div>
+                <span class="absolute -top-6 left-0 text-[10px] font-bold text-slate-400"
+                    >LT / L2</span
+                >
+            </div>
+
+            <div
+                class="absolute top-0 right-8 w-32 h-16 bg-slate-100 dark:bg-slate-800 rounded-t-2xl border-x border-t border-slate-200 dark:border-slate-700 flex flex-col justify-end p-2"
+            >
+                <!-- R2 Pressure Bar -->
+                <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                    <div id="bar-7" class="h-full bg-sky-500 w-0"></div>
+                </div>
+                <div
+                    id="btn-7"
+                    class="mt-2 w-full h-8 rounded-lg border-2 border-slate-300 dark:border-slate-600 transition-colors"
+                >
+                </div>
+                <span class="absolute -top-6 right-0 text-[10px] font-bold text-slate-400"
+                    >RT / R2</span
+                >
+            </div>
+
+            <!-- BUMPERS -->
+            <div
+                id="btn-4"
+                class="absolute top-20 left-8 w-32 h-10 bg-white dark:bg-slate-800 rounded-lg border-2 border-slate-300 dark:border-slate-600 shadow-sm transition-transform active:scale-95 flex items-center justify-center"
+            >
+                <span class="text-xs font-bold text-slate-300">LB</span>
+            </div>
+            <div
+                id="btn-5"
+                class="absolute top-20 right-8 w-32 h-10 bg-white dark:bg-slate-800 rounded-lg border-2 border-slate-300 dark:border-slate-600 shadow-sm transition-transform active:scale-95 flex items-center justify-center"
+            >
+                <span class="text-xs font-bold text-slate-300">RB</span>
+            </div>
+
+            <!-- LEFT STICK & D-PAD AREA -->
+            <div class="absolute top-40 left-16 w-40 h-40">
+                <!-- Stick (Top) -->
+                <div
+                    class="absolute top-0 left-0 w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center"
+                >
+                    <div
+                        id="stick-left"
+                        class="w-14 h-14 bg-slate-200 dark:bg-slate-600 rounded-full shadow-inner relative will-change-transform"
+                    >
+                        <div
+                            id="btn-10"
+                            class="w-full h-full rounded-full border-4 border-transparent transition-colors"
+                        >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- D-Pad (Bottom Right relative to stick) -->
+                <div class="absolute bottom-0 right-0 w-24 h-24">
+                    <div
+                        id="btn-12"
+                        class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded bg-slate-200 dark:bg-slate-700 transition-colors"
+                    >
+                    </div>
+                    <!-- U -->
+                    <div
+                        id="btn-13"
+                        class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded bg-slate-200 dark:bg-slate-700 transition-colors"
+                    >
+                    </div>
+                    <!-- D -->
+                    <div
+                        id="btn-14"
+                        class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded bg-slate-200 dark:bg-slate-700 transition-colors"
+                    >
+                    </div>
+                    <!-- L -->
+                    <div
+                        id="btn-15"
+                        class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded bg-slate-200 dark:bg-slate-700 transition-colors"
+                    >
+                    </div>
+                    <!-- R -->
+                    <div class="absolute inset-8 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                    <!-- Center fill -->
+                </div>
+            </div>
+
+            <!-- RIGHT STICK & FACE BUTTONS AREA -->
+            <div class="absolute top-40 right-16 w-40 h-40">
+                <!-- Face Buttons (Top) -->
+                <div class="absolute top-0 right-0 w-24 h-24">
+                    <div
+                        id="btn-3"
+                        class="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center font-bold text-slate-300 shadow-sm transition-all text-xs"
+                    >
+                        Y
+                    </div>
+                    <div
+                        id="btn-1"
+                        class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center font-bold text-slate-300 shadow-sm transition-all text-xs"
+                    >
+                        B
+                    </div>
+                    <div
+                        id="btn-0"
+                        class="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center font-bold text-slate-300 shadow-sm transition-all text-xs"
+                    >
+                        A
+                    </div>
+                    <div
+                        id="btn-2"
+                        class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex items-center justify-center font-bold text-slate-300 shadow-sm transition-all text-xs"
+                    >
+                        X
+                    </div>
+                </div>
+
+                <!-- Stick (Bottom) -->
+                <div
+                    class="absolute bottom-0 left-0 w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center"
+                >
+                    <div
+                        id="stick-right"
+                        class="w-14 h-14 bg-slate-200 dark:bg-slate-600 rounded-full shadow-inner relative will-change-transform"
+                    >
+                        <div
+                            id="btn-11"
+                            class="w-full h-full rounded-full border-4 border-transparent transition-colors"
+                        >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MENU (Center) -->
+            <div class="absolute top-40 left-1/2 -translate-x-1/2 flex gap-6">
+                <div
+                    id="btn-8"
+                    class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] text-slate-400 font-bold transition-colors"
+                >
+                    SEL
+                </div>
+                <div
+                    id="btn-9"
+                    class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] text-slate-400 font-bold transition-colors"
+                >
+                    STA
+                </div>
+            </div>
+            <!-- Guide -->
+            <div
+                id="btn-16"
+                class="absolute top-24 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-4 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-700 shadow-md flex items-center justify-center transition-colors"
+            >
+                <Icon name="mdi:power" class="w-6 h-6 text-slate-300" />
+            </div>
+        </div>
+
+        <!-- INFO BAR -->
+        <div
+            class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 w-full flex justify-between items-center text-xs font-mono text-slate-400 opacity-50 transition-opacity"
+            id="info-bar"
+        >
+            <div class="flex gap-4">
+                <span
+                    >ID: <strong id="gp-index" class="text-slate-600 dark:text-slate-300">--</strong
+                    ></span
+                >
+                <span class="hidden md:inline" id="gp-id">No device</span>
+            </div>
+            <div class="flex gap-4">
+                <div>AXIS: <span id="axis-count">0</span></div>
+                <div>BTNS: <span id="btn-count">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIBRATION TESTER -->
+    <div
+        class="mt-8 bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 opacity-50 pointer-events-none transition-opacity"
+        id="vibration-panel"
+    >
+        <div>
+            <h3 class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                <Icon name="mdi:vibrate" class="w-5 h-5 text-fuchsia-500" />
+                Test de Vibración
+            </h3>
+            <p class="text-xs text-slate-500 mt-1">
+                Requiere soporte del navegador y mando compatible (Chrome/Edge recomendado).
+            </p>
+        </div>
+        <div class="flex gap-4">
+            <button
+                id="vib-low"
+                class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-sm font-bold shadow-sm active:scale-95 transition-transform hover:border-fuchsia-400 hover:text-fuchsia-500"
+            >
+                Grave (Rumble)
+            </button>
+            <button
+                id="vib-high"
+                class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-sm font-bold shadow-sm active:scale-95 transition-transform hover:border-cyan-400 hover:text-cyan-500"
+            >
+                Agudo (Buzz)
+            </button>
+        </div>
+    </div>
+
+    <!-- DEBUG LOG -->
+    <div
+        class="mt-8 bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800"
+    >
+        <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xs font-bold uppercase text-slate-400 tracking-wider">
+                Historial de Eventos
+            </h3>
+            <button
+                id="clear-log"
+                class="text-[10px] text-slate-400 hover:text-sky-500 uppercase font-bold"
+                >Limpiar</button
+            >
+        </div>
+        <div
+            id="debug-log"
+            class="h-32 overflow-y-auto font-mono text-[10px] text-slate-500 dark:text-slate-400 space-y-1 p-2 bg-white dark:bg-black/20 rounded"
+        >
+            <div class="italic opacity-50">Esperando eventos...</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .active-btn {
+        background-color: #0ea5e9 !important; /* sky-500 */
+        border-color: #38bdf8 !important; /* sky-400 */
+        color: white !important;
+        box-shadow: 0 0 15px rgba(14, 165, 233, 0.5) !important;
+        transform: scale(0.95);
+    }
+    .active-dpad {
+        background-color: #0ea5e9 !important;
+        box-shadow: 0 0 10px rgba(14, 165, 233, 0.5) !important;
+    }
+    .active-stick-cap {
+        background-color: #0ea5e9 !important; /* sky-500 */
+        border-color: #7dd3fc !important; /* sky-300 */
+    }
+    .active-trigger-bar {
+        background-color: #0ea5e9 !important; /* sky-500 */
+    }
+</style>
+
+<script>
+    let rafId = 0;
+    const STICK_RANGE = 25;
+
+    // Elements
+    const stage = document.getElementById("gamepad-stage");
+    const infoBar = document.getElementById("info-bar");
+    const connMsg = document.getElementById("connection-msg");
+    const logEl = document.getElementById("debug-log");
+    const clearLogBtn = document.getElementById("clear-log");
+
+    // Vibration Elements
+    const vibPanel = document.getElementById("vibration-panel");
+    const btnVibLow = document.getElementById("vib-low");
+    const btnVibHigh = document.getElementById("vib-high");
+
+    // Status text
+    const txtIndex = document.getElementById("gp-index");
+    const txtId = document.getElementById("gp-id");
+    const txtAxis = document.getElementById("axis-count");
+    const txtBtn = document.getElementById("btn-count");
+
+    // Bars
+    const barL = document.getElementById("bar-6");
+    const barR = document.getElementById("bar-7");
+
+    // Clear Log
+    if (clearLogBtn) {
+        clearLogBtn.addEventListener("click", () => {
+            if (logEl) logEl.innerHTML = '<div class="italic opacity-50">Log limpiado...</div>';
+        });
+    }
+
+    function addLog(msg) {
+        if (!logEl) return;
+        const time = new Date().toLocaleTimeString();
+        const line = document.createElement("div");
+        line.innerHTML = `<span class="opacity-50">[${time}]</span> ${msg}`;
+        logEl.prepend(line);
+        if (logEl.children.length > 50 && logEl.lastElementChild) logEl.lastElementChild.remove();
+    }
+
+    // Vibration Logic
+    function triggerVibration(gpIndex, weak, strong) {
+        const gp = navigator.getGamepads()[gpIndex];
+        if (!gp || !gp.vibrationActuator) {
+            addLog(
+                `<span class="text-orange-500">Vibración no soportada por este mando/navegador.</span>`
+            );
+            return;
+        }
+
+        // @ts-ignore
+        gp.vibrationActuator
+            .playEffect("dual-rumble", {
+                startDelay: 0,
+                duration: 500,
+                weakMagnitude: weak,
+                strongMagnitude: strong,
+            })
+            .then(() => addLog(`Vibración enviada: ${weak > 0.5 ? "Grave" : "Agudo"}`))
+            .catch((err) =>
+                addLog(`<span class="text-red-500">Error vibración: ${err.message}</span>`)
+            );
+    }
+
+    window.addEventListener("gamepadconnected", (e) => {
+        const gp = e.gamepad;
+
+        stage?.classList.remove("opacity-25", "grayscale", "scale-90");
+        infoBar?.classList.remove("opacity-50");
+        if (vibPanel) vibPanel.classList.remove("opacity-50", "pointer-events-none");
+
+        if (connMsg)
+            connMsg.innerHTML = `<span class="text-emerald-500 font-bold">● Conectado</span>`;
+
+        if (txtIndex) txtIndex.textContent = gp.index.toString();
+        if (txtId) txtId.textContent = gp.id;
+        if (txtAxis) txtAxis.textContent = gp.axes.length.toString();
+        if (txtBtn) txtBtn.textContent = gp.buttons.length.toString();
+
+        addLog(`<span class="text-emerald-500 font-bold">Conectado:</span> ${gp.id}`);
+
+        // Bind Vibration Buttons
+        if (btnVibLow) btnVibLow.onclick = () => triggerVibration(gp.index, 1.0, 0.0);
+        if (btnVibHigh) btnVibHigh.onclick = () => triggerVibration(gp.index, 0.0, 1.0);
+
+        loop();
+    });
+
+    window.addEventListener("gamepaddisconnected", () => {
+        cancelAnimationFrame(rafId);
+        stage?.classList.add("opacity-25", "grayscale", "scale-90");
+        infoBar?.classList.add("opacity-50");
+        if (vibPanel) vibPanel.classList.add("opacity-50", "pointer-events-none");
+
+        if (connMsg) connMsg.textContent = "Conecta tu dispositivo USB o Bluetooth";
+        if (txtIndex) txtIndex.textContent = "--";
+        addLog(`<span class="text-rose-500 font-bold">Desconectado</span>`);
+    });
+
+    function loop() {
+        const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+        const gp = gamepads[0];
+
+        if (gp) {
+            updateInput(gp);
+        }
+        rafId = requestAnimationFrame(loop);
+    }
+
+    // Previous buttons state to detect changes
+    const prevButtons = new Array(17).fill(false);
+
+    function updateInput(gp) {
+        // BUTTONS
+        gp.buttons.forEach((b, i) => {
+            const el = document.getElementById(`btn-${i}`);
+            if (!el) return;
+
+            // LOG PRESS EVENTS (Rising Edge)
+            if (b.pressed && !prevButtons[i]) {
+                addLog(`Botón <strong>${i}</strong> presionado`);
+                prevButtons[i] = true;
+            } else if (!b.pressed && prevButtons[i]) {
+                prevButtons[i] = false;
+            }
+
+            // TRIGGERS (Analog)
+            if (i === 6 || i === 7) {
+                const pct = b.value * 100;
+                const bar = i === 6 ? barL : barR;
+                if (bar) bar.style.width = `${pct}%`;
+
+                if (b.value > 0.1) el.classList.add("active-btn");
+                else el.classList.remove("active-btn");
+                return;
+            }
+
+            // D-PAD
+            if (i >= 12 && i <= 15) {
+                if (b.pressed) el.classList.add("active-dpad");
+                else el.classList.remove("active-dpad");
+                return;
+            }
+
+            // STICK CLICKS
+            if (i === 10 || i === 11) {
+                if (b.pressed) el.classList.add("!border-sky-400", "!bg-sky-500");
+                else el.classList.remove("!border-sky-400", "!bg-sky-500");
+                return;
+            }
+
+            // FACE & OTHERS
+            if (b.pressed) {
+                el.classList.add("active-btn");
+                if (el.textContent) el.classList.add("text-white");
+            } else {
+                el.classList.remove("active-btn");
+                if (el.textContent) el.classList.remove("text-white");
+            }
+        });
+
+        // STICKS
+        const sL = document.getElementById("stick-left");
+        if (sL) {
+            const x = gp.axes[0] * STICK_RANGE;
+            const y = gp.axes[1] * STICK_RANGE;
+            sL.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        const sR = document.getElementById("stick-right");
+        if (sR) {
+            const x = gp.axes[2] * STICK_RANGE;
+            const y = gp.axes[3] * STICK_RANGE;
+            sR.style.transform = `translate(${x}px, ${y}px)`;
+        }
+    }
+</script>
