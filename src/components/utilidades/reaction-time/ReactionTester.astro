@@ -1,0 +1,567 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto p-4 font-sans select-none">
+    <!-- GAME CONTAINER -->
+    <div
+        id="reaction-area"
+        class="relative w-full h-[500px] md:h-[600px] rounded-[3rem] shadow-2xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all duration-300 transform active:scale-[0.99] touch-manipulation group"
+    >
+        <!-- Background Layers for States -->
+        <div
+            id="bg-wait"
+            class="absolute inset-0 bg-rose-500 transition-opacity duration-300 opacity-0 flex items-center justify-center"
+        >
+            <div class="text-white text-center animate-pulse px-4">
+                <div class="mb-6 flex justify-center transform scale-125">
+                    <Icon name="mdi:hand-back-right" class="w-24 h-24" />
+                </div>
+                <h2 id="wait-title" class="text-5xl md:text-7xl font-black tracking-tighter mb-4">
+                    ESPERA...
+                </h2>
+                <p id="wait-subtitle" class="text-2xl md:text-3xl font-medium opacity-90">
+                    No hagas clic todavía
+                </p>
+            </div>
+        </div>
+
+        <div
+            id="bg-go"
+            class="absolute inset-0 bg-emerald-500 transition-opacity duration-0 opacity-0 flex items-center justify-center"
+        >
+            <div class="text-white text-center">
+                <h2
+                    class="text-7xl md:text-[10rem] font-black tracking-tighter scale-110 drop-shadow-lg"
+                >
+                    ¡YA!
+                </h2>
+                <p class="text-3xl md:text-4xl font-bold mt-4 animate-bounce">¡DALE AHORA!</p>
+            </div>
+        </div>
+
+        <div
+            id="bg-idle"
+            class="absolute inset-0 bg-slate-100 dark:bg-slate-900 transition-opacity duration-300 flex items-center justify-center"
+        >
+            <div class="text-center p-8">
+                <div
+                    class="mb-6 inline-block p-6 rounded-full bg-white dark:bg-slate-800 shadow-xl group-hover:scale-110 transition-transform duration-500"
+                >
+                    <Icon name="mdi:lightning-bolt" class="w-16 h-16 text-indigo-500" />
+                </div>
+                <h1
+                    class="text-4xl md:text-7xl font-black text-slate-800 dark:text-white mb-4 tracking-tight"
+                >
+                    Test de Reflejos
+                </h1>
+                <p class="text-xl text-slate-500 dark:text-slate-400 max-w-lg mx-auto mb-8">
+                    Mide tu velocidad de reacción en milisegundos. Promedio de 5 intentos.
+                </p>
+                <div
+                    class="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xl transition-colors shadow-lg shadow-indigo-500/30"
+                >
+                    <Icon name="mdi:play" class="w-6 h-6 animate-pulse" />
+                    Haz click para comenzar
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="bg-early"
+            class="absolute inset-0 bg-orange-400 transition-opacity duration-300 opacity-0 flex items-center justify-center"
+        >
+            <div class="text-center text-white">
+                <div class="mb-4 flex justify-center">
+                    <Icon name="mdi:alert-circle" class="w-20 h-20" />
+                </div>
+                <h2 class="text-5xl font-black tracking-tight">¡Demasiado pronto!</h2>
+                <p class="text-2xl mt-4 opacity-90">Espera a que se ponga verde.</p>
+                <div
+                    class="mt-8 px-6 py-3 bg-white/20 rounded-xl font-bold backdrop-blur-sm cursor-pointer hover:bg-white/30 transition-colors"
+                >
+                    Click para reintentar
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="bg-result"
+            class="absolute inset-0 bg-indigo-600 transition-opacity duration-300 opacity-0 flex items-center justify-center"
+        >
+            <div class="text-center text-white w-full max-w-2xl px-4">
+                <div
+                    class="text-8xl md:text-[10rem] font-black font-mono tracking-tighter leading-none mb-2 filter drop-shadow-lg"
+                    id="time-display"
+                >
+                    245 ms
+                </div>
+                <p
+                    id="feedback-msg"
+                    class="text-3xl md:text-4xl font-bold mb-12 text-indigo-100 italic"
+                >
+                    ¡Velocidad de la luz!
+                </p>
+
+                <div
+                    class="w-full bg-black/20 h-6 rounded-full overflow-hidden mb-12 relative border border-white/10"
+                >
+                    <!-- Progress of attempts -->
+                    <div
+                        id="attempt-bar"
+                        class="h-full bg-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.5)] transition-all duration-500 w-1/5"
+                    >
+                    </div>
+                </div>
+
+                <div
+                    id="action-prompt"
+                    class="text-xl md:text-2xl font-medium opacity-90 animate-bounce flex items-center justify-center gap-2"
+                >
+                    <!-- Injected via JS -->
+                    <Icon name="mdi:cursor-default-click" /> Click para siguiente intento (1/5)
+                </div>
+            </div>
+        </div>
+
+        <!-- FINAL SCORE SCREEN -->
+        <div
+            id="bg-score"
+            class="absolute inset-0 bg-slate-900 z-50 transition-opacity duration-500 opacity-0 pointer-events-none flex flex-col items-center justify-center p-6 overflow-y-auto"
+        >
+            <div class="text-center w-full max-w-3xl my-auto">
+                <div
+                    id="rank-badge"
+                    class="inline-block px-6 py-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white font-black text-xl md:text-2xl uppercase tracking-widest mb-4 shadow-lg transform -rotate-2"
+                >
+                    Tigre
+                </div>
+
+                <h2 class="text-5xl md:text-8xl font-black text-white mb-2 tracking-tighter">
+                    <span
+                        id="final-avg"
+                        class="text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400"
+                        >232</span
+                    >
+                    <span class="text-4xl text-slate-500">ms</span>
+                </h2>
+                <p class="text-slate-400 text-xl mb-8">Promedio final</p>
+
+                <!-- Historic Graph -->
+                <div
+                    class="flex justify-center items-end gap-3 h-24 mb-6 px-4 md:px-20"
+                    id="bars-container"
+                >
+                    <!-- Bars injected by JS -->
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 w-full mb-8">
+                    <button
+                        id="btn-share-copy"
+                        class="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-xl transition-all active:scale-95 shadow-lg border border-slate-700"
+                    >
+                        <Icon name="mdi:content-copy" class="w-5 h-5" />
+                        <span>Copiar</span>
+                    </button>
+                    <button
+                        id="btn-share-twitter"
+                        class="flex items-center justify-center gap-2 bg-[#1DA1F2] hover:bg-[#1a91da] text-white font-bold py-3 px-4 rounded-xl transition-all active:scale-95 shadow-lg shadow-blue-500/30"
+                    >
+                        <Icon name="mdi:twitter" class="w-5 h-5" />
+                        <span>Twittear</span>
+                    </button>
+                </div>
+
+                <button
+                    onclick="location.reload()"
+                    class="w-full bg-white hover:bg-slate-200 text-slate-900 font-bold py-4 px-10 rounded-2xl text-xl transition-all active:scale-95 shadow-xl"
+                >
+                    Intentar de nuevo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions below -->
+    <div class="mt-8 flex justify-center text-slate-400 text-sm gap-8">
+        <div class="flex items-center gap-2">
+            <span
+                class="w-6 h-6 border border-slate-300 dark:border-slate-700 rounded flex items-center justify-center text-xs"
+                ><Icon name="mdi:mouse" /></span
+            >
+            <span>Ratón</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span
+                class="w-6 h-6 border border-slate-300 dark:border-slate-700 rounded flex items-center justify-center text-xs"
+                ><Icon name="mdi:gesture-tap" /></span
+            >
+            <span>Táctil</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span
+                class="px-2 h-6 border border-slate-300 dark:border-slate-700 rounded flex items-center justify-center text-xs font-mono"
+                >SPC</span
+            >
+            <span>Espacio</span>
+        </div>
+    </div>
+</div>
+
+<!-- HISTORY SECTION (Outside Game) -->
+<div class="mt-12 w-full max-w-4xl mx-auto">
+    <h2
+        class="text-2xl font-bold text-slate-800 dark:text-white mb-6 text-center flex items-center justify-center gap-2"
+    >
+        <Icon name="mdi:history" class="text-indigo-500" /> Historial Local
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <!-- Best -->
+        <div
+            class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800"
+        >
+            <h3
+                class="text-emerald-600 dark:text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2"
+            >
+                <Icon name="mdi:trophy" class="w-5 h-5" /> Top 5 Mejores
+            </h3>
+            <ul id="list-best" class="space-y-3">
+                <li class="text-slate-400 text-sm italic text-center py-4">
+                    Juega para registrar tu primer récord
+                </li>
+            </ul>
+        </div>
+
+        <!-- Worst -->
+        <div
+            class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800"
+        >
+            <h3
+                class="text-rose-600 dark:text-rose-400 font-bold text-sm uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2"
+            >
+                <Icon name="mdi:alert-circle" class="w-5 h-5" /> Top 5 Peores
+            </h3>
+            <ul id="list-worst" class="space-y-3">
+                <li class="text-slate-400 text-sm italic text-center py-4">
+                    Juega para registrar tu primer récord
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    /**
+     * Logic for Reaction Time Tester
+     * Uses performance.now() for high precision.
+     */
+
+    // DOM Elements
+    const area = document.getElementById("reaction-area");
+    const layers = {
+        idle: document.getElementById("bg-idle"),
+        wait: document.getElementById("bg-wait"),
+        go: document.getElementById("bg-go"),
+        early: document.getElementById("bg-early"),
+        result: document.getElementById("bg-result"),
+        score: document.getElementById("bg-score"),
+    };
+
+    // Using TS-ignore style logic for vanilla JS simple element selection
+    const els = {
+        time: document.getElementById("time-display"),
+        action: document.getElementById("action-prompt"),
+        bar: document.getElementById("attempt-bar"),
+        final: document.getElementById("final-avg"),
+        rank: document.getElementById("rank-badge"),
+        bars: document.getElementById("bars-container"),
+        feedback: document.getElementById("feedback-msg"),
+        waitTitle: document.getElementById("wait-title"),
+        waitSub: document.getElementById("wait-subtitle"),
+        listBest: document.getElementById("list-best"),
+        listWorst: document.getElementById("list-worst"),
+    };
+
+    // State
+    const TOTAL_ATTEMPTS = 5;
+    let attempts = [];
+    let state = "idle"; // idle, waiting, ready, result, early, finished
+    let startTime = 0;
+    let timerId = 0;
+
+    // Fun Texts
+    const WAIT_PHRASES = [
+        { t: "ESPERA...", s: "Aguanta la respiración..." },
+        { t: "QUIETO...", s: "No parpadees ahora" },
+        { t: "ATENTO...", s: "Dedos preparados..." },
+        { t: "HOLD...", s: "Paciencia, saltamontes" },
+        { t: "OJITO...", s: "Va a salir ya..." },
+    ];
+
+    const getFeedback = (ms) => {
+        if (ms < 150) return "¡¿ERES UN ROBOT?!";
+        if (ms < 180) return "¡INCREÍBLE!";
+        if (ms < 210) return "¡Muy rápido!";
+        if (ms < 250) return "Buena reacción";
+        if (ms < 300) return "No está mal...";
+        if (ms < 400) return "Un poco lento...";
+        if (ms < 600) return "Te has dormido";
+        return "Despierta...";
+    };
+
+    // Ranks Configuration
+    const RANKS = [
+        { max: 180, title: "Ciberatleta", color: "from-cyan-400 to-blue-600" },
+        { max: 230, title: "Tigre", color: "from-amber-400 to-orange-500" },
+        { max: 280, title: "Humano", color: "from-emerald-400 to-green-600" },
+        { max: 350, title: "Tortuga", color: "from-slate-400 to-slate-600" },
+        { max: 9999, title: "Dormido", color: "from-stone-500 to-stone-700" },
+    ];
+
+    // Helper: Switch Layer
+    function showLayer(layerName) {
+        // Hide all
+        Object.values(layers).forEach((el) => {
+            if (el) {
+                el.classList.remove("opacity-100", "pointer-events-auto");
+                el.classList.add("opacity-0", "pointer-events-none");
+            }
+        });
+
+        // Show target
+        const target = layers[layerName];
+        if (target) {
+            target.classList.remove("opacity-0", "pointer-events-none");
+            target.classList.add("opacity-100", "pointer-events-auto");
+        }
+    }
+
+    // --- GAME ACTIONS ---
+
+    function startAttempt() {
+        state = "waiting";
+
+        // Random Wait Text
+        const phrase = WAIT_PHRASES[Math.floor(Math.random() * WAIT_PHRASES.length)];
+        if (els.waitTitle) els.waitTitle.innerText = phrase.t;
+        if (els.waitSub) els.waitSub.innerText = phrase.s;
+
+        showLayer("wait");
+
+        // Random delay between 1.5s and 4.5s
+        const delay = Math.floor(Math.random() * 3000) + 1500;
+
+        timerId = setTimeout(() => {
+            if (state === "waiting") {
+                state = "ready";
+                showLayer("go");
+                startTime = performance.now();
+            }
+        }, delay);
+    }
+
+    function handleInteraction(e) {
+        // prevent default if needed (e.g. space scroll)
+        if (e.type === "keydown" && e.code === "Space") e.preventDefault();
+
+        // Only left click or touch or space
+        if (e.type === "mousedown" && e.button !== 0) return;
+
+        if (state === "idle") {
+            attempts = [];
+            startAttempt();
+            return;
+        }
+
+        if (state === "waiting") {
+            // Early click!
+            clearTimeout(timerId);
+            state = "early";
+            showLayer("early");
+            return;
+        }
+
+        if (state === "early") {
+            // Retry current attempt
+            startAttempt();
+            return;
+        }
+
+        if (state === "ready") {
+            // Valid Click!
+            const endTime = performance.now();
+            const reaction = endTime - startTime;
+            state = "result";
+
+            // Record
+            attempts.push(reaction);
+
+            // UI Update
+            if (els.time) els.time.innerText = Math.round(reaction) + " ms";
+            if (els.feedback) els.feedback.innerText = getFeedback(reaction);
+
+            const isLast = attempts.length >= TOTAL_ATTEMPTS;
+            const nextIndex = attempts.length + 1;
+
+            // Update Prompt Text
+            if (els.action) {
+                if (isLast) {
+                    els.action.innerHTML = `<span>Ver Resultados Finales</span>`;
+                } else {
+                    els.action.innerHTML = `<span>Click para intento (${nextIndex}/5)</span>`;
+                }
+            }
+
+            if (els.bar) els.bar.style.width = `${(attempts.length / TOTAL_ATTEMPTS) * 100}%`;
+
+            showLayer("result");
+            return;
+        }
+
+        if (state === "result") {
+            if (attempts.length >= TOTAL_ATTEMPTS) {
+                showScore();
+            } else {
+                startAttempt();
+            }
+            return;
+        }
+    }
+
+    function renderHistory() {
+        // Load
+        const history = JSON.parse(localStorage.getItem("reaction_scores") || "[]");
+
+        // Helper
+        const renderItem = (item, type) => `
+            <li class="flex justify-between items-center group bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                <div class="flex items-center gap-3">
+                    <span class="font-mono font-bold text-lg ${type === "best" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500"}">${item.score}ms</span>
+                    <span class="text-xs px-2 py-0.5 rounded bg-white dark:bg-slate-700 text-slate-500 dark:text-slate-300 font-medium border border-slate-100 dark:border-slate-600">${item.rank}</span>
+                </div>
+                <span class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">${item.date}</span>
+            </li>
+        `;
+
+        const emptyState = `<li class="text-slate-400 text-sm italic text-center py-4">Juega para registrar tu primer récord</li>`;
+
+        // Get Best (Lowest score first)
+        const best = [...history].sort((a, b) => a.score - b.score).slice(0, 5);
+
+        // Get Worst (Highest score first)
+        const worst = [...history].sort((a, b) => b.score - a.score).slice(0, 5);
+
+        if (els.listBest) {
+            els.listBest.innerHTML = best.length
+                ? best.map((i) => renderItem(i, "best")).join("")
+                : emptyState;
+        }
+        if (els.listWorst) {
+            els.listWorst.innerHTML = worst.length
+                ? worst.map((i) => renderItem(i, "worst")).join("")
+                : emptyState;
+        }
+    }
+
+    function saveScore(score, rankTitle) {
+        const history = JSON.parse(localStorage.getItem("reaction_scores") || "[]");
+        history.push({
+            score: score,
+            rank: rankTitle,
+            date: new Date().toLocaleDateString(),
+        });
+        localStorage.setItem("reaction_scores", JSON.stringify(history));
+
+        // Refresh UI
+        renderHistory();
+    }
+
+    function showScore() {
+        state = "finished";
+
+        // Calculate Average
+        const sum = attempts.reduce((a, b) => a + b, 0);
+        const avg = Math.round(sum / attempts.length);
+
+        if (els.final) els.final.innerText = avg;
+
+        // Determine Rank
+        const rank = RANKS.find((r) => avg <= r.max) || RANKS[RANKS.length - 1];
+        if (els.rank) {
+            els.rank.textContent = rank.title;
+            els.rank.className = `inline-block px-6 py-2 rounded-full bg-gradient-to-r ${rank.color} text-white font-black text-xl md:text-2xl uppercase tracking-widest mb-8 shadow-lg transform -rotate-2`;
+        }
+
+        // Save & Update History
+        saveScore(avg, rank.title);
+
+        // Draw Chart
+        if (els.bars) {
+            els.bars.innerHTML = "";
+            const maxVal = Math.max(...attempts, 400); // Scale reference
+            attempts.forEach((val, i) => {
+                const h = (val / maxVal) * 100;
+                const bar = document.createElement("div");
+                // Tailwind classes via string
+                bar.className = "w-8 md:w-12 bg-indigo-500 rounded-t-lg relative group";
+                bar.style.height = `${Math.min(h, 100)}%`;
+
+                // Tooltip
+                const tooltip = document.createElement("div");
+                tooltip.className =
+                    "absolute -top-8 left-1/2 -translate-x-1/2 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity bg-black px-2 py-1 rounded";
+                tooltip.innerText = Math.round(val);
+
+                bar.appendChild(tooltip);
+                els.bars.appendChild(bar);
+            });
+        }
+
+        // Setup Share Buttons
+        const shareText = `He sacado ${avg}ms en el Test de Reflejos!\nRango: ${rank.title}\n\n¿Puedes superarme?\nhttps://jjlmoya.com/utilidades/test-reflejos/`;
+
+        const btnCopy = document.getElementById("btn-share-copy");
+        const btnTwitter = document.getElementById("btn-share-twitter");
+
+        if (btnCopy) {
+            btnCopy.onclick = (e) => {
+                // Prevent bubbling to game container reset
+                e.stopPropagation();
+                navigator.clipboard.writeText(shareText);
+                const originalContent = btnCopy.innerHTML;
+                btnCopy.innerHTML = `<span class="text-emerald-400">¡Copiado!</span>`;
+                setTimeout(() => (btnCopy.innerHTML = originalContent), 2000);
+            };
+        }
+
+        if (btnTwitter) {
+            btnTwitter.onclick = (e) => {
+                e.stopPropagation();
+                const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+                window.open(url, "_blank");
+            };
+        }
+
+        showLayer("score");
+    }
+
+    // Input Listeners
+    if (area) {
+        area.addEventListener("mousedown", handleInteraction);
+        area.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                handleInteraction(e);
+            },
+            { passive: false }
+        );
+    }
+    document.addEventListener("keydown", (e) => {
+        if (e.code === "Space") handleInteraction(e);
+    });
+
+    // Initial Render
+    renderHistory();
+</script>
