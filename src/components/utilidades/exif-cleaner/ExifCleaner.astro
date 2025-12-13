@@ -3,7 +3,7 @@
 
 <section class="max-w-4xl mx-auto p-6">
     <div
-        class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden group"
+        class="bg-white backdrop-blur-xl border border-slate-200 rounded-3xl p-8 shadow-2xl relative overflow-hidden group"
         id="drop-zone"
     >
         <!-- Background decorative elements -->
@@ -17,18 +17,18 @@
         </div>
 
         <div class="relative z-10 flex flex-col items-center justify-center text-center space-y-6">
-            <div class="p-6 bg-white/5 rounded-full ring-1 ring-white/20 mb-4 transition-all duration-500 group-hover:scale-110 group-hover:bg-white/10 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-               <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <div class="p-6 bg-indigo-50 rounded-full ring-1 ring-indigo-100 mb-4 transition-all duration-500 group-hover:scale-110 group-hover:bg-indigo-100 shadow-xl">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
             </div>
 
-            <h2 class="text-3xl font-bold text-white tracking-tight">
+            <h2 class="text-3xl font-bold text-slate-900 tracking-tight">
                 Arrastra tu imagen aquí
             </h2>
-            <p class="text-indigo-200 max-w-lg text-lg">
+            <p class="text-slate-600 max-w-lg text-lg">
                 Elimina metadatos GPS, modelo de cámara y configuraciones ocultas.
-                <span class="block mt-2 text-sm text-indigo-300/70 font-mono">Procesamiento 100% local. Nada sube a la nube.</span>
+                <span class="block mt-2 text-sm text-indigo-600 font-mono">Procesamiento 100% local. Nada sube a la nube.</span>
             </p>
 
             <label
@@ -44,39 +44,41 @@
         </div>
 
         <!-- Processing State (Hidden by default) -->
-        <div id="processing-state" class="hidden absolute inset-0 bg-slate-900/90 backdrop-blur-md z-20 flex flex-col items-center justify-center text-white">
-            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500 mb-4"></div>
+        <div id="processing-state" class="hidden absolute inset-0 bg-white/90 backdrop-blur-md z-20 flex flex-col items-center justify-center text-slate-900">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-600 mb-4"></div>
             <p class="text-xl font-medium animate-pulse">Limpiando metadatos...</p>
         </div>
 
         <!-- Result State (Hidden by default) -->
-        <div id="result-state" class="hidden absolute inset-0 bg-slate-900 z-20 flex flex-col md:flex-row items-center justify-center gap-8 p-8 transition-opacity duration-300 opacity-0">
-             <div class="w-full md:w-1/2 flex flex-col items-center">
-                <p class="text-sm text-indigo-300 mb-2 uppercase tracking-wider font-bold">Original</p>
-                <div class="relative group w-full max-w-sm aspect-video bg-black/50 rounded-lg overflow-hidden border border-red-500/30">
-                    <img id="original-preview" class="w-full h-full object-contain opacity-70 grayscale group-hover:grayscale-0 transition-all" />
-                    <div class="absolute bottom-2 right-2 bg-red-500/80 text-white text-xs px-2 py-1 rounded">INFECTADO</div>
-                </div>
-                <div id="metadata-list" class="mt-4 text-left w-full h-32 overflow-y-auto text-xs font-mono text-red-300/80 bg-red-900/10 p-2 rounded border border-red-500/20">
-                    <!-- Metadata logs inserted here -->
+        <div id="result-state" class="hidden absolute inset-0 bg-white z-20 flex flex-col md:flex-row gap-8 p-8 transition-opacity duration-300 opacity-0 overflow-y-auto">
+             <div class="w-full md:w-1/2 flex flex-col items-center justify-center relative">
+                <div class="relative group w-full max-w-sm aspect-auto bg-slate-100 rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                    <img id="result-preview" class="w-full h-full object-contain" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-4">
+                        <span class="text-white text-sm font-medium">Vista Previa</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="hidden md:flex h-32 w-px bg-white/10"></div>
-            
-            <div class="w-full md:w-1/2 flex flex-col items-center">
-                 <p class="text-sm text-emerald-300 mb-2 uppercase tracking-wider font-bold">Limpio & Seguro</p>
-                 <div class="relative w-full max-w-sm aspect-video bg-black/50 rounded-lg overflow-hidden border border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                    <img id="clean-preview" class="w-full h-full object-contain" />
-                    <div class="absolute bottom-2 right-2 bg-emerald-500 text-white text-xs px-2 py-1 rounded shadow-lg">LIMPIO</div>
+            <div class="w-full md:w-1/2 flex flex-col">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="h-8 w-1 bg-indigo-600 rounded-full"></div>
+                    <h3 class="text-2xl font-bold text-slate-800">Análisis Completado</h3>
                 </div>
-                 <button id="download-btn" class="mt-6 w-full max-w-sm py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg shadow-lg hover:shadow-emerald-500/40 transition-all flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+                <div id="metadata-list" class="flex-grow bg-slate-50 rounded-xl border border-slate-200 p-4 mb-6 font-mono text-sm overflow-y-auto max-h-[300px]">
+                    <!-- Metadata analysis logs -->
+                </div>
+
+                 <button id="download-btn" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg hover:shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 transform active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
-                    Descargar Limpio
+                    <span>Descargar Imagen Limpia</span>
                 </button>
-                 <button id="reset-btn" class="mt-3 text-sm text-slate-400 hover:text-white underline decoration-slate-600 hover:decoration-white underline-offset-4 transition-all">
+                
+                 <button id="reset-btn" class="mt-4 text-sm text-slate-500 hover:text-indigo-600 flex items-center justify-center gap-1 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
                     Limpiar otra imagen
                 </button>
             </div>
@@ -131,88 +133,267 @@
     }
 
     function handleFiles(e: any) {
-        // Support both drop and change events
         const files = e instanceof FileList ? e : e.target.files;
         if (files && files.length > 0) {
             processImage(files[0]);
         }
     }
 
-    function processImage(file: File) {
+    async function processImage(file: File) {
         // Show processing
         processingState?.classList.remove('hidden');
         
-        // Simulating some "work" to make it feel substantial plus allowing UI to update
-        setTimeout(() => {
-            const reader = new FileReader();
+        // 1. Read and Parse Metadata (Real Analysis)
+        const metadata = await extractExif(file);
+        
+        // 2. Process Image (Clean)
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // Show Result Preview (Using the original for quality display, but logically representing the file)
+                const resultPreview = document.getElementById('result-preview') as HTMLImageElement;
+                if(resultPreview) resultPreview.src = img.src;
+                
+                // Render Real Metadata
+                renderMetadataLog(metadata, file);
 
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    // 1. Show Original
-                    originalPreview!.src = img.src;
+                // Clean via Canvas for download
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx?.drawImage(img, 0, 0);
+
+                canvas.toBlob((blob) => {
+                    if (!blob) return;
+                    const cleanUrl = URL.createObjectURL(blob);
                     
-                    // 2. Generate Fake Metadata log for effect (and mix with real if we parsed it, but for now we visualy show intent)
-                    // In a real expanded version, we could use a parser to show exact stripped tags.
-                    // For this "Client Only" implementation that relies on Canvas reconstruction:
-                    generateMetadataLog(file);
+                    // Setup Download
+                    downloadBtn!.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = cleanUrl;
+                        a.download = `CLEAN_${file.name.split('.')[0]}.png`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
 
-                    // 3. Clean via Canvas (Strip all metadata by rebuilding pixels)
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx?.drawImage(img, 0, 0);
+                    // Show Result
+                    processingState?.classList.add('hidden');
+                    resultState?.classList.remove('hidden');
+                    setTimeout(() => resultState?.classList.remove('opacity-0'), 50);
 
-                    // Export clean blob
-                    canvas.toBlob((blob) => {
-                        if (!blob) return;
-                        const cleanUrl = URL.createObjectURL(blob);
-                        cleanPreview!.src = cleanUrl;
-                        
-                        // Setup Download
-                        downloadBtn!.onclick = () => {
-                            const a = document.createElement('a');
-                            a.href = cleanUrl;
-                            a.download = `CLEAN_${file.name.split('.')[0]}.png`; // Always PNG or WEBP to ensure stripped
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                        };
-
-                        // Show Result
-                        processingState?.classList.add('hidden');
-                        resultState?.classList.remove('hidden');
-                        // Small timeout for fade in
-                        setTimeout(() => resultState?.classList.remove('opacity-0'), 50);
-
-                    }, 'image/png'); // PNG ensures no extra lossy compression artifacts if possible, though 'image/webp' is also good.
-                };
-                img.src = e.target?.result as string;
+                }, 'image/png');
             };
-            reader.readAsDataURL(file);
-        }, 800);
+            img.src = e.target?.result as string;
+        };
+        reader.readAsDataURL(file);
     }
 
-    function generateMetadataLog(file: File) {
+    function renderMetadataLog(tags: Record<string, any>, file: File) {
         if(!metadataList) return;
         
-        const now = new Date();
-        const logs = [
-            `> ANALYZING ${file.name}...`,
-            `> DETECTED SIZE: ${(file.size / 1024).toFixed(2)} KB`,
-            `> SCANNING HEADERS...`,
-            `> FOUND EXIF MARKER: 0xFFE1`,
-            `> FOUND GPS TAGS...`,
-            `> FOUND CAMERA MODEL...`,
-            `> FOUND CREATION DATE...`,
-            `> STRIPPING METADATA STRUCTURES...`,
-            `> REBUILDING PIXEL DATA...`,
-            `> VERIFYING INTEGRITY...`,
-            `> DONE.`
-        ];
-        
-        metadataList.innerHTML = logs.map(l => `<div class="mb-1">${l}</div>`).join('');
+        const hasData = Object.keys(tags).length > 0;
+        let html = '';
+
+        if (hasData) {
+            html += `<div class="font-bold text-amber-600 mb-2">⚠️ RIESGOS DE PRIVACIDAD ENCONTRADOS:</div>`;
+            html += `<ul class="space-y-1">`;
+            
+            // Prioritize sensitive data
+            if (tags['GPSLocation']) {
+                html += `<li class="text-red-600 font-bold flex justify-between"><span>📍 GPS:</span> <span class="text-[10px] sm:text-xs text-right max-w-[150px] break-words">${tags['GPSLocation']}</span></li>`;
+            } else if (tags['GPSDetected']) {
+                html += `<li class="text-red-600 font-bold flex justify-between"><span>📍 UBICACIÓN GPS:</span> <span>DETECTADA</span></li>`;
+            } else {
+                 html += `<li class="text-emerald-600 flex justify-between opacity-70"><span>📍 UBICACIÓN GPS:</span> <span>NO ENCONTRADA</span></li>`;
+            }
+
+            if (tags['Model']) {
+                html += `<li class="text-amber-700 flex justify-between"><span>📷 CÁMARA:</span> <span>${tags['Model']}</span></li>`;
+            }
+
+            if (tags['Software']) {
+                html += `<li class="text-slate-600 flex justify-between"><span>💾 SOFTWARE:</span> <span>${tags['Software']}</span></li>`;
+            }
+
+             if (tags['DateTimeOriginal']) {
+                html += `<li class="text-blue-600 flex justify-between"><span>📅 FECHA:</span> <span>${tags['DateTimeOriginal']}</span></li>`;
+            }
+            
+            html += `</ul>`;
+            
+            // Raw Details
+            html += `<div class="mt-4 border-t border-slate-200 pt-2">`;
+            html += `<div class="text-[10px] text-slate-400 uppercase font-bold mb-1">OTROS DETALLES TÉCNICOS</div>`;
+            for (const [key, val] of Object.entries(tags)) {
+                if (['GPSLatitude', 'GPSLongitude', 'Model', 'Software', 'DateTimeOriginal'].includes(key)) continue;
+                html += `<div class="flex justify-between text-slate-500"><span>${key}:</span> <span class="truncate max-w-[120px]">${val}</span></div>`;
+            }
+            html += `</div>`;
+
+        } else {
+            html = `<div class="h-full flex flex-col items-center justify-center text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p>No se encontraron metadatos EXIF legibles.</p>
+                <p class="text-xs opacity-70 mt-1">Es posible que la imagen ya esté limpia.</p>
+            </div>`;
+        }
+
+        metadataList.innerHTML = html;
+    }
+
+    // --- Simple EXIF Parser Implementation (No external deps) ---
+    async function extractExif(file: File): Promise<Record<string, any>> {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const view = new DataView(e.target!.result as ArrayBuffer);
+                    if (view.getUint16(0, false) != 0xFFD8) return resolve({}); // Not JPEG
+
+                    let offset = 2;
+                    const length = view.byteLength;
+                    const tags: Record<string, any> = {};
+
+                    // Helper to determine bytes per type
+                    const getBytesPerComponent = (type: number) => {
+                        if (type === 1 || type === 2 || type === 7) return 1;
+                        if (type === 3) return 2;
+                        if (type === 4 || type === 9) return 4;
+                        if (type === 5 || type === 10) return 8;
+                        return 0;
+                    };
+
+                    while (offset < length) {
+                        if (view.getUint8(offset) != 0xFF) break; // Not a marker
+
+                        const marker = view.getUint8(offset + 1);
+                        // APP1 Marker (Exif)
+                        if (marker == 0xE1) {
+                             const exifLength = view.getUint16(offset + 2, false);
+                             if (view.getUint32(offset + 4, false) !== 0x45786966) { offset += 2 + exifLength; continue; }
+                             
+                             const tiffStart = offset + 10;
+                             const littleEndian = view.getUint16(tiffStart, false) === 0x4949;
+                             const ifdOffset = view.getUint32(tiffStart + 4, littleEndian);
+                             
+                             if (ifdOffset < 8) { offset += 2 + exifLength; continue; }
+
+                             const parseIFD = (offset: number) => {
+                                 const numEntries = view.getUint16(offset, littleEndian);
+                                 for (let i = 0; i < numEntries; i++) {
+                                     const entryOffset = offset + 2 + (i * 12);
+                                     const tag = view.getUint16(entryOffset, littleEndian);
+                                     const type = view.getUint16(entryOffset + 2, littleEndian);
+                                     const numValues = view.getUint32(entryOffset + 4, littleEndian);
+                                     const bytePerComp = getBytesPerComponent(type);
+                                     const dataSize = numValues * bytePerComp;
+                                     
+                                     // Determine where the data is (Inline vs Offset)
+                                     let valueOffset;
+                                     if (dataSize > 4) {
+                                         valueOffset = tiffStart + view.getUint32(entryOffset + 8, littleEndian);
+                                     } else {
+                                         valueOffset = entryOffset + 8;
+                                     }
+
+                                     if (tag === 0x8825) { // GPSInfo IFD Pointer
+                                         // Special case: The value IS the offset to the GPS IFD (relative to TIFF start)
+                                         // It's a LONG (4 bytes), so dataSize is 4. valueOffset was calculated as entryOffset + 8.
+                                         // We need to read the uint32 AT that location.
+                                         const gpsOffset = view.getUint32(entryOffset + 8, littleEndian);
+                                         tags['GPSDetected'] = true; // Fallback detection
+                                         const gpsTags = parseGPS(tiffStart + gpsOffset, littleEndian);
+                                         if (gpsTags) tags['GPSLocation'] = gpsTags;
+                                     } else if (tag === 0x0110) { // Model
+                                         tags['Model'] = readString(valueOffset, numValues);
+                                     } else if (tag === 0x0131) { // Software
+                                         tags['Software'] = readString(valueOffset, numValues);
+                                     } else if (tag === 0x9003) { // DateTimeOriginal
+                                         tags['DateTimeOriginal'] = readString(valueOffset, numValues);
+                                     }
+                                 }
+                             };
+
+                             const parseGPS = (offset: number, littleEndian: boolean) => {
+                                 const numEntries = view.getUint16(offset, littleEndian);
+                                 let lat = null, latRef = null, lon = null, lonRef = null;
+
+                                 for (let i = 0; i < numEntries; i++) {
+                                      const entryOffset = offset + 2 + (i * 12);
+                                      const tag = view.getUint16(entryOffset, littleEndian);
+                                      const type = view.getUint16(entryOffset + 2, littleEndian);
+                                      const numValues = view.getUint32(entryOffset + 4, littleEndian);
+                                      const dataSize = numValues * getBytesPerComponent(type);
+                                      
+                                      let valueOffset;
+                                      if (dataSize > 4) {
+                                          valueOffset = tiffStart + view.getUint32(entryOffset + 8, littleEndian);
+                                      } else {
+                                          valueOffset = entryOffset + 8;
+                                      }
+
+                                      if (tag === 0x0001) { // GPSLatitudeRef
+                                          latRef = String.fromCharCode(view.getUint8(valueOffset));
+                                      } else if (tag === 0x0002) { // GPSLatitude
+                                          lat = readRational(valueOffset, 3, littleEndian);
+                                      } else if (tag === 0x0003) { // GPSLongitudeRef
+                                          lonRef = String.fromCharCode(view.getUint8(valueOffset));
+                                      } else if (tag === 0x0004) { // GPSLongitude
+                                          lon = readRational(valueOffset, 3, littleEndian);
+                                      }
+                                 }
+                                 
+                                 if (lat && lon) {
+                                     // Ensure refs are valid (default N/E if missing/null)
+                                     const lr = (latRef && latRef !== '\0') ? latRef : 'N';
+                                     const lor = (lonRef && lonRef !== '\0') ? lonRef : 'E';
+                                     return `${lat[0]}° ${lat[1]}' ${lat[2]}" ${lr}, ${lon[0]}° ${lon[1]}' ${lon[2]}" ${lor}`;
+                                 }
+                                 return null;
+                             };
+                             
+                             const readString = (offset: number, length: number) => {
+                                 let str = '';
+                                 for(let n=0; n < length && n < 100; n++) { // Limit length
+                                     const charCode = view.getUint8(offset + n);
+                                     if (charCode === 0) break;
+                                     str += String.fromCharCode(charCode);
+                                 }
+                                 return str.trim();
+                             };
+
+                             const readRational = (offset: number, numValues: number, littleEndian: boolean) => {
+                                 const values = [];
+                                 for(let i=0; i<numValues; i++) {
+                                     const num = view.getUint32(offset + (i*8), littleEndian);
+                                     const den = view.getUint32(offset + (i*8) + 4, littleEndian);
+                                     const val = den === 0 ? 0 : num/den;
+                                     // Format to manageable decimals
+                                     values.push(Math.round(val * 1000) / 1000);
+                                 }
+                                 return values;
+                             };
+
+                             parseIFD(tiffStart + ifdOffset);
+                             break;
+                        } else {
+                            const l = view.getUint16(offset + 2, false);
+                            offset += 2 + l;
+                        }
+                    }
+                    resolve(tags);
+                } catch (err) {
+                    console.error("Exif parse error", err);
+                    resolve({});
+                }
+            };
+            reader.readAsArrayBuffer(file.slice(0, 128 * 1024));
+        });
     }
 
     resetBtn?.addEventListener('click', () => {
