@@ -68,6 +68,14 @@ export const cookingSection: SectionData = {
             title: "Guía Maestra de Roux",
             description: "Descubre las Salsas Madre francesas y calcula proporciones de espesante.",
             color: "#d97706"
+        },
+        {
+            href: "/utilidades/guia-sartenes/",
+            iconBg: "mdi:pot-steam-outline",
+            iconFg: "mdi:shield-star-outline",
+            title: "Selector de Sartenes",
+            description: "Encuentra el material ideal y aprende su mantenimiento: Hierro, Acero, Cobre o Antiadherente.",
+            color: "#475569"
         }
     ]
 };
