@@ -60,6 +60,14 @@ export const cookingSection: SectionData = {
             title: "Calculadora Masa Madre",
             description: "Calcula los refrescos perfectos. Control total sobre ratios, hidratación y desperdicio.",
             color: "#f59e0b"
+        },
+        {
+            href: "/utilidades/guia-roux/",
+            iconBg: "mdi:pot-mix",
+            iconFg: "mdi:spoon-sugar",
+            title: "Guía Maestra de Roux",
+            description: "Descubre las Salsas Madre francesas y calcula proporciones de espesante.",
+            color: "#d97706"
         }
     ]
 };
