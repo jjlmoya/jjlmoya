@@ -83,6 +83,7 @@ You must register the new tool in the appropriate category file (e.g., `files.ts
     *   Vibrant ink splashes (matching the utility's color theme).
     *   Concept art style, High Quality, 8k.
     *   *No 3D realistic renders. No photographs.*
+    *   **Text**: If the image contains text, it MUST be in **Spanish**.
 *   **Format**: `.webp` (due to local conversion limitations, prefer webp for others).
 *   **Location**: `public/images/utilidades/`.
 

@@ -28,6 +28,14 @@ export const filesSection: SectionData = {
             title: "Contador de Caracteres",
             description: "Cuentapalabras y caracteres visual. Analiza tiempos de lectura y voz.",
             color: "#6366f1"
+        },
+        {
+            href: "/utilidades/limpiador-exif/",
+            iconBg: "mdi:camera-off",
+            iconFg: "mdi:shield-check",
+            title: "Limpiador EXIF",
+            description: "Borra metadatos GPS y modelo de cámara. Privacidad total para tus fotos.",
+            color: "#8b5cf6"
         }
     ]
 };
