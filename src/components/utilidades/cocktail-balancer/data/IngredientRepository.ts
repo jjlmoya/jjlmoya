@@ -2,49 +2,88 @@ import type { Ingredient } from '../domain/Ingredient';
 
 // Reference: Liquid Intelligence (Dave Arnold) & standard bartending charts
 export const INGREDIENTS_DB: Ingredient[] = [
-    // --- SPIRITS ---
-    { id: 'gin_std', name: 'Ginebra (London Dry)', type: 'spirit', abv: 40, sugar: 0, acid: 0 },
-    { id: 'vodka_std', name: 'Vodka', type: 'spirit', abv: 40, sugar: 0, acid: 0 },
-    { id: 'rum_white', name: 'Ron Blanco (Ligero)', type: 'spirit', abv: 40, sugar: 0, acid: 0 },
-    { id: 'rum_aged', name: 'Ron Añejo', type: 'spirit', abv: 40, sugar: 0.5, acid: 0 }, // Trace sugar often added
-    { id: 'tequila_blanco', name: 'Tequila Blanco', type: 'spirit', abv: 40, sugar: 0, acid: 0 },
-    { id: 'whiskey_bourbon', name: 'Bourbon Whiskey', type: 'spirit', abv: 45, sugar: 0, acid: 0 },
-    { id: 'rye_whiskey', name: 'Rye Whiskey', type: 'spirit', abv: 50, sugar: 0, acid: 0 },
-    { id: 'mezcal', name: 'Mezcal', type: 'spirit', abv: 45, sugar: 0, acid: 0 },
-    { id: 'pisco', name: 'Pisco', type: 'spirit', abv: 40, sugar: 1, acid: 0 },
+    // --- SPIRITS (Destilados Base) ---
+    { id: 'gin_std', name: 'Ginebra (London Dry)', type: 'spirit', abv: 40, sugar: 0, acid: 0, bitterness: 2, complexity: 5, color: '#e0f2fe' }, // Clear/Blue tint
+    { id: 'gin_old_tom', name: 'Ginebra Old Tom', type: 'spirit', abv: 40, sugar: 2.0, acid: 0, bitterness: 1, complexity: 6, color: '#e0f2fe' },
+    { id: 'gin_plymouth', name: 'Ginebra Plymouth', type: 'spirit', abv: 41.2, sugar: 0, acid: 0, bitterness: 1, complexity: 5, color: '#e0f2fe' },
+    { id: 'vodka_std', name: 'Vodka', type: 'spirit', abv: 40, sugar: 0, acid: 0, bitterness: 0, complexity: 0, color: '#ffffff' },
+    { id: 'rum_white', name: 'Ron Blanco (Ligero)', type: 'spirit', abv: 40, sugar: 0, acid: 0, bitterness: 0, complexity: 2, color: '#ffffff' },
+    { id: 'rum_aged', name: 'Ron Añejo (5+ años)', type: 'spirit', abv: 40, sugar: 0.5, acid: 0, bitterness: 1, complexity: 7, color: '#d97706' }, // Amber
+    { id: 'rum_overproof', name: 'Ron Overproof (69%)', type: 'spirit', abv: 69, sugar: 0, acid: 0, bitterness: 2, complexity: 4, color: '#fef3c7' }, // Light Straw
+    { id: 'rum_agricole', name: 'Rhum Agricole Blanc', type: 'spirit', abv: 50, sugar: 0, acid: 0, bitterness: 1, complexity: 8, color: '#ffffff' },
+    { id: 'tequila_blanco', name: 'Tequila Blanco', type: 'spirit', abv: 40, sugar: 0, acid: 0, bitterness: 1, complexity: 5, color: '#ffffff' },
+    { id: 'tequila_reposado', name: 'Tequila Reposado', type: 'spirit', abv: 40, sugar: 0.3, acid: 0, bitterness: 1, complexity: 6, color: '#fcd34d' }, // Light Gold
+    { id: 'mezcal', name: 'Mezcal Espadín', type: 'spirit', abv: 45, sugar: 0, acid: 0, bitterness: 2, complexity: 9, color: '#ffffff' },
+    { id: 'whiskey_bourbon', name: 'Bourbon Whiskey', type: 'spirit', abv: 45, sugar: 0, acid: 0, bitterness: 2, complexity: 7, color: '#b45309' }, // Dark Amber
+    { id: 'rye_whiskey', name: 'Rye Whiskey', type: 'spirit', abv: 50, sugar: 0, acid: 0, bitterness: 3, complexity: 7, color: '#b45309' },
+    { id: 'scotch_blended', name: 'Scotch Blended', type: 'spirit', abv: 40, sugar: 0, acid: 0, bitterness: 2, complexity: 6, color: '#d97706' },
+    { id: 'scotch_islay', name: 'Islay Scotch (Ahumado)', type: 'spirit', abv: 43, sugar: 0, acid: 0, bitterness: 4, complexity: 10, color: '#fcd34d' },
+    { id: 'brandy_cognac', name: 'Cognac VSOP', type: 'spirit', abv: 40, sugar: 0.8, acid: 0, bitterness: 1, complexity: 8, color: '#92400e' },
+    { id: 'pisco_quebranta', name: 'Pisco Quebranta', type: 'spirit', abv: 40, sugar: 1, acid: 0, bitterness: 1, complexity: 6, color: '#ffffff' },
+    { id: 'cachaca', name: 'Cachaça', type: 'spirit', abv: 40, sugar: 1, acid: 0, bitterness: 1, complexity: 6, color: '#ffffff' },
+    { id: 'absinthe', name: 'Absenta', type: 'spirit', abv: 60, sugar: 0, acid: 0, bitterness: 5, complexity: 9, color: '#bef264' }, // Light Green
 
-    // --- CITRUS / ACIDS ---
-    { id: 'juice_lime', name: 'Zumo de Lima (Fresco)', type: 'citrus', abv: 0, sugar: 1.5, acid: 6.0 },
-    { id: 'juice_lemon', name: 'Zumo de Limón', type: 'citrus', abv: 0, sugar: 2.0, acid: 6.0 },
-    { id: 'juice_grapefruit', name: 'Zumo de Pomelo', type: 'citrus', abv: 0, sugar: 7.0, acid: 2.0 }, // Less acid, more sugar
-    { id: 'juice_orange', name: 'Zumo de Naranja', type: 'citrus', abv: 0, sugar: 9.0, acid: 0.8 },
-    { id: 'acid_solution_citric', name: 'Solución Ácido Cítrico (6%)', type: 'citrus', abv: 0, sugar: 0, acid: 6.0 },
+    // --- CITRUS / ACIDS (Ácidos) ---
+    { id: 'juice_lime', name: 'Zumo de Lima (Fresco)', type: 'citrus', abv: 0, sugar: 1.5, acid: 6.0, bitterness: 1, complexity: 2, color: '#d9f99d' }, // Lime Green
+    { id: 'juice_lemon', name: 'Zumo de Limón', type: 'citrus', abv: 0, sugar: 2.0, acid: 6.0, bitterness: 0.5, complexity: 1, color: '#fef08a' }, // Yellow
+    { id: 'juice_grapefruit', name: 'Zumo de Pomelo', type: 'citrus', abv: 0, sugar: 7.0, acid: 2.0, bitterness: 3, complexity: 3, color: '#fecaca' }, // Pink
+    { id: 'juice_orange', name: 'Zumo de Naranja', type: 'citrus', abv: 0, sugar: 9.0, acid: 0.8, bitterness: 0, complexity: 2, color: '#fdba74' }, // Orange
+    { id: 'juice_yuzu', name: 'Zumo de Yuzu', type: 'citrus', abv: 0, sugar: 1.5, acid: 4.5, bitterness: 2, complexity: 6, color: '#fef08a' },
+    { id: 'juice_pineapple', name: 'Zumo de Piña', type: 'citrus', abv: 0, sugar: 10.0, acid: 0.8, bitterness: 0, complexity: 3, color: '#fde047' },
+    { id: 'acid_solution_citric', name: 'Solución Ácido Cítrico (6%)', type: 'citrus', abv: 0, sugar: 0, acid: 6.0, bitterness: 0, complexity: 0, color: '#ffffff' },
+    { id: 'acid_solution_malic', name: 'Solución Ácido Málico (20%)', type: 'citrus', abv: 0, sugar: 0, acid: 20.0, bitterness: 1, complexity: 0, color: '#ffffff' },
 
-    // --- SYRUPS / SWEETENERS ---
-    { id: 'syrup_simple_11', name: 'Jarabe Simple (1:1)', type: 'syrup', abv: 0, sugar: 61.5, acid: 0 },
-    { id: 'syrup_rich_21', name: 'Jarabe Rico (2:1)', type: 'syrup', abv: 0, sugar: 80.0, acid: 0 }, // approximate
-    { id: 'syrup_honey', name: 'Jarabe de Miel (3:1)', type: 'syrup', abv: 0, sugar: 75.0, acid: 0.1 },
-    { id: 'syrup_agave', name: 'Sirope de Agave', type: 'syrup', abv: 0, sugar: 70.0, acid: 0 },
-    { id: 'syrup_grenadine', name: 'Granadina (Real)', type: 'syrup', abv: 0, sugar: 65.0, acid: 0.5 },
-    { id: 'syrup_orgeat', name: 'Orgeat', type: 'syrup', abv: 0, sugar: 60.0, acid: 0 },
+    // --- SYRUPS / SWEETENERS (Endulzantes) ---
+    { id: 'syrup_simple_11', name: 'Jarabe Simple (1:1)', type: 'syrup', abv: 0, sugar: 61.5, acid: 0, bitterness: 0, complexity: 0, color: '#ffffff' },
+    { id: 'syrup_rich_21', name: 'Jarabe Rico (2:1)', type: 'syrup', abv: 0, sugar: 80.0, acid: 0, bitterness: 0, complexity: 0, color: '#ffffff' },
+    { id: 'syrup_honey', name: 'Jarabe de Miel (3:1)', type: 'syrup', abv: 0, sugar: 75.0, acid: 0.1, bitterness: 0, complexity: 4, color: '#fcd34d' },
+    { id: 'syrup_agave', name: 'Sirope de Agave', type: 'syrup', abv: 0, sugar: 70.0, acid: 0, bitterness: 0, complexity: 3, color: '#fde047' },
+    { id: 'syrup_demerara', name: 'Sirope Demerara', type: 'syrup', abv: 0, sugar: 65.0, acid: 0, bitterness: 1, complexity: 3, color: '#d97706' },
+    { id: 'syrup_grenadine', name: 'Granadina (Real)', type: 'syrup', abv: 0, sugar: 65.0, acid: 0.5, bitterness: 0, complexity: 2, color: '#dc2626' }, // Red
+    { id: 'syrup_orgeat', name: 'Orgeat (Almendra)', type: 'syrup', abv: 0, sugar: 60.0, acid: 0, bitterness: 0, complexity: 5, color: '#f1f5f9' }, // Milky
+    { id: 'syrup_falernum', name: 'Falernum (Sin Alcohol)', type: 'syrup', abv: 0, sugar: 50.0, acid: 0.2, bitterness: 2, complexity: 7, color: '#fef3c7' },
+    { id: 'syrup_ginger', name: 'Sirope de Jengibre', type: 'syrup', abv: 0, sugar: 60.0, acid: 0.1, bitterness: 2, complexity: 3, color: '#fef9c3' },
+    { id: 'syrup_passion', name: 'Sirope de Maracuyá', type: 'syrup', abv: 0, sugar: 60.0, acid: 2.0, bitterness: 0, complexity: 4, color: '#fbbf24' },
+    { id: 'cordial_lime', name: 'Cordial de Lima (Rose\'s)', type: 'syrup', abv: 0, sugar: 50.0, acid: 2.5, bitterness: 1, complexity: 1, color: '#d9f99d' },
+    { id: 'maple_syrup', name: 'Sirope de Arce (Grado A)', type: 'syrup', abv: 0, sugar: 66.0, acid: 0, bitterness: 1, complexity: 5, color: '#92400e' },
 
-    // --- LIQUEURS ---
-    { id: 'liq_cointreau', name: 'Cointreau / Triple Sec', type: 'liqueur', abv: 40, sugar: 25.0, acid: 0 },
-    { id: 'liq_curacao', name: 'Dry Curaçao', type: 'liqueur', abv: 40, sugar: 20.0, acid: 0 },
-    { id: 'liq_maraschino', name: 'Licor Maraschino', type: 'liqueur', abv: 32, sugar: 35.0, acid: 0 },
-    { id: 'liq_campari', name: 'Campari', type: 'liqueur', abv: 25, sugar: 24.0, acid: 0 }, // Very bitter, but sweet
-    { id: 'liq_aperol', name: 'Aperol', type: 'liqueur', abv: 11, sugar: 25.0, acid: 0 },
-    { id: 'vermouth_sweet', name: 'Vermut Rojo (Dulce)', type: 'liqueur', abv: 16, sugar: 16.0, acid: 0.4 },
-    { id: 'vermouth_dry', name: 'Vermut Dry', type: 'liqueur', abv: 18, sugar: 3.0, acid: 0.5 },
-    { id: 'liq_coffee', name: 'Licor de Café (Kahlúa)', type: 'liqueur', abv: 20, sugar: 40.0, acid: 0.1 },
-    { id: 'liq_amaretto', name: 'Amaretto', type: 'liqueur', abv: 28, sugar: 30.0, acid: 0 },
-    { id: 'liq_stgermain', name: 'St. Germain', type: 'liqueur', abv: 20, sugar: 25.0, acid: 0 },
+    // --- LIQUEURS / FORTIFIED WINES (Licores y Vinos) ---
+    { id: 'liq_cointreau', name: 'Cointreau / Triple Sec', type: 'liqueur', abv: 40, sugar: 25.0, acid: 0, bitterness: 1, complexity: 3, color: '#ffffff' },
+    { id: 'liq_curacao', name: 'Dry Curaçao (Pierre Ferrand)', type: 'liqueur', abv: 40, sugar: 20.0, acid: 0, bitterness: 2, complexity: 6, color: '#fbbf24' },
+    { id: 'liq_blue_curacao', name: 'Blue Curaçao', type: 'liqueur', abv: 20, sugar: 30.0, acid: 0, bitterness: 1, complexity: 2, color: '#2563eb' }, // Blue
+    { id: 'liq_maraschino', name: 'Licor Maraschino', type: 'liqueur', abv: 32, sugar: 35.0, acid: 0, bitterness: 0, complexity: 5, color: '#ffffff' },
+    { id: 'liq_campari', name: 'Campari', type: 'bitter', abv: 25, sugar: 24.0, acid: 0, bitterness: 9, complexity: 8, color: '#dc2626' }, // RED
+    { id: 'liq_aperol', name: 'Aperol', type: 'bitter', abv: 11, sugar: 25.0, acid: 0, bitterness: 6, complexity: 5, color: '#f97316' }, // Orange
+    { id: 'liq_cynar', name: 'Cynar', type: 'bitter', abv: 16.5, sugar: 20.0, acid: 0, bitterness: 8, complexity: 8, color: '#3f2c22' }, // Dark Brown
+    { id: 'liq_fernet', name: 'Fernet Branca', type: 'bitter', abv: 39, sugar: 8.0, acid: 0, bitterness: 10, complexity: 9, color: '#1a1006' }, // Black
+    { id: 'vermouth_sweet', name: 'Vermut Rojo (Dulce)', type: 'liqueur', abv: 16, sugar: 16.0, acid: 0.4, bitterness: 3, complexity: 6, color: '#7f1d1d' }, // Dark Red
+    { id: 'vermouth_dry', name: 'Vermut Dry (Seco)', type: 'liqueur', abv: 18, sugar: 3.0, acid: 0.5, bitterness: 2, complexity: 5, color: '#fefce8' },
+    { id: 'vermouth_bianco', name: 'Vermut Bianco', type: 'liqueur', abv: 16, sugar: 14.0, acid: 0.4, bitterness: 2, complexity: 5, color: '#fefce8' },
+    { id: 'sherry_fino', name: 'Jerez Fino/Manzanilla', type: 'liqueur', abv: 15, sugar: 0, acid: 0.4, bitterness: 1, complexity: 7, color: '#fefce8' },
+    { id: 'sherry_px', name: 'Jerez Pedro Ximénez', type: 'liqueur', abv: 17, sugar: 40.0, acid: 0.4, bitterness: 0, complexity: 9, color: '#3f2c22' }, // Black
+    { id: 'chartreuse_green', name: 'Chartreuse Verde', type: 'liqueur', abv: 55, sugar: 25.0, acid: 0, bitterness: 4, complexity: 10, color: '#84cc16' }, // Green
+    { id: 'chartreuse_yellow', name: 'Chartreuse Amarillo', type: 'liqueur', abv: 40, sugar: 28.0, acid: 0, bitterness: 2, complexity: 9, color: '#facc15' }, // Yellow
+    { id: 'liq_coffee', name: 'Licor de Café (Kahlúa)', type: 'liqueur', abv: 20, sugar: 40.0, acid: 0.1, bitterness: 3, complexity: 4, color: '#3f2c21' },
+    { id: 'liq_amaretto', name: 'Amaretto', type: 'liqueur', abv: 28, sugar: 30.0, acid: 0, bitterness: 1, complexity: 3, color: '#d97706' },
+    { id: 'liq_stgermain', name: 'St. Germain (Sauco)', type: 'liqueur', abv: 20, sugar: 25.0, acid: 0, bitterness: 0, complexity: 5, color: '#fef9c3' },
+    { id: 'liq_benedictine', name: 'Bénédictine', type: 'liqueur', abv: 40, sugar: 32.0, acid: 0, bitterness: 1, complexity: 8, color: '#b45309' },
+    { id: 'liq_baileys', name: 'Crema Irlandesa (Baileys)', type: 'liqueur', abv: 17, sugar: 20.0, acid: 0, bitterness: 0, complexity: 3, color: '#d6d3d1' },
 
-    // --- MIXERS ---
-    { id: 'mix_soda', name: 'Agua con Gas / Soda', type: 'mixer', abv: 0, sugar: 0, acid: 0 },
-    { id: 'mix_tonic', name: 'Tónica', type: 'mixer', abv: 0, sugar: 9.0, acid: 0.5 },
-    { id: 'mix_cola', name: 'Cola', type: 'mixer', abv: 0, sugar: 10.6, acid: 0.1 }, // Phosporic acid is acid but low %
-    { id: 'mix_gingerbeer', name: 'Ginger Beer', type: 'mixer', abv: 0, sugar: 12.0, acid: 0.1 },
+    // --- MIXERS (Refrescos) ---
+    { id: 'mix_soda', name: 'Agua con Gas / Soda', type: 'mixer', abv: 0, sugar: 0, acid: 0, bitterness: 0, complexity: 0, color: '#ffffff' },
+    { id: 'mix_tonic', name: 'Tónica', type: 'mixer', abv: 0, sugar: 9.0, acid: 0.5, bitterness: 4, complexity: 2, color: '#ffffff' },
+    { id: 'mix_cola', name: 'Cola', type: 'mixer', abv: 0, sugar: 10.6, acid: 0.1, bitterness: 1, complexity: 3, color: '#3f2c22' },
+    { id: 'mix_gingerbeer', name: 'Ginger Beer', type: 'mixer', abv: 0, sugar: 12.0, acid: 0.1, bitterness: 3, complexity: 3, color: '#fef08a' },
+    { id: 'mix_gingerale', name: 'Ginger Ale', type: 'mixer', abv: 0, sugar: 9.0, acid: 0.1, bitterness: 1, complexity: 1, color: '#fefce8' },
+    { id: 'mix_coconut_water', name: 'Agua de Coco', type: 'mixer', abv: 0, sugar: 4.0, acid: 0, bitterness: 0, complexity: 2, color: '#ffffff' },
+    { id: 'mix_coffee', name: 'Café Espresso', type: 'mixer', abv: 0, sugar: 0, acid: 1.0, bitterness: 6, complexity: 6, color: '#1a1006' },
+    { id: 'mix_cream', name: 'Nata Líquida', type: 'mixer', abv: 0, sugar: 3.0, acid: 0, bitterness: 0, complexity: 1, color: '#ffffff' },
+    { id: 'egg_white', name: 'Clara de Huevo', type: 'mixer', abv: 0, sugar: 0, acid: 0, bitterness: 0, complexity: 0, color: '#ffffff' },
+
+    // --- BITTERS (Amargos concentrados) ---
+    { id: 'bitter_angostura', name: 'Angostura Bitters', type: 'bitter', abv: 44.7, sugar: 0, acid: 0, bitterness: 10, complexity: 10, color: '#7f1d1d' },
+    { id: 'bitter_orange', name: 'Orange Bitters', type: 'bitter', abv: 39, sugar: 5.0, acid: 0, bitterness: 8, complexity: 8, color: '#f97316' },
+    { id: 'bitter_peychaud', name: 'Peychaud\'s Bitters', type: 'bitter', abv: 35, sugar: 10.0, acid: 0, bitterness: 7, complexity: 8, color: '#ef4444' },
 ];
 
 export class IngredientRepository {
