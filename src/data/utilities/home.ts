@@ -20,6 +20,14 @@ export const homeSection: SectionData = {
             title: "Generador QR Offline",
             description: "Crea QRs para WiFi, Contactos y URLs. 100% Privado.",
             color: "#2563eb"
+        },
+        {
+            href: "/utilidades/calculadora-solar/",
+            iconBg: "mdi:solar-power",
+            iconFg: "mdi:angle-acute",
+            title: "Calculadora Solar",
+            description: "Ángulo de inclinación óptimo para placas solares según tu latitud.",
+            color: "#f59e0b"
         }
     ]
 };

@@ -1,0 +1,318 @@
+---
+import SolarVisualizer from "./ui/SolarVisualizer.astro";
+---
+
+<div class="w-full max-w-6xl mx-auto p-4 md:p-8 font-sans">
+    <!-- Header -->
+    <div class="text-center mb-12 relative">
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-orange-500/20 blur-3xl rounded-full pointer-events-none"
+        >
+        </div>
+        <h1
+            class="text-4xl md:text-6xl font-black text-slate-800 dark:text-white tracking-tight relative z-10"
+        >
+            SOLAR <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500"
+                >TILT</span
+            >
+        </h1>
+        <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg max-w-xl mx-auto">
+            Calculadora de inclinación fotovoltaica de alta precisión. Optimiza tu instalación para
+            máxima eficiencia energética.
+        </p>
+    </div>
+
+    <!-- Interface Wrapper -->
+    <div
+        class="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 grid lg:grid-cols-12 min-h-[600px]"
+    >
+        <!-- Controls & Data (Left Side) -->
+        <div
+            class="lg:col-span-5 p-8 flex flex-col justify-between bg-slate-50 dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800 relative"
+        >
+            <!-- Input Section -->
+            <div class="space-y-8 z-10">
+                <!-- Location Input -->
+                <div class="space-y-3">
+                    <label
+                        for="lat-input"
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1"
+                        >Latitud Geográfica</label
+                    >
+                    <div class="relative group">
+                        <input
+                            type="number"
+                            id="lat-input"
+                            value="40.41"
+                            step="0.1"
+                            min="-90"
+                            max="90"
+                            class="block w-full text-4xl font-black text-slate-800 dark:text-white bg-transparent border-b-2 border-slate-200 dark:border-slate-700 py-2 focus:border-orange-500 focus:outline-none transition-colors"
+                        />
+                        <span class="absolute right-0 bottom-4 text-2xl text-slate-400 font-light"
+                            >° N</span
+                        >
+                    </div>
+
+                    <button
+                        id="btn-locate"
+                        class="flex items-center gap-2 text-sm text-orange-600 font-bold hover:text-orange-500 transition-colors cursor-pointer"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            ><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            ></path><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg
+                        >
+                        <span>Detectar mi ubicación</span>
+                    </button>
+                </div>
+
+                <!-- Main Result -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+                >
+                    <div
+                        class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-400/20 to-transparent rounded-bl-full transition-transform group-hover:scale-110"
+                    >
+                    </div>
+
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">
+                        Ángulo Óptimo Anual
+                    </p>
+                    <div class="flex items-baseline gap-1">
+                        <span
+                            id="display-angle"
+                            class="text-6xl font-black text-slate-800 dark:text-white tracking-tighter"
+                            >35.4</span
+                        >
+                        <span class="text-2xl font-bold text-orange-500">°</span>
+                    </div>
+                    <p
+                        class="text-xs text-green-600 dark:text-green-400 mt-2 font-medium flex items-center gap-1"
+                    >
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            ><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg
+                        >
+                        Eficiencia Máxima
+                    </p>
+                </div>
+
+                <!-- Seasonal Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800"
+                    >
+                        <div class="flex items-center gap-2 mb-2">
+                            <svg
+                                class="w-4 h-4 text-blue-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                ></path></svg
+                            >
+                            <span
+                                class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase"
+                                >Invierno</span
+                            >
+                        </div>
+                        <p
+                            id="winter-angle"
+                            class="text-2xl font-bold text-slate-700 dark:text-slate-200"
+                        >
+                            --°
+                        </p>
+                    </div>
+                    <div
+                        class="p-4 rounded-2xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800"
+                    >
+                        <div class="flex items-center gap-2 mb-2">
+                            <svg
+                                class="w-4 h-4 text-yellow-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                ></path></svg
+                            >
+                            <span
+                                class="text-xs font-bold text-yellow-600 dark:text-yellow-400 uppercase"
+                                >Verano</span
+                            >
+                        </div>
+                        <p
+                            id="summer-angle"
+                            class="text-2xl font-bold text-slate-700 dark:text-slate-200"
+                        >
+                            --°
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hemisphere Info -->
+            <div
+                id="hemisphere-badge"
+                class="mt-8 py-2 px-4 bg-slate-200 dark:bg-slate-800 rounded-lg self-start text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest"
+            >
+                Hemisferio Norte
+            </div>
+        </div>
+
+        <SolarVisualizer />
+    </div>
+</div>
+
+<script>
+    import { calculateTilt, toRad } from "./domain/solar-calculator";
+
+    const latInput = document.getElementById("lat-input") as HTMLInputElement;
+    const btnLocate = document.getElementById("btn-locate");
+
+    // Displays
+    const displayAngle = document.getElementById("display-angle");
+    const winterAngle = document.getElementById("winter-angle");
+    const summerAngle = document.getElementById("summer-angle");
+    const hemiBadge = document.getElementById("hemisphere-badge");
+
+    // Visualizer Elements (These are inside SolarVisualizer component)
+    const panelGroup = document.getElementById("panel-rect-group");
+    const vizArc = document.getElementById("viz-arc");
+    const vizArcText = document.getElementById("viz-arc-text");
+    const rayContainer = document.getElementById("ray-container");
+
+    // Canvas Constants
+    const CENTER_X = 400;
+    const CENTER_Y = 500;
+
+    function updateVisuals(angle: number, isNorth: boolean) {
+        if (panelGroup) {
+            panelGroup.setAttribute("transform", `rotate(${angle})`);
+        }
+
+        // Arc Drawing
+        if (vizArc && vizArcText) {
+            const r = 80;
+            const startX = -r;
+            const startY = 0;
+            const rad = toRad(angle);
+            const endX = -r * Math.cos(rad);
+            const endY = -r * Math.sin(rad);
+            const large = angle > 180 ? 1 : 0;
+            const d = `M${startX},${startY} A${r},${r} 0 ${large},1 ${endX},${endY}`;
+
+            vizArc.setAttribute("d", d);
+            vizArcText.textContent = `${angle}°`;
+
+            // Text pos (midway)
+            const midRad = rad / 2;
+            const textDist = 120;
+            const tx = -textDist * Math.cos(midRad);
+            const ty = -textDist * Math.sin(midRad);
+            vizArcText.setAttribute("x", String(tx));
+            vizArcText.setAttribute("y", String(ty));
+        }
+
+        // Live Sun Rays Animation Setup
+        const rad = toRad(angle);
+        const sunX = 650;
+        const sunY = 100;
+
+        if (rayContainer) {
+            rayContainer.innerHTML = "";
+            for (let i = -1; i <= 1; i++) {
+                const offset = i * 40;
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", String(sunX + offset));
+                line.setAttribute("y1", String(sunY - offset)); // diagonal spread
+
+                // Strike panel at different spots
+                const spotXlocal = -110 + i * 60;
+                const tX = spotXlocal * Math.cos(rad);
+                const tY = spotXlocal * Math.sin(rad);
+
+                line.setAttribute("x2", String(CENTER_X + tX));
+                line.setAttribute("y2", String(CENTER_Y + tY));
+                line.setAttribute("stroke", "#fbbf24");
+                line.setAttribute("stroke-width", "2");
+                line.setAttribute("stroke-dasharray", "8 4");
+                line.setAttribute("opacity", "0.6");
+
+                // Animation
+                const anim = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+                anim.setAttribute("attributeName", "stroke-dashoffset");
+                anim.setAttribute("from", "12");
+                anim.setAttribute("to", "0");
+                anim.setAttribute("dur", "1s");
+                anim.setAttribute("repeatCount", "indefinite");
+
+                line.appendChild(anim);
+                rayContainer.appendChild(line);
+            }
+        }
+    }
+
+    function update() {
+        if (!latInput.value) return;
+        const lat = parseFloat(latInput.value);
+        if (isNaN(lat)) return;
+
+        const data = calculateTilt(lat);
+
+        // Update Text
+        if (displayAngle) displayAngle.textContent = String(data.optimal);
+        if (winterAngle) winterAngle.textContent = String(data.winter) + "°";
+        if (summerAngle) summerAngle.textContent = String(data.summer) + "°";
+
+        if (hemiBadge) {
+            hemiBadge.textContent = data.isNorth
+                ? "Hemisferio Norte (Orientar al SUR)"
+                : "Hemisferio Sur (Orientar al NORTE)";
+        }
+
+        // Update Viz
+        updateVisuals(data.optimal, data.isNorth);
+    }
+
+    // Listeners
+    latInput.addEventListener("input", update);
+
+    btnLocate?.addEventListener("click", () => {
+        if (!navigator.geolocation) return alert("Geolocalización no disponible");
+        btnLocate.classList.add("opacity-50");
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                latInput.value = pos.coords.latitude.toFixed(2);
+                update();
+                btnLocate.classList.remove("opacity-50");
+            },
+            (err) => {
+                console.error(err);
+                btnLocate.classList.remove("opacity-50");
+            }
+        );
+    });
+
+    // Init
+    update();
+</script>
