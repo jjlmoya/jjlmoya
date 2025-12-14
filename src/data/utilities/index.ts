@@ -26,7 +26,6 @@ export const sections: SectionData[] = [
     toolsSection,
     financeSection,
     natureSection,
-    natureSection,
     streamingSection,
     alcoholSection,
 ];
