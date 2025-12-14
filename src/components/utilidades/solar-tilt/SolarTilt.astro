@@ -1,0 +1,571 @@
+---
+
+---
+
+<div class="w-full max-w-6xl mx-auto p-4 md:p-8 font-sans">
+    <!-- Header -->
+    <div class="text-center mb-12 relative">
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-orange-500/20 blur-3xl rounded-full pointer-events-none"
+        >
+        </div>
+        <h1
+            class="text-4xl md:text-6xl font-black text-slate-800 dark:text-white tracking-tight relative z-10"
+        >
+            SOLAR <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-500"
+                >TILT</span
+            >
+        </h1>
+        <p class="mt-4 text-slate-600 dark:text-slate-400 text-lg max-w-xl mx-auto">
+            Calculadora de inclinación fotovoltaica de alta precisión. Optimiza tu instalación para
+            máxima eficiencia energética.
+        </p>
+    </div>
+
+    <!-- Interface Wrapper -->
+    <div
+        class="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 grid lg:grid-cols-12 min-h-[600px]"
+    >
+        <!-- Controls & Data (Left Side) -->
+        <div
+            class="lg:col-span-5 p-8 flex flex-col justify-between bg-slate-50 dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800 relative"
+        >
+            <!-- Input Section -->
+            <div class="space-y-8 z-10">
+                <!-- Location Input -->
+                <div class="space-y-3">
+                    <label
+                        for="lat-input"
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1"
+                        >Latitud Geográfica</label
+                    >
+                    <div class="relative group">
+                        <input
+                            type="number"
+                            id="lat-input"
+                            value="40.41"
+                            step="0.1"
+                            min="-90"
+                            max="90"
+                            class="block w-full text-4xl font-black text-slate-800 dark:text-white bg-transparent border-b-2 border-slate-200 dark:border-slate-700 py-2 focus:border-orange-500 focus:outline-none transition-colors"
+                        />
+                        <span class="absolute right-0 bottom-4 text-2xl text-slate-400 font-light"
+                            >° N</span
+                        >
+                    </div>
+
+                    <button
+                        id="btn-locate"
+                        class="flex items-center gap-2 text-sm text-orange-600 font-bold hover:text-orange-500 transition-colors cursor-pointer"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            ><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            ></path><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg
+                        >
+                        <span>Detectar mi ubicación</span>
+                    </button>
+                </div>
+
+                <!-- Main Result -->
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+                >
+                    <div
+                        class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-400/20 to-transparent rounded-bl-full transition-transform group-hover:scale-110"
+                    >
+                    </div>
+
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">
+                        Ángulo Óptimo Anual
+                    </p>
+                    <div class="flex items-baseline gap-1">
+                        <span
+                            id="display-angle"
+                            class="text-6xl font-black text-slate-800 dark:text-white tracking-tighter"
+                            >35.4</span
+                        >
+                        <span class="text-2xl font-bold text-orange-500">°</span>
+                    </div>
+                    <p
+                        class="text-xs text-green-600 dark:text-green-400 mt-2 font-medium flex items-center gap-1"
+                    >
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            ><path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg
+                        >
+                        Eficiencia Máxima
+                    </p>
+                </div>
+
+                <!-- Seasonal Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800"
+                    >
+                        <div class="flex items-center gap-2 mb-2">
+                            <svg
+                                class="w-4 h-4 text-blue-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                ></path></svg
+                            >
+                            <span
+                                class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase"
+                                >Invierno</span
+                            >
+                        </div>
+                        <p
+                            id="winter-angle"
+                            class="text-2xl font-bold text-slate-700 dark:text-slate-200"
+                        >
+                            --°
+                        </p>
+                    </div>
+                    <div
+                        class="p-4 rounded-2xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-100 dark:border-yellow-800"
+                    >
+                        <div class="flex items-center gap-2 mb-2">
+                            <svg
+                                class="w-4 h-4 text-yellow-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                                ></path></svg
+                            >
+                            <span
+                                class="text-xs font-bold text-yellow-600 dark:text-yellow-400 uppercase"
+                                >Verano</span
+                            >
+                        </div>
+                        <p
+                            id="summer-angle"
+                            class="text-2xl font-bold text-slate-700 dark:text-slate-200"
+                        >
+                            --°
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hemisphere Info -->
+            <div
+                id="hemisphere-badge"
+                class="mt-8 py-2 px-4 bg-slate-200 dark:bg-slate-800 rounded-lg self-start text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest"
+            >
+                Hemisferio Norte
+            </div>
+        </div>
+
+        <!-- Visualizer (Right Side) -->
+        <div
+            class="lg:col-span-7 bg-slate-950 relative overflow-hidden flex items-center justify-center min-h-[400px]"
+        >
+            <!-- Dynamic Background -->
+            <div
+                class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-orange-900/40 via-slate-950 to-slate-950"
+            >
+            </div>
+
+            <!-- Grid -->
+            <div
+                class="absolute inset-0 opacity-20 pointer-events-none"
+                style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"
+            >
+            </div>
+
+            <!-- Main SVG -->
+            <svg
+                id="tilt-viz"
+                viewBox="0 0 800 600"
+                preserveAspectRatio="xMidYMid meet"
+                class="w-full h-full relative z-10 p-4"
+            >
+                <defs>
+                    <linearGradient id="panel-grad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#3b82f6"></stop>
+                        <stop offset="100%" stop-color="#1d4ed8"></stop>
+                    </linearGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur"></feGaussianBlur>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"></feMergeNode>
+                            <feMergeNode in="SourceGraphic"></feMergeNode>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Ground Line -->
+                <line
+                    x1="100"
+                    y1="500"
+                    x2="700"
+                    y2="500"
+                    stroke="#475569"
+                    stroke-width="2"
+                    stroke-dasharray="8 8"></line>
+
+                <!-- Sun System (To be moved/rotated) -->
+                <g id="sun-system" class="transition-all duration-1000 ease-out">
+                    <g transform="translate(650, 100)">
+                        <circle r="40" fill="#fbbf24" fill-opacity="0.2" class="animate-pulse"
+                        ></circle>
+                        <circle r="15" fill="#f59e0b" filter="url(#glow)"></circle>
+                        <!-- Rays coming towards scene -->
+                        <line
+                            x1="-20"
+                            y1="20"
+                            x2="-100"
+                            y2="100"
+                            stroke="url(#ray-grad)"
+                            stroke-width="2"
+                            stroke-dasharray="4"
+                            opacity="0"></line>
+                    </g>
+                </g>
+
+                <!-- Panel Assembly (Centered at 400, 500) -->
+                <g id="panel-assembly" transform="translate(400, 500)">
+                    <!-- 1. The Panel (Rendered First) -->
+                    <g
+                        id="panel-rect-group"
+                        class="transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1)"
+                    >
+                        <!-- Leg -->
+                        <line
+                            x1="0"
+                            y1="0"
+                            x2="-30"
+                            y2="0"
+                            stroke="#64748b"
+                            stroke-width="6"
+                            stroke-linecap="round"></line>
+
+                        <!-- Panel Profile -->
+                        <rect
+                            x="-220"
+                            y="-6"
+                            width="220"
+                            height="12"
+                            rx="4"
+                            fill="url(#panel-grad)"
+                            stroke="#60a5fa"
+                            stroke-width="1"></rect>
+
+                        <!-- Panel Details -->
+                        <line
+                            x1="-55"
+                            y1="-6"
+                            x2="-55"
+                            y2="6"
+                            stroke="white"
+                            stroke-opacity="0.2"
+                            stroke-width="1"></line>
+                        <line
+                            x1="-110"
+                            y1="-6"
+                            x2="-110"
+                            y2="6"
+                            stroke="white"
+                            stroke-opacity="0.2"
+                            stroke-width="1"></line>
+                        <line
+                            x1="-165"
+                            y1="-6"
+                            x2="-165"
+                            y2="6"
+                            stroke="white"
+                            stroke-opacity="0.2"
+                            stroke-width="1"></line>
+
+                        <!-- Normal Vector -->
+                        <line
+                            x1="-110"
+                            y1="-6"
+                            x2="-110"
+                            y2="-80"
+                            stroke="#fbbf24"
+                            stroke-width="2"
+                            stroke-dasharray="5 5"
+                            opacity="0.8"></line>
+                        <circle cx="-110" cy="-80" r="3" fill="#fbbf24"></circle>
+                        <text x="-100" y="-90" fill="#fbbf24" font-size="12" font-weight="bold"
+                            >NORMAL</text
+                        >
+                    </g>
+
+                    <!-- 2. Angle Arc Key & Text (Rendered Last = Top Z-Index) -->
+                    <path
+                        id="viz-arc"
+                        d="M-100,0 A100,100 0 0,1 -80,-60"
+                        fill="none"
+                        stroke="#f97316"
+                        stroke-width="2"
+                        stroke-dasharray="4"
+                        opacity="0.6"></path>
+                    <!-- Text with shadow for readability -->
+                    <text
+                        id="viz-arc-text"
+                        x="-140"
+                        y="-30"
+                        fill="#f97316"
+                        font-size="20"
+                        font-family="monospace"
+                        font-weight="bold"
+                        style="text-shadow: 0 0 4px rgba(0,0,0,0.8);">35°</text
+                    >
+
+                    <!-- Live Sun Rays (Rendering based on calculated positions) -->
+                    <g id="ray-container"></g>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        const latInput = document.getElementById("lat-input") as HTMLInputElement;
+        const btnLocate = document.getElementById("btn-locate");
+
+        // Displays
+        const displayAngle = document.getElementById("display-angle");
+        const winterAngle = document.getElementById("winter-angle");
+        const summerAngle = document.getElementById("summer-angle");
+        const hemiBadge = document.getElementById("hemisphere-badge");
+
+        // Visualizer
+        const panelGroup = document.getElementById("panel-rect-group");
+        const vizArc = document.getElementById("viz-arc");
+        const vizArcText = document.getElementById("viz-arc-text");
+        const rayContainer = document.getElementById("ray-container");
+        const sunSystem = document.getElementById("sun-system");
+
+        // Canvas Constants
+        const CENTER_X = 400;
+        const CENTER_Y = 500;
+        const PANEL_LENGTH = 220;
+
+        function toRad(deg: number) {
+            return (deg * Math.PI) / 180;
+        }
+
+        /**
+         * Calculates array tilt based on simple heuristics
+         */
+        function calculateTilt(lat: number) {
+            const absLat = Math.abs(lat);
+            // Basic heuristic
+            let optimal = absLat * 0.87;
+            if (absLat > 25 && absLat < 50) optimal = absLat * 0.76 + 3.1;
+
+            let winter = absLat * 0.9 + 29;
+            let summer = absLat * 0.9 - 23.5;
+
+            // Clamp
+            const clamp = (n: number) => Math.min(Math.max(n, 0), 90);
+
+            return {
+                optimal: parseFloat(clamp(optimal).toFixed(1)),
+                winter: parseFloat(clamp(winter).toFixed(1)),
+                summer: parseFloat(clamp(summer).toFixed(1)),
+                isNorth: lat >= 0,
+            };
+        }
+
+        function updateVisuals(angle: number, isNorth: boolean) {
+            // 1. Panel Rotation
+            // If North Hemisphere, panel faces South.
+            // We depict South as RIGHT.
+            // Panel pivot is at (400, 500).
+            // Flat panel (-220, 0) relative to group.
+            // If we want it to face RIGHT (South), we need to lift the LEFT side.
+            // Rotate Clockwise (+angle).
+            // Example: 0 deg -> Flat.
+            // 45 deg -> Left side goes UP and RIGHT.
+
+            // Wait, if we draw the panel from (0,0) to (-220, 0) [Leftwards],
+            // And we rotate +Angle (CW).
+            // The point (-220, 0) moves to:
+            // x = -220 cos(a) - 0 sin(a)
+            // y = -220 sin(a) + 0 cos(a)
+            // Y moves negative (UP in SVG). X moves closer to 0.
+            // This looks like the panel is lifting its back to face Right. Correct.
+
+            if (panelGroup) {
+                panelGroup.setAttribute("transform", `rotate(${angle})`);
+            }
+
+            // 2. Arc Drawing
+            // Arc from 180 deg (Left) to (180 + angle)
+            if (vizArc && vizArcText) {
+                const r = 80;
+                // Start is always ground left (-r, 0)
+                const startX = -r;
+                const startY = 0;
+
+                const rad = toRad(angle);
+                // End point rotated
+                // We rotate vector (-r, 0) by angle
+                const endX = -r * Math.cos(rad);
+                const endY = -r * Math.sin(rad);
+
+                // Large arc flag
+                const large = angle > 180 ? 1 : 0;
+                const d = `M${startX},${startY} A${r},${r} 0 ${large},1 ${endX},${endY}`;
+
+                vizArc.setAttribute("d", d);
+                vizArcText.textContent = `${angle}°`;
+
+                // Text pos (midway)
+                const midRad = rad / 2;
+                const textDist = 120;
+                // Again, rotating vector (-1, 0) by midRad
+                const tx = -textDist * Math.cos(midRad);
+                const ty = -textDist * Math.sin(midRad);
+                vizArcText.setAttribute("x", String(tx));
+                vizArcText.setAttribute("y", String(ty));
+            }
+
+            // 3. Sun Position
+            // If North Hemisphere (Facing South/Right), Sun is roughly Top-Right.
+            // If South Hemisphere (Facing North/Left), Sun is roughly Top-Left.
+            // But our visualization assumes "Panel Faces Right" is the optimized standard view.
+            // So we just flip the graphic if it's South Hemi?
+            // Actually, easier: Always visualize as "Facing Equator".
+            // Just text changes to say "Facing South" or "Facing North".
+
+            // Let's stick to standard "Right is Equator".
+            // Sun rays:
+            // We want rays to come perpendicular to the panel face if optimized?
+            // Roughly yes. Rays angle = 90 - angle?
+            // Or simply: Ray Angle relative to vertical = Latitude.
+            // Let's animate rays.
+
+            // Ray Source: Fixed Top Right (Standard Sun).
+            // Target: The Panel Center.
+            // Panel Center relative to pivot (0,0):
+            // Midpoint of rect is at (-110, 0).
+            // Rotated midpoint:
+            const rad = toRad(angle);
+            const midX = -110 * Math.cos(rad);
+            const midY = -110 * Math.sin(rad);
+
+            // Global Canvas Midpoint
+            const gMidX = CENTER_X + midX;
+            const gMidY = CENTER_Y + midY;
+
+            // Source Sun
+            const sunX = 650;
+            const sunY = 100;
+
+            if (rayContainer) {
+                rayContainer.innerHTML = "";
+                // Create 3 rays
+                for (let i = -1; i <= 1; i++) {
+                    const offset = i * 40;
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    // Offset source slightly
+                    line.setAttribute("x1", String(sunX + offset));
+                    line.setAttribute("y1", String(sunY - offset)); // diagonal spread
+
+                    // Target: Panel Midpoint + offset along panel surface vector
+                    // Panel vector is (cos(a), sin(a)) normalized?
+                    // Panel line vector is roughly aligned with rotation.
+                    // Vector along panel: (cos(a), sin(a)) * magnitude
+                    // Actually, panel vector is rotated (-1, 0). So (-cos a, -sin a).
+                    // Perpendicular is (sin a, -cos a).
+
+                    // Let's just strike the panel at different spots along its length.
+                    // Spots: -50, -110, -170 (local x).
+                    const spotXlocal = -110 + i * 60;
+                    const tX = spotXlocal * Math.cos(rad);
+                    const tY = spotXlocal * Math.sin(rad);
+
+                    line.setAttribute("x2", String(CENTER_X + tX));
+                    line.setAttribute("y2", String(CENTER_Y + tY));
+
+                    line.setAttribute("stroke", "#fbbf24");
+                    line.setAttribute("stroke-width", "2");
+                    line.setAttribute("stroke-dasharray", "8 4");
+                    line.setAttribute("opacity", "0.6");
+
+                    // Animation
+                    const anim = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+                    anim.setAttribute("attributeName", "stroke-dashoffset");
+                    anim.setAttribute("from", "12");
+                    anim.setAttribute("to", "0");
+                    anim.setAttribute("dur", "1s");
+                    anim.setAttribute("repeatCount", "indefinite");
+
+                    line.appendChild(anim);
+                    rayContainer.appendChild(line);
+                }
+            }
+        }
+
+        function update() {
+            if (!latInput.value) return;
+            const lat = parseFloat(latInput.value);
+            if (isNaN(lat)) return;
+
+            const data = calculateTilt(lat);
+
+            // Update Text
+            if (displayAngle) displayAngle.textContent = String(data.optimal);
+            if (winterAngle) winterAngle.textContent = String(data.winter) + "°";
+            if (summerAngle) summerAngle.textContent = String(data.summer) + "°";
+
+            if (hemiBadge) {
+                hemiBadge.textContent = data.isNorth
+                    ? "Hemisferio Norte (Orientar al SUR)"
+                    : "Hemisferio Sur (Orientar al NORTE)";
+            }
+
+            // Update Viz
+            updateVisuals(data.optimal, data.isNorth);
+        }
+
+        // Listeners
+        latInput.addEventListener("input", update);
+
+        btnLocate?.addEventListener("click", () => {
+            if (!navigator.geolocation) return alert("Geolocalización no disponible");
+            btnLocate.classList.add("opacity-50");
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    latInput.value = pos.coords.latitude.toFixed(2);
+                    update();
+                    btnLocate.classList.remove("opacity-50");
+                },
+                (err) => {
+                    console.error(err);
+                    btnLocate.classList.remove("opacity-50");
+                }
+            );
+        });
+
+        // Init
+        update();
+    </script>
+</div>
