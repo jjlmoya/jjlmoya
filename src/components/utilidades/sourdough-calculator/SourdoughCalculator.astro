@@ -3,22 +3,22 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div class="w-full max-w-4xl mx-auto mb-20">
-    <!-- Calculator Card -->
+    
     <div
         class="relative bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-800"
     >
-        <!-- Decorative Top Bar -->
+        
         <div
             class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-500"
         >
         </div>
 
         <div class="p-8 md:p-12">
-            <!-- Controls Grid -->
+            
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                <!-- Left Column: Inputs -->
+                
                 <div class="lg:col-span-5 space-y-10">
-                    <!-- 1. Total Amount Input -->
+                    
                     <div class="relative group">
                         <label
                             for="totalAmount"
@@ -46,7 +46,7 @@ import { Icon } from "astro-icon/components";
                         </p>
                     </div>
 
-                    <!-- 2. Ratio Selector -->
+                    
                     <div>
                         <label
                             class="flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-4"
@@ -55,9 +55,9 @@ import { Icon } from "astro-icon/components";
                             Ratio de Refresco
                         </label>
 
-                        <!-- Grid of Ratios -->
+                        
                         <div class="grid grid-cols-3 gap-3 mb-4">
-                            <!-- Active Button (Default 1:1:1) -->
+                            
                             <button
                                 class="ratio-btn group active flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-amber-50 dark:bg-amber-900/20 border-amber-500 text-amber-700 dark:text-amber-400 shadow-lg shadow-amber-500/10 ring-1 ring-amber-500"
                                 data-ratio="1:1:1"
@@ -69,7 +69,7 @@ import { Icon } from "astro-icon/components";
                                 <span class="text-lg font-black">1:1:1</span>
                             </button>
 
-                            <!-- Inactive Buttons -->
+                            
                             <button
                                 class="ratio-btn group flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500"
                                 data-ratio="1:2:2"
@@ -122,7 +122,7 @@ import { Icon } from "astro-icon/components";
                             </button>
                         </div>
 
-                        <!-- Custom Inputs Panel -->
+                        
                         <div
                             id="customRatioInputs"
                             class="hidden bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 animate-in slide-in-from-top-2 duration-300"
@@ -174,12 +174,12 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
-                <!-- Right Column: Visual Interaction & Results -->
+                
                 <div class="lg:col-span-7 flex flex-col justify-center">
                     <div
                         class="bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-2 border border-slate-100 dark:border-slate-700/50"
                     >
-                        <!-- Header of Receipt -->
+                        
                         <div
                             class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700/50"
                         >
@@ -193,9 +193,9 @@ import { Icon } from "astro-icon/components";
                             </span>
                         </div>
 
-                        <!-- The 3 Ingredients Rows -->
+                        
                         <div class="divide-y divide-slate-100 dark:divide-slate-700/50">
-                            <!-- Starter Row -->
+                            
                             <div
                                 class="group p-4 flex items-center justify-between hover:bg-white dark:hover:bg-slate-800 transition-colors rounded-xl"
                             >
@@ -229,7 +229,7 @@ import { Icon } from "astro-icon/components";
                                 </div>
                             </div>
 
-                            <!-- Flour Row -->
+                            
                             <div
                                 class="group p-4 flex items-center justify-between hover:bg-white dark:hover:bg-slate-800 transition-colors rounded-xl"
                             >
@@ -263,7 +263,7 @@ import { Icon } from "astro-icon/components";
                                 </div>
                             </div>
 
-                            <!-- Water Row -->
+                            
                             <div
                                 class="group p-4 flex items-center justify-between hover:bg-white dark:hover:bg-slate-800 transition-colors rounded-xl"
                             >
@@ -299,7 +299,7 @@ import { Icon } from "astro-icon/components";
                         </div>
                     </div>
 
-                    <!-- Total Confirmation -->
+                    
                     <div class="mt-6 flex justify-end items-center gap-3 opacity-60">
                         <span class="text-sm font-bold text-slate-500 uppercase tracking-widest"
                             >Total Masa:</span
@@ -327,35 +327,35 @@ import { Icon } from "astro-icon/components";
 <script>
     import { SourdoughCalculator } from "../../../lib/utilidades/sourdough-calculator/SourdoughCalculator";
 
-    // Elements
+    
     const totalAmountInput = document.getElementById("totalAmount") as HTMLInputElement;
     const ratioBtns = document.querySelectorAll(".ratio-btn");
     const customInputsDiv = document.getElementById("customRatioInputs");
     const customInputs = document.querySelectorAll(".custom-input") as NodeListOf<HTMLInputElement>;
 
-    // Outputs
+    
     const outStarter = document.getElementById("valStarter");
     const outFlour = document.getElementById("valFlour");
     const outWater = document.getElementById("valWater");
     const outTotal = document.getElementById("valTotalDisplay");
 
-    // State
-    // Default to 1:1:1
+    
+    
     let currentRatio = { s: 1, f: 1, w: 1 };
 
-    // Class strings for state management (since we can't use @apply)
-    // We maintain 'ratio-btn' as a selector hook, but manage visuals manually
+    
+    
     const baseClasses =
         "group flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-amber-400 hover:text-amber-500";
     const activeClasses =
         "group active flex flex-col items-center justify-center py-3 px-2 rounded-xl transition-all duration-200 border-2 bg-amber-50 dark:bg-amber-900/20 border-amber-500 text-amber-700 dark:text-amber-400 shadow-lg shadow-amber-500/10 ring-1 ring-amber-500";
 
     function calculate() {
-        // Get value
+        
         let total = parseInt(totalAmountInput.value);
         if (isNaN(total) || total < 1) total = 0;
 
-        // Calculate Logic
+        
         const result = SourdoughCalculator.calculate(
             total,
             currentRatio.s,
@@ -363,29 +363,29 @@ import { Icon } from "astro-icon/components";
             currentRatio.w
         );
 
-        // Update DOM with simple animation effect (just text replacement for now, robust enough)
+        
         if (outStarter) outStarter.textContent = result.starter.toString();
         if (outFlour) outFlour.textContent = result.flour.toString();
         if (outWater) outWater.textContent = result.water.toString();
 
-        // Confirm total (sanity check for user)
+        
         if (outTotal) outTotal.textContent = result.starter + result.flour + result.water + "g";
     }
 
-    // Toggle Custom Logic
+    
     function handleRatioClick(btn: Element) {
-        // Reset styles for ALL buttons
+        
         ratioBtns.forEach((b) => {
             b.className = baseClasses + " ratio-btn";
         });
 
-        // Apply active to current
+        
         btn.className = activeClasses + " ratio-btn";
 
-        // Logic
+        
         if (btn.id === "customRatioBtn") {
             customInputsDiv?.classList.remove("hidden");
-            // Trigger recalculation based on custom inputs
+            
             updateFromCustom();
         } else {
             customInputsDiv?.classList.add("hidden");
@@ -406,7 +406,7 @@ import { Icon } from "astro-icon/components";
         calculate();
     }
 
-    // Bind Events
+    
     totalAmountInput.addEventListener("input", calculate);
 
     ratioBtns.forEach((btn) => {
@@ -417,6 +417,6 @@ import { Icon } from "astro-icon/components";
         inp.addEventListener("input", updateFromCustom);
     });
 
-    // Init
+    
     calculate();
 </script>

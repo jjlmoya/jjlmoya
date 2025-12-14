@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 ---
 <div class="w-full max-w-4xl mx-auto space-y-8 user-select-none" id="srt-app">
-    <!-- Drag & Drop Area -->
+    
     <div 
         id="drop-zone"
         class="relative group cursor-pointer"
@@ -23,15 +23,15 @@ import { Icon } from "astro-icon/components";
                     o haz clic para explorar
                 </p>
                 <div id="file-name" class="mt-4 px-4 py-1 bg-cyan-50 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-300 rounded-full text-sm font-medium hidden inline-block animate-fade-in-up">
-                    <!-- File name injected here -->
+                    
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Controls (Hidden initially) -->
+    
     <div id="controls" class="hidden animate-fade-in space-y-8">
-        <!-- Time Shift Input -->
+        
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-xl shadow-slate-200/50 dark:shadow-black/20 border border-slate-100 dark:border-slate-800">
             <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-3">
                 <Icon name="mdi:clock-edit-outline" class="text-cyan-500" />
@@ -56,7 +56,7 @@ import { Icon } from "astro-icon/components";
                     </p>
                 </div>
 
-                <!-- Live Stats -->
+                
                 <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6 flex flex-col gap-4">
                     <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-2">
                         <span class="text-slate-500 dark:text-slate-400">Líneas</span>
@@ -74,16 +74,16 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        <!-- Preview -->
+        
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Original -->
+            
             <div class="bg-slate-100 dark:bg-black/20 rounded-xl p-6 border border-slate-200 dark:border-slate-800/50">
                 <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Original</h4>
                 <div id="preview-original" class="font-mono text-sm text-slate-600 dark:text-slate-400 space-y-4 max-h-64 overflow-y-auto custom-scrollbar">
-                    <!-- Lines injected here -->
+                    
                 </div>
             </div>
-             <!-- Modified -->
+             
              <div class="relative bg-white dark:bg-slate-900 rounded-xl p-6 border border-cyan-100 dark:border-cyan-900/30 shadow-lg shadow-cyan-500/5">
                 <div class="absolute -top-3 -right-3">
                     <span class="bg-cyan-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
@@ -92,21 +92,21 @@ import { Icon } from "astro-icon/components";
                 </div>
                 <h4 class="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider mb-4">Resultado</h4>
                 <div id="preview-modified" class="font-mono text-sm text-slate-800 dark:text-slate-200 space-y-4 max-h-64 overflow-y-auto custom-scrollbar">
-                    <!-- Lines injected here -->
+                    
                 </div>
             </div>
         </div>
 
-        <!-- Action Buttons -->
+        
         <div class="flex justify-center pt-4">
             <button 
                 id="download-btn"
                 class="relative inline-flex group perspective-1000"
             >
-                <!-- Glow Effect -->
+                
                 <div class="absolute transition-all duration-500 opacity-60 -inset-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-400 rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-2 group-hover:duration-200 animate-tilt"></div>
                 
-                <!-- Button Body -->
+                
                 <div class="relative inline-flex items-center justify-center px-8 py-5 text-lg font-black text-white transition-all duration-200 bg-slate-900 border border-slate-700/50 font-pj rounded-xl group-hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400">
                     <Icon name="mdi:cloud-download-outline" class="mr-3 text-3xl group-hover:animate-bounce" />
                     <span>Descargar Corregido</span>
@@ -118,24 +118,24 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-    // Component logic for SRT synchronization
     
-    // INLINE UTILS for Parser
+    
+    
     function parseSRT(data) {
         data = data.replace(/\r/g, '');
         const regex = /(\d+)\n(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/g;
         const blocks = [];
-        let lastIndex = 0;
+        const lastIndex = 0;
         let match;
 
-        // Reset regex
+        
         regex.lastIndex = 0;
 
-        // Simple splitting by double newline might fail if text has empty lines, 
-        // strictly following the standard: Number \n Time --> Time \n Text \n\n
         
-        // A robust way: Split by double newlines, but sometimes they are not double.
-        // Let's use a split approach.
+        
+        
+        
+        
         const parts = data.split('\n\n');
         
         const items = parts.map(part => {
@@ -147,7 +147,7 @@ import { Icon } from "astro-icon/components";
              if (!timeLine.includes('-->')) return null;
              
              const [start, end] = timeLine.split(' --> ');
-             const text = lines.slice(2).join('\n'); // Join rest as text
+             const text = lines.slice(2).join('\n'); 
 
              return {
                  id,
@@ -161,19 +161,19 @@ import { Icon } from "astro-icon/components";
     }
 
     function timeMs(timeStr) {
-        // 00:00:20,000
+        
         const [hms, ms] = timeStr.split(',');
         const [h, m, s] = hms.split(':').map(Number);
         return (h * 3600000) + (m * 60000) + (s * 1000) + Number(ms);
     }
 
     function msToTime(duration) {
-        let ms = parseInt(((duration % 1000) / 100) * 100);
+        const ms = parseInt(((duration % 1000) / 100) * 100);
         let s = parseInt((duration / 1000) % 60);
         let m = parseInt((duration / (1000 * 60)) % 60);
-        let h = parseInt((duration / (1000 * 60 * 60)) % 24); // Assuming < 24h, though SRT can go longer
+        let h = parseInt((duration / (1000 * 60 * 60)) % 24); 
 
-        // Handle negatives (though shouldn't happen usually for display if clamped)
+        
         if (duration < 0) return "00:00:00,000";
 
         h = (h < 10) ? "0" + h : h;
@@ -193,7 +193,7 @@ import { Icon } from "astro-icon/components";
         }).join('\n\n');
     }
 
-    // MAIN COMPONENTS
+    
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
     const controls = document.getElementById('controls');
@@ -203,7 +203,7 @@ import { Icon } from "astro-icon/components";
     const downloadBtn = document.getElementById('download-btn');
     const fileNameDisplay = document.getElementById('file-name');
     
-    // Stats
+    
     const statLines = document.getElementById('stat-lines');
     const statFirst = document.getElementById('stat-first');
     const statLast = document.getElementById('stat-last');
@@ -211,7 +211,7 @@ import { Icon } from "astro-icon/components";
     let originalItems = [];
     let currentFileName = "subtitulos.srt";
 
-    // Event Listeners
+    
     fileInput.addEventListener('change', handleFile);
     offsetInput.addEventListener('input', updatePreview);
     downloadBtn.addEventListener('click', downloadFile);
@@ -231,7 +231,7 @@ import { Icon } from "astro-icon/components";
             
             if (originalItems.length > 0) {
                 controls.classList.remove('hidden');
-                // Smooth scroll to controls
+                
                 setTimeout(() => {
                     controls.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
@@ -243,16 +243,16 @@ import { Icon } from "astro-icon/components";
     }
 
     function updatePreview() {
-        // Get offset in ms
+        
         const offsetSec = parseFloat(offsetInput.value) || 0;
         const offsetMs = offsetSec * 1000;
 
-        // Create modified items
+        
         const modifiedItems = originalItems.map(item => {
             let newStart = item.start + offsetMs;
             let newEnd = item.end + offsetMs;
             
-            // Clamp to 0
+            
             if (newStart < 0) newStart = 0;
             if (newEnd < 0) newEnd = 0;
 
@@ -263,14 +263,14 @@ import { Icon } from "astro-icon/components";
             };
         });
 
-        // Update Stats
+        
         statLines.textContent = modifiedItems.length;
         if (modifiedItems.length > 0) {
             statFirst.textContent = msToTime(modifiedItems[0].start);
             statLast.textContent = msToTime(modifiedItems[modifiedItems.length - 1].end);
         }
 
-        // Render Previews (Top 5 items)
+        
         renderPreviewBlock(previewOriginal, originalItems.slice(0, 5));
         renderPreviewBlock(previewModified, modifiedItems.slice(0, 5));
     }
@@ -321,7 +321,7 @@ import { Icon } from "astro-icon/components";
         
         const a = document.createElement('a');
         a.href = url;
-        // Insert "synced" before extension
+        
         const nameParts = currentFileName.split('.');
         const ext = nameParts.pop();
         a.download = `${nameParts.join('.')}_synced.${ext}`;

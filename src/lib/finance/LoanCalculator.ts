@@ -42,7 +42,7 @@ export class LoanCalculator {
                 (Math.pow(1 + monthlyRate, totalMonths) - 1);
         }
 
-        // 1. Calculate Original Scenario (No extra payments) for comparison
+        
         let originalTotalInterest = 0;
         let tempBalance = amount;
         for (let i = 0; i < totalMonths; i++) {
@@ -51,31 +51,31 @@ export class LoanCalculator {
             tempBalance -= (monthlyPaymentBase - interest);
         }
 
-        // 2. Calculate Actual Scenario (With extra payments)
+        
         const amortizationTable: AmortizationRow[] = [];
         let remainingBalance = amount;
         let totalInterest = 0;
         let actualMonths = 0;
 
         for (let month = 1; month <= totalMonths; month++) {
-            // Standard interest
+            
             const interestPayment = remainingBalance * monthlyRate;
 
-            // Standard principal
+            
             let principalPayment = monthlyPaymentBase - interestPayment;
 
-            // Apply extra payment
-            // Cannot pay more than remaining balance
+            
+            
             let currentExtra = monthlyExtraPayment;
 
-            // Check if we are finishing the loan
+            
             if ((principalPayment + currentExtra) > remainingBalance) {
-                // Adjust final payment
-                // const totalNeeded = remainingBalance;
-                // Priority: Pay interest first, then principal
-                // Actually, interest is calculated on start balance, so it's fixed for this month.
-                // We just reduce the principal payment to exactly clear the debt.
-                // Principal + Extra = Remaining Balance
+                
+                
+                
+                
+                
+                
                 if (principalPayment > remainingBalance) {
                     principalPayment = remainingBalance;
                     currentExtra = 0;
@@ -87,7 +87,7 @@ export class LoanCalculator {
                 remainingBalance -= (principalPayment + currentExtra);
             }
 
-            // Floating point correction
+            
             if (remainingBalance < 0.01) remainingBalance = 0;
 
             totalInterest += interestPayment;
@@ -110,7 +110,7 @@ export class LoanCalculator {
             totalInterest: Number(totalInterest.toFixed(2)),
             totalPaid: Number((amount + totalInterest).toFixed(2)),
             amortizationTable,
-            // Comparison metrics
+            
             originalTotalInterest: Number(originalTotalInterest.toFixed(2)),
             interestSaved: Number((originalTotalInterest - totalInterest).toFixed(2)),
             actualDurationMonths: actualMonths,

@@ -33,7 +33,7 @@ export class BMICalculator {
                 category: 'underweight',
                 label: 'Bajo Peso',
                 description: 'Podría indicar desnutrición o problemas de salud. Consulta con un médico.',
-                color: 'text-blue-500' // Indigo/Blue for cold/low
+                color: 'text-blue-500' 
             };
         } else if (bmi < 25) {
             return {
@@ -41,7 +41,7 @@ export class BMICalculator {
                 category: 'normal',
                 label: 'Peso Normal',
                 description: '¡Buen trabajo! Mantén una dieta equilibrada y ejercicio regular.',
-                color: 'text-emerald-500' // Green for healthy
+                color: 'text-emerald-500' 
             };
         } else if (bmi < 30) {
             return {
@@ -49,7 +49,7 @@ export class BMICalculator {
                 category: 'overweight',
                 label: 'Sobrepeso',
                 description: 'Un ligero exceso de peso. Pequeños cambios en la dieta pueden ayudar.',
-                color: 'text-amber-500' // Orange/Amber for warning
+                color: 'text-amber-500' 
             };
         } else if (bmi < 35) {
             return {
@@ -57,7 +57,7 @@ export class BMICalculator {
                 category: 'obesity_1',
                 label: 'Obesidad I',
                 description: 'Riesgo moderado de problemas cardiovasculares. Se recomienda supervisión.',
-                color: 'text-orange-600' // Darker Orange
+                color: 'text-orange-600' 
             };
         } else if (bmi < 40) {
             return {
@@ -65,7 +65,7 @@ export class BMICalculator {
                 category: 'obesity_2',
                 label: 'Obesidad II',
                 description: 'Riesgo alto de hipertensión y diabetes. Consulta a un especialista.',
-                color: 'text-rose-600' // Red
+                color: 'text-rose-600' 
             };
         } else {
             return {
@@ -73,7 +73,7 @@ export class BMICalculator {
                 category: 'obesity_3',
                 label: 'Obesidad III',
                 description: 'Situación de riesgo muy alto. Es crucial buscar ayuda médica profesional.',
-                color: 'text-red-700' // Dark Red
+                color: 'text-red-700' 
             };
         }
     }

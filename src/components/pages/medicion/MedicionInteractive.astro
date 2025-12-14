@@ -18,9 +18,9 @@
             </p>
         </div>
 
-        <!-- Dashboard Grid -->
+        
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-            <!-- 1. Distancia (The Classic) -->
+            
             <div
                 class="bg-neutral-900/50 rounded-2xl p-6 border border-neutral-800 backdrop-blur-sm col-span-1 md:col-span-2 lg:col-span-2 relative overflow-hidden group"
             >
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <!-- 2. Tiempo Total -->
+            
             <div
                 class="bg-neutral-900/50 rounded-2xl p-6 border border-neutral-800 backdrop-blur-sm col-span-1 md:col-span-1 relative overflow-hidden group"
             >
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            <!-- 3. Velocidad de Lectura -->
+            
             <div
                 class="bg-neutral-900/50 rounded-2xl p-6 border border-neutral-800 backdrop-blur-sm col-span-1 md:col-span-1 relative overflow-hidden group"
             >
@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            <!-- 4. Obsesión (Sección más leída) -->
+            
             <div
                 class="bg-neutral-900/50 rounded-2xl p-6 border border-neutral-800 backdrop-blur-sm col-span-1 md:col-span-2 lg:col-span-3 relative overflow-hidden group"
             >
@@ -135,7 +135,7 @@
                 </div>
             </div>
 
-            <!-- 5. Interacciones -->
+            
             <div
                 class="bg-neutral-900/50 rounded-2xl p-6 border border-neutral-800 backdrop-blur-sm col-span-1 md:col-span-1 relative overflow-hidden group"
             >
@@ -184,7 +184,7 @@
 </section>
 
 <script>
-    // --- Elements ---
+    
     const pixelsEl = document.getElementById("stat-pixels");
     const metersEl = document.getElementById("stat-meters");
     const scaleEl = document.getElementById("stat-scale");
@@ -195,21 +195,21 @@
     const clicksEl = document.getElementById("stat-clicks");
     const scrollsEl = document.getElementById("stat-scrolls");
 
-    // --- State ---
+    
     const startTime = Date.now();
     let totalClicks = 0;
-    let totalScrollEvents = 0; // Rough proxy for "effort"
+    let totalScrollEvents = 0; 
     let maxScrollY = 0;
 
-    // Section Tracking
+    
     const sectionTimes = new Map<string, number>();
     let currentSectionId: string | null = null;
     let lastSectionEnterTime = Date.now();
 
-    // Constants
+    
     const PIXEL_TO_METER = 0.0002645833;
 
-    // --- Helpers ---
+    
     function formatTime(ms: number) {
         const seconds = Math.floor(ms / 1000);
         const m = Math.floor(seconds / 60);
@@ -227,22 +227,22 @@
         return "Geográfico";
     }
 
-    // --- Tracking Logic ---
+    
 
-    // 1. Intersection Observer for Sections
-    // We assume sections have IDs or headings we can use as names
+    
+    
     const observer = new IntersectionObserver(
         (entries: IntersectionObserverEntry[]) => {
             const now = Date.now();
 
-            // Update time for previous section
+            
             if (currentSectionId) {
                 const timeSpent = now - lastSectionEnterTime;
                 const currentTotal = sectionTimes.get(currentSectionId) || 0;
                 sectionTimes.set(currentSectionId, currentTotal + timeSpent);
             }
 
-            // Find the most visible section
+            
             let maxRatio = 0;
             let bestEntry: IntersectionObserverEntry | null = null;
 
@@ -254,7 +254,7 @@
             });
 
             if (bestEntry) {
-                // Try to find a title
+                
                 const target = (bestEntry as IntersectionObserverEntry).target;
                 const title =
                     target.querySelector("h2")?.textContent || target.id || "Introducción";
@@ -266,12 +266,12 @@
         { threshold: [0.2, 0.5, 0.8] }
     );
 
-    // Observe all sections in main
+    
     document.querySelectorAll("main > section").forEach((section) => {
         observer.observe(section);
     });
 
-    // 2. Event Listeners
+    
     window.addEventListener("click", () => {
         totalClicks++;
         if (clicksEl) clicksEl.innerText = totalClicks.toString();
@@ -282,7 +282,7 @@
         const scrollY = window.scrollY;
         maxScrollY = Math.max(maxScrollY, scrollY);
 
-        // Count "scroll actions" (debounced)
+        
         if (!scrollTimeout) {
             totalScrollEvents++;
             if (scrollsEl) scrollsEl.innerText = totalScrollEvents.toString();
@@ -294,12 +294,12 @@
         updateRealtimeStats();
     });
 
-    // --- Update UI ---
+    
     function updateRealtimeStats() {
         const now = Date.now();
         const elapsedSeconds = (now - startTime) / 1000;
 
-        // Distance
+        
         const scrollY = window.scrollY;
         const meters = scrollY * PIXEL_TO_METER;
 
@@ -307,19 +307,19 @@
         if (metersEl) metersEl.innerText = meters.toFixed(2);
         if (scaleEl) scaleEl.innerText = getScaleLabel(meters);
 
-        // Time
+        
         if (timeEl) timeEl.innerText = formatTime(now - startTime);
 
-        // Speed (Pixels per second average)
+        
         const speed = elapsedSeconds > 0 ? Math.floor(scrollY / elapsedSeconds) : 0;
         if (speedEl) speedEl.innerText = speed.toString();
 
-        // Obsession (Most read section)
-        // Update current section time first
+        
+        
         if (currentSectionId) {
             const timeSpent = now - lastSectionEnterTime;
             const currentTotal = sectionTimes.get(currentSectionId) || 0;
-            // Don't commit it yet, just peek for display
+            
             const tempMap = new Map(sectionTimes);
             tempMap.set(currentSectionId, currentTotal + timeSpent);
 
@@ -327,7 +327,7 @@
             let maxTitle = "Analizando...";
 
             tempMap.forEach((time, title) => {
-                // Filter out "Escala Cósmica" itself to avoid recursion bias
+                
                 if (
                     time > maxTime &&
                     !title.includes("Escala Cósmica") &&
@@ -345,6 +345,6 @@
         }
     }
 
-    // Loop for time updates even if not scrolling
+    
     setInterval(updateRealtimeStats, 1000);
 </script>

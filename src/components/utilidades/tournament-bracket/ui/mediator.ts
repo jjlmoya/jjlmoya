@@ -51,13 +51,13 @@ export class TournamentUIMediator {
 
     updateHeader(name: string, date: string) {
         if (this.titleDisplay) {
-            // Only update text if we are NOT currently editing (checked by presence of input)
+            
             if (!this.titleDisplay.querySelector('input')) {
                 this.titleDisplay.textContent = name;
-                // Add explicit edit hint/icon? 
-                // Let's just append a small pencil icon if not present
-                // But textContent clears it. 
-                // Let's use innerHTML to include icon
+                
+                
+                
+                
                 this.titleDisplay.innerHTML = `${name} <span class="icon-[mdi--pencil] text-slate-400 text-sm ml-2 opacity-50 hover:opacity-100 cursor-pointer" title="Editar Nombre"></span>`;
             }
         }
@@ -68,21 +68,21 @@ export class TournamentUIMediator {
         if (!this.titleDisplay) return;
 
         this.titleDisplay.addEventListener("click", () => {
-            // Prevent if already editing
+            
             if (this.titleDisplay?.querySelector('input')) return;
 
 
-            // Allow clicking container or icon
+            
 
 
-            // innerText might include the icon text if accessible? No, icon is span. 
-            // Actually innerText of container includes "name". 
+            
+            
 
-            // More robust: Get the text node? 
-            // Or just use the value from ActiveController's render? 
-            // But we don't have it here. 
-            // Let's just grab textContent of the wrapper, removing the icon part if needed.
-            // Since we set innerHTML = name + icon, textContent will be name + nothing (if icon has no text).
+            
+            
+            
+            
+            
             const rawText = this.titleDisplay?.textContent || "";
 
             const input = document.createElement('input');
@@ -90,7 +90,7 @@ export class TournamentUIMediator {
             input.value = rawText.trim();
             input.className = "bg-transparent border-b-2 border-indigo-500 text-slate-800 font-bold text-center focus:outline-none min-w-[200px] w-auto inline-block";
 
-            // Replace content
+            
             if (this.titleDisplay) {
                 this.titleDisplay.innerHTML = '';
                 this.titleDisplay.appendChild(input);
@@ -101,7 +101,7 @@ export class TournamentUIMediator {
                     if (newName) {
                         onSave(newName);
                     } else {
-                        onSave(rawText); // Revert
+                        onSave(rawText); 
                     }
                 };
 

@@ -6,8 +6,8 @@ export interface OptimizationResult {
 export class RouteService {
     async optimizeRoute(points: { lat: number; lng: number }[]): Promise<OptimizationResult> {
         const coords = points.map(p => `${p.lng},${p.lat}`).join(';');
-        // source=any & roundtrip=true allows finding the best loop. 
-        // We will post-process this to cut the longest leg for an open route.
+        
+        
         const url = `https://router.project-osrm.org/trip/v1/driving/${coords}?source=any&roundtrip=true&geometries=geojson&overview=full`;
 
         const response = await fetch(url);

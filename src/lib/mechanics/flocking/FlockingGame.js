@@ -24,11 +24,11 @@ export class FlockingGame {
         window.addEventListener("mousemove", this.handleMove);
         window.addEventListener("mouseleave", this.handleLeave);
 
-        // Touch events
+        
         window.addEventListener(
             "touchmove",
             (e) => {
-                // e.preventDefault(); // Don't block scroll on window
+                
                 this.handleMove(e.touches[0]);
             },
             { passive: false }
@@ -64,7 +64,7 @@ export class FlockingGame {
     }
 
     draw() {
-        // Clear
+        
         this.ctx.fillStyle = "#0a0a0a";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
@@ -92,6 +92,6 @@ export class FlockingGame {
     destroy() {
         window.removeEventListener("mousemove", this.handleMove);
         window.removeEventListener("mouseleave", this.handleLeave);
-        // Remove touch listeners...
+        
     }
 }

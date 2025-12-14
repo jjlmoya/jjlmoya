@@ -9,23 +9,21 @@ export function toRad(deg: number): number {
     return (deg * Math.PI) / 180;
 }
 
-/**
- * Calculates array tilt based on simple heuristics
- */
+
 export function calculateTilt(lat: number): TiltResult {
     const absLat = Math.abs(lat);
 
-    // Basic heuristic for optimal annual tilt
+    
     let optimal = absLat * 0.87;
     if (absLat > 25 && absLat < 50) {
         optimal = absLat * 0.76 + 3.1;
     }
 
-    // Seasonal adjustments
-    let winter = absLat * 0.9 + 29;
-    let summer = absLat * 0.9 - 23.5;
+    
+    const winter = absLat * 0.9 + 29;
+    const summer = absLat * 0.9 - 23.5;
 
-    // Helper to clamp values between 0 and 90 degrees
+    
     const clamp = (n: number) => Math.min(Math.max(n, 0), 90);
 
     return {

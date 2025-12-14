@@ -54,7 +54,7 @@ export class GravityFlipGame {
 
         this.mechanic = new GravityFlipMechanic(this.height / 2, {
             gravity: 0.6,
-            jumpForce: 0, // Not used in this mechanic but kept for interface potential
+            jumpForce: 0, 
             groundY: this.height - this.player.size,
             ceilingY: 0
         });
@@ -102,12 +102,12 @@ export class GravityFlipGame {
 
         this.mechanic.updateBounds(this.height - this.player.size, 0);
 
-        // Ensure player stays within new bounds if resized
+        
         const state = this.mechanic.getState();
         if (state.y > this.height - this.player.size) {
-            // Force reset position if out of bounds, or could clamp
-            // But mechanic updateBounds doesn't auto-clamp current position usually
-            // For simplicity, let next update handle it or reset if extreme
+            
+            
+            
         }
     }
 

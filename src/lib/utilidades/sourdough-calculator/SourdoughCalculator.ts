@@ -1,12 +1,5 @@
 export class SourdoughCalculator {
-    /**
-     * Calculates the amounts of starter, flour, and water needed.
-     * @param totalAmount Desired final amount of sourdough starter in grams.
-     * @param starterRatio Parts of starter (e.g., 1 in 1:2:2).
-     * @param flourRatio Parts of flour (e.g., 2 in 1:2:2).
-     * @param waterRatio Parts of water (e.g., 2 in 1:2:2).
-     * @returns An object containing the grams of starter, flour, and water needed.
-     */
+    
     static calculate(
         totalAmount: number,
         starterRatio: number,

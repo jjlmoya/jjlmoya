@@ -31,9 +31,7 @@ export class TournamentStorage {
         localStorage.removeItem(STORAGE_KEY_CURRENT);
     }
 
-    /**
-     * Helper to save a tournament to history and set it as current
-     */
+    
     static saveTournament(manager: TournamentManager, history: any[]): any[] {
         const idx = history.findIndex(t => t.id === manager.id);
         const json = manager.toJSON();

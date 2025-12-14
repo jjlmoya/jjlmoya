@@ -41,13 +41,13 @@ export function calculateCoolingTime(state: CoolingState): number {
     const k = K_VALUES[state.container] * MULTIPLIER_MEDIUM[state.location];
 
     if (T_target >= T_0) {
-        return 0; // Already colder or equal
+        return 0; 
     }
 
-    // Safety margin for asymptotes
+    
     const effectiveEnv = T_env + 0.5;
     if (T_target <= effectiveEnv) {
-        return 999; // Never reaches
+        return 999; 
     }
 
     const ratio = (T_target - T_env) / (T_0 - T_env);

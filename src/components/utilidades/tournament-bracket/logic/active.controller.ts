@@ -61,7 +61,7 @@ export class ActiveController {
     }
 
     private attachMatchListeners() {
-        // Winner Selection Buttons
+        
         document.querySelectorAll(".match-btn").forEach((btn) => {
             btn.addEventListener("click", (e) => {
                 const target = e.currentTarget as HTMLElement;
@@ -73,18 +73,18 @@ export class ActiveController {
             });
         });
 
-        // Score Inputs
+        
         document.querySelectorAll(".score-input").forEach((input) => {
             input.addEventListener("change", (e) => {
                 const target = e.target as HTMLInputElement;
                 const matchId = target.dataset.matchId;
-                const playerNum = target.dataset.player; // "1" or "2"
+                const playerNum = target.dataset.player; 
 
                 if (matchId && playerNum) {
                     this.updateScore(matchId, playerNum, target.value);
                 }
             });
-            // Prepare inputs to not propagate clicks
+            
             input.addEventListener("click", (e) => e.stopPropagation());
         });
     }
@@ -92,15 +92,15 @@ export class ActiveController {
     private updateScore(matchId: string, playerNum: string, value: string) {
         if (!this.manager) return;
 
-        // Find current match to get existing scores
+        
         const match = this.findMatch(matchId);
         if (!match) return;
 
-        // Keep existing value if not the one being updated (careful with 0 being falsy)
+        
         let s1: number | null = (match.score1 !== undefined && match.score1 !== null) ? match.score1 : null;
         let s2: number | null = (match.score2 !== undefined && match.score2 !== null) ? match.score2 : null;
 
-        // Parse new value
+        
         let val: number | null = null;
         if (value.trim() !== "") {
             val = parseInt(value);
@@ -142,7 +142,7 @@ export class ActiveController {
 
     private saveCurrentState() {
         if (!this.manager) return;
-        this.history = TournamentStorage.loadHistory(); // Refresh to ensure we have latest
+        this.history = TournamentStorage.loadHistory(); 
         this.history = TournamentStorage.saveTournament(this.manager, this.history);
     }
 

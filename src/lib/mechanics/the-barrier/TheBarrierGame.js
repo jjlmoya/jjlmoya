@@ -10,7 +10,7 @@ export class TheBarrierGame {
         this.mechanic = new TheBarrierMechanic(this.width, this.height);
 
         this.isDrawing = false;
-        this.currentLine = null; // { start: {x,y}, end: {x,y} }
+        this.currentLine = null; 
 
         this.loop = this.loop.bind(this);
         this.handleStart = this.handleStart.bind(this);
@@ -59,7 +59,7 @@ export class TheBarrierGame {
         if (!this.isDrawing) return;
         this.isDrawing = false;
 
-        // Add barrier if length is sufficient
+        
         const dx = this.currentLine.end.x - this.currentLine.start.x;
         const dy = this.currentLine.end.y - this.currentLine.start.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -87,11 +87,11 @@ export class TheBarrierGame {
     }
 
     draw() {
-        // Clear
-        this.ctx.fillStyle = "rgba(10, 10, 20, 0.3)"; // Dark blueish fade
+        
+        this.ctx.fillStyle = "rgba(10, 10, 20, 0.3)"; 
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw Particles
+        
         for (const p of this.mechanic.particles) {
             this.ctx.fillStyle = p.color;
             this.ctx.beginPath();
@@ -99,10 +99,10 @@ export class TheBarrierGame {
             this.ctx.fill();
         }
 
-        // Draw Barriers
+        
         this.ctx.lineCap = "round";
         for (const b of this.mechanic.barriers) {
-            const alpha = b.life / 50; // Fade out
+            const alpha = b.life / 50; 
             this.ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, alpha)})`;
             this.ctx.lineWidth = 4;
             this.ctx.beginPath();
@@ -111,7 +111,7 @@ export class TheBarrierGame {
             this.ctx.stroke();
         }
 
-        // Draw Current Line
+        
         if (this.isDrawing && this.currentLine) {
             this.ctx.strokeStyle = "#FFFFFF";
             this.ctx.lineWidth = 2;

@@ -6,7 +6,7 @@ export class Player {
         this.x = 100;
         this.y = game.height - this.height - 100;
 
-        // Physics
+        
         this.vx = 0;
         this.vy = 0;
         this.weight = 1;
@@ -15,16 +15,16 @@ export class Player {
         this.maxSpeed = 10;
         this.jumpStrength = -20;
 
-        // State
+        
         this.onGround = false;
         this.canDoubleJump = true;
         this.isSliding = false;
         this.onWall = false;
-        this.wallDir = 0; // -1 left, 1 right
-        this.state = "IDLE"; // IDLE, RUN, JUMP, FALL, SLIDE, WALL_SLIDE
+        this.wallDir = 0; 
+        this.state = "IDLE"; 
 
-        // Visuals
-        this.color = "#6366f1"; // Indigo-500
+        
+        this.color = "#6366f1"; 
         this.squash = 1;
         this.stretch = 1;
     }
@@ -58,7 +58,7 @@ export class Player {
     }
 
     handleJump(input) {
-        // Jump
+        
         if (input.jumpPressed) {
             if (this.onGround) {
                 this.jump();
@@ -67,10 +67,10 @@ export class Player {
             } else if (this.canDoubleJump) {
                 this.doubleJump();
             }
-            input.jumpPressed = false; // Consume jump
+            input.jumpPressed = false; 
         }
 
-        // Variable Jump Height (release space to fall faster)
+        
         if (!input.keys.jump && this.vy < 0) {
             this.vy *= 0.5;
         }
@@ -89,49 +89,49 @@ export class Player {
         this.canDoubleJump = false;
         this.squash = 0.7;
         this.stretch = 1.3;
-        this.createParticles(5, "#a855f7"); // Purple particles
+        this.createParticles(5, "#a855f7"); 
     }
 
     wallJump() {
         this.vy = this.jumpStrength;
-        this.vx = -this.wallDir * 10; // Kick off wall
+        this.vx = -this.wallDir * 10; 
         this.onWall = false;
-        this.canDoubleJump = true; // Reset double jump on wall jump
-        this.createParticles(5, "#fbbf24"); // Amber particles
+        this.canDoubleJump = true; 
+        this.createParticles(5, "#fbbf24"); 
     }
 
     handleSlide(input) {
         if (input.keys.slide && this.onGround && Math.abs(this.vx) > 1) {
             this.isSliding = true;
-            this.height = 25; // Duck
-            // Position adjustment happens in collision resolution or simply by drawing offset
-            // But here we change hitbox, so we might need to push down if in air?
-            // Actually, if we are on ground, y is fixed. If we shrink height, we should move y down to keep bottom aligned.
-            // But we handle y as top-left.
+            this.height = 25; 
+            
+            
+            
+            
 
-            // If we just shrink height, the bottom lifts up.
-            // We need to move y down by difference.
-            // However, since we do this every frame, we need to be careful not to keep moving down.
-            // We'll handle visual offset in draw, but logical height changes.
-            // Let's keep it simple: if we shrink, we add to y. If we grow, we subtract.
-            // But doing it every frame is bad.
-            // Better: The physics engine pushes us up out of the floor.
-            // So if we shrink, we are "floating" for one frame until gravity pulls us down?
-            // No, gravity is constant.
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
-            // Let's just set friction.
+            
             this.friction = 0.98;
 
-            // Boost if starting slide
+            
             if (this.state !== "SLIDE") {
                 this.vx *= 1.2;
-                this.y += 25; // Snap down to floor
+                this.y += 25; 
                 this.createParticles(8, "#cbd5e1");
             }
         } else {
             if (this.isSliding) {
-                this.y -= 25; // Stand up
-                // Check if we hit ceiling standing up? (Optional)
+                this.y -= 25; 
+                
             }
             this.isSliding = false;
             this.height = 50;
@@ -188,7 +188,7 @@ export class Player {
             }
         });
 
-        // World Bounds
+        
         if (this.x < 0) {
             this.x = 0;
             this.vx = 0;
@@ -202,9 +202,9 @@ export class Player {
             this.wallDir = 1;
         }
 
-        // Wall Slide Friction
+        
         if (this.onWall && !this.onGround && this.vy > 0) {
-            this.vy *= 0.8; // Slide down slowly
+            this.vy *= 0.8; 
         }
     }
 
@@ -242,7 +242,7 @@ export class Player {
     }
 
     updateVisuals() {
-        // Recover shape
+        
         this.squash += (1 - this.squash) * 0.1;
         this.stretch += (1 - this.stretch) * 0.1;
     }
@@ -250,25 +250,25 @@ export class Player {
     draw(ctx) {
         ctx.fillStyle = this.color;
 
-        // Draw with squash and stretch
+        
         const w = this.width * this.squash;
         const h = this.height * this.stretch;
         const x = this.x + (this.width - w) / 2;
-        const y = this.y + (this.height - h); // Anchor at bottom
+        const y = this.y + (this.height - h); 
 
         ctx.fillRect(x, y, w, h);
 
-        // Draw eyes to see direction
+        
         ctx.fillStyle = "white";
         const eyeOffset = this.vx >= 0 ? 5 : -5;
-        // If on wall, look away from wall?
+        
         if (this.onWall && !this.onGround) {
-            // Look opposite to wall
-            // wallDir 1 (right) -> look left (-5)
-            // wallDir -1 (left) -> look right (5)
-            // const wallEyeOffset = this.wallDir === 1 ? -5 : 5;
-            // Actually usually you look at the wall you are sliding on?
-            // Let's keep it simple based on velocity or wall dir
+            
+            
+            
+            
+            
+            
         }
 
         ctx.fillRect(x + w / 2 + eyeOffset, y + h / 4, 10, 10);

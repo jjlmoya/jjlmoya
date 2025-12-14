@@ -455,10 +455,10 @@ Maria García
 <script>
     import { GiveawayEngine } from "../../../lib/utilidades/streaming/GiveawayEngine";
 
-    // Initialize Engine
+    
     const engine = new GiveawayEngine();
 
-    // DOM Elements
+    
     const els = {
         input: document.getElementById("participants-input") as HTMLTextAreaElement,
         blacklistInput: document.getElementById("blacklist-input") as HTMLTextAreaElement,
@@ -469,7 +469,7 @@ Maria García
         clearBtn: document.getElementById("clear-btn"),
         fileImport: document.getElementById("file-import") as HTMLInputElement,
 
-        // Tabs
+        
         tabParticipantsBtn: document.getElementById("tab-participants-btn"),
         tabSettingsBtn: document.getElementById("tab-settings-btn"),
         tabParticipantsView: document.getElementById("tab-participants-view"),
@@ -487,65 +487,65 @@ Maria García
 
         optCountdown: document.getElementById("opt-countdown") as HTMLInputElement,
         optConfetti: document.getElementById("opt-confetti") as HTMLInputElement,
-        // ... (Previous DOM Elements)
+        
         optDuplicates: document.getElementById("opt-duplicates") as HTMLInputElement,
         optWinnerCount: document.getElementById("opt-winner-count") as HTMLInputElement,
-        optAutoRemove: document.getElementById("opt-auto-remove") as HTMLInputElement, // New
+        optAutoRemove: document.getElementById("opt-auto-remove") as HTMLInputElement, 
         multiResults: document.getElementById("multi-results"),
 
-        // Zen Mode Elements (New)
-        mainGrid: document.getElementById("main-grid"), // Assuming an ID for the main grid container
-        sidebarPanel: document.getElementById("sidebar-panel"), // Assuming an ID for the sidebar panel
-        stagePanel: document.getElementById("stage-panel"), // Assuming an ID for the stage panel
-        zenToggle: document.getElementById("zen-toggle"), // New
+        
+        mainGrid: document.getElementById("main-grid"), 
+        sidebarPanel: document.getElementById("sidebar-panel"), 
+        stagePanel: document.getElementById("stage-panel"), 
+        zenToggle: document.getElementById("zen-toggle"), 
     };
 
     let isRunning = false;
     let audioContext: AudioContext | null = null;
-    let isZenMode = false; // New
+    let isZenMode = false; 
 
-    // --- LOGIC ---
+    
 
-    // New Zen Mode Toggle Function
+    
     function toggleZenMode() {
         isZenMode = !isZenMode;
         if (isZenMode) {
-            // Collapse Sidebar
+            
             els.sidebarPanel?.classList.add("hidden");
 
-            // Expand Stage to full width
+            
             els.stagePanel?.classList.remove("xl:col-span-8");
             els.stagePanel?.classList.add("xl:col-span-12");
 
-            // Icon Update
+            
             document.getElementById("icon-zen-open")?.classList.add("hidden");
             document.getElementById("icon-zen-close")?.classList.remove("hidden");
         } else {
-            // Restore Sidebar
+            
             els.sidebarPanel?.classList.remove("hidden");
 
-            // Restore Stage width
+            
             els.stagePanel?.classList.remove("xl:col-span-12");
             els.stagePanel?.classList.add("xl:col-span-8");
 
-            // Icon Update
+            
             document.getElementById("icon-zen-open")?.classList.remove("hidden");
             document.getElementById("icon-zen-close")?.classList.add("hidden");
         }
     }
 
-    // Attach Zen Toggle Event Listener (New)
+    
     els.zenToggle?.addEventListener("click", toggleZenMode);
 
     function updateStats() {
-        // Sync engine state
+        
         if (els.optDuplicates) engine.setAllowDuplicates(els.optDuplicates.checked);
         if (els.blacklistInput) engine.setBlacklistFromText(els.blacklistInput.value);
         if (els.input) engine.setParticipantsFromText(els.input.value);
 
         const count = engine.getCount();
 
-        // Update UI
+        
         if (els.countDisplay) els.countDisplay.textContent = count.toString();
         if (els.lineCount && els.input)
             els.lineCount.textContent = `${els.input.value.split("\n").filter((l) => l.trim().length > 0).length} líneas`;
@@ -560,7 +560,7 @@ Maria García
             els.triggerBtn.disabled = !isValid || isRunning;
         }
 
-        // State Views
+        
         if (count > 0) {
             if (els.stateEmpty) els.stateEmpty.classList.add("opacity-0", "translate-y-4");
         } else {
@@ -624,11 +624,11 @@ Maria García
             }
         };
         reader.readAsText(file);
-        // Reset input
+        
         (e.target as HTMLInputElement).value = "";
     }
 
-    // --- ANIMATION & EFFECTS ---
+    
 
     function playBeep(frequency = 440, duration = 0.1, type: OscillatorType = "sine") {
         if (!audioContext)
@@ -711,11 +711,11 @@ Maria García
         const participants = engine.getParticipants();
         if (participants.length < 1) return;
 
-        // Validation
+        
         const winnerCount = parseInt(els.optWinnerCount?.value || "1");
         if (winnerCount < 1) return;
         if (winnerCount > participants.length && !els.optDuplicates?.checked) {
-            // Can't pick more unique winners than participants
+            
             alert(
                 `No hay suficientes participantes únicos (${participants.length}) para elegir ${winnerCount} ganadores.`
             );
@@ -725,12 +725,12 @@ Maria García
         isRunning = true;
         els.triggerBtn.disabled = true;
 
-        // Prepare Stage
+        
         if (els.stateEmpty) els.stateEmpty.classList.add("hidden");
         if (els.stateActive) els.stateActive.classList.add("hidden");
         if (els.winnerActions) els.winnerActions.classList.add("hidden");
 
-        // Reset Single Display
+        
         if (els.mainDisplay) {
             els.mainDisplay.textContent = "???";
             els.mainDisplay.classList.remove(
@@ -743,22 +743,22 @@ Maria García
             els.mainDisplay.classList.add("text-white");
             els.mainDisplay.style.textShadow = "none";
         }
-        // Reset Multi Display
+        
         if (els.multiResults) {
             els.multiResults.classList.add("hidden");
             els.multiResults.innerHTML = "";
         }
 
-        // Countdown
+        
         if (els.optCountdown.checked) {
             await runCountdownSequence();
         }
 
-        // Show Rolling State
+        
         if (els.stateActive) els.stateActive.classList.remove("hidden");
 
-        // IF MULTIPLE WINNERS, we might want to hide the H1 and show a "Rolling..." text or just use H1 for rolling then swap.
-        // Let's use H1 for Rolling animation regardless of count.
+        
+        
 
         const totalDuration = 2500;
         const startTime = Date.now();
@@ -776,11 +776,11 @@ Maria García
                 }
                 requestAnimationFrame(animate);
             } else {
-                // FINISH
+                
                 const winners = engine.pickWinners(winnerCount);
 
                 if (winners.length === 1) {
-                    // SINGLE WINNER MODE
+                    
                     if (els.mainDisplay) {
                         els.mainDisplay.textContent = winners[0];
                         els.mainDisplay.classList.add(
@@ -793,11 +793,11 @@ Maria García
                             "0 0 40px rgba(52,211,153,0.8), 0 0 80px rgba(52,211,153,0.4)";
                     }
                 } else {
-                    // MULTI WINNER MODE
+                    
                     if (els.mainDisplay) els.mainDisplay.classList.add("hidden");
                     if (els.multiResults) {
                         els.multiResults.classList.remove("hidden");
-                        // Generate Grid
+                        
                         els.multiResults.innerHTML = winners
                             .map(
                                 (w, i) => `
@@ -825,7 +825,7 @@ Maria García
         animate();
     }
 
-    // --- EVENTS ---
+    
     els.input.addEventListener("input", updateStats);
     els.blacklistInput?.addEventListener("input", updateStats);
     els.optDuplicates?.addEventListener("change", updateStats);
@@ -845,7 +845,7 @@ Maria García
     els.triggerBtn.addEventListener("click", startRoll);
     els.btnReroll?.addEventListener("click", startRoll);
 
-    // Init
+    
     updateStats();
 </script>
 

@@ -72,12 +72,12 @@ export class TapFlyMechanic {
     public update() {
         if (this.state !== "playing") return;
 
-        // Physics
+        
         this.player.vel.y += this.config.gravity;
         this.player.pos.y += this.player.vel.y;
         this.player.angle = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, this.player.vel.y * 0.1));
 
-        // Bounds collision
+        
         if (
             this.player.pos.y + this.player.radius > this.bounds.height ||
             this.player.pos.y - this.player.radius < 0
@@ -85,7 +85,7 @@ export class TapFlyMechanic {
             this.state = "gameover";
         }
 
-        // Obstacles
+        
         this.frames++;
         if (this.frames % this.config.obstacleSpawnRate === 0) {
             const gapHeight = 150;
@@ -106,7 +106,7 @@ export class TapFlyMechanic {
             const obs = this.obstacles[i];
             obs.x -= this.config.speed;
 
-            // Collision
+            
             if (
                 this.player.pos.x + this.player.radius > obs.x &&
                 this.player.pos.x - this.player.radius < obs.x + obs.width
@@ -119,13 +119,13 @@ export class TapFlyMechanic {
                 }
             }
 
-            // Score
+            
             if (!obs.passed && this.player.pos.x > obs.x + obs.width) {
                 this.score++;
                 obs.passed = true;
             }
 
-            // Remove off-screen
+            
             if (obs.x + obs.width < 0) {
                 this.obstacles.splice(i, 1);
             }

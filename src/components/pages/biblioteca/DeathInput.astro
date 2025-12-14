@@ -6,24 +6,24 @@
     id="death-input-container"
     class="hidden grid-cols-1 place-items-center mt-8 transition-opacity duration-1000 opacity-0 w-full max-w-3xl mx-auto"
 >
-    <!-- YEAR SLIDER -->
+    
     <div id="year-section" class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full transition-opacity duration-500 z-20">
         
-        <!-- Wrapper for Slider & Lights (Ensures vertical centering ignores the button) -->
+        
         <div class="relative w-full group">
-            <!-- Flashlight/Vignette Effect -->
+            
             <div class="absolute inset-0 pointer-events-none z-20 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(12,10,9,0.4)_40%,rgba(12,10,9,0.9)_80%)]"></div>
             
-            <!-- Center Light Beam (Candle Glow) -->
+            
             <div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-40 bg-orange-500/10 blur-3xl z-10 pointer-events-none"></div>
 
-            <!-- Selection Indicator (Subtle) -->
+            
             <div
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-56 border-x border-orange-500/20 bg-orange-500/5 z-10 pointer-events-none rounded-lg blur-[1px]"
             >
             </div>
 
-            <!-- Scroll Container -->
+            
             <div 
                 id="year-slider" 
                 class="flex overflow-x-auto snap-x snap-mandatory w-full py-12 px-[50%] gap-4 no-scrollbar cursor-grab active:cursor-grabbing items-center h-80 select-none"
@@ -33,10 +33,10 @@
                         class="year-item snap-center shrink-0 transition-all duration-500 select-none flex flex-col items-center justify-center w-12 cursor-pointer group"
                         data-year={year}
                     >
-                        <!-- Book Spine Visual -->
+                        
                         <div class="book-spine wood-spine w-full h-40 rounded-sm relative shadow-lg group-hover:scale-105 transition-all duration-500 flex items-center justify-center overflow-hidden pointer-events-none">
                             <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent pointer-events-none"></div>
-                            <!-- Vertical Text -->
+                            
                             <span class="book-text writing-vertical font-serif text-[#e7e5e4]/60 text-lg tracking-widest rotate-180 transition-colors duration-300">{year}</span>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
         </button>
     </div>
 
-    <!-- MONTH SELECTION -->
+    
     <div id="month-section" class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full opacity-0 pointer-events-none transition-opacity duration-500 z-10">
         <div class="grid grid-cols-3 gap-3 md:gap-4 md:grid-cols-4 w-full max-w-2xl">
             {
@@ -99,14 +99,14 @@
         let startX;
         let scrollLeft;
 
-        // Show input when requested
+        
         const handleShowYearInput = () => {
             if (container) {
                 container.classList.remove("hidden");
-                container.classList.add("grid"); // Activate grid
+                container.classList.add("grid"); 
                 setTimeout(() => {
                     container.classList.remove("opacity-0");
-                    // Scroll to a reasonable default (e.g., 1990)
+                    
                     const defaultYear = document.querySelector('.year-item[data-year="1990"]');
                     defaultYear?.scrollIntoView({
                         behavior: "smooth",
@@ -116,10 +116,10 @@
                 }, 100);
             }
         };
-        document.removeEventListener("show-death-year-input", handleShowYearInput); // Clean up just in case
+        document.removeEventListener("show-death-year-input", handleShowYearInput); 
         document.addEventListener("show-death-year-input", handleShowYearInput);
 
-        // Drag to Scroll Logic
+        
         if (yearSlider) {
             yearSlider.addEventListener('mousedown', (e) => {
                 isDragging = false;
@@ -128,24 +128,24 @@
                 startX = e.pageX - yearSlider.offsetLeft;
                 scrollLeft = yearSlider.scrollLeft;
                 
-                // Disable snap while dragging for smoothness
+                
                 yearSlider.style.scrollSnapType = 'none';
             });
 
             yearSlider.addEventListener('mouseleave', () => {
                 yearSlider.classList.remove('cursor-grabbing');
                 yearSlider.classList.add('cursor-grab');
-                // Re-enable snap
+                
                 yearSlider.style.scrollSnapType = 'x mandatory';
             });
 
             yearSlider.addEventListener('mouseup', () => {
                 yearSlider.classList.remove('cursor-grabbing');
                 yearSlider.classList.add('cursor-grab');
-                // Re-enable snap
+                
                 yearSlider.style.scrollSnapType = 'x mandatory';
                 
-                // Small timeout to reset dragging flag so click events can check it
+                
                 setTimeout(() => { isDragging = false; }, 50);
             });
 
@@ -153,13 +153,13 @@
                 if (!yearSlider.classList.contains('cursor-grabbing')) return;
                 e.preventDefault();
                 const x = e.pageX - yearSlider.offsetLeft;
-                const walk = (x - startX) * 2; // Scroll-fast
-                if (Math.abs(walk) > 5) isDragging = true; // Threshold to detect drag vs click
+                const walk = (x - startX) * 2; 
+                if (Math.abs(walk) > 5) isDragging = true; 
                 yearSlider.scrollLeft = scrollLeft - walk;
             });
         }
 
-        // Click to select (only if not dragging)
+        
         yearItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 if (isDragging) {
@@ -175,7 +175,7 @@
             });
         });
 
-        // Slider Logic (Scroll based for precision)
+        
         const updateActiveYear = () => {
             if (!yearSlider) return;
             
@@ -191,7 +191,7 @@
                 const itemCenter = rect.left + rect.width / 2;
                 const diff = Math.abs(center - itemCenter);
 
-                // Reset styles (Default state)
+                
                 const spine = el.querySelector('.book-spine');
                 const text = el.querySelector('.book-text');
                 
@@ -211,7 +211,7 @@
                 const spine = el.querySelector('.book-spine');
                 const text = el.querySelector('.book-text');
 
-                // Active state
+                
                 spine?.classList.remove('wood-spine', 'h-40', 'opacity-50');
                 spine?.classList.add('wood-spine-active', 'h-64', 'z-10');
                 text?.classList.remove('text-[#e7e5e4]/60');
@@ -225,18 +225,18 @@
             yearSlider.addEventListener('scroll', () => {
                 window.requestAnimationFrame(updateActiveYear);
             });
-            // Initial check
+            
             setTimeout(updateActiveYear, 500);
         }
 
-        // Confirm Year Logic
+        
         const handleConfirmYear = () => {
             if (selectedYear) {
-                // Dispatch event with year
+                
                 const event = new CustomEvent("year-selected", { detail: { year: selectedYear } });
                 document.dispatchEvent(event);
 
-                // Hide Year Section (Fade out but keep space via Grid)
+                
                 if (yearSection) {
                     yearSection.classList.add("opacity-0", "pointer-events-none");
                 }
@@ -245,7 +245,7 @@
 
         if (yearConfirmBtn) {
             yearConfirmBtn.addEventListener("touchstart", (e) => {
-                e.preventDefault(); // Prevent double-tap zoom
+                e.preventDefault(); 
                 e.stopPropagation();
                 handleConfirmYear();
             }, { passive: false });
@@ -256,27 +256,27 @@
             });
         }
 
-        // Show Month Input when requested
+        
         const handleShowMonthInput = () => {
             if (monthSection) {
-                // Just fade in, space is already reserved by Grid
+                
                 monthSection.classList.remove("opacity-0", "pointer-events-none");
             }
         };
         document.removeEventListener("show-death-month-input", handleShowMonthInput);
         document.addEventListener("show-death-month-input", handleShowMonthInput);
 
-        // Month Input Logic
+        
         const handleMonthSelect = (btn) => {
             const month = parseInt(btn.dataset.month || "0");
 
-            // Dispatch final selection
+            
             const event = new CustomEvent("birthdate-selected", {
                 detail: { year: selectedYear, month },
             });
             document.dispatchEvent(event);
 
-            // Hide everything
+            
             if (container) container.classList.add("opacity-0");
             setTimeout(() => {
                 if (container) {

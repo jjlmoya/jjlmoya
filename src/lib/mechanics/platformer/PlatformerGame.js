@@ -6,7 +6,7 @@ export class PlatformerGame {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
 
-        // Initial size
+        
         const rect = canvas.getBoundingClientRect();
         this.width = canvas.width = rect.width;
         this.height = canvas.height = rect.height;
@@ -16,14 +16,14 @@ export class PlatformerGame {
 
         this.particles = [];
 
-        // Scale platforms relative to screen or keep fixed?
-        // For now, let's keep them somewhat fixed but ensure they are visible
+        
+        
         this.platforms = [
             { x: 200, y: 400, width: 200, height: 20 },
             { x: 500, y: 300, width: 200, height: 20 },
             { x: 50, y: 250, width: 100, height: 20 },
             { x: 700, y: 150, width: 20, height: 200 },
-            // Ground
+            
             { x: 0, y: this.height - 50, width: this.width, height: 50 },
         ];
 
@@ -42,7 +42,7 @@ export class PlatformerGame {
         this.width = this.canvas.width = rect.width;
         this.height = this.canvas.height = rect.height;
 
-        // Update ground platform
+        
         const ground = this.platforms.find((p) => p.height === 50 && p.y >= this.height - 100);
         if (ground) {
             ground.y = this.height - 50;
@@ -68,11 +68,11 @@ export class PlatformerGame {
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Background
-        this.ctx.fillStyle = "#1e293b"; // Slate 800
+        
+        this.ctx.fillStyle = "#1e293b"; 
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        this.ctx.fillStyle = "#334155"; // Slate 700
+        this.ctx.fillStyle = "#334155"; 
         this.platforms.forEach((platform) => {
             this.ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
         });

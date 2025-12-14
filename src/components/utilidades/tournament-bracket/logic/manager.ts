@@ -49,11 +49,11 @@ export class TournamentManager implements TournamentData {
 
         if (!match) return;
 
-        // Update scores (allowing null/undefined to clear them or part of them)
+        
         if (score1 !== null) match.score1 = score1;
         if (score2 !== null) match.score2 = score2;
 
-        // Only determine winner if BOTH scores are present
+        
         if (match.score1 !== undefined && match.score1 !== null && match.score2 !== undefined && match.score2 !== null) {
             if (match.score1 > match.score2 && match.player1) {
                 this.setWinner(matchId, match.player1.id);
@@ -67,7 +67,7 @@ export class TournamentManager implements TournamentData {
         let match: Match | undefined;
         let roundIndex = -1;
 
-        // Find match
+        
         for (let i = 0; i < this.rounds.length; i++) {
             const m = this.rounds[i].matches.find((m) => m.id === matchId);
             if (m) {
@@ -85,10 +85,10 @@ export class TournamentManager implements TournamentData {
 
         if (!winner) return;
 
-        // Update current match
+        
         match.winner = winner;
 
-        // Propagate to next match
+        
         if (match.nextMatchId) {
             this.propagateToNextRound(match.nextMatchId, roundIndex + 1, winner, match.matchIndex);
         }
@@ -103,13 +103,13 @@ export class TournamentManager implements TournamentData {
         const nextMatch = nextRound.matches.find((m) => m.id === nextMatchId);
 
         if (nextMatch) {
-            // Determine slot
+            
             const isPlayer1Slot = originatingMatchIndex % 2 === 0;
 
-            // Check if we actully need to update (optimization)
+            
             const currentPlayerInSlot = isPlayer1Slot ? nextMatch.player1 : nextMatch.player2;
 
-            // If the player is different, we MUST update and reset the next match's winner
+            
             if (currentPlayerInSlot?.id !== player.id) {
                 if (isPlayer1Slot) {
                     nextMatch.player1 = player;
@@ -117,10 +117,10 @@ export class TournamentManager implements TournamentData {
                     nextMatch.player2 = player;
                 }
 
-                // IMPORTANT: Reset winner of this next match because the matchup changed
+                
                 nextMatch.winner = null;
 
-                // Recursively clear future rounds
+                
                 if (nextMatch.nextMatchId) {
                     this.clearFutureRound(nextMatch.nextMatchId, nextRoundIndex + 1, nextMatch.matchIndex);
                 }
@@ -137,7 +137,7 @@ export class TournamentManager implements TournamentData {
         if (match) {
             const isPlayer1Slot = originatingMatchIndex % 2 === 0;
 
-            // Clear the slot
+            
             if (isPlayer1Slot) {
                 match.player1 = null;
             } else {
@@ -146,7 +146,7 @@ export class TournamentManager implements TournamentData {
 
             match.winner = null;
 
-            // Recurse
+            
             if (match.nextMatchId) {
                 this.clearFutureRound(match.nextMatchId, roundIndex + 1, match.matchIndex);
             }
@@ -154,7 +154,7 @@ export class TournamentManager implements TournamentData {
     }
 
     private resolveWalkovers() {
-        // We iterate potentially multiple times if a walkover triggers another
+        
         let changed = true;
         while (changed) {
             changed = false;
@@ -162,21 +162,21 @@ export class TournamentManager implements TournamentData {
                 round.matches.forEach(match => {
                     if (match.winner) return;
 
-                    // Case 1: Simple Bye (P1 vs null)
+                    
                     if (match.player1 && !match.player2) {
-                        // Check if P2 is *permanently* missing
-                        // In Round 0, !player2 means they didn't exist -> Bye
+                        
+                        
                         if (round.index === 0) {
                             this.setWinner(match.id, match.player1.id);
                             changed = true;
                         } else {
-                            // In later rounds, P2 might be coming from a previous match
-                            // We need to check if that source match exists
+                            
+                            
                             const sourceMatchIndex = match.matchIndex * 2 + 1;
                             const prevRound = this.rounds[round.index - 1];
                             const sourceMatch = prevRound?.matches.find(m => m.matchIndex === sourceMatchIndex);
 
-                            // If source match doesn't exist (because we sparse populated), then P2 will NEVER come.
+                            
                             if (!sourceMatch) {
                                 this.setWinner(match.id, match.player1.id);
                                 changed = true;
@@ -184,11 +184,11 @@ export class TournamentManager implements TournamentData {
                         }
                     }
 
-                    // Case 2: Double Void? (null vs null)
-                    // If sparse populated, this shouldn't happen for created matches unless logic fails.
-                    // But if P1 is missing:
+                    
+                    
+                    
                     if (!match.player1 && match.player2) {
-                        // Similar logic for P1 source
+                        
                         if (round.index === 0) {
                             this.setWinner(match.id, match.player2.id);
                             changed = true;
@@ -218,7 +218,7 @@ export class TournamentManager implements TournamentData {
         }
     }
 
-    // Serialization
+    
     toJSON(): any {
         return {
             id: this.id,

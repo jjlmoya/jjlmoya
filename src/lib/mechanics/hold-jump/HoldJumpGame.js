@@ -81,34 +81,34 @@ export class HoldJumpGame {
     draw() {
         const state = this.mechanic.getState();
 
-        // 1. Calculate Camera Offset
+        
         let offset = 0;
         if (state.player.pos.y < this.height * 0.6) {
             offset = this.height * 0.6 - state.player.pos.y;
         }
 
-        // 2. Render World (Camera Transformed)
+        
         this.ctx.save();
         this.ctx.translate(0, offset);
 
-        // Background
+        
         this.ctx.fillStyle = "#2c3e50";
-        this.ctx.fillRect(0, -offset, this.width, this.height); // Fill visible area
+        this.ctx.fillRect(0, -offset, this.width, this.height); 
 
-        // Platforms
+        
         this.ctx.fillStyle = "#95a5a6";
         for (const plat of state.platforms) {
-            // Optimization: only draw visible
+            
             if (plat.y + plat.height + offset > 0 && plat.y + offset < this.height) {
                 this.ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
             }
         }
 
-        // Player
+        
         this.ctx.save();
         this.ctx.translate(state.player.pos.x, state.player.pos.y);
 
-        // Squash effect based on charge
+        
         const scaleY = 1 - state.player.charge * 0.3;
         const scaleX = 1 + state.player.charge * 0.3;
         this.ctx.scale(scaleX, scaleY);
@@ -118,35 +118,35 @@ export class HoldJumpGame {
         this.ctx.arc(0, 0, state.player.radius, 0, Math.PI * 2);
         this.ctx.fill();
 
-        // Charge glow
+        
         if (state.player.charging) {
             this.ctx.strokeStyle = `rgba(255, 255, 255, ${state.player.charge})`;
             this.ctx.lineWidth = 4;
             this.ctx.stroke();
         }
 
-        this.ctx.restore(); // Restore player transform
-        this.ctx.restore(); // Restore camera transform
+        this.ctx.restore(); 
+        this.ctx.restore(); 
 
-        // 3. Render UI (Screen Coordinates)
+        
         const playerScreenY = state.player.pos.y + offset;
 
-        // Energy Bar
+        
         if (state.player.charging) {
             const barWidth = 60;
             const barHeight = 8;
             const x = state.player.pos.x - barWidth / 2;
             const y = playerScreenY - 40;
 
-            // Background
+            
             this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
             this.ctx.fillRect(x, y, barWidth, barHeight);
 
-            // Fill
+            
             const chargePercent = state.player.charge;
             const fillWidth = barWidth * chargePercent;
 
-            // Color gradient
+            
             const r = 255;
             const g = Math.floor(255 * (1 - chargePercent));
             const b = 0;
@@ -154,7 +154,7 @@ export class HoldJumpGame {
 
             this.ctx.fillRect(x, y, fillWidth, barHeight);
 
-            // Border
+            
             this.ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
             this.ctx.lineWidth = 1;
             this.ctx.strokeRect(x, y, barWidth, barHeight);
@@ -165,7 +165,7 @@ export class HoldJumpGame {
             this.ctx.fillText("HOLD", state.player.pos.x, playerScreenY - 30);
         }
 
-        // Height Score
+        
         const heightScore = Math.floor((this.height - state.player.pos.y) / 10);
         this.ctx.fillStyle = "white";
         this.ctx.font = "bold 20px monospace";
@@ -180,6 +180,6 @@ export class HoldJumpGame {
         window.removeEventListener("mouseup", this.handleUp);
         window.removeEventListener("keydown", this.handleKey);
         window.removeEventListener("keyup", this.handleKeyUp);
-        // Remove touch listeners...
+        
     }
 }

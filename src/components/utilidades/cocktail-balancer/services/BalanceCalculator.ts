@@ -8,7 +8,7 @@ export class BalanceCalculator {
         let totalSugarGrams = 0;
         let totalAcidGrams = 0;
 
-        // For weighted averages
+        
         let weightedBitterness = 0;
         let weightedComplexity = 0;
         let weightedR = 0;
@@ -25,11 +25,11 @@ export class BalanceCalculator {
             totalSugarGrams += vol * (comp.ingredient.sugar / 100);
             totalAcidGrams += vol * (comp.ingredient.acid / 100);
 
-            // Bitterness & Complexity Accumulation
+            
             weightedBitterness += vol * (comp.ingredient.bitterness || 0);
             weightedComplexity += vol * (comp.ingredient.complexity || 0);
 
-            // Color Mixing
+            
             const rgb = this.hexToRgb(comp.ingredient.color || '#ffffff');
             weightedR += vol * rgb.r;
             weightedG += vol * rgb.g;
@@ -51,9 +51,9 @@ export class BalanceCalculator {
             };
         }
 
-        // Averages
+        
         const bitternessIndex = weightedBitterness / totalVol;
-        const complexityIndex = weightedComplexity / totalVol; // Normalized 0-10ish
+        const complexityIndex = weightedComplexity / totalVol; 
 
         const finalR = Math.round(weightedR / totalVol);
         const finalG = Math.round(weightedG / totalVol);
@@ -93,39 +93,39 @@ export class BalanceCalculator {
     }
 
     static getFixSuggestion(stats: CocktailStats): { action: string, amount: string } | null {
-        const TARGET_RATIO = 7.5; // Slightly sweeter side of 7 for mass appeal
+        const TARGET_RATIO = 7.5; 
 
         if (stats.totalVolumeMl === 0) return null;
-        if (stats.totalAcidGrams === 0 && stats.totalSugarGrams < 2) return null; // Spirit only
-        if (stats.totalAcidGrams === 0 && stats.totalSugarGrams > 2) return { action: 'add_bitters', amount: '+2 dashes Bitters' }; // Old fashioned guidance
+        if (stats.totalAcidGrams === 0 && stats.totalSugarGrams < 2) return null; 
+        if (stats.totalAcidGrams === 0 && stats.totalSugarGrams > 2) return { action: 'add_bitters', amount: '+2 dashes Bitters' }; 
 
         const currentRatio = stats.balanceRatio;
 
-        if (currentRatio >= 6.0 && currentRatio <= 9.0) return null; // In zone
+        if (currentRatio >= 6.0 && currentRatio <= 9.0) return null; 
 
         if (currentRatio < 6.0) {
-            // Need Sugar
+            
             const targetSugar = TARGET_RATIO * stats.totalAcidGrams;
             const diffGrams = targetSugar - stats.totalSugarGrams;
-            // Use Simple Syrup (61.5g/100ml)
+            
             const vol = (diffGrams * 100) / 61.5;
             if (vol < 2.5) return null;
             return { action: 'add_sugar', amount: `+${Math.ceil(vol / 2.5) * 2.5}ml Jarabe` };
         } else {
-            // Need Acid
+            
             const targetAcid = stats.totalSugarGrams / TARGET_RATIO;
             const diffGrams = targetAcid - stats.totalAcidGrams;
-            // Use Lime (6g/100ml)
+            
             const vol = (diffGrams * 100) / 6.0;
             if (vol < 2.5) return null;
             return { action: 'add_acid', amount: `+${Math.ceil(vol / 2.5) * 2.5}ml Lima` };
         }
     }
 
-    // --- Helpers ---
+    
 
     private static hexToRgb(hex: string): { r: number, g: number, b: number } {
-        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        
         const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
         hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

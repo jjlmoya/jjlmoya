@@ -21,9 +21,9 @@ export class ClickerGame {
     }
 
     click(x, y) {
-        // Adjust x, y to canvas coordinates if needed, but here we receive relative coords usually
-        // or we can calculate them here if we pass the event.
-        // Let's assume x, y are relative to canvas/container.
+        
+        
+        
         return this.mechanic.click(x, y);
     }
 
@@ -70,7 +70,7 @@ export class ClickerGame {
 
     destroy() {
         this.mechanic.save();
-        // Stop loop?
+        
     }
 }
 

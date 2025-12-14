@@ -7,20 +7,20 @@ export interface SportConfig {
     name: string;
     type: ScoreType;
 
-    // Scoring Rules
-    maxScore?: number; // e.g. 21 for pingpong (just a guide, not hard limit)
-    winBy?: number; // e.g. 2
+    
+    maxScore?: number; 
+    winBy?: number; 
 
-    // Structure
+    
     hasSets?: boolean;
     hasGames?: boolean;
 
-    // Service
-    serviceRotationPoints?: number; // 0 = none, 2 = every 2 points
+    
+    serviceRotationPoints?: number; 
 
-    // UI Config
-    increments: number[]; // [1] for most, [1,2,3] for basket
-    colorScheme?: string; // CSS class helper
+    
+    increments: number[]; 
+    colorScheme?: string; 
 }
 
 export const SPORTS: Record<SportId, SportConfig> = {
@@ -37,13 +37,13 @@ export const SPORTS: Record<SportId, SportConfig> = {
         type: 'tennis',
         hasSets: true,
         hasGames: true,
-        increments: [1], // Tennis logic handles 15/30/40 internally
-        serviceRotationPoints: 0 // Tennis service changes every game, handled by logic
+        increments: [1], 
+        serviceRotationPoints: 0 
     },
     padel: {
         id: 'padel',
         name: 'Pádel',
-        type: 'tennis', // Same logic as tennis
+        type: 'tennis', 
         hasSets: true,
         hasGames: true,
         increments: [1],

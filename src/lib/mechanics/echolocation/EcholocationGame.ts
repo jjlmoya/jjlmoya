@@ -6,7 +6,7 @@ export class EcholocationGame {
     width: number;
     height: number;
 
-    // Physics
+    
     player: {
         x: number;
         y: number;
@@ -21,14 +21,14 @@ export class EcholocationGame {
     jumpForce: number = -12;
     speed: number = 1;
 
-    // Level
+    
     platforms: Surface[] = [];
     exit: { x: number; y: number; w: number; h: number } | null = null;
 
-    // Systems
+    
     echoSystem: EcholocationSystem;
 
-    // Input
+    
     keys: { [key: string]: boolean } = {};
 
     audioCtx: AudioContext | null = null;
@@ -113,25 +113,25 @@ export class EcholocationGame {
         const w = this.width;
         const h = this.height;
 
-        // Borders (Stone)
-        this.platforms.push({ x: 0, y: 0, w: w, h: 20, material: "stone" }); // Top
-        this.platforms.push({ x: 0, y: h - 20, w: w, h: 20, material: "stone" }); // Bottom
-        this.platforms.push({ x: 0, y: 0, w: 20, h: h, material: "stone" }); // Left
-        this.platforms.push({ x: w - 20, y: 0, w: 20, h: h, material: "stone" }); // Right
+        
+        this.platforms.push({ x: 0, y: 0, w: w, h: 20, material: "stone" }); 
+        this.platforms.push({ x: 0, y: h - 20, w: w, h: 20, material: "stone" }); 
+        this.platforms.push({ x: 0, y: 0, w: 20, h: h, material: "stone" }); 
+        this.platforms.push({ x: w - 20, y: 0, w: 20, h: h, material: "stone" }); 
 
-        // Platforms
+        
         this.platforms.push({ x: 100, y: h - 100, w: 200, h: 20, material: "wood" });
-        this.platforms.push({ x: 400, y: h - 200, w: 150, h: 20, material: "metal" }); // Bouncy
-        this.platforms.push({ x: 150, y: h - 300, w: 150, h: 20, material: "cloth" }); // Absorbing
-        this.platforms.push({ x: 500, y: h - 400, w: 20, h: 100, material: "stone" }); // Wall
+        this.platforms.push({ x: 400, y: h - 200, w: 150, h: 20, material: "metal" }); 
+        this.platforms.push({ x: 150, y: h - 300, w: 150, h: 20, material: "cloth" }); 
+        this.platforms.push({ x: 500, y: h - 400, w: 20, h: 100, material: "stone" }); 
         this.platforms.push({ x: 600, y: h - 150, w: 100, h: 20, material: "wood" });
 
         this.echoSystem.setSurfaces(this.platforms);
 
-        // Exit
+        
         this.exit = { x: w - 80, y: h - 80, w: 40, h: 40 };
 
-        // Reset Player
+        
         this.player.x = 50;
         this.player.y = h - 100;
         this.player.vx = 0;
@@ -150,7 +150,7 @@ export class EcholocationGame {
         window.addEventListener("keydown", (e) => {
             this.keys[e.code] = true;
 
-            // Jump
+            
             if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") {
                 if (this.player.grounded) {
                     this.player.vy = this.jumpForce;
@@ -158,7 +158,7 @@ export class EcholocationGame {
                     this.emitSound(this.player.x + 10, this.player.y + 10, 300, 180, "jump");
                 }
             }
-            // Manual shout
+            
             if (e.code === "KeyZ" || e.code === "Enter") {
                 this.emitSound(this.player.x + 10, this.player.y + 10, 800, 720, "shout");
             }
@@ -183,7 +183,7 @@ export class EcholocationGame {
         rayCount: number,
         type: "step" | "jump" | "land" | "shout" | "bump" = "step"
     ) {
-        // Audio Feedback
+        
         if (type === "step") this.playTone(100 + Math.random() * 50, "triangle", 0.05, 0.05);
         if (type === "jump") this.playTone(300, "sine", 0.2, 0.1);
         if (type === "land") this.playTone(150, "square", 0.1, 0.1);
@@ -192,7 +192,7 @@ export class EcholocationGame {
 
         const color = type === "shout" ? "#ffffff" : "#34d399";
 
-        // Exaggerate ray counts and radius for better visibility
+        
         const exaggeratedRayCount = rayCount * 6;
         const exaggeratedRadius = radius * 2.5;
 
@@ -202,7 +202,7 @@ export class EcholocationGame {
     update() {
         if (!this.isRunning) return;
 
-        // --- Physics ---
+        
         if (this.keys["ArrowLeft"] || this.keys["KeyA"]) {
             this.player.vx -= this.speed;
             if (Math.random() > 0.9 && this.player.grounded) {
@@ -225,7 +225,7 @@ export class EcholocationGame {
         this.player.y += this.player.vy;
         this.checkCollision("y");
 
-        // Check Exit
+        
         if (
             this.exit &&
             this.player.x < this.exit.x + this.exit.w &&
@@ -237,7 +237,7 @@ export class EcholocationGame {
             document.getElementById("winMessage")?.classList.remove("hidden");
         }
 
-        // --- Visuals Update ---
+        
         this.echoSystem.update();
     }
 
@@ -270,7 +270,7 @@ export class EcholocationGame {
                     if (this.player.vy > 0) {
                         this.player.y = plat.y - this.player.height;
                         this.player.grounded = true;
-                        // Land sound
+                        
                         if (this.player.vy > 2)
                             this.emitSound(
                                 this.player.x + 10,
@@ -304,19 +304,19 @@ export class EcholocationGame {
     }
 
     draw() {
-        // Clear (Black)
+        
         this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw Echoes and Pulses
+        
         this.echoSystem.draw(this.ctx);
 
-        // Draw Player (Faint)
+        
         this.ctx.strokeStyle = "#222";
         this.ctx.lineWidth = 1;
         this.ctx.strokeRect(this.player.x, this.player.y, this.player.width, this.player.height);
 
-        // Draw Exit (Faintly visible)
+        
         if (this.exit) {
             this.ctx.strokeStyle = "#110000";
             this.ctx.strokeRect(this.exit.x, this.exit.y, this.exit.w, this.exit.h);

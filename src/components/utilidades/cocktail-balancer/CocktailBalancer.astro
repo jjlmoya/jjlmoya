@@ -4,7 +4,7 @@ import { BalanceCalculator } from "./services/BalanceCalculator";
 import { Icon } from "astro-icon/components";
 import { COCKTAIL_PRESETS } from "./data/Presets";
 
-// Cargar todos los ingredientes para el modal de selección
+
 const allIngredients = IngredientRepository.getAll();
 const spirits = allIngredients.filter((i) => i.type === "spirit");
 const modifiers = allIngredients.filter((i) => ["liqueur", "vermouth", "amaro"].includes(i.type));
@@ -15,7 +15,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
 <div
     class="cocktail-balancer-app max-w-6xl mx-auto px-4 py-8 text-slate-800 dark:text-slate-100 font-sans"
 >
-    <!-- HEADER: Actions & Controls -->
+    
     <div
         class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800"
     >
@@ -49,13 +49,13 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </div>
 
-    <!-- MAIN GRID -->
+    
     <div class="grid lg:grid-cols-12 gap-8 items-start">
-        <!-- LEFT COLUMN: Recipe Builder -->
+        
         <div class="lg:col-span-7 flex flex-col gap-6">
-            <!-- Ingredients List Container -->
+            
             <div id="recipe-container" class="space-y-4 min-h-[300px]">
-                <!-- Empty State (Visible by default) -->
+                
                 <div
                     id="empty-state"
                     class="flex flex-col items-center justify-center py-16 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl bg-slate-50/50 dark:bg-slate-800/50"
@@ -78,10 +78,10 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         <Icon name="mdi:plus-circle" class="text-xl" /> Añadir Ingrediente
                     </button>
                 </div>
-                <!-- Dynamic List Items will be injected here -->
+                
             </div>
 
-            <!-- Add Button (Sticky/Floating or Standard) -->
+            
             <button
                 id="open-modal-btn"
                 class="hidden w-full py-4 border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-500 hover:border-indigo-500 hover:text-indigo-500 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 group"
@@ -94,9 +94,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             </button>
         </div>
 
-        <!-- RIGHT COLUMN: Dashboard / Analysis -->
+        
         <div class="lg:col-span-5 space-y-6 sticky top-8">
-            <!-- 1. HERO: Radar Chart -->
+            
             <div
                 class="bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-xl shadow-slate-200/50 dark:shadow-black/40 border border-slate-100 dark:border-slate-800 relative overflow-hidden"
             >
@@ -118,9 +118,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
 
                 <div class="relative w-full aspect-square max-w-[280px] mx-auto">
-                    <!-- Radar SVG -->
+                    
                     <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl">
-                        <!-- Pentagon Background (5 levels) -->
+                        
                         <polygon
                             points="100,20 176,75 147,164 53,164 24,75"
                             fill="none"
@@ -142,7 +142,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             class="stroke-slate-50 dark:stroke-slate-800/50"
                             stroke-width="1"></polygon>
 
-                        <!-- Axis Lines -->
+                        
                         <line
                             x1="100"
                             y1="100"
@@ -150,7 +150,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="20"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        <!-- Top -->
+                        
                         <line
                             x1="100"
                             y1="100"
@@ -158,7 +158,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="75"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        <!-- Top Right -->
+                        
                         <line
                             x1="100"
                             y1="100"
@@ -166,7 +166,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="164"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        <!-- Bottom Right -->
+                        
                         <line
                             x1="100"
                             y1="100"
@@ -174,7 +174,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="164"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        <!-- Bottom Left -->
+                        
                         <line
                             x1="100"
                             y1="100"
@@ -182,9 +182,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="75"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        <!-- Top Left -->
+                        
 
-                        <!-- The Data Shape -->
+                        
                         <polygon
                             id="radar-shape"
                             points="100,100 100,100 100,100 100,100 100,100"
@@ -192,7 +192,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             stroke-width="2"
                             stroke-linejoin="round"></polygon>
 
-                        <!-- Data Points -->
+                        
                         <circle
                             id="pt-sweet"
                             cx="100"
@@ -230,7 +230,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         ></circle>
                     </svg>
 
-                    <!-- Labels -->
+                    
                     <span
                         class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-[10px] uppercase font-bold text-slate-400 tracking-widest bg-white dark:bg-slate-900 px-1"
                         >Dulce</span
@@ -254,9 +254,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            <!-- 2. METRICS ROW -->
+            
             <div class="grid grid-cols-3 gap-4">
-                <!-- Volume -->
+                
                 <div
                     class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 text-center"
                 >
@@ -267,7 +267,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         >
                     </div>
                 </div>
-                <!-- Sugar -->
+                
                 <div
                     class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 text-center"
                 >
@@ -278,7 +278,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         >
                     </div>
                 </div>
-                <!-- Color -->
+                
                 <div
                     class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center"
                 >
@@ -295,7 +295,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            <!-- 3. BALANCE GAUGE -->
+            
             <div
                 class="bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-xl shadow-slate-200/50 dark:shadow-black/40 border border-slate-100 dark:border-slate-800"
             >
@@ -306,9 +306,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                     <div id="balance-verdict" class="text-base font-black text-slate-300">--</div>
                 </div>
 
-                <!-- Linear Gauge -->
+                
                 <div class="relative h-4 bg-slate-100 dark:bg-slate-800 rounded-full mb-8 mx-2">
-                    <!-- Zones -->
+                    
                     <div
                         class="absolute left-0 top-0 h-full w-[30%] bg-gradient-to-r from-lime-500/20 to-lime-500/5 rounded-l-full"
                     >
@@ -321,9 +321,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         class="absolute left-1/2 top-0 h-full w-1 bg-slate-300/50 -translate-x-1/2"
                     >
                     </div>
-                    <!-- Center Marker -->
+                    
 
-                    <!-- Needle -->
+                    
                     <div
                         id="balance-needle"
                         class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 bg-white dark:bg-slate-700 border-4 border-slate-800 dark:border-white rounded-full shadow-lg transition-all duration-500 z-10"
@@ -341,7 +341,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            <!-- 4. FIX SUGGESTION (Contextual) -->
+            
             <div
                 id="fix-box"
                 class="hidden bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-2xl p-5 animate-fade-in"
@@ -360,7 +360,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             id="fix-text"
                             class="text-sm text-indigo-800/80 dark:text-indigo-300 leading-relaxed"
                         >
-                            <!-- Text injected by JS -->
+                            
                         </p>
                     </div>
                 </div>
@@ -368,7 +368,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </div>
 
-    <!-- MODAL: Ingredient Selector -->
+    
     <dialog
         id="ingredient-modal"
         class="m-auto backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-2xl text-left rounded-3xl shadow-2xl open:animate-zoom-in"
@@ -376,7 +376,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         <div
             class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl max-h-[85vh] flex flex-col"
         >
-            <!-- Header -->
+            
             <div
                 class="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-10"
             >
@@ -403,7 +403,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            <!-- List -->
+            
             <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {
@@ -454,7 +454,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </dialog>
 
-    <!-- MODAL: Recetas / Presets -->
+    
     <dialog
         id="presets-modal"
         class="m-auto backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-4xl text-left rounded-3xl shadow-2xl open:animate-zoom-in"
@@ -475,7 +475,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 >
             </div>
             <div class="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-black/20">
-                <!-- Saved -->
+                
                 <div id="saved-section" class="mb-8 hidden">
                     <h4 class="text-xs font-bold uppercase text-slate-400 tracking-widest mb-4">
                         Mis Guardadas
@@ -487,7 +487,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                     </div>
                 </div>
 
-                <!-- Classics -->
+                
                 <h4 class="text-xs font-bold uppercase text-slate-400 tracking-widest mb-4">
                     Clásicos
                 </h4>
@@ -513,7 +513,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </dialog>
 
-    <!-- MODAL: Confirm Delete -->
+    
     <dialog
         id="confirm-modal"
         class="m-auto backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-sm text-center rounded-3xl shadow-2xl open:animate-zoom-in"
@@ -550,13 +550,13 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </dialog>
 
-    <!-- HIDDEN ICONS TEMPLATES FOR JS -->
+    
     <div style="display:none">
         <div id="tpl-icon-trash"><Icon name="mdi:trash-can-outline" /></div>
     </div>
 </div>
 
-<!-- LOGIC -->
+
 <script>
     import { IngredientRepository } from "./data/IngredientRepository";
     import { BalanceCalculator } from "./services/BalanceCalculator";
@@ -576,7 +576,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             this.loadState();
         }
 
-        // --- STATE MANAGEMENT ---
+        
 
         loadState() {
             const saved = localStorage.getItem(this.STORAGE_KEY);
@@ -598,15 +598,15 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             const ing = IngredientRepository.getById(id);
             if (!ing) return;
 
-            // Default volumes
+            
             let vol = 30;
             if (ing.type === "spirit") vol = 45;
             if (ing.type === "citrus") vol = 22.5;
             if (ing.type === "syrup") vol = 15;
-            if (ing.type === "bitter") vol = 2; // Dash
+            if (ing.type === "bitter") vol = 2; 
 
             this.recipe.push({
-                uId: Math.random().toString(36).substr(2, 9), // Unique ID for list
+                uId: Math.random().toString(36).substr(2, 9), 
                 id: id,
                 vol: vol,
             });
@@ -626,7 +626,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             if (item) {
                 item.vol = parseFloat(newVol);
                 this.saveState();
-                this.updateDashboard(); // Optimization: Only update stats, not full list redraw
+                this.updateDashboard(); 
             }
         }
 
@@ -635,7 +635,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             if (modal) modal.showModal();
         }
 
-        // --- RENDERING ---
+        
 
         refreshUI() {
             this.renderList();
@@ -647,10 +647,10 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             const container = document.getElementById("recipe-container");
             const emptyState = document.getElementById("empty-state");
 
-            // 1. Handle Empty State
+            
             if (this.recipe.length === 0) {
                 emptyState.style.display = "flex";
-                // Clear existing items but keep empty state in DOM
+                
                 Array.from(container.children).forEach((child) => {
                     if (child.id !== "empty-state") child.remove();
                 });
@@ -659,9 +659,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 emptyState.style.display = "none";
             }
 
-            // 2. Re-build List
-            // Simple approach: Clear non-empty-state items and rebuild.
-            // A virtual DOM diffing would be better but overkill here.
+            
+            
+            
             Array.from(container.children).forEach((child) => {
                 if (child.id !== "empty-state") child.remove();
             });
@@ -696,7 +696,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 container.appendChild(row);
             });
 
-            // 3. Attach Events to New Elements
+            
             container.querySelectorAll(".btn-remove").forEach((b) => {
                 b.addEventListener("click", (e) =>
                     this.removeIngredient(e.currentTarget.dataset.uid)
@@ -710,8 +710,8 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         }
 
         updateDashboard() {
-            // Calculate Stats
-            // Map our recipe items to what BalanceCalculator expects
+            
+            
             const calcItems = this.recipe
                 .map((r) => ({
                     ingredient: IngredientRepository.getById(r.id),
@@ -721,25 +721,25 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
 
             const stats = BalanceCalculator.calculate(calcItems);
 
-            // 1. Text Metrics
+            
             const volEl = document.getElementById("stat-vol");
             if (volEl) volEl.innerText = Math.round(stats.totalVolumeMl).toString();
 
-            // stat-abv removed from grid in v2 design, using badge instead
+            
             const abvBadge = document.getElementById("stat-abv-badge");
             if (abvBadge) abvBadge.innerText = stats.finalAbv.toFixed(1) + "% ABV";
 
             const sugarEl = document.getElementById("stat-sugar");
             if (sugarEl) sugarEl.innerText = Math.round(stats.totalSugarGrams).toString();
 
-            // 2. Color
+            
             const colorEl = document.getElementById("sim-color-bg");
             if (colorEl) colorEl.style.backgroundColor = stats.finalColor;
 
-            // 3. Radar Chart
+            
             this.renderRadar(stats);
 
-            // 4. Gauge & Verdict
+            
             const verdict = BalanceCalculator.getBalanceDescription(stats);
             const verdictEl = document.getElementById("balance-verdict");
             const needleEl = document.getElementById("balance-needle");
@@ -748,23 +748,23 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 if (this.recipe.length === 0) {
                     verdictEl.innerText = "--";
                     verdictEl.className = "text-base font-black text-slate-300";
-                    needleEl.style.left = "50%"; // Center idle
+                    needleEl.style.left = "50%"; 
                 } else {
                     verdictEl.innerText = verdict.label;
-                    verdictEl.className = `text-base font-black ${verdict.color}`; // Use color from calc
+                    verdictEl.className = `text-base font-black ${verdict.color}`; 
 
-                    // Map Balance Ratio (0 - 14) to Percentage (0 - 100)
-                    // Ratio < 5 : Acid/Dry (Left)
-                    // Ratio 5-9 : Balanced (Center)
-                    // Ratio > 9 : Sweet (Right)
-                    // Let's assume a range of 0 to 15 covers most cocktails.
+                    
+                    
+                    
+                    
+                    
                     let percent = (stats.balanceRatio / 15) * 100;
-                    percent = Math.max(2, Math.min(98, percent)); // Clamp
+                    percent = Math.max(2, Math.min(98, percent)); 
                     needleEl.style.left = `${percent}%`;
                 }
             }
 
-            // 5. Suggestions
+            
             const fixBox = document.getElementById("fix-box");
             const fixText = document.getElementById("fix-text");
             if (fixBox && fixText) {
@@ -782,20 +782,20 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         }
 
         renderRadar(stats) {
-            // Coordinates mapping logic
-            const R = 80; // Radius
-            const C = 100; // Center
+            
+            const R = 80; 
+            const C = 100; 
             const rad = (deg) => (deg * Math.PI) / 180;
 
-            // Normalize values to 0-100 scale for chart
+            
             const vSweet = Math.min((stats.sugarConcentration / 18) * 100, 100);
             const vBitter = Math.min((stats.bitternessIndex / 8) * 100, 100);
             const vComplex = Math.min((stats.complexityIndex / 8) * 100, 100);
             const vAlc = Math.min((stats.finalAbv / 40) * 100, 100);
             const vAcid = Math.min((stats.acidConcentration / 1.5) * 100, 100);
 
-            // Points Layout (Star shape)
-            // Sweet (-90deg), Bitter (-18), Complex (54), Alc (126), Acid (198)
+            
+            
             const getPt = (val, deg) => ({
                 x: C + (val / 100) * R * Math.cos(rad(deg)),
                 y: C + (val / 100) * R * Math.sin(rad(deg)),
@@ -807,7 +807,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             const pAlc = getPt(vAlc, 126);
             const pAcid = getPt(vAcid, 198);
 
-            // Update SVG
+            
             const shape = document.getElementById("radar-shape");
             if (shape) {
                 shape.setAttribute(
@@ -816,7 +816,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 );
             }
 
-            // Update dots
+            
             const setDot = (id, pt) => {
                 const el = document.getElementById(id);
                 if (el) {
@@ -837,9 +837,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             else addBtn.classList.add("hidden");
         }
 
-        // --- EVENTS ---
+        
         bindEvents() {
-            // Modals
+            
             const ingModal = document.getElementById("ingredient-modal");
             const presetsModal = document.getElementById("presets-modal");
 
@@ -857,7 +857,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             };
             document.getElementById("close-presets-btn").onclick = () => presetsModal.close();
 
-            // Close on backdrop
+            
             [ingModal, presetsModal].forEach((m) => {
                 m.addEventListener("click", (e) => {
                     const rect = m.getBoundingClientRect();
@@ -872,7 +872,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 });
             });
 
-            // Ingredient Search
+            
             document.getElementById("modal-search").addEventListener("input", (e) => {
                 const term = e.target.value.toLowerCase();
                 document.querySelectorAll(".ingredient-select-btn").forEach((btn) => {
@@ -881,12 +881,12 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 });
             });
 
-            // Add Ingredient Click
+            
             document.querySelectorAll(".ingredient-select-btn").forEach((btn) => {
                 btn.addEventListener("click", (e) => {
                     this.addIngredient(btn.dataset.id);
                     ingModal.close();
-                    // Clear search
+                    
                     document.getElementById("modal-search").value = "";
                     document
                         .querySelectorAll(".ingredient-select-btn")
@@ -894,18 +894,18 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 });
             });
 
-            // Reset
+            
             document.getElementById("reset-btn").onclick = () => this.reset();
 
-            // Save
+            
             document.getElementById("save-recipe-btn").onclick = () => this.saveToBook();
 
-            // Preset Loads
+            
             document.querySelectorAll(".preset-load-btn").forEach((btn) => {
                 btn.onclick = () => this.loadPreset(btn.dataset.presetId);
             });
 
-            // Confirm Modal Events
+            
             const confirmModal = document.getElementById("confirm-modal");
             document.getElementById("cancel-reset-btn").onclick = () => confirmModal.close();
             document.getElementById("confirm-reset-btn").onclick = () => {
@@ -915,7 +915,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 confirmModal.close();
             };
 
-            // Close Confirm on backdrop
+            
             confirmModal.addEventListener("click", (e) => {
                 const rect = confirmModal.getBoundingClientRect();
                 if (
@@ -929,7 +929,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             });
         }
 
-        // --- BOOK / PRESETS ---
+        
         saveToBook() {
             if (this.recipe.length === 0) return alert("Nada que guardar.");
             const name = prompt("Nombre de tu receta:");
@@ -972,7 +972,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
 
             container.querySelectorAll(".saved-recipe-card").forEach((card) => {
                 card.addEventListener("click", (e) => {
-                    // Ignore if delete button
+                    
                     if (e.target.closest(".delete-saved")) return;
                     this.loadSaved(card.dataset.id);
                 });
@@ -1017,7 +1017,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         }
     }
 
-    // Init Logic
+    
     document.addEventListener("DOMContentLoaded", () => {
         new CocktailApp();
     });

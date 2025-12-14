@@ -1,7 +1,7 @@
 import type { TournamentData } from "../models";
 
 
-// Duplicate constants for now to avoid circular dependency mess if refactoring blindly
+
 const THEME = {
     primary: { bg: "bg-indigo-600", text: "text-white", shadow: "shadow-md" },
     default: { bg: "bg-white", text: "text-slate-500", hover: "hover:bg-indigo-50" },
@@ -24,7 +24,7 @@ export class MobileBracketRenderer {
 
         const rounds = data.rounds;
 
-        // Tabs - Adjusted negative margins for p-2 parent (0.5rem)
+        
         let tabsHTML = `<div class="flex overflow-x-auto gap-2 p-1 no-scrollbar snap-x pb-4 sticky top-0 bg-slate-50/95 backdrop-blur z-20 mx-[-0.5rem] px-[0.5rem] mb-4">`;
         rounds.forEach((round, i) => {
             const isActive = i === activeRoundIndex;
@@ -42,7 +42,7 @@ export class MobileBracketRenderer {
         });
         tabsHTML += `</div>`;
 
-        // Content
+        
         let matchesHTML = `<div class="relative min-h-[500px] mt-4">`;
         rounds.forEach((round, i) => {
             const isActive = i === activeRoundIndex;
@@ -50,8 +50,8 @@ export class MobileBracketRenderer {
                 ? "opacity-100 z-10 pointer-events-auto relative translate-x-0"
                 : "opacity-0 z-0 pointer-events-none absolute inset-0 translate-x-8";
 
-            matchesHTML += `<div class="round-content w-full transition-all duration-300 ${visibilityClass} pb-8">`; // Added padding bottom
-            matchesHTML += `<div class="flex flex-col gap-4">`; // Increased gap
+            matchesHTML += `<div class="round-content w-full transition-all duration-300 ${visibilityClass} pb-8">`; 
+            matchesHTML += `<div class="flex flex-col gap-4">`; 
 
             if (round.matches.length === 0) {
                 matchesHTML += `<div class="text-center p-8 text-slate-400 italic">Ronda vacía</div>`;
@@ -66,7 +66,7 @@ export class MobileBracketRenderer {
 
         this.container.innerHTML = tabsHTML + matchesHTML;
 
-        // Attach Tab listeners
+        
         const tabs = this.container.querySelectorAll('.round-tab');
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {

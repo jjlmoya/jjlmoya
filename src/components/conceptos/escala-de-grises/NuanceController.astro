@@ -1,7 +1,7 @@
 ---
 import NuanceHUD from "./core/NuanceHUD.astro";
 
-// This component acts as the Controller/Manager for the entire concept
+
 ---
 
 <div
@@ -9,13 +9,13 @@ import NuanceHUD from "./core/NuanceHUD.astro";
     class="fixed inset-0 w-full h-full bg-neutral-900 text-neutral-200 overflow-hidden font-serif select-none"
     data-theme="center"
 >
-    <!-- 1. BACKGROUND LAYERS (The Moods) -->
-    <!-- CENTER: Vibrant/Life -->
+    
+    
     <div
         id="bg-center"
         class="absolute inset-0 bg-neutral-900 transition-opacity duration-700 opacity-100"
     >
-        <!-- Vibrant Gradient Mesh -->
+        
         <div
             class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-rose-900 opacity-50"
         >
@@ -24,25 +24,25 @@ import NuanceHUD from "./core/NuanceHUD.astro";
             class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,100,100,0.2),transparent_70%)]"
         >
         </div>
-        <!-- Grain -->
+        
         <div class="absolute inset-0 opacity-10 mix-blend-overlay"></div>
     </div>
 
-    <!-- LEFT: Stark White -->
+    
     <div
         id="bg-left"
         class="absolute inset-0 bg-white transition-opacity duration-100 opacity-0 pointer-events-none"
     >
     </div>
 
-    <!-- RIGHT: Stark Black -->
+    
     <div
         id="bg-right"
         class="absolute inset-0 bg-black transition-opacity duration-100 opacity-0 pointer-events-none"
     >
     </div>
 
-    <!-- 2. SCROLLABLE CONTENT (Slides) -->
+    
     <div
         id="content-scroll"
         class="absolute inset-0 overflow-y-scroll snap-y snap-mandatory scroll-smooth z-10 pt-10 pb-40"
@@ -50,14 +50,14 @@ import NuanceHUD from "./core/NuanceHUD.astro";
         <slot />
     </div>
 
-    <!-- 3. HUD -->
+    
     <NuanceHUD />
 </div>
 
 <script>
-    // --- CONTROLLER LOGIC ---
+    
     const track = document.getElementById("balance-track");
-    const visualTrack = document.getElementById("visual-track"); // TARGET VISUAL TRACK for styles
+    const visualTrack = document.getElementById("visual-track"); 
     const handle = document.getElementById("balance-handle");
     const bgLeft = document.getElementById("bg-left");
     const bgRight = document.getElementById("bg-right");
@@ -69,27 +69,27 @@ import NuanceHUD from "./core/NuanceHUD.astro";
     const hint = document.getElementById("hud-hint");
     const controller = document.getElementById("nuance-controller");
 
-    // State
+    
     let position = 0.5;
     let isDragging = false;
     let windForce = 0;
     let windTarget = 0.0;
 
-    // Physics Config
-    const PULL = 0.003; // Attraction to edges
+    
+    const PULL = 0.003; 
     const WIND_CHANGE_RATE = 0.05;
 
-    // --- INTERACTION ---
+    
     const updatePos = (clientX) => {
         if (!track) return;
         const rect = track.getBoundingClientRect();
-        // Calculate raw position 0..1
-        let raw = (clientX - rect.left) / rect.width;
+        
+        const raw = (clientX - rect.left) / rect.width;
         position = Math.max(0, Math.min(1, raw));
     };
 
     const start = (e) => {
-        // Prevent default only for touch to stop scrolling/zooming immediately
+        
         if (e.touches) e.preventDefault();
 
         isDragging = true;
@@ -99,7 +99,7 @@ import NuanceHUD from "./core/NuanceHUD.astro";
 
     const move = (e) => {
         if (!isDragging) return;
-        // Important: Stop scrolling while dragging
+        
         if (e.touches) e.preventDefault();
         updatePos(e.touches ? e.touches[0].clientX : e.clientX);
     };
@@ -111,7 +111,7 @@ import NuanceHUD from "./core/NuanceHUD.astro";
 
     if (track) {
         track.addEventListener("mousedown", start);
-        // Use passive: false to allow preventDefault
+        
         track.addEventListener("touchstart", start, { passive: false });
 
         window.addEventListener("mousemove", move);
@@ -121,15 +121,15 @@ import NuanceHUD from "./core/NuanceHUD.astro";
         window.addEventListener("touchend", end);
     }
 
-    // --- GAME LOOP ---
+    
     const loop = () => {
         if (!isDragging) {
-            // Apply Destructive Physics
-            // Random Wind
+            
+            
             if (Math.random() > 0.98) windTarget = (Math.random() - 0.5) * 0.008;
             windForce += (windTarget - windForce) * 0.05;
 
-            // Edge Pull
+            
             const dist = position - 0.5;
             const pull = dist * PULL;
 
@@ -142,50 +142,50 @@ import NuanceHUD from "./core/NuanceHUD.astro";
     };
 
     const render = () => {
-        // 1. Handle Position
+        
         if (handle) handle.style.left = `${position * 100}%`;
 
-        // 2. Opacity Logic for Backgrounds
-        // Center Zone: 0.3 to 0.7 visible. Outside that fades out.
-        // Left Zone: 0.3 down to 0.0 fades in.
-        // Right Zone: 0.7 up to 1.0 fades in.
+        
+        
+        
+        
 
         let leftOp = 0;
         let rightOp = 0;
         let centerOp = 1;
 
         if (position < 0.45) {
-            // Left Mode: 0.45 (0%) -> 0.25 (100%)
+            
             leftOp = Math.min(1, (0.45 - position) * 5);
             centerOp = 1 - leftOp;
         } else if (position > 0.55) {
-            // Right Mode: 0.55 (0%) -> 0.75 (100%)
+            
             rightOp = Math.min(1, (position - 0.55) * 5);
             centerOp = 1 - rightOp;
         }
 
-        // Apply Global BG Opacities
+        
         if (bgLeft) bgLeft.style.opacity = leftOp.toFixed(3);
         if (bgRight) bgRight.style.opacity = rightOp.toFixed(3);
         if (bgCenter) {
-            // We can dim the center bg visual elements
+            
             bgCenter.style.opacity = centerOp.toFixed(3);
-            // Also desaturate via filter?
+            
             bgCenter.style.filter = `grayscale(${Math.max(leftOp, rightOp)})`;
         }
 
-        // 3. HUD Colors
-        // If Left mode active (White): HUD text needs to be Black
-        // If Right mode active (Black): HUD text needs to be White
-        // If Center (Dark/Colorful): HUD text White
+        
+        
+        
+        
 
         if (controller) {
             if (leftOp > 0.5)
-                controller.style.color = "#000"; // Black text on White
-            else controller.style.color = "#fff"; // White text on Dark/Black
+                controller.style.color = "#000"; 
+            else controller.style.color = "#fff"; 
         }
 
-        // Handle Track Color/Border
+        
         if (visualTrack) {
             if (leftOp > 0.5) {
                 visualTrack.style.borderColor = "rgba(0,0,0,0.2)";
@@ -196,9 +196,9 @@ import NuanceHUD from "./core/NuanceHUD.astro";
             }
         }
 
-        // 4. Slide Content Visibility
-        // Update ALL slides content based on global state
-        // This is efficient enough.
+        
+        
+        
         const slides = document.querySelectorAll(".nuance-slide");
         slides.forEach((slide) => {
             const leftEl = slide.querySelector(".nuance-state-left");
@@ -216,7 +216,7 @@ import NuanceHUD from "./core/NuanceHUD.astro";
         });
     };
 
-    // --- OBSERVER ---
+    
     const obs = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
@@ -233,6 +233,6 @@ import NuanceHUD from "./core/NuanceHUD.astro";
 
     document.querySelectorAll(".nuance-slide").forEach((s) => obs.observe(s));
 
-    // START
+    
     requestAnimationFrame(loop);
 </script>

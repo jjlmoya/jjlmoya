@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+
 export default {
     content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
     theme: {
@@ -21,7 +21,7 @@ export default {
                 "split-light": "var(--color-split-light)",
                 "split-dark": "var(--color-split-dark)",
 
-                // Projects Palette
+                
                 "p-text": "var(--color-p-text)",
                 "p-text-muted": "var(--color-p-text-muted)",
                 "p-bg-card": "var(--color-p-bg-card)",

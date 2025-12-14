@@ -36,7 +36,7 @@ export class SetupRenderer {
         if (clearBtn) clearBtn.classList.remove('hidden');
         this.listPlayers.innerHTML = "";
 
-        // Create Fragment for better performance
+        
         const fragment = document.createDocumentFragment();
 
         players.forEach((player, i) => {
@@ -86,9 +86,9 @@ export class SetupRenderer {
     public renderShuffleControl(isEnabled: boolean, onToggle: (val: boolean) => void) {
         if (!this.shuffleWrapper) return;
 
-        // Render standard controls only if not already there
+        
         if (!this.shuffleWrapper.querySelector('#shuffle-check')) {
-            // We append to ensure we can have multiple controls
+            
             const container = document.createElement('div');
             container.className = "flex flex-col gap-2";
             container.innerHTML = `
@@ -118,28 +118,28 @@ export class SetupRenderer {
             });
         }
 
-        // Sync Shuffle
+        
         const check = this.shuffleWrapper.querySelector('#shuffle-check') as HTMLInputElement;
         if (check) check.checked = isEnabled;
     }
 
     public renderScoreControl(isEnabled: boolean, onToggle: (val: boolean) => void) {
         if (!this.shuffleWrapper) return;
-        // It relies on the structure created in renderShuffleControl currently or we need to separate them.
-        // For cleaner separation, let's just ensure the element exists.
-        // Actually, to respect the previous logic, the container is shared. 
-        // Let's modify renderShuffleControl to NOT be monolithic or handle both?
-        // The user asked for clean code. 
+        
+        
+        
+        
+        
 
         const scoreCheck = this.shuffleWrapper.querySelector('#score-check') as HTMLInputElement;
         if (scoreCheck) {
             scoreCheck.checked = isEnabled;
-            // Ensure listener is updated or attached? ID based is singleton so we just attach once if we can.
-            // But we need to support the callback.
-            // Let's replace the element to refresh callback or assume it's stable.
-            // Better: Attach listener on creation.
-            // Problem: on creation we don't have this callback.
-            // Fix: Assign onclick
+            
+            
+            
+            
+            
+            
             scoreCheck.onchange = (e) => onToggle((e.target as HTMLInputElement).checked);
         }
     }

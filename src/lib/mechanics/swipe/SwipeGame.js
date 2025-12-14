@@ -49,10 +49,10 @@ export class SwipeGame {
                     this.lastDirection = direction.toUpperCase();
                     this.lastVelocity = velocity;
                     this.activeArrow = direction;
-                    this.arrowTimer = 20; // Frames to show arrow
+                    this.arrowTimer = 20; 
                 },
                 onSwipeEnd: () => {
-                    // Trail fades out automatically
+                    
                 },
             }
         );
@@ -70,7 +70,7 @@ export class SwipeGame {
     }
 
     loop() {
-        // Update
+        
         if (this.arrowTimer > 0) {
             this.arrowTimer--;
         } else {
@@ -81,23 +81,23 @@ export class SwipeGame {
             .map((p) => ({ ...p, alpha: p.alpha * 0.9 }))
             .filter((p) => p.alpha > 0.01);
 
-        // Draw
+        
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Background (gradient handled by CSS in MechanicCanvas, but we can add one here if needed)
-        // Let's keep it transparent to show the container's background or draw a custom one.
-        // The original had a gradient background. Let's replicate it or rely on container.
-        // MechanicCanvas has bg-zinc-900. Let's draw a gradient here for flair.
+        
+        
+        
+        
         const bgGrad = this.ctx.createLinearGradient(0, 0, this.width, this.height);
-        bgGrad.addColorStop(0, "#1e1b4b"); // indigo-950
-        bgGrad.addColorStop(1, "#312e81"); // indigo-900
+        bgGrad.addColorStop(0, "#1e1b4b"); 
+        bgGrad.addColorStop(1, "#312e81"); 
         this.ctx.fillStyle = bgGrad;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw Arrows (Central Indicator)
+        
         this.drawArrows();
 
-        // Draw Trail
+        
         if (this.trailPoints.length > 1) {
             const gradient = this.ctx.createLinearGradient(
                 this.trailPoints[0].x,
@@ -129,7 +129,7 @@ export class SwipeGame {
             this.ctx.stroke();
         }
 
-        // Draw Stats
+        
         this.ctx.fillStyle = "white";
         this.ctx.font = "bold 32px monospace";
         this.ctx.textAlign = "center";
@@ -168,14 +168,14 @@ export class SwipeGame {
             this.ctx.translate(cx + arrow.x * offset, cy + arrow.y * offset);
             this.ctx.scale(scale, scale);
 
-            // Rotate based on direction
+            
             const angle = Math.atan2(arrow.y, arrow.x);
             this.ctx.rotate(angle + Math.PI / 2);
 
             this.ctx.fillStyle = arrow.color;
             this.ctx.globalAlpha = alpha;
 
-            // Draw simple arrow path
+            
             this.ctx.beginPath();
             this.ctx.moveTo(0, -10);
             this.ctx.lineTo(8, 10);

@@ -257,12 +257,12 @@ const timers = [
     import { KitchenTimer } from "../../lib/utilidades/kitchen-timer/KitchenTimer";
     import { DockManager } from "../../lib/utilidades/kitchen-timer/DockManager";
 
-    // --- Global Logic ---
+    
     const timersGrid = document.getElementById("timers-grid");
     const timerTemplate = document.getElementById("timer-template") as HTMLTemplateElement;
     const activeTimers: KitchenTimer[] = [];
 
-    // Init Dock Manager
+    
     const dockManager = new DockManager("mobile-dock", "mobile-dock-container");
 
     function initTimer(element: HTMLElement) {
@@ -272,41 +272,41 @@ const timers = [
         return timer;
     }
 
-    // Initialize existing
+    
     document.querySelectorAll(".timer-card").forEach((card) => {
         initTimer(card as HTMLElement);
     });
 
-    // Add Timer Logic
+    
     document.getElementById("add-timer-btn")?.addEventListener("click", () => {
         if (!timerTemplate || !timersGrid) return;
 
-        // Clone template
+        
         const clone = timerTemplate.content.cloneNode(true) as DocumentFragment;
         const newCard = clone.querySelector(".timer-card") as HTMLElement;
 
-        // Update index/name if needed (optional visual polish)
+        
         const count = activeTimers.length + 1;
         newCard.setAttribute("data-index", count.toString());
         const nameInput = newCard.querySelector(".timer-name") as HTMLInputElement;
         if (nameInput) nameInput.value = `Temporizador ${count}`;
 
-        // Append
+        
         timersGrid.appendChild(newCard);
 
-        // Init logic
+        
         initTimer(newCard);
 
-        // Scroll to it
+        
         newCard.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    // Stop All
+    
     document.getElementById("stop-all")?.addEventListener("click", () => {
         activeTimers.forEach((t) => t.pause());
     });
 
-    // Permission
+    
     if ("Notification" in window) {
         if (Notification.permission !== "granted" && Notification.permission !== "denied") {
             Notification.requestPermission();

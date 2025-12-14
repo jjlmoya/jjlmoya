@@ -4,14 +4,14 @@ type ParsedLine = {
     amount: number | null;
     unit: string | null;
     ingredient: string;
-    prefix: string; // Stuff before the number
+    prefix: string; 
 };
 
-// Improved Regex for numbers including fractions like 1/2, 1.5, 100
+
 const NUMBER_REGEX = /(\d+[\.,]\d+|\d+\/\d+|\d+)/;
 
 function parseLine(line: string): ParsedLine {
-    // Normalize
+    
     const cleanLine = line.trim();
     if (!cleanLine)
         return { original: line, amount: null, unit: null, ingredient: "", prefix: "" };
@@ -26,7 +26,7 @@ function parseLine(line: string): ParsedLine {
     const index = match.index || 0;
 
     const prefix = cleanLine.substring(0, index);
-    const rest = cleanLine.substring(index + numberStr.length); // Unit + Ingredient
+    const rest = cleanLine.substring(index + numberStr.length); 
 
     let amount = 0;
     if (numberStr.includes("/")) {
@@ -56,7 +56,7 @@ function formatAmount(amount: number): string {
 }
 
 export function initRescaler() {
-    // Elements
+    
     const originalInput = document.getElementById("original-servings") as HTMLInputElement;
     const targetInput = document.getElementById("target-servings") as HTMLInputElement;
     const ingredientsInput = document.getElementById("ingredients-input") as HTMLTextAreaElement;
@@ -75,10 +75,10 @@ export function initRescaler() {
             ratio = target / original;
         }
 
-        // Update multiplier UI
+        
         multiplierDisplay.textContent = `${ratio.toFixed(2).replace(".", ",")}x`;
 
-        // Process text
+        
         const text = ingredientsInput.value;
         const lines = text.split("\n");
 
@@ -115,19 +115,19 @@ export function initRescaler() {
         });
     }
 
-    // Event Listeners
+    
     originalInput.addEventListener('input', update);
     targetInput.addEventListener('input', update);
     ingredientsInput.addEventListener('input', update);
 
-    // Initial Example Run (if empty)
+    
     if (!ingredientsInput.value.trim()) {
         ingredientsInput.value = "200g Harina\n100ml Leche\n2 Huevos";
         update();
     }
 
 
-    // Copy Function
+    
     copyBtn.addEventListener('click', () => {
         const lines: string[] = [];
         const original = parseFloat(originalInput.value) || 1;

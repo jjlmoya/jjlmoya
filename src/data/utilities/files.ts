@@ -43,7 +43,7 @@ export const filesSection: SectionData = {
             iconFg: "mdi:clock-time-four-outline",
             title: "Sincronizar Subtítulos",
             description: "Ajusta el tiempo de tus archivos SRT. Adelanta o retrasa subtítulos fácilmente.",
-            color: "#06b6d4" // Cyan-500
+            color: "#06b6d4" 
         }
     ]
 };

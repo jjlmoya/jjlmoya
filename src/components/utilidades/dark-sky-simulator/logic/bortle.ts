@@ -2,12 +2,12 @@ export interface BortleClass {
     level: number;
     title: string;
     description: string;
-    nelm: number; // Naked Eye Limiting Magnitude
-    sqm: string; // Sky Quality Meter (mag/arcsec²)
+    nelm: number; 
+    sqm: string; 
     starsVisible: boolean;
     milkyWayVisible: boolean;
     cloudsLit: boolean;
-    skyBrightness: number; // 0 (Darkest) to 1 (Brightest) for visualizer opacity
+    skyBrightness: number; 
 }
 
 export const BORTLE_SCALE: Record<number, BortleClass> = {
@@ -41,7 +41,7 @@ export const BORTLE_SCALE: Record<number, BortleClass> = {
         sqm: "21.69 - 21.89",
         starsVisible: true,
         milkyWayVisible: true,
-        cloudsLit: true, // Partially
+        cloudsLit: true, 
         skyBrightness: 0.2
     },
     4: {
@@ -51,7 +51,7 @@ export const BORTLE_SCALE: Record<number, BortleClass> = {
         nelm: 6.5,
         sqm: "20.49 - 21.69",
         starsVisible: true,
-        milkyWayVisible: true, // Weakly
+        milkyWayVisible: true, 
         cloudsLit: true,
         skyBrightness: 0.35
     },
@@ -62,7 +62,7 @@ export const BORTLE_SCALE: Record<number, BortleClass> = {
         nelm: 6.0,
         sqm: "19.50 - 20.49",
         starsVisible: true,
-        milkyWayVisible: true, // Zenith only, very weak
+        milkyWayVisible: true, 
         cloudsLit: true,
         skyBrightness: 0.5
     },
@@ -83,7 +83,7 @@ export const BORTLE_SCALE: Record<number, BortleClass> = {
         description: "Fondo del cielo gris claro. Fuentes de luz fuertes en todas direcciones. Solo las estrellas más brillantes son visibles.",
         nelm: 5.0,
         sqm: "18.38 - 18.94",
-        starsVisible: true, // Bright ones only
+        starsVisible: true, 
         milkyWayVisible: false,
         cloudsLit: true,
         skyBrightness: 0.8
@@ -94,7 +94,7 @@ export const BORTLE_SCALE: Record<number, BortleClass> = {
         description: "El cielo es gris blanquecino o naranja. Se pueden leer titulares de periódico. Solo se ven constelaciones principales.",
         nelm: 4.5,
         sqm: "< 18.38",
-        starsVisible: true, // Very few
+        starsVisible: true, 
         milkyWayVisible: false,
         cloudsLit: true,
         skyBrightness: 0.9
@@ -105,7 +105,7 @@ export const BORTLE_SCALE: Record<number, BortleClass> = {
         description: "El cielo es muy brillante, incluso en el cenit. Solo se ven la Luna, planetas y un puñado de estrellas brillantes.",
         nelm: 4.0,
         sqm: "< 18.00",
-        starsVisible: false, // Almost none
+        starsVisible: false, 
         milkyWayVisible: false,
         cloudsLit: true,
         skyBrightness: 1.0
@@ -113,7 +113,7 @@ export const BORTLE_SCALE: Record<number, BortleClass> = {
 };
 
 export function getBortleData(level: number): BortleClass {
-    // Clamp between 1 and 9
+    
     const safeLevel = Math.max(1, Math.min(9, Math.floor(level)));
     return BORTLE_SCALE[safeLevel];
 }

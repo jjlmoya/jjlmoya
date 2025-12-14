@@ -5,7 +5,7 @@
 <div
     class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden"
 >
-    <!-- Tool Header -->
+    
     <div
         class="p-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 flex flex-wrap gap-4 items-center justify-between"
     >
@@ -28,7 +28,7 @@
             </div>
             <h2 class="text-xl font-bold text-slate-900 dark:text-white">Simulador de Inversión</h2>
         </div>
-        <!-- Future feature: Toggle Inflation -->
+        
         <div class="flex items-center gap-2 text-sm text-slate-500">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             Tiempo real
@@ -38,7 +38,7 @@
     <div
         class="grid lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-slate-700"
     >
-        <!-- Controls Sidebar -->
+        
         <div class="lg:col-span-4 p-6 space-y-6 bg-slate-50/30 dark:bg-slate-900/10">
             <div class="space-y-4">
                 <div>
@@ -114,7 +114,7 @@
                 </div>
             </div>
 
-            <!-- Summary Text -->
+            
             <div
                 class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3"
             >
@@ -152,13 +152,13 @@
             </div>
         </div>
 
-        <!-- Chart Area -->
+        
         <div class="lg:col-span-8 p-6 lg:p-8 flex flex-col h-[500px] lg:h-auto">
             <div class="relative w-full h-full">
                 <canvas id="ci-chart"></canvas>
             </div>
 
-            <!-- Insight Bubble -->
+            
             <div
                 id="ci-insight"
                 class="mt-4 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-sm text-emerald-800 dark:text-emerald-300 hidden md:block opacity-0 transition-opacity duration-500"
@@ -177,13 +177,13 @@
     let chart: Chart | null = null;
     const ctx = document.getElementById("ci-chart") as HTMLCanvasElement;
 
-    // Inputs
+    
     const initialEl = document.getElementById("ci-initial") as HTMLInputElement;
     const monthlyEl = document.getElementById("ci-monthly") as HTMLInputElement;
     const rateEl = document.getElementById("ci-rate") as HTMLInputElement;
     const yearsEl = document.getElementById("ci-years") as HTMLInputElement;
 
-    // Outputs
+    
     const investedOut = document.getElementById("ci-total-invested");
     const interestOut = document.getElementById("ci-total-interest");
     const finalOut = document.getElementById("ci-final-amount");
@@ -213,12 +213,12 @@
         if (interestOut) interestOut.innerText = formatMoney(last.interest);
         if (finalOut) finalOut.innerText = formatMoney(last.total);
 
-        // Chart Logic
+        
         const labels = data.map((d) => `Año ${d.year}`);
         const investedData = data.map((d) => d.invested);
-        const interestData = data.map((d) => d.interest); // Stacked approach: Interest on top of Invested? No, Chart.js stacked bar or area.
-        // Let's do stacked area chart. Total = Invested + Interest.
-        // So Dataset 1 = Invested, Dataset 2 = Interest. Stacked: true.
+        const interestData = data.map((d) => d.interest); 
+        
+        
 
         if (chart) {
             chart.data.labels = labels;
@@ -234,8 +234,8 @@
                         {
                             label: "Tu Dinero (Principal)",
                             data: investedData,
-                            borderColor: "#94a3b8", // slate-400
-                            backgroundColor: "rgba(148, 163, 184, 0.2)", // slate-400 transparent
+                            borderColor: "#94a3b8", 
+                            backgroundColor: "rgba(148, 163, 184, 0.2)", 
                             fill: true,
                             tension: 0.4,
                             pointRadius: 0,
@@ -244,8 +244,8 @@
                         {
                             label: "Intereses Generados",
                             data: interestData,
-                            borderColor: "#10b981", // emerald-500
-                            backgroundColor: "rgba(16, 185, 129, 0.2)", // emerald-500 transparent
+                            borderColor: "#10b981", 
+                            backgroundColor: "rgba(16, 185, 129, 0.2)", 
                             fill: true,
                             tension: 0.4,
                             pointRadius: 0,
@@ -283,7 +283,7 @@
                     },
                     scales: {
                         y: {
-                            stacked: true, // Key for stacking areas
+                            stacked: true, 
                             beginAtZero: true,
                             grid: { color: "rgba(0, 0, 0, 0.05)" },
                             ticks: {
@@ -305,12 +305,12 @@
             });
         }
 
-        // Find Insight: When does Interest > Annual Contribution?
-        // Annual contribution = monthly * 12
+        
+        
         const annualContrib = input.monthlyContribution * 12;
-        // In the data, "interest" is cumulative total interest.
-        // We need annual interest generated.
-        // Approx: (Total Interest year N) - (Total Interest year N-1)
+        
+        
+        
 
         let crossYear = -1;
         for (let i = 1; i < data.length; i++) {
@@ -330,6 +330,6 @@
     };
 
     [initialEl, monthlyEl, rateEl, yearsEl].forEach((el) => el?.addEventListener("input", update));
-    // Small delay to ensure chartjs loads? No, import handles it.
+    
     update();
 </script>

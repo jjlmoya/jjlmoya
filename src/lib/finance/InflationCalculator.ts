@@ -1,5 +1,5 @@
 export class InflationCalculator {
-    // Source: Historical CPI for Spain (INE)
+    
     private static readonly INFLATION_DATA: Record<number, number> = {
         1980: 15.6, 1981: 14.6, 1982: 14.4, 1983: 12.2, 1984: 11.3,
         1985: 8.8, 1986: 8.8, 1987: 5.2, 1988: 4.8, 1989: 6.8,
@@ -9,16 +9,11 @@ export class InflationCalculator {
         2005: 3.7, 2006: 3.5, 2007: 2.8, 2008: 4.1, 2009: -0.3,
         2010: 1.8, 2011: 3.2, 2012: 2.4, 2013: 1.4, 2014: -0.2,
         2015: -0.5, 2016: -0.2, 2017: 2.0, 2018: 1.7, 2019: 0.7,
-        2020: -0.3, 2021: 6.5, 2022: 5.7, 2023: 3.1, 2024: 2.8, // Updated
-        2025: 2.2 // Estimated
+        2020: -0.3, 2021: 6.5, 2022: 5.7, 2023: 3.1, 2024: 2.8, 
+        2025: 2.2 
     };
 
-    /**
-     * Calculates the equivalent value of an amount from a start year to an end year.
-     * @param amount The initial monetary amount.
-     * @param startYear The year the amount is from.
-     * @param endYear The target year (default 2025).
-     */
+    
     static calculate(amount: number, startYear: number, endYear: number = 2025): number {
         if (startYear === endYear) return amount;
 
@@ -32,10 +27,10 @@ export class InflationCalculator {
         }
 
         if (startYear < endYear) {
-            // Forward calculation: Past -> Future (Inflation erodes value, so you need MORE money to buy the same)
+            
             return Number((amount * multiplier).toFixed(2));
         } else {
-            // Backward calculation: Future -> Past
+            
             return Number((amount / multiplier).toFixed(2));
         }
     }

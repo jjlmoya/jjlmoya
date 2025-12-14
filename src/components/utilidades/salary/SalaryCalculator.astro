@@ -5,7 +5,7 @@
 <div
     class="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700"
 >
-    <!-- Input Form -->
+    
     <div
         class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 space-y-8 relative overflow-hidden"
     >
@@ -80,9 +80,9 @@
         </div>
     </div>
 
-    <!-- Results Display -->
+    
     <div class="space-y-4">
-        <!-- Main Card -->
+        
         <div
             class="bg-gradient-to-br from-emerald-600 to-teal-800 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden group"
         >
@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <!-- Breakdown Card -->
+        
         <div
             class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 space-y-4"
         >
@@ -150,7 +150,7 @@
     const payBtns = document.querySelectorAll(".pay-btn");
     const payDisplay = document.getElementById("pay-input-display");
 
-    // Outputs
+    
     const netMonthlyEl = document.getElementById("net-monthly");
     const netAnnualEl = document.getElementById("net-annual");
     const irpfPercentEl = document.getElementById("irpf-percent");
@@ -159,23 +159,23 @@
 
     let pays = 12;
 
-    // Simplified Spanish IRPF Brackets 2024 (Approximate for single person logic)
-    // Structure: [UpToAmount, Rate, BaseDeduction]
-    // This is a naive implementation. A real one is extremely complex.
-    // We will use an "Effective Rate" curve approximation for simplicity and speed which is common in simple calculators.
+    
+    
+    
+    
 
     function calculateEffectiveIRPF(gross: number) {
-        // Basic personal allowance deduction logic roughly included in effective rate curve
-        // Brackets roughly:
-        // 0 - 12450: 19%
-        // 12450 - 20200: 24%
-        // 20200 - 35200: 30%
-        // 35200 - 60000: 37%
-        // 60000 - 300000: 45%
-        // > 300000: 47%
+        
+        
+        
+        
+        
+        
+        
+        
 
-        // This logic is flawed for true tax calc but good for "Estimation".
-        // Let's use a standard progressive calculation
+        
+        
 
         const brackets = [
             { limit: 12450, rate: 0.19 },
@@ -186,21 +186,21 @@
             { limit: Infinity, rate: 0.47 },
         ];
 
-        // Personal minimum exemption (Single, no kids): Approx 5550.
-        // However, IRPF algorithm for payroll is different from "Renta".
-        // We will subtract minimal personal allowance from base to find taxable base.
+        
+        
+        
         const personalAllowance = 5550;
 
-        // Social security deduction
+        
         const ssRate = 0.0635;
         const ssDeduction = gross * ssRate;
 
-        let taxableBase = gross - ssDeduction - 2000; // 2000 generic deduction for expenses
+        let taxableBase = gross - ssDeduction - 2000; 
         if (taxableBase < 0) taxableBase = 0;
 
-        // Apply Personal Allowance logic:
-        // Tax is Calculated on (Base) - Tax on (Personal Min + Family Min)
-        // Correct way: Calculate tax on TOTAL Base, then subtract tax on (MinimoPersonal) using same brackets but starting from 0.
+        
+        
+        
 
         function getTaxForAmount(amount: number) {
             let tax = 0;
@@ -220,21 +220,21 @@
 
         const fullTax = getTaxForAmount(taxableBase);
 
-        // This is still high because "Minimo Personal" applies 0% on the first chunk effectively by deduction logic in Renta,
-        // but for Payroll retention algorithm checks valid rates.
-        // Let's trust a simpler "Retention Algorithm Approximation":
+        
+        
+        
 
-        // Just use `getTaxForAmount` on (Base - PersonalAllowance) is a closer naive approx? No.
-        // Let's stick to the "Cuota Integra" approach: Tax(Base) - Tax(MinimoPersonal)
+        
+        
 
         const taxOnMin = getTaxForAmount(personalAllowance);
         let finalTax = fullTax - taxOnMin;
 
         if (finalTax < 0) finalTax = 0;
 
-        // Limit check: if salary is very low (e.g. < 15k), retention is usually near 0 or minimal.
+        
         if (gross < 15876) {
-            finalTax = 0; // New law 2024ish boost
+            finalTax = 0; 
         }
 
         return {
@@ -255,7 +255,7 @@
 
         const irpfPercent = (results.irpfTotal / gross) * 100;
 
-        // Update UI
+        
         if (netMonthlyEl)
             netMonthlyEl.textContent = new Intl.NumberFormat("es-ES", {
                 style: "currency",
@@ -289,14 +289,14 @@
                 }).format(results.ssTotal);
     }
 
-    // Event Listeners
-    grossInput.addEventListener("input", calculate); // Live calc or on button? Live is cooler but maybe laggy mental load? Live is fine.
+    
+    grossInput.addEventListener("input", calculate); 
     calculateBtn?.addEventListener("click", calculate);
 
     payBtns.forEach((btn) => {
         btn.addEventListener("click", (e) => {
             const target = e.target as HTMLElement;
-            // Reset styles
+            
             payBtns.forEach((b) => {
                 b.classList.remove(
                     "bg-white",
@@ -307,7 +307,7 @@
                 );
                 b.classList.add("text-slate-500", "dark:text-slate-400");
             });
-            // Set active
+            
             target.classList.add(
                 "bg-white",
                 "dark:bg-slate-700",
