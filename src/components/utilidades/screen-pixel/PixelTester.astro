@@ -3,7 +3,6 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div class="w-full max-w-5xl mx-auto p-4 font-sans text-slate-900 dark:text-slate-100">
-    
     <div
         id="dashboard"
         class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-200 dark:border-slate-800 transition-all duration-500"
@@ -74,18 +73,15 @@ import { Icon } from "astro-icon/components";
                 </div>
             </div>
 
-            
             <div class="relative group cursor-pointer" id="monitor-preview">
                 <div
                     class="relative aspect-video bg-slate-950 rounded-2xl border-4 border-slate-800 shadow-2xl flex items-center justify-center overflow-hidden"
                 >
-                    
                     <div
                         class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"
                     >
                     </div>
 
-                    
                     <div
                         class="w-full h-full flex transition-colors duration-500"
                         id="preview-screen"
@@ -95,14 +91,13 @@ import { Icon } from "astro-icon/components";
                         <div class="flex-1 bg-blue-500/90"></div>
                     </div>
 
-                    
                     <div
                         class="absolute top-1/4 right-1/4 w-12 h-12 bg-white animate-pulse shadow-[0_0_20px_rgba(255,255,255,0.5)] z-20 hidden"
                         id="preview-fixer"
                     >
                     </div>
                 </div>
-                
+
                 <div class="mx-auto w-24 h-12 bg-slate-800 rounded-b-xl mt-[-4px] relative z-[-1]">
                 </div>
                 <div class="mx-auto w-48 h-4 bg-slate-900 rounded-full mt-[-20px] shadow-xl"></div>
@@ -110,12 +105,9 @@ import { Icon } from "astro-icon/components";
         </div>
     </div>
 
-    
     <div id="test-overlay" class="hidden fixed inset-0 z-[100] bg-black cursor-none">
-        
         <div id="test-bg" class="absolute inset-0 bg-black transition-colors duration-0"></div>
 
-        
         <div
             id="fixer-box"
             class="hidden fixed inset-0 z-[110] bg-white cursor-none overflow-hidden group"
@@ -129,7 +121,6 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div
             id="test-controls"
             class="absolute bottom-12 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex items-center gap-4 transition-opacity duration-300 opacity-0 hover:opacity-100"
@@ -177,7 +168,6 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-    
     const els = {
         btnStart: document.getElementById("btn-start-test"),
         btnFix: document.getElementById("btn-start-fix"),
@@ -198,8 +188,6 @@ import { Icon } from "astro-icon/components";
 
     const colors = ["#000000", "#ffffff", "#dc2626", "#16a34a", "#2563eb"];
 
-    
-
     function startTest(initialMode = "test") {
         els.overlay?.classList.remove("hidden");
         document.documentElement.requestFullscreen().catch(() => {});
@@ -207,7 +195,7 @@ import { Icon } from "astro-icon/components";
         if (initialMode === "fix") {
             toggleFixerBox(true);
         } else {
-            setColor(colors[0]); 
+            setColor(colors[0]);
         }
 
         document.addEventListener("mousemove", handleMouseMove);
@@ -235,17 +223,11 @@ import { Icon } from "astro-icon/components";
         setColor(colors[currentColorIndex]);
     }
 
-    
-
     function generateNoise(element: HTMLElement) {
-        
-        
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        
-        
         const width = window.innerWidth;
         const height = window.innerHeight;
         const ratio = height > 0 ? width / height : 1;
@@ -270,12 +252,11 @@ import { Icon } from "astro-icon/components";
             if (!isStrobing) return;
 
             for (let i = 0; i < buffer32.length; i++) {
-                
                 buffer32[i] =
-                    (255 << 24) | 
-                    ((Math.random() * 255) << 16) | 
-                    ((Math.random() * 255) << 8) | 
-                    ((Math.random() * 255) << 0); 
+                    (255 << 24) |
+                    ((Math.random() * 255) << 16) |
+                    ((Math.random() * 255) << 8) |
+                    ((Math.random() * 255) << 0);
             }
 
             ctx.putImageData(idata, 0, 0);
@@ -298,29 +279,9 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    
-
-    const isDragging = false;
-    const currentX = 0;
-    const currentY = 0;
-    const initialX = 0;
-    const initialY = 0;
-    const xOffset = 0;
-    const yOffset = 0;
-
-    if (els.fixerBox) {
-        
-    }
-
-    function dragStart(e: MouseEvent) {}
-    function dragEnd(e: MouseEvent) {}
-    function drag(e: MouseEvent) {}
-    function setTranslate(xPos: number, yPos: number, el: HTMLElement) {}
-
     function handleMouseMove() {
         if (!els.controls || !els.overlay) return;
 
-        
         els.controls.style.opacity = "1";
         els.overlay.style.cursor = "default";
 
@@ -331,7 +292,6 @@ import { Icon } from "astro-icon/components";
         if (idleTimer) clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
             if (els.controls && els.overlay) {
-                
                 els.controls.style.opacity = "0";
                 els.overlay.style.cursor = "none";
             }
@@ -344,7 +304,6 @@ import { Icon } from "astro-icon/components";
         if (e.key === "ArrowLeft") rotateColor(-1);
     }
 
-    
     document.querySelectorAll(".color-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
             const color = (e.target as HTMLElement).getAttribute("data-color");

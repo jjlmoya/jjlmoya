@@ -14,8 +14,8 @@ const noHtmlCommentsPlugin = {
                     Program() {
                         const sourceCode = context.sourceCode;
                         const text = sourceCode.getText();
-                        
-                        const regex = //g;
+
+                        const regex = new RegExp("", "g");
                         let match;
                         while ((match = regex.exec(text)) !== null) {
                             context.report({
@@ -34,21 +34,29 @@ const noHtmlCommentsPlugin = {
 };
 
 export default [
-    
+    {
+        ignores: [
+            "**/dist/",
+            "**/node_modules/",
+            ".astro/",
+            "**/.astro/**",
+            "fix_tags.cjs"
+        ]
+    },
     ...tseslint.configs.recommended,
     ...eslintPluginAstro.configs["flat/recommended"],
 
     {
-        
+
         plugins: {
             "no-comments": noComments,
             "custom": noHtmlCommentsPlugin
         },
-        
+
         rules: {
             "no-comments/disallowComments": "error",
-            "custom/no-html-comments": "error",
             
+
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "off"
         }

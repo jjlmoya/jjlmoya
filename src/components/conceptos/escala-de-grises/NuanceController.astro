@@ -1,7 +1,5 @@
 ---
 import NuanceHUD from "./core/NuanceHUD.astro";
-
-
 ---
 
 <div
@@ -9,13 +7,10 @@ import NuanceHUD from "./core/NuanceHUD.astro";
     class="fixed inset-0 w-full h-full bg-neutral-900 text-neutral-200 overflow-hidden font-serif select-none"
     data-theme="center"
 >
-    
-    
     <div
         id="bg-center"
         class="absolute inset-0 bg-neutral-900 transition-opacity duration-700 opacity-100"
     >
-        
         <div
             class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-rose-900 opacity-50"
         >
@@ -24,25 +19,22 @@ import NuanceHUD from "./core/NuanceHUD.astro";
             class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,100,100,0.2),transparent_70%)]"
         >
         </div>
-        
+
         <div class="absolute inset-0 opacity-10 mix-blend-overlay"></div>
     </div>
 
-    
     <div
         id="bg-left"
         class="absolute inset-0 bg-white transition-opacity duration-100 opacity-0 pointer-events-none"
     >
     </div>
 
-    
     <div
         id="bg-right"
         class="absolute inset-0 bg-black transition-opacity duration-100 opacity-0 pointer-events-none"
     >
     </div>
 
-    
     <div
         id="content-scroll"
         class="absolute inset-0 overflow-y-scroll snap-y snap-mandatory scroll-smooth z-10 pt-10 pb-40"
@@ -50,14 +42,12 @@ import NuanceHUD from "./core/NuanceHUD.astro";
         <slot />
     </div>
 
-    
     <NuanceHUD />
 </div>
 
 <script>
-    
     const track = document.getElementById("balance-track");
-    const visualTrack = document.getElementById("visual-track"); 
+    const visualTrack = document.getElementById("visual-track");
     const handle = document.getElementById("balance-handle");
     const bgLeft = document.getElementById("bg-left");
     const bgRight = document.getElementById("bg-right");
@@ -66,52 +56,46 @@ import NuanceHUD from "./core/NuanceHUD.astro";
         document.getElementById("label-hud-left"),
         document.getElementById("label-hud-right"),
     ];
-    const hint = document.getElementById("hud-hint");
     const controller = document.getElementById("nuance-controller");
 
-    
     let position = 0.5;
     let isDragging = false;
     let windForce = 0;
     let windTarget = 0.0;
 
-    
-    const PULL = 0.003; 
-    const WIND_CHANGE_RATE = 0.05;
+    const PULL = 0.003;
 
-    
-    const updatePos = (clientX) => {
+    const updatePos = (clientX: number) => {
         if (!track) return;
         const rect = track.getBoundingClientRect();
-        
+
         const raw = (clientX - rect.left) / rect.width;
         position = Math.max(0, Math.min(1, raw));
     };
 
-    const start = (e) => {
-        
-        if (e.touches) e.preventDefault();
+    const start = (e: MouseEvent | TouchEvent) => {
+        if (e instanceof TouchEvent) e.preventDefault();
 
         isDragging = true;
-        handle.classList.add("cursor-grabbing");
-        updatePos(e.touches ? e.touches[0].clientX : e.clientX);
+        if (handle) handle.classList.add("cursor-grabbing");
+        updatePos(e instanceof TouchEvent ? e.touches[0].clientX : e.clientX);
     };
 
-    const move = (e) => {
+    const move = (e: MouseEvent | TouchEvent) => {
         if (!isDragging) return;
-        
-        if (e.touches) e.preventDefault();
-        updatePos(e.touches ? e.touches[0].clientX : e.clientX);
+
+        if (e instanceof TouchEvent) e.preventDefault();
+        updatePos(e instanceof TouchEvent ? e.touches[0].clientX : e.clientX);
     };
 
     const end = () => {
         isDragging = false;
-        handle.classList.remove("cursor-grabbing");
+        if (handle) handle.classList.remove("cursor-grabbing");
     };
 
     if (track) {
         track.addEventListener("mousedown", start);
-        
+
         track.addEventListener("touchstart", start, { passive: false });
 
         window.addEventListener("mousemove", move);
@@ -121,15 +105,11 @@ import NuanceHUD from "./core/NuanceHUD.astro";
         window.addEventListener("touchend", end);
     }
 
-    
     const loop = () => {
         if (!isDragging) {
-            
-            
             if (Math.random() > 0.98) windTarget = (Math.random() - 0.5) * 0.008;
             windForce += (windTarget - windForce) * 0.05;
 
-            
             const dist = position - 0.5;
             const pull = dist * PULL;
 
@@ -142,50 +122,33 @@ import NuanceHUD from "./core/NuanceHUD.astro";
     };
 
     const render = () => {
-        
         if (handle) handle.style.left = `${position * 100}%`;
-
-        
-        
-        
-        
 
         let leftOp = 0;
         let rightOp = 0;
         let centerOp = 1;
 
         if (position < 0.45) {
-            
             leftOp = Math.min(1, (0.45 - position) * 5);
             centerOp = 1 - leftOp;
         } else if (position > 0.55) {
-            
             rightOp = Math.min(1, (position - 0.55) * 5);
             centerOp = 1 - rightOp;
         }
 
-        
         if (bgLeft) bgLeft.style.opacity = leftOp.toFixed(3);
         if (bgRight) bgRight.style.opacity = rightOp.toFixed(3);
         if (bgCenter) {
-            
             bgCenter.style.opacity = centerOp.toFixed(3);
-            
+
             bgCenter.style.filter = `grayscale(${Math.max(leftOp, rightOp)})`;
         }
 
-        
-        
-        
-        
-
         if (controller) {
-            if (leftOp > 0.5)
-                controller.style.color = "#000"; 
-            else controller.style.color = "#fff"; 
+            if (leftOp > 0.5) controller.style.color = "#000";
+            else controller.style.color = "#fff";
         }
 
-        
         if (visualTrack) {
             if (leftOp > 0.5) {
                 visualTrack.style.borderColor = "rgba(0,0,0,0.2)";
@@ -196,14 +159,11 @@ import NuanceHUD from "./core/NuanceHUD.astro";
             }
         }
 
-        
-        
-        
         const slides = document.querySelectorAll(".nuance-slide");
         slides.forEach((slide) => {
-            const leftEl = slide.querySelector(".nuance-state-left");
-            const rightEl = slide.querySelector(".nuance-state-right");
-            const centerEl = slide.querySelector(".nuance-state-center");
+            const leftEl = slide.querySelector(".nuance-state-left") as HTMLElement | null;
+            const rightEl = slide.querySelector(".nuance-state-right") as HTMLElement | null;
+            const centerEl = slide.querySelector(".nuance-state-center") as HTMLElement | null;
 
             if (leftEl)
                 leftEl.style.opacity = leftOp > 0.1 ? Math.min(1, leftOp * 2).toString() : "0";
@@ -216,7 +176,6 @@ import NuanceHUD from "./core/NuanceHUD.astro";
         });
     };
 
-    
     const obs = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
@@ -233,6 +192,5 @@ import NuanceHUD from "./core/NuanceHUD.astro";
 
     document.querySelectorAll(".nuance-slide").forEach((s) => obs.observe(s));
 
-    
     requestAnimationFrame(loop);
 </script>

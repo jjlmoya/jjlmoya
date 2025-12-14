@@ -1,21 +1,15 @@
 ---
 import { IngredientRepository } from "./data/IngredientRepository";
-import { BalanceCalculator } from "./services/BalanceCalculator";
+
 import { Icon } from "astro-icon/components";
 import { COCKTAIL_PRESETS } from "./data/Presets";
 
-
 const allIngredients = IngredientRepository.getAll();
-const spirits = allIngredients.filter((i) => i.type === "spirit");
-const modifiers = allIngredients.filter((i) => ["liqueur", "vermouth", "amaro"].includes(i.type));
-const mixers = allIngredients.filter((i) => ["citrus", "mixer", "syrup", "fruit"].includes(i.type));
-const bitters = allIngredients.filter((i) => i.type === "bitter");
 ---
 
 <div
     class="cocktail-balancer-app max-w-6xl mx-auto px-4 py-8 text-slate-800 dark:text-slate-100 font-sans"
 >
-    
     <div
         class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800"
     >
@@ -49,13 +43,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </div>
 
-    
     <div class="grid lg:grid-cols-12 gap-8 items-start">
-        
         <div class="lg:col-span-7 flex flex-col gap-6">
-            
             <div id="recipe-container" class="space-y-4 min-h-[300px]">
-                
                 <div
                     id="empty-state"
                     class="flex flex-col items-center justify-center py-16 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl bg-slate-50/50 dark:bg-slate-800/50"
@@ -78,10 +68,8 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         <Icon name="mdi:plus-circle" class="text-xl" /> Añadir Ingrediente
                     </button>
                 </div>
-                
             </div>
 
-            
             <button
                 id="open-modal-btn"
                 class="hidden w-full py-4 border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-500 hover:border-indigo-500 hover:text-indigo-500 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 group"
@@ -94,9 +82,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             </button>
         </div>
 
-        
         <div class="lg:col-span-5 space-y-6 sticky top-8">
-            
             <div
                 class="bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-xl shadow-slate-200/50 dark:shadow-black/40 border border-slate-100 dark:border-slate-800 relative overflow-hidden"
             >
@@ -118,9 +104,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
 
                 <div class="relative w-full aspect-square max-w-[280px] mx-auto">
-                    
                     <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl">
-                        
                         <polygon
                             points="100,20 176,75 147,164 53,164 24,75"
                             fill="none"
@@ -142,7 +126,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             class="stroke-slate-50 dark:stroke-slate-800/50"
                             stroke-width="1"></polygon>
 
-                        
                         <line
                             x1="100"
                             y1="100"
@@ -150,7 +133,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="20"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        
+
                         <line
                             x1="100"
                             y1="100"
@@ -158,7 +141,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="75"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        
+
                         <line
                             x1="100"
                             y1="100"
@@ -166,7 +149,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="164"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        
+
                         <line
                             x1="100"
                             y1="100"
@@ -174,7 +157,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="164"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        
+
                         <line
                             x1="100"
                             y1="100"
@@ -182,9 +165,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             y2="75"
                             class="stroke-slate-200 dark:stroke-slate-700"
                             stroke-width="1"></line>
-                        
 
-                        
                         <polygon
                             id="radar-shape"
                             points="100,100 100,100 100,100 100,100 100,100"
@@ -192,7 +173,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             stroke-width="2"
                             stroke-linejoin="round"></polygon>
 
-                        
                         <circle
                             id="pt-sweet"
                             cx="100"
@@ -230,7 +210,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         ></circle>
                     </svg>
 
-                    
                     <span
                         class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 text-[10px] uppercase font-bold text-slate-400 tracking-widest bg-white dark:bg-slate-900 px-1"
                         >Dulce</span
@@ -254,9 +233,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            
             <div class="grid grid-cols-3 gap-4">
-                
                 <div
                     class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 text-center"
                 >
@@ -267,7 +244,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         >
                     </div>
                 </div>
-                
+
                 <div
                     class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 text-center"
                 >
@@ -278,7 +255,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         >
                     </div>
                 </div>
-                
+
                 <div
                     class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center"
                 >
@@ -295,7 +272,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            
             <div
                 class="bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-xl shadow-slate-200/50 dark:shadow-black/40 border border-slate-100 dark:border-slate-800"
             >
@@ -306,9 +282,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                     <div id="balance-verdict" class="text-base font-black text-slate-300">--</div>
                 </div>
 
-                
                 <div class="relative h-4 bg-slate-100 dark:bg-slate-800 rounded-full mb-8 mx-2">
-                    
                     <div
                         class="absolute left-0 top-0 h-full w-[30%] bg-gradient-to-r from-lime-500/20 to-lime-500/5 rounded-l-full"
                     >
@@ -321,9 +295,7 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                         class="absolute left-1/2 top-0 h-full w-1 bg-slate-300/50 -translate-x-1/2"
                     >
                     </div>
-                    
 
-                    
                     <div
                         id="balance-needle"
                         class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 bg-white dark:bg-slate-700 border-4 border-slate-800 dark:border-white rounded-full shadow-lg transition-all duration-500 z-10"
@@ -341,7 +313,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            
             <div
                 id="fix-box"
                 class="hidden bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-2xl p-5 animate-fade-in"
@@ -360,7 +331,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                             id="fix-text"
                             class="text-sm text-indigo-800/80 dark:text-indigo-300 leading-relaxed"
                         >
-                            
                         </p>
                     </div>
                 </div>
@@ -368,7 +338,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </div>
 
-    
     <dialog
         id="ingredient-modal"
         class="m-auto backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-2xl text-left rounded-3xl shadow-2xl open:animate-zoom-in"
@@ -376,7 +345,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         <div
             class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl max-h-[85vh] flex flex-col"
         >
-            
             <div
                 class="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-10"
             >
@@ -403,7 +371,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 </div>
             </div>
 
-            
             <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {
@@ -454,7 +421,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </dialog>
 
-    
     <dialog
         id="presets-modal"
         class="m-auto backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-4xl text-left rounded-3xl shadow-2xl open:animate-zoom-in"
@@ -475,7 +441,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 >
             </div>
             <div class="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-black/20">
-                
                 <div id="saved-section" class="mb-8 hidden">
                     <h4 class="text-xs font-bold uppercase text-slate-400 tracking-widest mb-4">
                         Mis Guardadas
@@ -487,7 +452,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                     </div>
                 </div>
 
-                
                 <h4 class="text-xs font-bold uppercase text-slate-400 tracking-widest mb-4">
                     Clásicos
                 </h4>
@@ -513,7 +477,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </dialog>
 
-    
     <dialog
         id="confirm-modal"
         class="m-auto backdrop:bg-slate-900/40 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-sm text-center rounded-3xl shadow-2xl open:animate-zoom-in"
@@ -550,20 +513,31 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         </div>
     </dialog>
 
-    
     <div style="display:none">
         <div id="tpl-icon-trash"><Icon name="mdi:trash-can-outline" /></div>
     </div>
 </div>
-
 
 <script>
     import { IngredientRepository } from "./data/IngredientRepository";
     import { BalanceCalculator } from "./services/BalanceCalculator";
     import { COCKTAIL_PRESETS } from "./data/Presets";
 
+    interface RecipeItem {
+        uId: string;
+        id: string;
+        vol: number;
+    }
+
+    interface SavedRecipe {
+        id: number;
+        name: string;
+        recipe: RecipeItem[];
+        date: string;
+    }
+
     class CocktailApp {
-        recipe = [];
+        recipe: RecipeItem[] = [];
         STORAGE_KEY = "cocktail_tool_current";
         SAVED_KEY = "cocktail_tool_saved";
 
@@ -575,8 +549,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             this.bindEvents();
             this.loadState();
         }
-
-        
 
         loadState() {
             const saved = localStorage.getItem(this.STORAGE_KEY);
@@ -594,20 +566,19 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.recipe));
         }
 
-        addIngredient(id) {
-            const ing = IngredientRepository.getById(id);
+        addIngredient(id: string) {
+            const ing = IngredientRepository.getById(id.toString());
             if (!ing) return;
 
-            
             let vol = 30;
             if (ing.type === "spirit") vol = 45;
             if (ing.type === "citrus") vol = 22.5;
             if (ing.type === "syrup") vol = 15;
-            if (ing.type === "bitter") vol = 2; 
+            if (ing.type === "bitter") vol = 2;
 
             this.recipe.push({
-                uId: Math.random().toString(36).substr(2, 9), 
-                id: id,
+                uId: Math.random().toString(36).substr(2, 9),
+                id: id.toString(),
                 vol: vol,
             });
 
@@ -615,27 +586,25 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             this.refreshUI();
         }
 
-        removeIngredient(uId) {
+        removeIngredient(uId: string) {
             this.recipe = this.recipe.filter((item) => item.uId !== uId);
             this.saveState();
             this.refreshUI();
         }
 
-        updateVolume(uId, newVol) {
+        updateVolume(uId: string, newVol: string) {
             const item = this.recipe.find((i) => i.uId === uId);
             if (item) {
                 item.vol = parseFloat(newVol);
                 this.saveState();
-                this.updateDashboard(); 
+                this.updateDashboard();
             }
         }
 
         reset() {
-            const modal = document.getElementById("confirm-modal");
+            const modal = document.getElementById("confirm-modal") as HTMLDialogElement;
             if (modal) modal.showModal();
         }
-
-        
 
         refreshUI() {
             this.renderList();
@@ -644,13 +613,11 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         }
 
         renderList() {
-            const container = document.getElementById("recipe-container");
-            const emptyState = document.getElementById("empty-state");
+            const container = document.getElementById("recipe-container")!;
+            const emptyState = document.getElementById("empty-state")!;
 
-            
             if (this.recipe.length === 0) {
                 emptyState.style.display = "flex";
-                
                 Array.from(container.children).forEach((child) => {
                     if (child.id !== "empty-state") child.remove();
                 });
@@ -659,14 +626,11 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 emptyState.style.display = "none";
             }
 
-            
-            
-            
             Array.from(container.children).forEach((child) => {
                 if (child.id !== "empty-state") child.remove();
             });
 
-            const trashIcon = document.getElementById("tpl-icon-trash").innerHTML;
+            const trashIcon = document.getElementById("tpl-icon-trash")!.innerHTML;
 
             this.recipe.forEach((item) => {
                 const ing = IngredientRepository.getById(item.id);
@@ -696,50 +660,50 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 container.appendChild(row);
             });
 
-            
-            container.querySelectorAll(".btn-remove").forEach((b) => {
+            container.querySelectorAll<HTMLElement>(".btn-remove").forEach((b) => {
                 b.addEventListener("click", (e) =>
-                    this.removeIngredient(e.currentTarget.dataset.uid)
+                    this.removeIngredient((e.currentTarget as HTMLElement).dataset.uid!)
                 );
             });
-            container.querySelectorAll(".input-range, .input-number").forEach((i) => {
-                i.addEventListener("input", (e) =>
-                    this.updateVolume(e.target.dataset.uid, e.target.value)
-                );
-            });
+            container
+                .querySelectorAll<HTMLInputElement>(".input-range, .input-number")
+                .forEach((i) => {
+                    i.addEventListener("input", (e) =>
+                        this.updateVolume(
+                            (e.target as HTMLElement).dataset.uid!,
+                            (e.target as HTMLInputElement).value
+                        )
+                    );
+                });
         }
 
         updateDashboard() {
-            
-            
             const calcItems = this.recipe
                 .map((r) => ({
                     ingredient: IngredientRepository.getById(r.id),
                     volumeMl: r.vol,
                 }))
-                .filter((c) => c.ingredient);
+                .filter((c) => c.ingredient && c.ingredient !== undefined) as {
+                ingredient: any;
+                volumeMl: number;
+            }[];
 
             const stats = BalanceCalculator.calculate(calcItems);
 
-            
             const volEl = document.getElementById("stat-vol");
             if (volEl) volEl.innerText = Math.round(stats.totalVolumeMl).toString();
 
-            
             const abvBadge = document.getElementById("stat-abv-badge");
             if (abvBadge) abvBadge.innerText = stats.finalAbv.toFixed(1) + "% ABV";
 
             const sugarEl = document.getElementById("stat-sugar");
             if (sugarEl) sugarEl.innerText = Math.round(stats.totalSugarGrams).toString();
 
-            
             const colorEl = document.getElementById("sim-color-bg");
             if (colorEl) colorEl.style.backgroundColor = stats.finalColor;
 
-            
             this.renderRadar(stats);
 
-            
             const verdict = BalanceCalculator.getBalanceDescription(stats);
             const verdictEl = document.getElementById("balance-verdict");
             const needleEl = document.getElementById("balance-needle");
@@ -748,23 +712,17 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 if (this.recipe.length === 0) {
                     verdictEl.innerText = "--";
                     verdictEl.className = "text-base font-black text-slate-300";
-                    needleEl.style.left = "50%"; 
+                    needleEl.style.left = "50%";
                 } else {
                     verdictEl.innerText = verdict.label;
-                    verdictEl.className = `text-base font-black ${verdict.color}`; 
+                    verdictEl.className = `text-base font-black ${verdict.color}`;
 
-                    
-                    
-                    
-                    
-                    
                     let percent = (stats.balanceRatio / 15) * 100;
-                    percent = Math.max(2, Math.min(98, percent)); 
+                    percent = Math.max(2, Math.min(98, percent));
                     needleEl.style.left = `${percent}%`;
                 }
             }
 
-            
             const fixBox = document.getElementById("fix-box");
             const fixText = document.getElementById("fix-text");
             if (fixBox && fixText) {
@@ -781,22 +739,18 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             }
         }
 
-        renderRadar(stats) {
-            
-            const R = 80; 
-            const C = 100; 
-            const rad = (deg) => (deg * Math.PI) / 180;
+        renderRadar(stats: any) {
+            const R = 80;
+            const C = 100;
+            const rad = (deg: number) => (deg * Math.PI) / 180;
 
-            
             const vSweet = Math.min((stats.sugarConcentration / 18) * 100, 100);
             const vBitter = Math.min((stats.bitternessIndex / 8) * 100, 100);
             const vComplex = Math.min((stats.complexityIndex / 8) * 100, 100);
             const vAlc = Math.min((stats.finalAbv / 40) * 100, 100);
             const vAcid = Math.min((stats.acidConcentration / 1.5) * 100, 100);
 
-            
-            
-            const getPt = (val, deg) => ({
+            const getPt = (val: number, deg: number) => ({
                 x: C + (val / 100) * R * Math.cos(rad(deg)),
                 y: C + (val / 100) * R * Math.sin(rad(deg)),
             });
@@ -807,7 +761,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             const pAlc = getPt(vAlc, 126);
             const pAcid = getPt(vAcid, 198);
 
-            
             const shape = document.getElementById("radar-shape");
             if (shape) {
                 shape.setAttribute(
@@ -816,12 +769,11 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 );
             }
 
-            
-            const setDot = (id, pt) => {
+            const setDot = (id: string, pt: { x: number; y: number }) => {
                 const el = document.getElementById(id);
                 if (el) {
-                    el.setAttribute("cx", pt.x);
-                    el.setAttribute("cy", pt.y);
+                    el.setAttribute("cx", pt.x.toString());
+                    el.setAttribute("cy", pt.y.toString());
                 }
             };
             setDot("pt-sweet", pSweet);
@@ -832,32 +784,30 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         }
 
         updateControlsVisibility() {
-            const addBtn = document.getElementById("open-modal-btn");
+            const addBtn = document.getElementById("open-modal-btn")!;
             if (this.recipe.length > 0) addBtn.classList.remove("hidden");
             else addBtn.classList.add("hidden");
         }
 
-        
         bindEvents() {
-            
-            const ingModal = document.getElementById("ingredient-modal");
-            const presetsModal = document.getElementById("presets-modal");
+            const ingModal = document.getElementById("ingredient-modal") as HTMLDialogElement;
+            const presetsModal = document.getElementById("presets-modal") as HTMLDialogElement;
 
             const openIng = () => {
                 ingModal.showModal();
-                document.getElementById("modal-search").focus();
+                const search = document.getElementById("modal-search");
+                if (search) search.focus();
             };
-            document.getElementById("open-modal-btn").onclick = openIng;
-            document.getElementById("add-first-btn").onclick = openIng;
-            document.getElementById("close-modal-btn").onclick = () => ingModal.close();
+            document.getElementById("open-modal-btn")!.onclick = openIng;
+            document.getElementById("add-first-btn")!.onclick = openIng;
+            document.getElementById("close-modal-btn")!.onclick = () => ingModal.close();
 
-            document.getElementById("open-presets-btn").onclick = () => {
+            document.getElementById("open-presets-btn")!.onclick = () => {
                 this.renderSavedRecipes();
                 presetsModal.showModal();
             };
-            document.getElementById("close-presets-btn").onclick = () => presetsModal.close();
+            document.getElementById("close-presets-btn")!.onclick = () => presetsModal.close();
 
-            
             [ingModal, presetsModal].forEach((m) => {
                 m.addEventListener("click", (e) => {
                     const rect = m.getBoundingClientRect();
@@ -872,50 +822,44 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 });
             });
 
-            
-            document.getElementById("modal-search").addEventListener("input", (e) => {
-                const term = e.target.value.toLowerCase();
-                document.querySelectorAll(".ingredient-select-btn").forEach((btn) => {
+            document.getElementById("modal-search")!.addEventListener("input", (e) => {
+                const term = (e.target as HTMLInputElement).value.toLowerCase();
+                document.querySelectorAll<HTMLElement>(".ingredient-select-btn").forEach((btn) => {
                     const text = btn.innerText.toLowerCase();
                     btn.style.display = text.includes(term) ? "flex" : "none";
                 });
             });
 
-            
-            document.querySelectorAll(".ingredient-select-btn").forEach((btn) => {
+            document.querySelectorAll<HTMLElement>(".ingredient-select-btn").forEach((btn) => {
                 btn.addEventListener("click", (e) => {
-                    this.addIngredient(btn.dataset.id);
+                    this.addIngredient(btn.dataset.id!);
                     ingModal.close();
-                    
-                    document.getElementById("modal-search").value = "";
+
+                    const search = document.getElementById("modal-search") as HTMLInputElement;
+                    if (search) search.value = "";
                     document
-                        .querySelectorAll(".ingredient-select-btn")
+                        .querySelectorAll<HTMLElement>(".ingredient-select-btn")
                         .forEach((b) => (b.style.display = "flex"));
                 });
             });
 
-            
-            document.getElementById("reset-btn").onclick = () => this.reset();
+            document.getElementById("reset-btn")!.onclick = () => this.reset();
 
-            
-            document.getElementById("save-recipe-btn").onclick = () => this.saveToBook();
+            document.getElementById("save-recipe-btn")!.onclick = () => this.saveToBook();
 
-            
-            document.querySelectorAll(".preset-load-btn").forEach((btn) => {
-                btn.onclick = () => this.loadPreset(btn.dataset.presetId);
+            document.querySelectorAll<HTMLElement>(".preset-load-btn").forEach((btn) => {
+                btn.onclick = () => this.loadPreset(btn.dataset.presetId!);
             });
 
-            
-            const confirmModal = document.getElementById("confirm-modal");
-            document.getElementById("cancel-reset-btn").onclick = () => confirmModal.close();
-            document.getElementById("confirm-reset-btn").onclick = () => {
+            const confirmModal = document.getElementById("confirm-modal") as HTMLDialogElement;
+            document.getElementById("cancel-reset-btn")!.onclick = () => confirmModal.close();
+            document.getElementById("confirm-reset-btn")!.onclick = () => {
                 this.recipe = [];
                 this.saveState();
                 this.refreshUI();
                 confirmModal.close();
             };
 
-            
             confirmModal.addEventListener("click", (e) => {
                 const rect = confirmModal.getBoundingClientRect();
                 if (
@@ -929,7 +873,6 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             });
         }
 
-        
         saveToBook() {
             if (this.recipe.length === 0) return alert("Nada que guardar.");
             const name = prompt("Nombre de tu receta:");
@@ -947,9 +890,9 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
         }
 
         renderSavedRecipes() {
-            const container = document.getElementById("saved-grid");
-            const section = document.getElementById("saved-section");
-            const saved = JSON.parse(localStorage.getItem(this.SAVED_KEY) || "[]");
+            const container = document.getElementById("saved-grid")!;
+            const section = document.getElementById("saved-section")!;
+            const saved: SavedRecipe[] = JSON.parse(localStorage.getItem(this.SAVED_KEY) || "[]");
 
             if (saved.length === 0) {
                 section.classList.add("hidden");
@@ -963,27 +906,28 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                     <div class="font-bold text-slate-700 dark:text-slate-200">${r.name}</div>
                     <div class="text-xs text-slate-400">${r.recipe.length} ingredientes • ${r.date}</div>
                     <button class="absolute top-2 right-2 text-slate-300 hover:text-red-500 delete-saved p-2" data-id="${r.id}">
-                        ${document.getElementById("tpl-icon-trash").innerHTML}
+                        ${document.getElementById("tpl-icon-trash")!.innerHTML}
                     </button>
                 </div>
             `
                 )
                 .join("");
 
-            container.querySelectorAll(".saved-recipe-card").forEach((card) => {
+            container.querySelectorAll<HTMLElement>(".saved-recipe-card").forEach((card) => {
                 card.addEventListener("click", (e) => {
-                    
-                    if (e.target.closest(".delete-saved")) return;
-                    this.loadSaved(card.dataset.id);
+                    const target = e.target as HTMLElement;
+                    if (target.closest(".delete-saved")) return;
+                    this.loadSaved(card.dataset.id!);
                 });
             });
-            container.querySelectorAll(".delete-saved").forEach((btn) => {
+            container.querySelectorAll<HTMLElement>(".delete-saved").forEach((btn) => {
                 btn.addEventListener("click", (e) => {
                     e.stopPropagation();
                     if (confirm("Borrar?")) {
-                        const newSaved = JSON.parse(localStorage.getItem(this.SAVED_KEY)).filter(
-                            (s) => s.id != btn.dataset.id
+                        const savedList: SavedRecipe[] = JSON.parse(
+                            localStorage.getItem(this.SAVED_KEY)!
                         );
+                        const newSaved = savedList.filter((s) => s.id != parseInt(btn.dataset.id!));
                         localStorage.setItem(this.SAVED_KEY, JSON.stringify(newSaved));
                         this.renderSavedRecipes();
                     }
@@ -991,18 +935,18 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
             });
         }
 
-        loadSaved(id) {
-            const saved = JSON.parse(localStorage.getItem(this.SAVED_KEY) || "[]");
-            const r = saved.find((s) => s.id == id);
+        loadSaved(id: string) {
+            const saved: SavedRecipe[] = JSON.parse(localStorage.getItem(this.SAVED_KEY) || "[]");
+            const r = saved.find((s) => s.id == parseInt(id));
             if (r) {
                 this.recipe = r.recipe;
                 this.saveState();
                 this.refreshUI();
-                document.getElementById("presets-modal").close();
+                (document.getElementById("presets-modal") as HTMLDialogElement).close();
             }
         }
 
-        loadPreset(presetId) {
+        loadPreset(presetId: string) {
             const p = COCKTAIL_PRESETS.find((x) => x.id === presetId);
             if (p) {
                 this.recipe = p.ingredients.map((pi) => ({
@@ -1012,12 +956,11 @@ const bitters = allIngredients.filter((i) => i.type === "bitter");
                 }));
                 this.saveState();
                 this.refreshUI();
-                document.getElementById("presets-modal").close();
+                (document.getElementById("presets-modal") as HTMLDialogElement).close();
             }
         }
     }
 
-    
     document.addEventListener("DOMContentLoaded", () => {
         new CocktailApp();
     });
