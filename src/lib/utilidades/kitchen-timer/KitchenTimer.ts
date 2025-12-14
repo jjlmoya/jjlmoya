@@ -47,6 +47,7 @@ export class KitchenTimer extends EventTarget {
             input.addEventListener('change', () => this.validateInputs());
             input.addEventListener('input', () => {
                 if (this.isRunning) this.pause();
+                this.checkStartButton();
             });
         });
 
@@ -79,6 +80,7 @@ export class KitchenTimer extends EventTarget {
         this.setDisplay(s);
         this.remainingSeconds = s;
         this.totalSeconds = s;
+        this.checkStartButton();
         this.dispatchUpdate();
     }
 
@@ -219,6 +221,24 @@ export class KitchenTimer extends EventTarget {
                 this.statusText.classList.replace("text-green-500", "text-orange-500");
             }
             Object.values(this.inputs).forEach(i => i.disabled = false);
+        }
+        this.checkStartButton();
+    }
+
+    private checkStartButton() {
+        if (this.isRunning) {
+            this.btnToggle.disabled = false;
+            this.btnToggle.classList.remove('opacity-50', 'cursor-not-allowed');
+            return;
+        }
+
+        const currentSeconds = this.getInputSeconds();
+        if (currentSeconds > 0) {
+            this.btnToggle.disabled = false;
+            this.btnToggle.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            this.btnToggle.disabled = true;
+            this.btnToggle.classList.add('opacity-50', 'cursor-not-allowed');
         }
     }
 
