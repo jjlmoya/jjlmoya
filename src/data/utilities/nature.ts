@@ -9,7 +9,7 @@ export const natureSection: SectionData = {
         {
             title: "Simulador de Cielo Oscuro",
             description: "Visualiza la escala de Bortle y el impacto de la contaminación lumínica en las estrellas.",
-            href: "/utilidades/simulador-cielo-oscuro",
+            href: "/utilidades/simulador-cielo-oscuro/",
 
             color: "#4f46e5",
             iconBg: "mdi:weather-night",
