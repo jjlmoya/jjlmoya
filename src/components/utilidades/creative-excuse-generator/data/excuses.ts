@@ -1,0 +1,30 @@
+export interface ExcuseParts {
+    starts: string[];
+    middles: string[];
+    ends: string[];
+}
+
+export const EXCUSE_DATA: ExcuseParts = {
+    starts: [
+        "Mi gato", "Mi abuela", "El presidente", "Un alienígena", "Mi vecino del quinto",
+        "El wifi", "Mi horóscopo", "Un viajero del tiempo", "La lavadora", "Mi nevera",
+        "El espíritu de la navidad", "Mi sombra", "Un ninja", "La policía vegana", "Siri",
+        "Mi planta carnívora", "El repartidor de Amazon", "Mi clon malvado", "Un mago", "Godzilla"
+    ],
+    middles: [
+        "ha declarado la guerra a", "se ha comido", "ha secuestrado a", "ha prendido fuego a",
+        "está organizando una fiesta en", "ha vomitado sobre", "se niega a abandonar",
+        "ha hackeado", "ha robado", "se ha enamorado de", "está meditando sobre",
+        "ha lanzado un hechizo a", "está protestando contra", "ha fundado una secta en",
+        "está bailando samba en", "ha invocado a un demonio en", "ha bloqueado el acceso a",
+        "ha convertido en oro", "está intentando vender", "ha escrito un libro sobre"
+    ],
+    ends: [
+        "mis llaves de casa.", "mi voluntad de vivir.", "la puerta del garaje.", "mis pantalones favoritos.",
+        "el router del salón.", "mi único par de zapatos.", "las leyes de la física.",
+        "mi dignidad.", "el ascensor del edificio.", "mi cuenta de Netflix.",
+        "mi cepillo de dientes.", "las escrituras de mi casa.", "mi colección de tazos.",
+        "el freno de mano del coche.", "mis ganas de socializar.", "mi reserva de café.",
+        "la tapa del inodoro.", "el mando de la tele.", "mis calcetines de la suerte.", "la civilización occidental."
+    ]
+};
