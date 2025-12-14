@@ -76,14 +76,6 @@ export const cookingSection: SectionData = {
             title: "Selector de Sartenes",
             description: "Encuentra el material ideal y aprende su mantenimiento: Hierro, Acero, Cobre o Antiadherente.",
             color: "#475569"
-        },
-        {
-            href: "/utilidades/calculadora-enfriamiento-cerveza/",
-            iconBg: "mdi:snowflake-thermometer",
-            iconFg: "mdi:beer",
-            title: "Enfriador de Cerveza",
-            description: "Termodinámica líquida. Calcula cuándo tu bebida estará en el punto exacto de congelación.",
-            color: "#f59e0b"
         }
     ]
 };

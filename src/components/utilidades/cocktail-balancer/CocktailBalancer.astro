@@ -1,0 +1,992 @@
+---
+import { INGREDIENTS_DB, IngredientRepository } from "./data/IngredientRepository";
+import type { Ingredient } from "./domain/Ingredient";
+import { Icon } from "astro-icon/components";
+import { COCKTAIL_PRESETS } from "./data/Presets";
+
+// Pre-compute categorized ingredients for the modal
+const categories = {
+    Espirituosos: IngredientRepository.getByType("spirit"),
+    Cítricos: IngredientRepository.getByType("citrus"),
+    Endulzantes: IngredientRepository.getByType("syrup"),
+    Licores: IngredientRepository.getByType("liqueur"),
+    "Mixers & Otros": [
+        ...IngredientRepository.getByType("mixer"),
+        ...IngredientRepository.getByType("bitter"),
+    ],
+};
+---
+
+<div
+    class="cocktail-balancer-app relative min-h-[800px] text-slate-800 dark:text-slate-100 max-w-5xl mx-auto"
+>
+    <!-- HEADER CONTROLS (Presets & Reset) -->
+    <!-- HEADER CONTROLS (Presets & Actions) -->
+    <div
+        class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800"
+    >
+        <div class="flex items-center gap-4 w-full md:w-auto">
+            <button
+                id="open-presets-btn"
+                class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors"
+            >
+                <Icon name="mdi:book-open-variant" class="text-xl" />
+                Libro de Recetas
+            </button>
+            <button
+                id="save-recipe-btn"
+                class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+                <Icon name="mdi:content-save-outline" class="text-xl" />
+                Guardar
+            </button>
+        </div>
+
+        <button
+            id="reset-btn"
+            class="text-xs font-bold text-red-500 hover:text-red-600 uppercase tracking-wider px-3 py-1"
+        >
+            VACIAR MESA
+        </button>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
+        <!-- MAIN PANEL: Recipe Builder (Left) -->
+        <div class="lg:col-span-7 space-y-6">
+            <!-- Active Ingredients List -->
+            <div id="recipe-list" class="space-y-3 min-h-[300px]">
+                <!-- Empty State -->
+                <div
+                    id="empty-state"
+                    class="flex flex-col items-center justify-center h-[300px] border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl bg-slate-50/50 dark:bg-slate-900/50"
+                >
+                    <Icon
+                        name="mdi:shaker-outline"
+                        class="text-6xl text-slate-300 dark:text-slate-700 mb-4"
+                    />
+                    <p class="text-slate-400 dark:text-slate-600 font-medium">
+                        Empieza añadiendo ingredientes
+                    </p>
+                    <button
+                        id="add-first-btn"
+                        class="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-bold shadow-lg shadow-indigo-500/30 transition-all transform hover:scale-105"
+                    >
+                        + Añadir Ingrediente
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add Button (Sticky Bottom mobile?) -->
+            <button
+                id="open-modal-btn"
+                class="w-full py-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-bold hover:border-indigo-500 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all flex items-center justify-center gap-2 group hidden"
+            >
+                <Icon
+                    name="mdi:plus-circle-outline"
+                    class="text-2xl group-hover:scale-110 transition-transform"
+                />
+                Añadir Ingrediente
+            </button>
+        </div>
+
+        <!-- SIDE PANEL: Live Analysis (Right) -->
+        <div class="lg:col-span-5">
+            <div class="sticky top-24 space-y-6">
+                <!-- THE GAUGE (Hero) -->
+                <div
+                    class="bg-slate-900 text-white rounded-3xl p-8 shadow-2xl overflow-hidden relative border border-slate-800"
+                >
+                    <!-- Glow Effect -->
+                    <div
+                        id="gauge-glow"
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] transition-colors duration-1000"
+                    >
+                    </div>
+
+                    <div class="relative z-10 text-center">
+                        <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">
+                            Balance del Cóctel
+                        </h2>
+
+                        <!-- Main Status -->
+                        <div class="mb-8">
+                            <div
+                                id="status-text"
+                                class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200 transition-all duration-300"
+                            >
+                                --
+                            </div>
+                            <div id="status-sub" class="text-slate-400 text-sm mt-2 font-medium">
+                                Añade ingredientes para comenzar
+                            </div>
+                        </div>
+
+                        <!-- Visual Bar -->
+                        <div
+                            class="relative h-4 bg-slate-800 rounded-full mb-2 overflow-hidden shadow-inner"
+                        >
+                            <div class="absolute inset-0 flex">
+                                <div
+                                    class="w-1/3 h-full bg-gradient-to-r from-red-500/20 to-red-500/5"
+                                >
+                                </div>
+                                <!-- Acid Zone -->
+                                <div class="w-1/3 h-full bg-emerald-500/5"></div>
+                                <!-- Sweet Zone -->
+                                <div
+                                    class="w-1/3 h-full bg-gradient-to-l from-amber-500/20 to-amber-500/5"
+                                >
+                                </div>
+                            </div>
+                            <!-- Markers -->
+                            <div class="absolute top-0 bottom-0 left-[33%] w-[2px] bg-slate-700">
+                            </div>
+                            <div class="absolute top-0 bottom-0 right-[33%] w-[2px] bg-slate-700">
+                            </div>
+
+                            <!-- Needles -->
+                            <div
+                                id="needle"
+                                class="absolute top-0 bottom-0 w-2 bg-white shadow-[0_0_10px_white] rounded-full transition-all duration-500 left-1/2 -translate-x-1/2"
+                            >
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-bold text-slate-500 px-1">
+                            <span>ÁCIDO</span>
+                            <span>EQUILIBRIO</span>
+                            <span>DULCE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div
+                        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-center"
+                    >
+                        <div class="text-indigo-500 mb-1 flex justify-center">
+                            <Icon name="mdi:shaker-outline" />
+                        </div>
+                        <div class="text-2xl font-bold dark:text-white" id="stat-vol">0</div>
+                        <div class="text-[10px] text-slate-400 uppercase font-bold">
+                            ml (Pre-dil)
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-center"
+                    >
+                        <div class="text-rose-500 mb-1 flex justify-center">
+                            <Icon name="mdi:water-percent" />
+                        </div>
+                        <div class="text-2xl font-bold dark:text-white" id="stat-abv">0</div>
+                        <div class="text-[10px] text-slate-400 uppercase font-bold">% ABV</div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-center"
+                    >
+                        <div class="text-amber-500 mb-1 flex justify-center">
+                            <Icon name="mdi:spoon-sugar" />
+                        </div>
+                        <div class="text-2xl font-bold dark:text-white" id="stat-sugar">0</div>
+                        <div class="text-[10px] text-slate-400 uppercase font-bold">g Azúcar</div>
+                    </div>
+                </div>
+
+                <!-- Tips / Suggestions -->
+                <div
+                    id="suggestion-box"
+                    class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 p-4 rounded-2xl flex items-start gap-3 hidden"
+                >
+                    <Icon name="mdi:lightbulb-on" class="text-amber-500 text-xl shrink-0 mt-0.5" />
+                    <p
+                        class="text-sm text-amber-800 dark:text-amber-200 leading-snug"
+                        id="suggestion-text"
+                    >
+                        Tip goes here...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INGREDIENT MODAL (Hidden by default) -->
+    <dialog
+        id="ingredient-modal"
+        class="backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-2xl text-left rounded-3xl shadow-2xl m-auto open:animate-fade-in focus:outline-none"
+    >
+        <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5 max-h-[85vh] flex flex-col"
+        >
+            <!-- Header -->
+            <div
+                class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-xl"
+            >
+                <h3
+                    class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2"
+                >
+                    <Icon name="mdi:bottle-tonic-plus" class="text-indigo-500" />
+                    Seleccionar Ingrediente
+                </h3>
+                <button
+                    id="close-modal-btn"
+                    class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                >
+                    <Icon name="mdi:close" class="text-xl text-slate-500" />
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div
+                class="p-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 z-10 bg-white dark:bg-slate-900"
+            >
+                <div class="relative">
+                    <Icon
+                        name="mdi:magnify"
+                        class="absolute left-4 top-3.5 text-slate-400 text-lg"
+                    />
+                    <input
+                        type="text"
+                        id="modal-search"
+                        placeholder="Buscar ron, lima, sirope..."
+                        class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3 pl-12 pr-4 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-indigo-500 transition-all font-medium"
+                        autocomplete="off"
+                    />
+                </div>
+            </div>
+
+            <!-- List -->
+            <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                {
+                    Object.entries(categories).map(([category, items]) => (
+                        <div class="mb-6 ingredient-category-group">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-2">
+                                {category}
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {items.map((ing) => (
+                                    <button
+                                        class="ingredient-select-btn flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-800 transition-all group text-left"
+                                        data-id={ing.id}
+                                    >
+                                        <div class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-lg border border-slate-100 dark:border-slate-700 group-hover:scale-110 transition-transform">
+                                            {/* Simple icon mapping based on type */}
+                                            {ing.type === "spirit" && (
+                                                <Icon
+                                                    name="mdi:glass-cocktail"
+                                                    class="text-indigo-500"
+                                                />
+                                            )}
+                                            {ing.type === "citrus" && (
+                                                <Icon
+                                                    name="mdi:fruit-citrus"
+                                                    class="text-lime-500"
+                                                />
+                                            )}
+                                            {ing.type === "syrup" && (
+                                                <Icon
+                                                    name="mdi:spoon-sugar"
+                                                    class="text-amber-500"
+                                                />
+                                            )}
+                                            {ing.type === "liqueur" && (
+                                                <Icon
+                                                    name="mdi:bottle-wine"
+                                                    class="text-purple-500"
+                                                />
+                                            )}
+                                            {ing.type === "mixer" && (
+                                                <Icon
+                                                    name="mdi:bottle-soda"
+                                                    class="text-blue-400"
+                                                />
+                                            )}
+                                            {ing.type === "bitter" && (
+                                                <Icon
+                                                    name="mdi:water-percent"
+                                                    class="text-red-500"
+                                                />
+                                            )}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="font-bold text-slate-700 dark:text-slate-200 truncate">
+                                                {ing.name}
+                                            </div>
+                                            <div class="text-[10px] text-slate-400 flex gap-2">
+                                                {ing.abv > 0 && <span>{ing.abv}% ABV</span>}
+                                                {(ing.sugar > 0 || ing.acid > 0) && (
+                                                    <span>
+                                                        {ing.sugar > 0 ? `Dulce` : ""}
+                                                        {ing.sugar > 0 && ing.acid > 0 ? " • " : ""}
+                                                        {ing.acid > 0 ? `Ácido` : ""}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <Icon
+                                            name="mdi:plus"
+                                            class="text-slate-300 group-hover:text-indigo-500"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </dialog>
+
+    <!-- PRESETS & SAVED RECIPES MODAL -->
+    <dialog
+        id="presets-modal"
+        class="backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm bg-transparent p-0 w-full max-w-4xl text-left rounded-3xl shadow-2xl m-auto open:animate-fade-in focus:outline-none"
+    >
+        <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5 max-h-[85vh] flex flex-col"
+        >
+            <div
+                class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-xl"
+            >
+                <h3
+                    class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2"
+                >
+                    <Icon name="mdi:book-open-page-variant" class="text-indigo-500" />
+                    Libro de Recetas
+                </h3>
+                <button
+                    id="close-presets-btn"
+                    class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                >
+                    <Icon name="mdi:close" class="text-xl text-slate-500" />
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                <!-- Saved Recipes Section -->
+                <div id="saved-recipes-section" class="mb-8 hidden">
+                    <h4
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"
+                    >
+                        <Icon name="mdi:content-save" /> Mis Recetas Guardadas
+                    </h4>
+                    <div
+                        id="saved-recipes-grid"
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                    >
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Classic Presets Section -->
+                <div>
+                    <h4
+                        class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"
+                    >
+                        <Icon name="mdi:star-circle" /> Clásicos (Presets)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {
+                            COCKTAIL_PRESETS.map((preset) => (
+                                <button
+                                    class="preset-card text-left p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 hover:shadow-md transition-all group bg-white dark:bg-slate-800"
+                                    data-preset={preset.id}
+                                >
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div class="p-2 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20 transition-colors">
+                                            <Icon name={preset.icon} class="text-xl" />
+                                        </div>
+                                    </div>
+                                    <h5 class="font-bold text-slate-800 dark:text-slate-100 mb-1">
+                                        {preset.name}
+                                    </h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                                        {preset.description}
+                                    </p>
+                                </button>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+</div>
+
+<!-- HIDDEN ICON LIBRARY (Templates) -->
+<div style="display: none;">
+    <div id="icon-lib-spirit"><Icon name="mdi:glass-cocktail" class="w-7 h-7 fill-current" /></div>
+    <div id="icon-lib-citrus"><Icon name="mdi:fruit-citrus" class="w-7 h-7 fill-current" /></div>
+    <div id="icon-lib-syrup"><Icon name="mdi:spoon-sugar" class="w-7 h-7 fill-current" /></div>
+    <div id="icon-lib-liqueur"><Icon name="mdi:bottle-wine" class="w-7 h-7 fill-current" /></div>
+    <div id="icon-lib-mixer"><Icon name="mdi:bottle-soda" class="w-7 h-7 fill-current" /></div>
+    <div id="icon-lib-bitter"><Icon name="mdi:water-percent" class="w-7 h-7 fill-current" /></div>
+    <div id="icon-lib-default"><Icon name="mdi:flask-outline" class="w-7 h-7 fill-current" /></div>
+    <div id="icon-lib-trash">
+        <Icon name="mdi:trash-can-outline" class="w-6 h-6 fill-current" />
+    </div>
+    <div id="icon-lib-notebook">
+        <Icon name="mdi:notebook-edit-outline" class="w-6 h-6 fill-current" />
+    </div>
+    <div id="icon-lib-star"><Icon name="mdi:star-circle" class="w-6 h-6 fill-current" /></div>
+</div>
+
+<script>
+    import { IngredientRepository } from "./data/IngredientRepository";
+    import { BalanceCalculator } from "./services/BalanceCalculator";
+    import type { CocktailComponent } from "./domain/Ingredient";
+    import { COCKTAIL_PRESETS } from "./data/Presets";
+
+    interface RecipeItem {
+        ingredientId: string;
+        volumeMl: number;
+        tempId: string; // Unique ID for UI rendering keys
+    }
+
+    class CocktailApp {
+        recipe: RecipeItem[] = [];
+        STORAGE_KEY = "cocktail_balancer_saved_recipes";
+
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            this.bindEvents();
+            this.checkEmptyState();
+        }
+
+        bindEvents() {
+            // Modal Controls (Ingredients)
+            const ingModal = document.getElementById("ingredient-modal") as HTMLDialogElement;
+            const ingOpenBtns = [
+                document.getElementById("open-modal-btn"),
+                document.getElementById("add-first-btn"),
+            ];
+            const ingCloseBtn = document.getElementById("close-modal-btn");
+
+            ingOpenBtns.forEach((btn) =>
+                btn?.addEventListener("click", () => {
+                    ingModal?.showModal();
+                    (document.getElementById("modal-search") as HTMLInputElement)?.focus();
+                })
+            );
+            ingCloseBtn?.addEventListener("click", () => ingModal?.close());
+            ingModal?.addEventListener("click", (e) => this.handleBackdropClick(e, ingModal));
+
+            // Modal Controls (Presets / Book)
+            const bookModal = document.getElementById("presets-modal") as HTMLDialogElement;
+            const bookOpenBtn = document.getElementById("open-presets-btn");
+            const bookCloseBtn = document.getElementById("close-presets-btn");
+
+            bookOpenBtn?.addEventListener("click", () => {
+                this.renderSavedRecipes();
+                bookModal?.showModal();
+            });
+            bookCloseBtn?.addEventListener("click", () => bookModal?.close());
+            bookModal?.addEventListener("click", (e) => this.handleBackdropClick(e, bookModal));
+
+            // Ingredient Selection inside Modal
+            document.querySelectorAll(".ingredient-select-btn").forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    const id = (e.currentTarget as HTMLElement).dataset.id;
+                    if (id) {
+                        this.addIngredient(id);
+                        ingModal?.close();
+                    }
+                });
+            });
+
+            // Search in Modal
+            const searchInput = document.getElementById("modal-search");
+            searchInput?.addEventListener("input", (e) => {
+                const term = (e.target as HTMLInputElement).value.toLowerCase();
+                document.querySelectorAll(".ingredient-select-btn").forEach((btn) => {
+                    const el = btn as HTMLElement;
+                    const text = el.innerText.toLowerCase();
+                    el.style.display = text.includes(term) ? "flex" : "none";
+                });
+            });
+
+            // Preset Cards (Static & Dynamic)
+            // We use delegation for dynamic saved recipes
+            document.addEventListener("click", (e) => {
+                const target = (e.target as HTMLElement).closest(".preset-card");
+                if (target) {
+                    const presetId = (target as HTMLElement).dataset.preset;
+                    const savedId = (target as HTMLElement).dataset.savedId;
+
+                    if (presetId) {
+                        this.loadPreset(presetId);
+                        bookModal?.close();
+                    } else if (savedId) {
+                        this.loadSavedRecipe(savedId);
+                        bookModal?.close();
+                    }
+                }
+
+                const deleteBtn = (e.target as HTMLElement).closest(".delete-saved-btn");
+                if (deleteBtn) {
+                    e.stopPropagation();
+                    const id = (deleteBtn as HTMLElement).dataset.id;
+                    if (id && confirm("¿Borrar receta guardada?")) {
+                        this.deleteSavedRecipe(id);
+                        this.renderSavedRecipes();
+                    }
+                }
+            });
+
+            // Save Recipe
+            document.getElementById("save-recipe-btn")?.addEventListener("click", () => {
+                this.saveCurrentRecipe();
+            });
+
+            // Reset
+            document.getElementById("reset-btn")?.addEventListener("click", () => {
+                if (confirm("¿Vaciar toda la mesa de trabajo?")) {
+                    this.recipe = [];
+                    this.renderList();
+                    this.updateStats();
+                }
+            });
+        }
+
+        handleBackdropClick(e: MouseEvent, modal: HTMLDialogElement) {
+            const rect = modal.getBoundingClientRect();
+            const isInDialog =
+                rect.top <= e.clientY &&
+                e.clientY <= rect.top + rect.height &&
+                rect.left <= e.clientX &&
+                e.clientX <= rect.left + rect.width;
+            if (!isInDialog) modal.close();
+        }
+
+        saveCurrentRecipe() {
+            if (this.recipe.length === 0) {
+                alert("La coctelera está vacía. Añade ingredientes primero.");
+                return;
+            }
+
+            const name = prompt("Nombre para tu receta:", "Mi Cóctel");
+            if (!name) return;
+
+            const savedRecipes = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || "[]");
+            const newRecipe = {
+                id: Date.now().toString(),
+                name: name,
+                ingredients: this.recipe.map((r) => ({ id: r.ingredientId, vol: r.volumeMl })),
+                date: new Date().toLocaleDateString(),
+            };
+
+            savedRecipes.push(newRecipe);
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(savedRecipes));
+            alert("¡Receta guardada!");
+        }
+
+        getSavedRecipes() {
+            return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || "[]");
+        }
+
+        deleteSavedRecipe(id: string) {
+            const recipes = this.getSavedRecipes().filter((r: any) => r.id !== id);
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(recipes));
+        }
+
+        renderSavedRecipes() {
+            const container = document.getElementById("saved-recipes-grid");
+            const section = document.getElementById("saved-recipes-section");
+            if (!container || !section) return;
+
+            const recipes = this.getSavedRecipes();
+
+            if (recipes.length === 0) {
+                section.classList.add("hidden");
+                return;
+            }
+
+            section.classList.remove("hidden");
+            const notebookIcon = document.getElementById("icon-lib-notebook")
+                ? document.getElementById("icon-lib-notebook")!.innerHTML
+                : "";
+            const trashIcon = document.getElementById("icon-lib-trash")
+                ? document.getElementById("icon-lib-trash")!.innerHTML
+                : "";
+
+            container.innerHTML = recipes
+                .map(
+                    (r: any) => `
+                <div class="preset-card relative text-left p-4 rounded-xl border border-indigo-100 dark:border-indigo-900/30 bg-indigo-50/50 dark:bg-indigo-900/10 hover:border-indigo-500 hover:shadow-md transition-all group cursor-pointer" data-saved-id="${r.id}">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="w-10 h-10 flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/50 rounded-lg text-indigo-500">
+                             ${notebookIcon}
+                        </div>
+                        <button class="delete-saved-btn w-8 h-8 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-colors z-10" data-id="${r.id}" title="Borrar">
+                            ${trashIcon}
+                        </button>
+                    </div>
+                    <h5 class="font-bold text-slate-800 dark:text-slate-100 mb-1">${r.name}</h5>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">${r.ingredients.length} Ingredientes • ${r.date}</p>
+                </div>
+            `
+                )
+                .join("");
+        }
+
+        loadSavedRecipe(id: string) {
+            const recipe = this.getSavedRecipes().find((r: any) => r.id === id);
+            if (!recipe) return;
+
+            this.recipe = [];
+            recipe.ingredients.forEach((item: any) => {
+                this.addIngredient(item.id, item.vol);
+            });
+            this.renderList();
+            this.updateStats();
+        }
+
+        loadPreset(name: string | undefined) {
+            const preset = COCKTAIL_PRESETS.find((p) => p.id === name);
+            if (!preset) return;
+
+            this.recipe = [];
+
+            preset.ingredients.forEach((item) => {
+                this.addIngredient(item.id, item.vol);
+            });
+
+            this.renderList();
+            this.updateStats();
+        }
+
+        addIngredient(id: string, vol: number | null = null) {
+            const ing = IngredientRepository.getById(id);
+            if (!ing) return;
+
+            let defaultVol = vol;
+            if (defaultVol === null) {
+                if (ing.type === "spirit") defaultVol = 45;
+                else if (ing.type === "citrus") defaultVol = 22.5;
+                else if (ing.type === "syrup") defaultVol = 15;
+                else if (ing.type === "bitter") defaultVol = 5;
+                else defaultVol = 30;
+            }
+
+            this.recipe.push({
+                ingredientId: id,
+                volumeMl: defaultVol,
+                tempId: Math.random().toString(36).substr(2, 9),
+            });
+
+            this.renderList();
+            this.updateStats();
+        }
+
+        removeIngredient(tempId: string) {
+            this.recipe = this.recipe.filter((r) => r.tempId !== tempId);
+            this.renderList();
+            this.updateStats();
+        }
+
+        updateVolume(tempId: string, newVol: number) {
+            const item = this.recipe.find((r) => r.tempId === tempId);
+            if (item) {
+                item.volumeMl = newVol;
+                this.updateStats();
+
+                // Update specific input without re-rendering list
+                const inputNum = document.getElementById(`vol-num-${tempId}`) as HTMLInputElement;
+                if (inputNum && inputNum.value != newVol.toString())
+                    inputNum.value = newVol.toString();
+            }
+        }
+
+        renderList() {
+            const listContainer = document.getElementById("recipe-list");
+            const openModalBtn = document.getElementById("open-modal-btn");
+
+            this.checkEmptyState();
+
+            if (!listContainer) return;
+
+            // Clear current list (except empty state element which is toggled)
+            Array.from(listContainer.children).forEach((child) => {
+                if (child.id !== "empty-state") listContainer.removeChild(child);
+            });
+
+            if (this.recipe.length > 0) {
+                openModalBtn?.classList.remove("hidden");
+
+                this.recipe.forEach((item) => {
+                    const ing = IngredientRepository.getById(item.ingredientId);
+                    if (!ing) return;
+
+                    const colorBase = this.getColor(ing.type);
+
+                    const card = document.createElement("div");
+                    card.className =
+                        "bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 animate-slide-in-from-bottom-2";
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-${colorBase}-100 dark:bg-${colorBase}-900/30 text-${colorBase}-500 flex items-center justify-center text-2xl">
+                                ${this.getIconHtml(ing.type)}
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100">${ing.name}</h4>
+                                <p class="text-xs text-slate-500 uppercase tracking-wide font-bold">${this.getTranslatedType(ing.type)} • ${ing.abv}% ABV</p>
+                            </div>
+                            <button class="remove-btn text-slate-400 hover:text-red-500 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" data-tempid="${item.tempId}">
+                                ${document.getElementById("icon-lib-trash") ? document.getElementById("icon-lib-trash").innerHTML : ""}
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <input 
+                                type="range" 
+                                min="0" 
+                                max="90" 
+                                step="2.5" 
+                                value="${item.volumeMl}" 
+                                class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600 hover:accent-indigo-500"
+                                data-tempid="${item.tempId}"
+                            />
+                            <div class="relative w-24">
+                                <input 
+                                    type="number" 
+                                    value="${item.volumeMl}" 
+                                    id="vol-num-${item.tempId}"
+                                    class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg py-1 pl-2 pr-8 text-right font-mono font-bold text-slate-700 dark:text-slate-200 focus:ring-2 ring-indigo-500 outline-none" 
+                                    min="0"
+                                    data-tempid="${item.tempId}"
+                                />
+                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-bold text-slate-400 pointer-events-none">ml</span>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+
+                // Attach Events to new elements
+                listContainer.querySelectorAll('input[type="range"]').forEach((input) => {
+                    input.addEventListener("input", (e) => {
+                        const target = e.target as HTMLInputElement;
+                        this.updateVolume(target.dataset.tempid || "", parseFloat(target.value));
+                    });
+                });
+                listContainer.querySelectorAll('input[type="number"]').forEach((input) => {
+                    input.addEventListener("input", (e) => {
+                        const target = e.target as HTMLInputElement;
+                        this.updateVolume(target.dataset.tempid || "", parseFloat(target.value));
+                    });
+                });
+                listContainer.querySelectorAll(".remove-btn").forEach((btn) => {
+                    btn.addEventListener("click", (e) => {
+                        const target = e.currentTarget as HTMLElement;
+                        this.removeIngredient(target.dataset.tempid || "");
+                    });
+                });
+            } else {
+                openModalBtn?.classList.add("hidden");
+            }
+        }
+
+        checkEmptyState() {
+            const emptyState = document.getElementById("empty-state");
+            if (this.recipe.length === 0) {
+                emptyState?.classList.remove("hidden");
+                emptyState?.classList.add("flex");
+            } else {
+                emptyState?.classList.add("hidden");
+                emptyState?.classList.remove("flex");
+            }
+        }
+
+        updateStats() {
+            const components: CocktailComponent[] = this.recipe
+                .map((r) => ({
+                    ingredient: IngredientRepository.getById(r.ingredientId)!,
+                    volumeMl: r.volumeMl,
+                }))
+                .filter((c) => c.ingredient !== undefined);
+
+            const stats = BalanceCalculator.calculate(components);
+            const verdict = BalanceCalculator.getBalanceDescription(stats);
+
+            // Update DOM
+            document.getElementById("stat-vol")!.innerText = Math.round(
+                stats.totalVolumeMl
+            ).toString();
+            document.getElementById("stat-abv")!.innerText = stats.finalAbv.toFixed(1);
+            document.getElementById("stat-sugar")!.innerText = Math.round(
+                stats.totalSugarGrams
+            ).toString();
+
+            // Status Text
+            const statusText = document.getElementById("status-text")!;
+            if (this.recipe.length === 0) {
+                statusText.innerText = "--";
+                document.getElementById("status-sub")!.innerText =
+                    "Añade ingredientes para comenzar";
+                this.setNeedle(50); // Center
+                return;
+            }
+
+            statusText.innerText = verdict.label;
+            document.getElementById("status-sub")!.innerText = verdict.advice;
+
+            // Needle Math
+            // Range usually 0 (Acid) to ~15 (Sweet). Balanced is ~6-9.
+            // Let's normalize: 0-20 scale mapped to 0-100%
+            let percent = (stats.balanceRatio / 15) * 100;
+            if (percent > 100) percent = 100;
+            if (stats.balanceRatio > 50) percent = 100; // Cap for syrups
+
+            // Adjust visual center (Balanced range) to be in the middle of the bar
+            // Balanced in Calculator is ratio ~7.5.
+            // If 7.5 is center (50%), then scale should be 0-15.
+
+            this.setNeedle(percent);
+
+            // Suggestion Box
+            const suggestionBox = document.getElementById("suggestion-box");
+            if (verdict.label.includes("Equilibrado") || verdict.label.includes("Perfecto")) {
+                suggestionBox?.classList.add("hidden");
+            } else {
+                suggestionBox?.classList.remove("hidden");
+                // Simple heuristic suggestions
+                let tip = "";
+                if (stats.balanceRatio < 5)
+                    tip =
+                        "Tu bebida es muy ácida. Considera añadir 5-10ml de jarabe simple o licor dulce.";
+                else if (stats.balanceRatio > 10)
+                    tip =
+                        "Demasiado dulce. Aumenta el cítrico o añade más alcohol base para secarlo.";
+                else tip = verdict.advice;
+
+                document.getElementById("suggestion-text")!.innerText = tip;
+            }
+        }
+
+        setNeedle(percent: number) {
+            const needle = document.getElementById("needle");
+            if (needle) needle.style.left = `${percent}%`;
+
+            // Dynamic Glow Color based on position
+            const glow = document.getElementById("gauge-glow");
+            if (glow) {
+                if (percent < 30)
+                    glow.className =
+                        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-500/20 rounded-full blur-[80px] transition-colors duration-1000";
+                else if (percent > 70)
+                    glow.className =
+                        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-500/20 rounded-full blur-[80px] transition-colors duration-1000";
+                else
+                    glow.className =
+                        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px] transition-colors duration-1000";
+            }
+        }
+
+        getColor(type: string) {
+            const map: Record<string, string> = {
+                spirit: "indigo",
+                citrus: "lime",
+                syrup: "amber",
+                liqueur: "purple",
+                mixer: "blue",
+                bitter: "red",
+            };
+            return map[type] || "gray";
+        }
+
+        getTranslatedType(type: string) {
+            const map: Record<string, string> = {
+                spirit: "Espirituoso",
+                citrus: "Cítrico",
+                syrup: "Endulzante",
+                liqueur: "Licor",
+                mixer: "Mixer",
+                bitter: "Amargo",
+            };
+            return map[type] || type;
+        }
+
+        getIconHtml(type: string) {
+            const el = document.getElementById("icon-lib-" + type);
+            return el ? el.innerHTML : document.getElementById("icon-lib-default")!.innerHTML;
+        }
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+        new CocktailApp();
+    });
+</script>
+
+<style>
+    /* Utility Helpers */
+    /* Hide number input spinners */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .mask-gradient {
+        mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    }
+
+    dialog::backdrop {
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
+    }
+
+    dialog[open] {
+        animation: zoomIn 0.2s ease-out;
+    }
+
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out;
+    }
+    .animate-slide-in-from-bottom-2 {
+        animation: slideUp 0.3s ease-out;
+    }
+</style>
