@@ -76,6 +76,7 @@ You must register the new tool in the appropriate category file (e.g., `files.ts
 ## 3. SEO & Content
 *   **SEO Component**: Do not use Lorem Ipsum. Write valuable content. Explain "How to use", "Why this matters", or "The Math behind it".
 *   **Meta Tags**: Ensure the title is click-worthy (e.g., "Calculadora de IVA Inverso" is better than just "IVA").
+*   **Links & Bibliography**: External links to official sources, tools, or further reading are highly encouraged. "Compartir es vivir".
 
 ## 4. Assets & Images
 *   **Style**: **"Artist Ink and Watercolor"**.
@@ -85,7 +86,7 @@ You must register the new tool in the appropriate category file (e.g., `files.ts
     *   *No 3D realistic renders. No photographs.*
     *   **Text**: If the image contains text, it MUST be in **Spanish**.
 *   **Format**: `.webp` (due to local conversion limitations, prefer webp for others).
-*   **Location**: `public/images/utilidades/`.
+*   **Location**: `public/images/utilities/`.
 
 ## 5. Development Checklist
 - [ ] Logic works completely offline (client-side JS).
@@ -95,3 +96,4 @@ You must register the new tool in the appropriate category file (e.g., `files.ts
 - [ ] Added to `src/data/utilities`.
 - [ ] OG Image added and linked.
 - [ ] Mobile responsive (test on small viewport).
+ 

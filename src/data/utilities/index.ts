@@ -12,7 +12,10 @@ import { toolsSection } from "./tools";
 import { streamingSection } from "./streaming";
 import { hardwareSection } from "./hardware";
 
+import { natureSection } from "./nature";
+
 export const sections: SectionData[] = [
+    natureSection,
     streamingSection,
     cookingSection,
     homeSection,
