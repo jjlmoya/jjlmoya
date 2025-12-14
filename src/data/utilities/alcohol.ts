@@ -20,6 +20,14 @@ export const alcoholSection: SectionData = {
             title: "Enfriador de Bebidas",
             description: "Termodinámica líquida. Calcula cuándo tu bebida estará en el punto exacto de congelación.",
             color: "#f59e0b"
+        },
+        {
+            href: "/utilidades/calculadora-barriles-fiesta/",
+            iconBg: "mdi:keg",
+            iconFg: "mdi:snowflake",
+            title: "Calculadora de Fiesta",
+            description: "Estima cerveza y hielo necesarios basándose en invitados y temperatura ambiente.",
+            color: "#F59E0B"
         }
     ]
 };

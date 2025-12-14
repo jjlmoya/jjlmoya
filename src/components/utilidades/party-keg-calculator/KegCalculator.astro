@@ -1,0 +1,583 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-6xl mx-auto p-1 font-sans select-none text-slate-800">
+    <!-- Main Container: Light Theme -->
+    <div
+        class="relative rounded-3xl overflow-hidden bg-white/90 backdrop-blur-xl border border-white/40 shadow-xl ring-1 ring-black/5"
+    >
+        <!-- Background Accents -->
+        <div
+            class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-amber-200/30 rounded-full blur-3xl pointer-events-none"
+        >
+        </div>
+        <div
+            class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl pointer-events-none"
+        >
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 relative z-10">
+            <!-- Left: Controls Panel (5 columns) -->
+            <div
+                class="lg:col-span-12 xl:col-span-5 p-8 lg:p-10 space-y-10 lg:border-r border-slate-200 bg-white/40"
+            >
+                <!-- Header -->
+                <div class="flex items-center gap-3 mb-2">
+                    <div
+                        class="size-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/20 text-white"
+                    >
+                        <Icon name="mdi:calculator" class="size-6" />
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl leading-none text-slate-800">
+                            Calculadora de Stock
+                        </h3>
+                        <p class="text-slate-500 text-xs tracking-wider uppercase mt-1">
+                            Cerveza y Hielo para Eventos
+                        </p>
+                    </div>
+                </div>
+
+                <!-- INPUT: GUESTS -->
+                <div class="space-y-4 group">
+                    <div class="flex justify-between items-end">
+                        <label class="text-slate-600 text-sm font-bold tracking-wide uppercase"
+                            >Invitados</label
+                        >
+                        <span
+                            class="text-3xl font-light text-slate-900 tracking-tight"
+                            id="guest-count-display">50</span
+                        >
+                    </div>
+
+                    <div
+                        class="relative h-12 bg-slate-100 rounded-xl border border-slate-200 shadow-inner flex items-center px-2 cursor-pointer transition-colors group-hover:border-slate-300"
+                    >
+                        <input
+                            type="range"
+                            id="guest-slider"
+                            min="5"
+                            max="200"
+                            step="5"
+                            value="50"
+                            class="absolute inset-0 w-full h-full opacity-0 z-30 cursor-pointer"
+                        />
+                        <div
+                            class="absolute left-2 top-2 bottom-2 rounded-lg bg-gradient-to-r from-amber-400 to-orange-500 w-[24%] transition-all duration-100 ease-out z-10 shadow-sm"
+                            id="guest-fill"
+                        >
+                        </div>
+                        <div
+                            class="absolute h-8 w-1 bg-white rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.15)] ring-1 ring-black/5 z-20 transition-all duration-100 pointer-events-none transform translate-x-[-2px]"
+                            id="guest-thumb"
+                            style="left: 24%"
+                        >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INPUT: DURATION -->
+                <div class="space-y-4 group">
+                    <div class="flex justify-between items-end">
+                        <label class="text-slate-600 text-sm font-bold tracking-wide uppercase"
+                            >Duración</label
+                        >
+                        <div class="flex items-baseline gap-1">
+                            <span
+                                class="text-3xl font-light text-slate-900 tracking-tight"
+                                id="duration-display">4</span
+                            >
+                            <span class="text-sm text-slate-500 font-bold">HORAS</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="relative h-12 bg-slate-100 rounded-xl border border-slate-200 shadow-inner flex items-center px-2 cursor-pointer transition-colors group-hover:border-slate-300"
+                    >
+                        <input
+                            type="range"
+                            id="duration-slider"
+                            min="1"
+                            max="12"
+                            step="1"
+                            value="4"
+                            class="absolute inset-0 w-full h-full opacity-0 z-30 cursor-pointer"
+                        />
+                        <div
+                            class="absolute left-2 top-2 bottom-2 rounded-lg bg-gradient-to-r from-blue-400 to-indigo-500 w-[33%] transition-all duration-100 ease-out z-10 shadow-sm"
+                            id="duration-fill"
+                        >
+                        </div>
+                        <div
+                            class="absolute h-8 w-1 bg-white rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.15)] ring-1 ring-black/5 z-20 transition-all duration-100 pointer-events-none transform translate-x-[-2px]"
+                            id="duration-thumb"
+                            style="left: 33%"
+                        >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INPUT: VIBE SELECTOR -->
+                <div class="space-y-4">
+                    <label class="text-slate-600 text-sm font-bold tracking-wide uppercase"
+                        >Intensidad</label
+                    >
+                    <div class="grid grid-cols-3 gap-2">
+                        <button
+                            class="vibe-btn active relative p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all group overflow-hidden shadow-sm"
+                            data-mult="1"
+                        >
+                            <div
+                                class="absolute inset-0 bg-emerald-500/10 opacity-0 transition-opacity active-bg"
+                            >
+                            </div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <Icon
+                                    name="mdi:tea-outline"
+                                    class="size-6 text-slate-400 group-hover:text-emerald-500 transition-colors icon-col"
+                                />
+                                <span
+                                    class="text-xs font-bold text-slate-500 group-hover:text-slate-700 transition-colors text-col"
+                                    >Chill</span
+                                >
+                            </div>
+                            <div
+                                class="absolute bottom-0 left-0 w-full h-1 bg-emerald-500 scale-x-0 transition-transform active-bar"
+                            >
+                            </div>
+                        </button>
+
+                        <button
+                            class="vibe-btn relative p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all group overflow-hidden shadow-sm"
+                            data-mult="1.5"
+                        >
+                            <div
+                                class="absolute inset-0 bg-amber-500/10 opacity-0 transition-opacity active-bg"
+                            >
+                            </div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <Icon
+                                    name="mdi:glass-mug-variant"
+                                    class="size-6 text-slate-400 group-hover:text-amber-500 transition-colors icon-col"
+                                />
+                                <span
+                                    class="text-xs font-bold text-slate-500 group-hover:text-slate-700 transition-colors text-col"
+                                    >Standard</span
+                                >
+                            </div>
+                            <div
+                                class="absolute bottom-0 left-0 w-full h-1 bg-amber-500 scale-x-0 transition-transform active-bar"
+                            >
+                            </div>
+                        </button>
+
+                        <button
+                            class="vibe-btn relative p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all group overflow-hidden shadow-sm"
+                            data-mult="2.5"
+                        >
+                            <div
+                                class="absolute inset-0 bg-rose-500/10 opacity-0 transition-opacity active-bg"
+                            >
+                            </div>
+                            <div class="relative z-10 flex flex-col items-center gap-2">
+                                <Icon
+                                    name="mdi:fire"
+                                    class="size-6 text-slate-400 group-hover:text-rose-500 transition-colors icon-col"
+                                />
+                                <span
+                                    class="text-xs font-bold text-slate-500 group-hover:text-slate-700 transition-colors text-col"
+                                    >Party</span
+                                >
+                            </div>
+                            <div
+                                class="absolute bottom-0 left-0 w-full h-1 bg-rose-500 scale-x-0 transition-transform active-bar"
+                            >
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- INPUT: TEMP -->
+                <div class="space-y-4 pt-4 border-t border-slate-200">
+                    <div class="flex justify-between items-end">
+                        <label
+                            class="text-slate-600 text-sm font-bold tracking-wide uppercase flex items-center gap-2"
+                        >
+                            <Icon name="mdi:sun-thermometer-outline" class="text-slate-400" />
+                            Temperatura
+                        </label>
+                        <div class="flex items-baseline gap-1">
+                            <span
+                                class="text-3xl font-light text-slate-900 tracking-tight"
+                                id="temp-display">25</span
+                            >
+                            <span class="text-sm text-slate-500 font-bold">°C</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="relative h-12 bg-slate-100 rounded-xl border border-slate-200 shadow-inner flex items-center px-2 cursor-pointer transition-colors group-hover:border-slate-300"
+                    >
+                        <input
+                            type="range"
+                            id="temp-slider"
+                            min="15"
+                            max="40"
+                            step="1"
+                            value="25"
+                            class="absolute inset-0 w-full h-full opacity-0 z-30 cursor-pointer"
+                        />
+                        <div
+                            class="absolute left-2 top-2 bottom-2 rounded-lg bg-gradient-to-r from-cyan-400 via-teal-400 to-rose-400 w-[40%] transition-all duration-100 ease-out z-10 shadow-sm"
+                            id="temp-fill"
+                        >
+                        </div>
+                        <div
+                            class="absolute h-8 w-1 bg-white rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.15)] ring-1 ring-black/5 z-20 transition-all duration-100 pointer-events-none transform translate-x-[-2px]"
+                            id="temp-thumb"
+                            style="left: 40%"
+                        >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Dashboard & Visuals (7 columns) -->
+            <div class="lg:col-span-12 xl:col-span-7 bg-slate-50 relative flex flex-col">
+                <!-- Stats Row -->
+                <div class="grid grid-cols-2 border-b border-slate-200 bg-white">
+                    <!-- Beer Stat -->
+                    <div class="p-8 border-r border-slate-200 relative group overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"
+                        >
+                            <Icon name="mdi:beer" class="size-24 text-slate-900 rotate-12" />
+                        </div>
+                        <span
+                            class="text-slate-400 text-xs font-bold uppercase tracking-widest block mb-2"
+                            >Volumen Estimado</span
+                        >
+                        <div class="flex items-baseline gap-2">
+                            <span
+                                class="text-5xl font-light text-slate-900 tracking-tighter"
+                                id="total-liters">0</span
+                            >
+                            <span class="text-lg text-slate-500 font-bold">L</span>
+                        </div>
+                        <p class="mt-4 text-sm text-amber-600 font-medium" id="keg-text">
+                            -- Barriles
+                        </p>
+                    </div>
+
+                    <!-- Ice Stat -->
+                    <div class="p-8 relative group overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"
+                        >
+                            <Icon name="mdi:snowflake" class="size-24 text-slate-900 -rotate-12" />
+                        </div>
+                        <span
+                            class="text-slate-400 text-xs font-bold uppercase tracking-widest block mb-2"
+                            >Hielo Requerido</span
+                        >
+                        <div class="flex items-baseline gap-2">
+                            <span
+                                class="text-5xl font-light text-slate-900 tracking-tighter"
+                                id="total-ice">0</span
+                            >
+                            <span class="text-lg text-slate-500 font-bold">kg</span>
+                        </div>
+                        <p class="mt-4 text-sm text-cyan-600 font-medium" id="bags-text">
+                            -- Bolsas
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Visual Stage -->
+                <div
+                    class="flex-grow min-h-[400px] p-8 relative overflow-hidden flex flex-col justify-end bg-gradient-to-t from-slate-200/50 to-slate-50"
+                >
+                    <!-- Label -->
+                    <div
+                        class="absolute top-6 left-8 right-8 flex justify-between text-xs text-slate-400 font-bold uppercase tracking-widest"
+                    >
+                        <span>Visualización de Stock</span>
+                        <span id="ice-hint" class="text-slate-500">Calculando...</span>
+                    </div>
+
+                    <!-- Stage -->
+                    <div class="flex justify-center items-end gap-12" id="visual-stage">
+                        <!-- Javascript will inject here -->
+                    </div>
+
+                    <!-- Floor -->
+                    <div class="absolute bottom-0 left-0 w-full h-px bg-slate-300"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .vibe-btn.active .active-bg {
+        opacity: 1;
+    }
+    .vibe-btn.active .active-bar {
+        transform: scaleX(1);
+    }
+    .vibe-btn.active .icon-col {
+        color: slategray;
+    }
+    .vibe-btn.active .text-col {
+        color: #1e293b;
+    }
+
+    .vibe-btn[data-mult="1"].active .icon-col {
+        color: #10b981;
+    }
+    .vibe-btn[data-mult="1.5"].active .icon-col {
+        color: #f59e0b;
+    }
+    .vibe-btn[data-mult="2.5"].active .icon-col {
+        color: #f43f5e;
+    }
+
+    /* Custom Animations for Visuals */
+    @keyframes dropIn {
+        0% {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    .animate-drop {
+        animation: dropIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+</style>
+
+<script>
+    import { Icon } from "astro-icon/components";
+
+    // Elements
+    const els = {
+        guests: document.getElementById("guest-slider") as HTMLInputElement,
+        duration: document.getElementById("duration-slider") as HTMLInputElement,
+        temp: document.getElementById("temp-slider") as HTMLInputElement,
+
+        displayGuests: document.getElementById("guest-count-display"),
+        displayDuration: document.getElementById("duration-display"),
+        displayTemp: document.getElementById("temp-display"),
+
+        fillGuests: document.getElementById("guest-fill"),
+        fillDuration: document.getElementById("duration-fill"),
+        fillTemp: document.getElementById("temp-fill"),
+
+        thumbGuests: document.getElementById("guest-thumb"),
+        thumbDuration: document.getElementById("duration-thumb"),
+        thumbTemp: document.getElementById("temp-thumb"),
+
+        vibeBtns: document.querySelectorAll(".vibe-btn"),
+
+        outLiters: document.getElementById("total-liters"),
+        outKegs: document.getElementById("keg-text"),
+        outIce: document.getElementById("total-ice"),
+        outBags: document.getElementById("bags-text"),
+        iceHint: document.getElementById("ice-hint"),
+
+        stage: document.getElementById("visual-stage"),
+    };
+
+    // State
+    const state = {
+        guests: 50,
+        duration: 4,
+        temp: 25,
+        drinkRate: 1, // Multiplier
+    };
+
+    // Utils
+    function updateSlider(
+        input: HTMLInputElement,
+        fill: HTMLElement,
+        thumb: HTMLElement,
+        min: number,
+        max: number
+    ) {
+        if (!input || !fill || !thumb) return 0;
+        const val = parseFloat(input.value);
+        const percent = ((val - min) / (max - min)) * 100;
+
+        fill.style.width = `${percent}%`;
+        thumb.style.left = `${percent}%`;
+        return val;
+    }
+
+    function calculate() {
+        // Logic
+        let totalDrinks = state.guests * (state.drinkRate * state.duration);
+        let totalLiters = totalDrinks * 0.33;
+        totalLiters = Math.ceil(totalLiters);
+        const kegs = Math.ceil(totalLiters / 50);
+
+        const deltaT = state.temp - 4;
+        const massBeer = totalLiters;
+        const energyToRemove = massBeer * 4.18 * deltaT;
+        let iceForCooling = (energyToRemove / 334) * 1.5;
+
+        const ambientDelta = state.temp - 0;
+        const meltRate = (ambientDelta / 10) * 0.5;
+        const iceForMaintenance = meltRate * state.duration * (massBeer / 20);
+
+        let totalIce = Math.ceil(iceForCooling + iceForMaintenance);
+        const bags = Math.ceil(totalIce / 2);
+
+        // Update DOM
+        if (els.outLiters) els.outLiters.innerText = `${totalLiters}`;
+        if (els.outKegs) els.outKegs.innerText = `${kegs} Barriles (50L)`;
+        if (els.outIce) els.outIce.innerText = `${totalIce}`;
+        if (els.outBags) els.outBags.innerText = `${bags} Bolsas (2kg)`;
+
+        let iceMsg = "Condiciones Óptimas";
+        if (state.temp > 30) iceMsg = "⚠️ Alto Deshielo Detectado";
+        else if (state.temp < 15) iceMsg = "❄️ Ambiente Frío / Eficiencia Alta";
+        if (els.iceHint) els.iceHint.innerText = iceMsg;
+
+        renderVisuals(kegs, bags);
+    }
+
+    function renderVisuals(kegs: number, bags: number) {
+        if (!els.stage) return;
+        els.stage.innerHTML = "";
+
+        // Container for centering - Removed gap, using justify-center with specific widths
+        const container = document.createElement("div");
+        container.className =
+            "flex items-end justify-center w-full h-full gap-8 lg:gap-16 px-4 pb-2";
+
+        // KEG RENDER
+        const kegSvg = `
+          <svg width="70" height="88" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl">
+            <rect x="2" y="5" width="36" height="40" rx="2" fill="#B45309" stroke="#78350F" stroke-width="2"/>
+            <line x1="14" y1="5" x2="14" y2="45" stroke="#78350F" stroke-opacity="0.3" stroke-width="1"/>
+            <line x1="26" y1="5" x2="26" y2="45" stroke="#78350F" stroke-opacity="0.3" stroke-width="1"/>
+            <rect x="0" y="10" width="40" height="4" fill="#64748B" stroke="#334155"/>
+            <rect x="0" y="36" width="40" height="4" fill="#64748B" stroke="#334155"/>
+             <ellipse cx="20" cy="5" rx="18" ry="3" fill="#D97706" stroke="#78350F" stroke-width="2"/>
+          </svg>
+        `;
+
+        const kegStack = document.createElement("div");
+        // Tighter stack (-space-y-8 instead of -space-y-6) to reduce height
+        kegStack.className =
+            "flex flex-col-reverse items-center justify-start h-full -space-y-8 min-w-[80px]";
+
+        const maxDisplayKegs = 6; // Reduced slightly to keep stack shorter visually
+        const shownKegs = Math.min(kegs, maxDisplayKegs);
+
+        for (let i = 0; i < shownKegs; i++) {
+            const k = document.createElement("div");
+            k.innerHTML = kegSvg;
+            k.className =
+                "animate-drop relative hover:scale-105 transition-transform duration-300 origin-bottom";
+            k.style.zIndex = `${i}`;
+            k.style.animationDelay = `${i * 0.1}s`;
+            kegStack.appendChild(k);
+        }
+        if (kegs > maxDisplayKegs) {
+            const plus = document.createElement("div");
+            plus.innerHTML = `+${kegs - maxDisplayKegs}`;
+            plus.className =
+                "text-center font-black text-2xl text-amber-700 mb-4 bg-amber-100/80 backdrop-blur rounded-full w-14 h-14 flex items-center justify-center border-2 border-amber-200 shadow-xl z-50 animate-bounce";
+            kegStack.appendChild(plus); // Appended last because flex-col-reverse puts it at top
+        }
+
+        // ICE RENDER
+        const iceBagSvg = `
+        <svg width="45" height="51" viewBox="0 0 30 34" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-lg">
+            <path d="M5 8C5 6.89543 5.89543 6 7 6H23C24.1046 6 25 6.89543 25 8V28C25 30.2091 23.2091 32 21 32H9C6.79086 32 5 30.2091 5 28V8Z" fill="#CFFAFE" stroke="#06B6D4" stroke-width="1.5" stroke-opacity="0.5"/>
+            <path d="M10 6L8 2M20 6L22 2" stroke="#06B6D4" stroke-width="1.5" stroke-linecap="round"/>
+            <rect x="11" y="4" width="8" height="2" rx="1" fill="#0891B2"/>
+            <rect x="8" y="10" width="6" height="6" rx="1" fill="white" fill-opacity="0.6"/>
+            <rect x="16" y="14" width="6" height="6" rx="1" fill="white" fill-opacity="0.6"/>
+            <rect x="10" y="22" width="6" height="6" rx="1" fill="white" fill-opacity="0.6"/>
+            <path d="M22 10L23 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        `;
+
+        const icePile = document.createElement("div");
+        // Narrower container (w-60 instead of w-96) forces vertical growth
+        icePile.className =
+            "flex flex-wrap content-end justify-center w-60 lg:w-64 -space-x-5 px-4";
+
+        const maxDisplayBags = 40; // Increased to allow taller mountains
+        const shownBags = Math.min(bags, maxDisplayBags);
+
+        for (let i = 0; i < shownBags; i++) {
+            const b = document.createElement("div");
+            b.innerHTML = iceBagSvg;
+            b.className =
+                "animate-drop origin-bottom transform hover:scale-110 transition-transform cursor-pointer relative hover:z-50";
+            b.style.zIndex = `${Math.floor(i / 3)}`; // Layer z-index by rows effectively
+            b.style.marginBottom = "-18px"; // More vertical overlap for density
+            // Randomize rotation a bit more naturally
+            const rot = Math.random() * 30 - 15;
+            const xOffset = Math.random() * 10 - 5;
+            b.style.transform = `rotate(${rot}deg) translateX(${xOffset}px)`;
+            b.style.animationDelay = `${0.05 + Math.random() * 0.3}s`; // Random delay for natural feel
+            icePile.appendChild(b);
+        }
+        if (bags > maxDisplayBags) {
+            const plus = document.createElement("div");
+            plus.innerHTML = `+${bags - maxDisplayBags}`;
+            // Improved visibility: Badge style similar to kegs but rectangular/pill for variety or circle
+            plus.className =
+                "absolute -top-12 left-1/2 -translate-x-1/2 z-[100] font-black text-xl text-cyan-700 bg-cyan-50/90 backdrop-blur px-4 py-2 rounded-full border-2 border-cyan-200 shadow-[0_4px_20px_rgba(6,182,212,0.3)] animate-bounce select-none";
+            icePile.appendChild(plus);
+            icePile.style.position = "relative";
+        }
+
+        container.appendChild(kegStack);
+        container.appendChild(icePile);
+        els.stage.appendChild(container);
+    }
+
+    // Bindings
+    [els.guests, els.duration, els.temp].forEach((el) => {
+        if (el)
+            el.addEventListener("input", () => {
+                updateSlider(els.guests, els.fillGuests!, els.thumbGuests!, 5, 200);
+                updateSlider(els.duration, els.fillDuration!, els.thumbDuration!, 1, 12);
+                updateSlider(els.temp, els.fillTemp!, els.thumbTemp!, 15, 40);
+                state.guests = parseFloat(els.guests.value);
+                state.duration = parseFloat(els.duration.value);
+                state.temp = parseFloat(els.temp.value);
+
+                if (els.displayGuests) els.displayGuests.innerText = `${state.guests}`;
+                if (els.displayDuration) els.displayDuration.innerText = `${state.duration}`;
+                if (els.displayTemp) els.displayTemp.innerText = `${state.temp}`;
+
+                calculate();
+            });
+    });
+
+    els.vibeBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            els.vibeBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            state.drinkRate = parseFloat(btn.getAttribute("data-mult") || "1");
+            calculate();
+        });
+    });
+
+    // Init
+    requestAnimationFrame(() => {
+        updateSlider(els.guests, els.fillGuests!, els.thumbGuests!, 5, 200);
+        updateSlider(els.duration, els.fillDuration!, els.thumbDuration!, 1, 12);
+        updateSlider(els.temp, els.fillTemp!, els.thumbTemp!, 15, 40);
+        calculate();
+    });
+</script>
