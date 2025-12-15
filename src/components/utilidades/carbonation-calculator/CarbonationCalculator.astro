@@ -1,0 +1,536 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<carbonation-calculator class="block w-full max-w-6xl mx-auto p-4 md:p-8">
+    <div class="flex flex-col lg:flex-row gap-12 items-center lg:items-start">
+        <div class="w-full lg:w-1/2 space-y-8">
+            <div
+                class="bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-zinc-100 dark:border-zinc-800 relative overflow-hidden group"
+            >
+                <div
+                    class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"
+                >
+                    <Icon name="mdi:beer" class="w-24 h-24 text-amber-500 transform rotate-12" />
+                </div>
+
+                <h2
+                    class="text-3xl font-black text-zinc-900 dark:text-white mb-8 flex items-center gap-3"
+                >
+                    <span
+                        class="bg-amber-500 rounded-xl p-2 text-white shadow-lg shadow-amber-500/30"
+                    >
+                        <Icon name="mdi:calculator" class="w-6 h-6" />
+                    </span>
+                    Parámetros
+                </h2>
+
+                <div class="flex bg-zinc-100 dark:bg-zinc-800 p-1.5 rounded-xl mb-8 w-fit">
+                    <button
+                        id="btnMetric"
+                        class="px-6 py-2 rounded-lg text-sm font-bold transition-all shadow-md bg-white text-zinc-900 dark:bg-zinc-700 dark:text-white"
+                    >
+                        Métrico
+                    </button>
+                    <button
+                        id="btnImperial"
+                        class="px-6 py-2 rounded-lg text-sm font-bold transition-all text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+                    >
+                        Imperial
+                    </button>
+                </div>
+
+                <div class="space-y-6 relative z-10">
+                    <div class="group">
+                        <label
+                            class="flex justify-between text-sm font-bold text-zinc-500 dark:text-zinc-400 mb-2 uppercase tracking-wide"
+                        >
+                            Volumen de Cerveza
+                            <span
+                                id="volumeUnitDisplay"
+                                class="bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded text-xs"
+                                >Litros</span
+                            >
+                        </label>
+                        <div
+                            class="relative transition-transform duration-300 group-hover:-translate-y-1"
+                        >
+                            <input
+                                type="number"
+                                id="beerVolume"
+                                value="20"
+                                step="0.5"
+                                min="0"
+                                class="w-full bg-zinc-50 dark:bg-black/20 border-2 border-zinc-200 dark:border-zinc-700 rounded-2xl px-5 py-4 text-xl font-bold text-zinc-900 dark:text-white outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all placeholder-zinc-300"
+                            />
+                            <Icon
+                                name="mdi:beaker"
+                                class="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-300 group-focus-within:text-amber-500 transition-colors"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="group">
+                        <label
+                            class="flex justify-between text-sm font-bold text-zinc-500 dark:text-zinc-400 mb-2 uppercase tracking-wide"
+                        >
+                            Temperatura Máxima
+                            <span
+                                id="tempUnitDisplay"
+                                class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2 py-0.5 rounded text-xs"
+                                >°C</span
+                            >
+                        </label>
+                        <div
+                            class="relative transition-transform duration-300 group-hover:-translate-y-1"
+                        >
+                            <input
+                                type="number"
+                                id="beerTemp"
+                                value="20"
+                                step="1"
+                                class="w-full bg-zinc-50 dark:bg-black/20 border-2 border-zinc-200 dark:border-zinc-700 rounded-2xl px-5 py-4 text-xl font-bold text-zinc-900 dark:text-white outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder-zinc-300"
+                            />
+                            <Icon
+                                name="mdi:thermometer"
+                                class="absolute right-5 top-1/2 -translate-y-1/2 w-6 h-6 text-zinc-300 group-focus-within:text-blue-500 transition-colors"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-dashed border-zinc-200 dark:border-zinc-700">
+                        <div class="flex justify-between items-end mb-4">
+                            <label class="font-bold text-zinc-700 dark:text-zinc-200"
+                                >Carbonatación Deseada</label
+                            >
+                            <div class="text-right">
+                                <span id="co2Display" class="text-4xl font-black text-amber-500"
+                                    >2.4</span
+                                >
+                                <span class="text-sm font-bold text-zinc-400 uppercase">Vol</span>
+                            </div>
+                        </div>
+
+                        <input
+                            type="range"
+                            id="co2Target"
+                            min="1.0"
+                            max="4.5"
+                            step="0.1"
+                            value="2.4"
+                            class="w-full h-4 bg-zinc-200 dark:bg-zinc-700 rounded-full appearance-none cursor-pointer accent-amber-500 hover:accent-amber-400 transition-all"
+                        />
+
+                        <div class="flex justify-between mt-3 px-1">
+                            <button
+                                class="flex flex-col items-center cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+                                data-set-co2="1.8"
+                            >
+                                <div class="w-1 h-3 bg-zinc-300 mb-1"></div>
+                                <span class="text-xs font-bold text-zinc-500">Stout</span>
+                                <span class="text-[10px] text-zinc-400">1.8</span>
+                            </button>
+                            <button
+                                class="flex flex-col items-center cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+                                data-set-co2="2.4"
+                            >
+                                <div class="w-1 h-3 bg-zinc-300 mb-1"></div>
+                                <span class="text-xs font-bold text-zinc-500">Ale</span>
+                                <span class="text-[10px] text-zinc-400">2.4</span>
+                            </button>
+                            <button
+                                class="flex flex-col items-center cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+                                data-set-co2="2.6"
+                            >
+                                <div class="w-1 h-3 bg-zinc-300 mb-1"></div>
+                                <span class="text-xs font-bold text-zinc-500">Lager</span>
+                                <span class="text-[10px] text-zinc-400">2.6</span>
+                            </button>
+                            <button
+                                class="flex flex-col items-center cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
+                                data-set-co2="3.5"
+                            >
+                                <div class="w-1 h-3 bg-zinc-300 mb-1"></div>
+                                <span class="text-xs font-bold text-zinc-500">Wheat</span>
+                                <span class="text-[10px] text-zinc-400">3.5</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-xl border border-zinc-100 dark:border-zinc-800"
+            >
+                <h3
+                    class="text-xl font-bold text-zinc-800 dark:text-white mb-6 flex items-center gap-3"
+                >
+                    <Icon name="mdi:sack" class="w-6 h-6 text-zinc-400" />
+                    Resultados
+                </h3>
+                <div class="grid gap-4">
+                    <div
+                        class="flex items-center justify-between p-4 bg-gradient-to-r from-zinc-50 to-zinc-100 dark:from-zinc-800 dark:to-zinc-800/50 rounded-2xl border border-zinc-200 dark:border-zinc-700"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-white dark:bg-zinc-700 flex items-center justify-center shadow-sm"
+                            >
+                                <Icon name="mdi:cube-outline" class="w-5 h-5 text-indigo-500" />
+                            </div>
+                            <span class="font-bold text-zinc-700 dark:text-zinc-300"
+                                >Azúcar de Mesa</span
+                            >
+                        </div>
+                        <span
+                            id="resultTableSugar"
+                            class="text-2xl font-black text-indigo-600 dark:text-indigo-400"
+                            >0 g</span
+                        >
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center"
+                            >
+                                <Icon name="mdi:corn" class="w-5 h-5 text-yellow-500" />
+                            </div>
+                            <span class="font-medium text-zinc-600 dark:text-zinc-400"
+                                >Dextrosa</span
+                            >
+                        </div>
+                        <span
+                            id="resultCornSugar"
+                            class="text-xl font-bold text-zinc-800 dark:text-white">0 g</span
+                        >
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center"
+                            >
+                                <Icon name="mdi:barley" class="w-5 h-5 text-amber-600" />
+                            </div>
+                            <span class="font-medium text-zinc-600 dark:text-zinc-400"
+                                >Extracto (DME)</span
+                            >
+                        </div>
+                        <span id="resultDME" class="text-xl font-bold text-zinc-800 dark:text-white"
+                            >0 g</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 flex flex-col items-center justify-center lg:sticky lg:top-8">
+            <div id="safetyWarning" class="w-full mb-6 hidden">
+                <div
+                    class="bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg shadow-red-500/30 flex items-center justify-center gap-3 font-bold animate-bounce"
+                >
+                    <Icon name="mdi:alert-decagram" class="w-6 h-6" />
+                    ¡ALTO RIESGO DE EXPLOSIÓN!
+                </div>
+            </div>
+
+            <div class="relative w-[300px] h-[500px] select-none perspective-1000">
+                <div class="beer-glass relative w-full h-full transform-style-3d">
+                    <div
+                        class="absolute top-0 w-full h-8 border-4 border-white/30 rounded-[50%] z-50 bg-gradient-to-r from-white/20 to-transparent"
+                    >
+                    </div>
+
+                    <div
+                        class="absolute top-4 w-full h-[92%] bg-gradient-to-r from-white/10 to-white/20 border-x border-white/30 backdrop-blur-[1px] z-50 rounded-b-[40px] shadow-[inset_0_0_20px_rgba(255,255,255,0.2)]"
+                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);"
+                    >
+                    </div>
+
+                    <div
+                        class="absolute top-4 w-full h-[90%] z-40"
+                        style="clip-path: polygon(2% 0, 98% 0, 89% 98%, 11% 98%);"
+                    >
+                        <div
+                            class="absolute bottom-0 left-0 right-0 top-10 bg-gradient-to-b from-amber-400 via-amber-600 to-amber-900 shadow-[inset_0_-20px_60px_rgba(0,0,0,0.5)]"
+                        >
+                            <div
+                                id="bubblesContainer"
+                                class="absolute inset-0 overflow-hidden mix-blend-overlay opacity-70"
+                            >
+                            </div>
+                        </div>
+
+                        <div
+                            id="foamHead"
+                            class="absolute top-10 w-full bg-[#fcf5e5] transition-all duration-500 ease-in-out shadow-sm origin-bottom"
+                            style="height: 20px;"
+                        >
+                            <div
+                                class="w-full h-full bg-[radial-gradient(circle,rgba(0,0,0,0.05)_1px,transparent_1px)] [background-size:4px_4px] opacity-70"
+                            >
+                            </div>
+                            <div
+                                class="absolute -top-2 w-full h-4 bg-[#fcf5e5] rounded-[50%] opacity-90"
+                            >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="absolute -bottom-4 left-[15%] w-[70%] h-6 bg-black/30 blur-xl rounded-[50%]"
+                >
+                </div>
+            </div>
+
+            <div class="mt-8 text-center space-y-2">
+                <p
+                    id="foamTextDisplay"
+                    class="text-2xl font-black text-amber-500 uppercase tracking-widest opacity-80"
+                >
+                    CARBONATACIÓN MEDIA
+                </p>
+                <p class="text-zinc-400 text-sm">Visualización aproximada de efervescencia</p>
+            </div>
+        </div>
+    </div>
+</carbonation-calculator>
+
+<style is:global>
+    @keyframes rise-up {
+        0% {
+            transform: translateY(100%) scale(0.5);
+            opacity: 0;
+        }
+        20% {
+            opacity: 0.8;
+        }
+        100% {
+            transform: translateY(-120%) scale(var(--scale, 1));
+            opacity: 0;
+        }
+    }
+
+    .calc-bubble {
+        position: absolute;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.1)
+        );
+        border-radius: 50%;
+        animation: rise-up linear infinite;
+        bottom: -20px;
+    }
+</style>
+
+<script>
+    class CarbonationCalculator extends HTMLElement {
+        private units = "metric";
+        private co2Value = 2.4;
+
+        private els: any = {};
+
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            this.queryElements();
+            this.setupListeners();
+            this.calculate();
+        }
+
+        private queryElements() {
+            const q = (sel: string) => this.querySelector(sel);
+
+            this.els = {
+                volume: q("#beerVolume"),
+                temp: q("#beerTemp"),
+                co2Target: q("#co2Target"),
+                btnMetric: q("#btnMetric"),
+                btnImperial: q("#btnImperial"),
+                co2Presets: this.querySelectorAll("[data-set-co2]"),
+
+                volUnit: q("#volumeUnitDisplay"),
+                tempUnit: q("#tempUnitDisplay"),
+                co2Display: q("#co2Display"),
+
+                resTable: q("#resultTableSugar"),
+                resCorn: q("#resultCornSugar"),
+                resDME: q("#resultDME"),
+
+                warning: q("#safetyWarning"),
+                foamHead: q("#foamHead"),
+                foamText: q("#foamTextDisplay"),
+                bubbles: q("#bubblesContainer"),
+            };
+        }
+
+        private setupListeners() {
+            if (!this.els.volume) return;
+
+            this.els.volume.addEventListener("input", () => this.calculate());
+            this.els.temp.addEventListener("input", () => this.calculate());
+            this.els.co2Target.addEventListener("input", () => this.calculate());
+
+            this.els.btnMetric.addEventListener("click", () => this.setUnits("metric"));
+            this.els.btnImperial.addEventListener("click", () => this.setUnits("imperial"));
+
+            this.els.co2Presets.forEach((btn: HTMLElement) => {
+                btn.addEventListener("click", () => {
+                    const val = btn.dataset.setCo2;
+                    if (val && this.els.co2Target) {
+                        this.els.co2Target.value = val;
+                        this.calculate();
+                    }
+                });
+            });
+        }
+
+        private setUnits(mode: string) {
+            if (this.units === mode) return;
+
+            const volumeInput = this.els.volume;
+            const tempInput = this.els.temp;
+
+            let vol = parseFloat(volumeInput.value) || 0;
+            let temp = parseFloat(tempInput.value) || 0;
+
+            if (mode === "imperial") {
+                vol = vol * 0.264172;
+                temp = (temp * 9) / 5 + 32;
+
+                this.els.volUnit.textContent = "Galones";
+                this.els.tempUnit.textContent = "°F";
+
+                this.toggleBtnState(this.els.btnImperial, this.els.btnMetric);
+            } else {
+                vol = vol / 0.264172;
+                temp = ((temp - 32) * 5) / 9;
+
+                this.els.volUnit.textContent = "Litros";
+                this.els.tempUnit.textContent = "°C";
+
+                this.toggleBtnState(this.els.btnMetric, this.els.btnImperial);
+            }
+
+            volumeInput.value = vol.toFixed(2);
+            tempInput.value = Math.round(temp).toString();
+            this.units = mode;
+            this.calculate();
+        }
+
+        private toggleBtnState(active: HTMLElement, inactive: HTMLElement) {
+            const activeClasses = [
+                "bg-white",
+                "text-zinc-900",
+                "shadow-md",
+                "dark:bg-zinc-700",
+                "dark:text-white",
+            ];
+            const inactiveClasses = ["text-zinc-500", "hover:text-zinc-900", "hover:text-zinc-300"];
+
+            active.className =
+                "px-6 py-2 rounded-lg text-sm font-bold transition-all shadow-md bg-white text-zinc-900 dark:bg-zinc-700 dark:text-white";
+            inactive.className =
+                "px-6 py-2 rounded-lg text-sm font-bold transition-all text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300";
+        }
+
+        private calculate() {
+            const volInput = this.els.volume;
+            const tempInput = this.els.temp;
+            const co2Input = this.els.co2Target;
+
+            let vol = parseFloat(volInput.value) || 0;
+            let temp = parseFloat(tempInput.value) || 0;
+            this.co2Value = parseFloat(co2Input.value) || 0;
+
+            if (this.units === "imperial") {
+                vol = vol / 0.264172;
+                temp = ((temp - 32) * 5) / 9;
+            }
+
+            const residualCO2 = 3.0378 - 0.050062 * temp + 0.00026555 * Math.pow(temp, 2);
+            const co2Needed = Math.max(0, this.co2Value - residualCO2);
+
+            const gCorn = vol * co2Needed * 4.4;
+            const gTable = gCorn * 0.91;
+            const gDME = gCorn * 1.5;
+
+            this.els.co2Display.textContent = this.co2Value.toFixed(1);
+            this.els.resTable.textContent = `${Math.round(gTable)} g`;
+            this.els.resCorn.textContent = `${Math.round(gCorn)} g`;
+            this.els.resDME.textContent = `${Math.round(gDME)} g`;
+
+            this.updateVisuals();
+        }
+
+        private updateVisuals() {
+            const minH = 20;
+            const maxH = 120;
+            const factor = (this.co2Value - 1.0) / (4.5 - 1.0);
+            const height = minH + factor * (maxH - minH);
+
+            if (this.els.foamHead) {
+                this.els.foamHead.style.height = `${height}px`;
+            }
+
+            if (this.co2Value > 3.5) {
+                this.els.warning.classList.remove("hidden");
+                this.els.foamText.textContent = "PELIGRO EXPLOSIÓN";
+                this.els.foamText.className =
+                    "text-red-500 font-black text-2xl uppercase animate-pulse";
+            } else {
+                this.els.warning.classList.add("hidden");
+
+                if (this.co2Value < 1.8) {
+                    this.els.foamText.textContent = "BAJA CARBONATACIÓN";
+                    this.els.foamText.className = "text-zinc-400 font-bold text-xl uppercase";
+                } else if (this.co2Value < 2.8) {
+                    this.els.foamText.textContent = "CARBONATACIÓN ÓPTIMA";
+                    this.els.foamText.className = "text-amber-500 font-bold text-xl uppercase";
+                } else {
+                    this.els.foamText.textContent = "ALTA EFERVESCENCIA";
+                    this.els.foamText.className = "text-amber-600 font-bold text-xl uppercase";
+                }
+            }
+
+            this.refreshBubbles();
+        }
+
+        private refreshBubbles() {
+            if (!this.els.bubbles) return;
+
+            if (this.els.bubbles.children.length === 0) {
+                for (let i = 0; i < 30; i++) {
+                    const b = document.createElement("div");
+                    b.className = "calc-bubble";
+                    const size = 3 + Math.random() * 6;
+                    b.style.width = `${size}px`;
+                    b.style.height = `${size}px`;
+                    b.style.left = `${Math.random() * 100}%`;
+                    b.style.animationDelay = `${Math.random() * 5}s`;
+                    b.style.setProperty("--scale", `${0.8 + Math.random()}`);
+                    this.els.bubbles.appendChild(b);
+                }
+            }
+
+            const baseDuration = 4;
+            const speedMod = 2.0 / Math.max(1, this.co2Value);
+            const duration = baseDuration * speedMod;
+
+            Array.from(this.els.bubbles.children).forEach((b: any) => {
+                b.style.animationDuration = `${duration + Math.random()}s`;
+            });
+        }
+    }
+
+    customElements.define("carbonation-calculator", CarbonationCalculator);
+</script>

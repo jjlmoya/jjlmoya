@@ -28,6 +28,14 @@ export const alcoholSection: SectionData = {
             title: "Calculadora de Fiesta",
             description: "Estima cerveza y hielo necesarios basándose en invitados y temperatura ambiente.",
             color: "#F59E0B"
+        },
+        {
+            href: "/utilidades/calculadora-carbonatacion/",
+            iconBg: "mdi:bottle-soda-classic",
+            iconFg: "mdi:water-opacity",
+            title: "Carbonatación Perfecta",
+            description: "Visualiza y calcula el priming exacto para Stouts, IPAs y Lagers sin riesgo de explosión.",
+            color: "#D97706"
         }
     ]
 };
