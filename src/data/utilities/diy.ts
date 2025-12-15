@@ -12,6 +12,22 @@ export const diySection: SectionData = {
             title: "Calculadora de Resina",
             description: "Calcula volumen y mezcla exacta para proyectos epoxi sin desperdicios.",
             color: "#f59e0b"
+        },
+        {
+            href: "/utilidades/calculadora-balustres/",
+            iconBg: "mdi:ruler",
+            iconFg: "mdi:view-week",
+            title: "Calculadora de Balustres",
+            description: "Distribución exacta de barrotes cumpliendo normativa.",
+            color: "#2563eb"
+        },
+        {
+            href: "/utilidades/morteros/",
+            iconBg: "mdi:wall",
+            iconFg: "mdi:calculator",
+            title: "Calculadora de Morteros",
+            description: "Proporciones exactas de cal y arena para enfoscados y revocos.",
+            color: "#a855f7"
         }
     ]
 };
