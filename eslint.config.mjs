@@ -15,7 +15,7 @@ const customCommentsPlugin = {
                         const sourceCode = context.sourceCode;
                         const text = sourceCode.getText();
 
-                        // Regex for HTML comments: <!-- ... -->
+
                         const regex = new RegExp("<!--[\\s\\S]*?-->", "g");
                         let match;
                         while ((match = regex.exec(text)) !== null) {
@@ -42,7 +42,7 @@ const customCommentsPlugin = {
                         const sourceCode = context.sourceCode;
                         const text = sourceCode.getText();
 
-                        // Regex for CSS/Block comments: /* ... */
+
                         const regex = new RegExp("/\\*[\\s\\S]*?\\*/", "g");
                         let match;
                         while ((match = regex.exec(text)) !== null) {
@@ -74,7 +74,7 @@ export default [
     ...tseslint.configs.recommended,
     ...eslintPluginAstro.configs["flat/recommended"],
 
-    // General Rules (apply to all supported files)
+
     {
         plugins: {
             "no-comments": noComments,
@@ -86,7 +86,7 @@ export default [
         }
     },
 
-    // Scoped Rules: HTML Comments (Astro, HTML)
+
     {
         files: ["**/*.astro", "**/*.html"],
         plugins: {
@@ -97,9 +97,9 @@ export default [
         }
     },
 
-    // Scoped Rules: CSS Comments (Astro, CSS)
+
     {
-        files: ["**/*.astro", "**/*.css"],
+        files: ["**/*.astro"],
         plugins: {
             "custom": customCommentsPlugin
         },
