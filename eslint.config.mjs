@@ -15,8 +15,8 @@ const customCommentsPlugin = {
                         const sourceCode = context.sourceCode;
                         const text = sourceCode.getText();
 
-                        
-                        const regex = new RegExp("", "g");
+                        // Regex for HTML comments: <!-- ... -->
+                        const regex = new RegExp("<!--[\\s\\S]*?-->", "g");
                         let match;
                         while ((match = regex.exec(text)) !== null) {
                             context.report({
@@ -42,7 +42,7 @@ const customCommentsPlugin = {
                         const sourceCode = context.sourceCode;
                         const text = sourceCode.getText();
 
-                        
+                        // Regex for CSS/Block comments: /* ... */
                         const regex = new RegExp("/\\*[\\s\\S]*?\\*/", "g");
                         let match;
                         while ((match = regex.exec(text)) !== null) {
@@ -67,25 +67,44 @@ export default [
             "**/dist/",
             "**/node_modules/",
             ".astro/",
-            "**/.astro/**"
+            "**/.astro/**",
+            "**/public/**"
         ]
     },
     ...tseslint.configs.recommended,
     ...eslintPluginAstro.configs["flat/recommended"],
 
+    // General Rules (apply to all supported files)
     {
         plugins: {
             "no-comments": noComments,
-            "custom": customCommentsPlugin
         },
-
         rules: {
             "no-comments/disallowComments": "error",
-            "custom/no-html-comments": "error",
-            "custom/no-css-comments": "error",
-
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "off"
+        }
+    },
+
+    // Scoped Rules: HTML Comments (Astro, HTML)
+    {
+        files: ["**/*.astro", "**/*.html"],
+        plugins: {
+            "custom": customCommentsPlugin
+        },
+        rules: {
+            "custom/no-html-comments": "error"
+        }
+    },
+
+    // Scoped Rules: CSS Comments (Astro, CSS)
+    {
+        files: ["**/*.astro", "**/*.css"],
+        plugins: {
+            "custom": customCommentsPlugin
+        },
+        rules: {
+            "custom/no-css-comments": "error"
         }
     }
 ];
