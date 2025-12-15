@@ -2,12 +2,13 @@
 import Layout from "./Layout.astro";
 import BackToUtilities from "../components/ui/BackToUtilities.astro";
 import RelatedUtilities from "../components/utilidades/RelatedUtilities.astro";
+import { sections } from "../data/utilities";
 
 interface Props {
     title: string;
     description: string;
     image?: string;
-    category: string;
+    category?: string;
     gradientFrom?: string;
     gradientTo?: string;
 }
@@ -16,12 +17,26 @@ const {
     title,
     description,
     image,
-    category,
+    category: propCategory,
     gradientFrom = "from-slate-100",
     gradientTo = "to-white",
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
+
+const normalize = (path: string) => path.replace(/\/+$/, "");
+const targetPath = normalize(currentPath);
+
+let category = propCategory;
+
+if (!category) {
+    const foundSection = sections.find((section) =>
+        section.utilities.some((u) => normalize(u.href) === targetPath)
+    );
+    if (foundSection) {
+        category = foundSection.title;
+    }
+}
 ---
 
 <Layout title={title} description={description} image={image}>
@@ -60,7 +75,7 @@ const currentPath = Astro.url.pathname;
                 <slot name="bibliography" />
             </div>
 
-            <RelatedUtilities category={category} currentPath={currentPath} />
+            <RelatedUtilities category={category ?? ""} currentPath={currentPath} />
         </div>
     </div>
 </Layout>

@@ -6,14 +6,6 @@ export const homeSection: SectionData = {
     theme: "purple",
     utilities: [
         {
-            href: "/utilidades/morteros/",
-            iconBg: "mdi:wall",
-            iconFg: "mdi:calculator",
-            title: "Calculadora de Morteros",
-            description: "Proporciones exactas de cal y arena para enfoscados y revocos.",
-            color: "#a855f7"
-        },
-        {
             href: "/utilidades/qr/",
             iconBg: "mdi:qrcode",
             iconFg: "mdi:wifi-lock",

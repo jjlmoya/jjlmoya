@@ -1,0 +1,411 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto p-4 space-y-8">
+    <div
+        class="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-xl border border-zinc-100 dark:border-zinc-800"
+    >
+        <div class="flex items-center gap-3 mb-6">
+            <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
+                <Icon name="mdi:tape-measure" class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-zinc-800 dark:text-white">Dimensiones</h2>
+                <p class="text-sm text-zinc-500">Ingresa las medidas de tu barandilla</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+                <label
+                    for="railLength"
+                    class="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                >
+                    Longitud Total (L)
+                </label>
+                <div class="relative">
+                    <input
+                        type="number"
+                        id="railLength"
+                        value="200"
+                        min="0"
+                        step="0.1"
+                        class="block w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all outline-none text-zinc-900 dark:text-white"
+                    />
+                    <span
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 text-sm unit-label"
+                        >cm</span
+                    >
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label
+                    for="balusterWidth"
+                    class="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                >
+                    Ancho Balustre (w)
+                </label>
+                <div class="relative">
+                    <input
+                        type="number"
+                        id="balusterWidth"
+                        value="5"
+                        min="0"
+                        step="0.1"
+                        class="block w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all outline-none text-zinc-900 dark:text-white"
+                    />
+                    <span
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 text-sm unit-label"
+                        >cm</span
+                    >
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label
+                    for="maxGap"
+                    class="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                >
+                    Espacio Máximo (g)
+                </label>
+                <div class="relative">
+                    <input
+                        type="number"
+                        id="maxGap"
+                        value="10"
+                        min="0"
+                        step="0.1"
+                        class="block w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all outline-none text-zinc-900 dark:text-white"
+                    />
+                    <span
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 text-sm unit-label"
+                        >cm</span
+                    >
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <div class="inline-flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg">
+                <button
+                    id="btnCm"
+                    class="px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-white dark:bg-zinc-700 shadow-sm text-zinc-900 dark:text-white"
+                    >cm</button
+                >
+                <button
+                    id="btnIn"
+                    class="px-4 py-1.5 rounded-md text-sm font-medium transition-all text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200"
+                    >in</button
+                >
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="bg-[#1e3a8a] dark:bg-[#0f172a] rounded-2xl p-1 shadow-2xl overflow-hidden border-4 border-white/10 relative blueprint-container font-mono"
+    >
+        <div
+            class="absolute inset-0 opacity-10"
+            style="background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 20px 20px;"
+        >
+        </div>
+
+        <div class="relative p-6 md:p-10 text-blue-100">
+            <div class="flex justify-between items-start mb-8 border-b border-white/20 pb-4">
+                <div>
+                    <h3 class="text-xl tracking-widest uppercase mb-1">Plan de Montaje</h3>
+                    <p class="text-xs opacity-60">REF: BAL-001 // ESCALA: AUTO</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-white mb-1" id="resCount">0</div>
+                    <p class="text-xs opacity-60 uppercase tracking-wider">Balustres Requeridos</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white/5 backdrop-blur-sm p-3 rounded border border-white/10">
+                    <span class="block text-xs opacity-50 uppercase mb-1">Gap Exacto</span>
+                    <span class="text-lg font-bold text-white" id="resGap">0</span>
+                </div>
+                <div class="bg-white/5 backdrop-blur-sm p-3 rounded border border-white/10">
+                    <span class="block text-xs opacity-50 uppercase mb-1">Centro a Centro</span>
+                    <span class="text-lg font-bold text-white" id="resOnCenter">0</span>
+                </div>
+                <div class="bg-white/5 backdrop-blur-sm p-3 rounded border border-white/10">
+                    <span class="block text-xs opacity-50 uppercase mb-1">Espacios Totales</span>
+                    <span class="text-lg font-bold text-white" id="resSpaces">0</span>
+                </div>
+                <div class="bg-white/5 backdrop-blur-sm p-3 rounded border border-white/10">
+                    <span class="block text-xs opacity-50 uppercase mb-1">Longitud Cubierta</span>
+                    <span class="text-lg font-bold text-white" id="resCovered">0</span>
+                </div>
+            </div>
+
+            <div
+                class="w-full h-48 md:h-64 border border-dashed border-white/30 rounded flex items-center justify-center bg-[#172554]/50 relative overflow-hidden"
+                id="visualizerContainer"
+            >
+                <svg
+                    id="railSvg"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 1000 200"
+                    preserveAspectRatio="xMidYMid meet"
+                    class="w-full h-full"
+                >
+                </svg>
+            </div>
+
+            <p class="text-center text-xs opacity-40 mt-4 font-mono">
+                * Las dimensiones mostradas son aproximadas para visualización.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const state = {
+        L: 200,
+        w: 5,
+        maxGap: 10,
+        unit: "cm",
+    };
+
+    const inputs = {
+        L: document.getElementById("railLength") as HTMLInputElement,
+        w: document.getElementById("balusterWidth") as HTMLInputElement,
+        maxGap: document.getElementById("maxGap") as HTMLInputElement,
+    };
+
+    const units = {
+        cm: document.getElementById("btnCm"),
+        in: document.getElementById("btnIn"),
+    };
+
+    const outputs = {
+        count: document.getElementById("resCount"),
+        gap: document.getElementById("resGap"),
+        onCenter: document.getElementById("resOnCenter"),
+        spaces: document.getElementById("resSpaces"),
+        covered: document.getElementById("resCovered"),
+        svg: document.getElementById("railSvg"),
+    };
+
+    const labels = document.querySelectorAll(".unit-label");
+
+    inputs.L.addEventListener("input", (e) =>
+        updateState("L", +(e.target as HTMLInputElement).value)
+    );
+    inputs.w.addEventListener("input", (e) =>
+        updateState("w", +(e.target as HTMLInputElement).value)
+    );
+    inputs.maxGap.addEventListener("input", (e) =>
+        updateState("maxGap", +(e.target as HTMLInputElement).value)
+    );
+
+    units.cm?.addEventListener("click", () => setUnit("cm"));
+    units.in?.addEventListener("click", () => setUnit("in"));
+
+    function setUnit(u: string) {
+        state.unit = u;
+
+        if (state.unit === "cm") {
+            units.cm?.classList.add(
+                "bg-white",
+                "dark:bg-zinc-700",
+                "shadow-sm",
+                "text-zinc-900",
+                "dark:text-white"
+            );
+            units.cm?.classList.remove("text-zinc-500");
+            units.in?.classList.remove(
+                "bg-white",
+                "dark:bg-zinc-700",
+                "shadow-sm",
+                "text-zinc-900",
+                "dark:text-white"
+            );
+            units.in?.classList.add("text-zinc-500");
+        } else {
+            units.in?.classList.add(
+                "bg-white",
+                "dark:bg-zinc-700",
+                "shadow-sm",
+                "text-zinc-900",
+                "dark:text-white"
+            );
+            units.in?.classList.remove("text-zinc-500");
+            units.cm?.classList.remove(
+                "bg-white",
+                "dark:bg-zinc-700",
+                "shadow-sm",
+                "text-zinc-900",
+                "dark:text-white"
+            );
+            units.cm?.classList.add("text-zinc-500");
+        }
+
+        labels.forEach((l) => (l.textContent = u));
+
+        calculate();
+    }
+
+    function updateState(key: "L" | "w" | "maxGap", value: number) {
+        state[key] = value;
+        calculate();
+    }
+
+    function calculate() {
+        const { L, w, maxGap, unit } = state;
+
+        if (L <= 0 || maxGap <= 0) {
+            renderEmpty();
+            return;
+        }
+
+        let n = Math.ceil((L - maxGap) / (w + maxGap));
+        if (n < 0) n = 0;
+
+        let g = (L - n * w) / (n + 1);
+
+        if (g < 0) {
+            g = 0;
+            n = 0;
+        }
+
+        const onCenter = g + w;
+
+        const unitStr = unit;
+        const fmt = (num: number) => num.toLocaleString("es-ES", { maximumFractionDigits: 2 });
+
+        if (outputs.count) outputs.count.innerText = n.toString();
+        if (outputs.gap) outputs.gap.innerText = `${fmt(g)} ${unitStr}`;
+        if (outputs.onCenter) outputs.onCenter.innerText = `${fmt(onCenter)} ${unitStr}`;
+        if (outputs.spaces) outputs.spaces.innerText = (n + 1).toString();
+        if (outputs.covered) outputs.covered.innerText = `${fmt(L)} ${unitStr}`;
+
+        drawBlueprint(n, g, w, L);
+    }
+
+    function renderEmpty() {
+        if (outputs.count) outputs.count.innerText = "0";
+        if (outputs.svg) outputs.svg.innerHTML = "";
+    }
+
+    function drawBlueprint(n: number, g: number, w: number, L: number) {
+        if (!outputs.svg) return;
+
+        const svg = outputs.svg;
+        svg.innerHTML = "";
+
+        const paddingX = 50;
+        const drawWidth = 1000 - paddingX * 2;
+
+        const scale = drawWidth / L;
+
+        const railY = 50;
+        const railHeight = 20;
+        const balusterHeight = 100;
+        const balusterY = railY + railHeight;
+
+        const railRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        railRect.setAttribute("x", paddingX.toString());
+        railRect.setAttribute("y", railY.toString());
+        railRect.setAttribute("width", (L * scale).toString());
+        railRect.setAttribute("height", railHeight.toString());
+        railRect.setAttribute("fill", "none");
+        railRect.setAttribute("stroke", "white");
+        railRect.setAttribute("stroke-width", "2");
+        svg.appendChild(railRect);
+
+        let currentX = paddingX + g * scale;
+
+        const maxDraw = 100;
+        const isTruncated = n > maxDraw;
+        const drawLimit = isTruncated ? 20 : n;
+
+        for (let i = 0; i < drawLimit; i++) {
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect.setAttribute("x", currentX.toString());
+            rect.setAttribute("y", balusterY.toString());
+            rect.setAttribute("width", (w * scale).toString());
+            rect.setAttribute("height", balusterHeight.toString());
+            rect.setAttribute("fill", "white");
+            rect.setAttribute("fill-opacity", "0.2");
+            rect.setAttribute("stroke", "white");
+            rect.setAttribute("stroke-width", "1");
+            svg.appendChild(rect);
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", (currentX + (w * scale) / 2).toString());
+            line.setAttribute("y1", balusterY.toString());
+            line.setAttribute("x2", (currentX + (w * scale) / 2).toString());
+            line.setAttribute("y2", (balusterY + balusterHeight + 10).toString());
+            line.setAttribute("stroke", "white");
+            line.setAttribute("stroke-width", "0.5");
+            line.setAttribute("stroke-dasharray", "2,2");
+            line.setAttribute("opacity", "0.5");
+            svg.appendChild(line);
+
+            currentX += w * scale + g * scale;
+        }
+
+        if (isTruncated) {
+            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", "500");
+            text.setAttribute("y", (balusterY + balusterHeight / 2).toString());
+            text.setAttribute("fill", "white");
+            text.setAttribute("text-anchor", "middle");
+            text.textContent = `... ${n - 40} más ...`;
+            svg.appendChild(text);
+        }
+
+        if (n >= 0) {
+            drawArrow(
+                svg,
+                paddingX,
+                railY + railHeight + balusterHeight / 2,
+                paddingX + g * scale,
+                railY + railHeight + balusterHeight / 2,
+                `Gap ${g.toFixed(1)}`
+            );
+        }
+    }
+
+    function drawArrow(
+        svg: HTMLElement,
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number,
+        label: string
+    ) {
+        if (x2 - x1 < 20) return;
+
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x1.toString());
+        line.setAttribute("y1", y1.toString());
+        line.setAttribute("x2", x2.toString());
+        line.setAttribute("y2", y2.toString());
+        line.setAttribute("stroke", "#4ade80");
+        line.setAttribute("stroke-width", "1");
+        group.appendChild(line);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", ((x1 + x2) / 2).toString());
+        text.setAttribute("y", (y1 - 5).toString());
+        text.setAttribute("fill", "#4ade80");
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("font-size", "10");
+        text.textContent = label;
+        group.appendChild(text);
+
+        svg.appendChild(group);
+    }
+
+    calculate();
+</script>
