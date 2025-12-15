@@ -43,7 +43,15 @@ export const filesSection: SectionData = {
             iconFg: "mdi:clock-time-four-outline",
             title: "Sincronizar Subtítulos",
             description: "Ajusta el tiempo de tus archivos SRT. Adelanta o retrasa subtítulos fácilmente.",
-            color: "#06b6d4" 
+            color: "#06b6d4"
+        },
+        {
+            href: "/utilidades/editor-privacidad/",
+            iconBg: "mdi:eye-off",
+            iconFg: "mdi:blur",
+            title: "Editor de Privacidad",
+            description: "Censura, pixela y desenfoca zonas sensibles de tus fotos online.",
+            color: "#64748b"
         }
     ]
 };
