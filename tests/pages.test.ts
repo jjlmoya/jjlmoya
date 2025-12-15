@@ -50,8 +50,6 @@ describe("Page Availability Tests", () => {
 
 
             if (path === "/404/") {
-                // In static preview, accessing /404/ directly returns 200 (the file exists).
-                // In SSR/Dev it might return 404. We accept both as valid for "availability".
                 expect([200, 404]).toContain(response.status);
             } else {
                 expect(response.status).toBe(200);
