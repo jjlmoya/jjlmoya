@@ -12,6 +12,14 @@ export const creativeSection: SectionData = {
             title: "Generador de Excusas",
             description: "Máquina de azar semántica para librarte de compromisos con estilo.",
             color: "#ec4899"
+        },
+        {
+            href: "/utilidades/calculadora-resina/",
+            iconBg: "mdi:flask",
+            iconFg: "mdi:calculator",
+            title: "Calculadora de Resina",
+            description: "Calcula volumen y mezcla exacta para proyectos epoxi sin desperdicios.",
+            color: "#f59e0b"
         }
     ]
 };
