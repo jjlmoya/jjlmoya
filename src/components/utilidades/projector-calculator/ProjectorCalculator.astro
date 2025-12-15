@@ -1,0 +1,326 @@
+---
+import ProjectorVisualizer from "./ui/ProjectorVisualizer.astro";
+---
+
+<div class="w-full max-w-6xl mx-auto p-4 md:p-8 font-sans text-slate-600">
+    <div
+        class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 grid lg:grid-cols-12 min-h-[600px]"
+    >
+        <div
+            class="lg:col-span-5 p-8 flex flex-col justify-between bg-slate-50 border-r border-slate-200 relative z-10"
+        >
+            <div class="space-y-10">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800 tracking-tight mb-1">
+                        Configuración
+                    </h2>
+                    <p class="text-sm text-slate-500">Define tu pantalla y proyector</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-baseline">
+                        <label
+                            for="diagonal-input"
+                            class="text-xs font-bold text-cyan-600 uppercase tracking-widest"
+                            >Diagonal de Pantalla</label
+                        >
+                        <span class="text-xs text-slate-400 font-mono">Pulgadas (")</span>
+                    </div>
+                    <div class="relative group">
+                        <input
+                            type="range"
+                            id="diagonal-slider"
+                            min="30"
+                            max="300"
+                            value="100"
+                            step="1"
+                            class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600 mb-4"
+                        />
+                        <div class="relative flex items-center">
+                            <input
+                                type="number"
+                                id="diagonal-input"
+                                value="100"
+                                min="30"
+                                max="300"
+                                class="block w-full text-5xl font-black text-slate-900 bg-transparent border-b-2 border-slate-200 py-2 focus:border-cyan-500 focus:outline-none transition-colors"
+                            />
+                            <span
+                                class="absolute right-0 bottom-4 text-2xl text-slate-400 font-light"
+                                >"</span
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="text-xs font-bold text-cyan-600 uppercase tracking-widest"
+                        >Formato (Relación de Aspecto)</label
+                    >
+                    <div class="grid grid-cols-3 gap-2" id="ratio-buttons">
+                        <button
+                            data-ratio="1.777"
+                            class="ratio-btn active px-4 py-3 rounded-xl bg-white border border-slate-200 hover:border-cyan-500/50 hover:bg-slate-50 transition-all text-sm font-bold text-slate-600 flex flex-col items-center gap-1 group"
+                        >
+                            <span
+                                class="w-8 h-5 border-2 border-slate-400 rounded-sm opacity-50 group-[.active]:opacity-100 transition-opacity"
+                            ></span>
+                            16:9
+                            <span class="text-[10px] text-slate-400 font-normal">TV / HD</span>
+                        </button>
+                        <button
+                            data-ratio="2.333"
+                            class="ratio-btn px-4 py-3 rounded-xl bg-white border border-slate-200 hover:border-cyan-500/50 hover:bg-slate-50 transition-all text-sm font-bold text-slate-600 flex flex-col items-center gap-1 group"
+                        >
+                            <span
+                                class="w-10 h-4 border-2 border-slate-400 rounded-sm opacity-50 group-[.active]:opacity-100 transition-opacity"
+                            ></span>
+                            21:9
+                            <span class="text-[10px] text-slate-400 font-normal">Cine</span>
+                        </button>
+                        <button
+                            data-ratio="1.333"
+                            class="ratio-btn px-4 py-3 rounded-xl bg-white border border-slate-200 hover:border-cyan-500/50 hover:bg-slate-50 transition-all text-sm font-bold text-slate-600 flex flex-col items-center gap-1 group"
+                        >
+                            <span
+                                class="w-6 h-5 border-2 border-slate-400 rounded-sm opacity-50 group-[.active]:opacity-100 transition-opacity"
+                            ></span>
+                            4:3
+                            <span class="text-[10px] text-slate-400 font-normal">Retro</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-baseline">
+                        <label
+                            for="throw-input"
+                            class="text-xs font-bold text-cyan-600 uppercase tracking-widest"
+                            >Ratio de Tiro (Throw Ratio)</label
+                        >
+                        <div class="group relative">
+                            <svg
+                                class="w-4 h-4 text-slate-400 cursor-help"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                ></path></svg
+                            >
+                            <div
+                                class="absolute bottom-full right-0 mb-2 w-64 bg-slate-800 text-xs text-slate-200 p-3 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none"
+                            >
+                                Consulta el manual de tu proyector. Ejemplo: 1.50 significa que para
+                                1m de ancho, necesitas 1.5m de distancia.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <input
+                            type="number"
+                            id="throw-input"
+                            value="1.50"
+                            step="0.01"
+                            min="0.1"
+                            class="block w-full text-4xl font-black text-slate-900 bg-transparent border-b-2 border-slate-200 py-2 focus:border-cyan-500 focus:outline-none transition-colors"
+                        />
+                        <span class="absolute right-0 bottom-4 text-xl text-slate-400 font-mono"
+                            >: 1</span
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-cyan-50 rounded-2xl p-6 border border-cyan-100">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-cyan-700 uppercase tracking-wider mb-1">
+                            Ancho Pantalla
+                        </p>
+                        <p id="display-width" class="text-xl font-bold text-slate-800">-- m</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-cyan-700 uppercase tracking-wider mb-1">
+                            Alto Pantalla
+                        </p>
+                        <p id="display-height" class="text-xl font-bold text-slate-800">-- m</p>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-cyan-200">
+                    <p class="text-xs text-cyan-700 uppercase tracking-wider mb-1">
+                        Distancia Requerida
+                    </p>
+                    <p
+                        id="display-distance"
+                        class="text-4xl font-black text-slate-900 tracking-tight"
+                    >
+                        -- m
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <ProjectorVisualizer />
+    </div>
+</div>
+
+<script>
+    const diagonalInput = document.getElementById("diagonal-input") as HTMLInputElement;
+    const diagonalSlider = document.getElementById("diagonal-slider") as HTMLInputElement;
+    const throwInput = document.getElementById("throw-input") as HTMLInputElement;
+    const ratioButtons = document.querySelectorAll(".ratio-btn");
+
+    const displayWidth = document.getElementById("display-width");
+    const displayHeight = document.getElementById("display-height");
+    const displayDistance = document.getElementById("display-distance");
+
+    const vizProjector = document.getElementById("viz-projector");
+    const vizBeam = document.getElementById("viz-beam");
+    const vizDistText = document.getElementById("viz-dist-text");
+    const vizScreen = document.getElementById("viz-screen");
+
+    let currentRatio = 16 / 9;
+
+    function cmToM(cm: number) {
+        return (cm / 100).toFixed(2);
+    }
+
+    function calculate() {
+        const diagonalInches = parseFloat(diagonalInput.value);
+        const throwRatio = parseFloat(throwInput.value);
+
+        if (isNaN(diagonalInches) || isNaN(throwRatio)) return;
+
+        const angle = Math.atan(1 / currentRatio);
+        const widthInches = diagonalInches * Math.cos(angle);
+        const heightInches = diagonalInches * Math.sin(angle);
+
+        const widthCm = widthInches * 2.54;
+        const heightCm = heightInches * 2.54;
+
+        const distanceCm = widthCm * throwRatio;
+
+        if (displayWidth) displayWidth.innerText = `${cmToM(widthCm)} m`;
+        if (displayHeight) displayHeight.innerText = `${cmToM(heightCm)} m`;
+        if (displayDistance) displayDistance.innerText = `${cmToM(distanceCm)} m`;
+
+        updateVisuals(widthCm, distanceCm);
+    }
+
+    function updateVisuals(widthCm: number, distanceCm: number) {
+        const MAX_DIST_CM = 1000;
+        const CONTAINER_WIDTH = 600;
+        const SCALE = CONTAINER_WIDTH / MAX_DIST_CM;
+
+        const screenX = 50;
+        const projX = screenX + distanceCm * SCALE;
+
+        const clampedProjX = Math.min(Math.max(projX, 100), 750);
+
+        if (vizProjector) {
+            vizProjector.setAttribute("transform", `translate(${clampedProjX}, 300)`);
+        }
+
+        const screenVisualHeight = Math.min((widthCm * SCALE) / currentRatio, 200);
+
+        if (vizBeam) {
+            const pX = clampedProjX - 10;
+            const pY = 300;
+            const sX = screenX + 10;
+            const sTop = 300 - screenVisualHeight / 2;
+            const sBottom = 300 + screenVisualHeight / 2;
+
+            vizBeam.setAttribute("d", `M${pX},${pY} L${sX},${sTop} L${sX},${sBottom} Z`);
+        }
+
+        if (vizDistText) {
+            vizDistText.innerHTML = `${(distanceCm / 100).toFixed(1)}m`;
+            vizDistText.setAttribute("x", String((screenX + clampedProjX) / 2));
+        }
+
+        if (vizScreen) {
+            const sTop = 300 - screenVisualHeight / 2;
+            const sBottom = 300 + screenVisualHeight / 2;
+            vizScreen.setAttribute("y1", String(sTop));
+            vizScreen.setAttribute("y2", String(sBottom));
+        }
+    }
+
+    function updateRatioButtons(selectedBtn: Element) {
+        const activeClasses = [
+            "bg-cyan-600",
+            "border-cyan-600",
+            "text-white",
+            "shadow-lg",
+            "shadow-cyan-500/30",
+        ];
+        const inactiveClasses = [
+            "bg-white",
+            "border-slate-200",
+            "text-slate-600",
+            "hover:bg-slate-50",
+        ];
+
+        ratioButtons.forEach((btn) => {
+            btn.classList.remove(...activeClasses);
+            btn.classList.add(...inactiveClasses);
+
+            const iconSpan = btn.querySelector("span:first-child");
+            if (iconSpan) {
+                iconSpan.classList.remove("opacity-100", "border-white");
+                iconSpan.classList.add("opacity-50", "border-slate-400");
+            }
+
+            const textSpan = btn.querySelector("span:last-child");
+            if (textSpan) {
+                textSpan.classList.remove("text-cyan-100");
+                textSpan.classList.add("text-slate-400");
+            }
+        });
+
+        selectedBtn.classList.remove(...inactiveClasses);
+        selectedBtn.classList.add(...activeClasses);
+
+        const activeIcon = selectedBtn.querySelector("span:first-child");
+        if (activeIcon) {
+            activeIcon.classList.remove("opacity-50", "border-slate-400");
+            activeIcon.classList.add("opacity-100", "border-white");
+        }
+
+        const activeText = selectedBtn.querySelector("span:last-child");
+        if (activeText) {
+            activeText.classList.remove("text-slate-400");
+            activeText.classList.add("text-cyan-100");
+        }
+    }
+
+    diagonalInput.addEventListener("input", (e) => {
+        diagonalSlider.value = (e.target as HTMLInputElement).value;
+        calculate();
+    });
+
+    diagonalSlider.addEventListener("input", (e) => {
+        diagonalInput.value = (e.target as HTMLInputElement).value;
+        calculate();
+    });
+
+    throwInput.addEventListener("input", calculate);
+
+    ratioButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            updateRatioButtons(btn);
+            const r = btn.getAttribute("data-ratio");
+            if (r) {
+                currentRatio = parseFloat(r);
+                calculate();
+            }
+        });
+    });
+
+    if (ratioButtons.length > 0) updateRatioButtons(ratioButtons[0]);
+    calculate();
+</script>
