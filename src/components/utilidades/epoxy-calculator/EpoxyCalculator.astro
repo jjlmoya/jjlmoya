@@ -1,0 +1,521 @@
+---
+
+---
+
+<div class="epoxy-calculator grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto w-full">
+    <div
+        class="lg:col-span-7 bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl p-6 shadow-xl shadow-amber-900/5 transition-all duration-300 hover:shadow-amber-900/10"
+    >
+        <div class="flex gap-2 mb-8 bg-slate-100/50 p-1.5 rounded-2xl">
+            <button
+                class="shape-btn active flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
+                data-shape="rect"
+            >
+                <span class="icon-[mdi--cube-outline] text-xl"></span> Rectangular
+            </button>
+            <button
+                class="shape-btn flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 transition-all flex items-center justify-center gap-2"
+                data-shape="cylinder"
+            >
+                <span class="icon-[mdi--cylinder] text-xl"></span> Cilíndrico
+            </button>
+            <button
+                class="shape-btn flex-1 py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-800 transition-all flex items-center justify-center gap-2"
+                data-shape="sphere"
+            >
+                <span class="icon-[mdi--circle-outline] text-xl"></span> Esférico
+            </button>
+        </div>
+
+        <div id="inputs-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+            <div class="input-group rect-input">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+                    >Largo (cm)</label
+                >
+                <input
+                    type="number"
+                    id="length"
+                    value="30"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                />
+            </div>
+            <div class="input-group rect-input">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+                    >Ancho (cm)</label
+                >
+                <input
+                    type="number"
+                    id="width"
+                    value="20"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                />
+            </div>
+
+            <div class="input-group cylinder-input hidden">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+                    >Diámetro (cm)</label
+                >
+                <input
+                    type="number"
+                    id="diameter"
+                    value="15"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                />
+            </div>
+
+            <div class="input-group sphere-input hidden">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+                    >Diámetro (cm)</label
+                >
+                <input
+                    type="number"
+                    id="sphere-diameter"
+                    value="10"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                />
+            </div>
+
+            <div class="input-group depth-input">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+                    >Profundidad (cm)</label
+                >
+                <input
+                    type="number"
+                    id="depth"
+                    value="5"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all"
+                />
+            </div>
+        </div>
+
+        <div class="h-px w-full bg-slate-100 mb-8"></div>
+
+        <div class="mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider"
+                    >Proporción de Mezcla (Peso/Volumen)</label
+                >
+                <span
+                    id="ratio-display"
+                    class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">2:1</span
+                >
+            </div>
+
+            <div class="flex gap-4 items-center">
+                <div class="flex-1">
+                    <input
+                        type="range"
+                        id="ratio-slider"
+                        min="1"
+                        max="5"
+                        step="0.5"
+                        value="2"
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+                    <div class="flex justify-between text-[10px] text-slate-400 mt-2 font-mono">
+                        <span>1:1</span>
+                        <span>2:1</span>
+                        <span>3:1</span>
+                        <span>4:1</span>
+                        <span>5:1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 flex items-center gap-2">
+                <input
+                    type="checkbox"
+                    id="custom-ratio-check"
+                    class="rounded text-amber-500 focus:ring-amber-500 border-gray-300"
+                />
+                <label for="custom-ratio-check" class="text-sm text-slate-600"
+                    >Usar proporción personalizada (A:B)</label
+                >
+            </div>
+            <div id="custom-ratio-inputs" class="grid grid-cols-2 gap-4 mt-2 hidden">
+                <div>
+                    <label class="text-[10px] uppercase text-slate-400 font-bold">Resina (A)</label>
+                    <input
+                        type="number"
+                        id="ratio-a"
+                        value="100"
+                        class="w-full px-3 py-2 border rounded-lg text-sm bg-slate-50"
+                    />
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase text-slate-400 font-bold"
+                        >Endurecedor (B)</label
+                    >
+                    <input
+                        type="number"
+                        id="ratio-b"
+                        value="50"
+                        class="w-full px-3 py-2 border rounded-lg text-sm bg-slate-50"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-100"
+        >
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-white rounded-lg shadow-sm text-amber-500">
+                    <span class="icon-[mdi--flask-outline] text-xl"></span>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-slate-700">Margen de Seguridad</p>
+                    <p class="text-xs text-slate-400">Añade 5% extra para pérdidas</p>
+                </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="waste-margin" checked class="sr-only peer" />
+                <div
+                    class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"
+                >
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <div class="lg:col-span-5 space-y-6">
+        <div
+            class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-3xl p-1 shadow-xl shadow-orange-900/20 text-white overflow-hidden relative group"
+        >
+            <div
+                class="absolute top-0 right-0 p-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"
+            >
+            </div>
+
+            <div
+                class="bg-white/10 backdrop-blur-sm p-6 rounded-[20px] h-full flex flex-col justify-between relative z-10"
+            >
+                <div>
+                    <h3 class="text-amber-100 text-sm font-semibold uppercase tracking-wider mb-1">
+                        Volumen Total
+                    </h3>
+                    <div class="flex items-baseline gap-2">
+                        <span id="total-volume" class="text-5xl font-bold tracking-tight">0</span>
+                        <span class="text-xl text-amber-200">ml</span>
+                    </div>
+                </div>
+
+                <div class="mt-8 grid grid-cols-2 gap-4">
+                    <div class="bg-black/20 rounded-xl p-3 backdrop-blur-md">
+                        <p class="text-xs text-amber-200 mb-1 uppercase font-bold">
+                            Parte A (Resina)
+                        </p>
+                        <p id="part-a" class="text-2xl font-mono font-bold">0 ml</p>
+                    </div>
+                    <div class="bg-white/20 rounded-xl p-3 backdrop-blur-md">
+                        <p class="text-xs text-white mb-1 uppercase font-bold">
+                            Parte B (Catalizador)
+                        </p>
+                        <p id="part-b" class="text-2xl font-mono font-bold">0 ml</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bg-white rounded-3xl p-6 shadow-lg border border-slate-100 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden"
+        >
+            <p
+                class="absolute top-6 left-6 text-xs font-bold text-slate-300 uppercase tracking-widest"
+            >
+                Visualización
+            </p>
+
+            <div
+                class="visual-stage relative w-40 h-40 flex items-end justify-center perspective-1000"
+            >
+                <div
+                    id="visual-shape"
+                    class="relative transition-all duration-500 border-4 border-slate-800/20 w-32 h-32 overflow-hidden bg-slate-50"
+                >
+                    <div
+                        id="liquid-fill"
+                        class="absolute bottom-0 left-0 w-full bg-amber-400/80 transition-all duration-700 ease-in-out h-0 relative"
+                    >
+                        <div class="absolute top-0 left-0 w-full h-2 bg-white/30 animate-pulse">
+                        </div>
+                        <div
+                            class="bubble absolute bottom-2 left-2 w-2 h-2 bg-white/40 rounded-full animate-bounce"
+                        >
+                        </div>
+                        <div
+                            class="bubble absolute bottom-5 right-4 w-1 h-1 bg-white/40 rounded-full animate-pulse"
+                        >
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    id="visual-label"
+                    class="absolute -bottom-8 text-center text-xs font-mono text-slate-400 w-full"
+                >
+                    Rectángulo
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+
+    .shape-rect {
+        border-radius: 4px;
+        transform: rotateX(10deg) rotateY(10deg);
+        box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .shape-cylinder {
+        border-radius: 4px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+
+        width: 100px !important;
+        transform: rotateX(5deg);
+    }
+    .shape-sphere {
+        border-radius: 50%;
+        transform: scale(1.1);
+        box-shadow: inset -10px -10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    #liquid-fill {
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    }
+</style>
+
+<script>
+    let currentShape = "rect";
+    let isCustomRatio = false;
+
+    const shapeBtns = document.querySelectorAll(".shape-btn");
+
+    const displayGroups = {
+        rect: document.querySelectorAll(".rect-input"),
+        cylinder: document.querySelectorAll(".cylinder-input"),
+        sphere: document.querySelectorAll(".sphere-input"),
+        depth: document.querySelectorAll(".depth-input"),
+    };
+
+    const totalEl = document.getElementById("total-volume");
+    const partAEl = document.getElementById("part-a");
+    const partBEl = document.getElementById("part-b");
+    const visualShape = document.getElementById("visual-shape");
+    const liquidFill = document.getElementById("liquid-fill");
+    const visualLabel = document.getElementById("visual-label");
+
+    const inputs = {
+        length: document.getElementById("length"),
+        width: document.getElementById("width"),
+        depth: document.getElementById("depth"),
+        diameter: document.getElementById("diameter"),
+        sphereDiameter: document.getElementById("sphere-diameter"),
+
+        ratioSlider: document.getElementById("ratio-slider"),
+        customCheck: document.getElementById("custom-ratio-check"),
+        customA: document.getElementById("ratio-a"),
+        customB: document.getElementById("ratio-b"),
+        wasteMargin: document.getElementById("waste-margin"),
+    };
+
+    function init() {
+        attachListeners();
+        const defaultSlider = document.getElementById("ratio-slider");
+        if (defaultSlider instanceof HTMLInputElement) {
+            const display = document.getElementById("ratio-display");
+            if (display) display.textContent = `${defaultSlider.value}:1`;
+        }
+        calculate();
+    }
+
+    function attachListeners() {
+        shapeBtns.forEach((btn) => {
+            if (!(btn instanceof HTMLElement)) return;
+            btn.addEventListener("click", () => {
+                const shape = btn.dataset.shape || "rect";
+                setShape(shape);
+            });
+        });
+
+        Object.values(inputs).forEach((input) => {
+            if (input instanceof HTMLInputElement) {
+                input.addEventListener("input", calculate);
+            }
+        });
+
+        const customCheck = inputs.customCheck;
+        if (customCheck instanceof HTMLInputElement) {
+            customCheck.addEventListener("change", (e) => {
+                const target = e.target;
+                if (target instanceof HTMLInputElement) {
+                    isCustomRatio = target.checked;
+
+                    const customInputs = document.getElementById("custom-ratio-inputs");
+                    if (customInputs) customInputs.classList.toggle("hidden", !isCustomRatio);
+
+                    const slider = document.getElementById("ratio-slider");
+                    if (slider instanceof HTMLInputElement) {
+                        if (slider.parentElement)
+                            slider.parentElement.classList.toggle("opacity-50", isCustomRatio);
+                        slider.disabled = isCustomRatio;
+                    }
+
+                    calculate();
+                }
+            });
+        }
+
+        const ratioSlider = inputs.ratioSlider;
+        if (ratioSlider instanceof HTMLInputElement) {
+            ratioSlider.addEventListener("input", (e) => {
+                const target = e.target;
+                if (target instanceof HTMLInputElement) {
+                    const display = document.getElementById("ratio-display");
+                    if (display) display.textContent = `${target.value}:1`;
+                    calculate();
+                }
+            });
+        }
+    }
+
+    function setShape(shape: string) {
+        if (typeof shape !== "string") return;
+        currentShape = shape;
+
+        shapeBtns.forEach((btn) => {
+            if (!(btn instanceof HTMLElement)) return;
+            const isActive = btn.dataset.shape === shape;
+
+            if (isActive) {
+                btn.classList.add("bg-slate-800", "text-white", "shadow-lg");
+                btn.classList.remove("text-slate-500", "hover:text-slate-800");
+            } else {
+                btn.classList.remove("bg-slate-800", "text-white", "shadow-lg");
+                btn.classList.add("text-slate-500", "hover:text-slate-800");
+            }
+            btn.classList.toggle("active", isActive);
+        });
+
+        document.querySelectorAll(".input-group").forEach((el) => el.classList.add("hidden"));
+
+        const showInputs = (list: NodeListOf<Element>) => {
+            list.forEach((el) => el.classList.remove("hidden"));
+        };
+
+        if (shape === "rect") {
+            showInputs(displayGroups.rect);
+            showInputs(displayGroups.depth);
+            if (visualShape)
+                visualShape.className =
+                    "relative transition-all duration-500 border-4 border-slate-800/20 w-32 h-20 overflow-hidden bg-slate-50 shape-rect";
+            if (visualLabel) visualLabel.textContent = "Bloque Rectangular";
+        } else if (shape === "cylinder") {
+            showInputs(displayGroups.cylinder);
+            showInputs(displayGroups.depth);
+            if (visualShape)
+                visualShape.className =
+                    "relative transition-all duration-500 border-4 border-slate-800/20 w-32 h-32 overflow-hidden bg-slate-50 shape-cylinder";
+            if (visualLabel) visualLabel.textContent = "Cilindro / Molde Redondo";
+        } else if (shape === "sphere") {
+            showInputs(displayGroups.sphere);
+            if (visualShape)
+                visualShape.className =
+                    "relative transition-all duration-500 border-4 border-slate-800/20 w-32 h-32 overflow-hidden bg-slate-50 shape-sphere rounded-full";
+            if (visualLabel) visualLabel.textContent = "Esfera Completa";
+        }
+
+        calculate();
+    }
+
+    function calculate() {
+        let volume = 0;
+
+        if (currentShape === "rect") {
+            const l =
+                inputs.length instanceof HTMLInputElement
+                    ? parseFloat(inputs.length.value) || 0
+                    : 0;
+            const w =
+                inputs.width instanceof HTMLInputElement ? parseFloat(inputs.width.value) || 0 : 0;
+            const d =
+                inputs.depth instanceof HTMLInputElement ? parseFloat(inputs.depth.value) || 0 : 0;
+            volume = l * w * d;
+        } else if (currentShape === "cylinder") {
+            const r =
+                inputs.diameter instanceof HTMLInputElement
+                    ? (parseFloat(inputs.diameter.value) || 0) / 2
+                    : 0;
+            const h =
+                inputs.depth instanceof HTMLInputElement ? parseFloat(inputs.depth.value) || 0 : 0;
+            volume = Math.PI * Math.pow(r, 2) * h;
+        } else if (currentShape === "sphere") {
+            const r =
+                inputs.sphereDiameter instanceof HTMLInputElement
+                    ? (parseFloat(inputs.sphereDiameter.value) || 0) / 2
+                    : 0;
+            volume = (4 / 3) * Math.PI * Math.pow(r, 3);
+        }
+
+        if (inputs.wasteMargin instanceof HTMLInputElement && inputs.wasteMargin.checked) {
+            volume = volume * 1.05;
+        }
+
+        let rA = 0,
+            rB = 0;
+        if (isCustomRatio) {
+            rA =
+                inputs.customA instanceof HTMLInputElement
+                    ? parseFloat(inputs.customA.value) || 1
+                    : 1;
+            rB =
+                inputs.customB instanceof HTMLInputElement
+                    ? parseFloat(inputs.customB.value) || 1
+                    : 1;
+        } else {
+            rA =
+                inputs.ratioSlider instanceof HTMLInputElement
+                    ? parseFloat(inputs.ratioSlider.value || "2")
+                    : 2;
+            rB = 1;
+        }
+
+        const totalParts = rA + rB;
+        if (totalParts === 0) return;
+
+        const volA = (volume / totalParts) * rA;
+        const volB = (volume / totalParts) * rB;
+
+        updateUI(volume, volA, volB);
+    }
+
+    function updateUI(total: number, partA: number, partB: number) {
+        if (totalEl) animateValue(totalEl, total);
+        if (partAEl) partAEl.textContent = `${Math.round(partA)} ml`;
+        if (partBEl) partBEl.textContent = `${Math.round(partB)} ml`;
+
+        if (liquidFill) liquidFill.style.height = "85%";
+    }
+
+    function animateValue(obj: HTMLElement, end: number, duration = 500) {
+        if (!(obj instanceof HTMLElement)) return;
+        let startTimestamp: number | null = null;
+        const start = parseFloat(obj.innerHTML.replace(",", "")) || 0;
+        const step = (timestamp: number) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start).toString();
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    init();
+</script>
