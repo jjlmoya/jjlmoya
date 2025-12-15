@@ -28,6 +28,14 @@ export const homeSection: SectionData = {
             title: "Calculadora Solar",
             description: "Ángulo de inclinación óptimo para placas solares según tu latitud.",
             color: "#f59e0b"
+        },
+        {
+            href: "/utilidades/calculadora-tiro-proyector/",
+            iconBg: "mdi:projector",
+            iconFg: "mdi:video-input-component",
+            title: "Calculadora Distancia Proyector",
+            description: "Calcula dónde poner el proyector según las pulgadas de pantalla.",
+            color: "#06b6d4"
         }
     ]
 };
