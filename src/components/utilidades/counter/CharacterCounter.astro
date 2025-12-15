@@ -5,7 +5,7 @@
 <div
     class="w-full max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700"
 >
-    <!-- Stats Grid -->
+    
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div
             class="group relative p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-500/50 dark:hover:border-blue-500/50 transition-all duration-300 shadow-sm hover:shadow-md"
@@ -72,7 +72,7 @@
         </div>
     </div>
 
-    <!-- Detailed Stats (Hidden by default, shown when there is text) -->
+    
     <div
         id="detailed-stats"
         class="grid grid-cols-2 md:grid-cols-4 gap-4 opacity-50 transition-opacity duration-300"
@@ -106,7 +106,7 @@
         </div>
     </div>
 
-    <!-- Main Input Area -->
+    
     <div class="relative group">
         <div
             class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl opacity-10 group-focus-within:opacity-20 transition-opacity duration-500 blur-lg"
@@ -115,7 +115,7 @@
         <div
             class="relative bg-white dark:bg-slate-900 rounded-xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-800"
         >
-            <!-- Toolbar -->
+            
             <div
                 class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-sm"
             >
@@ -201,7 +201,7 @@
     const copyBtn = document.getElementById("copy-btn");
     const detailedStats = document.getElementById("detailed-stats");
 
-    // Stats Elements
+    
     const stats = {
         chars: document.getElementById("char-count"),
         words: document.getElementById("word-count"),
@@ -216,27 +216,27 @@
     function updateStats() {
         const text = textInput.value;
 
-        // Basic Counts
+        
         const charCount = text.length;
         const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
         const lineCount = text === "" ? 0 : text.split(/\r\n|\r|\n/).length;
 
-        // Paragraphs (double newline as separator mainly)
+        
         const paragraphCount =
             text === "" ? 0 : text.split(/\n\s*\n/).filter((p) => p.trim().length > 0).length;
 
-        // Detailed
+        
         const charNoSpacesCount = text.replace(/\s/g, "").length;
-        const blob = new Blob([text]); // Gets accurate byte size including multibyte chars
+        const blob = new Blob([text]); 
         const byteSize = blob.size;
 
-        // Estimations
+        
         const wordsPerMinuteReading = 200;
         const wordsPerMinuteSpeaking = 130;
         const readTimeMinutes = wordCount / wordsPerMinuteReading;
         const speakTimeMinutes = wordCount / wordsPerMinuteSpeaking;
 
-        // Formatting outputs
+        
         if (stats.chars) stats.chars.textContent = new Intl.NumberFormat("es-ES").format(charCount);
         if (stats.words) stats.words.textContent = new Intl.NumberFormat("es-ES").format(wordCount);
         if (stats.lines) stats.lines.textContent = new Intl.NumberFormat("es-ES").format(lineCount);
@@ -251,7 +251,7 @@
         if (stats.readingTime) stats.readingTime.textContent = formatTime(readTimeMinutes);
         if (stats.speakingTime) stats.speakingTime.textContent = formatTime(speakTimeMinutes);
 
-        // Opacity toggle for detailed stats
+        
         if (detailedStats) {
             detailedStats.style.opacity = text.length > 0 ? "1" : "0.5";
         }
@@ -274,10 +274,10 @@
         return `${Math.round(minutes)} min`;
     }
 
-    // Event Listeners
+    
     textInput.addEventListener("input", updateStats);
 
-    // File Upload
+    
     fileInput.addEventListener("change", (e) => {
         const file = (e.target as HTMLInputElement).files?.[0];
         if (!file) return;
@@ -290,7 +290,7 @@
         reader.readAsText(file);
     });
 
-    // Drag and Drop
+    
     const dropZone = textInput.closest(".group") as HTMLElement;
 
     if (dropZone) {
@@ -318,19 +318,19 @@
         });
     }
 
-    // Clear
+    
     clearBtn?.addEventListener("click", () => {
         textInput.value = "";
         updateStats();
         textInput.focus();
     });
 
-    // Copy
+    
     copyBtn?.addEventListener("click", () => {
         textInput.select();
         navigator.clipboard.writeText(textInput.value);
 
-        // Visual feedback
+        
         const originalIcon = copyBtn.innerHTML;
         copyBtn.innerHTML = `<svg class="w-4 h-4 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`;
 

@@ -63,11 +63,11 @@ export class FlockingMechanic {
 
     public update(mouseX?: number, mouseY?: number) {
         for (const boid of this.boids) {
-            // Reset acceleration
+            
             boid.acc.x = 0;
             boid.acc.y = 0;
 
-            // Apply rules
+            
             const alignment = this.align(boid);
             const cohesion = this.cohesion(boid);
             const separation = this.separation(boid);
@@ -79,7 +79,7 @@ export class FlockingMechanic {
             boid.acc.x += separation.x * this.config.separationWeight;
             boid.acc.y += separation.y * this.config.separationWeight;
 
-            // Mouse interaction (Repulsion)
+            
             if (mouseX !== undefined && mouseY !== undefined) {
                 const d = this.dist(boid.pos.x, boid.pos.y, mouseX, mouseY);
                 if (d < 100) {
@@ -95,11 +95,11 @@ export class FlockingMechanic {
                 }
             }
 
-            // Update physics
+            
             boid.vel.x += boid.acc.x;
             boid.vel.y += boid.acc.y;
 
-            // Limit speed
+            
             const speed = Math.sqrt(boid.vel.x * boid.vel.x + boid.vel.y * boid.vel.y);
             if (speed > this.config.maxSpeed) {
                 boid.vel.x = (boid.vel.x / speed) * this.config.maxSpeed;
@@ -109,7 +109,7 @@ export class FlockingMechanic {
             boid.pos.x += boid.vel.x;
             boid.pos.y += boid.vel.y;
 
-            // Wrap around
+            
             if (boid.pos.x < 0) boid.pos.x = this.bounds.width;
             if (boid.pos.x > this.bounds.width) boid.pos.x = 0;
             if (boid.pos.y < 0) boid.pos.y = this.bounds.height;
@@ -118,7 +118,7 @@ export class FlockingMechanic {
     }
 
     private align(boid: Boid): Vector {
-        let steering = { x: 0, y: 0 };
+        const steering = { x: 0, y: 0 };
         let total = 0;
 
         for (const other of this.boids) {
@@ -134,18 +134,18 @@ export class FlockingMechanic {
             steering.x /= total;
             steering.y /= total;
 
-            // Set to max speed
+            
             const speed = Math.sqrt(steering.x * steering.x + steering.y * steering.y);
             if (speed > 0) {
                 steering.x = (steering.x / speed) * this.config.maxSpeed;
                 steering.y = (steering.y / speed) * this.config.maxSpeed;
             }
 
-            // Steer towards target
+            
             steering.x -= boid.vel.x;
             steering.y -= boid.vel.y;
 
-            // Limit force
+            
             const force = Math.sqrt(steering.x * steering.x + steering.y * steering.y);
             if (force > this.config.maxForce) {
                 steering.x = (steering.x / force) * this.config.maxForce;
@@ -157,7 +157,7 @@ export class FlockingMechanic {
     }
 
     private cohesion(boid: Boid): Vector {
-        let steering = { x: 0, y: 0 };
+        const steering = { x: 0, y: 0 };
         let total = 0;
 
         for (const other of this.boids) {
@@ -173,7 +173,7 @@ export class FlockingMechanic {
             steering.x /= total;
             steering.y /= total;
 
-            // Seek target
+            
             steering.x -= boid.pos.x;
             steering.y -= boid.pos.y;
 
@@ -197,18 +197,18 @@ export class FlockingMechanic {
     }
 
     private separation(boid: Boid): Vector {
-        let steering = { x: 0, y: 0 };
+        const steering = { x: 0, y: 0 };
         let total = 0;
 
         for (const other of this.boids) {
             const d = this.dist(boid.pos.x, boid.pos.y, other.pos.x, other.pos.y);
             if (other !== boid && d < this.config.separationRadius) {
-                let diff = {
+                const diff = {
                     x: boid.pos.x - other.pos.x,
                     y: boid.pos.y - other.pos.y,
                 };
 
-                // Weight by distance
+                
                 if (d > 0) {
                     diff.x /= d;
                     diff.y /= d;

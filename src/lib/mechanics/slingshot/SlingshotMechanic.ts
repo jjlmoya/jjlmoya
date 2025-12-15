@@ -1,12 +1,4 @@
-/**
- * Slingshot Mechanic
- *
- * A reusable physics-based slingshot mechanic for games.
- * Drag an object, stretch it like a rubber band, and release to launch.
- *
- * @author jjlmoya
- * @license MIT
- */
+
 
 export interface SlingshotConfig {
     gravity?: number;
@@ -95,8 +87,8 @@ export class SlingshotMechanic {
 
         this.callbacks = callbacks;
 
-        // Bounds should be set by the caller via updateBounds()
-        // this.updateBounds(window.innerWidth, window.innerHeight);
+        
+        
     }
 
     updateBounds(width: number, height: number): void {
@@ -130,7 +122,7 @@ export class SlingshotMechanic {
 
         let dx = mouseX - this.state.anchor.x;
         let dy = mouseY - this.state.anchor.y;
-        let dist = Math.sqrt(dx * dx + dy * dy);
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist > this.config.maxDragDistance) {
             const ratio = this.config.maxDragDistance / dist;

@@ -78,7 +78,7 @@ export class MagneticFingerGame {
     }
 
     draw() {
-        // Fade effect
+        
         this.ctx.fillStyle = "rgba(10, 10, 10, 0.3)";
         this.ctx.fillRect(0, 0, this.width, this.height);
 

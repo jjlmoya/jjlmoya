@@ -14,12 +14,12 @@ export class VibratorCrackerGame {
     lastMouseAngle: number = 0;
     dialRotation: number = 0;
 
-    // Hold to unlock logic
+    
     holdTimer: number = 0;
-    readonly HOLD_DURATION: number = 1000; // ms
+    readonly HOLD_DURATION: number = 1000; 
     lastTime: number = 0;
 
-    // Visual feedback for ticks
+    
     tickAnim: number = 0;
 
     private _boundOnPointerMove: (e: MouseEvent | TouchEvent) => void;
@@ -30,14 +30,14 @@ export class VibratorCrackerGame {
         this.ctx = canvas.getContext("2d")!;
         this.system = new VibratorCrackerSystem();
 
-        // Visual feedback callbacks
+        
         this.system.onTick = () => {
             this.tickAnim = 1.0;
         };
 
         this.resize();
 
-        // Bind methods once to allow removal later
+        
         this._boundOnPointerMove = (e: any) => {
             if (e.type === "touchmove") {
                 if (this.isDragging) {
@@ -66,12 +66,12 @@ export class VibratorCrackerGame {
     }
 
     bindEvents() {
-        // Mouse
+        
         this.canvas.addEventListener("mousedown", this.onPointerDown.bind(this));
         window.addEventListener("mousemove", this._boundOnPointerMove);
         window.addEventListener("mouseup", this._boundOnPointerUp);
 
-        // Touch
+        
         this.canvas.addEventListener(
             "touchstart",
             (e) => {
@@ -80,7 +80,7 @@ export class VibratorCrackerGame {
                 const dy = touch.clientY - this.canvas.getBoundingClientRect().top - this.centerY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                // Only prevent default if touching the dial
+                
                 if (dist < 150) {
                     e.preventDefault();
                     this.onPointerDown(touch);
@@ -105,7 +105,7 @@ export class VibratorCrackerGame {
         const dy = e.clientY - this.canvas.getBoundingClientRect().top - this.centerY;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        // Only grab if inside the dial (radius approx 120)
+        
         if (dist < 150) {
             this.isDragging = true;
             this.lastMouseAngle = Math.atan2(dy, dx);
@@ -122,14 +122,14 @@ export class VibratorCrackerGame {
         const currentMouseAngle = Math.atan2(dy, dx);
         let deltaAngle = currentMouseAngle - this.lastMouseAngle;
 
-        // Handle wrap around
+        
         if (deltaAngle > Math.PI) deltaAngle -= Math.PI * 2;
         if (deltaAngle < -Math.PI) deltaAngle += Math.PI * 2;
 
         this.dialRotation += deltaAngle;
         this.lastMouseAngle = currentMouseAngle;
 
-        // Update System
+        
         this.system.updateDial(this.dialRotation);
     }
 
@@ -160,9 +160,9 @@ export class VibratorCrackerGame {
             this.holdTimer = 0;
         }
 
-        // Decay tick animation
+        
         if (this.tickAnim > 0) {
-            this.tickAnim -= dt * 0.01; // Decay speed
+            this.tickAnim -= dt * 0.01; 
             if (this.tickAnim < 0) this.tickAnim = 0;
         }
     }
@@ -170,16 +170,16 @@ export class VibratorCrackerGame {
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Background
+        
         this.ctx.fillStyle = "#111";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw Safe Dial
+        
         this.ctx.save();
         this.ctx.translate(this.centerX, this.centerY);
         this.ctx.rotate(this.dialRotation);
 
-        // Dial Body
+        
         this.ctx.beginPath();
         this.ctx.arc(0, 0, 120, 0, Math.PI * 2);
         this.ctx.fillStyle = "#333";
@@ -188,7 +188,7 @@ export class VibratorCrackerGame {
         this.ctx.lineWidth = 5;
         this.ctx.stroke();
 
-        // Ticks
+        
         this.ctx.fillStyle = "#fff";
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle";
@@ -222,7 +222,7 @@ export class VibratorCrackerGame {
             }
         }
 
-        // Knob
+        
         this.ctx.beginPath();
         this.ctx.arc(0, 0, 40, 0, Math.PI * 2);
         this.ctx.fillStyle = "#222";
@@ -233,27 +233,27 @@ export class VibratorCrackerGame {
 
         this.ctx.restore();
 
-        // Indicator (Fixed at top)
-        const indicatorOffset = this.tickAnim * 5; // Move up by 5px on tick
+        
+        const indicatorOffset = this.tickAnim * 5; 
         this.ctx.beginPath();
         this.ctx.moveTo(this.centerX, this.centerY - 130 - indicatorOffset);
         this.ctx.lineTo(this.centerX - 10, this.centerY - 150 - indicatorOffset);
         this.ctx.lineTo(this.centerX + 10, this.centerY - 150 - indicatorOffset);
         this.ctx.closePath();
 
-        // Indicator color changes when holding
+        
         if (this.holdTimer > 0 && !this.system.isUnlocked) {
-            // Pulse or change color based on progress
+            
             const progress = Math.min(1, this.holdTimer / this.HOLD_DURATION);
             const r = 225;
             const g = Math.floor(29 + (255 - 29) * progress);
             const b = Math.floor(72 + (0 - 72) * progress);
             this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 
-            // Draw progress ring around indicator?
+            
             this.ctx.fill();
 
-            // Draw progress arc
+            
             this.ctx.beginPath();
             this.ctx.arc(
                 this.centerX,
@@ -266,11 +266,11 @@ export class VibratorCrackerGame {
             this.ctx.lineWidth = 3;
             this.ctx.stroke();
         } else {
-            this.ctx.fillStyle = "#e11d48"; // Red indicator
+            this.ctx.fillStyle = "#e11d48"; 
             this.ctx.fill();
         }
 
-        // Status / Combination Progress
+        
         this.drawStatus();
     }
 

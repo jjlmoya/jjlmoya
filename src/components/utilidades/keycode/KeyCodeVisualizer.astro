@@ -5,19 +5,19 @@ import { Icon } from "astro-icon/components";
 <div
     class="w-full max-w-4xl mx-auto min-h-[500px] flex flex-col items-center justify-center relative perspective-1000"
 >
-    <!-- Initial State -->
+    
     <div
         id="initial-state"
         class="text-center space-y-8 animate-in fade-in zoom-in duration-500 py-20"
     >
         <div class="relative group cursor-pointer inline-block">
-            <!-- Glow Effect -->
+            
             <div
                 class="absolute -inset-8 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 animate-pulse"
             >
             </div>
 
-            <!-- Floating Key -->
+            
             <div
                 class="relative w-40 h-40 bg-white dark:bg-slate-800 rounded-3xl border-b-[12px] border-slate-200 dark:border-slate-950 shadow-2xl flex items-center justify-center transform transition-all duration-500 hover:-translate-y-2 hover:shadow-violet-500/20"
             >
@@ -26,7 +26,7 @@ import { Icon } from "astro-icon/components";
                     class="w-20 h-20 text-slate-300 dark:text-slate-600 group-hover:text-violet-500 transition-colors duration-300"
                 />
 
-                <!-- Animated Click Indicator -->
+                
                 <div
                     class="absolute -top-2 -right-2 w-6 h-6 bg-violet-500 rounded-full animate-bounce shadow-lg"
                 >
@@ -64,9 +64,9 @@ import { Icon } from "astro-icon/components";
         </div>
     </div>
 
-    <!-- Active State (Hidden by default) -->
+    
     <div id="active-state" class="hidden w-full space-y-12 animate-in fade-in zoom-in duration-300">
-        <!-- The Giant 3D Key -->
+        
         <div class="flex justify-center">
             <div id="main-key" class="relative group">
                 <div
@@ -86,7 +86,7 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        <!-- Info Grid -->
+        
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div
                 class="bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 text-center flex flex-col items-center justify-between min-h-[130px] group hover:border-violet-500/50 transition-colors"
@@ -170,7 +170,7 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        <!-- Modifiers -->
+        
         <div class="flex justify-center gap-4">
             <div
                 id="mod-ctrl"
@@ -198,7 +198,7 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        <!-- Quick Copy Snippets -->
+        
         <div class="space-y-4 pt-8 border-t border-slate-200 dark:border-slate-800">
             <h3 class="text-sm font-mono uppercase tracking-widest text-slate-500 text-center mb-6">
                 Snippets Rápidos
@@ -274,7 +274,7 @@ import { Icon } from "astro-icon/components";
     const activeState = document.getElementById("active-state");
     const mainKey = document.querySelector(".key-3d");
 
-    // Display elements
+    
     const displayKey = document.getElementById("display-key");
     const displayCode = document.getElementById("display-code");
     const infoKey = document.getElementById("info-key");
@@ -282,14 +282,14 @@ import { Icon } from "astro-icon/components";
     const infoWhich = document.getElementById("info-which");
     const infoLocation = document.getElementById("info-location");
 
-    // Snippet elements
+    
     const snippetKey = document.getElementById("snippet-key");
     const snippetCode = document.getElementById("snippet-code");
     const snippetWhich = document.getElementById("snippet-which");
     const snippetJson = document.getElementById("snippet-json");
     const snippetBtns = document.querySelectorAll(".snippet-btn");
 
-    // Modifiers
+    
     const mods = {
         ctrl: document.getElementById("mod-ctrl"),
         shift: document.getElementById("mod-shift"),
@@ -300,19 +300,19 @@ import { Icon } from "astro-icon/components";
     function updateVisuals(e: KeyboardEvent) {
         e.preventDefault();
 
-        // Switch to active state if not already
+        
         if (initialState && !initialState.classList.contains("hidden")) {
             initialState.classList.add("hidden");
             activeState?.classList.remove("hidden");
         }
 
-        // Visual "Explosion" / Press effect
+        
         if (mainKey) {
             mainKey.classList.add("key-pressed");
             setTimeout(() => mainKey.classList.remove("key-pressed"), 150);
         }
 
-        // Update main display
+        
         let keyDisplay = e.key;
         if (keyDisplay === " ") keyDisplay = "Space";
         if (keyDisplay.length === 1) keyDisplay = keyDisplay.toUpperCase();
@@ -320,22 +320,22 @@ import { Icon } from "astro-icon/components";
         if (displayKey) displayKey.textContent = keyDisplay;
         if (displayCode) displayCode.textContent = e.code;
 
-        // Update Info Grid
+        
         if (infoKey) infoKey.textContent = e.key === " " ? "(space)" : e.key;
         if (infoCode) infoCode.textContent = e.code;
         if (infoWhich) infoWhich.textContent = (e as any).which.toString();
 
-        // Location mapping
+        
         const locations = ["Standard", "Left", "Right", "Numpad"];
         if (infoLocation) infoLocation.textContent = locations[e.location] || "Standard";
 
-        // Update Modifiers
+        
         updateModifier(mods.ctrl, e.ctrlKey);
         updateModifier(mods.shift, e.shiftKey);
         updateModifier(mods.alt, e.altKey);
         updateModifier(mods.meta, e.metaKey);
 
-        // Update Snippets
+        
         const keyQuote = e.key === "'" ? '"' : "'";
         if (snippetKey) snippetKey.textContent = `if (e.key === ${keyQuote}${e.key}${keyQuote})`;
         if (snippetCode) snippetCode.textContent = `if (e.code === '${e.code}')`;
@@ -367,14 +367,14 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    // Copy functionality
+    
     snippetBtns.forEach((btn) => {
         btn.addEventListener("click", async () => {
             const code = btn.querySelector("code");
             if (code && code.textContent) {
                 await navigator.clipboard.writeText(code.textContent);
 
-                // Visual feedback
+                
                 btn.classList.remove("bg-slate-100", "dark:bg-slate-900/50");
                 btn.classList.add("bg-green-500/10", "border-green-500", "text-green-600");
 
@@ -386,7 +386,7 @@ import { Icon } from "astro-icon/components";
         });
     });
 
-    // Value Copy functionality
+    
     const valueBtns = document.querySelectorAll(".copy-value-btn");
     valueBtns.forEach((btn) => {
         btn.addEventListener("click", async (e) => {
@@ -399,7 +399,7 @@ import { Icon } from "astro-icon/components";
             if (targetEl && targetEl.textContent) {
                 await navigator.clipboard.writeText(targetEl.textContent);
 
-                // Visual feedback
+                
                 btn.classList.add("text-green-500", "bg-green-500/10");
                 btn.classList.remove("text-slate-400", "hover:text-violet-500");
 
@@ -411,6 +411,6 @@ import { Icon } from "astro-icon/components";
         });
     });
 
-    // Listen to window events
+    
     window.addEventListener("keydown", updateVisuals);
 </script>

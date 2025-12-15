@@ -77,7 +77,6 @@
 </dialog>
 
 <script>
-    // Define interface locally to avoid ANY imports
     interface SearchResult {
         id: string;
         title: string;
@@ -157,7 +156,7 @@
                 const response = await fetch("/api/search-index.json");
                 if (response.ok) {
                     this.items = await response.json();
-                    // If modal is still open, refresh filtering
+
                     if (this.isOpen) {
                         this.filter();
                     }
@@ -201,7 +200,11 @@
         }
 
         private toggle() {
-            this.isOpen ? this.close() : this.open();
+            if (this.isOpen) {
+                this.close();
+            } else {
+                this.open();
+            }
         }
 
         private filter() {

@@ -2,7 +2,7 @@ import type { SectionData } from "./index";
 
 export const hardwareSection: SectionData = {
     title: "Hardware y Periféricos",
-    icon: "mdi:cpu-64-bit", // Chip icon or similar
+    icon: "mdi:cpu-64-bit", 
     theme: "blue",
     utilities: [
         {
@@ -19,7 +19,7 @@ export const hardwareSection: SectionData = {
             iconFg: "mdi:keyboard-outline",
             title: "Test de Teclado (Ghosting)",
             description: "Verifica el Rollover de tu teclado y detecta teclas que no funcionan.",
-            color: "#6366f1" // Indigo
+            color: "#6366f1" 
         },
         {
             href: "/utilidades/test-mando/",
@@ -27,7 +27,7 @@ export const hardwareSection: SectionData = {
             iconFg: "mdi:controller",
             title: "Test de Mando y Drift",
             description: "Analiza joysticks, botones y vibración de tu Gamepad (Xbox/PS).",
-            color: "#a855f7" // Purple
+            color: "#a855f7" 
         },
         {
             href: "/utilidades/test-raton/",
@@ -35,7 +35,7 @@ export const hardwareSection: SectionData = {
             iconFg: "mdi:mouse",
             title: "Test de Polling Rate",
             description: "Mide los Hz reales de tu ratón gaming en el navegador.",
-            color: "#10b981" // Emerald
+            color: "#10b981" 
         },
         {
             href: "/utilidades/generador-tonos/",
@@ -43,7 +43,7 @@ export const hardwareSection: SectionData = {
             iconFg: "mdi:sine-wave",
             title: "Generador de Frecuencias",
             description: "Crea tonos puros de audio para probar altavoces y oídos.",
-            color: "#f43f5e" // Rose
+            color: "#f43f5e" 
         }
     ]
 };

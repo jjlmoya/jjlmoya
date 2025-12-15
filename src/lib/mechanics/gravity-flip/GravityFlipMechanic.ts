@@ -15,7 +15,7 @@ export interface GravityFlipState {
 export class GravityFlipMechanic {
     private y: number;
     private vy: number;
-    private gravityDir: number; // 1 for down, -1 for up
+    private gravityDir: number; 
     private isGrounded: boolean;
     private config: GravityFlipConfig;
 
@@ -42,7 +42,7 @@ export class GravityFlipMechanic {
         this.vy += gravityForce;
         this.y += this.vy;
 
-        // Floor/Ceiling Collision
+        
         if (this.y >= this.config.groundY) {
             this.y = this.config.groundY;
             this.vy = 0;

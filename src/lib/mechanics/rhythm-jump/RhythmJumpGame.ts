@@ -9,14 +9,14 @@ export class RhythmJumpGame {
     private animationId: number = 0;
     private lastTime: number = 0;
 
-    // Camera
+    
     private cameraX: number = 0;
 
-    // Colors
+    
     private colors = {
-        bg: '#0f172a', // slate-900
-        c0: '#22d3ee', // cyan-400
-        c1: '#d946ef', // fuchsia-500
+        bg: '#0f172a', 
+        c0: '#22d3ee', 
+        c1: '#d946ef', 
         c0Ghost: 'rgba(34, 211, 238, 0.2)',
         c1Ghost: 'rgba(217, 70, 239, 0.2)'
     };
@@ -49,11 +49,11 @@ export class RhythmJumpGame {
         if (!this.isRunning) return;
 
         const now = performance.now();
-        const dt = Math.min((now - this.lastTime), 100); // Cap dt to prevent huge jumps
+        const dt = Math.min((now - this.lastTime), 100); 
         this.lastTime = now;
 
-        // Calculate timeScale (1.0 at 60fps)
-        // 1000ms / 60fps = 16.66ms per frame
+        
+        
         const timeScale = dt / (1000 / 60);
 
         this.update(timeScale);
@@ -68,14 +68,14 @@ export class RhythmJumpGame {
     }
 
     private draw() {
-        // Clear
+        
         this.ctx.fillStyle = this.colors.bg;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.save();
         this.ctx.translate(-this.cameraX, 0);
 
-        // Draw Platforms
+        
         for (const p of this.mechanic.platforms) {
             const isMatching = p.colorId === this.mechanic.player.colorId;
 
@@ -96,12 +96,12 @@ export class RhythmJumpGame {
             this.ctx.fillRect(p.x, p.y, p.width, p.height);
             this.ctx.shadowBlur = 0;
 
-            // Outline
+            
             this.ctx.strokeStyle = 'rgba(255,255,255,0.1)';
             this.ctx.strokeRect(p.x, p.y, p.width, p.height);
         }
 
-        // Draw Player
+        
         const playerColor = this.mechanic.player.colorId === 0 ? this.colors.c0 : this.colors.c1;
         this.ctx.fillStyle = playerColor;
         this.ctx.shadowBlur = 20;
@@ -111,18 +111,18 @@ export class RhythmJumpGame {
 
         this.ctx.restore();
 
-        // UI
+        
         this.drawUI();
     }
 
     private drawUI() {
-        // Score
+        
         this.ctx.fillStyle = '#fff';
         this.ctx.font = 'bold 24px monospace';
         this.ctx.textAlign = 'left';
         this.ctx.fillText(`SCORE: ${this.mechanic.score}`, 20, 40);
 
-        // Color Indicator (Current State)
+        
         const indSize = 30;
         const x = this.canvas.width - 50;
         const y = 30;
@@ -136,7 +136,7 @@ export class RhythmJumpGame {
         this.ctx.lineWidth = 2;
         this.ctx.stroke();
 
-        // Game Over
+        
         if (this.mechanic.player.state === 'dead') {
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -151,7 +151,7 @@ export class RhythmJumpGame {
     }
 
     private bindInput() {
-        // Desktop: Click to toggle, Space to jump
+        
         const handleClick = (e: MouseEvent) => {
             e.preventDefault();
             if (this.mechanic.player.state === 'dead') {
@@ -175,7 +175,7 @@ export class RhythmJumpGame {
         this.canvas.addEventListener('mousedown', handleClick);
         window.addEventListener('keydown', handleKey);
 
-        // Mobile: Touch handling
+        
         let touchStartY = 0;
         let touchStartX = 0;
         const SWIPE_THRESHOLD = 30;
@@ -199,11 +199,11 @@ export class RhythmJumpGame {
             const dy = touchEndY - touchStartY;
             const dx = touchEndX - touchStartX;
 
-            // Check for swipe up (negative dy)
+            
             if (dy < -SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
                 this.mechanic.jump();
             } else {
-                // Treat as tap
+                
                 this.mechanic.toggleColor();
             }
         });

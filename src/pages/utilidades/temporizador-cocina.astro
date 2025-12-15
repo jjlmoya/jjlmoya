@@ -9,7 +9,7 @@ const title = "Temporizador de Cocina Múltiple";
 const description =
     "Gestiona múltiples tiempos de cocción simultáneamente. Alarmas independientes, ideal para chefs y organización en la cocina (Mise en Place).";
 
-// Updated defaults
+
 const timers = [
     { defaultName: "Temporizador 1" },
     { defaultName: "Temporizador 2" },
@@ -24,7 +24,7 @@ const timers = [
     category="Cocina"
     gradientFrom="from-orange-100"
 >
-    <!-- Header -->
+    
     <div slot="header">
         <UtilityHeader
             titleHighlight="Cocina"
@@ -36,9 +36,9 @@ const timers = [
         />
     </div>
 
-    <!-- Timers Area -->
+    
     <div class="max-w-7xl mx-auto mb-16">
-        <!-- Grid -->
+        
         <div
             id="timers-grid"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 transition-all"
@@ -50,7 +50,7 @@ const timers = [
             }
         </div>
 
-        <!-- Add Button -->
+        
         <div class="flex justify-center">
             <button
                 id="add-timer-btn"
@@ -66,10 +66,10 @@ const timers = [
         </div>
     </div>
 
-    <!-- Mobile Dock -->
+    
     <MobileTimerDock />
 
-    <!-- Global Controls -->
+    
     <div class="flex justify-center gap-4 mb-24">
         <button
             id="stop-all"
@@ -80,12 +80,12 @@ const timers = [
         </button>
     </div>
 
-    <!-- Hidden Template for JS cloning -->
+    
     <template id="timer-template">
         <SingleTimer index={-1} defaultName="Nuevo Temporizador" />
     </template>
 
-    <!-- SEO Content -->
+    
     <div slot="seo">
         <div
             class="p-8 md:p-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800"
@@ -175,7 +175,7 @@ const timers = [
                             <li
                                 class="flex justify-between border-b border-slate-200 dark:border-slate-700 pb-2"
                             >
-                                <span>Reposo (Pieza asada >1kg)</span>
+                                <span>Reposo (Pieza asada &gt;1kg)</span>
                                 <span class="font-mono font-bold text-orange-600">15-20 min</span>
                             </li>
                         </ul>
@@ -257,12 +257,10 @@ const timers = [
     import { KitchenTimer } from "../../lib/utilidades/kitchen-timer/KitchenTimer";
     import { DockManager } from "../../lib/utilidades/kitchen-timer/DockManager";
 
-    // --- Global Logic ---
     const timersGrid = document.getElementById("timers-grid");
     const timerTemplate = document.getElementById("timer-template") as HTMLTemplateElement;
     const activeTimers: KitchenTimer[] = [];
 
-    // Init Dock Manager
     const dockManager = new DockManager("mobile-dock", "mobile-dock-container");
 
     function initTimer(element: HTMLElement) {
@@ -272,41 +270,32 @@ const timers = [
         return timer;
     }
 
-    // Initialize existing
     document.querySelectorAll(".timer-card").forEach((card) => {
         initTimer(card as HTMLElement);
     });
 
-    // Add Timer Logic
     document.getElementById("add-timer-btn")?.addEventListener("click", () => {
         if (!timerTemplate || !timersGrid) return;
 
-        // Clone template
         const clone = timerTemplate.content.cloneNode(true) as DocumentFragment;
         const newCard = clone.querySelector(".timer-card") as HTMLElement;
 
-        // Update index/name if needed (optional visual polish)
         const count = activeTimers.length + 1;
         newCard.setAttribute("data-index", count.toString());
         const nameInput = newCard.querySelector(".timer-name") as HTMLInputElement;
         if (nameInput) nameInput.value = `Temporizador ${count}`;
 
-        // Append
         timersGrid.appendChild(newCard);
 
-        // Init logic
         initTimer(newCard);
 
-        // Scroll to it
         newCard.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    // Stop All
     document.getElementById("stop-all")?.addEventListener("click", () => {
         activeTimers.forEach((t) => t.pause());
     });
 
-    // Permission
     if ("Notification" in window) {
         if (Notification.permission !== "granted" && Notification.permission !== "denied") {
             Notification.requestPermission();

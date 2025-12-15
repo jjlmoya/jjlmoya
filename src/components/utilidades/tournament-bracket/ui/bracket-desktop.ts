@@ -1,6 +1,6 @@
 import type { TournamentData, Match } from "../models";
 
-// Shared Theme (could be imported)
+
 const THEME = {
     match: {
         winner: "bg-indigo-100 text-indigo-900 font-bold shadow-inner ring-1 ring-indigo-200",
@@ -155,7 +155,7 @@ export class DesktopBracketRenderer {
         const p1Disabled = !p1 ? "disabled" : "";
         const p2Disabled = !p2 ? "disabled" : "";
 
-        // P1 Input
+        
         let p1Input = '';
         if (scoreEnabled && p1 && p2) {
             const val = (match.score1 !== undefined && match.score1 !== null) ? match.score1 : '';
@@ -163,7 +163,7 @@ export class DesktopBracketRenderer {
                         data-match-id="${match.id}" data-player="1" value="${val}" onclick="event.stopPropagation()">`;
         }
 
-        // P2 Input
+        
         let p2Input = '';
         if (scoreEnabled && p1 && p2) {
             const val = (match.score2 !== undefined && match.score2 !== null) ? match.score2 : '';
@@ -171,19 +171,19 @@ export class DesktopBracketRenderer {
                         data-match-id="${match.id}" data-player="2" value="${val}" onclick="event.stopPropagation()">`;
         }
 
-        // If inputs exist, we need to adjust layout. 
-        // We can place the input inside the button or next to it.
-        // Current button takes full width.
-        // Let's modify the inner HTML of the "button".
-        // Wait, button type="button" wrapped around input is bad.
-        // We should move input OUT of button or use div.
-        // But the whole row is clickable to select winner in NO-SCORE mode.
-        // In SCORE mode, can we still click to select winner? Yes, manual override.
-        // So we can have input on the right side.
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         return `
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative group w-full h-[100px] flex flex-col justify-center hover:shadow-md transition-shadow z-10">
-           <!-- Connector Dots -->
+           
             <div class="absolute top-1/2 -left-1.5 w-3 h-3 bg-slate-200 rounded-full transform -translate-y-1/2 border-2 border-white box-content"></div>
             <div class="absolute top-1/2 -right-1.5 w-3 h-3 bg-slate-200 rounded-full transform -translate-y-1/2 border-2 border-white box-content"></div>
 

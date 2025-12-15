@@ -6,32 +6,26 @@
     id="nuance-world"
     class="fixed inset-0 w-full h-full bg-neutral-900 text-neutral-200 overflow-hidden select-none font-serif"
 >
-    <!-- 1. DYNAMIC BACKGROUND LAYER (The "Mood") -->
     <div
         id="bg-layer"
         class="absolute inset-0 transition-colors duration-700 ease-out bg-neutral-500"
     >
-        <!-- Noise Texture -->
         <div
             class="absolute inset-0 opacity-20 pointer-events-none"
             style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"
         >
         </div>
 
-        <!-- Split Gradient (Side A vs Side B) -->
         <div
             class="absolute inset-0 bg-gradient-to-r from-white via-transparent to-black mix-blend-overlay opacity-50"
         >
         </div>
     </div>
 
-    <!-- 2. CONTENT LAYER (The "Truth") -->
-    <!-- This container scrolls but is also affected by opacity based on balance -->
     <div
         id="content-scroll"
         class="absolute inset-0 overflow-y-scroll snap-y snap-mandatory scroll-smooth z-10 pt-20 pb-40"
     >
-        <!-- INTRO -->
         <section
             class="h-[80vh] w-full snap-center flex flex-col items-center justify-center p-8 text-center"
             data-label-a="LUZ CIEGA"
@@ -53,13 +47,11 @@
             </div>
         </section>
 
-        <!-- DEBATE 1: POLITICA -->
         <section
             class="min-h-screen w-full snap-center flex flex-col items-center justify-center p-8 relative"
             data-label-a="FASCISMO"
             data-label-b="COMUNISMO"
         >
-            <!-- The Content that fades -->
             <div
                 class="nuance-content opacity-100 transition-opacity duration-200 max-w-4xl text-center"
             >
@@ -75,7 +67,6 @@
                 </p>
             </div>
 
-            <!-- Radical Overlays (Hidden by default, shown by JS) -->
             <div
                 class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300 transform scale-150"
                 id="radical-a-1"
@@ -98,7 +89,6 @@
             </div>
         </section>
 
-        <!-- DEBATE 2: IA -->
         <section
             class="min-h-screen w-full snap-center flex flex-col items-center justify-center p-8 relative"
             data-label-a="LUDISMO"
@@ -119,7 +109,6 @@
                 </p>
             </div>
 
-            <!-- Radical Overlays -->
             <div
                 class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300"
                 id="radical-a-2"
@@ -142,7 +131,6 @@
             </div>
         </section>
 
-        <!-- FINAL -->
         <section
             class="h-[50vh] w-full snap-center flex flex-col items-center justify-center p-8 text-center"
             data-label-a="CIEGO"
@@ -160,12 +148,9 @@
         </section>
     </div>
 
-    <!-- 3. THE HUD (Footer Control) -->
-    <!-- Always visible, high z-index -->
     <div
         class="fixed bottom-0 left-0 w-full z-50 p-4 md:p-8 flex flex-col items-center pointer-events-none"
     >
-        <!-- Dynamic Labels -->
         <div
             class="w-full max-w-xl flex justify-between text-[10px] md:text-xs font-bold uppercase tracking-widest mb-4 font-mono text-white mix-blend-difference transition-all duration-300"
             id="hud-labels"
@@ -174,19 +159,15 @@
             <span id="label-hud-b">B</span>
         </div>
 
-        <!-- THE BALANCE BAR (Interactive) -->
         <div
             class="relative w-full max-w-xl h-16 bg-neutral-900/90 rounded-full border border-white/20 shadow-2xl backdrop-blur-md pointer-events-auto overflow-hidden cursor-ew-resize touch-none"
             id="balance-track"
         >
-            <!-- Danger Zones inside track -->
             <div class="absolute inset-y-0 left-0 w-1/4 bg-white/20"></div>
             <div class="absolute inset-y-0 right-0 w-1/4 bg-black/50"></div>
 
-            <!-- Center Safe Zone -->
             <div class="absolute inset-y-0 left-1/2 w-0.5 bg-white/20 -translate-x-1/2"></div>
 
-            <!-- THE HANDLE (Draggable) -->
             <div
                 id="balance-handle"
                 class="absolute top-1 bottom-1 w-14 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.5)] left-1/2 -translate-x-1/2 flex items-center justify-center transform active:scale-95 transition-transform duration-75"
@@ -200,14 +181,12 @@
         </div>
     </div>
 
-    <!-- 4. FULLSCREEN OVERLAYS (The "Themes") -->
-    <!-- Whiteout -->
     <div
         id="theme-white"
         class="fixed inset-0 bg-white pointer-events-none z-40 transition-opacity duration-100 opacity-0 mix-blend-normal"
     >
     </div>
-    <!-- Blackout -->
+
     <div
         id="theme-black"
         class="fixed inset-0 bg-black pointer-events-none z-40 transition-opacity duration-100 opacity-0 mix-blend-normal"
@@ -216,58 +195,48 @@
 </div>
 
 <script>
-    // --- ELEMENTS ---
     const track = document.getElementById("balance-track");
     const handle = document.getElementById("balance-handle");
-    const bgLayer = document.getElementById("bg-layer");
     const themeWhite = document.getElementById("theme-white");
     const themeBlack = document.getElementById("theme-black");
-    const contentScroll = document.getElementById("content-scroll");
 
-    // Labels
     const labelHudA = document.getElementById("label-hud-a");
     const labelHudB = document.getElementById("label-hud-b");
 
-    // Sections for Observer
     const sections = document.querySelectorAll("section");
 
-    // --- STATE ---
-    let position = 0.5; // 0.0 to 1.0 (0.5 is center)
+    let position = 0.5;
     let isDragging = false;
 
-    // "Wind" Drift Physics
     let windForce = 0;
-    let windTarget = 0.002; // Constant drift to right initially
+    let windTarget = 0.002;
 
-    // Constants
-    const DRIFT_SPEED = 0.0015; // How fast it ruins itself
-    const PULL_STRENGTH = 0.003; // Magnetic pull to edges
+    const PULL_STRENGTH = 0.003;
 
-    // --- INTERACTION ---
-    const updateFromInput = (clientX) => {
+    const updateFromInput = (clientX: number) => {
         if (!track) return;
         const rect = track.getBoundingClientRect();
         const x = clientX - rect.left;
-        // Clamp 0 to 1
+
         position = Math.max(0, Math.min(1, x / rect.width));
     };
 
-    const startDrag = (e) => {
+    const startDrag = (e: MouseEvent | TouchEvent) => {
         isDragging = true;
-        handle.classList.add("cursor-grabbing");
-        updateFromInput(e.touches ? e.touches[0].clientX : e.clientX);
+        if (handle) handle.classList.add("cursor-grabbing");
+        updateFromInput(e instanceof TouchEvent ? e.touches[0].clientX : e.clientX);
     };
 
-    const moveDrag = (e) => {
+    const moveDrag = (e: MouseEvent | TouchEvent) => {
         if (!isDragging) return;
-        // Prevent scrolling on touch
-        if (e.touches) e.preventDefault();
-        updateFromInput(e.touches ? e.touches[0].clientX : e.clientX);
+
+        if (e instanceof TouchEvent && e.cancelable && e.touches) e.preventDefault();
+        updateFromInput(e instanceof TouchEvent ? e.touches[0].clientX : e.clientX);
     };
 
     const endDrag = () => {
         isDragging = false;
-        handle.classList.remove("cursor-grabbing");
+        if (handle) handle.classList.remove("cursor-grabbing");
     };
 
     if (track) {
@@ -279,25 +248,18 @@
         window.addEventListener("touchend", endDrag);
     }
 
-    // --- GAME LOOP ---
     const loop = () => {
         if (!isDragging) {
-            // physics takeover!
-
-            // 1. Wind (Random changes)
             if (Math.random() > 0.98) {
                 windTarget = (Math.random() - 0.5) * 0.006;
             }
             windForce += (windTarget - windForce) * 0.05;
 
-            // 2. Magnetic Edge Pull (The "Spiral")
-            // The further from center, the stronger the pull to the edge
             const dist = position - 0.5;
             const pull = dist * PULL_STRENGTH;
 
             position += windForce + pull;
 
-            // Clamp
             position = Math.max(0, Math.min(1, position));
         }
 
@@ -305,74 +267,44 @@
         requestAnimationFrame(loop);
     };
 
-    // --- RENDER ---
     const render = () => {
-        // 1. Move Handle
-        // Convert 0..1 to %
         if (handle) {
             handle.style.left = `${position * 100}%`;
         }
 
-        // 2. Handle Themes (The 3 States)
-        // Center Safe Zone: 0.35 to 0.65
-        const dist = Math.abs(position - 0.5) * 2; // 0 (center) to 1 (edge)
+        const dist = Math.abs(position - 0.5) * 2;
 
-        // Background Color Shift (Gray -> White or Gray -> Black)
-        // 0.0 -> White
-        // 1.0 -> Black
-        // But only applies if opacity overlay isn't fully covering.
-
-        // Calculate Danger Opacity
-        // If < 0.3 -> White fade in
-        // If > 0.7 -> Black fade in
         let whiteOp = 0;
         let blackOp = 0;
 
         if (position < 0.3) {
-            whiteOp = (0.3 - position) * 3.33; // 0 at 0.3, 1 at 0.0
+            whiteOp = (0.3 - position) * 3.33;
         }
         if (position > 0.7) {
-            blackOp = (position - 0.7) * 3.33; // 0 at 0.7, 1 at 1.0
+            blackOp = (position - 0.7) * 3.33;
         }
 
         if (themeWhite) themeWhite.style.opacity = whiteOp.toFixed(3);
         if (themeBlack) themeBlack.style.opacity = blackOp.toFixed(3);
 
-        // 3. Radical Overlays visibility
-        // We find the current visible section index
-        // Since we have an observer, we can track 'activeIndex'
-        // But for visual render loop, let's just use CSS classes tailored to active index?
-        // Actually, opacity on overlays is global.
-        // We need to show SPECIFIC radical text for the CURRENT section.
-
-        // Let's rely on the observer to set 'active' class on section
-        // And then use CSS inside render to toggle the specific radical div?
-        // Or simpler: Update ALL radical elements opacity based on global position?
-        // Yes.
-
-        // Radical A texts (Left/White side)
         const radsA = document.querySelectorAll('[id^="radical-a-"]');
         radsA.forEach((el) => {
-            el.style.opacity = whiteOp > 0.5 ? "1" : "0";
+            (el as HTMLElement).style.opacity = whiteOp > 0.5 ? "1" : "0";
         });
 
-        // Radical B texts (Right/Black side)
         const radsB = document.querySelectorAll('[id^="radical-b-"]');
         radsB.forEach((el) => {
-            el.style.opacity = blackOp > 0.5 ? "1" : "0";
+            (el as HTMLElement).style.opacity = blackOp > 0.5 ? "1" : "0";
         });
 
-        // Main Content Fade Out (when radical)
         const contents = document.querySelectorAll(".nuance-content");
         contents.forEach((el) => {
-            // Fade out if either radical is high
             const maxRad = Math.max(whiteOp, blackOp);
-            el.style.opacity = maxRad > 0.5 ? "0" : "1";
-            el.style.filter = `blur(${maxRad * 10}px)`;
+            (el as HTMLElement).style.opacity = maxRad > 0.5 ? "0" : "1";
+            (el as HTMLElement).style.filter = `blur(${maxRad * 10}px)`;
         });
     };
 
-    // --- SCROLL OBSERVER ---
     const obs = new IntersectionObserver(
         (entries) => {
             entries.forEach((entry) => {
@@ -383,7 +315,6 @@
                     if (labelHudA) labelHudA.innerText = a || "A";
                     if (labelHudB) labelHudB.innerText = b || "B";
 
-                    // Highlight active section for logic if needed
                     sections.forEach((s) => s.classList.remove("active-section"));
                     entry.target.classList.add("active-section");
                 }
@@ -394,6 +325,5 @@
 
     sections.forEach((s) => obs.observe(s));
 
-    // START
     requestAnimationFrame(loop);
 </script>

@@ -3,7 +3,7 @@ import type { TournamentManager } from "../logic/manager";
 export class TournamentNavigator {
     static findNextPlayableMatch(manager: TournamentManager) {
         for (const round of manager.rounds) {
-            // Find first match with NO winner but WITH players defined
+            
             const m = round.matches.find(m => !m.winner && m.player1 && m.player2);
             if (m) return m;
         }
@@ -24,7 +24,7 @@ export class TournamentNavigator {
         }
     ) {
         const desktopContainer = document.querySelector('.desktop-bracket-container') as HTMLElement;
-        // Check if desktop view is active (visible)
+        
         const isDesktop = desktopContainer && desktopContainer.offsetParent !== null;
 
         if (isDesktop) {
@@ -91,17 +91,17 @@ export class TournamentNavigator {
         currentActiveRound: number,
         onRoundChange: (i: number) => void
     ) {
-        // Find which round this match belongs to
+        
         const roundIndex = manager.rounds.findIndex(r => r.matches.some(m => m.id === matchId));
 
         if (roundIndex !== -1 && roundIndex !== currentActiveRound) {
-            // Need to switch tabs first
+            
             onRoundChange(roundIndex);
 
-            // Wait for DOM update then scroll (recursive call via timeout handled by caller usually, but here we can try to find it after delay)
-            // Since we don't have the caller's context easily to re-call 'scrollToMatch', we rely on the implementation 
-            // of onRoundChange to eventually allow scrolling, OR we wait here.
-            // Ideally, the controller re-calls this logic or we set a timeout here.
+            
+            
+            
+            
             setTimeout(() => {
                 const mobileContainer = document.querySelector('.bracket-mobile') as HTMLElement;
                 const targetBtn = mobileContainer?.querySelector(`button[data-match-id="${matchId}"]`) as HTMLElement;

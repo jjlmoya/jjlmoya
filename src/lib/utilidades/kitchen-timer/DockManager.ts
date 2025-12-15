@@ -12,7 +12,7 @@ export class DockManager {
 
     public registerTimer(timer: KitchenTimer) {
         this.timers.push(timer);
-        // Listen to updates from the timer
+        
         timer.addEventListener('update', () => this.sync());
         this.sync();
     }
@@ -20,8 +20,8 @@ export class DockManager {
     public sync() {
         if (!this.containerElement || !this.dockElement) return;
 
-        // Filter relevant timers: Running OR (Paused but with remaining time > 0)
-        // AND not finished (remaining > 0)
+        
+        
         const relevantTimers = this.timers.filter(t => t.totalSeconds > 0 && t.remainingSeconds > 0);
 
         if (relevantTimers.length === 0) {
@@ -32,7 +32,7 @@ export class DockManager {
         this.dockElement.setAttribute('data-visible', 'true');
         this.containerElement.innerHTML = '';
 
-        // Sort by remaining time (asc) so the ones finishing soonest are first
+        
         relevantTimers.sort((a, b) => a.remainingSeconds - b.remainingSeconds);
 
         relevantTimers.forEach(t => {
@@ -43,7 +43,7 @@ export class DockManager {
 
     private createDockItem(timer: KitchenTimer): HTMLElement {
         const item = document.createElement('div');
-        // Compact styles: reduced padding, gap, min-width
+        
         item.className = `flex items-center gap-2 px-3 py-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 min-w-[130px] max-w-[160px] flex-shrink-0 shadow-sm transition-colors ${timer.isRunning ? 'border-orange-500 bg-orange-50/30' : ''}`;
 
         item.innerHTML = `

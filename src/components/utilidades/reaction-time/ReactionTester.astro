@@ -3,12 +3,10 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div class="w-full max-w-4xl mx-auto p-4 font-sans select-none">
-    <!-- GAME CONTAINER -->
     <div
         id="reaction-area"
         class="relative w-full h-[500px] md:h-[600px] rounded-[3rem] shadow-2xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all duration-300 transform active:scale-[0.99] touch-manipulation group"
     >
-        <!-- Background Layers for States -->
         <div
             id="bg-wait"
             class="absolute inset-0 bg-rose-500 transition-opacity duration-300 opacity-0 flex items-center justify-center"
@@ -106,7 +104,6 @@ import { Icon } from "astro-icon/components";
                 <div
                     class="w-full bg-black/20 h-6 rounded-full overflow-hidden mb-12 relative border border-white/10"
                 >
-                    <!-- Progress of attempts -->
                     <div
                         id="attempt-bar"
                         class="h-full bg-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.5)] transition-all duration-500 w-1/5"
@@ -118,13 +115,11 @@ import { Icon } from "astro-icon/components";
                     id="action-prompt"
                     class="text-xl md:text-2xl font-medium opacity-90 animate-bounce flex items-center justify-center gap-2"
                 >
-                    <!-- Injected via JS -->
                     <Icon name="mdi:cursor-default-click" /> Click para siguiente intento (1/5)
                 </div>
             </div>
         </div>
 
-        <!-- FINAL SCORE SCREEN -->
         <div
             id="bg-score"
             class="absolute inset-0 bg-slate-900 z-50 transition-opacity duration-500 opacity-0 pointer-events-none flex flex-col items-center justify-center p-6 overflow-y-auto"
@@ -147,12 +142,10 @@ import { Icon } from "astro-icon/components";
                 </h2>
                 <p class="text-slate-400 text-xl mb-8">Promedio final</p>
 
-                <!-- Historic Graph -->
                 <div
                     class="flex justify-center items-end gap-3 h-24 mb-6 px-4 md:px-20"
                     id="bars-container"
                 >
-                    <!-- Bars injected by JS -->
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 w-full mb-8">
@@ -182,7 +175,6 @@ import { Icon } from "astro-icon/components";
         </div>
     </div>
 
-    <!-- Instructions below -->
     <div class="mt-8 flex justify-center text-slate-400 text-sm gap-8">
         <div class="flex items-center gap-2">
             <span
@@ -208,7 +200,6 @@ import { Icon } from "astro-icon/components";
     </div>
 </div>
 
-<!-- HISTORY SECTION (Outside Game) -->
 <div class="mt-12 w-full max-w-4xl mx-auto">
     <h2
         class="text-2xl font-bold text-slate-800 dark:text-white mb-6 text-center flex items-center justify-center gap-2"
@@ -217,7 +208,6 @@ import { Icon } from "astro-icon/components";
     </h2>
 
     <div class="grid md:grid-cols-2 gap-6">
-        <!-- Best -->
         <div
             class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800"
         >
@@ -233,7 +223,6 @@ import { Icon } from "astro-icon/components";
             </ul>
         </div>
 
-        <!-- Worst -->
         <div
             class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800"
         >
@@ -252,12 +241,6 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-    /**
-     * Logic for Reaction Time Tester
-     * Uses performance.now() for high precision.
-     */
-
-    // DOM Elements
     const area = document.getElementById("reaction-area");
     const layers = {
         idle: document.getElementById("bg-idle"),
@@ -268,7 +251,6 @@ import { Icon } from "astro-icon/components";
         score: document.getElementById("bg-score"),
     };
 
-    // Using TS-ignore style logic for vanilla JS simple element selection
     const els = {
         time: document.getElementById("time-display"),
         action: document.getElementById("action-prompt"),
@@ -283,14 +265,12 @@ import { Icon } from "astro-icon/components";
         listWorst: document.getElementById("list-worst"),
     };
 
-    // State
     const TOTAL_ATTEMPTS = 5;
-    let attempts = [];
-    let state = "idle"; // idle, waiting, ready, result, early, finished
+    let attempts: number[] = [];
+    let state = "idle";
     let startTime = 0;
-    let timerId = 0;
+    let timerId: ReturnType<typeof setTimeout> | number = 0;
 
-    // Fun Texts
     const WAIT_PHRASES = [
         { t: "ESPERA...", s: "Aguanta la respiración..." },
         { t: "QUIETO...", s: "No parpadees ahora" },
@@ -299,7 +279,7 @@ import { Icon } from "astro-icon/components";
         { t: "OJITO...", s: "Va a salir ya..." },
     ];
 
-    const getFeedback = (ms) => {
+    const getFeedback = (ms: number) => {
         if (ms < 150) return "¡¿ERES UN ROBOT?!";
         if (ms < 180) return "¡INCREÍBLE!";
         if (ms < 210) return "¡Muy rápido!";
@@ -310,8 +290,13 @@ import { Icon } from "astro-icon/components";
         return "Despierta...";
     };
 
-    // Ranks Configuration
-    const RANKS = [
+    interface Rank {
+        max: number;
+        title: string;
+        color: string;
+    }
+
+    const RANKS: Rank[] = [
         { max: 180, title: "Ciberatleta", color: "from-cyan-400 to-blue-600" },
         { max: 230, title: "Tigre", color: "from-amber-400 to-orange-500" },
         { max: 280, title: "Humano", color: "from-emerald-400 to-green-600" },
@@ -319,9 +304,7 @@ import { Icon } from "astro-icon/components";
         { max: 9999, title: "Dormido", color: "from-stone-500 to-stone-700" },
     ];
 
-    // Helper: Switch Layer
-    function showLayer(layerName) {
-        // Hide all
+    function showLayer(layerName: keyof typeof layers) {
         Object.values(layers).forEach((el) => {
             if (el) {
                 el.classList.remove("opacity-100", "pointer-events-auto");
@@ -329,7 +312,6 @@ import { Icon } from "astro-icon/components";
             }
         });
 
-        // Show target
         const target = layers[layerName];
         if (target) {
             target.classList.remove("opacity-0", "pointer-events-none");
@@ -337,19 +319,15 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    // --- GAME ACTIONS ---
-
     function startAttempt() {
         state = "waiting";
 
-        // Random Wait Text
         const phrase = WAIT_PHRASES[Math.floor(Math.random() * WAIT_PHRASES.length)];
         if (els.waitTitle) els.waitTitle.innerText = phrase.t;
         if (els.waitSub) els.waitSub.innerText = phrase.s;
 
         showLayer("wait");
 
-        // Random delay between 1.5s and 4.5s
         const delay = Math.floor(Math.random() * 3000) + 1500;
 
         timerId = setTimeout(() => {
@@ -361,12 +339,10 @@ import { Icon } from "astro-icon/components";
         }, delay);
     }
 
-    function handleInteraction(e) {
-        // prevent default if needed (e.g. space scroll)
-        if (e.type === "keydown" && e.code === "Space") e.preventDefault();
+    function handleInteraction(e: Event) {
+        if (e.type === "keydown" && (e as KeyboardEvent).code === "Space") e.preventDefault();
 
-        // Only left click or touch or space
-        if (e.type === "mousedown" && e.button !== 0) return;
+        if (e.type === "mousedown" && (e as MouseEvent).button !== 0) return;
 
         if (state === "idle") {
             attempts = [];
@@ -375,7 +351,6 @@ import { Icon } from "astro-icon/components";
         }
 
         if (state === "waiting") {
-            // Early click!
             clearTimeout(timerId);
             state = "early";
             showLayer("early");
@@ -383,28 +358,23 @@ import { Icon } from "astro-icon/components";
         }
 
         if (state === "early") {
-            // Retry current attempt
             startAttempt();
             return;
         }
 
         if (state === "ready") {
-            // Valid Click!
             const endTime = performance.now();
             const reaction = endTime - startTime;
             state = "result";
 
-            // Record
             attempts.push(reaction);
 
-            // UI Update
             if (els.time) els.time.innerText = Math.round(reaction) + " ms";
             if (els.feedback) els.feedback.innerText = getFeedback(reaction);
 
             const isLast = attempts.length >= TOTAL_ATTEMPTS;
             const nextIndex = attempts.length + 1;
 
-            // Update Prompt Text
             if (els.action) {
                 if (isLast) {
                     els.action.innerHTML = `<span>Ver Resultados Finales</span>`;
@@ -429,12 +399,16 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    function renderHistory() {
-        // Load
-        const history = JSON.parse(localStorage.getItem("reaction_scores") || "[]");
+    interface ScoreEntry {
+        score: number;
+        rank: string;
+        date: string;
+    }
 
-        // Helper
-        const renderItem = (item, type) => `
+    function renderHistory() {
+        const history: ScoreEntry[] = JSON.parse(localStorage.getItem("reaction_scores") || "[]");
+
+        const renderItem = (item: ScoreEntry, type: string) => `
             <li class="flex justify-between items-center group bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                 <div class="flex items-center gap-3">
                     <span class="font-mono font-bold text-lg ${type === "best" ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500"}">${item.score}ms</span>
@@ -446,10 +420,8 @@ import { Icon } from "astro-icon/components";
 
         const emptyState = `<li class="text-slate-400 text-sm italic text-center py-4">Juega para registrar tu primer récord</li>`;
 
-        // Get Best (Lowest score first)
         const best = [...history].sort((a, b) => a.score - b.score).slice(0, 5);
 
-        // Get Worst (Highest score first)
         const worst = [...history].sort((a, b) => b.score - a.score).slice(0, 5);
 
         if (els.listBest) {
@@ -464,8 +436,8 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    function saveScore(score, rankTitle) {
-        const history = JSON.parse(localStorage.getItem("reaction_scores") || "[]");
+    function saveScore(score: number, rankTitle: string) {
+        const history: ScoreEntry[] = JSON.parse(localStorage.getItem("reaction_scores") || "[]");
         history.push({
             score: score,
             rank: rankTitle,
@@ -473,52 +445,45 @@ import { Icon } from "astro-icon/components";
         });
         localStorage.setItem("reaction_scores", JSON.stringify(history));
 
-        // Refresh UI
         renderHistory();
     }
 
     function showScore() {
         state = "finished";
 
-        // Calculate Average
         const sum = attempts.reduce((a, b) => a + b, 0);
         const avg = Math.round(sum / attempts.length);
 
-        if (els.final) els.final.innerText = avg;
+        if (els.final) els.final.innerText = avg.toString();
 
-        // Determine Rank
         const rank = RANKS.find((r) => avg <= r.max) || RANKS[RANKS.length - 1];
         if (els.rank) {
             els.rank.textContent = rank.title;
             els.rank.className = `inline-block px-6 py-2 rounded-full bg-gradient-to-r ${rank.color} text-white font-black text-xl md:text-2xl uppercase tracking-widest mb-8 shadow-lg transform -rotate-2`;
         }
 
-        // Save & Update History
         saveScore(avg, rank.title);
 
-        // Draw Chart
         if (els.bars) {
             els.bars.innerHTML = "";
-            const maxVal = Math.max(...attempts, 400); // Scale reference
-            attempts.forEach((val, i) => {
+            const maxVal = Math.max(...attempts, 400);
+            attempts.forEach((val) => {
                 const h = (val / maxVal) * 100;
                 const bar = document.createElement("div");
-                // Tailwind classes via string
+
                 bar.className = "w-8 md:w-12 bg-indigo-500 rounded-t-lg relative group";
                 bar.style.height = `${Math.min(h, 100)}%`;
 
-                // Tooltip
                 const tooltip = document.createElement("div");
                 tooltip.className =
                     "absolute -top-8 left-1/2 -translate-x-1/2 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity bg-black px-2 py-1 rounded";
-                tooltip.innerText = Math.round(val);
+                tooltip.innerText = Math.round(val).toString();
 
                 bar.appendChild(tooltip);
-                els.bars.appendChild(bar);
+                els.bars!.appendChild(bar);
             });
         }
 
-        // Setup Share Buttons
         const shareText = `¡He sacado ${avg}ms en el Test de Reflejos!\nRango: ${rank.title}\n\n¿Puedes superarme?\nhttps://jjlmoya.es/utilidades/test-reflejos/`;
 
         const btnCopy = document.getElementById("btn-share-copy");
@@ -526,7 +491,6 @@ import { Icon } from "astro-icon/components";
 
         if (btnCopy) {
             btnCopy.onclick = (e) => {
-                // Prevent bubbling to game container reset
                 e.stopPropagation();
                 navigator.clipboard.writeText(shareText);
                 const originalContent = btnCopy.innerHTML;
@@ -546,7 +510,6 @@ import { Icon } from "astro-icon/components";
         showLayer("score");
     }
 
-    // Input Listeners
     if (area) {
         area.addEventListener("mousedown", handleInteraction);
         area.addEventListener(
@@ -562,6 +525,5 @@ import { Icon } from "astro-icon/components";
         if (e.code === "Space") handleInteraction(e);
     });
 
-    // Initial Render
     renderHistory();
 </script>

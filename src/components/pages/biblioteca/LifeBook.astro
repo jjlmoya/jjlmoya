@@ -24,7 +24,7 @@ import BookNavigation from "./BookNavigation.astro";
     id="life-book-container"
     class="w-full h-full flex items-center justify-center p-4 md:p-8 opacity-0 transition-opacity duration-1000 relative"
 >
-    <!-- SVG Filters for Ink Effects -->
+    
     <svg class="hidden">
         <defs>
             <filter id="ink-paper">
@@ -47,22 +47,22 @@ import BookNavigation from "./BookNavigation.astro";
         </defs>
     </svg>
 
-    <!-- Book Wrapper (Positioning context, NO overflow hidden) -->
+    
     <div
         class="relative w-full max-w-6xl aspect-[1/2.2] md:aspect-[1.6/1] group transition-all duration-500"
     >
-        <!-- The Book Content (Clipped) -->
+        
         <div
             id="book-inner-content"
             class="absolute inset-0 bg-[#1a1614] rounded-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col md:flex-row border border-[#292524] transition-transform duration-700"
         >
-            <!-- Paper Texture Overlay -->
+            
             <div
                 class="absolute inset-0 pointer-events-none opacity-[0.03] z-10 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] mix-blend-overlay ignore-capture"
             >
             </div>
 
-            <!-- Book Spine / Gutter Shadow -->
+            
             <div
                 class="hidden md:block absolute left-1/2 top-0 bottom-0 w-16 -ml-8 z-20 pointer-events-none bg-gradient-to-r from-transparent via-[#0c0a09]/40 to-transparent ignore-capture"
             >
@@ -72,11 +72,11 @@ import BookNavigation from "./BookNavigation.astro";
             >
             </div>
 
-            <!-- Left Page (Visuals) -->
+            
             <div
                 class="w-full md:w-1/2 h-[40%] md:h-full relative overflow-hidden p-6 md:p-16 flex items-center justify-center bg-[#1a1614]"
             >
-                <!-- Inner Page Shadow (Left) -->
+                
                 <div
                     class="absolute inset-0 pointer-events-none bg-gradient-to-b md:bg-gradient-to-r from-black/20 to-transparent h-6 md:h-auto md:w-8 ignore-capture"
                 >
@@ -86,7 +86,7 @@ import BookNavigation from "./BookNavigation.astro";
                     id="page-visual-container"
                     class="w-full h-full relative flex items-center justify-center"
                 >
-                    <!-- Visuals will be injected here or toggled -->
+                    
                     <div class="book-page-visual hidden w-full h-full" data-page="0">
                         <PageIntro side="left" />
                     </div>
@@ -143,7 +143,7 @@ import BookNavigation from "./BookNavigation.astro";
                     </div>
                 </div>
 
-                <!-- Page Number Left -->
+                
                 <div
                     class="absolute bottom-3 left-6 md:bottom-6 md:left-8 text-[#57534e] font-serif text-[10px] md:text-xs tracking-widest opacity-50"
                     id="page-num-left"
@@ -151,11 +151,11 @@ import BookNavigation from "./BookNavigation.astro";
                 </div>
             </div>
 
-            <!-- Right Page (Text) -->
+            
             <div
                 class="w-full md:w-1/2 h-[60%] md:h-full relative overflow-hidden p-4 md:p-16 flex items-center justify-center text-center md:text-left bg-[#1a1614]"
             >
-                <!-- Inner Page Shadow (Right) -->
+                
                 <div
                     class="absolute inset-y-0 left-0 pointer-events-none bg-gradient-to-t md:bg-gradient-to-l from-transparent to-black/10 h-6 md:h-auto md:w-4 ignore-capture"
                 >
@@ -165,7 +165,7 @@ import BookNavigation from "./BookNavigation.astro";
                     id="page-text-container"
                     class="w-full h-full relative flex items-center justify-center break-normal hyphens-none"
                 >
-                    <!-- Texts will be injected here or toggled -->
+                    
                     <div class="book-page-text hidden w-full h-full" data-page="0">
                         <PageIntro side="right" />
                     </div>
@@ -222,14 +222,14 @@ import BookNavigation from "./BookNavigation.astro";
                     </div>
                 </div>
 
-                <!-- Page Number Right -->
+                
                 <div
                     class="absolute bottom-3 right-6 md:bottom-6 md:right-8 text-[#57534e] font-serif text-[10px] md:text-xs tracking-widest opacity-50"
                     id="page-num-right"
                 >
                 </div>
 
-                <!-- Share/Tear Button -->
+                
                 <button
                     id="share-tear-btn"
                     class="absolute top-3 right-6 md:top-6 md:right-8 text-[#57534e] hover:text-red-400 transition-colors opacity-0 pointer-events-none ignore-capture"
@@ -254,11 +254,11 @@ import BookNavigation from "./BookNavigation.astro";
         </div>
     </div>
 
-    <!-- Navigation Controls -->
+    
     <BookNavigation />
 </div>
 
-<!-- Warning Modal -->
+
 <div
     id="tear-warning-modal"
     class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300"
@@ -305,7 +305,7 @@ import BookNavigation from "./BookNavigation.astro";
         let currentPage = 0;
         const totalPages = 18;
 
-        // Define variables for DOM elements
+        
         let container = null;
         let bookInner = null;
         let visuals = null;
@@ -320,7 +320,7 @@ import BookNavigation from "./BookNavigation.astro";
         let cancelTearBtn = null;
         let confirmTearBtn = null;
 
-        // State for torn pages
+        
         const getTornPages = () => JSON.parse(localStorage.getItem("life-book-torn-pages") || "[]");
         const addTornPage = (pageIndex) => {
             const torn = getTornPages();
@@ -330,7 +330,7 @@ import BookNavigation from "./BookNavigation.astro";
             }
         };
 
-        // Helper to refresh DOM references
+        
         const refreshDOMRefs = () => {
             container = document.getElementById("life-book-container");
             bookInner = document.getElementById("book-inner-content");
@@ -347,7 +347,7 @@ import BookNavigation from "./BookNavigation.astro";
             confirmTearBtn = document.getElementById("confirm-tear");
         };
 
-        // Navigation Logic
+        
         const handleNavigation = (direction) => {
             if (direction === "prev") {
                 if (currentPage > 0) showPage(currentPage - 1);
@@ -357,11 +357,11 @@ import BookNavigation from "./BookNavigation.astro";
         };
 
         const attachListener = (btn, direction) => {
-            // Clone to remove old listeners if any (simple way to clear previous event handlers)
+            
             const newBtn = btn.cloneNode(true);
             btn.parentNode?.replaceChild(newBtn, btn);
 
-            // Update reference
+            
             if (direction === "prev") prevBtn = newBtn;
             else nextBtn = newBtn;
 
@@ -383,30 +383,30 @@ import BookNavigation from "./BookNavigation.astro";
             });
         };
 
-        // Initialization Logic
+        
         const initBook = (year, month) => {
-            refreshDOMRefs(); // Ensure we have the latest DOM
+            refreshDOMRefs(); 
 
             const birthdate = new Date(year, month, 1);
 
-            // Use global function
+            
             const stats = window.calculateLifeStats ? window.calculateLifeStats(birthdate) : {};
 
             if (container) {
                 container.classList.remove("opacity-0");
             }
 
-            // Broadcast stats
+            
             const event = new CustomEvent("update-life-stats", {
                 detail: { stats, birthdate },
             });
             document.dispatchEvent(event);
 
-            // Setup Navigation
+            
             if (prevBtn) attachListener(prevBtn, "prev");
             if (nextBtn) attachListener(nextBtn, "next");
 
-            // Setup Tear Logic
+            
             if (shareBtn) {
                 shareBtn.onclick = () => {
                     if (warningModal && warningContent) {
@@ -439,7 +439,7 @@ import BookNavigation from "./BookNavigation.astro";
                 };
             }
 
-            // Reset and Show
+            
             currentPage = 0;
             showPage(0);
         };
@@ -551,24 +551,24 @@ import BookNavigation from "./BookNavigation.astro";
                 const mainStat =
                     currentTextEl.querySelector(".font-variant-numeric")?.textContent?.trim() || "";
 
-                // Custom poetic messages based on page index
+                
                 const messages = {
-                    1: `Di mis ${mainStat} latidos para que encontraras tu volumen en la biblioteca de la vida.`, // Heart
-                    2: `Sacrifiqué ${mainStat} horas de sueño eterno para despertar vuestra curiosidad.`, // Sleep
-                    3: `He exhalado mi último aliento, ${mainStat} veces, para que podáis respirar esta página.`, // Breath
-                    4: `Caminé ${mainStat} pasos hasta el fin del mundo solo para traeros este recuerdo.`, // Steps
-                    5: `He silenciado ${mainStat} palabras. Ahora solo queda el silencio y esta página.`, // Words
-                    6: `Cerré los ojos ${mainStat} veces. En esa oscuridad encontré esto para vosotros.`, // Blinks
-                    7: `Lloré ${mainStat} litros de lágrimas. Un mar salado que ahora os pertenece.`, // Tears
-                    8: `Me desollé vivo. ${mainStat} kilos de piel dejados atrás para revelar esta verdad.`, // Skin
-                    9: `Aullé a ${mainStat} lunas llenas. La locura fue el precio de este conocimiento.`, // Moon
-                    10: `Me bebí ${mainStat} litros de olvido. Ahora tengo sed de verdad.`, // Water
-                    11: `Devoré ${mainStat} toneladas de vida. El hambre persiste, pero esta página os alimentará.`, // Food
-                    12: `Corté ${mainStat} metros de mi propio ser. Crecerá de nuevo, pero este trozo es vuestro.`, // Hair
-                    13: `Me arranqué ${mainStat} metros de uñas. Una defensa que ya no necesito, entregada a vosotros.`, // Nails
-                    14: `Vi morir al sol ${mainStat} veces. Os regalo este amanecer eterno.`, // Sun
-                    15: `Olvidé ${mainStat} pensamientos para recordar solo esto.`, // Mind
-                    16: "He arrancado a los gatos. Ahora el universo es un lugar un poco más frío y silencioso.", // Cats
+                    1: `Di mis ${mainStat} latidos para que encontraras tu volumen en la biblioteca de la vida.`, 
+                    2: `Sacrifiqué ${mainStat} horas de sueño eterno para despertar vuestra curiosidad.`, 
+                    3: `He exhalado mi último aliento, ${mainStat} veces, para que podáis respirar esta página.`, 
+                    4: `Caminé ${mainStat} pasos hasta el fin del mundo solo para traeros este recuerdo.`, 
+                    5: `He silenciado ${mainStat} palabras. Ahora solo queda el silencio y esta página.`, 
+                    6: `Cerré los ojos ${mainStat} veces. En esa oscuridad encontré esto para vosotros.`, 
+                    7: `Lloré ${mainStat} litros de lágrimas. Un mar salado que ahora os pertenece.`, 
+                    8: `Me desollé vivo. ${mainStat} kilos de piel dejados atrás para revelar esta verdad.`, 
+                    9: `Aullé a ${mainStat} lunas llenas. La locura fue el precio de este conocimiento.`, 
+                    10: `Me bebí ${mainStat} litros de olvido. Ahora tengo sed de verdad.`, 
+                    11: `Devoré ${mainStat} toneladas de vida. El hambre persiste, pero esta página os alimentará.`, 
+                    12: `Corté ${mainStat} metros de mi propio ser. Crecerá de nuevo, pero este trozo es vuestro.`, 
+                    13: `Me arranqué ${mainStat} metros de uñas. Una defensa que ya no necesito, entregada a vosotros.`, 
+                    14: `Vi morir al sol ${mainStat} veces. Os regalo este amanecer eterno.`, 
+                    15: `Olvidé ${mainStat} pensamientos para recordar solo esto.`, 
+                    16: "He arrancado a los gatos. Ahora el universo es un lugar un poco más frío y silencioso.", 
                 };
 
                 shareTitle = `El Sacrificio de ${title}`;
@@ -578,13 +578,13 @@ import BookNavigation from "./BookNavigation.astro";
             }
 
             if (bookInner) {
-                // 3. Start Share Process (Capture first to preserve user activation context if possible)
-                // Animate Tearing concurrently
+                
+                
                 bookInner.style.transition = "transform 1s ease-in, opacity 1s ease-in";
                 bookInner.style.transform = "rotate(5deg) translateY(100px) scale(0.9)";
                 bookInner.style.opacity = "0";
 
-                // Perform Share
+                
                 if (window.shareElementAsImage) {
                     await window.shareElementAsImage({
                         element: bookInner,
@@ -593,36 +593,36 @@ import BookNavigation from "./BookNavigation.astro";
                         url: window.location.href,
                         fileName: "pagina-sacrificada.png",
                         onSuccess: () => {
-                            // Optional: Show success toast
+                            
                         },
                         onError: () => {
-                            // Already handled in share.ts fallback
+                            
                         },
                     });
                 }
 
-                // 4. Update UI State after animation/share
+                
                 setTimeout(() => {
                     addTornPage(currentPage);
                     showTornPage(currentPage);
 
-                    // Restore book style for next time
+                    
                     bookInner.style.transition = "none";
                     bookInner.style.transform = "none";
                     bookInner.style.opacity = "1";
-                }, 1000); // Wait for the visual animation to finish
+                }, 1000); 
             }
         };
 
         refreshDOMRefs();
 
-        // 1. Check LocalStorage immediately
+        
         const storedData = localStorage.getItem("life-birthdate");
         if (storedData) {
             try {
                 const { year, month } = JSON.parse(storedData);
                 if (year && month !== undefined) {
-                    // Initialize immediately if data exists
+                    
                     initBook(year, month);
                 }
             } catch (e) {
@@ -630,8 +630,8 @@ import BookNavigation from "./BookNavigation.astro";
             }
         }
 
-        // 2. Listen for event (for manual entry flow)
-        // Clean up previous listener
+        
+        
         if (window._handleInitLifeBook) {
             document.removeEventListener("init-life-book", window._handleInitLifeBook);
         }

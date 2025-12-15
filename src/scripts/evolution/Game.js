@@ -9,18 +9,18 @@ export class Game {
         this.entities = [];
         this.nextId = 1;
 
-        // DOM Elements
+        
         this.playground = document.getElementById("playground");
         this.entitiesLayer = document.getElementById("entities-layer");
         this.inventoryContainer = document.getElementById("inventory");
         this.instructions = document.getElementById("instructions");
 
-        // Encyclopedia Elements
+        
         this.encyclopediaModal = document.getElementById("encyclopedia-modal");
         this.encyclopediaGrid = document.getElementById("encyclopedia-grid");
         this.encyclopediaStats = document.getElementById("encyclopedia-stats");
 
-        // Systems
+        
         this.fx = new FX(this.entitiesLayer);
         this.battleSystem = new BattleSystem({
             overlay: document.getElementById("battle-overlay"),
@@ -46,7 +46,7 @@ export class Game {
             onMoveEntity: (id, clientX, clientY) => this.moveEntity(id, clientX, clientY),
         });
 
-        // Connect battle system callbacks to input system cleanup
+        
         this.battleSystem.onBattleStart = () => {
             this.inputSystem.cleanup();
         };
@@ -54,12 +54,12 @@ export class Game {
             this.inputSystem.cleanup();
         };
 
-        // Init
+        
         this.renderInventory();
         this.setupControls();
         this.startPassiveHealing();
 
-        // Load from localStorage or spawn default egg
+        
         this.loadGame();
         this.loadEncyclopedia();
     }
@@ -102,7 +102,7 @@ export class Game {
                 const saveData = JSON.parse(saved);
                 this.nextId = saveData.nextId || 1;
 
-                // Clear and refill the array to maintain the reference
+                
                 this.entities.length = 0;
                 saveData.entities.forEach((e) => {
                     this.entities.push({
@@ -148,12 +148,12 @@ export class Game {
         });
 
         document.getElementById("clear-btn").addEventListener("click", () => {
-            this.entities.length = 0; // Clear array while maintaining reference
+            this.entities.length = 0; 
             this.renderEntities();
             this.saveGame();
         });
 
-        // Encyclopedia Controls
+        
         const openBtn = document.getElementById("encyclopedia-btn");
         const closeBtn = document.getElementById("close-encyclopedia");
 
@@ -172,16 +172,16 @@ export class Game {
     startPassiveHealing() {
         setInterval(() => {
             this.entities.forEach((entity) => {
-                // Don't heal if dead or in battle
+                
                 if (entity.currentHp <= 0 || entity.inBattle) return;
 
                 const maxHp = entity.data.stats.hp;
                 if (entity.currentHp < maxHp) {
-                    // Heal 2% of max HP or at least 1
+                    
                     const healAmount = Math.max(1, Math.floor(maxHp * 0.02));
                     entity.currentHp = Math.min(maxHp, entity.currentHp + healAmount);
 
-                    // Update Visual HP Bar
+                    
                     const hpBar = document.getElementById(`hp-bar-${entity.id}`);
                     if (hpBar) {
                         const pct = (entity.currentHp / maxHp) * 100;
@@ -260,7 +260,7 @@ export class Game {
         el.style.top = `${entity.y}px`;
         el.style.transform = "translate(-50%, -50%)";
 
-        // Get type-based colors
+        
         const typeColor = this.getTypeColor(entity.data.types);
         let visualClass = `${typeColor.text} drop-shadow-[0_0_15px_rgba(${typeColor.glow},0.5)]`;
         let bgClass = `bg-slate-900/80 border-[rgba(${typeColor.bg},0.3)]`;
@@ -270,7 +270,7 @@ export class Game {
             bgClass = "bg-amber-900/20 border-amber-700/30";
         }
 
-        // Slots
+        
         let slotsHtml = "";
         if (entity.type === "creature") {
             slotsHtml = `<div class="absolute -top-4 flex gap-1">`;
@@ -286,13 +286,13 @@ export class Game {
             slotsHtml += `</div>`;
         }
 
-        // Level
+        
         const levelHtml =
             entity.type === "creature"
                 ? `<div class="absolute -right-2 -top-2 w-5 h-5 rounded-full bg-amber-500 text-slate-900 text-[10px] font-black flex items-center justify-center border border-white/20 shadow-lg z-20">${entity.level}</div>`
                 : "";
 
-        // HP Bar
+        
         const hpPct = (entity.currentHp / entity.data.stats.hp) * 100;
         const hpColor = hpPct < 30 ? "bg-red-500" : "bg-emerald-500";
         const hpBarHtml = `
@@ -301,7 +301,7 @@ export class Game {
             </div>
         `;
 
-        // XP Bar
+        
         let xpBarHtml = "";
         if (entity.type === "creature") {
             const xpNeeded = entity.level * 100;
@@ -361,13 +361,13 @@ export class Game {
         const entity = this.entities.find((e) => e.id === entityId);
         if (!entity || entity.type !== "creature") return;
 
-        // Check if we can feed (Normal case OR Egg Evolution case)
+        
         let canFeed = false;
 
         if (entity.stomach.length < entity.maxStomach) {
             canFeed = true;
         } else if (entity.data.id === "egg" && entity.stomach.length === 1) {
-            // Allow overfilling egg ONLY if it creates a valid recipe
+            
             const i1 = entity.stomach[0];
             const i2 = ingredient;
             const recipe = this.recipes.find(
@@ -467,7 +467,7 @@ export class Game {
 
         if (!source || !target) return;
 
-        // Prevent entity from battling itself
+        
         if (sourceId === targetId) return;
 
         const canFight = (e) =>
@@ -476,23 +476,23 @@ export class Game {
             (e.data.id === "egg" && e.stomach.length > 0);
 
         if (canFight(source) && canFight(target)) {
-            // Set Battle State
+            
             source.inBattle = true;
             target.inBattle = true;
 
             this.battleSystem.start(source, target, (winner, loser) => {
-                // Clear Battle State
+                
                 source.inBattle = false;
                 target.inBattle = false;
 
-                // XP Logic
+                
                 this.gainXp(winner, 50);
 
-                // Loser Logic
+                
                 if (loser.type === "poop" || loser.currentHp <= 0) {
                     const loserIndex = this.entities.findIndex((e) => e.id === loser.id);
                     if (loserIndex !== -1) {
-                        this.entities.splice(loserIndex, 1); // Remove while maintaining reference
+                        this.entities.splice(loserIndex, 1); 
                     }
                 }
 
@@ -553,7 +553,7 @@ export class Game {
             if (isDiscovered) {
                 const typeColor = this.getTypeColor(recipe.result.types);
 
-                // Inputs HTML
+                
                 const inputsHtml = recipe.inputs
                     .map((inputId) => {
                         const data = this.getEntityData(inputId);

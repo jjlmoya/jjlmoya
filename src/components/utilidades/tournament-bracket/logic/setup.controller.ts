@@ -99,12 +99,12 @@ export class SetupController {
         this.history = this.history.filter(t => t.id !== id);
         TournamentStorage.saveHistory(this.history);
 
-        // Can't easily check if this was the 'current' one without passing manager in. 
-        // For simplicity, we assume if you are in Setup, you aren't playing the one you are deleting 
-        // (unless you reset but kept it in history).
-        // If we strictly follow flow, deleting from history simply removes it from history.
-        // It doesn't stop the current game if it matches ID (edge case). 
-        // But since we are in Setup view, there is no active game visible.
+        
+        
+        
+        
+        
+        
 
         this.render();
     }

@@ -34,23 +34,23 @@ export class DrawThePathGame {
     private loop() {
         if (!this.isRunning) return;
         this.mechanic.update();
-        this.cameraX = this.mechanic.player.x - 150; // Keep player left-center
+        this.cameraX = this.mechanic.player.x - 150; 
         this.draw();
         this.animationId = requestAnimationFrame(() => this.loop());
     }
 
     private draw() {
-        // 1. Background
-        this.ctx.fillStyle = '#0f0f1a'; // Deep dark blue/black
+        
+        this.ctx.fillStyle = '#0f0f1a'; 
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.save();
         this.ctx.translate(-this.cameraX, 0);
 
-        // 2. Parallax Grid
+        
         this.drawGrid();
 
-        // 3. Platforms
+        
         this.ctx.fillStyle = '#1e1e2e';
         this.ctx.strokeStyle = '#00ffcc';
         this.ctx.lineWidth = 2;
@@ -63,7 +63,7 @@ export class DrawThePathGame {
         }
         this.ctx.shadowBlur = 0;
 
-        // 4. Lines
+        
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
         for (const line of this.mechanic.lines) {
@@ -83,10 +83,10 @@ export class DrawThePathGame {
             this.ctx.shadowBlur = 0;
         }
 
-        // 5. Player
+        
         const pl = this.mechanic.player;
 
-        // Trail
+        
         for (let i = 1; i <= 5; i++) {
             this.ctx.fillStyle = `rgba(0, 255, 255, ${0.3 - i * 0.05})`;
             this.ctx.beginPath();
@@ -94,7 +94,7 @@ export class DrawThePathGame {
             this.ctx.fill();
         }
 
-        // Body
+        
         this.ctx.fillStyle = '#fff';
         this.ctx.shadowBlur = 20;
         this.ctx.shadowColor = '#00ffff';
@@ -103,7 +103,7 @@ export class DrawThePathGame {
         this.ctx.fill();
         this.ctx.shadowBlur = 0;
 
-        // 6. Threats
+        
         for (const t of this.mechanic.threats) {
             if (t.type === 'meteor') {
                 this.ctx.fillStyle = '#ff4400';
@@ -114,7 +114,7 @@ export class DrawThePathGame {
                 this.ctx.fill();
                 this.ctx.shadowBlur = 0;
             } else {
-                // Jumper
+                
                 this.ctx.fillStyle = '#00ff00';
                 this.ctx.shadowBlur = 10;
                 this.ctx.shadowColor = '#00ff00';
@@ -125,7 +125,7 @@ export class DrawThePathGame {
 
         this.ctx.restore();
 
-        // 7. UI
+        
         this.drawUI();
     }
 

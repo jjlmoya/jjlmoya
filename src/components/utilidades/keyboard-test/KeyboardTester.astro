@@ -8,8 +8,12 @@ const testedClass =
     "!bg-emerald-100 dark:!bg-emerald-900/30 !text-emerald-600 dark:!text-emerald-400 !border-emerald-200 dark:!border-emerald-800";
 ---
 
-<div class="w-full max-w-7xl mx-auto p-4 font-sans text-slate-900 dark:text-slate-100">
-    <!-- DASHBOARD -->
+<div
+    id="keyboard-tester-root"
+    class="w-full max-w-7xl mx-auto p-4 font-sans text-slate-900 dark:text-slate-100"
+    data-active-class={activeClass}
+    data-tested-class={testedClass}
+>
     <div
         class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-200 dark:border-slate-800"
     >
@@ -52,16 +56,14 @@ const testedClass =
             </div>
         </div>
 
-        <!-- KEYBOARD VISUALIZER -->
         <div class="relative w-full overflow-x-auto pb-4">
             <div
                 class="keyboard-base mx-auto bg-slate-200 dark:bg-slate-800 p-2 rounded-xl inline-flex flex-col gap-1 select-none min-w-[900px]"
             >
-                <!-- ROW 1 -->
                 <div class="flex gap-1">
                     <div class={`${keyClass} w-12`} data-code="Escape">ESC</div>
                     <div class="w-8"></div>
-                    <!-- Gap -->
+
                     <div class={`${keyClass} w-12`} data-code="F1">F1</div>
                     <div class={`${keyClass} w-12`} data-code="F2">F2</div>
                     <div class={`${keyClass} w-12`} data-code="F3">F3</div>
@@ -77,13 +79,12 @@ const testedClass =
                     <div class={`${keyClass} w-12`} data-code="F11">F11</div>
                     <div class={`${keyClass} w-12`} data-code="F12">F12</div>
                     <div class="w-4"></div>
-                    <!-- Utility Keys -->
+
                     <div class={`${keyClass} w-12`} data-code="PrintScreen">PRT</div>
                     <div class={`${keyClass} w-12`} data-code="ScrollLock">SCR</div>
                     <div class={`${keyClass} w-12`} data-code="Pause">PAU</div>
                 </div>
 
-                <!-- ROW 2 -->
                 <div class="flex gap-1 mt-2">
                     <div class={`${keyClass} w-12`} data-code="Backquote">`</div>
                     <div class={`${keyClass} w-12`} data-code="Digit1">1</div>
@@ -105,7 +106,6 @@ const testedClass =
                     <div class={`${keyClass} w-12`} data-code="PageUp">PGU</div>
                 </div>
 
-                <!-- ROW 3 -->
                 <div class="flex gap-1">
                     <div class={`${keyClass} w-16`} data-code="Tab">TAB</div>
                     <div class={`${keyClass} w-12`} data-code="KeyQ">Q</div>
@@ -127,7 +127,6 @@ const testedClass =
                     <div class={`${keyClass} w-12`} data-code="PageDown">PGD</div>
                 </div>
 
-                <!-- ROW 4 -->
                 <div class="flex gap-1">
                     <div class={`${keyClass} w-20`} data-code="CapsLock">CAPS</div>
                     <div class={`${keyClass} w-12`} data-code="KeyA">A</div>
@@ -143,10 +142,8 @@ const testedClass =
                     <div class={`${keyClass} w-12`} data-code="Quote">'</div>
                     <div class={`${keyClass} w-24`} data-code="Enter">ENTER</div>
                     <div class="w-[108px]"></div>
-                    <!-- Spacer for nav block -->
                 </div>
 
-                <!-- ROW 5 -->
                 <div class="flex gap-1">
                     <div class={`${keyClass} w-24`} data-code="ShiftLeft">SHIFT</div>
                     <div class={`${keyClass} w-12`} data-code="KeyZ">Z</div>
@@ -166,7 +163,6 @@ const testedClass =
                     <div class="w-12"></div>
                 </div>
 
-                <!-- ROW 6 -->
                 <div class="flex gap-1">
                     <div class={`${keyClass} w-16`} data-code="ControlLeft">CTRL</div>
                     <div class={`${keyClass} w-12`} data-code="MetaLeft">WIN</div>
@@ -200,26 +196,29 @@ const testedClass =
     </div>
 </div>
 
-<script define:vars={{ activeClass, testedClass }}>
-    // Classes passed from frontmatter
+<script>
+    const root = document.getElementById("keyboard-tester-root");
+    const activeClass = root?.dataset.activeClass || "";
+    const testedClass = root?.dataset.testedClass || "";
+
     const activeClasses = activeClass.split(" ");
     const testedClasses = testedClass.split(" ");
 
-    const keys = document.querySelectorAll("[data-code]"); // Select by data-code to be safe
+    const keys = document.querySelectorAll("[data-code]");
     const maxKroDisplay = document.getElementById("max-kro");
     const eventLog = document.getElementById("event-log");
     const resetBtn = document.getElementById("reset-btn");
 
-    let activeKeys = new Set();
+    const activeKeys = new Set<string>();
     let maxSimultaneous = 0;
 
-    // Map keys by code for fast access
-    const keyMap = new Map();
+    const keyMap = new Map<string, Element>();
     keys.forEach((k) => {
-        keyMap.set(k.getAttribute("data-code"), k);
+        const code = k.getAttribute("data-code");
+        if (code) keyMap.set(code, k);
     });
 
-    function log(msg) {
+    function log(msg: string) {
         if (!eventLog) return;
         const div = document.createElement("div");
         div.textContent = `> ${msg}`;
@@ -227,34 +226,26 @@ const testedClass =
         if (eventLog.children.length > 20) eventLog.lastElementChild?.remove();
     }
 
-    function handleDown(e) {
+    function handleDown(e: KeyboardEvent) {
         e.preventDefault();
         const code = e.code;
 
         if (!activeKeys.has(code)) {
             activeKeys.add(code);
 
-            // Visuals
-            const el = keyMap.get(code);
+            const el = keyMap.get(code) as HTMLElement | undefined;
             if (el) {
-                // Add active classes
                 el.classList.add(...activeClasses);
-                el.classList.add("is-tested"); // Marker for logical state
+                el.classList.add("is-tested");
 
-                // Add tested visual classes ONCE
                 if (!el.dataset.tested) {
                     el.classList.add(...testedClasses);
                     el.dataset.tested = "true";
                 }
-
-                // If it's active, we want active style to override tested style.
-                // Since using utility classes, order matters or specific overrides.
-                // The activeClass constant uses !important properties (!bg-indigo-500) to ensure visibility over testedClass.
             } else {
                 log(`Tecla desconocida: ${code}`);
             }
 
-            // Stats
             if (activeKeys.size > maxSimultaneous) {
                 maxSimultaneous = activeKeys.size;
                 if (maxKroDisplay) maxKroDisplay.textContent = maxSimultaneous.toString();
@@ -262,7 +253,7 @@ const testedClass =
         }
     }
 
-    function handleUp(e) {
+    function handleUp(e: KeyboardEvent) {
         e.preventDefault();
         const code = e.code;
         activeKeys.delete(code);
@@ -282,7 +273,7 @@ const testedClass =
         keys.forEach((k) => {
             k.classList.remove(...activeClasses);
             k.classList.remove(...testedClasses);
-            delete k.dataset.tested;
+            (k as HTMLElement).removeAttribute("data-tested");
             k.classList.remove("is-tested");
         });
         log("Test reiniciado.");
@@ -292,6 +283,5 @@ const testedClass =
     window.addEventListener("keyup", handleUp);
     resetBtn?.addEventListener("click", reset);
 
-    // Initial focus help
     window.focus();
 </script>

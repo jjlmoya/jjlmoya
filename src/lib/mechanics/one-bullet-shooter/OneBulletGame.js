@@ -13,7 +13,7 @@ export class OneBulletGame {
             x: this.width / 2,
             y: this.height / 2,
             radius: 15,
-            speed: 300, // pixels per second
+            speed: 300, 
             color: "#4ade80",
             angle: 0,
             hasBullet: true,
@@ -26,14 +26,14 @@ export class OneBulletGame {
             vy: 0,
             radius: 5,
             speed: 800,
-            state: "ready", // ready, fired, stuck
+            state: "ready", 
             color: "#facc15",
         };
 
         this.enemies = [];
         this.particles = [];
         this.enemySpawnTimer = 0;
-        this.enemySpawnInterval = 2; // seconds
+        this.enemySpawnInterval = 2; 
 
         this.keys = {
             w: false,
@@ -75,7 +75,7 @@ export class OneBulletGame {
             this.shoot();
         });
 
-        // Touch support
+        
         this.canvas.addEventListener(
             "touchstart",
             (e) => {
@@ -107,7 +107,7 @@ export class OneBulletGame {
             this.bullet.vx = Math.cos(angle) * this.bullet.speed;
             this.bullet.vy = Math.sin(angle) * this.bullet.speed;
 
-            // Recoil effect
+            
             this.createParticles(this.player.x, this.player.y, 5, "#4ade80");
         }
     }
@@ -134,7 +134,7 @@ export class OneBulletGame {
     update(dt) {
         if (this.gameOver) return;
 
-        // Player Movement
+        
         let dx = 0;
         let dy = 0;
 
@@ -151,7 +151,7 @@ export class OneBulletGame {
             this.player.x += dx * this.player.speed * dt;
             this.player.y += dy * this.player.speed * dt;
 
-            // Boundary checks
+            
             this.player.x = Math.max(
                 this.player.radius,
                 Math.min(this.width - this.player.radius, this.player.x)
@@ -162,15 +162,15 @@ export class OneBulletGame {
             );
         }
 
-        // Player Rotation
+        
         this.player.angle = Math.atan2(this.mouse.y - this.player.y, this.mouse.x - this.player.x);
 
-        // Bullet Logic
+        
         if (this.bullet.state === "fired") {
             this.bullet.x += this.bullet.vx * dt;
             this.bullet.y += this.bullet.vy * dt;
 
-            // Wall collision
+            
             if (
                 this.bullet.x < this.bullet.radius ||
                 this.bullet.x > this.width - this.bullet.radius ||
@@ -180,7 +180,7 @@ export class OneBulletGame {
                 this.bullet.state = "stuck";
                 this.bullet.vx = 0;
                 this.bullet.vy = 0;
-                // Clamp position
+                
                 this.bullet.x = Math.max(
                     this.bullet.radius,
                     Math.min(this.width - this.bullet.radius, this.bullet.x)
@@ -193,7 +193,7 @@ export class OneBulletGame {
                 this.createParticles(this.bullet.x, this.bullet.y, 10, "#facc15");
             }
         } else if (this.bullet.state === "stuck") {
-            // Check pickup
+            
             const dist = Math.hypot(this.player.x - this.bullet.x, this.player.y - this.bullet.y);
             if (dist < this.player.radius + this.bullet.radius + 10) {
                 this.player.hasBullet = true;
@@ -202,38 +202,38 @@ export class OneBulletGame {
             }
         }
 
-        // Enemy Spawning
+        
         this.enemySpawnTimer += dt;
         if (this.enemySpawnTimer > this.enemySpawnInterval) {
             this.enemySpawnTimer = 0;
             this.spawnEnemy();
-            // Increase difficulty
+            
             if (this.enemySpawnInterval > 0.5) this.enemySpawnInterval -= 0.05;
         }
 
-        // Enemy Logic
+        
         for (let i = this.enemies.length - 1; i >= 0; i--) {
             const enemy = this.enemies[i];
 
-            // Chase player
+            
             const angle = Math.atan2(this.player.y - enemy.y, this.player.x - enemy.x);
             enemy.x += Math.cos(angle) * enemy.speed * dt;
             enemy.y += Math.sin(angle) * enemy.speed * dt;
 
-            // Collision with Player
+            
             const distPlayer = Math.hypot(this.player.x - enemy.x, this.player.y - enemy.y);
             if (distPlayer < this.player.radius + enemy.radius) {
                 this.gameOver = true;
                 this.createParticles(this.player.x, this.player.y, 50, "#ef4444");
             }
 
-            // Collision with Bullet
+            
             if (this.bullet.state === "fired") {
                 const distBullet = Math.hypot(this.bullet.x - enemy.x, this.bullet.y - enemy.y);
                 if (distBullet < this.bullet.radius + enemy.radius) {
-                    // Kill enemy
+                    
                     this.enemies.splice(i, 1);
-                    this.bullet.state = "stuck"; // Bullet gets stuck in enemy corpse (or just stops where enemy was)
+                    this.bullet.state = "stuck"; 
                     this.bullet.vx = 0;
                     this.bullet.vy = 0;
                     this.score++;
@@ -243,7 +243,7 @@ export class OneBulletGame {
             }
         }
 
-        // Particles
+        
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             p.life -= dt;
@@ -261,19 +261,19 @@ export class OneBulletGame {
         const buffer = 30;
 
         switch (side) {
-            case 0: // Top
+            case 0: 
                 x = Math.random() * this.width;
                 y = -buffer;
                 break;
-            case 1: // Right
+            case 1: 
                 x = this.width + buffer;
                 y = Math.random() * this.height;
                 break;
-            case 2: // Bottom
+            case 2: 
                 x = Math.random() * this.width;
                 y = this.height + buffer;
                 break;
-            case 3: // Left
+            case 3: 
                 x = -buffer;
                 y = Math.random() * this.height;
                 break;
@@ -305,11 +305,11 @@ export class OneBulletGame {
     }
 
     draw() {
-        // Clear background
+        
         this.ctx.fillStyle = "#1e1e2e";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw Particles
+        
         this.particles.forEach((p) => {
             this.ctx.globalAlpha = p.life;
             this.ctx.fillStyle = p.color;
@@ -319,37 +319,37 @@ export class OneBulletGame {
         });
         this.ctx.globalAlpha = 1;
 
-        // Draw Bullet (if not in player)
+        
         if (!this.player.hasBullet) {
             this.ctx.fillStyle = this.bullet.color;
             this.ctx.beginPath();
             this.ctx.arc(this.bullet.x, this.bullet.y, this.bullet.radius, 0, Math.PI * 2);
             this.ctx.fill();
 
-            // Glow
+            
             this.ctx.shadowBlur = 10;
             this.ctx.shadowColor = this.bullet.color;
             this.ctx.fill();
             this.ctx.shadowBlur = 0;
         }
 
-        // Draw Player
+        
         if (!this.gameOver) {
             this.ctx.save();
             this.ctx.translate(this.player.x, this.player.y);
             this.ctx.rotate(this.player.angle);
 
-            // Body
+            
             this.ctx.fillStyle = this.player.color;
             this.ctx.beginPath();
             this.ctx.arc(0, 0, this.player.radius, 0, Math.PI * 2);
             this.ctx.fill();
 
-            // Gun/Direction indicator
+            
             this.ctx.fillStyle = "#ffffff";
             this.ctx.fillRect(0, -2, this.player.radius + 5, 4);
 
-            // Bullet indicator inside player
+            
             if (this.player.hasBullet) {
                 this.ctx.fillStyle = this.bullet.color;
                 this.ctx.beginPath();
@@ -360,7 +360,7 @@ export class OneBulletGame {
             this.ctx.restore();
         }
 
-        // Draw Enemies
+        
         this.enemies.forEach((enemy) => {
             this.ctx.fillStyle = enemy.color;
             this.ctx.beginPath();
@@ -368,7 +368,7 @@ export class OneBulletGame {
             this.ctx.fill();
         });
 
-        // UI
+        
         this.ctx.fillStyle = "#ffffff";
         this.ctx.font = "20px Inter, sans-serif";
         this.ctx.fillText(`Score: ${this.score}`, 20, 40);
@@ -392,7 +392,7 @@ export class OneBulletGame {
         const dt = (timestamp - this.lastTime) / 1000;
         this.lastTime = timestamp;
 
-        // Cap dt to prevent huge jumps
+        
         if (dt < 0.1) {
             this.update(dt);
         }
@@ -402,8 +402,8 @@ export class OneBulletGame {
     }
 
     destroy() {
-        // Cleanup listeners if needed
-        // Since we add listeners to window/canvas, we might want to remove them
-        // For simplicity in this demo, we rely on page navigation cleanup
+        
+        
+        
     }
 }

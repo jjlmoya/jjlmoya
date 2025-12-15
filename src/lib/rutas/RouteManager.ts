@@ -2,7 +2,7 @@ import L from "leaflet";
 import { GeocodingService } from "./GeocodingService";
 import { RouteService } from "./RouteService";
 
-// Fix Leaflet icon issue
+
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -82,16 +82,16 @@ export class RouteManager extends EventTarget {
 
         this.notifyUpdate();
 
-        // Handle drag
+        
         marker.on("dragend", () => {
             const newPos = marker.getLatLng();
             point.lat = newPos.lat;
             point.lng = newPos.lng;
             this.clearRoute();
-            this.updateAddress(point); // Refresh address on drag
+            this.updateAddress(point); 
         });
 
-        // Fetch address
+        
         await this.updateAddress(point);
     }
 
@@ -165,8 +165,8 @@ export class RouteManager extends EventTarget {
         try {
             const { waypoints, trip } = await this.routeService.optimizeRoute(this.points);
 
-            // 1. Map the response waypoints to our internal points to get the "Loop Order"
-            // The waypoints array in the OSRM Trip response is sorted by the visit order
+            
+            
             const loopPoints = waypoints.map((wp: any) => {
                 if (wp.waypoint_index !== undefined && wp.waypoint_index < this.points.length) {
                     return this.points[wp.waypoint_index];
@@ -180,8 +180,8 @@ export class RouteManager extends EventTarget {
                 return;
             }
 
-            // 2. Find the longest leg to "cut" the loop
-            // The legs array corresponds to transitions: 0->1, 1->2, ..., (N-1)->0
+            
+            
             const legs = trip.legs;
             let maxLegIndex = -1;
             let maxLegDistance = -1;
@@ -193,9 +193,9 @@ export class RouteManager extends EventTarget {
                 }
             });
 
-            // 3. Rotate the array so it starts after the longest leg
-            // If leg[i] is the longest (from point i to i+1), we want to start at i+1.
-            // New order: [i+1, i+2, ..., N-1, 0, 1, ..., i]
+            
+            
+            
             const startIdx = (maxLegIndex + 1) % loopPoints.length;
             const newPointsOrder = [
                 ...loopPoints.slice(startIdx),
@@ -206,10 +206,10 @@ export class RouteManager extends EventTarget {
             this.updateAllMarkers();
             this.notifyUpdate();
 
-            // 4. Fetch the actual open route geometry for this new order
+            
             const finalRoute = await this.routeService.getRoute(this.points);
 
-            // Draw Route
+            
             this.clearRoute();
             const routeGeoJSON = {
                 type: "Feature",

@@ -8,7 +8,7 @@ export interface Player {
     height: number;
     isGrounded: boolean;
     state: 'running' | 'jumping' | 'falling' | 'dead';
-    colorId: 0 | 1; // 0: Cyan, 1: Magenta
+    colorId: 0 | 1; 
 }
 
 export interface Platform {
@@ -53,7 +53,7 @@ export class RhythmJumpMechanic {
         this.score = 0;
         this.distance = 0;
 
-        // Initial platform (neutral or matching start color)
+        
         this.platforms.push({
             x: 0,
             y: this.height - 100,
@@ -73,22 +73,22 @@ export class RhythmJumpMechanic {
     public update(timeScale: number = 1) {
         if (this.player.state === 'dead') return;
 
-        // Physics
+        
         this.player.vy += this.gravity * timeScale;
         this.player.y += this.player.vy * timeScale;
         this.player.x += this.player.vx * timeScale;
 
-        // Ground Collision
+        
         this.player.isGrounded = false;
         for (const p of this.platforms) {
-            // Collision only if colors match
+            
             if (p.colorId !== this.player.colorId) continue;
 
             if (
                 this.player.x + this.player.width > p.x &&
                 this.player.x < p.x + p.width &&
                 this.player.y + this.player.height >= p.y &&
-                this.player.y + this.player.height <= p.y + p.height + 20 && // Tolerance
+                this.player.y + this.player.height <= p.y + p.height + 20 && 
                 this.player.vy >= 0
             ) {
                 this.player.y = p.y - this.player.height;
@@ -98,16 +98,16 @@ export class RhythmJumpMechanic {
             }
         }
 
-        // Death Check
+        
         if (this.player.y > this.height) {
             this.player.state = 'dead';
         }
 
-        // Score
+        
         this.distance = Math.floor(this.player.x / 100);
         this.score = this.distance;
 
-        // Cleanup & Gen
+        
         this.managePlatforms();
     }
 
@@ -131,14 +131,14 @@ export class RhythmJumpMechanic {
     }
 
     private generatePlatforms(startX: number) {
-        let currentX = startX;
-        const gap = 150; // Gap between platforms
+        const currentX = startX;
+        const gap = 150; 
 
-        // Add a platform
+        
         const width = 300 + Math.random() * 200;
         const y = this.height - 100 - Math.random() * 150;
 
-        // Random color
+        
         const colorId = Math.random() > 0.5 ? 0 : 1;
 
         this.platforms.push({

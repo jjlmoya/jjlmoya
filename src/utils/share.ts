@@ -15,7 +15,7 @@ const downloadBlob = (blob: Blob, filename: string) => {
     const link = document.createElement("a");
     link.download = filename;
     link.href = url;
-    document.body.appendChild(link); // Required for some browsers
+    document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
@@ -54,7 +54,7 @@ export const shareElementAsImage = async ({
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(fullShareText);
             } else {
-                // Fallback for HTTP/Dev environments where navigator.clipboard is undefined
+
                 const textArea = document.createElement("textarea");
                 textArea.value = fullShareText;
                 textArea.style.position = "fixed";
@@ -62,7 +62,7 @@ export const shareElementAsImage = async ({
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
-                // @ts-ignore
+
                 document.execCommand("copy");
                 document.body.removeChild(textArea);
             }
@@ -81,7 +81,7 @@ export const shareElementAsImage = async ({
     };
 
     try {
-        // Temporarily remove transform/transition/opacity for clean capture
+
         const originalTransform = element.style.transform;
         const originalTransition = element.style.transition;
         const originalOpacity = element.style.opacity;
@@ -90,42 +90,42 @@ export const shareElementAsImage = async ({
         element.style.transform = "none";
         element.style.transition = "none";
         element.style.opacity = "1";
-        // Apply a nice gradient for the share image
+
         element.style.background = "radial-gradient(circle at center, #292524 0%, #0c0a09 100%)";
 
-        // Force background color for capture (transparent otherwise)
+
         const canvas = await html2canvas(element, {
-            backgroundColor: null, // Use the element's background (our gradient)
-            scale: 2, // Higher quality
+            backgroundColor: null,
+            scale: 2,
             logging: false,
             useCORS: true,
-            allowTaint: true, // Try to allow tainted images (might still fail export)
+            allowTaint: true,
             ignoreElements: (element) => {
-                // Ignore elements with specific class if needed, e.g., external textures causing CORS
+
                 return element.classList.contains("ignore-capture");
             },
             onclone: (clonedDoc) => {
                 try {
                     console.log("[Share] Starting aggressive oklab/oklch sanitization...");
 
-                    // Helper to convert a single color string (e.g. "oklab(...)") to RGB/Hex via Canvas
 
 
-                    // Helper to replace all oklab(...)/oklch(...) occurrences in a string
+
+
 
 
 
 
                     let replacements = 0;
 
-                    // 1. Sanitize <style> tags content (CRITICAL for CSS variables)
+
                     const styleTags = clonedDoc.querySelectorAll("style");
                     styleTags.forEach((styleTag) => {
                         if (
                             styleTag.innerHTML.includes("oklab") ||
                             styleTag.innerHTML.includes("oklch")
                         ) {
-                            // Simple regex replacement for the whole block
+
                             const newCss = styleTag.innerHTML.replace(
                                 /(oklab|oklch)\([^)]+\)/g,
                                 "#000000"
@@ -135,11 +135,11 @@ export const shareElementAsImage = async ({
                         }
                     });
 
-                    // 2. Sanitize Computed Styles (Inline Styles)
+
                     const allElements = clonedDoc.querySelectorAll("*");
                     allElements.forEach((el) => {
                         const element = el as HTMLElement;
-                        // We iterate styles that might contain colors
+
                         const props = [
                             "color",
                             "backgroundColor",
@@ -160,35 +160,35 @@ export const shareElementAsImage = async ({
                         const style = window.getComputedStyle(element);
 
                         props.forEach((prop) => {
-                            // @ts-ignore
-                            const val = style[prop];
+
+                            const val = style[prop as any];
                             if (val && (val.includes("oklab") || val.includes("oklch"))) {
-                                // Force override with a safe color (white for text, transparent/black for others)
+
                                 let safeVal = "#000000";
                                 if (prop === "color") safeVal = "#ffffff";
-                                if (prop.includes("background")) safeVal = "rgba(0,0,0,0)"; // Default to transparent for bg to avoid blocks
+                                if (prop.includes("background")) safeVal = "rgba(0,0,0,0)";
 
-                                // Specific overrides for our app's look
+
                                 if (prop === "color") {
-                                    element.style.color = "#e7e5e4"; // Stone-200
+                                    element.style.color = "#e7e5e4";
                                 } else if (prop === "backgroundColor") {
-                                    // Try to keep transparency if possible, otherwise dark
-                                    element.style.backgroundColor = "#0c0a09"; // Stone-950
+
+                                    element.style.backgroundColor = "#0c0a09";
                                 } else {
-                                    // @ts-ignore
-                                    element.style[prop] = safeVal;
+
+                                    (element.style as any)[prop] = safeVal;
                                 }
                                 replacements++;
                             }
                         });
 
-                        // 3. Sanitize SVG Attributes explicitly
+
                         if (element instanceof SVGElement) {
                             const svgAttrs = ["fill", "stroke"];
                             svgAttrs.forEach((attr) => {
                                 const val = element.getAttribute(attr);
                                 if (val && (val.includes("oklab") || val.includes("oklch"))) {
-                                    element.setAttribute(attr, "#3f1d1d"); // Default dark red for heart/blood
+                                    element.setAttribute(attr, "#3f1d1d");
                                     replacements++;
                                 }
                             });
@@ -204,18 +204,18 @@ export const shareElementAsImage = async ({
             },
         });
 
-        // Restore styles
+
         element.style.transform = originalTransform;
         element.style.transition = originalTransition;
         element.style.opacity = originalOpacity;
-        element.style.background = originalBackground; // Restore the original background
+        element.style.background = originalBackground;
 
-        // Convert to blob/file SYNCHRONOUSLY to try and save the user gesture
-        // canvas.toBlob is async and kills the gesture on iOS often.
-        // toDataURL is sync.
+
+
+
         const dataUrl = canvas.toDataURL("image/png");
 
-        // Manual Base64 to Blob conversion (Sync)
+
         const byteString = atob(dataUrl.split(",")[1]);
         const ab = new ArrayBuffer(byteString.length);
         const ia = new Uint8Array(ab);
@@ -229,8 +229,8 @@ export const shareElementAsImage = async ({
 
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
-                    // Backup: Copy text to clipboard silently in case the app drops it (common in WhatsApp/Instagram/iOS)
-                    // We use the robust copyToClipboard helper to ensure fallback to execCommand if needed
+
+
                     console.log("[Share] Creating text backup in clipboard...");
                     await copyToClipboard(fullShareText);
 
@@ -245,7 +245,7 @@ export const shareElementAsImage = async ({
                         `DEBUG: Intentando compartir.\nTexto: ${fullShareText}\nURL: ${url}`
                     );
 
-                    // OS Detection for Share Quirks
+
                     const isIOS =
                         /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
 
@@ -254,12 +254,12 @@ export const shareElementAsImage = async ({
                     };
 
                     if (isIOS) {
-                        // iOS often fails if we mix types. We prioritize the file.
-                        // The text is already in the clipboard.
+
+
                         console.log("[Share] iOS detected. Sharing file only.");
                     } else {
-                        // Android/Windows: Try to send text and title.
-                        // We DO NOT send 'url' as a separate param because it causes some Androids to drop the file.
+
+
                         shareData.text = fullShareText;
                         shareData.title = title;
                     }
@@ -282,8 +282,8 @@ export const shareElementAsImage = async ({
                     "[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context)."
                 );
 
-                // Fallback: Browser doesn't support file share
-                // Try to share text natively first!
+
+
                 let textShared = false;
                 if (navigator.share) {
                     try {
@@ -308,32 +308,26 @@ export const shareElementAsImage = async ({
                 downloadBlob(blob, fileName);
             }
         } else {
-            // Blob generation failed
+
             console.warn("Blob generation failed, falling back to text share");
             await shareTextOnly();
         }
     } catch (error: any) {
         console.error("Capture failed:", error);
-        // Debug for iOS
-        // alert(`Capture Error: ${error.message}`);
 
-        // Fallback to text only share if capture crashes (e.g. oklab error)
+
+
+
         await shareTextOnly();
     }
 };
 
-/**
- * Handles the share functionality for any element with the `data-share-btn` attribute.
- * Expects the element to have a `data-share-text` attribute with the content to share.
- * Optional: `data-share-target-id` to capture an element as image.
- * Optional: `data-share-filename` to specify the filename for the image.
- * Appends the current URL to the shared text.
- */
+
 export async function handleGlobalShare(e: MouseEvent) {
     const target = e.target as HTMLElement;
     const btn = target.closest("[data-share-btn]");
 
-    // If the click is not on a share button, ignore it
+
     if (!btn) return;
 
     const element = btn as HTMLElement;
@@ -342,7 +336,7 @@ export async function handleGlobalShare(e: MouseEvent) {
     const fileName = element.dataset.shareFilename || "share.png";
     const shareTitle = element.dataset.shareTitle || "Compartir";
 
-    // Image Share Mode
+
     if (targetId) {
         const targetEl = document.getElementById(targetId);
         if (targetEl) {
@@ -358,35 +352,35 @@ export async function handleGlobalShare(e: MouseEvent) {
         }
     }
 
-    // Text Share Mode (Fallback or Default)
+
     if (!shareText) return;
 
     const fullText = `${shareText}\n\n${window.location.href}`;
 
-    // Waterfall Share Logic
+
     const tryShare = async () => {
-        // 1. Try Native Share
+
         if (navigator.share) {
             try {
                 await navigator.share({
                     title: shareTitle,
                     text: fullText,
                 });
-                return true; // Success
+                return true;
             } catch (err) {
-                // If user cancelled, stop here, don't fallback to clipboard (it's annoying)
+
                 if ((err as Error).name === "AbortError") return true;
                 console.warn("Native share failed, falling back to clipboard:", err);
             }
         }
 
-        // 2. Fallback to Clipboard
+
         return await copyToClipboard();
     };
 
     const copyToClipboard = async () => {
         try {
-            // Check for insecure context on mobile to warn user
+
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             const isSecure = window.isSecureContext;
 
@@ -418,17 +412,17 @@ export async function handleGlobalShare(e: MouseEvent) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
 
-            // Avoid scrolling to bottom
+
             textArea.style.top = "0";
             textArea.style.left = "0";
             textArea.style.position = "fixed";
-            textArea.style.opacity = "0"; // Invisible but present
+            textArea.style.opacity = "0";
 
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
 
-            // @ts-ignore
+
             const successful = document.execCommand("copy");
             document.body.removeChild(textArea);
 
@@ -446,9 +440,9 @@ export async function handleGlobalShare(e: MouseEvent) {
     };
 
     const showCopiedFeedback = () => {
-        // Visual feedback
+
         const originalContent = element.innerHTML;
-        // Avoid double feedback if we already showed the warning toast
+
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         const isSecure = window.isSecureContext;
 
@@ -465,7 +459,7 @@ export async function handleGlobalShare(e: MouseEvent) {
     await tryShare();
 }
 
-// Auto-initialize if running in the browser
+
 if (typeof window !== "undefined") {
     document.addEventListener("click", handleGlobalShare);
 }

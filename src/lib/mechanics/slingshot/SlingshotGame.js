@@ -33,7 +33,7 @@ export class SlingshotGame {
             }
         );
 
-        // Initialize bounds immediately
+        
         this.mechanic.updateBounds(this.width, this.height);
 
         this.audioCtx = null;
@@ -63,13 +63,13 @@ export class SlingshotGame {
         window.addEventListener(
             "touchmove",
             () => {
-                // e.preventDefault(); // Don't prevent default on window, might block scroll?
-                // Actually for game we want to prevent scroll if touching canvas
+                
+                
             },
             { passive: false }
         );
-        // We attach touchmove to window to track drag outside canvas?
-        // Better to attach to window for drag continuity
+        
+        
         window.addEventListener(
             "touchmove",
             (e) => {
@@ -143,14 +143,14 @@ export class SlingshotGame {
     }
 
     draw() {
-        // Clear
-        this.ctx.fillStyle = "#f5f5f5"; // neutral-100
+        
+        this.ctx.fillStyle = "#f5f5f5"; 
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         const state = this.mechanic.getState();
         const dragInfo = this.mechanic.getDragInfo();
 
-        // Draw Drag Line
+        
         if (dragInfo) {
             this.ctx.beginPath();
             this.ctx.moveTo(dragInfo.anchor.x, dragInfo.anchor.y);
@@ -159,18 +159,18 @@ export class SlingshotGame {
             this.ctx.lineWidth = 4;
             this.ctx.stroke();
 
-            // Anchor point
+            
             this.ctx.beginPath();
             this.ctx.arc(dragInfo.anchor.x, dragInfo.anchor.y, 5, 0, Math.PI * 2);
             this.ctx.fillStyle = "rgba(0,0,0,0.2)";
             this.ctx.fill();
         }
 
-        // Draw Pet
+        
         this.ctx.save();
         this.ctx.translate(state.x, state.y);
 
-        // Squash and stretch
+        
         const speed = this.mechanic.getSpeed();
         const stretch = Math.min(speed * 0.02, 0.5);
         const angle = Math.atan2(state.vy, state.vx);
@@ -178,22 +178,22 @@ export class SlingshotGame {
         this.ctx.rotate(angle);
         this.ctx.scale(1 + stretch, 1 - stretch * 0.5);
 
-        // Shadow
+        
         this.ctx.beginPath();
         this.ctx.arc(4, 4, state.radius, 0, Math.PI * 2);
         this.ctx.fillStyle = "rgba(0,0,0,1)";
         this.ctx.fill();
 
-        // Body
+        
         this.ctx.beginPath();
         this.ctx.arc(0, 0, state.radius, 0, Math.PI * 2);
-        this.ctx.fillStyle = "#facc15"; // yellow-400
+        this.ctx.fillStyle = "#facc15"; 
         this.ctx.lineWidth = 4;
         this.ctx.strokeStyle = "#000000";
         this.ctx.fill();
         this.ctx.stroke();
 
-        // Face
+        
         this.ctx.fillStyle = "#000000";
         this.ctx.font = "900 20px Inter, sans-serif";
         this.ctx.textAlign = "center";
@@ -210,8 +210,8 @@ export class SlingshotGame {
             face = ">_<";
         }
 
-        // Rotate text back so it's upright relative to the body rotation?
-        // Or let it rotate with body? Original rotated with body.
+        
+        
         this.ctx.fillText(face, 0, 0);
 
         this.ctx.restore();
@@ -221,6 +221,6 @@ export class SlingshotGame {
         this.canvas.removeEventListener("mousedown", this.handleStart);
         window.removeEventListener("mousemove", this.handleMove);
         window.removeEventListener("mouseup", this.handleEnd);
-        // Remove touch listeners...
+        
     }
 }

@@ -1,4 +1,4 @@
-// Main entry point for utilities data
+
 import type { SectionData } from "./types";
 
 import { financeSection } from "./finance";

@@ -24,15 +24,15 @@
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Calculadora de Inflación</h2>
     </div>
 
-    <!-- Intro Text -->
+    
     <p class="text-slate-600 dark:text-slate-400 text-sm mb-8">
         Simulación basada en el IPC histórico de España (1980-2025). Calcula cuánto valía tu dinero
         en el pasado o cuánto necesitas hoy para comprar lo mismo.
     </p>
 
-    <!-- Main Tool UI -->
+    
     <div class="flex flex-col md:flex-row gap-4 items-stretch justify-center">
-        <!-- CARD 1: Origin -->
+        
         <div
             class="flex-1 bg-white dark:bg-slate-900 rounded-2xl border-2 border-slate-100 dark:border-slate-700 p-6 flex flex-col items-center justify-between shadow-sm relative overflow-hidden group hover:border-amber-300 dark:hover:border-amber-700 transition-colors"
         >
@@ -62,12 +62,12 @@
                     id="inf-year"
                     class="w-full bg-slate-50 dark:bg-slate-800 border-none text-slate-900 dark:text-white text-lg font-bold rounded-xl focus:ring-2 focus:ring-amber-500 block p-3 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 >
-                    <!-- JS filled -->
+                    
                 </select>
             </div>
         </div>
 
-        <!-- Arrow Indicator -->
+        
         <div
             class="flex items-center justify-center text-amber-500 dark:text-amber-500 z-10 -my-4 md:-my-0 md:-mx-4"
         >
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <!-- CARD 2: Result -->
+        
         <div
             class="flex-1 bg-amber-50 dark:bg-amber-950/30 rounded-2xl border-2 border-amber-200 dark:border-amber-800 p-6 flex flex-col items-center justify-between shadow-md relative overflow-hidden"
         >
@@ -118,7 +118,7 @@
         </div>
     </div>
 
-    <!-- Summary Footnote -->
+    
     <div class="mt-8 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
         <div
             id="inf-change-percent"
@@ -153,13 +153,13 @@
     const resultEl = document.getElementById("inf-result");
     const percentEl = document.getElementById("inf-change-percent");
 
-    // Populate years
+    
     const years = InflationCalculator.getAvailableYears();
     years.forEach((year) => {
         const opt = document.createElement("option");
         opt.value = year.toString();
         opt.text = year.toString();
-        if (year === 2000) opt.selected = true; // Default
+        if (year === 2000) opt.selected = true; 
         yearEl?.appendChild(opt);
     });
 
@@ -170,7 +170,7 @@
         const val = Number(amountEl.value) || 0;
         const year = Number(yearEl.value);
 
-        // Calculate to 2025 as the updated target
+        
         const res = InflationCalculator.calculate(val, year, 2025);
 
         if (resultEl) resultEl.innerText = formatMoney(res);
@@ -186,6 +186,6 @@
     amountEl?.addEventListener("input", update);
     yearEl?.addEventListener("change", update);
 
-    // Initial update
+    
     if (amountEl && yearEl) update();
 </script>

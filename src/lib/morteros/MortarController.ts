@@ -103,11 +103,11 @@ export class MortarController {
         const phase = VITRUVIAN_PHASES[this.state.phase];
         const result = MortarCalculator.calculate(this.state);
 
-        // Update phase info
+        
         if (this.elements.phaseName) this.elements.phaseName.textContent = phase.name;
         if (this.elements.phaseDesc) this.elements.phaseDesc.textContent = phase.description;
 
-        // Update column selection
+        
         this.elements.columnSections.forEach((section) => {
             const sectionPhase = section.getAttribute("data-phase");
             if (sectionPhase === this.state.phase) {
@@ -117,7 +117,7 @@ export class MortarController {
             }
         });
 
-        // Update material buttons
+        
         this.elements.materialBtns.forEach((btn) => {
             const material = btn.getAttribute("data-material");
             if (material === this.state.materialType) {
@@ -127,27 +127,27 @@ export class MortarController {
             }
         });
 
-        // Show/hide cal type toggle
+        
         if (this.elements.calTypeContainer) {
             this.elements.calTypeContainer.style.display =
                 this.state.materialType === "cal" ? "block" : "none";
         }
 
-        // Update quantity display
+        
         if (this.elements.quantityValue)
             this.elements.quantityValue.textContent = this.state.materialKg.toString();
 
-        // Update sack pile visualization
+        
         this.updateSackPile();
 
-        // Update coverage display
+        
         if (this.elements.coverageValue)
             this.elements.coverageValue.textContent = result.coverageArea.toFixed(1);
 
-        // Update wall visualization
+        
         this.updateWallVisualization(result.coverageArea);
 
-        // Update complementary material
+        
         if (this.elements.complementaryLabel)
             this.elements.complementaryLabel.textContent = result.complementaryName;
         if (this.elements.complementaryValue)
@@ -156,13 +156,13 @@ export class MortarController {
             ).toString();
         if (this.elements.ratioDisplay) this.elements.ratioDisplay.textContent = result.ratioText;
 
-        // Update technical details
+        
         if (this.elements.thicknessValue)
             this.elements.thicknessValue.textContent = `${phase.thickness} mm`;
         if (this.elements.layersValue)
             this.elements.layersValue.textContent = `${phase.layers} ${phase.layers === 1 ? "mano" : "manos"}`;
 
-        // Update granulometry cards highlighting
+        
         this.updateGranulometryCards();
     }
 
@@ -189,7 +189,7 @@ export class MortarController {
         const sackHeight = 50;
         const cols = 4;
 
-        // Draw full sacks
+        
         for (let i = 0; i < fullSacks; i++) {
             const row = Math.floor(i / cols);
             const col = i % cols;
@@ -207,7 +207,7 @@ export class MortarController {
             `;
         }
 
-        // Draw half sack if needed
+        
         if (hasHalfSack) {
             const i = fullSacks;
             const row = Math.floor(i / cols);

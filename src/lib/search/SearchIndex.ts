@@ -45,7 +45,7 @@ export function getSearchIndex(): SearchResult[] {
     const results: SearchResult[] = [];
     const pagesDir = path.join(process.cwd(), "src/pages");
 
-    // Safety check if we are not in node env or dir missing
+    
     if (!fs.existsSync(pagesDir)) {
         console.warn("SearchIndex: src/pages directory not found");
         return [];
@@ -54,16 +54,16 @@ export function getSearchIndex(): SearchResult[] {
     const pageFiles = getAllFiles(pagesDir);
 
     pageFiles.forEach((absolutePath) => {
-        // Normalize path to forward slashes for CONSISTENT processing
+        
         const normalizedPath = absolutePath.split(path.sep).join("/");
-        // Convert to project-relative path like "/src/pages/..." to match original logic expectations
+        
         const relativePart = normalizedPath.split("/src/pages")[1];
 
-        // Skip if undefined or empty
+        
         if (!relativePart) return;
 
-        // Reconstruct the "virtual" path that import.meta.glob would have returned
-        // e.g., "/src/pages/about.astro"
+        
+        
         const virtualPath = `/src/pages${relativePart}`;
 
         if (virtualPath.includes("404") || virtualPath.includes("[") || virtualPath.includes("index.astro")) {
@@ -77,7 +77,7 @@ export function getSearchIndex(): SearchResult[] {
                     icon: "mdi:home",
                 });
             }
-            // Skip 404, dynamic routes, and other index.astro files that caused this block to be entered
+            
             return;
         }
 

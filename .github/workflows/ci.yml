@@ -1,0 +1,39 @@
+name: CI Quality Checks
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Type Check
+      run: npm run check
+
+    - name: Linting
+      run: npm run lint
+
+    - name: Build Project
+      run: npm run build
+
+    - name: Start Preview Server and Run Tests
+      run: |
+        npm run preview &
+        npx wait-on http://localhost:4321
+        npm run test

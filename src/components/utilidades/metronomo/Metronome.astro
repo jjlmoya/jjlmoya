@@ -5,7 +5,7 @@
 <div
     class="w-full max-w-md mx-auto p-6 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800"
 >
-    <!-- Visual Display -->
+    
     <div class="relative mb-8 flex justify-center items-center">
         <div
             id="visual-beat"
@@ -21,26 +21,26 @@
                     >120</span
                 >
             </div>
-            <!-- Ripple Effect Container -->
+            
             <div id="ripple" class="absolute inset-0 rounded-full bg-cyan-500 opacity-0 scale-50">
             </div>
         </div>
 
-        <!-- Beat Dots -->
+        
         <div id="beat-dots" class="absolute bottom-[-1.5rem] flex gap-2">
-            <!-- Dynamically populated -->
+            
         </div>
     </div>
 
-    <!-- Controls -->
+    
     <div class="space-y-6">
-        <!-- Play/Stop Button -->
+        
         <div class="flex justify-center">
             <button
                 id="play-btn"
                 class="group relative w-20 h-20 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-cyan-500/50"
             >
-                <!-- Play Icon -->
+                
                 <svg
                     id="icon-play"
                     xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@
                         d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
                         clip-rule="evenodd"></path>
                 </svg>
-                <!-- Stop Icon (Hidden) -->
+                
                 <svg
                     id="icon-stop"
                     xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@
             </button>
         </div>
 
-        <!-- BPM Slider -->
+        
         <div class="space-y-2">
             <div
                 class="flex justify-between text-sm font-medium text-slate-500 dark:text-slate-400"
@@ -88,7 +88,7 @@
             />
         </div>
 
-        <!-- Adjust Buttons -->
+        
         <div class="flex justify-between gap-4">
             <button
                 class="w-12 h-10 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 active:scale-95 transition-colors flex items-center justify-center adjust-btn"
@@ -109,7 +109,7 @@
             >
         </div>
 
-        <!-- Volume Control -->
+        
         <div class="flex items-center gap-3 px-1 pt-2">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +132,7 @@
             />
         </div>
 
-        <!-- Time Signature -->
+        
         <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
             <div class="space-y-1">
                 <label
@@ -171,7 +171,7 @@
     </div>
 </div>
 
-<!-- Mobile Silent Switch Warning -->
+
 <div
     class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800 text-sm text-amber-800 dark:text-amber-200 hidden"
     id="mobile-warning"
@@ -197,10 +197,7 @@
 </div>
 
 <style is:global>
-    /* 
-      We moved component-specific styles to inline classes where possible 
-      to avoid @apply issues. 
-    */
+    
 
     @keyframes ripple-anim {
         0% {
@@ -220,20 +217,20 @@
 
 <script>
     class Metronome {
-        // State
+        
         audioContext: AudioContext | null = null;
         masterGainNode: GainNode | null = null;
         isPlaying = false;
         tempo = 120;
-        lookahead = 25.0; // ms
-        scheduleAheadTime = 0.1; // sec
+        lookahead = 25.0; 
+        scheduleAheadTime = 0.1; 
         nextNoteTime = 0.0;
         timerWorker: Worker | null = null;
         beatsPerBar = 4;
         currentBeatInBar = 0;
         volume = 0.8;
 
-        // Visuals
+        
         ui = {
             playBtn: document.getElementById("play-btn") as HTMLButtonElement,
             iconPlay: document.getElementById("icon-play") as HTMLElement,
@@ -259,15 +256,15 @@
             this.initListeners();
             this.renderDots();
 
-            // Initialize silent audio for session keeping (iOS Silent Switch Bypass)
-            // We use a simple silent WAV. Loop is FALSE to avoid "machine gun" buzzing.
-            // We will play it on every interaction to keep session active.
+            
+            
+            
             this.silentAudio = new Audio(
                 "data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YRAAAAAAAAAAAAAAAAAAAA=="
             );
             this.silentAudio.loop = false;
 
-            // Global unlock attempt on any interaction
+            
             const unlockHandler = () => {
                 console.log("Metronome: User interaction detected (global unlock)");
                 this.initAudioContext();
@@ -280,7 +277,7 @@
             document.addEventListener("touchstart", unlockHandler, { passive: true });
             document.addEventListener("click", unlockHandler);
 
-            // Show mobile warning if touch device
+            
             const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
 
@@ -292,7 +289,7 @@
 
         playSilentUnlock() {
             if (this.silentAudio) {
-                this.silentAudio.volume = 0.01; // Minimum volume
+                this.silentAudio.volume = 0.01; 
                 this.silentAudio
                     .play()
                     .catch((e) => console.error("Metronome: Silent HTML5 Audio play failed", e));
@@ -362,7 +359,7 @@
                 this.setTempo(bpm);
             }
 
-            // Init audio on tap too just in case
+            
             this.initAudioContext();
 
             this.ui.tapBtn.classList.add("scale-95", "bg-cyan-100", "dark:bg-cyan-900");
@@ -411,7 +408,7 @@
                         (window as any).webkitAudioContext)();
                     console.log("Metronome: AudioContext created");
 
-                    // Create master gain to valid clipping/volume issues
+                    
                     this.masterGainNode = this.audioContext.createGain();
                     this.masterGainNode.gain.value = 1.0;
                     this.masterGainNode.connect(this.audioContext.destination);
@@ -423,7 +420,7 @@
             }
             if (this.audioContext) {
                 console.log(`Metronome: AudioContext state is '${this.audioContext.state}'`);
-                // Always try to resume on interaction, just in case
+                
                 if (this.audioContext.state === "suspended") {
                     console.log("Metronome: Attempting to resume AudioContext...");
                     this.audioContext
@@ -436,9 +433,9 @@
                         .catch((e) => console.error("Metronome: AudioContext resume failed", e));
                 }
 
-                // MAGIC MOMENT: Play a silent buffer.
-                // This is the most reliable way to unlock AudioContext on iOS/Android
-                // We do this EVERY time init is called (on click/touch) to ensure it stays awake
+                
+                
+                
                 try {
                     const buffer = this.audioContext.createBuffer(1, 1, 22050);
                     const source = this.audioContext.createBufferSource();
@@ -447,7 +444,7 @@
                     source.start(0);
                     console.log("Metronome: Silent buffer played (Watchdog)");
                 } catch (e) {
-                    // console.error("Metronome: Silent buffer failed", e);
+                    
                 }
             }
         }
@@ -456,7 +453,7 @@
             console.log("Metronome: Toggle called");
             this.initAudioContext();
 
-            // Play unlock sound once on toggle start
+            
             if (!this.isPlaying) {
                 this.playSilentUnlock();
             }
@@ -482,7 +479,7 @@
 
                 this.timerWorker.onmessage = (e) => {
                     if (e.data == "tick") {
-                        // console.log("Metronome: Tick received from worker");
+                        
                         this.scheduler();
                     } else {
                         console.log("Metronome: Worker message: " + e.data);
@@ -544,7 +541,7 @@
         }
 
         scheduleNote(beatNumber: number, time: number) {
-            // Audio
+            
             if (!this.audioContext) return;
 
             console.log(`Metronome: Scheduling note for beat ${beatNumber} at time ${time}`);
@@ -554,11 +551,11 @@
 
             const isAccent = beatNumber === 0;
 
-            // Revert to original Sine wave and pitch/duration
-            // osc.type is 'sine' by default
+            
+            
             osc.frequency.value = isAccent ? 1000 : 800;
 
-            envelope.gain.value = this.volume; // Apply volume state
+            envelope.gain.value = this.volume; 
             envelope.gain.exponentialRampToValueAtTime(this.volume, time + 0.001);
             envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.02);
 
@@ -568,7 +565,7 @@
             osc.start(time);
             osc.stop(time + 0.03);
 
-            // Visual Sync
+            
             const delay = Math.max(0, (time - this.audioContext.currentTime) * 1000);
             setTimeout(() => {
                 this.animateBeat(beatNumber);
@@ -587,11 +584,11 @@
         animateBeat(beatNumber: number) {
             const isAccent = beatNumber === 0;
 
-            // Visual Flash
+            
             if (this.ui.ripple) {
-                // Reset animation
+                
                 this.ui.ripple.classList.remove("animate-ripple");
-                void this.ui.ripple.offsetWidth; // trigger reflow
+                void this.ui.ripple.offsetWidth; 
                 this.ui.ripple.classList.add("animate-ripple");
 
                 if (isAccent) {
@@ -610,10 +607,10 @@
                 }
             }
 
-            // Dots
+            
             this.ui.beatDotsContainer?.querySelectorAll(".beat-dot").forEach((d) => {
-                d.classList.remove("bg-cyan-500", "scale-125"); // Remove active formatting
-                d.classList.add("bg-slate-200", "dark:bg-slate-700"); // Reset base
+                d.classList.remove("bg-cyan-500", "scale-125"); 
+                d.classList.add("bg-slate-200", "dark:bg-slate-700"); 
             });
 
             const activeDot = document.getElementById(`beat-dot-${beatNumber}`);
@@ -624,7 +621,7 @@
         }
     }
 
-    // Initialize
+    
     document.addEventListener("DOMContentLoaded", () => {
         new Metronome();
     });

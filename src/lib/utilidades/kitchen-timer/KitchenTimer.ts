@@ -13,14 +13,14 @@ export class KitchenTimer extends EventTarget {
     private intervalId: number | null = null;
     isRunning: boolean = false;
 
-    // Static context to be shared if needed, or instance based
+    
     private audioContext: AudioContext | null = null;
 
     constructor(element: HTMLElement) {
         super();
         this.element = element;
 
-        // Elements
+        
         this.inputs = {
             h: element.querySelector('.hours') as HTMLInputElement,
             m: element.querySelector('.minutes') as HTMLInputElement,
@@ -34,7 +34,7 @@ export class KitchenTimer extends EventTarget {
         this.timerNameInput = element.querySelector('.timer-name') as HTMLInputElement;
 
         this.initEvents();
-        this.validateInputs(); // Init state
+        this.validateInputs(); 
     }
 
     private initEvents() {
@@ -51,7 +51,7 @@ export class KitchenTimer extends EventTarget {
             });
         });
 
-        // Emit name change event for dock updates
+        
         this.timerNameInput.addEventListener('input', () => {
             this.dispatchUpdate();
         });
@@ -215,7 +215,7 @@ export class KitchenTimer extends EventTarget {
                 this.statusText.textContent = "Pausado";
                 this.statusText.classList.replace("text-green-500", "text-orange-500");
             } else if (this.remainingSeconds === 0 && this.totalSeconds > 0) {
-                // finished handled in timeUp usually
+                
             } else {
                 this.statusText.textContent = "Listo";
                 this.statusText.classList.replace("text-green-500", "text-orange-500");

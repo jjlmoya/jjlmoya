@@ -34,7 +34,7 @@ export class GravityWellGame {
     }
 
     handleInput(e) {
-        // Prevent default if it's a touch event to stop scrolling/zooming
+        
         if (e.type === "touchstart") {
             e.preventDefault();
         }
@@ -69,11 +69,11 @@ export class GravityWellGame {
     }
 
     draw() {
-        // Trail effect
+        
         this.ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw Wells
+        
         const wells = this.mechanic.getWells();
         for (const well of wells) {
             const opacity = well.lifetime / well.maxLifetime;
@@ -91,7 +91,7 @@ export class GravityWellGame {
             this.ctx.stroke();
         }
 
-        // Draw Particles
+        
         const particles = this.mechanic.getParticles();
         for (const p of particles) {
             this.ctx.beginPath();

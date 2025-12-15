@@ -12,7 +12,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
     footerClass="bg-black text-white"
     image="/images/biblioteca_og_scythe.webp"
 >
-    <!-- Google Fonts for Pratchett Vibe -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -56,7 +56,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             <DeathInput />
         </div>
 
-        <!-- STAGE 2: CONFIRMATION -->
+        
         <div
             id="stage-confirmation"
             class="hidden z-10 w-full max-w-4xl transition-opacity duration-1000"
@@ -69,7 +69,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             />
         </div>
 
-        <!-- STAGE 3: THE BOOK -->
+        
         <div
             id="stage-book"
             class="hidden z-10 w-full h-screen absolute inset-0 transition-opacity duration-1000 opacity-0"
@@ -77,7 +77,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             <LifeBook />
         </div>
 
-        <!-- Death of Rats Easter Egg -->
+        
         <div
             id="death-of-rats"
             class="fixed bottom-4 right-8 z-50 text-xl cursor-pointer hover:scale-125 transition-transform duration-200 select-none opacity-50 hover:opacity-100"
@@ -89,10 +89,10 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
 
     <script is:inline>
         document.addEventListener("DOMContentLoaded", () => {
-            // --- RAT EASTER EGG ---
+            
             const rat = document.getElementById("death-of-rats");
             if (rat) {
-                // Clone to remove old listeners if any, just to be safe and clean
+                
                 const newRat = rat.cloneNode(true);
                 rat.parentNode.replaceChild(newRat, rat);
                 newRat.addEventListener("click", () => {
@@ -102,7 +102,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                 });
             }
 
-            // --- STATE MANAGEMENT ---
+            
             const stageIntro = document.getElementById("stage-intro");
             const introInitial = document.getElementById("intro-initial");
             const introNext = document.getElementById("intro-next");
@@ -110,7 +110,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             const stageConfirmation = document.getElementById("stage-confirmation");
             const stageBook = document.getElementById("stage-book");
 
-            // --- CHECK EXISTING SESSION ---
+            
             const storedData = localStorage.getItem("life-birthdate");
             let hasSkippedIntro = false;
 
@@ -119,7 +119,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     const { year, month } = JSON.parse(storedData);
                     if (year && month !== undefined) {
                         hasSkippedIntro = true;
-                        // Skip directly to book
+                        
                         if (stageIntro) stageIntro.classList.add("hidden");
                         if (stageConfirmation) stageConfirmation.classList.add("hidden");
 
@@ -127,7 +127,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                             stageBook.classList.remove("hidden");
                             stageBook.classList.remove("opacity-0");
 
-                            // Dispatch event for LifeBook
+                            
                             setTimeout(() => {
                                 const initEvent = new CustomEvent("init-life-book", {
                                     detail: { year, month },
@@ -141,9 +141,9 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                 }
             }
 
-            // --- SEQUENCE LOGIC (Only if not skipped) ---
+            
             if (!hasSkippedIntro) {
-                // Re-query elements to ensure we have the fresh ones from the current page render
+                
                 const firstDialogue = document.querySelector(
                     "#intro-initial .death-dialogue-container"
                 );
@@ -154,10 +154,10 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     "#intro-month .death-dialogue-container"
                 );
 
-                // 1. First Dialogue Complete -> Show Year Question
+                
                 if (firstDialogue) {
-                    // We use a named handler to avoid duplication if we weren't cloning,
-                    // but since these are fresh DOM nodes on navigation, addEventListener is fine.
+                    
+                    
                     firstDialogue.addEventListener("dialogue-complete", () => {
                         setTimeout(() => {
                             if (introInitial) introInitial.style.opacity = "0";
@@ -165,21 +165,21 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                                 if (introInitial) introInitial.classList.add("hidden");
                                 if (introNext) {
                                     introNext.classList.remove("hidden");
-                                    void introNext.offsetWidth; // Force reflow
+                                    void introNext.offsetWidth; 
                                     introNext.classList.remove("opacity-0");
 
-                                    // Trigger typing for the next dialogue
+                                    
                                     setTimeout(() => {
                                         if (nextDialogue)
                                             nextDialogue.dispatchEvent(new Event("start-typing"));
                                     }, 500);
                                 }
                             }, 1000);
-                        }, 4000); // Wait a bit for user to read
+                        }, 4000); 
                     });
                 }
 
-                // 2. Year Question Complete -> Show Year Input
+                
                 if (nextDialogue) {
                     nextDialogue.addEventListener("dialogue-complete", () => {
                         setTimeout(() => {
@@ -188,7 +188,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     });
                 }
 
-                // 3. Month Question Complete -> Show Month Input
+                
                 if (monthDialogue) {
                     monthDialogue.addEventListener("dialogue-complete", () => {
                         setTimeout(() => {
@@ -197,9 +197,9 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     });
                 }
 
-                // --- EVENT HANDLERS FOR INPUTS ---
+                
 
-                // Handler for Year Selection
+                
                 const handleYearSelected = () => {
                     if (introNext) introNext.style.opacity = "0";
                     setTimeout(() => {
@@ -209,7 +209,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                             void introMonth.offsetWidth;
                             introMonth.classList.remove("opacity-0");
 
-                            // Trigger typing for month dialogue
+                            
                             setTimeout(() => {
                                 if (monthDialogue)
                                     monthDialogue.dispatchEvent(new Event("start-typing"));
@@ -218,7 +218,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     }, 1000);
                 };
 
-                // Handler for Birthdate (Final) Selection
+                
                 const handleBirthdateSelected = (e) => {
                     const { year, month } = e.detail;
                     window.localStorage.setItem("life-birthdate", JSON.stringify({ year, month }));
@@ -231,7 +231,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                         }, 1000);
                     }
 
-                    // Show Confirmation then Book
+                    
                     setTimeout(() => {
                         if (stageConfirmation) {
                             stageConfirmation.style.opacity = "0";
@@ -252,8 +252,8 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     }, 8000);
                 };
 
-                // Clean up and attach global listeners
-                // Since 'document' persists, we MUST remove old listeners to avoid duplicates/stacking
+                
+                
                 if (window._handleYearSelected) {
                     document.removeEventListener("year-selected", window._handleYearSelected);
                 }
@@ -277,7 +277,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             background-color: #0c0a09;
         }
 
-        /* Custom Scrollbar for the book pages */
+        
         ::-webkit-scrollbar {
             width: 8px;
         }

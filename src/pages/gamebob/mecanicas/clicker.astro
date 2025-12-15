@@ -25,7 +25,7 @@ const CODE_URL =
             subInstruction="Genera monedas"
             verticalOnMobile={true}
         >
-            <!-- Custom Button Overlay -->
+            
             <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
                 <button
                     id="click-btn"
@@ -38,7 +38,7 @@ const CODE_URL =
                 </button>
             </div>
 
-            <!-- Currency Display Overlay -->
+            
             <div class="absolute top-8 left-0 right-0 text-center z-20 pointer-events-none">
                 <h2 class="text-4xl font-black text-[#fbbf24] drop-shadow-lg" id="currency-display">
                     0
@@ -57,7 +57,7 @@ const CODE_URL =
             Tienda de Mejoras
         </h3>
         <div id="upgrades-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Upgrades injected here -->
+            
         </div>
     </div>
 
@@ -99,10 +99,10 @@ const CODE_URL =
     let game: ClickerGame | null = null;
 
     if (canvas && overlay && clickBtn && currencyDisplay && gpsDisplay && upgradesList) {
-        // Initialize Game
+        
         game = new ClickerGame(canvas);
 
-        // Hide overlay on first interaction
+        
         const start = () => {
             overlay.style.opacity = "0";
             overlay.style.pointerEvents = "none";
@@ -110,30 +110,30 @@ const CODE_URL =
         overlay.addEventListener("click", start);
         clickBtn.addEventListener("click", start);
 
-        // Click Handler
+        
         clickBtn.addEventListener("mousedown", () => {
             if (!game) return;
-            // Calculate relative position for particles
+            
             const rect = canvas.getBoundingClientRect();
-            // Center of button roughly
+            
             const x = rect.width / 2;
             const y = rect.height / 2;
 
-            // Or use mouse position relative to canvas
-            // const mouseX = (e as MouseEvent).clientX - rect.left;
-            // const mouseY = (e as MouseEvent).clientY - rect.top;
+            
+            
+            
 
-            // Randomize slightly around center
+            
             game.click(x + (Math.random() - 0.5) * 50, y + (Math.random() - 0.5) * 50);
 
             updateUI();
 
-            // Animation
+            
             clickBtn.style.transform = "scale(0.90)";
             setTimeout(() => (clickBtn.style.transform = "scale(1)"), 50);
         });
 
-        // Shop UI Generation
+        
         function initShop() {
             if (!game || !upgradesList) return;
             const state = game.state;
@@ -163,7 +163,7 @@ const CODE_URL =
                 btn.onclick = () => {
                     if (game && game.buyUpgrade(u.id)) {
                         updateUI();
-                        // Animation
+                        
                         btn.style.transform = "scale(0.98)";
                         setTimeout(() => (btn.style.transform = "scale(1)"), 50);
                     }
@@ -181,7 +181,7 @@ const CODE_URL =
             if (gpsDisplay)
                 gpsDisplay.innerText = `${formatNumber(state.autoClickRate)} por segundo`;
 
-            // Update Shop Buttons
+            
             state.upgrades.forEach((u) => {
                 const btn = document.getElementById(`upgrade-btn-${u.id}`);
                 const countEl = document.getElementById(`upgrade-count-${u.id}`);
@@ -208,7 +208,7 @@ const CODE_URL =
             });
         }
 
-        // Loop for UI updates (auto-currency)
+        
         function uiLoop() {
             if (game && game.state.autoClickRate > 0) {
                 updateUI();
@@ -220,7 +220,7 @@ const CODE_URL =
             if (game) game.resize();
         });
 
-        // Save on unload
+        
         window.addEventListener("beforeunload", () => {
             if (game) game.save();
         });

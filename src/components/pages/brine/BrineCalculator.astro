@@ -6,7 +6,7 @@
     class="w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
 >
     <div class="grid lg:grid-cols-2 gap-0">
-        <!-- Left Column: Controls -->
+        
         <div class="p-8 lg:p-10 space-y-8">
             <div class="space-y-2">
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Calculadora</h2>
@@ -15,9 +15,9 @@
                 </p>
             </div>
 
-            <!-- Inputs -->
+            
             <div class="space-y-6">
-                <!-- Product Weight -->
+                
                 <div class="group">
                     <label
                         for="weight-product"
@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                <!-- Water Weight -->
+                
                 <div class="group">
                     <label
                         for="weight-water"
@@ -63,7 +63,7 @@
                     </div>
                 </div>
 
-                <!-- Salinity Slider -->
+                
                 <div class="pt-4">
                     <div class="flex justify-between items-end mb-4">
                         <label
@@ -93,7 +93,7 @@
                         class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-cyan-600 dark:accent-cyan-400 hover:accent-cyan-500 transition-all"
                     />
 
-                    <!-- Presets -->
+                    
                     <div class="flex flex-wrap gap-2 mt-4">
                         <button
                             class="preset-btn px-3 py-1.5 text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-lg hover:bg-cyan-100 dark:hover:bg-cyan-900/30 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors border border-transparent hover:border-cyan-200 dark:hover:border-cyan-800"
@@ -122,7 +122,7 @@
                     </div>
                 </div>
 
-                <!-- Sugar Toggle -->
+                
                 <div
                     class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/50"
                 >
@@ -156,23 +156,23 @@
             </div>
         </div>
 
-        <!-- Right Column: Visualizer & Results -->
+        
         <div
             class="bg-slate-50 dark:bg-slate-800/50 p-8 lg:p-10 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800 relative overflow-hidden"
         >
-            <!-- Visualizer Container -->
+            
             <div class="relative flex-grow flex items-center justify-center min-h-[300px] mb-8">
-                <!-- Jar Visualization -->
+                
                 <div
                     class="relative w-48 h-64 border-4 border-slate-300 dark:border-slate-600 rounded-2xl rounded-t-none border-t-0 bg-white/50 dark:bg-white/5 backdrop-blur-sm overflow-hidden"
                 >
-                    <!-- Lid -->
+                    
                     <div
                         class="absolute -top-1 left-1/2 -translate-x-1/2 w-52 h-4 bg-slate-300 dark:bg-slate-600 rounded-t-lg"
                     >
                     </div>
 
-                    <!-- Water Level (Dynamic Height) -->
+                    
                     <div
                         id="vis-water"
                         class="absolute bottom-0 left-0 w-full bg-blue-500/20 transition-all duration-500 ease-out"
@@ -182,7 +182,7 @@
                         </div>
                     </div>
 
-                    <!-- Product (Dynamic Size) -->
+                    
                     <div
                         id="vis-product"
                         class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-800/10 dark:bg-white/10 rounded-xl transition-all duration-500 ease-out backdrop-blur-sm border border-slate-900/10 dark:border-white/10"
@@ -196,13 +196,13 @@
                         </div>
                     </div>
 
-                    <!-- Particles (Salt/Sugar) -->
+                    
                     <div id="vis-particles" class="absolute inset-0 pointer-events-none">
-                        <!-- Particles injected via JS -->
+                        
                     </div>
                 </div>
 
-                <!-- Floating Stats -->
+                
                 <div class="absolute top-0 right-0 space-y-2">
                     <div
                         class="bg-white dark:bg-slate-900 px-3 py-1.5 rounded-lg shadow-sm border border-slate-100 dark:border-slate-700 text-xs font-mono text-slate-500 dark:text-slate-400"
@@ -212,7 +212,7 @@
                 </div>
             </div>
 
-            <!-- Results Panel -->
+            
             <div class="space-y-4">
                 <div
                     class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
@@ -343,7 +343,7 @@
         animation: float 3s ease-in-out infinite;
     }
 
-    /* Simple wave animation for water */
+    
     @keyframes wave {
         0% {
             transform: translateX(0) translateZ(0) scaleY(1);
@@ -363,7 +363,7 @@
 </style>
 
 <script>
-    // State Management
+    
     const state = {
         product: 500,
         water: 500,
@@ -371,7 +371,7 @@
         sugar: false,
     };
 
-    // DOM Elements
+    
     const els = {
         inputs: {
             product: document.getElementById("weight-product") as HTMLInputElement,
@@ -396,7 +396,7 @@
         },
     };
 
-    // Core Logic
+    
     const calculate = () => {
         const totalWeight = state.product + state.water;
         const salt = totalWeight * (state.salinity / 100);
@@ -404,32 +404,32 @@
         return { salt, sugar, totalWeight };
     };
 
-    // Visualization Logic
+    
     const updateVisuals = (results: { salt: number; sugar: number; totalWeight: number }) => {
-        // 1. Update Water Level (relative to container max capacity concept)
-        // Assuming max capacity is 2000g for visual scaling
+        
+        
         const maxCap = 2000;
         const waterHeight = Math.min((state.water / maxCap) * 100, 90);
         if (els.vis.water) els.vis.water.style.height = `${Math.max(waterHeight, 10)}%`;
 
-        // 2. Update Product Size
+        
         const productSize = Math.min((state.product / maxCap) * 100, 80);
         if (els.vis.product) {
             els.vis.product.style.height = `${Math.max(productSize, 10)}%`;
             els.vis.product.style.width = `${Math.max(productSize, 20)}%`;
         }
 
-        // 3. Particles (Salt/Sugar)
-        // Clear existing
+        
+        
         if (els.vis.particles) els.vis.particles.innerHTML = "";
 
-        // Add Salt Particles
-        const saltCount = Math.min(Math.floor(results.salt / 2), 50); // Cap at 50 particles
+        
+        const saltCount = Math.min(Math.floor(results.salt / 2), 50); 
         for (let i = 0; i < saltCount; i++) {
             createParticle("bg-white", "animate-float");
         }
 
-        // Add Sugar Particles
+        
         if (state.sugar) {
             const sugarCount = Math.min(Math.floor(results.sugar / 2), 30);
             for (let i = 0; i < sugarCount; i++) {
@@ -441,7 +441,7 @@
     const createParticle = (colorClass: string, animClass: string) => {
         if (!els.vis.particles) return;
         const p = document.createElement("div");
-        const size = Math.random() * 4 + 2; // 2-6px
+        const size = Math.random() * 4 + 2; 
         p.className = `absolute rounded-full opacity-60 ${colorClass} ${animClass}`;
         p.style.width = `${size}px`;
         p.style.height = `${size}px`;
@@ -456,10 +456,10 @@
             const val = parseFloat(btn.getAttribute("data-value") || "0");
             const isSelected = Math.abs(val - state.salinity) < 0.01;
 
-            // Base active classes
+            
             const activeClasses = ["ring-2", "ring-offset-2", "dark:ring-offset-slate-900"];
 
-            // Specific color classes map
+            
             let specificClasses: string[] = [];
             if (val === 1.5)
                 specificClasses = [
@@ -504,11 +504,11 @@
         });
     };
 
-    // Main Update Function
+    
     const update = () => {
         const results = calculate();
 
-        // Update Text Results
+        
         if (els.displays.saltResult)
             els.displays.saltResult.textContent = Math.round(results.salt).toString();
         if (els.displays.sugarResult)
@@ -517,13 +517,13 @@
         if (els.displays.visTotal)
             els.displays.visTotal.textContent = Math.round(results.totalWeight).toString();
 
-        // Toggle Sugar Panel
+        
         if (els.displays.sugarPanel) {
             if (state.sugar) els.displays.sugarPanel.classList.remove("hidden");
             else els.displays.sugarPanel.classList.add("hidden");
         }
 
-        // Update Time Recommendation
+        
         let timeText = "";
         let timeLabel = "";
 
@@ -541,12 +541,12 @@
         if (els.displays.timeResult) els.displays.timeResult.textContent = timeText;
         if (els.displays.timeLabel) els.displays.timeLabel.textContent = timeLabel;
 
-        // Update Visualization
+        
         updateVisuals(results);
         updatePresets();
     };
 
-    // Event Listeners
+    
     if (els.inputs.product)
         els.inputs.product.addEventListener("input", (e) => {
             state.product = parseFloat((e.target as HTMLInputElement).value) || 0;
@@ -580,6 +580,6 @@
         });
     });
 
-    // Initial Render
+    
     update();
 </script>
