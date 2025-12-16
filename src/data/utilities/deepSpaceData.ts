@@ -1,0 +1,161 @@
+export interface CelestialObject {
+    name: string;
+    mag: number;
+    icon: string;
+    type: string;
+    az: number;
+    alt: number;
+    color: string;
+    desc: string;
+}
+
+export const OBJECTS: CelestialObject[] = [
+    {
+        name: "Venus", mag: -4.6, icon: "mdi:circle", type: "Planeta", az: 45, alt: 30, color: "text-yellow-100",
+        desc: "El objeto más brillante tras el Sol y la Luna. Atmósfera densa de CO2 con efecto invernadero desbocado (460°C). Fases visibles con telescopio."
+    },
+    {
+        name: "Júpiter", mag: -2.5, icon: "mdi:circle", type: "Planeta", az: 120, alt: 45, color: "text-orange-100",
+        desc: "El gigante gaseoso. Visible con sus 4 lunas galileanas (Io, Europa, Gamínedes, Calisto) incluso con prismáticos. Su Gran Mancha Roja es una tormenta mayor que la Tierra."
+    },
+    {
+        name: "Marte", mag: -1.0, icon: "mdi:circle", type: "Planeta", az: 200, alt: 60, color: "text-red-200",
+        desc: "El Planeta Rojo. Superficie rica en óxido de hierro. Con telescopios medianos se pueden apreciar sus casquetes polares y grandes zonas oscuras (Syrtis Major)."
+    },
+    {
+        name: "Saturno", mag: 0.7, icon: "mdi:circle", type: "Planeta", az: 300, alt: 40, color: "text-amber-100",
+        desc: "Famoso por su sistema de anillos visibles con cualquier telescopio (>30x). Es un gigante gaseoso menos denso que el agua."
+    },
+    {
+        name: "Urano", mag: 5.7, icon: "mdi:circle", type: "Planeta", az: 10, alt: 70, color: "text-cyan-200",
+        desc: "Gigante de hielo. Visible como un pequeño disco azul verdoso. Su eje de rotación está inclinado 98°, orbitando 'de lado'."
+    },
+    {
+        name: "Neptuno", mag: 7.8, icon: "mdi:circle", type: "Planeta", az: 160, alt: 50, color: "text-blue-400",
+        desc: "El planeta más lejano (30 UA). Un punto azul intenso en telescopios. Atmósfera muy activa con los vientos más rápidos del sistema solar."
+    },
+    {
+        name: "Mercurio", mag: -0.5, icon: "mdi:circle", type: "Planeta", az: 30, alt: 15, color: "text-slate-300",
+        desc: "El más cercano al Sol. Solo visible al amanecer/atardecer. Superficie llena de cráteres similar a la Luna. Temperaturas extremas (-170°C a 430°C)."
+    },
+    {
+        name: "Sirio", mag: -1.4, icon: "mdi:star-four-points", type: "Estrella", az: 100, alt: 35, color: "text-blue-100",
+        desc: "Alpha Canis Majoris. La estrella más brillante del cielo nocturno. Distancia: 8.6 años luz. Es una binaria con una enana blanca (Sirio B) difícil de ver."
+    },
+    {
+        name: "Canopus", mag: -0.7, icon: "mdi:star-four-points", type: "Estrella", az: 130, alt: 15, color: "text-white",
+        desc: "Alpha Carinae. La segunda más brillante. Supergigante blanco-amarilla a 310 años luz. 10.000 veces más luminosa que el Sol."
+    },
+    {
+        name: "Arturo", mag: -0.05, icon: "mdi:star-four-points", type: "Estrella", az: 20, alt: 60, color: "text-orange-200",
+        desc: "Alpha Boötis. Gigante naranja a 37 años luz. Es la cuarta estrella más brillante y la más brillante del hemisferio norte celeste."
+    },
+    {
+        name: "Vega", mag: 0.03, icon: "mdi:star-four-points", type: "Estrella", az: 280, alt: 80, color: "text-blue-50",
+        desc: "Alpha Lyrae. Estrella estándar para magnitud 0. A 25 años luz. Posee un disco de polvo protoplanetario. Gira muy rápido."
+    },
+    {
+        name: "Capella", mag: 0.08, icon: "mdi:star-four-points", type: "Estrella", az: 60, alt: 70, color: "text-yellow-100",
+        desc: "Alpha Aurigae. Sistema estelar cuádruple: dos gigantes amarillas y dos enanas rojas. 6ª más brillante del cielo."
+    },
+    {
+        name: "Rigel", mag: 0.18, icon: "mdi:star-four-points", type: "Estrella", az: 95, alt: 25, color: "text-blue-200",
+        desc: "Beta Orionis. Supergigante azul a ~860 años luz. Es 120.000 veces más luminosa que el Sol. Ilumina la Nebulosa Cabeza de Bruja."
+    },
+    {
+        name: "Betelgeuse", mag: 0.42, icon: "mdi:star-four-points", type: "Estrella", az: 85, alt: 50, color: "text-red-400",
+        desc: "Alpha Orionis. Supergigante roja variable. Si estuviera en el centro de nuestro sistema, llegaría hasta Júpiter. Candidata a supernova cercana."
+    },
+    {
+        name: "Altair", mag: 0.77, icon: "mdi:star-four-points", type: "Estrella", az: 290, alt: 50, color: "text-white",
+        desc: "Alpha Aquilae. A solo 16.7 años luz. Rota tan rápido (9 horas) que está achatada por los polos. Parte del Triángulo de Verano."
+    },
+    {
+        name: "Aldebarán", mag: 0.85, icon: "mdi:star-four-points", type: "Estrella", az: 70, alt: 55, color: "text-orange-300",
+        desc: "Alpha Tauri. Gigante naranja a 65 años luz. Parece pertenecer al cúmulo Híades, pero está mucho más cerca (en primer plano)."
+    },
+    {
+        name: "Antares", mag: 0.96, icon: "mdi:star-four-points", type: "Estrella", az: 240, alt: 25, color: "text-red-400",
+        desc: "Alpha Scorpii. Supergigante roja. Nombre significa 'Rival de Marte'. Es una de las estrellas más grandes conocidas visible a simple vista."
+    },
+    {
+        name: "Polaris", mag: 1.97, icon: "mdi:star-four-points", type: "Estrella", az: 0, alt: 85, color: "text-white",
+        desc: "Alpha Ursae Minoris. En realidad es un sistema triple y variable Cefeida. Marca el Polo Norte Celeste actual."
+    },
+    {
+        name: "Andrómeda (M31)", mag: 3.4, icon: "mdi:creation", type: "Galaxia", az: 15, alt: 75, color: "text-indigo-200",
+        desc: "Galaxia espiral más cercana a la Vía Láctea (2.5 mill. años luz). Contiene 1 billón de estrellas. Visible a simple vista en cielos oscuros."
+    },
+    {
+        name: "Triángulo (M33)", mag: 5.7, icon: "mdi:creation", type: "Galaxia", az: 35, alt: 65, color: "text-slate-300",
+        desc: "Tercera galaxia mayor del Grupo Local. Espiral a 3 mill. años luz. Objeto difuso y difícil por su bajo brillo superficial."
+    },
+    {
+        name: "Pléyades (M45)", mag: 1.6, icon: "mdi:creation", type: "Cúmulo", az: 65, alt: 60, color: "text-blue-300",
+        desc: "Cúmulo abierto más famoso. Estrellas jóvenes, calientes y azules (clase B) a 444 años luz, iluminando una nebulosa de reflexión residual."
+    },
+    {
+        name: "Híades", mag: 0.5, icon: "mdi:creation", type: "Cúmulo", az: 75, alt: 50, color: "text-yellow-100",
+        desc: "Cúmulo abierto más cercano al sistema solar (153 años luz). Forma la 'V' de Tauro. Estimadas en 625 millones de años de edad."
+    },
+    {
+        name: "Neb. Orión (M42)", mag: 4.0, icon: "mdi:creation", type: "Nebulosa", az: 92, alt: 30, color: "text-pink-300",
+        desc: "Región de formación estelar masiva más cercana (1.344 años luz). Visible el Trapecio (4 estrellas jóvenes) en su centro con telescopios."
+    },
+    {
+        name: "Pesebre (M44)", mag: 3.7, icon: "mdi:creation", type: "Cúmulo", az: 130, alt: 60, color: "text-white",
+        desc: "Cúmulo abierto en Cáncer. 1.000 estrellas a 577 años luz. Fue uno de los primeros objetos estudiados por Galileo."
+    },
+    {
+        name: "Leo Triplet (M66)", mag: 8.9, icon: "mdi:creation", type: "Galaxias", az: 150, alt: 55, color: "text-slate-200",
+        desc: "Grupo de tres galaxias espirales (M65, M66, NGC 3628) en Leo. Dista unos 35 millones de años luz. Requiere cielos oscuros."
+    },
+    {
+        name: "Búho (M97)", mag: 9.9, icon: "mdi:creation", type: "Nebulosa", az: 160, alt: 80, color: "text-indigo-400",
+        desc: "Nebulosa planetaria en Ursa Major. Dos huecos oscuros en el disco le dan aspecto de cara de búho. Resto de una estrella tipo Sol."
+    },
+    {
+        name: "Gal. Bode (M81)", mag: 6.9, icon: "mdi:creation", type: "Galaxia", az: 170, alt: 60, color: "text-white",
+        desc: "Gran galaxia espiral en Ursa Major, a 12 mill. años luz. Núcleo activo que alberga un agujero negro supermasivo de 70 mill. masas solares."
+    },
+    {
+        name: "Gal. Cigarro (M82)", mag: 8.4, icon: "mdi:creation", type: "Galaxia", az: 175, alt: 62, color: "text-red-200",
+        desc: "Galaxia Starburst con brote estelar masivo causado por interacción con M81. Expulsa chorros de hidrógeno visible en rojo."
+    },
+    {
+        name: "Molinete (M101)", mag: 7.9, icon: "mdi:creation", type: "Galaxia", az: 185, alt: 70, color: "text-blue-200",
+        desc: "Galaxia espiral gigante (170.000 al de diámetro). Se ve 'de cara'. Contiene inmensas regiones HII de formación estelar."
+    },
+    {
+        name: "Sombrero (M104)", mag: 8.0, icon: "mdi:creation", type: "Galaxia", az: 195, alt: 40, color: "text-white",
+        desc: "Galaxia espiral vista de canto en Virgo. Famosa por su prominente banda de polvo oscuro y enorme bulbo central."
+    },
+    {
+        name: "Centauro Omega", mag: 3.9, icon: "mdi:creation", type: "Cúmulo Glob.", az: 210, alt: 10, color: "text-amber-100",
+        desc: "El cúmulo globular más grande y brillante de la Vía Láctea. 10 millones de estrellas. Posiblemente el núcleo remanente de una galaxia enana."
+    },
+    {
+        name: "Hércules (M13)", mag: 5.8, icon: "mdi:creation", type: "Cúmulo Glob.", az: 250, alt: 75, color: "text-amber-50",
+        desc: "Gran Cúmulo de Hércules. Bola de ~300.000 estrellas viejas a 22.000 años luz. Uno de los mejores objetos para telescopios en el norte."
+    },
+    {
+        name: "Anillo (M57)", mag: 8.8, icon: "mdi:creation", type: "Nebulosa", az: 285, alt: 70, color: "text-cyan-300",
+        desc: "Nebulosa planetaria en Lyra. Capas de gas expulsadas por una estrella moribunda. Enana blanca central (mag 14.8) muy difícil de ver."
+    },
+    {
+        name: "Dumbbell (M27)", mag: 7.4, icon: "mdi:creation", type: "Nebulosa", az: 295, alt: 55, color: "text-green-200",
+        desc: "Nebulosa de la Haltera. La primera nebulosa planetaria descubierta (Messier, 1764). A 1.360 años luz, en Vulpecula."
+    },
+    {
+        name: "Norteamérica (NGC7000)", mag: 4.0, icon: "mdi:creation", type: "Nebulosa", az: 320, alt: 80, color: "text-red-300",
+        desc: "Nebulosa de emisión en Cygnus. Muy grande (4 lunas llenas) pero brillo superficial bajo. Requiere cielo muy oscuro o filtros UHC."
+    },
+    {
+        name: "Escultor (NGC 253)", mag: 8.0, icon: "mdi:creation", type: "Galaxia", az: 350, alt: 15, color: "text-slate-300",
+        desc: "Galaxia espiral barrada a 11 mill. años luz. Una de las galaxias más brillantes después de M31 y M33. Mucho polvo interestelar."
+    },
+    {
+        name: "3C 273", mag: 12.9, icon: "mdi:creation", type: "Cuásar", az: 190, alt: 50, color: "text-fuchsia-400",
+        desc: "Cuásar en Virgo. Núcleo galáctico activo a 2.400 millones de años luz. Objeto más lejano visible con óptica amateur."
+    },
+];

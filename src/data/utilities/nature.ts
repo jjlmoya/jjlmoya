@@ -23,5 +23,13 @@ export const natureSection: SectionData = {
             iconBg: "mdi:tractor",
             iconFg: "mdi:sprout",
         },
+        {
+            title: "Alcance de Telescopio",
+            description: "Calculadora de magnitud límite. Descubre qué objetos celestes son visibles con tu equipo.",
+            href: "/utilidades/alcance-telescopio/",
+            color: "#6366f1",
+            iconBg: "mdi:telescope",
+            iconFg: "mdi:eye",
+        },
     ],
 };
