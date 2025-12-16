@@ -31,5 +31,13 @@ export const natureSection: SectionData = {
             iconBg: "mdi:telescope",
             iconFg: "mdi:eye",
         },
+        {
+            title: "Cosechador de Lluvia",
+            description: "Calcula el potencial de recolección de agua tu techo y dimensiona tu tanque.",
+            href: "/utilidades/calculadora-agua-lluvia/",
+            color: "#06b6d4",
+            iconBg: "mdi:weather-pouring",
+            iconFg: "mdi:water",
+        },
     ],
 };

@@ -1,0 +1,265 @@
+---
+import { Icon } from "astro-icon/components";
+import { ROOF_MATERIALS, FILTER_EFFICIENCY } from "../../../data/utilities/rainHarvesterData";
+---
+
+<div
+    class="w-full max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+>
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="p-6 md:p-10 space-y-8 bg-slate-50 dark:bg-slate-900/50">
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <label
+                        for="area"
+                        class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2"
+                    >
+                        <Icon name="mdi:home-roof" class="text-xl" /> Área del Techo (m²)
+                    </label>
+                    <div class="relative group">
+                        <input
+                            type="number"
+                            id="area"
+                            class="w-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-2xl font-bold text-slate-800 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                            placeholder="Ej. 100"
+                            value="100"
+                            min="0"
+                        />
+                        <span
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-mono"
+                            >m²</span
+                        >
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label
+                        for="rainfall"
+                        class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2"
+                    >
+                        <Icon name="mdi:weather-pouring" class="text-xl" /> Precipitación Anual (mm)
+                    </label>
+                    <div class="relative group">
+                        <input
+                            type="number"
+                            id="rainfall"
+                            class="w-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-2xl font-bold text-slate-800 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                            placeholder="Ej. 600"
+                            value="600"
+                            min="0"
+                        />
+                        <span
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-mono"
+                            >mm</span
+                        >
+                    </div>
+                    <p class="text-xs text-slate-400 italic">
+                        ¿No lo sabes? Busca "precipitación media anual [tu ciudad]" en Google.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <label
+                        for="material"
+                        class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2"
+                    >
+                        <Icon name="mdi:texture-box" class="text-xl" /> Material del Techo
+                    </label>
+                    <div class="relative">
+                        <select
+                            id="material"
+                            class="w-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-lg font-bold text-slate-800 dark:text-white focus:outline-none focus:border-cyan-500 appearance-none cursor-pointer"
+                        >
+                            {
+                                ROOF_MATERIALS.map((mat) => (
+                                    <option value={mat.id} selected={mat.id === "clay"}>
+                                        {mat.name} (Efic. {mat.coefficient * 100}%)
+                                    </option>
+                                ))
+                            }
+                        </select>
+                        <Icon
+                            name="mdi:chevron-down"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-2xl text-slate-400 pointer-events-none"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-2xl border border-indigo-100 dark:border-indigo-800"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div
+                        class="p-3 bg-indigo-100 dark:bg-indigo-800 rounded-lg text-indigo-600 dark:text-indigo-300"
+                    >
+                        <Icon name="mdi:information-outline" class="text-2xl" />
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-indigo-900 dark:text-indigo-100">
+                            Factor de Eficiencia
+                        </h4>
+                        <p class="text-sm text-indigo-700 dark:text-indigo-300">
+                            Se aplica una pérdida del {(1 - FILTER_EFFICIENCY) * 100}% por filtros y
+                            evaporación.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bg-gradient-to-br from-cyan-500 to-blue-600 p-6 md:p-10 text-white flex flex-col justify-between relative overflow-hidden"
+        >
+            <div class="relative z-10 space-y-8">
+                <div>
+                    <h3 class="text-cyan-100 font-bold uppercase tracking-widest text-sm mb-2">
+                        Potencial de Cosecha Anual
+                    </h3>
+                    <div class="flex items-baseline gap-2">
+                        <span
+                            id="result-liters"
+                            class="text-6xl md:text-7xl font-black tracking-tighter counter-value"
+                            >0</span
+                        >
+                        <span class="text-2xl font-bold text-cyan-200">Litros</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="font-bold text-cyan-100 border-b border-cyan-400/30 pb-2">
+                        Equivalencias Prácticas
+                    </h4>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div
+                            class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10"
+                        >
+                            <Icon name="mdi:toilet" class="text-3xl text-cyan-200" />
+                            <div>
+                                <div id="calc-flushes" class="text-2xl font-bold leading-none">
+                                    0
+                                </div>
+                                <div class="text-xs text-cyan-100 uppercase tracking-wider mt-1">
+                                    Descargas de WC
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10"
+                        >
+                            <Icon name="mdi:shower-head" class="text-3xl text-cyan-200" />
+                            <div>
+                                <div id="calc-showers" class="text-2xl font-bold leading-none">
+                                    0
+                                </div>
+                                <div class="text-xs text-cyan-100 uppercase tracking-wider mt-1">
+                                    Duchas (10 min)
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10"
+                        >
+                            <Icon name="mdi:flower" class="text-3xl text-cyan-200" />
+                            <div>
+                                <div id="calc-garden" class="text-2xl font-bold leading-none">
+                                    0
+                                </div>
+                                <div class="text-xs text-cyan-100 uppercase tracking-wider mt-1">
+                                    Riegos de Jardín (50m²)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="absolute bottom-0 right-0 w-64 h-64 opacity-20 pointer-events-none transform translate-x-1/4 translate-y-1/4"
+            >
+                <Icon name="mdi:water" class="w-full h-full" />
+            </div>
+
+            <div class="absolute inset-0 z-0">
+                <div
+                    id="liquid-fill"
+                    class="absolute bottom-0 left-0 w-full bg-white/20 transition-all duration-1000 ease-in-out"
+                    style="height: 0%"
+                >
+                    <div class="w-full h-4 bg-white/30 skew-y-1 absolute -top-2 animate-pulse">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { ROOF_MATERIALS, FILTER_EFFICIENCY } from "../../../data/utilities/rainHarvesterData";
+
+    const areaInput = document.getElementById("area") as HTMLInputElement;
+    const rainfallInput = document.getElementById("rainfall") as HTMLInputElement;
+    const materialSelect = document.getElementById("material") as HTMLSelectElement;
+
+    const resultLiters = document.getElementById("result-liters");
+    const calcFlushes = document.getElementById("calc-flushes");
+    const calcShowers = document.getElementById("calc-showers");
+    const calcGarden = document.getElementById("calc-garden");
+    const liquidFill = document.getElementById("liquid-fill");
+
+    function calculate() {
+        const area = parseFloat(areaInput.value) || 0;
+        const rainfall = parseFloat(rainfallInput.value) || 0;
+        const materialId = materialSelect.value;
+        const material = ROOF_MATERIALS.find((m) => m.id === materialId) || ROOF_MATERIALS[0];
+
+        const grossVolume = area * rainfall;
+        const netVolume = grossVolume * material.coefficient * FILTER_EFFICIENCY;
+
+        const flushes = Math.floor(netVolume / 6);
+        const showers = Math.floor(netVolume / 80);
+        const garden = Math.floor(netVolume / 500);
+
+        if (resultLiters)
+            animateValue(
+                resultLiters,
+                parseInt(resultLiters.innerText.replace(/,/g, "")),
+                Math.floor(netVolume)
+            );
+        if (calcFlushes)
+            animateValue(calcFlushes, parseInt(calcFlushes.innerText.replace(/,/g, "")), flushes);
+        if (calcShowers)
+            animateValue(calcShowers, parseInt(calcShowers.innerText.replace(/,/g, "")), showers);
+        if (calcGarden)
+            animateValue(calcGarden, parseInt(calcGarden.innerText.replace(/,/g, "")), garden);
+
+        if (liquidFill) {
+            const maxCapacity = 500 * 2000;
+            const percentage = Math.min((netVolume / maxCapacity) * 100, 100);
+            liquidFill.style.height = `${Math.max(percentage, 5)}%`;
+        }
+    }
+
+    function animateValue(obj: HTMLElement, start: number, end: number) {
+        if (start === end) return;
+        const range = end - start;
+        const duration = 1000;
+        let startTime: number | null = null;
+
+        const step = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            obj.innerHTML = Math.floor(start + range * progress).toLocaleString();
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    areaInput?.addEventListener("input", calculate);
+    rainfallInput?.addEventListener("input", calculate);
+    materialSelect?.addEventListener("change", calculate);
+
+    calculate();
+</script>
