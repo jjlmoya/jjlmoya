@@ -16,6 +16,7 @@ import { natureSection } from "./nature";
 import { alcoholSection } from "./alcohol";
 import { creativeSection } from "./creative";
 import { diySection } from "./diy";
+import { bikeSection } from "./bike";
 
 export const sections: SectionData[] = [
     cookingSection,
@@ -32,6 +33,7 @@ export const sections: SectionData[] = [
     alcoholSection,
     creativeSection,
     diySection,
+    bikeSection,
 ];
 
 export type { SectionData, UtilityItem } from "./types";

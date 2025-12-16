@@ -1,0 +1,333 @@
+---
+import { Icon } from "astro-icon/components";
+import { TIRE_SIZES } from "../../../data/utilities/fixedGearData";
+---
+
+<div
+    class="w-full max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+>
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="p-6 md:p-10 space-y-10 bg-slate-50 dark:bg-slate-900/50">
+            <div class="space-y-8">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end">
+                        <label
+                            for="chainring"
+                            class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2"
+                        >
+                            <Icon name="mdi:cog" class="text-xl" /> Plato (Dientes)
+                        </label>
+                        <span
+                            id="chainring-val"
+                            class="text-3xl font-black text-slate-800 dark:text-white font-mono"
+                            >48</span
+                        >
+                    </div>
+                    <input
+                        type="range"
+                        id="chainring"
+                        min="40"
+                        max="60"
+                        value="48"
+                        step="1"
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                    />
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end">
+                        <label
+                            for="cog"
+                            class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2"
+                        >
+                            <Icon name="mdi:cog-box" class="text-xl" /> Piñón (Dientes)
+                        </label>
+                        <span
+                            id="cog-val"
+                            class="text-3xl font-black text-slate-800 dark:text-white font-mono"
+                            >16</span
+                        >
+                    </div>
+                    <input
+                        type="range"
+                        id="cog"
+                        min="13"
+                        max="22"
+                        value="16"
+                        step="1"
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500/50"
+                    />
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label
+                            for="tire"
+                            class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"
+                        >
+                            Cubierta
+                        </label>
+                        <div class="relative">
+                            <select
+                                id="tire"
+                                class="w-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 appearance-none cursor-pointer"
+                            >
+                                {
+                                    TIRE_SIZES.map((tire) => (
+                                        <option
+                                            value={tire.diameterInches}
+                                            selected={tire.label === "700x25c"}
+                                        >
+                                            {tire.label}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                            <Icon
+                                name="mdi:chevron-down"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-slate-400 pointer-events-none"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label
+                            class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"
+                        >
+                            Skid Style
+                        </label>
+                        <button
+                            id="ambidextrous-btn"
+                            class="w-full px-3 py-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 hover:text-indigo-600 transition-all flex items-center justify-center gap-2"
+                        >
+                            <Icon name="mdi:foot-print" />
+                            <span id="skid-style-text">Una Pierna</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-2xl border border-indigo-100 dark:border-indigo-800 flex justify-between items-center"
+            >
+                <div>
+                    <h4
+                        class="font-bold text-indigo-900 dark:text-indigo-100 uppercase tracking-widest text-xs mb-1"
+                    >
+                        Gear Inches
+                    </h4>
+                    <div
+                        id="gear-inches-display"
+                        class="text-4xl font-black text-indigo-600 dark:text-indigo-400 font-mono"
+                    >
+                        0.0
+                    </div>
+                </div>
+                <div class="text-right">
+                    <h4
+                        class="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest text-xs mb-1"
+                    >
+                        Velocidad (90 RPM)
+                    </h4>
+                    <div
+                        id="speed-display"
+                        class="text-2xl font-bold text-slate-700 dark:text-slate-300 font-mono"
+                    >
+                        0 km/h
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bg-slate-900 p-6 md:p-10 text-white flex flex-col justify-center items-center relative overflow-hidden min-h-[400px]"
+        >
+            <div
+                id="patches-status"
+                class="absolute top-6 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-bold uppercase tracking-widest transition-colors duration-300"
+            >
+                Calculando...
+            </div>
+
+            <div class="relative w-64 h-64 md:w-80 md:h-80">
+                <svg
+                    viewBox="0 0 100 100"
+                    class="w-full h-full animate-[spin_10s_linear_infinite]"
+                    id="wheel-svg"
+                >
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#334155" stroke-width="8"
+                    ></circle>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#0f172a" stroke-width="2"
+                    ></circle>
+                    <circle cx="50" cy="50" r="5" fill="#f8fafc"></circle>
+
+                    <g id="spokes" stroke="#475569" stroke-width="0.5"> </g>
+
+                    <g id="skid-markers"> </g>
+                </svg>
+
+                <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none"
+                >
+                    <div
+                        id="patches-count"
+                        class="text-6xl md:text-7xl font-black tracking-tighter drop-shadow-2xl"
+                    >
+                        0
+                    </div>
+                    <div class="text-xs uppercase tracking-[0.2em] text-white/50 font-bold mt-1">
+                        Patches
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute bottom-6 left-0 right-0 text-center px-6">
+                <p id="verdict-text" class="text-sm font-medium text-slate-400">
+                    Ajusta los valores para ver el resultado.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import {
+        calculateSkidPatches,
+        calculateGearInches,
+        calculateSpeed,
+    } from "../../../data/utilities/fixedGearData";
+
+    const chainringInput = document.getElementById("chainring") as HTMLInputElement;
+    const cogInput = document.getElementById("cog") as HTMLInputElement;
+    const tireSelect = document.getElementById("tire") as HTMLSelectElement;
+    const ambidextrousBtn = document.getElementById("ambidextrous-btn");
+
+    const chainringVal = document.getElementById("chainring-val");
+    const cogVal = document.getElementById("cog-val");
+    const skidStyleText = document.getElementById("skid-style-text");
+
+    const patchesCount = document.getElementById("patches-count");
+    const gearInchesDisplay = document.getElementById("gear-inches-display");
+    const speedDisplay = document.getElementById("speed-display");
+    const patchesStatus = document.getElementById("patches-status");
+    const verdictText = document.getElementById("verdict-text");
+
+    const wheelSvg = document.getElementById("wheel-svg");
+    const skidMarkersGroup = document.getElementById("skid-markers");
+    const spokesGroup = document.getElementById("spokes");
+
+    let isAmbidextrous = false;
+
+    function initSpokes() {
+        if (!spokesGroup) return;
+        spokesGroup.innerHTML = "";
+        for (let i = 0; i < 16; i++) {
+            const angle = (i / 16) * Math.PI * 2;
+            const x2 = 50 + Math.cos(angle) * 40;
+            const y2 = 50 + Math.sin(angle) * 40;
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", "50");
+            line.setAttribute("y1", "50");
+            line.setAttribute("x2", x2.toString());
+            line.setAttribute("y2", y2.toString());
+            spokesGroup.appendChild(line);
+        }
+    }
+
+    function updateMarkers(count: number) {
+        if (!skidMarkersGroup) return;
+        skidMarkersGroup.innerHTML = "";
+
+        for (let i = 0; i < count; i++) {
+            const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+            const x = 50 + Math.cos(angle) * 40;
+            const y = 50 + Math.sin(angle) * 40;
+
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", x.toString());
+            circle.setAttribute("cy", y.toString());
+            circle.setAttribute("r", count === 1 ? "6" : "3");
+            circle.setAttribute("fill", count === 1 ? "#ef4444" : "#22d3ee");
+            circle.setAttribute("stroke", "white");
+            circle.setAttribute("stroke-width", "1");
+            skidMarkersGroup.appendChild(circle);
+        }
+    }
+
+    function update() {
+        const chainring = parseInt(chainringInput.value);
+        const cog = parseInt(cogInput.value);
+        const tireDiameter = parseFloat(tireSelect.value);
+
+        if (chainringVal) chainringVal.innerText = chainring.toString();
+        if (cogVal) cogVal.innerText = cog.toString();
+
+        const patches = calculateSkidPatches(chainring, cog, isAmbidextrous);
+        const gearInches = calculateGearInches(chainring, cog, tireDiameter);
+        const speed = calculateSpeed(gearInches, 90);
+
+        if (patchesCount) patchesCount.innerText = patches.toString();
+        if (gearInchesDisplay) gearInchesDisplay.innerText = gearInches.toFixed(1);
+        if (speedDisplay) speedDisplay.innerText = `${speed.toFixed(1)} km/h`;
+
+        updateMarkers(patches);
+
+        if (patchesStatus && verdictText) {
+            patchesStatus.classList.remove(
+                "bg-red-500",
+                "bg-yellow-500",
+                "bg-green-500",
+                "text-white"
+            );
+
+            if (patches === 1) {
+                patchesStatus.innerText = "PELIGRO CRÍTICO";
+                patchesStatus.classList.add("bg-red-600", "text-white");
+                verdictText.innerText =
+                    "¡STOP! Frenarás siempre en el mismo punto. Tu neumático durará días.";
+                verdictText.className = "text-sm font-bold text-red-400";
+            } else if (patches < 5) {
+                patchesStatus.innerText = "POBRE";
+                patchesStatus.classList.add("bg-yellow-500", "text-white");
+                verdictText.innerText = "Desgaste muy concentrado. Considera cambiar el piñón.";
+                verdictText.className = "text-sm font-bold text-yellow-400";
+            } else {
+                patchesStatus.innerText = "ÓPTIMO";
+                patchesStatus.classList.add("bg-green-600", "text-white");
+                verdictText.innerText = "Excelente distribución del desgaste. ¡A rodar!";
+                verdictText.className = "text-sm font-bold text-green-400";
+            }
+        }
+    }
+
+    ambidextrousBtn?.addEventListener("click", () => {
+        isAmbidextrous = !isAmbidextrous;
+        if (ambidextrousBtn) {
+            if (isAmbidextrous) {
+                ambidextrousBtn.classList.add(
+                    "border-indigo-500",
+                    "text-indigo-600",
+                    "bg-indigo-50",
+                    "dark:bg-indigo-900/30"
+                );
+                if (skidStyleText) skidStyleText.innerText = "Ambidiestro";
+            } else {
+                ambidextrousBtn.classList.remove(
+                    "border-indigo-500",
+                    "text-indigo-600",
+                    "bg-indigo-50",
+                    "dark:bg-indigo-900/30"
+                );
+                if (skidStyleText) skidStyleText.innerText = "Una Pierna";
+            }
+        }
+        update();
+    });
+
+    chainringInput?.addEventListener("input", update);
+    cogInput?.addEventListener("input", update);
+    tireSelect?.addEventListener("change", update);
+
+    initSpokes();
+    update();
+</script>
