@@ -108,9 +108,49 @@ import { Icon } from "astro-icon/components";
         useTorch: document.getElementById("torch-toggle") as HTMLInputElement,
     };
 
-    let engine: MorseEngine;
+    let currentEngine: MorseEngine | null = null;
     let torchTrack: MediaStreamTrack | null = null;
     let isTorchCapable = false;
+
+    function setStatus(text: string, color: "green" | "amber" | "red" | "slate") {
+        ui.statusText.innerText = text;
+        const colorMap = {
+            green: "bg-green-500",
+            amber: "bg-amber-500",
+            red: "bg-red-500",
+            slate: "bg-slate-500",
+        };
+        ui.statusLed.className = `w-2 h-2 rounded-full transition-colors duration-200 ${colorMap[color]}`;
+    }
+
+    async function setTorchState(on: boolean) {
+        if (!isTorchCapable || !torchTrack || !ui.useTorch.checked) return;
+        try {
+            await torchTrack.applyConstraints({ advanced: [{ torch: on }] as any });
+        } catch (e) {
+            console.warn("Torch toggle failed", e);
+        }
+    }
+
+    function onSignalChange(active: boolean, bit: MorseBit | null) {
+        if (active) {
+            ui.bulb.style.backgroundColor = "#4ade80";
+            ui.bulb.style.boxShadow = "0 0 60px #4ade80";
+            ui.bulb.style.borderColor = "#ffffff";
+            ui.bulbIcon.style.color = "#ffffff";
+        } else {
+            ui.bulb.style.backgroundColor = "#1e293b";
+            ui.bulb.style.boxShadow = "none";
+            ui.bulb.style.borderColor = "#334155";
+            ui.bulbIcon.style.color = "#475569";
+        }
+
+        setTorchState(active);
+
+        if (bit) {
+            ui.statusText.innerText = `ENVIANDO: ${bit.type.toUpperCase()}`;
+        }
+    }
 
     async function initTorch() {
         if (!ui.useTorch.checked) return;
@@ -156,60 +196,42 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    async function setTorchState(on: boolean) {
-        if (!isTorchCapable || !torchTrack || !ui.useTorch.checked) return;
-        try {
-            await torchTrack.applyConstraints({ advanced: [{ torch: on }] as any });
-        } catch (e) {
-            console.warn("Torch toggle failed", e);
+    function stopTransmission() {
+        if (currentEngine) {
+            currentEngine.stop();
+            setStatus("DETENIENDO...", "amber");
         }
-    }
-
-    function onSignalChange(active: boolean, bit: MorseBit | null) {
-        if (active) {
-            ui.bulb.style.backgroundColor = "#4ade80";
-            ui.bulb.style.boxShadow = "0 0 60px #4ade80";
-            ui.bulb.style.borderColor = "#ffffff";
-            ui.bulbIcon.style.color = "#ffffff";
-        } else {
-            ui.bulb.style.backgroundColor = "#1e293b";
-            ui.bulb.style.boxShadow = "none";
-            ui.bulb.style.borderColor = "#334155";
-            ui.bulbIcon.style.color = "#475569";
-        }
-
-        setTorchState(active);
-
-        if (bit) {
-            ui.statusText.innerText = `ENVIANDO: ${bit.type.toUpperCase()}`;
-        }
-    }
-
-    function setStatus(text: string, color: "green" | "amber" | "red" | "slate") {
-        ui.statusText.innerText = text;
-        const colorMap = {
-            green: "bg-green-500",
-            amber: "bg-amber-500",
-            red: "bg-red-500",
-            slate: "bg-slate-500",
-        };
-        ui.statusLed.className = `w-2 h-2 rounded-full transition-colors duration-200 ${colorMap[color]}`;
     }
 
     async function startTransmission(text: string, loop: boolean) {
         if (!text.trim()) return;
 
-        engine = new MorseEngine(15, onSignalChange);
+        if (currentEngine) {
+            currentEngine.stop();
+            await new Promise((r) => setTimeout(r, 100));
+        }
+
+        currentEngine = new MorseEngine(15, onSignalChange);
         const sequence = MorseEngine.compileSequence(text, 15);
         ui.ticker.innerText = MorseEngine.textToMorse(text);
 
         ui.input.disabled = true;
         ui.transmitBtn.disabled = true;
-        ui.sosBtn.innerHTML = loop ? "DETENER" : "DETENER";
 
-        const stopHandler = () => engine.stop();
-        ui.sosBtn.onclick = stopHandler;
-        if (!loop) ui.transmitBtn.onclick = stopHandler;
+        const stopLabel = `<span class="flex items-center gap-2"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg> DETENER</span>`;
+        ui.sosBtn.innerHTML = stopLabel;
+
+        ui.sosBtn.onclick = (e) => {
+            e.preventDefault();
+            stopTransmission();
+        };
+
+        if (!loop) {
+            ui.transmitBtn.onclick = (e) => {
+                e.preventDefault();
+                stopTransmission();
+            };
+        }
 
         setStatus("TRANSMITIENDO", "green");
 
@@ -217,20 +239,23 @@ import { Icon } from "astro-icon/components";
             await initTorch();
         }
 
-        await engine.transmit(sequence, loop);
+        await currentEngine.transmit(sequence, loop);
         endTransmission();
     }
 
     function endTransmission() {
         ui.input.disabled = false;
         ui.transmitBtn.disabled = false;
-        ui.sosBtn.innerHTML = `Bucle SOS`;
+
+        ui.sosBtn.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> Bucle SOS`;
+
         ui.sosBtn.onclick = () => startTransmission("SOS", true);
         ui.transmitBtn.onclick = () => startTransmission(ui.input.value, false);
 
         setTorchState(false);
         setStatus("EN ESPERA", "slate");
         onSignalChange(false, null);
+        currentEngine = null;
     }
 
     document.addEventListener("DOMContentLoaded", () => {
