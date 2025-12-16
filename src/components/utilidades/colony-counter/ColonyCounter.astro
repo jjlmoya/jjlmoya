@@ -1,0 +1,333 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+    class="w-full max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+>
+    <div class="grid grid-cols-1 lg:grid-cols-3">
+        <div class="lg:col-span-2 p-6 md:p-10 bg-slate-50 dark:bg-slate-900/50 relative">
+            <div class="aspect-square max-w-2xl mx-auto relative">
+                <canvas
+                    id="petri-canvas"
+                    class="w-full h-full rounded-full border-4 border-slate-300 dark:border-slate-700 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-slate-800 dark:to-slate-900 cursor-crosshair shadow-2xl"
+                ></canvas>
+
+                <div
+                    class="absolute top-4 left-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg"
+                >
+                    <p
+                        class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider"
+                    >
+                        Modo Actual
+                    </p>
+                    <p
+                        id="current-mode"
+                        class="text-lg font-black text-teal-600 dark:text-teal-400"
+                    >
+                        Tipo A
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="p-6 md:p-8 space-y-6 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800"
+        >
+            <div class="space-y-4">
+                <h3
+                    class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400"
+                >
+                    Tipo de Colonia
+                </h3>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button
+                        id="mode-a"
+                        class="colony-mode-btn active px-4 py-3 rounded-xl border-2 border-teal-500 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 font-bold text-sm transition-all hover:scale-105 flex items-center justify-center gap-2"
+                    >
+                        <span class="w-4 h-4 rounded-full bg-teal-500"></span>
+                        Tipo A
+                    </button>
+                    <button
+                        id="mode-b"
+                        class="colony-mode-btn px-4 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-sm transition-all hover:scale-105 flex items-center justify-center gap-2"
+                    >
+                        <span class="w-4 h-4 rounded-full bg-purple-500"></span>
+                        Tipo B
+                    </button>
+                </div>
+            </div>
+
+            <hr class="border-slate-200 dark:border-slate-700" />
+
+            <div class="space-y-4">
+                <h3
+                    class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400"
+                >
+                    Conteo
+                </h3>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="bg-teal-50 dark:bg-teal-900/10 p-4 rounded-2xl border border-teal-100 dark:border-teal-800/30"
+                    >
+                        <p
+                            class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase mb-1"
+                        >
+                            Tipo A
+                        </p>
+                        <p
+                            id="count-a"
+                            class="text-4xl font-black text-teal-700 dark:text-teal-300 font-mono"
+                        >
+                            0
+                        </p>
+                    </div>
+                    <div
+                        class="bg-purple-50 dark:bg-purple-900/10 p-4 rounded-2xl border border-purple-100 dark:border-purple-800/30"
+                    >
+                        <p
+                            class="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase mb-1"
+                        >
+                            Tipo B
+                        </p>
+                        <p
+                            id="count-b"
+                            class="text-4xl font-black text-purple-700 dark:text-purple-300 font-mono"
+                        >
+                            0
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700"
+                >
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">
+                        Total UFC
+                    </p>
+                    <p
+                        id="count-total"
+                        class="text-5xl font-black text-slate-800 dark:text-white font-mono"
+                    >
+                        0
+                    </p>
+                </div>
+            </div>
+
+            <hr class="border-slate-200 dark:border-slate-700" />
+
+            <div class="space-y-3">
+                <button
+                    id="undo-btn"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2"
+                >
+                    <Icon name="mdi:undo" class="text-xl" />
+                    Deshacer Último
+                </button>
+
+                <button
+                    id="clear-btn"
+                    class="w-full px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 font-bold text-sm hover:bg-red-100 dark:hover:bg-red-900/30 transition-all flex items-center justify-center gap-2"
+                >
+                    <Icon name="mdi:delete-sweep" class="text-xl" />
+                    Limpiar Todo
+                </button>
+            </div>
+
+            <div class="text-xs text-slate-400 dark:text-slate-500 space-y-1">
+                <p>
+                    <Icon name="mdi:information" class="inline text-sm" /> Haz clic en la placa para
+                    marcar colonias
+                </p>
+                <p>
+                    <Icon name="mdi:palette" class="inline text-sm" /> Cambia el tipo antes de marcar
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById("petri-canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+
+    const modeABtn = document.getElementById("mode-a");
+    const modeBBtn = document.getElementById("mode-b");
+    const undoBtn = document.getElementById("undo-btn");
+    const clearBtn = document.getElementById("clear-btn");
+
+    const countAEl = document.getElementById("count-a");
+    const countBEl = document.getElementById("count-b");
+    const countTotalEl = document.getElementById("count-total");
+    const currentModeEl = document.getElementById("current-mode");
+
+    let currentMode: "A" | "B" = "A";
+    let colonies: Array<{ x: number; y: number; type: "A" | "B" }> = [];
+
+    const COLONY_RADIUS = 8;
+    const COLORS = {
+        A: "#14b8a6",
+        B: "#a855f7",
+    };
+
+    function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        redraw();
+    }
+
+    function redraw() {
+        if (!ctx) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        colonies.forEach((colony) => {
+            ctx.fillStyle = COLORS[colony.type];
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.arc(colony.x, colony.y, COLONY_RADIUS, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+        });
+    }
+
+    function updateCounts() {
+        const countA = colonies.filter((c) => c.type === "A").length;
+        const countB = colonies.filter((c) => c.type === "B").length;
+        const total = colonies.length;
+
+        if (countAEl) countAEl.innerText = countA.toString();
+        if (countBEl) countBEl.innerText = countB.toString();
+        if (countTotalEl) countTotalEl.innerText = total.toString();
+    }
+
+    function playClickSound() {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = 800;
+        oscillator.type = "sine";
+
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+    }
+
+    function setMode(mode: "A" | "B") {
+        currentMode = mode;
+
+        if (currentModeEl) {
+            currentModeEl.innerText = `Tipo ${mode}`;
+            currentModeEl.className =
+                mode === "A"
+                    ? "text-lg font-black text-teal-600 dark:text-teal-400"
+                    : "text-lg font-black text-purple-600 dark:text-purple-400";
+        }
+
+        document.querySelectorAll(".colony-mode-btn").forEach((btn) => {
+            btn.classList.remove(
+                "active",
+                "border-teal-500",
+                "bg-teal-50",
+                "dark:bg-teal-900/20",
+                "text-teal-700",
+                "dark:text-teal-300",
+                "border-purple-500",
+                "bg-purple-50",
+                "dark:bg-purple-900/20",
+                "text-purple-700",
+                "dark:text-purple-300"
+            );
+            btn.classList.add(
+                "border-slate-300",
+                "dark:border-slate-700",
+                "bg-white",
+                "dark:bg-slate-800",
+                "text-slate-600",
+                "dark:text-slate-300"
+            );
+        });
+
+        const activeBtn = mode === "A" ? modeABtn : modeBBtn;
+        if (activeBtn) {
+            activeBtn.classList.remove(
+                "border-slate-300",
+                "dark:border-slate-700",
+                "bg-white",
+                "dark:bg-slate-800",
+                "text-slate-600",
+                "dark:text-slate-300"
+            );
+            if (mode === "A") {
+                activeBtn.classList.add(
+                    "active",
+                    "border-teal-500",
+                    "bg-teal-50",
+                    "dark:bg-teal-900/20",
+                    "text-teal-700",
+                    "dark:text-teal-300"
+                );
+            } else {
+                activeBtn.classList.add(
+                    "active",
+                    "border-purple-500",
+                    "bg-purple-50",
+                    "dark:bg-purple-900/20",
+                    "text-purple-700",
+                    "dark:text-purple-300"
+                );
+            }
+        }
+    }
+
+    canvas.addEventListener("click", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = Math.min(canvas.width, canvas.height) / 2;
+        const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+
+        if (distance > radius - 20) return;
+
+        colonies.push({ x, y, type: currentMode });
+        playClickSound();
+        redraw();
+        updateCounts();
+    });
+
+    modeABtn?.addEventListener("click", () => setMode("A"));
+    modeBBtn?.addEventListener("click", () => setMode("B"));
+
+    undoBtn?.addEventListener("click", () => {
+        if (colonies.length > 0) {
+            colonies.pop();
+            redraw();
+            updateCounts();
+        }
+    });
+
+    clearBtn?.addEventListener("click", () => {
+        if (confirm("¿Seguro que quieres borrar todas las colonias marcadas?")) {
+            colonies = [];
+            redraw();
+            updateCounts();
+        }
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+</script>
