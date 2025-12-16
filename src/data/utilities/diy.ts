@@ -28,6 +28,14 @@ export const diySection: SectionData = {
             title: "Calculadora de Morteros",
             description: "Proporciones exactas de cal y arena para enfoscados y revocos.",
             color: "#a855f7"
+        },
+        {
+            href: "/utilidades/calculadora-passepartout/",
+            iconBg: "mdi:crop-free",
+            iconFg: "mdi:ruler",
+            title: "Calculadora Passepartout",
+            description: "Márgenes perfectos y corrección óptica para enmarcar tus obras.",
+            color: "#6366f1"
         }
     ]
 };
