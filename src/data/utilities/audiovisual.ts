@@ -38,14 +38,6 @@ export const audiovisualSection: SectionData = {
             color: "#64748b"
         },
         {
-            href: "/utilidades/distancia-proyector/",
-            iconBg: "mdi:projector",
-            iconFg: "mdi:ruler",
-            title: "Distancia de Proyección",
-            description: "Calcula dónde colocar tu proyector según las pulgadas de pantalla deseadas.",
-            color: "#f43f5e"
-        },
-        {
             href: "/utilidades/lente-cromatica/",
             iconBg: "mdi:palette-swatch",
             iconFg: "mdi:eye-outline",
