@@ -28,6 +28,14 @@ export const toolsSection: SectionData = {
             title: "Generador de Contraseñas",
             description: "Crea claves seguras y aleatorias imposibles de hackear. Ciberseguridad básica.",
             color: "#10b981"
+        },
+        {
+            href: "/utilidades/baliza-morse/",
+            iconBg: "mdi:flash",
+            iconFg: "mdi:access-point",
+            title: "Baliza Morse",
+            description: "Transmisor táctico SOS usando flash, pantalla y vibración.",
+            color: "#22c55e"
         }
     ]
 };
