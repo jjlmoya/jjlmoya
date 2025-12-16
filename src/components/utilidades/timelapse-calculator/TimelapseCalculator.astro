@@ -13,7 +13,6 @@ import { Icon } from "astro-icon/components";
             </h3>
 
             <div class="space-y-6">
-                
                 <div class="space-y-3">
                     <label
                         class="text-xs font-bold uppercase tracking-wider text-slate-500 delay-100"
@@ -50,7 +49,6 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
-                
                 <div class="space-y-3">
                     <label
                         class="text-xs font-bold uppercase tracking-wider text-slate-500 delay-100"
@@ -96,7 +94,6 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div
             class="p-8 md:p-12 bg-gradient-to-br from-indigo-600 to-violet-700 text-white flex flex-col justify-between"
         >
@@ -167,54 +164,182 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-    const eventHours = document.getElementById("event-hours") as HTMLInputElement;
-    const eventMinutes = document.getElementById("event-minutes") as HTMLInputElement;
-    const videoSeconds = document.getElementById("video-seconds") as HTMLInputElement;
-    const fpsSelect = document.getElementById("fps-select") as HTMLSelectElement;
+    class TimelapseMath {
+        private static RAW_SIZE_MB = 25;
+        private static GB_CONVERSION = 1024;
 
-    const resultInterval = document.getElementById("result-interval");
-    const resultPhotos = document.getElementById("result-photos");
-    const resultStorage = document.getElementById("result-storage");
-    const resultSpeed = document.getElementById("result-speed");
-    const resultShutter = document.getElementById("result-shutter");
+        static calculate(eventDurationSecs: number, videoTargetSecs: number, fps: number) {
+            const totalFrames = videoTargetSecs * fps;
+            const interval =
+                totalFrames > 0 && eventDurationSecs > 0 ? eventDurationSecs / totalFrames : 0;
 
-    function calculate() {
-        const hrs = parseFloat(eventHours.value) || 0;
-        const mins = parseFloat(eventMinutes.value) || 0;
-        const eventSecs = hrs * 3600 + mins * 60;
+            const rawSizeGB = (totalFrames * this.RAW_SIZE_MB) / this.GB_CONVERSION;
+            const speedFactor = videoTargetSecs > 0 ? eventDurationSecs / videoTargetSecs : 0;
 
-        const vidSecs = parseFloat(videoSeconds.value) || 0;
-        const fps = parseInt(fpsSelect.value) || 24;
+            const shutterSpeed = interval / 2;
 
-        const totalFrames = vidSecs * fps;
-        let interval = 0;
-
-        if (totalFrames > 0 && eventSecs > 0) {
-            interval = eventSecs / totalFrames;
+            return {
+                interval,
+                totalFrames: Math.floor(totalFrames),
+                storageGB: rawSizeGB,
+                speedFactor,
+                shutterSpeed,
+            };
         }
 
-        const rawSize = totalFrames * 25;
-        const gbSize = rawSize / 1024;
-        const speed = vidSecs > 0 ? eventSecs / vidSecs : 0;
-        const shutterSpeed = interval / 2;
-
-        if (resultInterval)
-            resultInterval.innerText = interval < 1 ? interval.toFixed(2) : interval.toFixed(1);
-        if (resultPhotos) resultPhotos.innerText = totalFrames.toLocaleString("es-ES");
-        if (resultStorage) resultStorage.innerText = `~${gbSize.toFixed(1)} GB`;
-        if (resultSpeed) resultSpeed.innerText = `${speed.toFixed(0)}x`;
-        if (resultShutter)
-            resultShutter.innerText =
-                shutterSpeed < 1
-                    ? `1/${Math.round(1 / shutterSpeed)}s`
-                    : `${shutterSpeed.toFixed(1)}s`;
+        static formatTime(seconds: number): string {
+            const h = Math.floor(seconds / 3600)
+                .toString()
+                .padStart(2, "0");
+            const m = Math.floor((seconds % 3600) / 60)
+                .toString()
+                .padStart(2, "0");
+            const s = Math.floor(seconds % 60)
+                .toString()
+                .padStart(2, "0");
+            return h === "00" ? `${m}:${s}` : `${h}:${m}:${s}`;
+        }
     }
 
-    eventHours?.addEventListener("input", calculate);
-    eventMinutes?.addEventListener("input", calculate);
-    videoSeconds?.addEventListener("input", calculate);
-    fpsSelect?.addEventListener("change", calculate);
+    class CalculatorUI {
+        private elements: Record<string, HTMLElement | HTMLInputElement | HTMLSelectElement>;
 
-    
-    calculate();
+        constructor() {
+            this.elements = {
+                hours: document.getElementById("event-hours") as HTMLInputElement,
+                minutes: document.getElementById("event-minutes") as HTMLInputElement,
+                seconds: document.getElementById("video-seconds") as HTMLInputElement,
+                fps: document.getElementById("fps-select") as HTMLSelectElement,
+                interval: document.getElementById("result-interval")!,
+                photos: document.getElementById("result-photos")!,
+                storage: document.getElementById("result-storage")!,
+                speed: document.getElementById("result-speed")!,
+                shutter: document.getElementById("result-shutter")!,
+                playBtn: document.getElementById("play-btn")!,
+                barVideo: document.getElementById("bar-video")!,
+                barReal: document.getElementById("bar-real")!,
+                simVideoTime: document.getElementById("sim-video-time")!,
+                simRealTime: document.getElementById("sim-real-time")!,
+            };
+        }
+
+        public getInputs() {
+            return {
+                hours: parseFloat((this.elements.hours as HTMLInputElement).value) || 0,
+                minutes: parseFloat((this.elements.minutes as HTMLInputElement).value) || 0,
+                videoSeconds: parseFloat((this.elements.seconds as HTMLInputElement).value) || 0,
+                fps: parseInt((this.elements.fps as HTMLSelectElement).value) || 24,
+            };
+        }
+
+        public updateResults(results: any) {
+            if (!this.elements.interval) return;
+
+            this.elements.interval.innerText =
+                results.interval < 1 ? results.interval.toFixed(2) : results.interval.toFixed(1);
+
+            this.elements.photos.innerText = results.totalFrames.toLocaleString("es-ES");
+            this.elements.storage.innerText = `~${results.storageGB.toFixed(1)} GB`;
+            this.elements.speed.innerText = `${results.speedFactor.toFixed(0)}x`;
+
+            const shutter = results.shutterSpeed;
+            this.elements.shutter.innerText =
+                shutter < 1 ? `1/${Math.round(1 / shutter)}s` : `${shutter.toFixed(1)}s`;
+        }
+
+        public getElement(id: string) {
+            return this.elements[id];
+        }
+
+        public bindEvents(callback: () => void) {
+            ["hours", "minutes", "seconds", "fps"].forEach((key) => {
+                this.elements[key]?.addEventListener("input", callback);
+                this.elements[key]?.addEventListener("change", callback);
+            });
+        }
+
+        public updateSimulation(progress: number, videoTotal: number, realTotal: number) {
+            if (this.elements.barVideo) {
+                this.elements.barVideo.style.width = `${progress * 100}%`;
+            }
+            if (this.elements.barReal) {
+                this.elements.barReal.style.width = `${progress * 100}%`;
+            }
+            if (this.elements.simVideoTime) {
+                this.elements.simVideoTime.innerText = TimelapseMath.formatTime(
+                    progress * videoTotal
+                );
+            }
+            if (this.elements.simRealTime) {
+                this.elements.simRealTime.innerText = TimelapseMath.formatTime(
+                    progress * realTotal
+                );
+            }
+        }
+
+        public resetSimulation() {
+            if (this.elements.barVideo) this.elements.barVideo.style.width = "0%";
+            if (this.elements.barReal) this.elements.barReal.style.width = "0%";
+            if (this.elements.simVideoTime) this.elements.simVideoTime.innerText = "00:00";
+            if (this.elements.simRealTime) this.elements.simRealTime.innerText = "00:00:00";
+        }
+    }
+
+    class Simulator {
+        private isPlaying: boolean = false;
+        private animationId: number = 0;
+        private readonly DURATION_MS = 5000;
+
+        constructor(private ui: CalculatorUI) {
+            const btn = ui.getElement("playBtn");
+            btn?.addEventListener("click", () => this.start());
+        }
+
+        public start() {
+            if (this.isPlaying) return;
+            this.isPlaying = true;
+
+            const inputs = this.ui.getInputs();
+            const realDurationSecs = inputs.hours * 3600 + inputs.minutes * 60;
+            const videoDurationSecs = inputs.videoSeconds;
+
+            const startTime = performance.now();
+
+            const step = (now: number) => {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / this.DURATION_MS, 1);
+
+                this.ui.updateSimulation(progress, videoDurationSecs, realDurationSecs);
+
+                if (progress < 1) {
+                    this.animationId = requestAnimationFrame(step);
+                } else {
+                    this.isPlaying = false;
+                    setTimeout(() => this.ui.resetSimulation(), 1000);
+                }
+            };
+
+            this.animationId = requestAnimationFrame(step);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const ui = new CalculatorUI();
+        const sim = new Simulator(ui);
+
+        const recalculate = () => {
+            const inputs = ui.getInputs();
+            const eventDurationSecs = inputs.hours * 3600 + inputs.minutes * 60;
+            const results = TimelapseMath.calculate(
+                eventDurationSecs,
+                inputs.videoSeconds,
+                inputs.fps
+            );
+            ui.updateResults(results);
+        };
+
+        ui.bindEvents(recalculate);
+
+        recalculate();
+    });
 </script>
