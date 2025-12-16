@@ -8,13 +8,31 @@ import { Icon } from "astro-icon/components";
     <div class="grid grid-cols-1 lg:grid-cols-3">
         <div class="lg:col-span-2 p-6 md:p-10 bg-slate-50 dark:bg-slate-900/50 relative">
             <div class="aspect-square max-w-2xl mx-auto relative">
+                <input type="file" id="image-upload" accept="image/*" class="hidden" />
+
+                <div
+                    id="upload-prompt"
+                    class="w-full h-full rounded-full border-4 border-dashed border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 cursor-pointer hover:border-indigo-500 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex flex-col items-center justify-center gap-4"
+                >
+                    <Icon name="mdi:upload" class="text-6xl text-slate-400" />
+                    <div class="text-center px-6">
+                        <p class="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">
+                            Haz clic para subir tu placa de Petri
+                        </p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            Sube una foto de tu placa y empieza a contar colonias
+                        </p>
+                    </div>
+                </div>
+
                 <canvas
                     id="petri-canvas"
-                    class="w-full h-full rounded-full border-4 border-slate-300 dark:border-slate-700 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-slate-800 dark:to-slate-900 cursor-crosshair shadow-2xl"
+                    class="hidden w-full h-full rounded-full border-4 border-slate-300 dark:border-slate-700 cursor-crosshair shadow-2xl"
                 ></canvas>
 
                 <div
-                    class="absolute top-4 left-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg"
+                    id="mode-indicator"
+                    class="hidden absolute top-4 left-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg"
                 >
                     <p
                         class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider"
@@ -152,6 +170,9 @@ import { Icon } from "astro-icon/components";
 <script>
     const canvas = document.getElementById("petri-canvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
+    const imageUpload = document.getElementById("image-upload") as HTMLInputElement;
+    const uploadPrompt = document.getElementById("upload-prompt");
+    const modeIndicator = document.getElementById("mode-indicator");
 
     const modeABtn = document.getElementById("mode-a");
     const modeBBtn = document.getElementById("mode-b");
@@ -165,12 +186,36 @@ import { Icon } from "astro-icon/components";
 
     let currentMode: "A" | "B" = "A";
     let colonies: Array<{ x: number; y: number; type: "A" | "B" }> = [];
+    let uploadedImage: HTMLImageElement | null = null;
 
     const COLONY_RADIUS = 8;
     const COLORS = {
         A: "#14b8a6",
         B: "#a855f7",
     };
+
+    uploadPrompt?.addEventListener("click", () => {
+        imageUpload.click();
+    });
+
+    imageUpload.addEventListener("change", (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                uploadedImage = img;
+                if (uploadPrompt) uploadPrompt.classList.add("hidden");
+                canvas.classList.remove("hidden");
+                if (modeIndicator) modeIndicator.classList.remove("hidden");
+                resizeCanvas();
+            };
+            img.src = event.target?.result as string;
+        };
+        reader.readAsDataURL(file);
+    });
 
     function resizeCanvas() {
         const rect = canvas.getBoundingClientRect();
@@ -183,6 +228,38 @@ import { Icon } from "astro-icon/components";
         if (!ctx) return;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (uploadedImage) {
+            const canvasAspect = canvas.width / canvas.height;
+            const imageAspect = uploadedImage.width / uploadedImage.height;
+
+            let drawWidth, drawHeight, offsetX, offsetY;
+
+            if (canvasAspect > imageAspect) {
+                drawHeight = canvas.height;
+                drawWidth = uploadedImage.width * (canvas.height / uploadedImage.height);
+                offsetX = (canvas.width - drawWidth) / 2;
+                offsetY = 0;
+            } else {
+                drawWidth = canvas.width;
+                drawHeight = uploadedImage.height * (canvas.width / uploadedImage.width);
+                offsetX = 0;
+                offsetY = (canvas.height - drawHeight) / 2;
+            }
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(
+                canvas.width / 2,
+                canvas.height / 2,
+                Math.min(canvas.width, canvas.height) / 2,
+                0,
+                Math.PI * 2
+            );
+            ctx.clip();
+            ctx.drawImage(uploadedImage, offsetX, offsetY, drawWidth, drawHeight);
+            ctx.restore();
+        }
 
         colonies.forEach((colony) => {
             ctx.fillStyle = COLORS[colony.type];
