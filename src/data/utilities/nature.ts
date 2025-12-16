@@ -15,5 +15,13 @@ export const natureSection: SectionData = {
             iconBg: "mdi:weather-night",
             iconFg: "mdi:telescope",
         },
+        {
+            title: "Calculadora de Siembra",
+            description: "Calibra tu sembradora. Calcula el espaciado entre semillas basado en la población por hectárea.",
+            href: "/utilidades/calculadora-siembra/",
+            color: "#d97706",
+            iconBg: "mdi:tractor",
+            iconFg: "mdi:sprout",
+        },
     ],
 };
