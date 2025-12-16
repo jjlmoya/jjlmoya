@@ -1,540 +1,472 @@
 ---
 import { Icon } from "astro-icon/components";
 
-
-const presets = [
-    { id: "corn", label: "Maíz", pop: 80000, row: 70, icon: "mdi:corn" },
-    { id: "sunflower", label: "Girasol", pop: 55000, row: 70, icon: "mdi:flower" },
-    { id: "soy", label: "Soja", pop: 350000, row: 52, icon: "mdi:sprout" },
-    { id: "wheat", label: "Trigo", pop: 3000000, row: 17, icon: "mdi:barley" },
+const crops = [
+    {
+        id: "corn",
+        name: "Maíz Grano",
+        icon: "mdi:corn",
+        color: "bg-yellow-500",
+        pop: 85000,
+        row: 70,
+        note: "Alta precisión requerida",
+    },
+    {
+        id: "silage",
+        name: "Maíz Silo",
+        icon: "mdi:grass",
+        color: "bg-lime-600",
+        pop: 95000,
+        row: 70,
+        note: "Densidad media-alta",
+    },
+    {
+        id: "sunflower",
+        name: "Girasol",
+        icon: "mdi:flower",
+        color: "bg-orange-500",
+        pop: 60000,
+        row: 70,
+        note: "Sensible a velocidad",
+    },
+    {
+        id: "sorghum",
+        name: "Sorgo",
+        icon: "mdi:grain",
+        color: "bg-amber-700",
+        pop: 250000,
+        row: 52,
+        note: "Flujo continuo o plato",
+    },
+    {
+        id: "soy",
+        name: "Soja",
+        icon: "mdi:sprout",
+        color: "bg-green-600",
+        pop: 350000,
+        row: 52,
+        note: "Alta población",
+    },
+    {
+        id: "beet",
+        name: "Remolacha",
+        icon: "mdi:carrot",
+        color: "bg-rose-500",
+        pop: 110000,
+        row: 50,
+        note: "Siembra crítica superficial",
+    },
+    {
+        id: "rapeseed",
+        name: "Colza",
+        icon: "mdi:flower-pollen",
+        color: "bg-yellow-300",
+        pop: 500000,
+        row: 45,
+        note: "Semilla muy pequeña",
+    },
 ];
 ---
 
-<div class="max-w-5xl mx-auto p-4 select-none">
-    
-    <div
-        class="bg-zinc-950 border-8 border-zinc-800 rounded-[3rem] shadow-2xl overflow-hidden relative"
-    >
-        
-        <div
-            class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-50 rounded-[2.5rem]"
-        >
-        </div>
-
-        
-        <div
-            class="bg-zinc-900 px-8 py-4 flex justify-between items-center border-b border-zinc-800"
-        >
-            <div class="flex items-center gap-2">
-                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span class="text-zinc-400 text-xs font-mono">SYSTEM: CALIBRATED</span>
-            </div>
-            <div class="flex gap-4">
-                <button
-                    id="modeMetric"
-                    class="text-xs font-bold text-emerald-400 bg-emerald-950/50 px-3 py-1 rounded border border-emerald-900"
-                    >MÉTRICO</button
-                >
-                <button
-                    id="modeImperial"
-                    class="text-xs font-bold text-zinc-600 hover:text-zinc-400 transition-colors"
-                    >IMPERIAL</button
-                >
-            </div>
-        </div>
-
-        <div class="flex flex-col lg:flex-row h-auto lg:h-[600px]">
-            
-            <div
-                class="w-full lg:w-5/12 bg-zinc-900/50 p-6 lg:p-8 flex flex-col gap-8 border-r border-zinc-800 relative"
+<calc-sembradora class="block max-w-6xl mx-auto p-4 md:p-8 font-sans select-none">
+    <div class="mb-12">
+        <h2 class="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-2">
+            <span
+                class="w-8 h-8 rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center text-sm"
+                >1</span
             >
-                
-                <div class="grid grid-cols-4 gap-2">
-                    {
-                        presets.map((p) => (
-                            <button
-                                class="preset-btn group flex flex-col items-center gap-2 p-2 rounded-xl transition-all hover:bg-zinc-800 opacity-50 hover:opacity-100"
-                                data-pop={p.pop}
-                                data-row={p.row}
-                                aria-label={p.label}
-                            >
-                                <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center group-hover:bg-emerald-500/20 group-hover:text-emerald-400 transition-colors">
-                                    <Icon name={p.icon} class="w-5 h-5" />
-                                </div>
-                            </button>
-                        ))
-                    }
-                </div>
+            Selecciona tu Cultivo
+        </h2>
 
-                
-                <div class="control-group relative group">
-                    <label
-                        class="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2 block"
-                        >Población Objetivo</label
-                    >
-                    <div class="flex items-start justify-between mb-4">
-                        <h2 id="valPop" class="text-4xl font-black text-white tracking-tight">
-                            80,000
-                        </h2>
-                        <span class="text-zinc-600 text-xs mt-2 uppercase font-mono">sem/ha</span>
-                    </div>
-                    <input
-                        type="range"
-                        id="inputPop"
-                        min="10000"
-                        max="150000"
-                        step="1000"
-                        value="80000"
-                        class="w-full h-12 bg-transparent appearance-none cursor-ew-resize focus:outline-none z-10 relative opacity-0"
-                    />
-                    
-                    <div
-                        class="absolute bottom-3 left-0 right-0 h-4 bg-zinc-800 rounded-full overflow-hidden pointer-events-none"
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+            {
+                crops.map((c) => (
+                    <button
+                        class="crop-btn group relative flex flex-col items-center p-3 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-700 transition-all shadow-sm hover:shadow-md"
+                        data-id={c.id}
+                        data-pop={c.pop}
+                        data-row={c.row}
+                        data-col={c.color}
                     >
                         <div
-                            id="barPop"
-                            class="h-full bg-emerald-600 w-1/2 transition-all duration-100 ease-out"
+                            class={`w-12 h-12 rounded-full ${c.color} bg-opacity-10 group-hover:bg-opacity-20 flex items-center justify-center mb-3 transition-colors`}
                         >
-                        </div>
-                    </div>
-                    
-                    <div
-                        class="absolute bottom-3 left-0 w-full flex justify-between px-1 pointer-events-none"
-                    >
-                        <div
-                            class="w-4 h-4 bg-white rounded-full shadow-lg transform -translate-y-1/2 mt-2 transition-all duration-100 ease-out"
-                            id="thumbPop"
-                            style="left: 50%"
-                        >
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="control-group relative group">
-                    <label
-                        class="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2 block"
-                        >Distancia entre Surcos</label
-                    >
-                    <div class="flex items-start justify-between mb-4">
-                        <h2 id="valRow" class="text-4xl font-black text-white tracking-tight">
-                            70
-                        </h2>
-                        <span id="unitRow" class="text-zinc-600 text-xs mt-2 uppercase font-mono"
-                            >cm</span
-                        >
-                    </div>
-
-                    <div class="flex gap-2">
-                        <button
-                            class="step-btn h-12 w-12 rounded-xl bg-zinc-800 text-white font-bold hover:bg-zinc-700 flex items-center justify-center border border-zinc-700 active:border-emerald-500"
-                            data-target="inputRow"
-                            data-step="-1"
-                        >
-                            <Icon name="mdi:minus" />
-                        </button>
-                        <div
-                            class="flex-1 bg-zinc-800 rounded-xl relative border border-zinc-700 flex items-center px-4 overflow-hidden"
-                        >
-                            <input
-                                type="number"
-                                id="inputRow"
-                                value="70"
-                                class="w-full bg-transparent text-center font-mono text-xl text-emerald-400 focus:outline-none"
+                            <Icon
+                                name={c.icon}
+                                class={`w-6 h-6 text-current filter brightness-75 dark:brightness-125`}
                             />
                         </div>
-                        <button
-                            class="step-btn h-12 w-12 rounded-xl bg-zinc-800 text-white font-bold hover:bg-zinc-700 flex items-center justify-center border border-zinc-700 active:border-emerald-500"
-                            data-target="inputRow"
-                            data-step="1"
+
+                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300 group-hover:text-black dark:group-hover:text-white transition-colors">
+                            {c.name}
+                        </span>
+
+                        <div class="absolute inset-0 rounded-2xl border-2 border-emerald-500 opacity-0 scale-95 transition-all selection-ring" />
+                    </button>
+                ))
+            }
+        </div>
+    </div>
+
+    <div
+        class="grid lg:grid-cols-12 gap-8 opacity-50 pointer-events-none transition-all duration-500"
+        id="mainDash"
+    >
+        <div class="lg:col-span-4 space-y-6">
+            <h2 class="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                <span
+                    class="w-8 h-8 rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center text-sm"
+                    >2</span
+                >
+                Parámetros
+            </h2>
+
+            <div
+                class="bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xl border border-zinc-100 dark:border-zinc-800 space-y-8"
+            >
+                <div class="relative">
+                    <label
+                        class="flex justify-between text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2"
+                    >
+                        Población
+                        <span class="text-emerald-600">Semillas/Ha</span>
+                    </label>
+                    <div class="flex items-center gap-4">
+                        <input
+                            type="range"
+                            id="inPop"
+                            min="10000"
+                            max="600000"
+                            step="1000"
+                            class="flex-1 h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-black dark:accent-white"
+                        />
+                        <span
+                            id="valPop"
+                            class="w-24 text-right font-black text-xl text-zinc-900 dark:text-white tabular-nums"
+                            >0</span
                         >
-                            <Icon name="mdi:plus" />
-                        </button>
                     </div>
                 </div>
 
-                
-                <div
-                    class="mt-auto bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl flex items-start gap-3"
+                <div class="relative">
+                    <label
+                        class="flex justify-between text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2"
+                    >
+                        Entre Surcos
+                        <span class="text-emerald-600">Centímetros</span>
+                    </label>
+                    <div class="flex items-center gap-4">
+                        <input
+                            type="range"
+                            id="inRow"
+                            min="15"
+                            max="100"
+                            step="1"
+                            class="flex-1 h-2 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-black dark:accent-white"
+                        />
+                        <span
+                            id="valRow"
+                            class="w-24 text-right font-black text-xl text-zinc-900 dark:text-white tabular-nums"
+                            >0</span
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        class="flex justify-between text-xs font-bold text-zinc-500 uppercase tracking-wider mb-4"
+                    >
+                        Velocidad de Trabajo
+                        <span class="text-blue-500">km/h</span>
+                    </label>
+
+                    <div
+                        class="flex justify-between gap-2 p-2 bg-zinc-100 dark:bg-zinc-800 rounded-2xl"
+                    >
+                        {
+                            [4, 5, 6, 7, 8, 9, 10, 12].map((s) => (
+                                <button
+                                    class="speed-btn flex-1 py-3 rounded-xl text-sm font-bold text-zinc-400 hover:bg-white dark:hover:bg-zinc-700 hover:text-black dark:hover:text-white transition-all shadow-sm hover:shadow"
+                                    data-speed={s}
+                                >
+                                    {s}
+                                </button>
+                            ))
+                        }
+                    </div>
+                    <input type="hidden" id="inSpeed" value="6" />
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-8 space-y-6">
+            <h2 class="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+                <span
+                    class="w-8 h-8 rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center text-sm"
+                    >3</span
                 >
-                    <Icon name="mdi:information-variant" class="w-5 h-5 text-blue-400 shrink-0" />
-                    <p class="text-xs text-blue-200 leading-relaxed">
-                        A mayor velocidad de siembra, mayor probabilidad de desviación. La
-                        calibración estática debe verificarse siempre a velocidad de trabajo real.
-                    </p>
+                Análisis en Tiempo Real
+            </h2>
+
+            <div
+                class="bg-gradient-to-tr from-emerald-600 to-teal-500 text-white p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group hover:scale-[1.01] transition-transform duration-300"
+            >
+                <div
+                    class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
+                >
+                </div>
+
+                <div class="relative z-10 grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div
+                            class="text-emerald-100 uppercase text-xs font-bold tracking-widest mb-1"
+                        >
+                            Calibración Placa
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span
+                                id="outSpacing"
+                                class="text-8xl font-black tracking-tighter leading-none">--</span
+                            >
+                            <span class="text-3xl font-bold text-emerald-200">cm</span>
+                        </div>
+                        <p class="mt-4 text-emerald-100 text-sm font-medium">
+                            Distancia exacta entre cada semilla en la línea.
+                        </p>
+                    </div>
+
+                    <div
+                        class="bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/10"
+                    >
+                        <div class="flex items-center gap-3 mb-4">
+                            <Icon name="mdi:engine" class="w-6 h-6 text-emerald-200" />
+                            <span class="font-bold uppercase text-xs tracking-wider"
+                                >Estrés de Máquina</span
+                            >
+                        </div>
+
+                        <div class="relative h-4 bg-black/20 rounded-full mb-2 overflow-hidden">
+                            <div id="hzBar" class="h-full bg-white transition-all duration-300 w-0">
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-xs font-bold text-emerald-200">
+                            <span id="hzVal">0 Hz</span>
+                            <span id="hzStatus">STANDBY</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            
-            <div
-                class="w-full lg:w-7/12 bg-[#121214] relative flex flex-col items-center justify-center p-8 overflow-hidden"
-            >
-                
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div
-                    class="absolute inset-0"
-                    style="background-image: radial-gradient(#333 1px, transparent 1px); background-size: 20px 20px; opacity: 0.2"
+                    class="bg-white dark:bg-zinc-900 p-5 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm text-center"
                 >
+                    <span
+                        class="block text-3xl font-black text-zinc-800 dark:text-white mb-1"
+                        id="outSeedsM">--</span
+                    >
+                    <span class="text-[10px] uppercase font-bold text-zinc-400"
+                        >Semillas / Metro</span
+                    >
                 </div>
 
-                
-                <div class="relative z-10 text-center mb-12">
-                    <h3 class="text-zinc-500 text-sm font-bold uppercase tracking-[0.2em] mb-2">
-                        CALIBRACIÓN REQUERIDA
-                    </h3>
-                    <div class="relative inline-block">
-                        <span
-                            id="resultVal"
-                            class="text-[8rem] leading-none font-black text-white tabular-nums tracking-tighter mix-blend-overlay"
-                            >17.9</span
-                        >
-                        <span
-                            id="resultUnit"
-                            class="absolute -top-4 -right-12 text-2xl font-bold text-emerald-500"
-                            >CM</span
-                        >
-
-                        
-                        <div class="absolute inset-0 bg-emerald-500/20 blur-[100px] -z-10"></div>
-                    </div>
-                    <div class="flex justify-center gap-8 mt-4">
-                        <div class="text-center">
-                            <span class="block text-xl font-bold text-white" id="resSeedsMeter"
-                                >5.6</span
-                            >
-                            <span class="text-[10px] text-zinc-500 uppercase tracking-wider"
-                                >Semillas / metro</span
-                            >
-                        </div>
-                        <div class="text-center">
-                            <span class="block text-xl font-bold text-white" id="resPopReal"
-                                >8.0</span
-                            >
-                            <span class="text-[10px] text-zinc-500 uppercase tracking-wider"
-                                >Plantas / m²</span
-                            >
-                        </div>
-                    </div>
-                </div>
-
-                
                 <div
-                    class="w-full max-w-md h-24 bg-zinc-900 border border-zinc-700 rounded-lg relative overflow-hidden shadow-inner flex items-center"
+                    class="bg-white dark:bg-zinc-900 p-5 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm text-center"
                 >
-                    
-                    <div
-                        class="absolute inset-0 opacity-30"
-                        style="background: repeating-linear-gradient(90deg, #666 0px, #666 1px, transparent 1px, transparent 20px);"
+                    <span
+                        class="block text-3xl font-black text-zinc-800 dark:text-white mb-1"
+                        id="outPlantsM2">--</span
                     >
-                    </div>
-                    <div
-                        class="absolute inset-0 opacity-50"
-                        style="background: repeating-linear-gradient(90deg, #aaa 0px, #aaa 2px, transparent 2px, transparent 100px);"
-                    >
-                    </div>
-
-                    
-                    <div id="seedTrack" class="absolute h-full w-full flex items-center">
-                        
-                    </div>
-
-                    
-                    <div
-                        class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-red-500 shadow-[0_0_10px_red] z-20"
-                    >
-                    </div>
-                    <div
-                        class="absolute left-1/2 top-2 -translate-x-1/2 text-[10px] font-bold text-red-500 bg-zinc-900/80 px-1 rounded"
-                    >
-                        REF
-                    </div>
+                    <span class="text-[10px] uppercase font-bold text-zinc-400">Plantas / m²</span>
                 </div>
 
-                <div class="mt-4 text-center">
-                    <p class="text-[10px] text-zinc-600 font-mono">
-                        SIMULACIÓN VISUAL (ESCALA APROXIMADA)
-                    </p>
+                <div
+                    class="bg-white dark:bg-zinc-900 p-5 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm text-center"
+                >
+                    <span
+                        class="block text-3xl font-black text-zinc-800 dark:text-white mb-1"
+                        id="outSpeedMs">--</span
+                    >
+                    <span class="text-[10px] uppercase font-bold text-zinc-400">Metros / Seg</span>
+                </div>
+
+                <div
+                    class="bg-amber-50 dark:bg-amber-900/10 p-5 rounded-3xl border border-amber-100 dark:border-amber-800 shadow-sm text-center"
+                >
+                    <span
+                        class="block text-3xl font-black text-amber-600 dark:text-amber-400 mb-1"
+                        id="outHaBag">--</span
+                    >
+                    <span class="text-[10px] uppercase font-bold text-amber-400"
+                        >Ha / Saco (80k)</span
+                    >
                 </div>
             </div>
         </div>
     </div>
-</div>
+</calc-sembradora>
 
 <style>
-    
-    input[type="range"] {
-        cursor: grab;
-    }
-    input[type="range"]:active {
-        cursor: grabbing;
-    }
-
-    
-    @keyframes slideLeft {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(-100%);
-            opacity: 1;
-        }
+    .crop-btn.active .selection-ring {
+        opacity: 1;
+        transform: scale(1);
+        border-width: 3px;
+        border-color: #10b981;
     }
 
-    .seed-icon {
-        position: absolute;
-        width: 12px;
-        height: 12px;
-        background: #fbbf24;
-        border-radius: 50%;
-        box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
-        top: 50%;
-        margin-top: -6px;
-        transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    .seed-line {
-        position: absolute;
-        top: 30%;
-        bottom: 30%;
-        border-right: 1px dashed rgba(255, 255, 255, 0.2);
+    .speed-btn.active {
+        background-color: #10b981;
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
     }
 </style>
 
 <script>
-    class SeedCalculator extends HTMLElement {
-        private els: any = {};
-        private state = {
-            pop: 80000,
-            row: 70, 
-            isMetric: true,
-        };
+    class CalcSembradora extends HTMLElement {
+        els: any = {};
+        state = { pop: 0, row: 0, speed: 6, activeCrop: "" };
 
         constructor() {
             super();
+        }
+        connectedCallback() {
             this.init();
         }
 
-        private init() {
-            
+        init() {
             const q = (s: string) => this.querySelector(s);
             this.els = {
-                inputPop: q("#inputPop"),
+                mainDash: q("#mainDash"),
+                inPop: q("#inPop"),
                 valPop: q("#valPop"),
-                inputRow: q("#inputRow"),
+                inRow: q("#inRow"),
                 valRow: q("#valRow"),
+                speedBtns: this.querySelectorAll(".speed-btn"),
 
-                barPop: q("#barPop"),
-                thumbPop: q("#thumbPop"),
+                outSpacing: q("#outSpacing"),
+                hzBar: q("#hzBar"),
+                hzVal: q("#hzVal"),
+                hzStatus: q("#hzStatus"),
+                outSeedsM: q("#outSeedsM"),
+                outPlantsM2: q("#outPlantsM2"),
+                outSpeedMs: q("#outSpeedMs"),
+                outHaBag: q("#outHaBag"),
 
-                resultVal: q("#resultVal"),
-                resultUnit: q("#resultUnit"),
-                resSeedsMeter: q("#resSeedsMeter"),
-                resPopReal: q("#resPopReal"),
-
-                modeMetric: q("#modeMetric"),
-                modeImperial: q("#modeImperial"),
-                unitRow: q("#unitRow"),
-
-                seedTrack: q("#seedTrack"),
-                presets: this.querySelectorAll(".preset-btn"),
-                stepBtns: this.querySelectorAll(".step-btn"),
+                cropBtns: this.querySelectorAll(".crop-btn"),
             };
 
+            this.els.cropBtns.forEach((btn: HTMLElement) => {
+                btn.addEventListener("click", () => this.selectCrop(btn));
+            });
+
+            this.els.inPop.addEventListener("input", (e: any) =>
+                this.updateParam("pop", parseInt(e.target.value))
+            );
+            this.els.inRow.addEventListener("input", (e: any) =>
+                this.updateParam("row", parseInt(e.target.value))
+            );
+
+            this.els.speedBtns.forEach((btn: HTMLElement) => {
+                btn.addEventListener("click", () => this.setSpeed(btn));
+            });
+
+            this.setSpeed(this.els.speedBtns[2]);
+        }
+
+        selectCrop(btn: HTMLElement) {
+            this.els.mainDash.classList.remove("opacity-50", "pointer-events-none");
+
+            this.els.cropBtns.forEach((b: HTMLElement) => b.classList.remove("active"));
+            btn.classList.add("active");
+
             
-            this.els.inputPop.addEventListener("input", (e: any) => {
-                this.state.pop = parseInt(e.target.value);
-                this.updateUI();
-            });
+            const pop = parseInt(btn.dataset.pop || "0");
+            const row = parseInt(btn.dataset.row || "0");
 
-            this.els.inputRow.addEventListener("change", (e: any) => {
-                this.state.row = parseFloat(e.target.value);
-                this.updateUI();
-            });
+            
+            this.els.inPop.value = pop;
+            this.updateParam("pop", pop);
 
-            this.els.modeMetric.addEventListener("click", () => this.setMode(true));
-            this.els.modeImperial.addEventListener("click", () => this.setMode(false));
+            this.els.inRow.value = row;
+            this.updateParam("row", row);
+        }
 
-            this.els.presets.forEach((btn: HTMLElement) => {
-                btn.addEventListener("click", () => {
-                    this.state.pop = parseInt(btn.dataset.pop || "0");
-                    
-                    this.state.row = parseInt(btn.dataset.row || "70");
-                    if (!this.state.isMetric) {
-                        
-                        this.state.row = Math.round(this.state.row / 2.54);
-                        
-                        this.state.pop = Math.round(this.state.pop / 2.471);
+        setSpeed(btn: HTMLElement) {
+            this.els.speedBtns.forEach((b: HTMLElement) => b.classList.remove("active"));
+            btn.classList.add("active");
+            const s = parseInt(btn.dataset.speed || "6");
+            this.state.speed = s;
+            this.calc();
+        }
+
+        updateParam(key: "pop" | "row", val: number) {
+            this.state[key] = val;
+
+            if (key === "pop") this.els.valPop.textContent = val.toLocaleString();
+            if (key === "row") this.els.valRow.textContent = val;
+
+            this.calc();
+        }
+
+        calc() {
+            const { pop, row, speed } = this.state;
+            if (pop <= 0 || row <= 0) return;
+
+            const spacing = 10_000_000 / (pop * row);
+
+            const speedCmS = speed * 27.778;
+            const hz = speedCmS / spacing;
+
+            const seedsM = 100 / spacing;
+            const plantsM2 = pop / 10000;
+
+            this.els.outSpacing.textContent = spacing.toFixed(1);
+
+            this.els.hzVal.textContent = hz.toFixed(1) + " Hz";
+
+            if (hz > 60) {
+                this.els.hzStatus.textContent = "FLUJO VOLUMÉTRICO";
+                this.els.hzVal.className = "text-blue-200 font-bold";
+
+                const pctHz = Math.min(100, (hz / 400) * 100);
+
+                if (this.els.hzBar) {
+                    this.els.hzBar.style.width = `${pctHz}%`;
+                    this.els.hzBar.className =
+                        "h-full transition-all duration-300 bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]";
+                }
+            } else {
+                const pctHz = Math.min(100, (hz / 60) * 100);
+
+                if (this.els.hzBar) {
+                    this.els.hzBar.style.width = `${pctHz}%`;
+
+                    if (hz < 25) {
+                        this.els.hzStatus.textContent = "DOSIFICACIÓN ÓPTIMA";
+                        this.els.hzVal.className = "text-emerald-200 font-bold";
+                        this.els.hzBar.className =
+                            "h-full transition-all duration-300 bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]";
+                    } else if (hz < 50) {
+                        this.els.hzStatus.textContent = "ALTA VELOCIDAD";
+                        this.els.hzVal.className = "text-yellow-200 font-bold";
+                        this.els.hzBar.className =
+                            "h-full transition-all duration-300 bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.5)]";
+                    } else {
+                        this.els.hzStatus.textContent = "LÍMITE DE PLACA";
+                        this.els.hzVal.className = "text-red-200 font-bold";
+                        this.els.hzBar.className =
+                            "h-full transition-all duration-300 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]";
                     }
-                    this.updateUI();
-                });
-            });
-
-            this.els.stepBtns.forEach((btn: HTMLElement) => {
-                btn.addEventListener("click", () => {
-                    const step = parseFloat(btn.dataset.step || "1");
-                    this.state.row = Math.max(1, this.state.row + step);
-                    this.updateUI();
-                });
-            });
-
-            this.updateUI();
-        }
-
-        private setMode(metric: boolean) {
-            if (this.state.isMetric === metric) return;
-
-            if (metric) {
-                
-                this.state.pop = Math.round(this.state.pop * 2.471);
-                this.state.row = Math.round(this.state.row * 2.54);
-                this.els.inputPop.max = 150000;
-                this.els.inputPop.min = 10000;
-                this.els.inputPop.step = 1000;
-            } else {
-                
-                this.state.pop = Math.round(this.state.pop / 2.471);
-                this.state.row = Math.round(this.state.row / 2.54);
-                this.els.inputPop.max = 60000;
-                this.els.inputPop.min = 4000;
-                this.els.inputPop.step = 500;
+                }
             }
 
-            this.state.isMetric = metric;
-            this.updateUI();
-        }
+            this.els.outSeedsM.textContent = seedsM.toFixed(1);
+            this.els.outPlantsM2.textContent = plantsM2.toFixed(1);
+            this.els.outSpeedMs.textContent = (speed / 3.6).toFixed(1);
 
-        private updateUI() {
-            
-            this.els.inputPop.value = this.state.pop;
-            this.els.inputRow.value = this.state.row;
-            this.els.valPop.textContent = this.state.pop.toLocaleString();
-            this.els.valRow.textContent = this.state.row;
-
-            
-            const pct =
-                ((this.state.pop - parseInt(this.els.inputPop.min)) /
-                    (parseInt(this.els.inputPop.max) - parseInt(this.els.inputPop.min))) *
-                100;
-            this.els.barPop.style.width = `${pct}%`;
-            this.els.thumbPop.style.left = `${pct}%`;
-
-            
-            if (this.state.isMetric) {
-                this.els.modeMetric.className =
-                    "text-xs font-bold text-emerald-400 bg-emerald-950/50 px-3 py-1 rounded border border-emerald-900";
-                this.els.modeImperial.className =
-                    "text-xs font-bold text-zinc-600 hover:text-zinc-400 transition-colors";
-                this.els.unitRow.textContent = "CM";
-                this.els.resultUnit.textContent = "CM";
-            } else {
-                this.els.modeImperial.className =
-                    "text-xs font-bold text-emerald-400 bg-emerald-950/50 px-3 py-1 rounded border border-emerald-900";
-                this.els.modeMetric.className =
-                    "text-xs font-bold text-zinc-600 hover:text-zinc-400 transition-colors";
-                this.els.unitRow.textContent = "IN";
-                this.els.resultUnit.textContent = "IN";
-            }
-
-            this.calculate();
-        }
-
-        private calculate() {
-            let spacing = 0;
-            let seedsMeter = 0;
-            let plantsSqM = 0;
-
-            if (this.state.isMetric) {
-                
-                
-                const p = Math.max(1, this.state.pop);
-                const r = Math.max(1, this.state.row);
-                spacing = 10_000_000 / (p * r);
-
-                seedsMeter = 100 / spacing;
-                plantsSqM = p / 10000;
-            } else {
-                
-                
-                const p = Math.max(1, this.state.pop);
-                const r = Math.max(1, this.state.row);
-                spacing = 6_272_640 / (p * r);
-
-                seedsMeter = 12 / spacing;
-                plantsSqM = p / 43560; 
-            }
-
-            this.els.resultVal.textContent = spacing.toFixed(1);
-            this.els.resSeedsMeter.textContent = seedsMeter.toFixed(1);
-            this.els.resSeedsMeter.nextElementSibling.textContent = this.state.isMetric
-                ? "SEMILLAS / METRO"
-                : "SEMILLAS / PIE";
-
-            this.els.resPopReal.textContent = this.state.isMetric
-                ? plantsSqM.toFixed(1)
-                : (this.state.pop / 1000).toFixed(1) + "k";
-            this.els.resPopReal.nextElementSibling.textContent = this.state.isMetric
-                ? "PLANTAS / M²"
-                : "PLANTAS / ACRE";
-
-            this.visualize(spacing);
-        }
-
-        private visualize(spacing: number) {
-            
-            
-            
-            const containerWidth = this.els.seedTrack.clientWidth;
-
-            
-            
-            
-            const pxPerUnit = 15;
-
-            const gapPx = spacing * pxPerUnit;
-
-            
-            const center = containerWidth / 2;
-
-            this.els.seedTrack.innerHTML = "";
-
-            
-            
-            this.drawSeed(center);
-
-            
-            let pos = center + gapPx;
-            while (pos < containerWidth) {
-                this.drawSeed(pos, true);
-                pos += gapPx;
-            }
-
-            
-            pos = center - gapPx;
-            while (pos > 0) {
-                this.drawSeed(pos, true);
-                pos -= gapPx;
-            }
-        }
-
-        private drawSeed(left: number, isGhost = false) {
-            const seed = document.createElement("div");
-            seed.className = "seed-icon";
-            if (isGhost) seed.style.opacity = "0.5";
-            seed.style.left = `${left}px`;
-
-            
-            if (isGhost && left > this.els.seedTrack.clientWidth / 2) {
-                
-                const line = document.createElement("div");
-                line.className = "absolute top-1/2 h-px bg-emerald-500/50";
-                line.style.left = `${this.els.seedTrack.clientWidth / 2}px`;
-                line.style.width = `${left - this.els.seedTrack.clientWidth / 2}px`;
-                this.els.seedTrack.appendChild(line);
-            }
-
-            this.els.seedTrack.appendChild(seed);
+            const haPerBag = 80000 / pop;
+            this.els.outHaBag.textContent = haPerBag.toFixed(2);
         }
     }
-
-    customElements.define("calc-siembra", SeedCalculator);
+    customElements.define("calc-sembradora", CalcSembradora);
 </script>
