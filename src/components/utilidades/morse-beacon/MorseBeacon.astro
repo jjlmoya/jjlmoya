@@ -1,0 +1,248 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+    class="w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100"
+>
+    <div
+        class="bg-gray-900 p-8 relative overflow-hidden flex flex-col items-center justify-center min-h-[300px]"
+    >
+        <div
+            id="virtual-bulb"
+            class="w-24 h-24 rounded-full bg-slate-800 border-4 border-slate-700 transition-all duration-75 shadow-lg relative z-10 flex items-center justify-center"
+        >
+            <Icon
+                name="mdi:flash"
+                class="text-slate-600 w-10 h-10 transition-colors duration-75"
+                id="bulb-icon"
+            />
+        </div>
+
+        <div
+            class="absolute bottom-6 left-0 right-0 h-8 flex justify-center items-center opacity-90 overflow-hidden px-12"
+        >
+            <div
+                id="ticker-tape"
+                class="text-green-400 font-mono text-2xl font-bold tracking-[0.2em] whitespace-nowrap"
+            >
+            </div>
+        </div>
+
+        <div
+            class="absolute top-4 right-4 flex items-center gap-2 bg-slate-800/80 backdrop-blur px-3 py-1.5 rounded-full border border-slate-700"
+        >
+            <span id="status-led" class="w-2 h-2 rounded-full bg-slate-500"></span>
+            <span id="status-text" class="text-xs font-bold text-slate-300 tracking-wider"
+                >STANDBY</span
+            >
+        </div>
+    </div>
+
+    <div class="p-8 space-y-8">
+        <div class="space-y-4">
+            <label
+                for="input-text"
+                class="text-sm font-bold text-slate-400 uppercase tracking-wider flex justify-between"
+            >
+                <span>Mensaje a Transmitir</span>
+                <span id="char-count" class="text-green-600">0/100</span>
+            </label>
+            <textarea
+                id="input-text"
+                rows="2"
+                placeholder="Escribe aquí tu mensaje (SOS, HOLA, AYUDA)..."
+                class="w-full text-lg font-bold text-slate-800 border-b-2 border-slate-200 focus:border-green-500 outline-none py-2 resize-none placeholder:text-slate-300 transition-colors bg-transparent uppercase"
+                maxlength="100"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button
+                id="transmit-btn"
+                class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-green-200 transition-all active:scale-95 flex items-center justify-center gap-2 uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <Icon name="mdi:send-variant" class="w-5 h-5" />
+                Transmitir
+            </button>
+
+            <button
+                id="sos-btn"
+                class="bg-rose-50 hover:bg-rose-100 text-rose-600 border-2 border-rose-100 hover:border-rose-200 font-bold py-4 px-6 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 uppercase tracking-wide disabled:opacity-50"
+            >
+                <Icon name="mdi:alert-circle" class="w-5 h-5" />
+                Bucle SOS
+            </button>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-6 pt-4 border-t border-slate-50">
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <div class="relative">
+                    <input type="checkbox" id="torch-toggle" class="peer sr-only" checked />
+                    <div
+                        class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"
+                    >
+                    </div>
+                </div>
+                <span
+                    class="text-sm font-medium text-slate-600 group-hover:text-green-600 transition-colors"
+                    >Flash/Linterna</span
+                >
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { MorseEngine, MorseBit } from "./logic/MorseEngine";
+
+    const ui = {
+        input: document.getElementById("input-text") as HTMLTextAreaElement,
+        transmitBtn: document.getElementById("transmit-btn") as HTMLButtonElement,
+        sosBtn: document.getElementById("sos-btn") as HTMLButtonElement,
+        bulb: document.getElementById("virtual-bulb")!,
+        bulbIcon: document.getElementById("bulb-icon")!,
+        ticker: document.getElementById("ticker-tape")!,
+        statusLed: document.getElementById("status-led")!,
+        statusText: document.getElementById("status-text")!,
+        charCount: document.getElementById("char-count")!,
+        useTorch: document.getElementById("torch-toggle") as HTMLInputElement,
+    };
+
+    let engine: MorseEngine;
+    let torchTrack: MediaStreamTrack | null = null;
+    let isTorchCapable = false;
+
+    async function initTorch() {
+        if (!ui.useTorch.checked) return;
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.log("MediaDevices API not supported or secure context required");
+            isTorchCapable = false;
+            if (location.protocol === "http:" && location.hostname !== "localhost") {
+                setStatus("REQ. HTTPS", "amber");
+            } else {
+                setStatus("NO SOPORTADO", "amber");
+            }
+            return;
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "environment" },
+            });
+            const track = stream.getVideoTracks()[0];
+
+            if (track.getCapabilities) {
+                const caps = track.getCapabilities() as unknown as { torch: boolean };
+                if (caps && caps.torch) {
+                    torchTrack = track;
+                    isTorchCapable = true;
+                    setStatus("HARDWARE LISTO", "green");
+                } else {
+                    track.stop();
+                    isTorchCapable = false;
+                    setStatus("SIN LINTERNA", "amber");
+                }
+            } else {
+                const settings = track.getSettings() as unknown as { torch: boolean };
+                torchTrack = track;
+                isTorchCapable = true;
+                setStatus("HARDWARE LISTO", "green");
+            }
+        } catch (e) {
+            console.log("Torch error", e);
+            isTorchCapable = false;
+            setStatus("SIN PERMISO", "red");
+        }
+    }
+
+    async function setTorchState(on: boolean) {
+        if (!isTorchCapable || !torchTrack || !ui.useTorch.checked) return;
+        try {
+            await torchTrack.applyConstraints({ advanced: [{ torch: on }] as any });
+        } catch (e) {
+            console.warn("Torch toggle failed", e);
+        }
+    }
+
+    function onSignalChange(active: boolean, bit: MorseBit | null) {
+        if (active) {
+            ui.bulb.style.backgroundColor = "#4ade80";
+            ui.bulb.style.boxShadow = "0 0 60px #4ade80";
+            ui.bulb.style.borderColor = "#ffffff";
+            ui.bulbIcon.style.color = "#ffffff";
+        } else {
+            ui.bulb.style.backgroundColor = "#1e293b";
+            ui.bulb.style.boxShadow = "none";
+            ui.bulb.style.borderColor = "#334155";
+            ui.bulbIcon.style.color = "#475569";
+        }
+
+        setTorchState(active);
+
+        if (bit) {
+            ui.statusText.innerText = `ENVIANDO: ${bit.type.toUpperCase()}`;
+        }
+    }
+
+    function setStatus(text: string, color: "green" | "amber" | "red" | "slate") {
+        ui.statusText.innerText = text;
+        const colorMap = {
+            green: "bg-green-500",
+            amber: "bg-amber-500",
+            red: "bg-red-500",
+            slate: "bg-slate-500",
+        };
+        ui.statusLed.className = `w-2 h-2 rounded-full transition-colors duration-200 ${colorMap[color]}`;
+    }
+
+    async function startTransmission(text: string, loop: boolean) {
+        if (!text.trim()) return;
+
+        engine = new MorseEngine(15, onSignalChange);
+        const sequence = MorseEngine.compileSequence(text, 15);
+        ui.ticker.innerText = MorseEngine.textToMorse(text);
+
+        ui.input.disabled = true;
+        ui.transmitBtn.disabled = true;
+        ui.sosBtn.innerHTML = loop ? "DETENER" : "DETENER";
+
+        const stopHandler = () => engine.stop();
+        ui.sosBtn.onclick = stopHandler;
+        if (!loop) ui.transmitBtn.onclick = stopHandler;
+
+        setStatus("TRANSMITIENDO", "green");
+
+        if (!torchTrack && ui.useTorch.checked) {
+            await initTorch();
+        }
+
+        await engine.transmit(sequence, loop);
+        endTransmission();
+    }
+
+    function endTransmission() {
+        ui.input.disabled = false;
+        ui.transmitBtn.disabled = false;
+        ui.sosBtn.innerHTML = `Bucle SOS`;
+        ui.sosBtn.onclick = () => startTransmission("SOS", true);
+        ui.transmitBtn.onclick = () => startTransmission(ui.input.value, false);
+
+        setTorchState(false);
+        setStatus("EN ESPERA", "slate");
+        onSignalChange(false, null);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        ui.transmitBtn.addEventListener("click", () => startTransmission(ui.input.value, false));
+        ui.sosBtn.addEventListener("click", () => startTransmission("SOS", true));
+
+        ui.input.addEventListener("input", () => {
+            ui.charCount.innerText = `${ui.input.value.length}/100`;
+        });
+
+        ui.useTorch.addEventListener("change", async () => {
+            if (ui.useTorch.checked && !torchTrack) await initTorch();
+        });
+    });
+</script>
