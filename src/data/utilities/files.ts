@@ -28,30 +28,6 @@ export const filesSection: SectionData = {
             title: "Contador de Caracteres",
             description: "Cuentapalabras y caracteres visual. Analiza tiempos de lectura y voz.",
             color: "#6366f1"
-        },
-        {
-            href: "/utilidades/limpiador-exif/",
-            iconBg: "mdi:camera-off",
-            iconFg: "mdi:shield-check",
-            title: "Limpiador EXIF",
-            description: "Borra metadatos GPS y modelo de cámara. Privacidad total para tus fotos.",
-            color: "#8b5cf6"
-        },
-        {
-            href: "/utilidades/sincronizar-subtitulos/",
-            iconBg: "mdi:movie-open-edit-outline",
-            iconFg: "mdi:clock-time-four-outline",
-            title: "Sincronizar Subtítulos",
-            description: "Ajusta el tiempo de tus archivos SRT. Adelanta o retrasa subtítulos fácilmente.",
-            color: "#06b6d4"
-        },
-        {
-            href: "/utilidades/editor-privacidad/",
-            iconBg: "mdi:eye-off",
-            iconFg: "mdi:blur",
-            title: "Editor de Privacidad",
-            description: "Censura, pixela y desenfoca zonas sensibles de tus fotos online.",
-            color: "#64748b"
         }
     ]
 };
