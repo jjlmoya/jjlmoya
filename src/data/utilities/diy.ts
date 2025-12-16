@@ -6,6 +6,14 @@ export const diySection: SectionData = {
     theme: "blue",
     utilities: [
         {
+            href: "/utilidades/calculadora-arcilla/",
+            iconBg: "mdi:pot",
+            iconFg: "mdi:resize",
+            title: "Calculadora de Arcilla",
+            description: "Calcula la contracción de arcilla en secado y cocción para dimensiones exactas.",
+            color: "#d97706"
+        },
+        {
             href: "/utilidades/calculadora-resina/",
             iconBg: "mdi:flask",
             iconFg: "mdi:calculator",

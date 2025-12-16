@@ -1,0 +1,266 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+    class="w-full max-w-5xl mx-auto bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-900 dark:to-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-amber-200 dark:border-slate-700"
+>
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="p-8 md:p-12 space-y-8">
+            <div class="space-y-6">
+                <div class="space-y-3">
+                    <label
+                        class="text-sm font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400"
+                    >
+                        Tamaño Inicial (mm)
+                    </label>
+                    <input
+                        type="number"
+                        id="initial-size"
+                        value="100"
+                        min="1"
+                        step="0.1"
+                        class="w-full bg-white dark:bg-slate-800 border-2 border-amber-300 dark:border-amber-700 rounded-xl px-4 py-3 text-2xl font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+                    />
+                </div>
+
+                <div class="space-y-3">
+                    <label
+                        class="text-sm font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400"
+                    >
+                        Porcentaje de Contracción (%)
+                    </label>
+                    <div class="flex items-center gap-4">
+                        <input
+                            type="range"
+                            id="shrinkage-slider"
+                            min="0"
+                            max="20"
+                            value="12"
+                            step="0.5"
+                            class="flex-1 h-3 bg-amber-200 dark:bg-amber-900/30 rounded-lg appearance-none cursor-pointer accent-amber-600"
+                        />
+                        <span
+                            id="shrinkage-display"
+                            class="text-3xl font-black text-amber-700 dark:text-amber-400 font-mono w-20 text-right"
+                        >
+                            12.0
+                        </span>
+                    </div>
+                    <div class="flex justify-between text-xs text-amber-600 dark:text-amber-500">
+                        <span>Baja (Terracota)</span>
+                        <span>Media (Gres)</span>
+                        <span>Alta (Porcelana)</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-4">
+                    <button
+                        id="preset-low"
+                        class="px-4 py-2 rounded-lg bg-orange-100 dark:bg-orange-900/20 border-2 border-orange-300 dark:border-orange-700 text-orange-800 dark:text-orange-300 font-bold text-sm hover:bg-orange-200 dark:hover:bg-orange-900/30 transition-all"
+                    >
+                        Terracota (8%)
+                    </button>
+                    <button
+                        id="preset-medium"
+                        class="px-4 py-2 rounded-lg bg-amber-100 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 text-amber-800 dark:text-amber-300 font-bold text-sm hover:bg-amber-200 dark:hover:bg-amber-900/30 transition-all"
+                    >
+                        Gres (12%)
+                    </button>
+                    <button
+                        id="preset-high"
+                        class="px-4 py-2 rounded-lg bg-red-100 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 text-red-800 dark:text-red-300 font-bold text-sm hover:bg-red-200 dark:hover:bg-red-900/30 transition-all col-span-2"
+                    >
+                        Porcelana (15%)
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-800 rounded-2xl p-6 border-2 border-amber-300 dark:border-amber-700 shadow-lg"
+            >
+                <h3
+                    class="text-sm font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400 mb-4"
+                >
+                    Resultado
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-baseline">
+                        <span class="text-slate-600 dark:text-slate-400">Tamaño Final:</span>
+                        <span
+                            id="final-size"
+                            class="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono"
+                        >
+                            88.0 mm
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-baseline text-sm">
+                        <span class="text-slate-500 dark:text-slate-500">Pérdida Total:</span>
+                        <span
+                            id="loss-amount"
+                            class="text-lg font-bold text-red-600 dark:text-red-400 font-mono"
+                        >
+                            -12.0 mm
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-amber-100 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-200 dark:border-amber-800"
+            >
+                <p class="text-xs text-amber-800 dark:text-amber-300 flex items-start gap-2">
+                    <Icon name="mdi:information" class="text-base flex-shrink-0 mt-0.5" />
+                    <span>
+                        Para calcular el tamaño inicial necesario para obtener un tamaño final
+                        específico, divide el tamaño deseado entre (1 - contracción/100).
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <div
+            class="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 p-8 md:p-12 flex items-center justify-center relative overflow-hidden"
+        >
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-10 left-10 w-32 h-32 bg-amber-500 rounded-full blur-3xl">
+                </div>
+                <div
+                    class="absolute bottom-10 right-10 w-40 h-40 bg-orange-500 rounded-full blur-3xl"
+                >
+                </div>
+            </div>
+
+            <div class="relative z-10 w-full max-w-md">
+                <div class="aspect-square relative flex items-center justify-center">
+                    <div
+                        id="circle-initial"
+                        class="absolute rounded-full border-4 border-dashed border-amber-400 dark:border-amber-600 bg-amber-100/30 dark:bg-amber-900/20 transition-all duration-700 flex items-center justify-center"
+                        style="width: 100%; height: 100%;"
+                    >
+                        <div
+                            class="absolute -top-8 left-1/2 -translate-x-1/2 bg-amber-600 dark:bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap"
+                        >
+                            Inicial: <span id="viz-initial">100.0</span> mm
+                        </div>
+                    </div>
+
+                    <div
+                        id="circle-final"
+                        class="absolute rounded-full border-4 border-solid border-emerald-600 dark:border-emerald-500 bg-emerald-500/40 dark:bg-emerald-600/30 transition-all duration-700 flex items-center justify-center shadow-2xl"
+                        style="width: 88%; height: 88%;"
+                    >
+                        <div class="text-center">
+                            <div
+                                class="text-5xl font-black text-emerald-700 dark:text-emerald-300 mb-2"
+                                id="viz-final"
+                            >
+                                88.0
+                            </div>
+                            <div class="text-sm font-bold text-emerald-800 dark:text-emerald-400">
+                                mm final
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-red-600 dark:bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg"
+                    >
+                        Pérdida: <span id="viz-loss">12.0</span>%
+                    </div>
+                </div>
+
+                <div class="mt-16 grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-white/50 dark:bg-slate-800/50 rounded-xl p-3 backdrop-blur-sm">
+                        <div class="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                            Área Inicial
+                        </div>
+                        <div
+                            class="text-lg font-bold text-amber-700 dark:text-amber-400"
+                            id="area-initial"
+                        >
+                            31,416 mm²
+                        </div>
+                    </div>
+                    <div class="bg-white/50 dark:bg-slate-800/50 rounded-xl p-3 backdrop-blur-sm">
+                        <div class="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                            Área Final
+                        </div>
+                        <div
+                            class="text-lg font-bold text-emerald-700 dark:text-emerald-400"
+                            id="area-final"
+                        >
+                            24,328 mm²
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const initialSizeInput = document.getElementById("initial-size") as HTMLInputElement;
+    const shrinkageSlider = document.getElementById("shrinkage-slider") as HTMLInputElement;
+    const shrinkageDisplay = document.getElementById("shrinkage-display");
+    const finalSizeEl = document.getElementById("final-size");
+    const lossAmountEl = document.getElementById("loss-amount");
+
+    const vizInitial = document.getElementById("viz-initial");
+    const vizFinal = document.getElementById("viz-final");
+    const vizLoss = document.getElementById("viz-loss");
+    const circleFinal = document.getElementById("circle-final");
+    const areaInitialEl = document.getElementById("area-initial");
+    const areaFinalEl = document.getElementById("area-final");
+
+    const presetLow = document.getElementById("preset-low");
+    const presetMedium = document.getElementById("preset-medium");
+    const presetHigh = document.getElementById("preset-high");
+
+    function calculate() {
+        const initialSize = parseFloat(initialSizeInput.value) || 0;
+        const shrinkagePercent = parseFloat(shrinkageSlider.value) || 0;
+
+        const finalSize = initialSize * (1 - shrinkagePercent / 100);
+        const loss = initialSize - finalSize;
+        const scale = finalSize / initialSize;
+
+        const radiusInitial = initialSize / 2;
+        const radiusFinal = finalSize / 2;
+        const areaInitial = Math.PI * radiusInitial * radiusInitial;
+        const areaFinal = Math.PI * radiusFinal * radiusFinal;
+
+        if (shrinkageDisplay) shrinkageDisplay.innerText = shrinkagePercent.toFixed(1);
+        if (finalSizeEl) finalSizeEl.innerText = `${finalSize.toFixed(1)} mm`;
+        if (lossAmountEl) lossAmountEl.innerText = `-${loss.toFixed(1)} mm`;
+
+        if (vizInitial) vizInitial.innerText = initialSize.toFixed(1);
+        if (vizFinal) vizFinal.innerText = finalSize.toFixed(1);
+        if (vizLoss) vizLoss.innerText = shrinkagePercent.toFixed(1);
+
+        if (areaInitialEl)
+            areaInitialEl.innerText = `${areaInitial.toLocaleString("es-ES", { maximumFractionDigits: 0 })} mm²`;
+        if (areaFinalEl)
+            areaFinalEl.innerText = `${areaFinal.toLocaleString("es-ES", { maximumFractionDigits: 0 })} mm²`;
+
+        if (circleFinal) {
+            const scalePercent = (scale * 100).toFixed(1);
+            circleFinal.style.width = `${scalePercent}%`;
+            circleFinal.style.height = `${scalePercent}%`;
+        }
+    }
+
+    function setShrinkage(value: number) {
+        shrinkageSlider.value = value.toString();
+        calculate();
+    }
+
+    initialSizeInput.addEventListener("input", calculate);
+    shrinkageSlider.addEventListener("input", calculate);
+
+    presetLow?.addEventListener("click", () => setShrinkage(8));
+    presetMedium?.addEventListener("click", () => setShrinkage(12));
+    presetHigh?.addEventListener("click", () => setShrinkage(15));
+
+    calculate();
+</script>
