@@ -35,7 +35,6 @@ import SuperCalculatorSEO from "../../components/utilidades/super-calculator/Sup
     title="Extended Title for SEO"
     description="Short description"
     image="/images/utilities/my-tool.webp"
-    category="Category Name"
     gradientFrom="from-color-100"
 >
     <!-- 1. Header Slot using Standard Component -->

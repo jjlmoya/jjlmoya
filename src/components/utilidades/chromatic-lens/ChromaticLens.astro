@@ -1,0 +1,272 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+    id="chromatic-lens-container"
+    class="w-full relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 rounded-3xl shadow-2xl border border-slate-200 transition-all duration-1000 ease-out min-h-[600px] flex flex-col"
+>
+    <div
+        id="bg-overlay"
+        class="absolute inset-0 opacity-0 transition-opacity duration-1000 bg-gradient-to-br"
+    >
+    </div>
+
+    <div
+        class="relative z-10 flex flex-col flex-grow p-6 md:p-12 gap-8 items-center justify-center"
+    >
+        <div
+            id="drop-zone"
+            class="w-full max-w-2xl bg-white/10 opacity-100 backdrop-blur-md border-4 border-dashed border-slate-300 rounded-3xl p-12 text-center cursor-pointer hover:border-fuchsia-400 hover:bg-white/20 transition-all group flex flex-col items-center justify-center min-h-[300px]"
+        >
+            <input type="file" id="file-input" accept="image/*" class="hidden" />
+
+            <div
+                id="upload-prompt"
+                class="space-y-6 pointer-events-none transition-all duration-300"
+            >
+                <div
+                    class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform shadow-inner"
+                >
+                    <Icon
+                        name="mdi:cloud-upload"
+                        class="w-10 h-10 text-slate-400 group-hover:text-fuchsia-500 transition-colors"
+                    />
+                </div>
+                <div class="space-y-2">
+                    <h3
+                        class="text-2xl font-black text-slate-700 group-hover:text-fuchsia-600 transition-colors"
+                    >
+                        Arrastra una imagen
+                    </h3>
+                    <p class="text-slate-500 font-medium">o haz clic para explorar</p>
+                </div>
+                <p
+                    class="text-xs text-slate-400 font-mono bg-slate-100 py-1 px-3 rounded-full inline-block"
+                >
+                    Soporta JPG, PNG, WEBP
+                </p>
+            </div>
+
+            <img
+                id="preview-img"
+                class="hidden max-h-[400px] w-auto rounded-xl shadow-2xl object-contain pointer-events-none"
+            />
+
+            <div id="loader" class="hidden flex-col items-center gap-4">
+                <div
+                    class="w-12 h-12 border-4 border-fuchsia-200 border-t-fuchsia-600 rounded-full animate-spin"
+                >
+                </div>
+                <span class="font-bold text-fuchsia-600 tracking-wider animate-pulse"
+                    >EXTRAYENDO...</span
+                >
+            </div>
+        </div>
+
+        <div id="palette-container" class="hidden w-full max-w-4xl">
+            <h3
+                class="text-center font-bold text-slate-800/50 uppercase tracking-widest mb-6 text-sm"
+            >
+                Paleta Dominante
+            </h3>
+            <div id="swatches" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
+        </div>
+    </div>
+
+    <canvas id="process-canvas" class="hidden"></canvas>
+</div>
+
+<div
+    id="toast"
+    class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-full shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 font-bold flex items-center gap-3"
+>
+    <Icon name="mdi:check-circle" class="text-green-400 w-5 h-5" />
+    <span id="toast-text">Copiado</span>
+</div>
+
+<script>
+    import { extractPalette } from "./logic/medianCut";
+    import type { ColorSwatch } from "./logic/medianCut";
+
+    const ui = {
+        container: document.getElementById("chromatic-lens-container")!,
+        bgOverlay: document.getElementById("bg-overlay")!,
+        dropZone: document.getElementById("drop-zone")!,
+        fileInput: document.getElementById("file-input") as HTMLInputElement,
+        uploadPrompt: document.getElementById("upload-prompt")!,
+        previewImg: document.getElementById("preview-img") as HTMLImageElement,
+        loader: document.getElementById("loader")!,
+        paletteContainer: document.getElementById("palette-container")!,
+        swatches: document.getElementById("swatches")!,
+        canvas: document.getElementById("process-canvas") as HTMLCanvasElement,
+        toast: document.getElementById("toast")!,
+        toastText: document.getElementById("toast-text")!,
+    };
+
+    const MAX_CANVAS_SIZE = 200;
+
+    ui.dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        ui.dropZone.classList.add("border-fuchsia-400", "bg-white/20");
+    });
+
+    ui.dropZone.addEventListener("dragleave", (e) => {
+        e.preventDefault();
+        ui.dropZone.classList.remove("border-fuchsia-400", "bg-white/20");
+    });
+
+    ui.dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        ui.dropZone.classList.remove("border-fuchsia-400", "bg-white/20");
+        if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    ui.dropZone.addEventListener("click", () => {
+        ui.fileInput.click();
+    });
+
+    ui.fileInput.addEventListener("change", () => {
+        if (ui.fileInput.files && ui.fileInput.files.length > 0) {
+            handleFile(ui.fileInput.files[0]);
+        }
+    });
+
+    function handleFile(file: File) {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            if (e.target?.result) {
+                const img = new Image();
+                img.onload = () => processImage(img);
+                img.src = e.target.result as string;
+
+                ui.uploadPrompt.classList.add("hidden");
+                ui.previewImg.src = e.target.result as string;
+                ui.previewImg.classList.remove("hidden");
+                ui.dropZone.classList.remove("p-12");
+                ui.dropZone.classList.add("p-4", "border-transparent", "bg-transparent");
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function processImage(img: HTMLImageElement) {
+        ui.loader.classList.remove("hidden");
+        ui.loader.classList.add("flex");
+        ui.paletteContainer.classList.add("hidden");
+
+        setTimeout(() => {
+            const ctx = ui.canvas.getContext("2d");
+            if (!ctx) return;
+
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_CANVAS_SIZE) {
+                    height = Math.round(height * (MAX_CANVAS_SIZE / width));
+                    width = MAX_CANVAS_SIZE;
+                }
+            } else {
+                if (height > MAX_CANVAS_SIZE) {
+                    width = Math.round(width * (MAX_CANVAS_SIZE / height));
+                    height = MAX_CANVAS_SIZE;
+                }
+            }
+
+            ui.canvas.width = width;
+            ui.canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            try {
+                const imageData = ctx.getImageData(0, 0, width, height);
+                const palette = extractPalette(imageData.data, width * height, 5);
+                renderPalette(palette);
+                updateBackground(palette);
+            } catch (e) {
+                console.error("Error processing image", e);
+            } finally {
+                ui.loader.classList.add("hidden");
+                ui.loader.classList.remove("flex");
+            }
+        }, 100);
+    }
+
+    function renderPalette(palette: ColorSwatch[]) {
+        ui.swatches.innerHTML = "";
+
+        palette.forEach((swatch, index) => {
+            const btn = document.createElement("button");
+            btn.className =
+                "group relative h-32 md:h-48 rounded-2xl shadow-lg transition-transform hover:-translate-y-2 hover:shadow-2xl opacity-0 flex flex-col items-center justify-end p-4 overflow-hidden";
+            btn.style.backgroundColor = swatch.hex;
+            btn.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s forwards`;
+
+            const brightness =
+                (swatch.rgb[0] * 299 + swatch.rgb[1] * 587 + swatch.rgb[2] * 114) / 1000;
+            const textColor = brightness > 128 ? "text-slate-900" : "text-white";
+
+            btn.innerHTML = `
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                <span class="${textColor} font-bold font-mono text-lg tracking-wider opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-4 group-hover:translate-y-0 relative z-10 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-lg">
+                    ${swatch.hex}
+                </span>
+                <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/50 opacity-0 group-hover:opacity-100 transition-all scale-50 group-hover:scale-100 pointer-events-none">
+                     <svg class="w-8 h-8 ${textColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                </span>
+            `;
+
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                copyToClipboard(swatch.hex);
+            };
+
+            ui.swatches.appendChild(btn);
+        });
+
+        ui.paletteContainer.classList.remove("hidden");
+    }
+
+    function updateBackground(palette: ColorSwatch[]) {
+        if (palette.length < 2) return;
+        const c1 = palette[0].hex;
+        const c2 = palette[1].hex;
+
+        ui.bgOverlay.style.background = `linear-gradient(135deg, ${c1}22, ${c2}44)`;
+        ui.bgOverlay.style.opacity = "1";
+    }
+
+    function copyToClipboard(text: string) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast(`Copiado ${text}`);
+        });
+    }
+
+    let toastTimeout: number;
+    function showToast(msg: string) {
+        ui.toastText.innerText = msg;
+        ui.toast.classList.remove("translate-y-20", "opacity-0");
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            ui.toast.classList.add("translate-y-20", "opacity-0");
+        }, 2000) as unknown as number;
+    }
+</script>
+
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
