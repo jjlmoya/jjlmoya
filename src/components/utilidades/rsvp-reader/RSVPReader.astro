@@ -1,0 +1,262 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto space-y-8">
+    <div
+        id="rsvp-stage"
+        class="relative bg-slate-900 rounded-3xl h-[400px] flex items-center justify-center overflow-hidden shadow-2xl transition-all duration-500 border border-slate-800"
+    >
+        <div
+            id="focus-overlay"
+            class="absolute inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-1000 z-0"
+        >
+        </div>
+
+        <div
+            class="relative z-10 w-full max-w-2xl px-8 flex items-baseline justify-center font-mono select-none"
+        >
+            <div
+                class="absolute top-0 bottom-0 left-1/2 w-0 border-l border-slate-700/50 -translate-x-1/2 h-full"
+            >
+            </div>
+            <div
+                class="absolute top-1/2 left-1/2 w-[300px] h-[80px] -translate-x-1/2 -translate-y-[55%] border-t border-b border-slate-700/30 rounded-lg"
+            >
+            </div>
+
+            <div
+                id="word-container"
+                class="w-full grid grid-cols-[1fr_auto_1fr] items-center text-4xl md:text-6xl font-bold font-mono tracking-tight gap-0"
+            >
+                <div class="text-right whitespace-nowrap text-slate-500">
+                    <span id="word-left">Pre</span>
+                </div>
+                <div class="relative flex justify-center mx-0.5 shrink-0 min-w-[1ch]">
+                    <span
+                        id="word-pivot"
+                        class="text-red-500 relative z-20 font-black scale-110 inline-block"
+                        >pa</span
+                    >
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0.5 h-20 bg-red-500/20 rounded-full"
+                    >
+                    </div>
+                </div>
+                <div class="text-left whitespace-nowrap text-slate-500">
+                    <span id="word-right">rados...</span>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="absolute top-6 right-6 text-slate-500 font-mono text-sm uppercase tracking-widest flex items-center gap-2 bg-slate-800/50 px-3 py-1 rounded-full border border-slate-700 z-20"
+        >
+            <span id="wpm-display" class="font-bold text-slate-300">300</span>
+            <span class="text-slate-500">PPM</span>
+            <div
+                class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadowed-led"
+                id="status-led"
+            >
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl p-8 shadow-2xl border border-slate-100 space-y-8">
+        <div class="flex items-center gap-6">
+            <button
+                id="play-btn"
+                class="w-16 h-16 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 transition-all hover:scale-105 active:scale-95 group"
+            >
+                <Icon name="mdi:play" class="w-10 h-10 ml-1 group-hover:text-indigo-100" />
+            </button>
+
+            <div class="flex-grow space-y-3">
+                <div
+                    class="flex justify-between text-xs text-slate-400 font-bold uppercase tracking-wider px-1"
+                >
+                    <span>Progreso lectura</span>
+                    <span id="progress-text" class="text-indigo-600">0%</span>
+                </div>
+                <input
+                    type="range"
+                    id="progress-slider"
+                    min="0"
+                    max="100"
+                    value="0"
+                    class="w-full h-3 bg-slate-100 rounded-full appearance-none cursor-pointer accent-indigo-600 hover:accent-indigo-500 transition-colors"
+                />
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 md:gap-12 pt-6 border-t border-slate-100">
+            <div class="space-y-6">
+                <div class="flex justify-between items-baseline">
+                    <label class="text-slate-800 font-black text-lg">Velocidad</label>
+                    <span
+                        class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold font-mono border border-indigo-100"
+                        id="wpm-value">300 PPM</span
+                    >
+                </div>
+                <div class="space-y-2">
+                    <input
+                        type="range"
+                        id="wpm-slider"
+                        min="200"
+                        max="1000"
+                        step="50"
+                        value="300"
+                        class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                    />
+                    <div
+                        class="flex justify-between text-xs font-bold text-slate-300 tracking-wider"
+                    >
+                        <span>LENTO</span>
+                        <span>DIOS</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400 leading-relaxed">
+                    Ajusta la velocidad según tu nivel. Empieza en 300 y sube gradualmente hasta
+                    romper tus límites.
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <label class="text-slate-800 font-black text-lg block">Texto a procesar</label>
+                <div class="relative group">
+                    <textarea
+                        id="text-input"
+                        class="w-full h-40 rounded-2xl border-slate-200 bg-slate-50 p-5 text-slate-600 text-sm leading-relaxed focus:border-indigo-500 focus:ring-indigo-500 focus:bg-white transition-all shadow-inner resize-none group-hover:border-slate-300"
+                        placeholder="Pega aquí tu artículo, libro o texto..."></textarea>
+                    <div
+                        class="absolute bottom-4 right-4 flex gap-3 text-xs font-bold items-center"
+                    >
+                        <span
+                            id="word-count"
+                            class="text-slate-400 bg-white px-2 py-1 rounded-md shadow-sm border border-slate-100"
+                            >0 palabras</span
+                        >
+                        <button
+                            id="clear-text"
+                            class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 px-2 py-1 rounded-md transition-colors"
+                            >BORRAR</button
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        import { RSVPEngine } from "./logic/rsvpEngine";
+        import type { RSVPWord } from "./logic/rsvpEngine";
+
+        const ui = {
+            playBtn: document.getElementById("play-btn")!,
+            playIcon: document.querySelector("#play-btn svg")!,
+            progressSlider: document.getElementById("progress-slider") as HTMLInputElement,
+            progressText: document.getElementById("progress-text")!,
+            wpmSlider: document.getElementById("wpm-slider") as HTMLInputElement,
+            wpmValue: document.getElementById("wpm-value")!,
+            wpmDisplay: document.getElementById("wpm-display")!,
+            textInput: document.getElementById("text-input") as HTMLTextAreaElement,
+            wordCount: document.getElementById("wordCount")!,
+            wordLeft: document.getElementById("word-left")!,
+            wordPivot: document.getElementById("word-pivot")!,
+            wordRight: document.getElementById("word-right")!,
+            stage: document.getElementById("rsvp-stage")!,
+            statusLed: document.getElementById("status-led")!,
+            clearBtn: document.getElementById("clear-text")!,
+            focusOverlay: document.getElementById("focus-overlay")!,
+        };
+
+        let isPlaying = false;
+        let engine: RSVPEngine;
+
+        const defaultText =
+            "Bienvenido al Lector Rápido RSVP. Pega tu texto abajo para comenzar. Esta tecnología te ayudará a leer hasta tres veces más rápido eliminando los movimientos oculares innecesarios. ¡Inténtalo ahora!";
+
+        function init() {
+            ui.textInput.value = defaultText;
+            engine = new RSVPEngine(onWordUpdate, onComplete);
+            engine.setText(defaultText);
+            updateWordCount();
+        }
+
+        function onWordUpdate(word: RSVPWord) {
+            ui.wordLeft.innerText = word.left;
+            ui.wordPivot.innerText = word.pivot;
+            ui.wordRight.innerText = word.right;
+
+            const progress = engine.getProgress();
+            ui.progressSlider.value = progress.toString();
+            ui.progressText.innerText = Math.round(progress) + "%";
+        }
+
+        function onComplete() {
+            setPlaying(false, false);
+        }
+
+        function setPlaying(play: boolean, rewind: boolean = true) {
+            isPlaying = play;
+            if (play) {
+                engine.play();
+                ui.playBtn.innerHTML = `<svg class="w-8 h-8 ml-0" viewBox="0 0 24 24" fill="currentColor"><path d="M14,19H18V5H14M6,19H10V5H6V19Z" /></svg>`;
+                ui.playBtn.classList.replace("bg-indigo-600", "bg-slate-800");
+                ui.playBtn.classList.replace("hover:bg-indigo-700", "hover:bg-slate-900");
+                ui.stage.classList.add("scale-105");
+                ui.focusOverlay.classList.remove("opacity-0");
+                ui.focusOverlay.classList.add("opacity-80");
+            } else {
+                engine.pause(rewind);
+                ui.playBtn.innerHTML = `<svg class="w-8 h-8 ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>`;
+                ui.playBtn.classList.replace("bg-slate-800", "bg-indigo-600");
+                ui.playBtn.classList.replace("hover:bg-slate-900", "hover:bg-indigo-700");
+                ui.stage.classList.remove("scale-105");
+                ui.focusOverlay.classList.add("opacity-0");
+                ui.focusOverlay.classList.remove("opacity-80");
+            }
+        }
+
+        ui.playBtn.onclick = () => setPlaying(!isPlaying);
+
+        ui.wpmSlider.oninput = () => {
+            const val = parseInt(ui.wpmSlider.value);
+            ui.wpmValue.innerText = val.toString();
+            ui.wpmDisplay.innerText = val.toString();
+            engine.setWPM(val);
+        };
+
+        ui.textInput.oninput = () => {
+            const text = ui.textInput.value;
+            engine.setText(text);
+            updateWordCount();
+            if (isPlaying) setPlaying(false);
+        };
+
+        ui.progressSlider.oninput = () => {
+            const val = parseFloat(ui.progressSlider.value);
+            engine.seek(val);
+            ui.progressText.innerText = Math.round(val) + "%";
+        };
+
+        ui.clearBtn.onclick = () => {
+            ui.textInput.value = "";
+            engine.setText("");
+            setPlaying(false);
+            onWordUpdate({ left: "", pivot: "-", right: "", original: "", delayMod: 1 });
+            updateWordCount();
+        };
+
+        function updateWordCount() {
+            const count = ui.textInput.value
+                .trim()
+                .split(/\s+/)
+                .filter((w) => w.length > 0).length;
+            const el = document.getElementById("word-count");
+            if (el) el.innerText = `${count} palabras`;
+        }
+
+        init();
+    </script>
+</div>

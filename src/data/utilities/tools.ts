@@ -36,6 +36,14 @@ export const toolsSection: SectionData = {
             title: "Baliza Morse",
             description: "Transmisor táctico SOS usando flash, pantalla y vibración.",
             color: "#22c55e"
+        },
+        {
+            href: "/utilidades/lectura-rapida/",
+            iconBg: "mdi:speedometer",
+            iconFg: "mdi:eye-plus",
+            title: "Lector Rápido RSVP",
+            description: "Tecnología de lectura de alto rendimiento. Lee a 1000+ palabras por minuto.",
+            color: "#4f46e5"
         }
     ]
 };
