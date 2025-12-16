@@ -1,0 +1,354 @@
+---
+import { Icon } from "astro-icon/components";
+
+const SPOKE_COUNTS = [16, 20, 24, 28, 32, 36];
+const CROSS_OPTIONS = [0, 1, 2, 3, 4];
+---
+
+<div
+    class="w-full max-w-7xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+>
+    <div class="grid grid-cols-1 lg:grid-cols-12">
+        <div
+            class="lg:col-span-4 bg-slate-50 dark:bg-slate-900/50 p-6 md:p-8 space-y-8 border-r border-slate-200 dark:border-slate-800 h-full overflow-y-auto max-h-[800px]"
+        >
+            <div class="space-y-4">
+                <h3
+                    class="text-sm font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-2"
+                >
+                    <Icon name="mdi:hub" class="text-lg" /> Datos del Buje (Hub)
+                </h3>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase"
+                            >PCD Left (mm)</label
+                        >
+                        <input
+                            type="number"
+                            id="pcd-left"
+                            value="58"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        />
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase"
+                            >PCD Right (mm)</label
+                        >
+                        <input
+                            type="number"
+                            id="pcd-right"
+                            value="58"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        />
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase"
+                            >Dist. Left (mm)</label
+                        >
+                        <input
+                            type="number"
+                            id="dist-left"
+                            value="34"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        />
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase"
+                            >Dist. Right (mm)</label
+                        >
+                        <input
+                            type="number"
+                            id="dist-right"
+                            value="18"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        />
+                    </div>
+                </div>
+                <div class="text-xs text-slate-400 italic">
+                    * PCD: Pitch Circle Diameter (Diámetro del círculo de agujeros)
+                </div>
+            </div>
+
+            <hr class="border-slate-200 dark:border-slate-700" />
+
+            <div class="space-y-4">
+                <h3
+                    class="text-sm font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 flex items-center gap-2"
+                >
+                    <Icon name="mdi:tire" class="text-lg" /> Datos de Llanta (Rim)
+                </h3>
+
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-500 uppercase">ERD (mm)</label>
+                    <input
+                        type="number"
+                        id="erd"
+                        value="595"
+                        class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                    />
+                    <p class="text-xs text-slate-400 mt-1">
+                        Effective Rim Diameter. ¡Mide con cuidado!
+                    </p>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-500 uppercase"
+                        >OSB (mm) (Opcional)</label
+                    >
+                    <input
+                        type="number"
+                        id="osb"
+                        value="0"
+                        step="0.5"
+                        class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                    />
+                    <p class="text-xs text-slate-400 mt-1">
+                        Offset Spoke Bed (para llantas asimétricas)
+                    </p>
+                </div>
+            </div>
+
+            <hr class="border-slate-200 dark:border-slate-700" />
+
+            <div class="space-y-4">
+                <h3
+                    class="text-sm font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 flex items-center gap-2"
+                >
+                    <Icon name="mdi:cogs" class="text-lg" /> Configuración
+                </h3>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase">Radios</label>
+                        <select
+                            id="spoke-count"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        >
+                            {
+                                SPOKE_COUNTS.map((n) => (
+                                    <option value={n} selected={n === 32}>
+                                        {n}H
+                                    </option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase">Cruces</label>
+                        <select
+                            id="cross-count"
+                            class="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        >
+                            {
+                                CROSS_OPTIONS.map((n) => (
+                                    <option value={n} selected={n === 3}>
+                                        {n}x
+                                    </option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="lg:col-span-8 p-6 md:p-10 flex flex-col h-full bg-slate-900 relative overflow-hidden"
+        >
+            <div class="flex justify-between items-start z-10 w-full mb-8">
+                <div
+                    class="bg-slate-800/80 backdrop-blur-md p-4 rounded-2xl border border-slate-700 shadow-xl"
+                >
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                        Lado Izquierdo (No Drive)
+                    </h4>
+                    <div class="text-4xl font-mono font-black text-indigo-400" id="result-left">
+                        000.0
+                    </div>
+                    <div class="text-xs text-slate-500 font-mono mt-1">mm</div>
+                </div>
+
+                <div
+                    class="bg-slate-800/80 backdrop-blur-md p-4 rounded-2xl border border-slate-700 shadow-xl text-right"
+                >
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                        Lado Derecho (Drive)
+                    </h4>
+                    <div class="text-4xl font-mono font-black text-emerald-400" id="result-right">
+                        000.0
+                    </div>
+                    <div class="text-xs text-slate-500 font-mono mt-1">mm</div>
+                </div>
+            </div>
+
+            <div class="flex-grow flex items-center justify-center relative">
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-800/50 to-transparent pointer-events-none"
+                >
+                </div>
+
+                <svg
+                    id="wheel-viz"
+                    viewBox="0 0 400 400"
+                    class="w-full h-full max-h-[600px] drop-shadow-2xl"
+                >
+                    <circle
+                        cx="200"
+                        cy="200"
+                        r="180"
+                        class="stroke-slate-700/50"
+                        fill="none"
+                        stroke-width="1"
+                        stroke-dasharray="4 4"></circle>
+                    <circle
+                        cx="200"
+                        cy="200"
+                        r="25"
+                        class="stroke-slate-700/50"
+                        fill="none"
+                        stroke-width="1"></circle>
+
+                    <g id="spokes-group" class="stroke-slate-400/80"></g>
+                    <g id="hub-group"></g>
+                    <g id="rim-group"></g>
+                </svg>
+            </div>
+
+            <div
+                class="absolute bottom-4 right-4 text-xs text-slate-600 dark:text-slate-500 max-w-xs text-right"
+            >
+                Visualización simplificada (Solo lado Drive). La geometría real varía en 3D.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const inputs = {
+        pcdLeft: document.getElementById("pcd-left") as HTMLInputElement,
+        pcdRight: document.getElementById("pcd-right") as HTMLInputElement,
+        distLeft: document.getElementById("dist-left") as HTMLInputElement,
+        distRight: document.getElementById("dist-right") as HTMLInputElement,
+        erd: document.getElementById("erd") as HTMLInputElement,
+        osb: document.getElementById("osb") as HTMLInputElement,
+        spokeCount: document.getElementById("spoke-count") as HTMLSelectElement,
+        crossCount: document.getElementById("cross-count") as HTMLSelectElement,
+    };
+
+    const outputs = {
+        left: document.getElementById("result-left"),
+        right: document.getElementById("result-right"),
+    };
+
+    const viz = {
+        spokes: document.getElementById("spokes-group"),
+        hub: document.getElementById("hub-group"),
+        rim: document.getElementById("rim-group"),
+    };
+
+    function calcSpokeLength(
+        pcd: number,
+        flangeDist: number,
+        erd: number,
+        spokes: number,
+        crosses: number,
+        holeOffset: number = 0
+    ) {
+        const R = erd / 2;
+        const H = pcd / 2;
+        const W = flangeDist;
+
+        const angle = (4 * Math.PI * crosses) / spokes;
+        const l2d_sq = R * R + H * H - 2 * R * H * Math.cos(angle);
+        const length = Math.sqrt(l2d_sq + W * W);
+
+        return length;
+    }
+
+    function update() {
+        const pcdL = parseFloat(inputs.pcdLeft.value) || 0;
+        const pcdR = parseFloat(inputs.pcdRight.value) || 0;
+        const distL = parseFloat(inputs.distLeft.value) || 0;
+        const distR = parseFloat(inputs.distRight.value) || 0;
+        const erd = parseFloat(inputs.erd.value) || 0;
+        const osb = parseFloat(inputs.osb.value) || 0;
+        const N = parseInt(inputs.spokeCount.value) || 32;
+        const K = parseInt(inputs.crossCount.value) || 3;
+
+        const lenL = calcSpokeLength(pcdL, distL, erd, N, K);
+        const lenR = calcSpokeLength(pcdR, distR, erd, N, K);
+
+        if (outputs.left) outputs.left.innerText = lenL.toFixed(1);
+        if (outputs.right) outputs.right.innerText = lenR.toFixed(1);
+
+        drawViz(N, K, erd, pcdR);
+    }
+
+    function drawViz(spokes: number, crosses: number, erd: number, pcd: number) {
+        if (!viz.spokes || !viz.hub || !viz.rim) return;
+
+        viz.spokes.innerHTML = "";
+        viz.hub.innerHTML = "";
+        viz.rim.innerHTML = "";
+
+        const cx = 200;
+        const cy = 200;
+        const scale = 160 / (erd / 2 || 300);
+
+        const r_rim = (erd / 2) * scale;
+        const r_hub = (pcd / 2) * scale;
+
+        const rimCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        rimCircle.setAttribute("cx", cx.toString());
+        rimCircle.setAttribute("cy", cy.toString());
+        rimCircle.setAttribute("r", r_rim.toString());
+        rimCircle.setAttribute("fill", "none");
+        rimCircle.setAttribute("stroke", "#94a3b8");
+        rimCircle.setAttribute("stroke-width", "4");
+        viz.rim.appendChild(rimCircle);
+
+        const hubCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        hubCircle.setAttribute("cx", cx.toString());
+        hubCircle.setAttribute("cy", cy.toString());
+        hubCircle.setAttribute("r", r_hub.toString());
+        hubCircle.setAttribute("fill", "none");
+        hubCircle.setAttribute("stroke", "#6366f1");
+        hubCircle.setAttribute("stroke-width", "2");
+        viz.hub.appendChild(hubCircle);
+
+        const flangeSpokes = spokes / 2;
+
+        for (let i = 0; i < flangeSpokes; i++) {
+            const hubAngle = (i / flangeSpokes) * 2 * Math.PI;
+            const x_hub = cx + Math.cos(hubAngle) * r_hub;
+            const y_hub = cy + Math.sin(hubAngle) * r_hub;
+
+            const rimHoleIndex = (i * 2 + crosses) % spokes;
+            const rimAngle = (rimHoleIndex / spokes) * 2 * Math.PI;
+            const x_rim = cx + Math.cos(rimAngle) * r_rim;
+            const y_rim = cy + Math.sin(rimAngle) * r_rim;
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x_hub.toString());
+            line.setAttribute("y1", y_hub.toString());
+            line.setAttribute("x2", x_rim.toString());
+            line.setAttribute("y2", y_rim.toString());
+            line.setAttribute("stroke-width", "1");
+            viz.spokes.appendChild(line);
+
+            const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            dot.setAttribute("cx", x_rim.toString());
+            dot.setAttribute("cy", y_rim.toString());
+            dot.setAttribute("r", "2");
+            dot.setAttribute("fill", "#cbd5e1");
+            viz.rim.appendChild(dot);
+        }
+    }
+
+    Object.values(inputs).forEach((input) => {
+        input.addEventListener("input", update);
+        input.addEventListener("change", update);
+    });
+
+    update();
+</script>
