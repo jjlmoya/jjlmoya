@@ -1,0 +1,64 @@
+---
+interface Props {
+    verdict: "vaporized" | "severe-burns" | "ruptured-eardrums" | "safe";
+}
+
+const { verdict } = Astro.props;
+
+const verdicts = {
+    vaporized: {
+        text: "Vaporizado",
+        description: "Estás dentro del cráter. Muerte instantánea por vaporización.",
+        gradient: "from-red-500 to-orange-500",
+        iconBg: "bg-red-500",
+        icon: "M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z",
+    },
+    "severe-burns": {
+        text: "Quemaduras Severas",
+        description: "Radiación térmica intensa. Quemaduras de tercer grado y posible muerte.",
+        gradient: "from-orange-400 to-yellow-400",
+        iconBg: "bg-orange-500",
+        icon: "M13,14C9.64,14 8.54,15.35 8.18,16.24C9.25,16.7 10,17.76 10,19A3,3 0 0,1 7,22A3,3 0 0,1 4,19C4,17.69 4.83,16.58 6,16.17V7.83C4.83,7.42 4,6.31 4,5A3,3 0 0,1 7,2A3,3 0 0,1 10,5C10,6.31 9.17,7.42 8,7.83V13.12C8.88,12.47 10.16,12 12,12C14.67,12 15.56,10.66 15.85,9.77C14.77,9.32 14,8.25 14,7A3,3 0 0,1 17,4A3,3 0 0,1 20,7C20,8.34 19.12,9.5 17.91,9.86C17.65,11.29 16.68,14 13,14M7,18A1,1 0 0,0 6,19A1,1 0 0,0 7,20A1,1 0 0,0 8,19A1,1 0 0,0 7,18M7,4A1,1 0 0,0 6,5A1,1 0 0,0 7,6A1,1 0 0,0 8,5A1,1 0 0,0 7,4M17,6A1,1 0 0,0 16,7A1,1 0 0,0 17,8A1,1 0 0,0 18,7A1,1 0 0,0 17,6Z",
+    },
+    "ruptured-eardrums": {
+        text: "Tímpanos Rotos",
+        description: "Onda de choque destructiva. Lesiones graves, edificios colapsados.",
+        gradient: "from-blue-400 to-indigo-400",
+        iconBg: "bg-blue-500",
+        icon: "M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z",
+    },
+    safe: {
+        text: "A Salvo",
+        description:
+            "A esta distancia, solo presenciarás un hermoso espectáculo de luz en el cielo.",
+        gradient: "from-emerald-400 to-green-400",
+        iconBg: "bg-emerald-500",
+        icon: "M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z",
+    },
+};
+
+const config = verdicts[verdict];
+---
+
+<div
+    class={`bg-gradient-to-br ${config.gradient} rounded-3xl p-8 shadow-2xl border border-white/20 transition-all duration-500`}
+>
+    <div class="flex items-center gap-4 mb-4">
+        <div
+            class={`w-16 h-16 rounded-2xl ${config.iconBg} flex items-center justify-center transition-all duration-500`}
+        >
+            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d={config.icon}></path>
+            </svg>
+        </div>
+        <div>
+            <h3 class="text-sm font-bold text-white/80 uppercase tracking-wider">
+                Veredicto de Supervivencia
+            </h3>
+            <p class="text-3xl font-black text-white">{config.text}</p>
+        </div>
+    </div>
+    <p class="text-white/90 leading-relaxed">
+        {config.description}
+    </p>
+</div>

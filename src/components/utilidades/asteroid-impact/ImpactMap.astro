@@ -1,0 +1,291 @@
+---
+interface Props {
+    craterRadius: number;
+    thermalRadius: number;
+    shockwaveRadius: number;
+}
+
+const { craterRadius, thermalRadius, shockwaveRadius } = Astro.props;
+---
+
+<div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
+    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+        <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+                d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z"
+            ></path></svg
+        >
+        Mapa de Impacto
+    </h3>
+
+    <div class="mb-4 space-y-2">
+        <button
+            id="get-location-btn"
+            class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all flex items-center justify-center gap-2 shadow-lg"
+        >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
+                ><path
+                    d="M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M3.05,13H1V11H3.05C3.5,6.83 6.83,3.5 11,3.05V1H13V3.05C17.17,3.5 20.5,6.83 20.95,11H23V13H20.95C20.5,17.17 17.17,20.5 13,20.95V23H11V20.95C6.83,20.5 3.5,17.17 3.05,13M12,5A7,7 0 0,0 5,12A7,7 0 0,0 12,19A7,7 0 0,0 19,12A7,7 0 0,0 12,5Z"
+                ></path></svg
+            >
+            Obtener mi ubicación GPS
+        </button>
+        <p id="location-status" class="text-sm text-slate-500 text-center"></p>
+    </div>
+
+    <div
+        id="impact-map"
+        class="w-full h-96 rounded-2xl overflow-hidden border border-slate-200 cursor-crosshair"
+        data-crater={craterRadius}
+        data-thermal={thermalRadius}
+        data-shockwave={shockwaveRadius}
+    >
+    </div>
+
+    <div class="mt-4 space-y-2 text-xs">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+            <p class="text-blue-800 font-semibold">
+                <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 24 24"
+                    ><path
+                        d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+                    ></path></svg
+                >
+                Haz clic en el mapa para elegir dónde cae el asteroide
+            </p>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full bg-green-500"></div>
+            <span id="user-location-label" class="text-slate-600">Tu ubicación (activa GPS)</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full bg-red-500"></div>
+            <span class="text-slate-600">Punto de impacto (haz clic en el mapa)</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full bg-red-500/20 border-2 border-red-500"></div>
+            <span class="text-slate-600">Cráter ({(craterRadius / 1000).toFixed(1)} km)</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full bg-orange-500/10 border-2 border-orange-500"></div>
+            <span class="text-slate-600"
+                >Radiación térmica ({(thermalRadius / 1000).toFixed(1)} km)</span
+            >
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded-full bg-blue-500/5 border-2 border-blue-500 border-dashed">
+            </div>
+            <span class="text-slate-600"
+                >Onda de choque ({(shockwaveRadius / 1000).toFixed(1)} km)</span
+            >
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<script>
+    import L from "leaflet";
+
+    let userLat = 40.4168;
+    let userLng = -3.7038;
+    let impactLat = 40.4168;
+    let impactLng = -3.7038;
+
+    let map: L.Map | null = null;
+    let craterCircle: L.Circle | null = null;
+    let thermalCircle: L.Circle | null = null;
+    let shockwaveCircle: L.Circle | null = null;
+    let userMarker: L.Marker | null = null;
+    let impactMarker: L.Marker | null = null;
+
+    function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLng = ((lng2 - lng1) * Math.PI) / 180;
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((lat1 * Math.PI) / 180) *
+                Math.cos((lat2 * Math.PI) / 180) *
+                Math.sin(dLng / 2) *
+                Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    function initMap() {
+        const mapElement = document.getElementById("impact-map");
+        if (!mapElement || map) return;
+
+        const crater = parseFloat(mapElement.getAttribute("data-crater") || "500");
+        const thermal = parseFloat(mapElement.getAttribute("data-thermal") || "2500");
+        const shockwave = parseFloat(mapElement.getAttribute("data-shockwave") || "5000");
+
+        map = L.map("impact-map", {
+            center: [userLat, userLng],
+            zoom: 9,
+            zoomControl: true,
+            scrollWheelZoom: true,
+        });
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "© OpenStreetMap",
+            maxZoom: 19,
+        }).addTo(map);
+
+        const greenIcon = L.divIcon({
+            className: "custom-marker",
+            html: '<div style="width: 24px; height: 24px; background: #10b981; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(16,185,129,0.6);"></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12],
+        });
+
+        userMarker = L.marker([userLat, userLng], {
+            icon: greenIcon,
+        }).addTo(map);
+
+        map.on("click", (e: L.LeafletMouseEvent) => {
+            impactLat = e.latlng.lat;
+            impactLng = e.latlng.lng;
+
+            const distance = calculateDistance(userLat, userLng, impactLat, impactLng);
+
+            if (impactMarker) map!.removeLayer(impactMarker);
+
+            const redIcon = L.divIcon({
+                className: "custom-marker",
+                html: '<div style="width: 20px; height: 20px; background: #ef4444; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(239,68,68,0.8);"></div>',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10],
+            });
+
+            impactMarker = L.marker([impactLat, impactLng], {
+                icon: redIcon,
+            }).addTo(map!);
+
+            updateMap(crater, thermal, shockwave);
+
+            window.dispatchEvent(
+                new CustomEvent("impact-location-change", {
+                    detail: { distance, impactLat, impactLng },
+                })
+            );
+        });
+
+        updateMap(crater, thermal, shockwave);
+    }
+
+    function updateMap(craterRadius: number, thermalRadius: number, shockwaveRadius: number) {
+        if (!map) return;
+
+        if (craterCircle) map.removeLayer(craterCircle);
+        if (thermalCircle) map.removeLayer(thermalCircle);
+        if (shockwaveCircle) map.removeLayer(shockwaveCircle);
+
+        shockwaveCircle = L.circle([impactLat, impactLng], {
+            color: "#3b82f6",
+            fillColor: "#3b82f6",
+            fillOpacity: 0.05,
+            radius: shockwaveRadius,
+            weight: 2,
+            dashArray: "5, 5",
+        }).addTo(map);
+
+        thermalCircle = L.circle([impactLat, impactLng], {
+            color: "#f97316",
+            fillColor: "#f97316",
+            fillOpacity: 0.1,
+            radius: thermalRadius,
+            weight: 2,
+        }).addTo(map);
+
+        craterCircle = L.circle([impactLat, impactLng], {
+            color: "#ef4444",
+            fillColor: "#ef4444",
+            fillOpacity: 0.2,
+            radius: craterRadius,
+            weight: 3,
+        }).addTo(map);
+
+        const maxRadius = Math.max(shockwaveRadius, 50000);
+        const bounds = L.circle([impactLat, impactLng], maxRadius * 1.1).getBounds();
+        map.fitBounds(bounds);
+    }
+
+    const getLocationBtn = document.getElementById("get-location-btn");
+    const locationStatus = document.getElementById("location-status");
+    const userLocationLabel = document.getElementById("user-location-label");
+
+    getLocationBtn?.addEventListener("click", () => {
+        if (!navigator.geolocation) {
+            if (locationStatus)
+                locationStatus.textContent = "Tu navegador no soporta geolocalización";
+            return;
+        }
+
+        if (locationStatus) locationStatus.textContent = "Obteniendo ubicación...";
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
+
+                if (map && userMarker) {
+                    map.removeLayer(userMarker);
+
+                    const greenIcon = L.divIcon({
+                        className: "custom-marker",
+                        html: '<div style="width: 24px; height: 24px; background: #10b981; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(16,185,129,0.6);"></div>',
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12],
+                    });
+
+                    userMarker = L.marker([userLat, userLng], {
+                        icon: greenIcon,
+                    }).addTo(map);
+
+                    map.setView([userLat, userLng], 9);
+                }
+
+                if (locationStatus) locationStatus.textContent = "✓ Ubicación obtenida";
+                if (userLocationLabel)
+                    userLocationLabel.textContent = `Tu ubicación (${userLat.toFixed(4)}, ${userLng.toFixed(4)})`;
+
+                const distance = calculateDistance(userLat, userLng, impactLat, impactLng);
+                window.dispatchEvent(
+                    new CustomEvent("impact-location-change", {
+                        detail: { distance, impactLat, impactLng },
+                    })
+                );
+            },
+            (error) => {
+                if (locationStatus) {
+                    locationStatus.textContent =
+                        "Error: " +
+                        (error.code === 1 ? "Permiso denegado" : "No se pudo obtener ubicación");
+                }
+            }
+        );
+    });
+
+    window.addEventListener("impact-update", ((e: CustomEvent) => {
+        const { craterRadius, thermalRadius, shockwaveRadius } = e.detail;
+        updateMap(craterRadius, thermalRadius, shockwaveRadius);
+    }) as EventListener);
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initMap);
+    } else {
+        initMap();
+    }
+</script>
+
+<style is:global>
+    .leaflet-container {
+        font-family: inherit;
+        z-index: 0;
+    }
+    .custom-marker {
+        background: transparent !important;
+        border: none !important;
+    }
+</style>

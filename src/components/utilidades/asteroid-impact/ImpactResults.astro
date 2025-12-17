@@ -1,0 +1,128 @@
+---
+interface Props {
+    megatons: number;
+    craterDiameter: number;
+    craterDepth: number;
+    thermalRadius: number;
+    shockwave1psi: number;
+    shockwave5psi: number;
+    seismicMagnitude: number;
+    airburst: boolean;
+}
+
+const {
+    megatons,
+    craterDiameter,
+    craterDepth,
+    thermalRadius,
+    shockwave1psi,
+    shockwave5psi,
+    seismicMagnitude,
+    airburst,
+} = Astro.props;
+---
+
+<div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 space-y-6">
+    <h3 class="text-2xl font-bold text-slate-800 flex items-center gap-3">
+        <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+                d="M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M9,17H7V10H9V17M13,17H11V7H13V17M17,17H15V13H17V17Z"
+            ></path></svg
+        >
+        Efectos del Impacto
+    </h3>
+
+    <div class="space-y-4">
+        <div
+            class="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-4 border border-red-100"
+        >
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-bold text-slate-700">Energía Liberada</span>
+                <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"
+                    ><path
+                        d="M17.66,11.2C17.43,10.9 17.15,10.64 16.89,10.38C16.22,9.78 15.46,9.35 14.82,8.72C13.33,7.26 13,4.85 13.95,3C13,3.23 12.17,3.75 11.46,4.32C8.87,6.4 7.85,10.07 9.07,13.22C9.11,13.32 9.15,13.42 9.15,13.55C9.15,13.77 9,13.97 8.8,14.05C8.57,14.15 8.33,14.09 8.14,13.93C8.08,13.88 8.04,13.83 8,13.76C6.87,12.33 6.69,10.28 7.45,8.64C5.78,10 4.87,12.3 5,14.47C5.06,14.97 5.12,15.47 5.29,15.97C5.43,16.57 5.7,17.17 6,17.7C7.08,19.43 8.95,20.67 10.96,20.92C13.1,21.19 15.39,20.8 17.03,19.32C18.86,17.66 19.5,15 18.56,12.72L18.43,12.46C18.22,12 17.66,11.2 17.66,11.2M14.5,17.5C14.22,17.74 13.76,18 13.4,18.1C12.28,18.5 11.16,17.94 10.5,17.28C11.69,17 12.4,16.12 12.61,15.23C12.78,14.43 12.46,13.77 12.33,13C12.21,12.26 12.23,11.63 12.5,10.94C12.69,11.32 12.89,11.7 13.13,12C13.9,13 15.11,13.44 15.37,14.8C15.41,14.94 15.43,15.08 15.43,15.23C15.46,16.05 15.1,16.95 14.5,17.5H14.5Z"
+                    ></path></svg
+                >
+            </div>
+            <p class="text-2xl font-black text-red-600">{megatons.toFixed(2)} Megatones</p>
+            <p class="text-xs text-slate-500 mt-1">Equivalente TNT</p>
+        </div>
+
+        <div
+            class="bg-gradient-to-r from-slate-50 to-slate-100 rounded-2xl p-4 border border-slate-200"
+        >
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-bold text-slate-700">Cráter</span>
+                <svg class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24"
+                    ><path
+                        d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+                    ></path></svg
+                >
+            </div>
+            {
+                airburst ? (
+                    <>
+                        <p class="text-xl font-black text-slate-700">Explosión aérea</p>
+                        <p class="text-sm text-slate-500">Sin cráter</p>
+                    </>
+                ) : (
+                    <>
+                        <p class="text-xl font-black text-slate-700">
+                            {(craterDiameter / 1000).toFixed(2)} km diámetro
+                        </p>
+                        <p class="text-sm text-slate-500">
+                            {(craterDepth / 1000).toFixed(2)} km profundidad
+                        </p>
+                    </>
+                )
+            }
+        </div>
+
+        <div
+            class="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-2xl p-4 border border-orange-100"
+        >
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-bold text-slate-700">Radiación Térmica</span>
+                <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24"
+                    ><path
+                        d="M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17M12,22L9.59,18.56C10.33,18.83 11.14,19 12,19C12.82,19 13.63,18.83 14.37,18.56L12,22Z"
+                    ></path></svg
+                >
+            </div>
+            <p class="text-xl font-black text-orange-600">{(thermalRadius / 1000).toFixed(1)} km</p>
+            <p class="text-xs text-slate-500 mt-1">Quemaduras de 3er grado</p>
+        </div>
+
+        <div
+            class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border border-blue-100"
+        >
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-bold text-slate-700">Onda de Choque</span>
+                <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24"
+                    ><path
+                        d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z"
+                    ></path></svg
+                >
+            </div>
+            <p class="text-xl font-black text-blue-600">
+                {(shockwave1psi / 1000).toFixed(1)} km (cristales)
+            </p>
+            <p class="text-sm text-slate-500">{(shockwave5psi / 1000).toFixed(1)} km (edificios)</p>
+        </div>
+
+        <div
+            class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 border border-purple-100"
+        >
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-bold text-slate-700">Magnitud Sísmica</span>
+                <svg class="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 24 24"
+                    ><path
+                        d="M7,14A2,2 0 0,1 5,12A2,2 0 0,1 7,10A2,2 0 0,1 9,12A2,2 0 0,1 7,14M12.65,10C11.83,7.67 9.61,6 7, 6A6,6 0 0,0 1,12A6,6 0 0,0 7,18C9.61,18 11.83,16.33 12.65,14H17V18H21V14H23V10H12.65Z"
+                    ></path></svg
+                >
+            </div>
+            <p class="text-2xl font-black text-purple-600">{seismicMagnitude.toFixed(1)}</p>
+            <p class="text-xs text-slate-500 mt-1">Escala de Richter</p>
+        </div>
+    </div>
+</div>
