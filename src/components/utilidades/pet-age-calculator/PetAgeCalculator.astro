@@ -1,0 +1,536 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div
+    id="share-overlay"
+    class="fixed inset-0 z-[100] hidden flex-col items-center justify-center overflow-hidden transition-opacity duration-500"
+>
+    <div class="absolute inset-0 bg-slate-950">
+        <div class="absolute inset-0 bg-gradient-to-b from-indigo-950 via-slate-950 to-black"></div>
+        <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900/40 via-transparent to-transparent opacity-70"
+        >
+        </div>
+
+        <div class="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+
+        <div
+            class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px] animate-pulse-slow"
+        >
+        </div>
+        <div
+            class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse-slow animation-delay-2000"
+        >
+        </div>
+    </div>
+
+    <div
+        class="relative w-full h-full safe-area-inset flex flex-col items-center justify-center p-4 sm:p-6 z-10"
+    >
+        <div class="relative w-full max-w-[420px] mx-auto perspective-1000">
+            <div
+                class="absolute -top-6 left-1/2 transform -translate-x-1/2 z-20 opacity-0 animate-fade-in-down"
+                style="animation-delay: 0.2s; animation-fill-mode: forwards;"
+            >
+                <div
+                    class="bg-indigo-500/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg border border-white/20 flex items-center gap-2"
+                >
+                    <span>Edad Mágica</span>
+                </div>
+            </div>
+
+            <div
+                class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl opacity-0 animate-card-enter flex flex-col"
+                style="animation-delay: 0.1s; animation-fill-mode: forwards;"
+            >
+                <div
+                    class="relative p-6 md:p-8 pb-6 flex flex-col items-center border-b border-white/5 bg-gradient-to-b from-white/5 to-transparent"
+                >
+                    <div class="relative mb-5 group">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity"
+                        >
+                        </div>
+                        <div
+                            class="relative w-24 h-24 bg-slate-900/80 rounded-full border-2 border-white/20 flex items-center justify-center overflow-hidden shadow-inner ring-4 ring-white/5"
+                        >
+                            <div id="share-icon-dog" class="hidden text-indigo-300">
+                                <Icon name="mdi:dog-side" class="w-14 h-14" />
+                            </div>
+                            <div id="share-icon-cat" class="hidden text-purple-300">
+                                <Icon name="mdi:cat" class="w-14 h-14" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1
+                        id="share-pet-name"
+                        class="text-3xl sm:text-4xl font-black text-white text-center leading-none tracking-tight drop-shadow-sm font-display mb-2"
+                    >
+                    </h1>
+                </div>
+
+                <div class="p-6 md:p-8 pt-6 flex flex-col items-center gap-6">
+                    <div class="relative w-full text-center">
+                        <p
+                            class="text-indigo-200/70 font-bold text-[10px] uppercase tracking-[0.2em] mb-1"
+                        >
+                            Edad Humana
+                        </p>
+
+                        <div class="relative inline-block">
+                            <span
+                                id="share-human-age"
+                                class="block text-6xl sm:text-[8rem] leading-[0.85] font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 drop-shadow-2xl font-display tracking-tight"
+                            >
+                            </span>
+                        </div>
+                        <p
+                            class="text-2xl font-black text-white/40 uppercase tracking-widest -mt-2"
+                        >
+                            Años
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 w-full mt-2">
+                        <div
+                            class="bg-white/5 rounded-2xl p-3 border border-white/5 flex flex-col items-center justify-center shadow-inner hover:bg-white/10 transition-colors"
+                        >
+                            <span
+                                class="text-indigo-200/50 font-bold text-[9px] uppercase tracking-widest mb-1"
+                                >Edad Real</span
+                            >
+                            <div class="flex items-baseline gap-1">
+                                <span
+                                    id="share-chronological-age"
+                                    class="text-2xl font-bold text-white leading-none">--</span
+                                >
+                                <span class="text-xs font-medium text-white/50">años</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white/5 rounded-2xl p-3 border border-white/5 flex flex-col items-center justify-center shadow-inner hover:bg-white/10 transition-colors"
+                        >
+                            <span
+                                class="text-indigo-200/50 font-bold text-[9px] uppercase tracking-widest mb-1"
+                                >Etapa</span
+                            >
+                            <span
+                                id="share-life-stage"
+                                class="text-xs sm:text-sm font-bold text-white text-center leading-tight line-clamp-2 px-1"
+                            >
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-4 bg-black/20 border-t border-white/5 text-center">
+                    <span
+                        class="text-white/30 font-black tracking-[0.3em] text-[10px] uppercase font-mono"
+                        >jjlmoya.es</span
+                    >
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="mt-8 opacity-0 animate-fade-in-up"
+            style="animation-delay: 0.5s; animation-fill-mode: forwards;"
+        >
+            <button
+                id="create-new-btn"
+                class="flex items-center gap-2 text-white/60 hover:text-white bg-white/5 hover:bg-white/10 px-5 py-2.5 rounded-full border border-white/10 transition-all duration-300 text-xs font-bold uppercase tracking-widest backdrop-blur-sm"
+            >
+                <Icon name="mdi:refresh" class="w-4 h-4" />
+                <span>Calcular otra edad</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div
+    id="calculator-container"
+    class="w-full max-w-3xl mx-auto py-12 px-4 transition-all duration-500"
+>
+    <div
+        class="bg-white dark:bg-slate-900 rounded-3xl md:rounded-[2.5rem] p-5 md:p-12 shadow-2xl shadow-slate-200/60 dark:shadow-slate-950/60 ring-1 ring-slate-100 dark:ring-slate-800 relative overflow-hidden"
+    >
+        <div
+            class="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-amber-50 to-orange-50/0 dark:from-amber-900/10 dark:to-transparent rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"
+        >
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-rose-50 to-pink-50/0 dark:from-rose-900/10 dark:to-transparent rounded-full blur-3xl -ml-32 -mb-32 pointer-events-none"
+        >
+        </div>
+
+        <div class="relative z-10 space-y-12">
+            <div class="text-center space-y-3">
+                <div
+                    class="inline-flex justify-center items-center p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl mb-2 text-indigo-500 shadow-sm rotate-3 hover:rotate-6 transition-transform"
+                >
+                    <Icon name="mdi:paw" class="w-8 h-8" />
+                </div>
+                <h2
+                    class="text-2xl md:text-3xl lg:text-4xl font-black text-slate-800 dark:text-white font-display tracking-tight leading-tight"
+                >
+                    Calculadora de Edad
+                </h2>
+                <p
+                    class="text-slate-500 dark:text-slate-400 text-base font-medium max-w-md mx-auto"
+                >
+                    ¿Cuántos años humanos tiene realmente tu peludo?
+                </p>
+            </div>
+
+            <div class="max-w-md mx-auto">
+                <label
+                    for="pet-name"
+                    class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 text-center"
+                >
+                    Nombre (Opcional)
+                </label>
+                <div class="relative group">
+                    <input
+                        type="text"
+                        id="pet-name"
+                        placeholder="Ej. Toby"
+                        class="w-full text-center bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-800 rounded-2xl py-3 md:py-4 px-6 text-lg md:text-xl font-bold text-slate-700 dark:text-white placeholder-slate-300 focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 dark:focus:ring-indigo-900/20 transition-all group-hover:bg-white dark:group-hover:bg-slate-800"
+                    />
+                </div>
+            </div>
+
+            <div class="grid gap-10">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <span
+                            class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-sm"
+                            >1</span
+                        >
+                        <h3 class="text-lg font-bold text-slate-700 dark:text-white">
+                            ¿Quién es tu compañero?
+                        </h3>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button
+                            class="pet-type-btn active group flex flex-col items-center justify-center p-4 md:p-6 rounded-2xl border-2 transition-all duration-200"
+                            data-type="dog"
+                        >
+                            <div
+                                class="text-blue-500 mb-2 transform group-hover:scale-110 transition-transform"
+                            >
+                                <Icon name="mdi:dog-side" class="w-10 h-10" />
+                            </div>
+                            <span
+                                class="font-bold text-slate-600 dark:text-slate-300 group-hover:text-blue-500 transition-colors"
+                                >Perro</span
+                            >
+                        </button>
+
+                        <button
+                            class="pet-type-btn group flex flex-col items-center justify-center p-4 md:p-6 rounded-2xl border-2 transition-all duration-200"
+                            data-type="cat"
+                        >
+                            <div
+                                class="text-orange-500 mb-2 transform group-hover:scale-110 transition-transform"
+                            >
+                                <Icon name="mdi:cat" class="w-10 h-10" />
+                            </div>
+                            <span
+                                class="font-bold text-slate-600 dark:text-slate-300 group-hover:text-orange-500 transition-colors"
+                                >Gato</span
+                            >
+                        </button>
+                    </div>
+
+                    <div
+                        id="dog-size-selector"
+                        class="animate-fade-in mt-6 md:mt-0 mx-auto max-w-sm md:max-w-none md:mx-0 md:ml-12"
+                    >
+                        <p
+                            class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 text-center md:text-left"
+                        >
+                            Tamaño
+                        </p>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button
+                                class="size-btn active p-2 py-3 rounded-xl border-2 flex flex-col items-center gap-1 transition-all bg-white dark:bg-slate-800 group hover:-translate-y-1"
+                                data-size="small"
+                            >
+                                <Icon
+                                    name="mdi:dog-side"
+                                    class="w-4 h-4 text-slate-400 icon-target opacity-50 group-hover:text-indigo-500 group-hover:opacity-100 transition-colors"
+                                />
+                                <span class="text-xs font-bold text-slate-600 dark:text-slate-300"
+                                    >Peque</span
+                                >
+                            </button>
+                            <button
+                                class="size-btn p-2 py-3 rounded-xl border-2 flex flex-col items-center gap-1 transition-all bg-white dark:bg-slate-800 group hover:-translate-y-1"
+                                data-size="medium"
+                            >
+                                <Icon
+                                    name="mdi:dog-side"
+                                    class="w-5 h-5 text-slate-400 icon-target opacity-60 group-hover:text-indigo-500 group-hover:opacity-100 transition-colors"
+                                />
+                                <span class="text-xs font-bold text-slate-600 dark:text-slate-300"
+                                    >Med</span
+                                >
+                            </button>
+                            <button
+                                class="size-btn p-2 py-3 rounded-xl border-2 flex flex-col items-center gap-1 transition-all bg-white dark:bg-slate-800 group hover:-translate-y-1"
+                                data-size="large"
+                            >
+                                <Icon
+                                    name="mdi:dog-side"
+                                    class="w-6 h-6 text-slate-400 icon-target opacity-70 group-hover:text-indigo-500 group-hover:opacity-100 transition-colors"
+                                />
+                                <span class="text-xs font-bold text-slate-600 dark:text-slate-300"
+                                    >Grande</span
+                                >
+                            </button>
+                            <button
+                                class="size-btn p-2 py-3 rounded-xl border-2 flex flex-col items-center gap-1 transition-all bg-white dark:bg-slate-800 group hover:-translate-y-1"
+                                data-size="giant"
+                            >
+                                <Icon
+                                    name="mdi:dog-side"
+                                    class="w-7 h-7 text-slate-400 icon-target opacity-80 group-hover:text-indigo-500 group-hover:opacity-100 transition-colors"
+                                />
+                                <span class="text-xs font-bold text-slate-600 dark:text-slate-300"
+                                    >Gigante</span
+                                >
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <span
+                            class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-sm"
+                            >2</span
+                        >
+                        <h3 class="text-lg font-bold text-slate-700 dark:text-white">
+                            Año de nacimiento
+                        </h3>
+                    </div>
+
+                    <div class="max-w-xs mx-auto md:mx-0 md:ml-12">
+                        <div class="relative group">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"
+                            >
+                            </div>
+                            <input
+                                type="number"
+                                id="birth-year-input"
+                                placeholder="Ej: 2021"
+                                class="relative w-full text-center bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-xl py-4 px-4 text-3xl font-black text-slate-800 dark:text-white placeholder-slate-200 focus:outline-none focus:border-indigo-500/50 focus:ring-0 transition-all shadow-sm"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="perspective-1000 pt-4">
+                <div
+                    id="result-card"
+                    class="relative bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2rem] p-8 text-white shadow-2xl shadow-indigo-500/30 overflow-hidden transform transition-all duration-500 hover:scale-[1.01]"
+                >
+                    <div class="absolute -top-12 -right-12 text-white opacity-5 rotate-12">
+                        <Icon name="mdi:paw" class="w-56 h-56" />
+                    </div>
+
+                    <div class="relative z-10 flex flex-col items-center text-center gap-6">
+                        <div>
+                            <span
+                                class="text-indigo-100 font-medium text-sm mb-2 block tracking-wide"
+                                >La edad humana de <span
+                                    id="result-pet-name"
+                                    class="hidden font-bold">tu mascota</span
+                                > es</span
+                            >
+                            <div class="flex items-baseline justify-center gap-2">
+                                <span
+                                    class="text-6xl md:text-8xl font-black tracking-tighter drop-shadow-xl leading-none"
+                                    id="human-age">--</span
+                                >
+                                <span class="text-xl font-bold opacity-80">años</span>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-px bg-white/20"></div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                            <div
+                                class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10 flex flex-col items-center justify-center"
+                            >
+                                <span
+                                    class="text-[10px] uppercase tracking-widest opacity-60 font-bold block mb-1"
+                                    >Etapa Vital</span
+                                >
+                                <span id="life-stage" class="font-bold text-base leading-tight"
+                                    >---</span
+                                >
+                            </div>
+                            <div
+                                class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/10 flex flex-col items-center justify-center"
+                            >
+                                <span
+                                    class="text-[10px] uppercase tracking-widest opacity-60 font-bold block mb-1"
+                                    >Próximo Hito</span
+                                >
+                                <span id="next-milestone" class="font-bold text-base leading-tight"
+                                    >---</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <button
+                    id="share-btn"
+                    class="group bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-indigo-500 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+                >
+                    <Icon
+                        name="mdi:share-variant"
+                        class="w-4 h-4 group-hover:scale-110 transition-transform"
+                    />
+                    <span id="share-text">Compartir Resultado</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes pulse-slow {
+        0%,
+        100% {
+            opacity: 0.2;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.4;
+            transform: scale(1.1);
+        }
+    }
+    .animate-pulse-slow {
+        animation: pulse-slow 8s infinite ease-in-out;
+    }
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+
+    @keyframes fade-in-down {
+        from {
+            opacity: 0;
+            transform: translateY(-20px) translateX(-50%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) translateX(-50%);
+        }
+    }
+    .animate-fade-in-down {
+        animation: fade-in-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animate-fade-in-up {
+        animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes card-enter {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+    .animate-card-enter {
+        animation: card-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+
+    .no-scroll {
+        overflow: hidden;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .pet-type-btn {
+        background-color: transparent;
+        border-color: #f1f5f9;
+    }
+    :global(.dark) .pet-type-btn {
+        border-color: #334155;
+        background-color: transparent;
+    }
+
+    .pet-type-btn.active[data-type="dog"] {
+        border-color: #3b82f6;
+        background-color: #eff6ff;
+    }
+    :global(.dark) .pet-type-btn.active[data-type="dog"] {
+        background-color: rgba(30, 58, 138, 0.2);
+        border-color: #3b82f6;
+    }
+
+    .pet-type-btn.active[data-type="cat"] {
+        border-color: #f97316;
+        background-color: #fff7ed;
+    }
+    :global(.dark) .pet-type-btn.active[data-type="cat"] {
+        background-color: rgba(124, 45, 18, 0.2);
+        border-color: #f97316;
+    }
+
+    .size-btn.active {
+        border-color: #6366f1;
+        background-color: #eef2ff;
+    }
+    :global(.dark) .size-btn.active {
+        background-color: rgba(67, 56, 202, 0.2);
+        border-color: #6366f1;
+    }
+    .size-btn.active .icon-target {
+        color: #6366f1;
+        opacity: 1 !important;
+    }
+</style>
+
+<script>
+    import { PetAgeCalculatorUI } from "./PetAgeController";
+
+    new PetAgeCalculatorUI();
+
+    document.addEventListener("astro:page-load", () => {
+        new PetAgeCalculatorUI();
+    });
+</script>
