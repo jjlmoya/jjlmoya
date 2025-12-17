@@ -3,11 +3,9 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div class="w-full max-w-4xl mx-auto space-y-8">
-    
     <div
         class="bg-white dark:bg-slate-900 rounded-[3rem] p-8 md:p-12 shadow-2xl border-4 border-amber-100 dark:border-slate-800 relative overflow-hidden"
     >
-        
         <div
             class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-amber-50 dark:bg-amber-900/10 rounded-full blur-3xl opacity-50 pointer-events-none"
         >
@@ -26,6 +24,24 @@ import { Icon } from "astro-icon/components";
                 <p class="text-slate-500 dark:text-slate-400 font-medium">
                     Descubre la etapa vital de tu mejor amigo
                 </p>
+            </div>
+
+            
+            <div class="mb-8 max-w-lg mx-auto">
+                <label for="pet-name" class="sr-only">Nombre de tu mascota</label>
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="pet-name"
+                        placeholder="Nombre de tu mascota (Opcional)"
+                        class="w-full text-center bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-4 text-lg font-bold text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-200 transition-all shadow-sm"
+                    />
+                    <div
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    >
+                        <Icon name="mdi:pencil" class="w-5 h-5 opacity-50" />
+                    </div>
+                </div>
             </div>
 
             
@@ -191,7 +207,6 @@ import { Icon } from "astro-icon/components";
                     id="result-card"
                     class="relative bg-gradient-to-br from-rose-400 to-orange-400 rounded-[2.5rem] p-8 md:p-10 text-white shadow-2xl shadow-rose-500/30 overflow-hidden transform transition-all duration-500 hover:rotate-x-2"
                 >
-                    
                     <div class="absolute top-0 right-0 p-8 opacity-20 transform rotate-12">
                         <Icon name="mdi:paw" class="w-44 h-44" />
                     </div>
@@ -207,7 +222,9 @@ import { Icon } from "astro-icon/components";
                                 class="text-rose-100 font-bold text-lg mb-1 flex items-center justify-center md:justify-start gap-2"
                             >
                                 <Icon name="mdi:magic-staff" class="w-5 h-5" />
-                                Edad Humana Mágica
+                                Edad Humana Mágica <span id="result-pet-name" class="hidden"
+                                    >de <span class="name-val"></span></span
+                                >
                             </p>
                             <div class="flex items-baseline justify-center md:justify-start gap-3">
                                 <span
@@ -256,12 +273,22 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
             </div>
+
+            
+            <div class="mt-8 flex justify-center">
+                <button
+                    id="share-btn"
+                    class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-white dark:hover:bg-slate-700 hover:text-rose-500 dark:hover:text-rose-400 shadow-sm border border-slate-200 dark:border-slate-700 transition-all active:scale-95"
+                >
+                    <Icon name="mdi:share-variant" class="w-5 h-5" />
+                    <span id="share-text">Compartir Resultado</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
 <style>
-    
     @keyframes bounce-sm {
         0%,
         100% {
@@ -272,7 +299,6 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    
     .pet-type-btn {
         background-color: #fff;
         border-color: #f1f5f9;
@@ -308,7 +334,6 @@ import { Icon } from "astro-icon/components";
         filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
     }
 
-    
     .size-btn {
         background-color: white;
         border-color: #f1f5f9;
@@ -322,7 +347,7 @@ import { Icon } from "astro-icon/components";
     }
 
     .size-btn.active {
-        border-color: #f43f5e; 
+        border-color: #f43f5e;
         background-color: #fff1f2;
         opacity: 1;
         transform: scale(1);
@@ -333,14 +358,12 @@ import { Icon } from "astro-icon/components";
         border-color: #f43f5e;
     }
 
-    
     .size-btn.active .icon-target {
         color: #f43f5e;
         opacity: 1 !important;
         animation: bounce-sm 2s infinite;
     }
 
-    
     input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
         height: 32px;
@@ -351,7 +374,7 @@ import { Icon } from "astro-icon/components";
         background-repeat: no-repeat;
         background-position: center;
         cursor: grab;
-        margin-top: -12px; 
+        margin-top: -12px;
         box-shadow: 0 4px 6px rgba(244, 63, 94, 0.3);
         transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -372,12 +395,20 @@ import { Icon } from "astro-icon/components";
         background: linear-gradient(90deg, #881337 0%, #e11d48 100%);
     }
 
-    
     .perspective-1000 {
         perspective: 1000px;
     }
     #result-card {
         transform-style: preserve-3d;
+    }
+    #result-pet-name:not(.hidden) {
+        display: inline;
+    }
+    .name-val {
+        color: #fff;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-decoration: underline;
+        text-decoration-color: rgba(255, 255, 255, 0.4);
     }
 </style>
 
@@ -394,16 +425,83 @@ import { Icon } from "astro-icon/components";
         private nextMilestoneDisplay = document.getElementById("next-milestone");
 
         
+        private petNameInput = document.getElementById("pet-name") as HTMLInputElement;
+        private resultPetNameSpan = document.getElementById("result-pet-name");
+        private nameValSpan = document.querySelector(".name-val");
+        private shareBtn = document.getElementById("share-btn");
+        private shareText = document.getElementById("share-text");
+
+        
         private petType: "dog" | "cat" = "dog";
         private dogSize: "small" | "medium" | "large" | "giant" = "small";
         private age: number = 5;
+        private petName: string = "";
 
         constructor() {
+            this.loadFromURL();
             this.initEvents();
             this.update();
         }
 
+        private loadFromURL() {
+            const params = new URLSearchParams(window.location.search);
+
+            
+            const name = params.get("name");
+            if (name) {
+                this.petName = name;
+                if (this.petNameInput) this.petNameInput.value = name;
+            }
+
+            
+            const type = params.get("type");
+            if (type === "dog" || type === "cat") {
+                this.petType = type;
+                
+                this.petBtns.forEach((b) => {
+                    const t = (b as HTMLElement).dataset.type;
+                    if (t === type) b.classList.add("active");
+                    else b.classList.remove("active");
+                });
+
+                
+                if (this.dogSizeSelector) {
+                    this.dogSizeSelector.style.display = type === "dog" ? "block" : "none";
+                }
+            }
+
+            
+            const size = params.get("size");
+            if (size && ["small", "medium", "large", "giant"].includes(size)) {
+                this.dogSize = size as any;
+                this.sizeBtns.forEach((b) => {
+                    const s = (b as HTMLElement).dataset.size;
+                    if (s === size) b.classList.add("active");
+                    else b.classList.remove("active");
+                });
+            }
+
+            
+            const age = params.get("age");
+            if (age) {
+                const parsedAge = parseInt(age);
+                if (!isNaN(parsedAge) && parsedAge >= 1 && parsedAge <= 20) {
+                    this.age = parsedAge;
+                    if (this.ageSlider) this.ageSlider.value = parsedAge.toString();
+                    if (this.ageDisplay) this.ageDisplay.textContent = parsedAge.toString();
+                }
+            }
+        }
+
         private initEvents() {
+            
+            if (this.petNameInput) {
+                this.petNameInput.addEventListener("input", (e) => {
+                    this.petName = (e.target as HTMLInputElement).value;
+                    this.update();
+                });
+            }
+
             
             this.petBtns.forEach((btn) => {
                 btn.addEventListener("click", (e) => {
@@ -417,7 +515,6 @@ import { Icon } from "astro-icon/components";
                     if (this.dogSizeSelector) {
                         if (this.petType === "dog") {
                             this.dogSizeSelector.style.display = "block";
-                            
                         } else {
                             this.dogSizeSelector.style.display = "none";
                         }
@@ -448,6 +545,47 @@ import { Icon } from "astro-icon/components";
                     this.update();
                 });
             }
+
+            
+            if (this.shareBtn) {
+                this.shareBtn.addEventListener("click", () => {
+                    this.shareResult();
+                });
+            }
+        }
+
+        private shareResult() {
+            const params = new URLSearchParams();
+            if (this.petName) params.set("name", this.petName);
+            params.set("type", this.petType);
+            if (this.petType === "dog") params.set("size", this.dogSize);
+            params.set("age", this.age.toString());
+
+            const newUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+
+            navigator.clipboard.writeText(newUrl).then(() => {
+                if (this.shareText) this.shareText.textContent = "¡Enlace Copiado!";
+                if (this.shareBtn) {
+                    this.shareBtn.classList.add(
+                        "bg-green-100",
+                        "text-green-600",
+                        "border-green-200"
+                    );
+                    this.shareBtn.classList.remove("bg-slate-100", "text-slate-600");
+                }
+
+                setTimeout(() => {
+                    if (this.shareText) this.shareText.textContent = "Compartir Resultado";
+                    if (this.shareBtn) {
+                        this.shareBtn.classList.remove(
+                            "bg-green-100",
+                            "text-green-600",
+                            "border-green-200"
+                        );
+                        this.shareBtn.classList.add("bg-slate-100", "text-slate-600");
+                    }
+                }, 2000);
+            });
         }
 
         private calculateHumanAge(): number {
@@ -518,6 +656,16 @@ import { Icon } from "astro-icon/components";
             if (this.nextMilestoneDisplay) {
                 this.nextMilestoneDisplay.textContent = this.getNextMilestone();
             }
+
+            
+            if (this.resultPetNameSpan && this.nameValSpan) {
+                if (this.petName.trim() !== "") {
+                    this.resultPetNameSpan.classList.remove("hidden");
+                    this.nameValSpan.textContent = this.petName;
+                } else {
+                    this.resultPetNameSpan.classList.add("hidden");
+                }
+            }
         }
 
         private animateValue(obj: HTMLElement, start: number, end: number, duration: number) {
@@ -538,8 +686,9 @@ import { Icon } from "astro-icon/components";
     document.addEventListener("DOMContentLoaded", () => {
         new PetAgeCalculator();
     });
-    
+
     if (document.readyState === "complete") {
         new PetAgeCalculator();
     }
 </script>
+```
