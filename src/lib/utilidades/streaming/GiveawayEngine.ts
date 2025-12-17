@@ -2,7 +2,7 @@ export class GiveawayEngine {
     private rawParticipants: string[] = [];
     private excludeList: string[] = [];
     private allowDuplicates: boolean = false;
-    private winner: string | null = null;
+
     private processedParticipants: string[] = [];
 
     constructor() {
@@ -10,7 +10,7 @@ export class GiveawayEngine {
     }
 
     public setParticipantsFromText(text: string): void {
-        
+
         this.rawParticipants = text.split(/\n/).map(s => s.trim()).filter(s => s.length > 0);
         this.process();
     }
@@ -27,8 +27,8 @@ export class GiveawayEngine {
 
     private process(): void {
         const tempMap = new Map<string, number>();
-        
-        
+
+
         const weightRegex = /^(.+?)(?:\s+[\*x]\s*(\d+)|\s*\(\s*[x\*]?\s*(\d+)\s*\))$/i;
 
         for (const line of this.rawParticipants) {
@@ -43,29 +43,29 @@ export class GiveawayEngine {
                 if (isNaN(weight) || weight < 1) weight = 1;
             }
 
-            
+
             if (this.excludeList.includes(name.toLowerCase())) {
                 continue;
             }
 
             if (this.allowDuplicates) {
-                
-                
-                
-                
-                
-                
 
-                
-                
-                
 
-                
-                
+
+
+
+
+
+
+
+
+
+
+
                 const expansion = Array(weight).fill(name);
-                this.processedParticipants.push(...expansion); 
+                this.processedParticipants.push(...expansion);
             } else {
-                
+
                 const currentW = tempMap.get(name) || 0;
                 tempMap.set(name, currentW + weight);
             }
@@ -74,7 +74,7 @@ export class GiveawayEngine {
         this.processedParticipants = [];
 
         if (this.allowDuplicates) {
-            
+
             for (const line of this.rawParticipants) {
                 let name = line;
                 let weight = 1;
@@ -90,16 +90,16 @@ export class GiveawayEngine {
                 for (let i = 0; i < weight; i++) this.processedParticipants.push(name);
             }
         } else {
-            
-            
 
-            
-            
-            
-            
 
-            
-            
+
+
+
+
+
+
+
+
 
             const entries: { name: string, weight: number }[] = [];
 
@@ -110,7 +110,7 @@ export class GiveawayEngine {
                 if (match) {
                     name = match[1].trim();
                     const wStr = match[2] || match[3];
-                    
+
                     weight = Math.min(parseInt(wStr, 10), 1000);
                     if (isNaN(weight) || weight < 1) weight = 1;
                 }
@@ -121,17 +121,17 @@ export class GiveawayEngine {
             }
 
             if (!this.allowDuplicates) {
-                
+
                 const merged = new Map<string, number>();
                 for (const e of entries) {
                     merged.set(e.name, (merged.get(e.name) || 0) + e.weight);
                 }
-                
+
                 merged.forEach((w, n) => {
                     for (let i = 0; i < w; i++) this.processedParticipants.push(n);
                 });
             } else {
-                
+
                 for (const e of entries) {
                     for (let i = 0; i < e.weight; i++) this.processedParticipants.push(e.name);
                 }
@@ -155,14 +155,14 @@ export class GiveawayEngine {
     public pickWinners(count: number = 1): string[] {
         if (this.processedParticipants.length === 0) return [];
 
-        
+
         const availableIndices = Array.from({ length: this.processedParticipants.length }, (_, i) => i);
         const winners: string[] = [];
         const numToPick = Math.min(count, availableIndices.length);
 
         for (let i = 0; i < numToPick; i++) {
             let randomIndex;
-            
+
             if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
                 const array = new Uint32Array(1);
                 crypto.getRandomValues(array);
@@ -174,7 +174,7 @@ export class GiveawayEngine {
             const winningIndex = availableIndices[randomIndex];
             winners.push(this.processedParticipants[winningIndex]);
 
-            
+
             availableIndices.splice(randomIndex, 1);
         }
 

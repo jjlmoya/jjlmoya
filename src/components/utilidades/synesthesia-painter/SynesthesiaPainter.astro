@@ -1,0 +1,286 @@
+<div class="w-full max-w-4xl mx-auto">
+    <div
+        class="relative min-h-[400px] bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-all duration-500 flex flex-col"
+        id="painter-container"
+    >
+        <div
+            class="absolute top-4 right-4 z-30 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm flex gap-1"
+        >
+            <button
+                class="mode-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-400 data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:shadow-indigo-500/30 data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-600"
+                data-mode="letters"
+                data-state="active"
+            >
+                Letras
+            </button>
+            <button
+                class="mode-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-400 data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:shadow-indigo-500/30 data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-600"
+                data-mode="dots"
+                data-state="inactive"
+            >
+                Puntos
+            </button>
+            <button
+                class="mode-btn px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-400 data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:shadow-indigo-500/30 data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-600"
+                data-mode="aura"
+                data-state="inactive"
+            >
+                Aura
+            </button>
+        </div>
+
+        <div class="relative w-full flex-grow p-8 md:p-12 pt-20 cursor-text" id="canvas-wrapper">
+            <div
+                id="visualization-layer"
+                class="break-words whitespace-pre-wrap leading-relaxed outline-none"
+                style="font-size: 2.5rem; min-height: 100%;"
+            >
+            </div>
+
+            <textarea
+                id="hidden-input"
+                class="absolute inset-0 opacity-0 cursor-text -z-10 w-full h-full resize-none"
+                autofocus></textarea>
+
+            <div
+                id="placeholder"
+                class="absolute top-20 left-12 pointer-events-none opacity-40 select-none"
+            >
+                <span class="text-slate-300 dark:text-slate-600 text-4xl font-light italic"
+                    >Escribe aquí...</span
+                >
+            </div>
+        </div>
+
+        <div
+            class="bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 px-8 py-4 flex items-center justify-between"
+        >
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                ✨ Escribe para descubrir tu paleta de colores personal
+            </p>
+            <button
+                id="clear-btn"
+                class="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors uppercase tracking-wider flex items-center gap-2 group"
+            >
+                <span class="group-hover:underline decoration-red-500 underline-offset-4"
+                    >Borrar</span
+                >
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    :global(.syn-char) {
+        display: inline-block;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeIn 0.2s ease-out forwards;
+    }
+
+    :global(.mode-dots .syn-char) {
+        color: transparent !important;
+        font-size: 0 !important;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: var(--char-color);
+        margin: 0.25rem;
+        box-shadow: 0 0 10px var(--char-color);
+    }
+
+    :global(.mode-aura .syn-char) {
+        color: rgba(255, 255, 255, 0.1) !important;
+        text-shadow:
+            0 0 20px var(--char-color),
+            0 0 40px var(--char-color);
+    }
+    :global(.dark .mode-aura .syn-char) {
+        color: rgba(255, 255, 255, 0.9) !important;
+        text-shadow:
+            0 0 15px var(--char-color),
+            0 0 30px var(--char-color),
+            0 0 60px var(--char-color);
+    }
+
+    .cursor-blink {
+        display: inline-block;
+        width: 2px;
+        height: 2.5rem;
+        background-color: #6366f1;
+        animation: blink 1s step-end infinite;
+        vertical-align: text-bottom;
+        margin-left: 2px;
+    }
+    @keyframes blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+</style>
+
+<script>
+    class SynesthesiaPainter {
+        private container = document.getElementById("canvas-wrapper") as HTMLDivElement;
+        private vizLayer = document.getElementById("visualization-layer") as HTMLDivElement;
+        private input = document.getElementById("hidden-input") as HTMLTextAreaElement;
+        private placeholder = document.getElementById("placeholder") as HTMLDivElement;
+        private clearBtn = document.getElementById("clear-btn") as HTMLButtonElement;
+        private modeBtns = document.querySelectorAll(".mode-btn");
+
+        private mode: "letters" | "dots" | "aura" = "letters";
+
+        private colorMap: Record<string, string> = {
+            a: "#ef4444",
+            b: "#3b82f6",
+            c: "#eab308",
+            d: "#78350f",
+            e: "#22c55e",
+            f: "#64748b",
+            g: "#8b5cf6",
+            h: "#f97316",
+            i: "#ffffff",
+            j: "#d946ef",
+            k: "#ec4899",
+            l: "#fef08a",
+            m: "#b91c1c",
+            n: "#fb923c",
+            o: "#000000",
+            p: "#9333ea",
+            q: "#a8a29e",
+            r: "#dc2626",
+            s: "#14b8a6",
+            t: "#1d4ed8",
+            u: "#f59e0b",
+            v: "#7c3aed",
+            w: "#1e293b",
+            x: "#111827",
+            y: "#facc15",
+            z: "#ffffff",
+            "0": "#ffffff",
+            "1": "#ffffff",
+            "2": "#ef4444",
+            "3": "#22c55e",
+            "4": "#3b82f6",
+            "5": "#eab308",
+            "6": "#8b5cf6",
+            "7": "#f97316",
+            "8": "#9333ea",
+            "9": "#ec4899",
+        };
+
+        private isDark = document.documentElement.classList.contains("dark");
+
+        constructor() {
+            this.initEvents();
+            this.input.focus();
+        }
+
+        private initEvents() {
+            this.container.addEventListener("click", () => {
+                this.input.focus();
+            });
+
+            this.input.addEventListener("input", () => this.render());
+
+            this.clearBtn.addEventListener("click", () => {
+                this.input.value = "";
+                this.render();
+                this.input.focus();
+            });
+
+            this.modeBtns.forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    const target = e.currentTarget as HTMLButtonElement;
+                    this.setMode(target.dataset.mode as any);
+
+                    this.modeBtns.forEach((b) => b.setAttribute("data-state", "inactive"));
+                    target.setAttribute("data-state", "active");
+                });
+            });
+        }
+
+        private setMode(newMode: "letters" | "dots" | "aura") {
+            this.mode = newMode;
+            this.vizLayer.className = `break-words whitespace-pre-wrap leading-relaxed outline-none mode-${this.mode}`;
+            this.render();
+        }
+
+        private render() {
+            const text = this.input.value;
+
+            if (text.length > 0) {
+                this.placeholder.style.display = "none";
+            } else {
+                this.placeholder.style.display = "block";
+            }
+
+            this.vizLayer.innerHTML = "";
+
+            for (const char of text) {
+                if (char === "\n") {
+                    this.vizLayer.appendChild(document.createElement("br"));
+                    continue;
+                }
+
+                const span = document.createElement("span");
+                const lower = char.toLowerCase();
+                let color = this.colorMap[lower];
+
+                if (!color) {
+                    color = this.isDark ? "#94a3b8" : "#475569";
+                }
+
+                if (color === "#ffffff" && !this.isDark) color = "#0f172a";
+                if (color === "#000000" && this.isDark) color = "#f8fafc";
+
+                span.textContent = char;
+                span.classList.add("syn-char");
+
+                span.classList.add("font-serif", "font-bold");
+
+                span.style.color = color;
+                span.style.setProperty("--char-color", color);
+
+                this.vizLayer.appendChild(span);
+            }
+
+            const cursor = document.createElement("span");
+            cursor.className = "cursor-blink";
+            this.vizLayer.appendChild(cursor);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        new SynesthesiaPainter();
+    });
+</script>
