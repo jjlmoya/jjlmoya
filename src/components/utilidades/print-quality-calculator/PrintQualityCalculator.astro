@@ -1,0 +1,478 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto space-y-8 p-4">
+    <div
+        id="drop-zone"
+        class="relative group cursor-pointer border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-12 transition-all duration-300 hover:border-indigo-500 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+    >
+        <input
+            type="file"
+            id="file-input"
+            class="hidden"
+            accept="image/png, image/jpeg, image/webp, image/tiff"
+        />
+
+        <div class="flex flex-col items-center justify-center text-center space-y-4">
+            <div
+                class="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-300"
+            >
+                <Icon name="mdi:cloud-upload" size={40} />
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+                    Arrastra tu imagen aquí
+                </h3>
+                <p class="text-slate-500 dark:text-slate-400 mt-2">
+                    o haz click para seleccionar (JPG, PNG, TIFF, WEBP)
+                </p>
+            </div>
+        </div>
+
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+        >
+        </div>
+    </div>
+
+    <div id="results-area" class="hidden space-y-8 anime-enter">
+        <div
+            class="bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 p-6 flex flex-col md:flex-row items-center gap-6"
+        >
+            <div class="relative w-32 h-32 shrink-0">
+                <img id="preview-img" class="w-full h-full object-cover rounded-lg shadow-md" />
+                <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-lg"></div>
+            </div>
+
+            <div class="flex-1 w-full text-center md:text-left">
+                <h3
+                    id="file-name"
+                    class="font-bold text-slate-900 dark:text-white truncate max-w-xs"
+                >
+                    nombre_archivo.jpg
+                </h3>
+                <div
+                    class="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-2 text-sm text-slate-500 dark:text-slate-400"
+                >
+                    <span class="flex items-center gap-1">
+                        <Icon name="mdi:arrow-expand" />
+                        <span id="pixel-dims">0 x 0 px</span>
+                    </span>
+                    <span class="flex items-center gap-1">
+                        <Icon name="mdi:harddisk" />
+                        <span id="file-size">0 MB</span>
+                    </span>
+                    <span class="flex items-center gap-1">
+                        <Icon name="mdi:image-filter-hdr" />
+                        <span id="megapixels">0 MP</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div
+                class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6 border border-slate-200 dark:border-slate-700"
+            >
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-4">
+                    Densidad de Impresión Deseada (DPI)
+                </label>
+
+                <input
+                    type="range"
+                    id="dpi-slider"
+                    min="72"
+                    max="600"
+                    value="300"
+                    step="1"
+                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-indigo-500 mb-4"
+                />
+
+                <div class="flex items-center justify-between gap-4">
+                    <input
+                        type="number"
+                        id="dpi-input"
+                        value="300"
+                        class="w-24 rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 text-center font-bold"
+                    />
+                    <span class="text-sm text-slate-500 dark:text-slate-400"
+                        >puntos por pulgada</span
+                    >
+                </div>
+
+                <div class="mt-6 flex flex-wrap gap-2">
+                    <button
+                        class="dpi-preset px-3 py-1 text-xs font-medium rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+                        data-val="72">Pantalla (72)</button
+                    >
+                    <button
+                        class="dpi-preset px-3 py-1 text-xs font-medium rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+                        data-val="150">Periódico (150)</button
+                    >
+                    <button
+                        class="dpi-preset px-3 py-1 text-xs font-medium rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800 transition ring-1 ring-indigo-500/20"
+                        data-val="300">Imprenta (300)</button
+                    >
+                    <button
+                        class="dpi-preset px-3 py-1 text-xs font-medium rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+                        data-val="600">Fine Art (600)</button
+                    >
+                </div>
+            </div>
+
+            <div
+                class="flex flex-col justify-center bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-6 text-white shadow-xl relative overflow-hidden group"
+            >
+                <div
+                    class="absolute top-0 right-0 p-32 bg-white/10 rounded-full blur-3xl -translate-y-16 translate-x-16"
+                >
+                </div>
+
+                <h3
+                    class="text-indigo-100 text-sm font-medium uppercase tracking-wider mb-2 relative z-10"
+                >
+                    Tamaño Máximo de Impresión
+                </h3>
+
+                <div
+                    class="text-4xl md:text-5xl font-black mb-1 relative z-10 flex items-baseline gap-2"
+                >
+                    <span id="print-cm-w">0</span>
+                    <span class="text-2xl opacity-50">x</span>
+                    <span id="print-cm-h">0</span>
+                    <span class="text-2xl">cm</span>
+                </div>
+
+                <div class="text-indigo-100/80 text-sm mb-6 relative z-10 font-mono">
+                    <span id="print-in-w">0</span>" x <span id="print-in-h">0</span>"
+                </div>
+
+                <div class="mt-auto pt-4 border-t border-white/20 relative z-10">
+                    <span
+                        id="quality-badge"
+                        class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-bold"
+                    >
+                        <Icon name="mdi:check-decagram" />
+                        <span id="quality-text">Calidad Excelente</span>
+                    </span>
+                    <p id="quality-desc" class="mt-2 text-sm text-indigo-100 leading-snug">
+                        Ideal para revistas de arte, folletos premium y visualización cercana (&lt;
+                        30cm).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6"
+        >
+            <h4 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                <Icon name="mdi:ruler-square" class="text-indigo-500" />
+                Comparativa de Formatos Estándar
+            </h4>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+                    <thead
+                        class="text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-800 dark:text-slate-300"
+                    >
+                        <tr>
+                            <th class="px-4 py-3">Formato</th>
+                            <th class="px-4 py-3">Medidas (cm)</th>
+                            <th class="px-4 py-3">¿Es suficiente?</th>
+                        </tr>
+                    </thead>
+                    <tbody
+                        id="formats-table-body"
+                        class="divide-y divide-slate-200 dark:divide-slate-700"
+                    >
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+    let currentWidth = 0;
+    let currentHeight = 0;
+
+    const PAPER_FORMATS = [
+        { name: "A6 (Postal)", w: 10.5, h: 14.8 },
+        { name: "A5 (Cuartilla)", w: 14.8, h: 21.0 },
+        { name: "A4 (Folio)", w: 21.0, h: 29.7 },
+        { name: "A3 (Doble Folio)", w: 29.7, h: 42.0 },
+        { name: "A2 (Poster Pequeño)", w: 42.0, h: 59.4 },
+        { name: "A1 (Poster Grande)", w: 59.4, h: 84.1 },
+        { name: "A0 (Plano)", w: 84.1, h: 118.9 },
+    ];
+
+    function init() {
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("file-input");
+        const resultsArea = document.getElementById("results-area");
+
+        const previewImg = document.getElementById("preview-img");
+        const fileNameEl = document.getElementById("file-name");
+        const pixelDimsEl = document.getElementById("pixel-dims");
+        const fileSizeEl = document.getElementById("file-size");
+        const megapixelsEl = document.getElementById("megapixels");
+
+        const dpiSlider = document.getElementById("dpi-slider");
+        const dpiInput = document.getElementById("dpi-input");
+        const dpiPresets = document.querySelectorAll(".dpi-preset");
+
+        const printCmW = document.getElementById("print-cm-w");
+        const printCmH = document.getElementById("print-cm-h");
+        const printInW = document.getElementById("print-in-w");
+        const printInH = document.getElementById("print-in-h");
+        const qualityBadge = document.getElementById("quality-badge");
+        const qualityText = document.getElementById("quality-text");
+        const qualityDesc = document.getElementById("quality-desc");
+        const formatsTableBody = document.getElementById("formats-table-body");
+
+        if (!dropZone || !fileInput) return;
+
+        ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ["dragenter", "dragover"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ["dragleave", "drop"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dropZone.classList.add("border-indigo-500", "bg-slate-50", "dark:bg-slate-800/80");
+        }
+
+        function unhighlight() {
+            dropZone.classList.remove("border-indigo-500", "bg-slate-50", "dark:bg-slate-800/80");
+        }
+
+        dropZone.addEventListener("drop", handleDrop, false);
+        dropZone.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", handleFiles);
+
+        if (dpiSlider) {
+            dpiSlider.addEventListener("input", (e) => updateDPI(e.target.value));
+        }
+        if (dpiInput) {
+            dpiInput.addEventListener("input", (e) => updateDPI(e.target.value));
+        }
+
+        dpiPresets.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const val = btn.dataset.val;
+                if (val) updateDPI(val);
+            });
+        });
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt?.files;
+            if (files) {
+                if (files.length > 0) processFile(files[0]);
+            }
+        }
+
+        function handleFiles(e) {
+            const target = e.target;
+            const files = target.files;
+            if (files && files.length > 0) {
+                processFile(files[0]);
+            }
+        }
+
+        function processFile(file) {
+            if (!file.type.startsWith("image/")) {
+                alert("Por favor selecciona una imagen válida");
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    currentWidth = img.naturalWidth;
+                    currentHeight = img.naturalHeight;
+
+                    if (e.target?.result) {
+                        showResults(file, e.target.result);
+                        calculateSizes();
+                    }
+                };
+                if (e.target?.result) {
+                    img.src = e.target.result;
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function showResults(file, src) {
+            if (
+                !resultsArea ||
+                !previewImg ||
+                !fileNameEl ||
+                !pixelDimsEl ||
+                !fileSizeEl ||
+                !megapixelsEl
+            )
+                return;
+
+            resultsArea.classList.remove("hidden");
+            previewImg.src = src;
+            fileNameEl.innerText = file.name;
+            pixelDimsEl.innerText = `${currentWidth} x ${currentHeight} px`;
+
+            const sizeMB = file.size / (1024 * 1024);
+            fileSizeEl.innerText = `${sizeMB.toFixed(2)} MB`;
+
+            const mp = (currentWidth * currentHeight) / 1000000;
+            megapixelsEl.innerText = `${mp.toFixed(1)} MP`;
+
+            setTimeout(() => {
+                resultsArea.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 100);
+        }
+
+        function updateDPI(val) {
+            if (!dpiSlider || !dpiInput) return;
+
+            dpiSlider.value = val;
+            dpiInput.value = val;
+
+            dpiPresets.forEach((btn) => {
+                const el = btn;
+                const isActive = el.dataset.val === val;
+                if (isActive) {
+                    el.className =
+                        "dpi-preset px-3 py-1 text-xs font-medium rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800 transition ring-1 ring-indigo-500/20";
+                } else {
+                    el.className =
+                        "dpi-preset px-3 py-1 text-xs font-medium rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600 transition";
+                }
+            });
+
+            calculateSizes();
+        }
+
+        function calculateSizes() {
+            if (!currentWidth || !currentHeight || !dpiInput) return;
+
+            const dpi = parseInt(dpiInput.value);
+            if (isNaN(dpi)) return;
+
+            const inchesW = currentWidth / dpi;
+            const inchesH = currentHeight / dpi;
+
+            const cmW = inchesW * 2.54;
+            const cmH = inchesH * 2.54;
+
+            if (printInW) printInW.innerText = inchesW.toFixed(1);
+            if (printInH) printInH.innerText = inchesH.toFixed(1);
+            if (printCmW) printCmW.innerText = cmW.toFixed(1);
+            if (printCmH) printCmH.innerText = cmH.toFixed(1);
+
+            updateQualityBadge(dpi);
+            updateFormatsTable(cmW, cmH);
+        }
+
+        function updateQualityBadge(dpi) {
+            if (!qualityText || !qualityDesc || !qualityBadge) return;
+
+            if (dpi >= 300) {
+                qualityText.innerText = "Calidad Excelente";
+                qualityDesc.innerText =
+                    "Ideal para revistas de arte, libros de fotografía y visualización a menos de 30cm.";
+                qualityBadge.className =
+                    "inline-flex items-center gap-1.5 bg-green-500/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-bold text-green-100 ring-1 ring-green-400/30";
+            } else if (dpi >= 150) {
+                qualityText.innerText = "Calidad Buena";
+                qualityDesc.innerText =
+                    "Suficiente para pósters, periódicos y visualización a más de 50cm de distancia.";
+                qualityBadge.className =
+                    "inline-flex items-center gap-1.5 bg-yellow-500/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-bold text-yellow-100 ring-1 ring-yellow-400/30";
+            } else if (dpi >= 72) {
+                qualityText.innerText = "Calidad Pantalla/Baja";
+                qualityDesc.innerText =
+                    "Adecuado solo para visualización digital o vallas publicitarias lejanas (>2 metros).";
+                qualityBadge.className =
+                    "inline-flex items-center gap-1.5 bg-red-500/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-bold text-red-100 ring-1 ring-red-400/30";
+            } else {
+                qualityText.innerText = "No Apto para impresión";
+                qualityDesc.innerText =
+                    "La imagen se verá pixelada. Usar solo para iconos pequeños o vistas muy lejanas.";
+                qualityBadge.className =
+                    "inline-flex items-center gap-1.5 bg-slate-500/20 backdrop-blur-md px-3 py-1 rounded-full text-sm font-bold text-slate-100 ring-1 ring-slate-400/30";
+            }
+        }
+
+        function updateFormatsTable(cmW, cmH) {
+            if (!formatsTableBody) return;
+            formatsTableBody.innerHTML = "";
+
+            const imgMin = Math.min(cmW, cmH);
+            const imgMax = Math.max(cmW, cmH);
+
+            PAPER_FORMATS.forEach((paper) => {
+                const paperMin = Math.min(paper.w, paper.h);
+                const paperMax = Math.max(paper.w, paper.h);
+
+                const covers = imgMin >= paperMin - 0.1 && imgMax >= paperMax - 0.1;
+
+                const row = document.createElement("tr");
+                row.className =
+                    "bg-white border-b dark:bg-slate-900 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors";
+
+                const coverage = Math.min(imgMin / paperMin, imgMax / paperMax) * 100;
+
+                const statusIcon = covers
+                    ? `<span class="inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-bold"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Sí (Cubierto)</span>`
+                    : `<span class="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12,2L1,21H23M12,6L19.53,19H4.47M11,10V14H13V10M11,16V18H13V16"/></svg> No (${coverage.toFixed(0)}%)</span>`;
+
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium text-slate-900 dark:text-white">${paper.name}</td>
+                    <td class="px-4 py-3 font-mono text-slate-500 dark:text-slate-400">${paper.w} x ${paper.h}</td>
+                    <td class="px-4 py-3">${statusIcon}</td>
+                `;
+                formatsTableBody.appendChild(row);
+            });
+        }
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+</script>
+
+<style>
+    .anime-enter {
+        animation: fadeSlideUp 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
