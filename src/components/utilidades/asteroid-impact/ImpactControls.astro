@@ -1,0 +1,146 @@
+---
+interface Props {
+    diameter: number;
+    composition: string;
+    onDiameterChange: (value: number) => void;
+    onCompositionChange: (value: string) => void;
+}
+
+const { diameter, composition, onDiameterChange, onCompositionChange } = Astro.props;
+---
+
+<div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 space-y-8">
+    <h3 class="text-2xl font-bold text-slate-800 flex items-center gap-3">
+        <svg class="w-8 h-8 text-orange-500" fill="currentColor" viewBox="0 0 24 24"
+            ><path d="M21,3L3,10.53V11.51L9.84,14.16L12.48,21H13.46L21,3Z"></path></svg
+        >
+        Configuración del Impacto
+    </h3>
+
+    <div class="grid md:grid-cols-2 gap-8">
+        <div>
+            <label class="block text-sm font-bold text-slate-700 mb-3">Tamaño del Asteroide</label>
+            <div class="flex gap-2 mb-4 flex-wrap">
+                <button
+                    class="preset-btn px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors text-xs font-semibold"
+                    data-diameter="10"
+                >
+                    Bus<br /><span class="text-xs text-slate-500">10m</span>
+                </button>
+                <button
+                    class="preset-btn px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors text-xs font-semibold"
+                    data-diameter="20"
+                >
+                    Chelyabinsk<br /><span class="text-xs text-slate-500">20m</span>
+                </button>
+                <button
+                    class="preset-btn px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors text-xs font-semibold"
+                    data-diameter="10000"
+                >
+                    Chicxulub<br /><span class="text-xs text-slate-500">10km</span>
+                </button>
+            </div>
+            <input
+                type="range"
+                id="diameter-slider"
+                min="1"
+                max="10000"
+                value={diameter}
+                step="1"
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+            />
+            <div class="flex justify-between items-center mt-2">
+                <span class="text-xs text-slate-500">1m</span>
+                <span id="diameter-value" class="text-lg font-bold text-orange-600"
+                    >{
+                        diameter >= 1000 ? `${(diameter / 1000).toFixed(1)} km` : `${diameter}m`
+                    }</span
+                >
+                <span class="text-xs text-slate-500">10km</span>
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-bold text-slate-700 mb-3">Composición</label>
+            <div class="grid grid-cols-3 gap-2 mt-12">
+                <button
+                    class={`composition-btn px-3 py-3 rounded-xl border-2 font-semibold transition-all hover:scale-105 text-xs ${composition === "ice" ? "bg-blue-100 border-blue-300 text-blue-700" : "bg-slate-100 border-transparent text-slate-700"}`}
+                    data-composition="ice"
+                >
+                    <svg class="w-5 h-5 mx-auto mb-1" fill="currentColor" viewBox="0 0 24 24"
+                        ><path
+                            d="M12,2L11,7H13L12,2M6.5,5.27L5.77,6L9.5,9.73L10.23,9L6.5,5.27M17.5,5.27L13.77,9L14.5,9.73L18.23,6L17.5,5.27M2,11V13H7V11H2M17,11V13H22V11H17M9.5,14.27L5.77,18L6.5,18.73L10.23,15L9.5,14.27M14.5,14.27L13.77,15L17.5,18.73L18.23,18L14.5,14.27M11,17L12,22L13,17H11Z"
+                        ></path></svg
+                    >
+                    Hielo
+                </button>
+                <button
+                    class={`composition-btn px-3 py-3 rounded-xl border-2 font-semibold transition-all hover:scale-105 text-xs ${composition === "rock" ? "bg-amber-100 border-amber-300 text-amber-700" : "bg-slate-100 border-transparent text-slate-700"}`}
+                    data-composition="rock"
+                >
+                    <svg class="w-5 h-5 mx-auto mb-1" fill="currentColor" viewBox="0 0 24 24"
+                        ><path
+                            d="M14.19,14.19L6,18L9.81,9.81L18,6M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,10.9A1.1,1.1 0 0,0 10.9,12A1.1,1.1 0 0,0 12,13.1A1.1,1.1 0 0,0 13.1,12A1.1,1.1 0 0,0 12,10.9Z"
+                        ></path></svg
+                    >
+                    Roca
+                </button>
+                <button
+                    class={`composition-btn px-3 py-3 rounded-xl border-2 font-semibold transition-all hover:scale-105 text-xs ${composition === "iron" ? "bg-slate-300 border-slate-400 text-slate-800" : "bg-slate-100 border-transparent text-slate-700"}`}
+                    data-composition="iron"
+                >
+                    <svg class="w-5 h-5 mx-auto mb-1" fill="currentColor" viewBox="0 0 24 24"
+                        ><path
+                            d="M12,3A4,4 0 0,1 16,7C16,7.73 15.81,8.41 15.46,9H18C18.95,9 19.75,9.67 19.95,10.56C21.96,10.57 22,11.05 22,12V13H21V20A2,2 0 0,1 19,22H5A2,2 0 0,1 3,20V13H2V12C2,11.05 2.04,10.57 4.05,10.56C4.25,9.67 5.05,9 6,9H8.54C8.19,8.41 8,7.73 8,7A4,4 0 0,1 12,3M12,5A2,2 0 0,0 10,7A2,2 0 0,0 12,9A2,2 0 0,0 14,7A2,2 0 0,0 12,5Z"
+                        ></path></svg
+                    >
+                    Hierro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
+        <svg class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+                d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"
+            ></path></svg
+        >
+        <div class="text-sm text-blue-800">
+            <p class="font-semibold mb-1">Cómo usar el simulador:</p>
+            <ol class="list-decimal list-inside space-y-1">
+                <li>Activa tu <strong>ubicación GPS</strong> en el mapa</li>
+                <li><strong>Haz clic en el mapa</strong> donde quieras que caiga el asteroide</li>
+                <li>Ajusta el tamaño y composición del asteroide</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<script define:vars={{ onDiameterChange, onCompositionChange }}>
+    const diameterSlider = document.getElementById("diameter-slider");
+    const diameterValue = document.getElementById("diameter-value");
+
+    diameterSlider?.addEventListener("input", (e) => {
+        const value = parseFloat(e.target.value);
+        diameterValue.textContent = value >= 1000 ? `${(value / 1000).toFixed(1)} km` : `${value}m`;
+        window.dispatchEvent(new CustomEvent("diameter-change", { detail: value }));
+    });
+
+    document.querySelectorAll(".preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const value = parseFloat(btn.getAttribute("data-diameter"));
+            diameterSlider.value = value;
+            diameterValue.textContent =
+                value >= 1000 ? `${(value / 1000).toFixed(1)} km` : `${value}m`;
+            window.dispatchEvent(new CustomEvent("diameter-change", { detail: value }));
+        });
+    });
+
+    document.querySelectorAll(".composition-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const comp = btn.getAttribute("data-composition");
+            window.dispatchEvent(new CustomEvent("composition-change", { detail: comp }));
+        });
+    });
+</script>

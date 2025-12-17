@@ -29,5 +29,13 @@ export const scienceSection: SectionData = {
             iconBg: "mdi:telescope",
             iconFg: "mdi:eye",
         },
+        {
+            href: "/utilidades/simulador-impacto-asteroide/",
+            iconBg: "mdi:meteor",
+            iconFg: "mdi:earth",
+            title: "Simulador de Impacto de Asteroides",
+            description: "Calcula los efectos de un impacto cósmico. Energía, cráter, radiación y veredicto de supervivencia.",
+            color: "#f97316"
+        },
     ]
 };
