@@ -1,0 +1,269 @@
+---
+import { models } from "./data";
+---
+
+<div class="w-full max-w-4xl mx-auto space-y-8 p-4">
+    <div class="relative group">
+        <div
+            class="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"
+        >
+        </div>
+        <div
+            class="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-xl p-6 shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10"
+        >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <label
+                            for="model-select"
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                        >
+                            Modelo LLM
+                        </label>
+                        <div class="relative">
+                            <select
+                                id="model-select"
+                                class="block w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 shadow-sm transition-all"
+                            >
+                                {
+                                    models.map((model) => (
+                                        <option
+                                            value={model.id}
+                                            data-input={model.input}
+                                            data-output={model.output}
+                                        >
+                                            {model.name} (${model.input}/${model.output})
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label
+                                for="input-tokens"
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                            >
+                                Tokens Entrada
+                            </label>
+                            <input
+                                type="number"
+                                id="input-tokens"
+                                value="1000"
+                                min="0"
+                                class="block w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 shadow-sm"
+                            />
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                ~<span id="input-words">750</span> palabras
+                            </p>
+                        </div>
+                        <div>
+                            <label
+                                for="output-tokens"
+                                class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                            >
+                                Tokens Salida
+                            </label>
+                            <input
+                                type="number"
+                                id="output-tokens"
+                                value="500"
+                                min="0"
+                                class="block w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2.5 shadow-sm"
+                            />
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                ~<span id="output-words">375</span> palabras
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label
+                            for="requests"
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                        >
+                            Número de Peticiones
+                        </label>
+                        <div class="flex items-center space-x-4">
+                            <input
+                                type="range"
+                                id="requests-range"
+                                min="1"
+                                max="100000"
+                                value="1000"
+                                step="100"
+                                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-indigo-500"
+                            />
+                            <input
+                                type="number"
+                                id="requests-input"
+                                value="1000"
+                                min="1"
+                                class="w-24 rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 shadow-sm text-center"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="flex flex-col justify-center space-y-6 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6 border border-slate-100 dark:border-slate-700/50"
+                >
+                    <div class="text-center">
+                        <h3
+                            class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider"
+                        >
+                            Coste por Petición
+                        </h3>
+                        <div
+                            class="mt-2 text-3xl font-bold text-slate-900 dark:text-white"
+                            id="cost-per-request"
+                        >
+                            $0.00
+                        </div>
+                    </div>
+
+                    <div class="relative h-px bg-slate-200 dark:bg-slate-700">
+                        <div
+                            class="absolute left-1/2 -top-3 -translate-x-1/2 bg-slate-50 dark:bg-slate-800 px-2 text-xs text-slate-500"
+                        >
+                            x <span id="request-multiplier">1000</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <h3
+                            class="text-sm font-medium text-indigo-500 dark:text-indigo-400 uppercase tracking-wider"
+                        >
+                            Coste Total Estimado
+                        </h3>
+                        <div
+                            class="mt-2 text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400"
+                            id="total-cost"
+                        >
+                            $0.00
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div
+                            class="flex justify-between text-xs text-slate-500 dark:text-slate-400"
+                        >
+                            <span>Input</span>
+                            <span>Output</span>
+                        </div>
+                        <div
+                            class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden flex"
+                        >
+                            <div
+                                id="bar-input"
+                                class="bg-blue-500 h-full transition-all duration-500"
+                                style="width: 50%"
+                            >
+                            </div>
+                            <div
+                                id="bar-output"
+                                class="bg-green-500 h-full transition-all duration-500"
+                                style="width: 50%"
+                            >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { formatMoney, estimateWords } from "./logic";
+
+    function update() {
+        const modelSelect = document.getElementById("model-select") as HTMLSelectElement;
+        const inputTokens = document.getElementById("input-tokens") as HTMLInputElement;
+        const outputTokens = document.getElementById("output-tokens") as HTMLInputElement;
+        const requestsInput = document.getElementById("requests-input") as HTMLInputElement;
+
+        if (!modelSelect || !inputTokens || !outputTokens || !requestsInput) return;
+
+        const option = modelSelect.options[modelSelect.selectedIndex];
+        if (!option) return;
+
+        const inputPrice = parseFloat(option.dataset.input || "0");
+        const outputPrice = parseFloat(option.dataset.output || "0");
+
+        const inputs = parseInt(inputTokens.value) || 0;
+
+        const outputs = parseInt(outputTokens.value) || 0;
+
+        const requests = parseInt(requestsInput.value) || 1;
+
+        const inputWords = document.getElementById("input-words");
+        const outputWords = document.getElementById("output-words");
+        if (inputWords) inputWords.innerText = estimateWords(inputs).toString();
+        if (outputWords) outputWords.innerText = estimateWords(outputs).toString();
+
+        const inputCost = (inputs / 1_000_000) * inputPrice;
+        const outputCost = (outputs / 1_000_000) * outputPrice;
+        const totalPerRequest = inputCost + outputCost;
+
+        const costPerRequest = document.getElementById("cost-per-request");
+        if (costPerRequest) costPerRequest.innerText = formatMoney(totalPerRequest);
+
+        const totalCost = document.getElementById("total-cost");
+        if (totalCost) {
+            const total = totalPerRequest * requests;
+            totalCost.innerText = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+            }).format(total);
+        }
+
+        const requestMultiplier = document.getElementById("request-multiplier");
+        if (requestMultiplier) requestMultiplier.innerText = requests.toLocaleString();
+
+        const barInput = document.getElementById("bar-input");
+        const barOutput = document.getElementById("bar-output");
+        if (totalPerRequest > 0) {
+            const inputPercent = (inputCost / totalPerRequest) * 100;
+            const outputPercent = (outputCost / totalPerRequest) * 100;
+            if (barInput) barInput.style.width = `${inputPercent}%`;
+            if (barOutput) barOutput.style.width = `${outputPercent}%`;
+        }
+    }
+
+    function init() {
+        const modelSelect = document.getElementById("model-select") as HTMLSelectElement;
+        const inputTokens = document.getElementById("input-tokens") as HTMLInputElement;
+        const outputTokens = document.getElementById("output-tokens") as HTMLInputElement;
+        const requestsRange = document.getElementById("requests-range") as HTMLInputElement;
+        const requestsInput = document.getElementById("requests-input") as HTMLInputElement;
+
+        if (!modelSelect) return;
+
+        modelSelect.addEventListener("change", update);
+        inputTokens?.addEventListener("input", update);
+        outputTokens?.addEventListener("input", update);
+
+        requestsRange?.addEventListener("input", (e) => {
+            const target = e.target as HTMLInputElement;
+            if (requestsInput) requestsInput.value = target.value;
+            update();
+        });
+
+        requestsInput?.addEventListener("input", (e) => {
+            const target = e.target as HTMLInputElement;
+            if (requestsRange) requestsRange.value = target.value;
+            update();
+        });
+
+        update();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+</script>

@@ -20,6 +20,14 @@ export const devSection: SectionData = {
             title: "KeyCode Visualizer",
             description: "Visualiza códigos de teclas JavaScript en tiempo real.",
             color: "#8b5cf6"
+        },
+        {
+            href: "/utilidades/calculadora-coste-llm/",
+            iconBg: "mdi:robot",
+            iconFg: "mdi:currency-usd",
+            title: "Calculadora Costes LLM",
+            description: "Estima el precio de tus proyectos con GPT-4, Claude y Gemini.",
+            color: "#6366f1"
         }
     ]
 };
