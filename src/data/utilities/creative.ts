@@ -21,6 +21,14 @@ export const creativeSection: SectionData = {
             title: "Galleta de la Fortuna",
             description: "Consulta tu destino diario y descubre tus números de la suerte.",
             color: "#f59e0b"
+        },
+        {
+            href: "/utilidades/pintor-sinestesia/",
+            iconBg: "mdi:brush",
+            iconFg: "mdi:eye",
+            title: "Pintor de Sinestesia",
+            description: "Visualiza el color de las palabras según la sinestesia grafema-color.",
+            color: "#8b5cf6"
         }
     ]
 };
