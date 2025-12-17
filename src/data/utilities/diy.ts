@@ -52,6 +52,14 @@ export const diySection: SectionData = {
             title: "Optimizador de Cortes",
             description: "Ahorra material. Calcula la mejor distribución de cortes para madera o metal.",
             color: "#f97316"
+        },
+        {
+            href: "/utilidades/calculadora-caida-tension/",
+            iconBg: "mdi:lightning-bolt",
+            iconFg: "mdi:transmission-tower",
+            title: "Calculadora Caída Tensión",
+            description: "Evita cables quemados. Calcula la sección necesaria para 12V, 24V o 230V.",
+            color: "#eab308"
         }
     ]
 };

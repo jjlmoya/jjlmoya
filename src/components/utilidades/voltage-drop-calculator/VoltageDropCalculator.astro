@@ -1,0 +1,449 @@
+---
+
+---
+
+<div class="w-full max-w-4xl mx-auto space-y-8 p-4">
+    
+    <div
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-8"
+    >
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="space-y-6">
+                
+                <div>
+                    <label
+                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                    >
+                        Voltaje del Sistema
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="number"
+                            id="voltage-input"
+                            value="12"
+                            min="1"
+                            class="block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-amber-500 focus:border-amber-500"
+                        />
+                        <div
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+                        >
+                            <span class="text-slate-500 dark:text-slate-400">V</span>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex gap-2">
+                        <button
+                            class="preset-btn px-3 py-1 text-xs rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+                            data-val="12">12V (LED/Auto)</button
+                        >
+                        <button
+                            class="preset-btn px-3 py-1 text-xs rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+                            data-val="24">24V (Camión)</button
+                        >
+                        <button
+                            class="preset-btn px-3 py-1 text-xs rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+                            data-val="230">230V (Casa)</button
+                        >
+                    </div>
+                </div>
+
+                
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                            Carga / Consumo
+                        </label>
+                        <div class="flex bg-slate-200 dark:bg-slate-700 rounded-lg p-0.5">
+                            <button
+                                id="mode-watts"
+                                class="px-3 py-1 text-xs font-bold rounded-md transition-all bg-white dark:bg-slate-600 shadow text-slate-900 dark:text-white"
+                                >Watts</button
+                            >
+                            <button
+                                id="mode-amps"
+                                class="px-3 py-1 text-xs font-bold rounded-md transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                                >Amps</button
+                            >
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <input
+                            type="number"
+                            id="load-input"
+                            value="60"
+                            min="0.1"
+                            class="block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-amber-500 focus:border-amber-500"
+                        />
+                        <div
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+                        >
+                            <span id="load-unit" class="text-slate-500 dark:text-slate-400">W</span>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div>
+                    <label
+                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                    >
+                        Longitud del Cable (Ida)
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="number"
+                            id="length-input"
+                            value="10"
+                            min="0.1"
+                            class="block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-amber-500 focus:border-amber-500"
+                        />
+                        <div
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+                        >
+                            <span class="text-slate-500 dark:text-slate-400">metros</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                        Calculamos el circuito completo (ida + vuelta = 2x longitud).
+                    </p>
+                </div>
+
+                
+                <div>
+                    <label
+                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                    >
+                        Sección del Cable
+                    </label>
+                    <select
+                        id="cable-select"
+                        class="block w-full rounded-lg border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-amber-500 focus:border-amber-500"
+                    >
+                        <option value="0.25">0.25 mm² (AWG 23)</option>
+                        <option value="0.5">0.5 mm² (AWG 20)</option>
+                        <option value="0.75">0.75 mm² (AWG 18)</option>
+                        <option value="1.0">1.0 mm² (AWG 17)</option>
+                        <option value="1.5" selected>1.5 mm² (AWG 15) - Estándar Iluminación</option
+                        >
+                        <option value="2.5">2.5 mm² (AWG 13) - Enchufes</option>
+                        <option value="4.0">4.0 mm² (AWG 11)</option>
+                        <option value="6.0">6.0 mm² (AWG 9) - Horno/Vitro</option>
+                        <option value="10.0">10.0 mm² (AWG 7)</option>
+                        <option value="16.0">16.0 mm² (AWG 5)</option>
+                        <option value="25.0">25.0 mm² (AWG 3)</option>
+                    </select>
+                </div>
+
+                
+                <div>
+                    <label
+                        class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+                    >
+                        Material
+                    </label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label
+                            class="flex items-center gap-2 p-3 rounded-lg border border-amber-200 dark:border-amber-900/30 bg-amber-50 dark:bg-amber-900/10 cursor-pointer hover:bg-amber-100 dark:hover:bg-amber-900/20 transition"
+                        >
+                            <input
+                                type="radio"
+                                name="material"
+                                value="copper"
+                                checked
+                                class="text-amber-600 focus:ring-amber-500"
+                            />
+                            <span class="text-slate-800 dark:text-slate-200 font-medium">Cobre</span
+                            >
+                        </label>
+                        <label
+                            class="flex items-center gap-2 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+                        >
+                            <input
+                                type="radio"
+                                name="material"
+                                value="aluminum"
+                                class="text-slate-600 focus:ring-slate-500"
+                            />
+                            <span class="text-slate-800 dark:text-slate-200 font-medium"
+                                >Aluminio</span
+                            >
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div
+                class="flex flex-col h-full bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-slate-800 p-6 relative overflow-hidden"
+            >
+                <div
+                    class="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"
+                >
+                </div>
+
+                <h3
+                    class="text-lg font-bold text-slate-900 dark:text-white mb-6 relative z-10 flex items-center gap-2"
+                >
+                    <span id="status-icon" class="text-xl">💡</span>
+                    Resultados
+                </h3>
+
+                
+                <div
+                    class="flex-1 flex flex-col items-center justify-center text-center space-y-2 mb-8 relative z-10"
+                >
+                    <div
+                        class="text-slate-500 dark:text-slate-400 text-sm uppercase tracking-wider font-semibold"
+                    >
+                        Caída de Tensión
+                    </div>
+                    <div class="text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+                        <span id="drop-voltage">0.00</span> V
+                    </div>
+                    <div
+                        id="drop-percent-badge"
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 mt-2"
+                    >
+                        <span id="drop-percent">0.00</span>%
+                    </div>
+                </div>
+
+                
+                <div class="grid grid-cols-2 gap-4 mb-8 relative z-10">
+                    <div
+                        class="p-4 rounded-lg bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800 text-center"
+                    >
+                        <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">
+                            Voltaje Origen
+                        </div>
+                        <div class="text-xl font-bold text-slate-900 dark:text-white">
+                            <span id="source-voltage">12</span>V
+                        </div>
+                    </div>
+                    <div
+                        class="p-4 rounded-lg bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800 text-center relative overflow-hidden"
+                    >
+                        <div
+                            id="dest-voltage-bg"
+                            class="absolute inset-0 bg-red-500/0 transition-colors duration-500"
+                        >
+                        </div>
+                        <div class="relative z-10">
+                            <div class="text-xs text-slate-500 dark:text-slate-400 mb-1">
+                                Voltaje Destino
+                            </div>
+                            <div class="text-xl font-bold text-slate-900 dark:text-white">
+                                <span id="final-voltage">11.5</span>V
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div
+                    class="mt-auto relative w-full h-12 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden"
+                >
+                    <div
+                        id="wire-fill"
+                        class="h-full bg-gradient-to-r from-amber-500 to-amber-600 transition-all duration-500"
+                        style="width: 100%"
+                    >
+                    </div>
+                    <div
+                        class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white drop-shadow-md"
+                    >
+                        Eficiencia <span id="efficiency-val" class="ml-1">98%</span>
+                    </div>
+                </div>
+                <p
+                    id="recommendation-text"
+                    class="text-sm text-center mt-4 text-slate-600 dark:text-slate-300 font-medium"
+                >
+                    Todo correcto. Pérdida insignificante.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+    
+    const RESISTIVITY_COPPER = 0.0178; 
+    const RESISTIVITY_ALUMINUM = 0.028; 
+
+    
+    const voltageInput = document.getElementById("voltage-input");
+    const loadInput = document.getElementById("load-input");
+    const lengthInput = document.getElementById("length-input");
+    const cableSelect = document.getElementById("cable-select");
+    const modeWattsBtn = document.getElementById("mode-watts");
+    const modeAmpsBtn = document.getElementById("mode-amps");
+    const loadUnit = document.getElementById("load-unit");
+    const materialRadios = document.querySelectorAll('input[name="material"]');
+    const presetBtns = document.querySelectorAll(".preset-btn");
+
+    
+    const dropVoltageEl = document.getElementById("drop-voltage");
+    const dropPercentEl = document.getElementById("drop-percent");
+    const dropPercentBadge = document.getElementById("drop-percent-badge");
+    const sourceVoltageEl = document.getElementById("source-voltage");
+    const finalVoltageEl = document.getElementById("final-voltage");
+    const efficiencyValEl = document.getElementById("efficiency-val");
+    const wireFill = document.getElementById("wire-fill");
+    const recommendationText = document.getElementById("recommendation-text");
+    const destVoltageBg = document.getElementById("dest-voltage-bg");
+    const statusIcon = document.getElementById("status-icon");
+
+    let isWattsMode = true;
+
+    function init() {
+        addListeners();
+        calculate();
+    }
+
+    function addListeners() {
+        [voltageInput, loadInput, lengthInput, cableSelect].forEach((el) => {
+            el.addEventListener("input", calculate);
+        });
+
+        materialRadios.forEach((el) => el.addEventListener("change", calculate));
+
+        modeWattsBtn.addEventListener("click", () => setMode(true));
+        modeAmpsBtn.addEventListener("click", () => setMode(false));
+
+        presetBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const val = btn.dataset.val;
+                if (val) {
+                    voltageInput.value = val;
+                    calculate();
+                }
+            });
+        });
+    }
+
+    function setMode(watts) {
+        isWattsMode = watts;
+        if (watts) {
+            modeWattsBtn.className =
+                "px-3 py-1 text-xs font-bold rounded-md transition-all bg-white dark:bg-slate-600 shadow text-slate-900 dark:text-white";
+            modeAmpsBtn.className =
+                "px-3 py-1 text-xs font-bold rounded-md transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+            loadUnit.innerText = "W";
+        } else {
+            modeAmpsBtn.className =
+                "px-3 py-1 text-xs font-bold rounded-md transition-all bg-white dark:bg-slate-600 shadow text-slate-900 dark:text-white";
+            modeWattsBtn.className =
+                "px-3 py-1 text-xs font-bold rounded-md transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+            loadUnit.innerText = "A";
+        }
+        calculate();
+    }
+
+    function calculate() {
+        const voltage = parseFloat(voltageInput.value) || 0;
+        const load = parseFloat(loadInput.value) || 0;
+        const length = parseFloat(lengthInput.value) || 0;
+        const section = parseFloat(cableSelect.value) || 0;
+
+        let resistivity = RESISTIVITY_COPPER;
+        materialRadios.forEach((r) => {
+            if (r.checked && r.value === "aluminum") resistivity = RESISTIVITY_ALUMINUM;
+        });
+
+        if (voltage <= 0 || load <= 0 || length <= 0 || section <= 0) return;
+
+        
+        let current = load;
+        if (isWattsMode) {
+            current = load / voltage;
+        }
+
+        
+        
+        const drop = (2 * length * current * resistivity) / section;
+        const dropPercent = (drop / voltage) * 100;
+        const finalVoltage = Math.max(0, voltage - drop);
+        const efficiency = 100 - dropPercent;
+
+        
+        dropVoltageEl.innerText = drop.toFixed(2);
+        dropPercentEl.innerText = dropPercent.toFixed(2);
+        sourceVoltageEl.innerText = voltage;
+        finalVoltageEl.innerText = finalVoltage.toFixed(2);
+        efficiencyValEl.innerText = `${Math.max(0, efficiency).toFixed(1)}%`;
+        wireFill.style.width = `${Math.max(0, efficiency)}%`;
+
+        updateStatus(dropPercent, voltage);
+    }
+
+    function updateStatus(percent, voltage) {
+        
+        
+        
+
+        
+
+        if (percent < 3) {
+            
+            setStyles("good");
+            recommendationText.innerText =
+                "✅ Excelente. Pérdida insignificante, ideal para cualquier uso.";
+            statusIcon.innerText = "💡";
+        } else if (percent < 5) {
+            
+            setStyles("warning");
+            recommendationText.innerText =
+                "⚠️ Aceptable. Puede haber ligera pérdida de brillo en LEDs.";
+            statusIcon.innerText = "🔦";
+        } else {
+            
+            setStyles("bad");
+            recommendationText.innerText =
+                "❌ Crítico. El cable es muy fino para esta distancia/carga. Riesgo de sobrecalentamiento y fallo.";
+            statusIcon.innerText = "🔥";
+        }
+    }
+
+    function setStyles(state) {
+        dropPercentBadge.className =
+            "inline-flex items-center px-3 py-1 rounded-full text-sm font-bold mt-2 transition-colors duration-300";
+
+        if (state === "good") {
+            dropPercentBadge.classList.add(
+                "bg-green-100",
+                "text-green-700",
+                "dark:bg-green-900/30",
+                "dark:text-green-400"
+            );
+            wireFill.className =
+                "h-full bg-gradient-to-r from-green-500 to-green-600 transition-all duration-500";
+            destVoltageBg.classList.remove("bg-yellow-500/10", "bg-red-500/10");
+        } else if (state === "warning") {
+            dropPercentBadge.classList.add(
+                "bg-yellow-100",
+                "text-yellow-700",
+                "dark:bg-yellow-900/30",
+                "dark:text-yellow-400"
+            );
+            wireFill.className =
+                "h-full bg-gradient-to-r from-yellow-400 to-yellow-500 transition-all duration-500";
+            destVoltageBg.classList.add("bg-yellow-500/10");
+            destVoltageBg.classList.remove("bg-red-500/10");
+        } else {
+            dropPercentBadge.classList.add(
+                "bg-red-100",
+                "text-red-700",
+                "dark:bg-red-900/30",
+                "dark:text-red-400"
+            );
+            wireFill.className =
+                "h-full bg-gradient-to-r from-red-500 to-red-600 transition-all duration-500";
+            destVoltageBg.classList.add("bg-red-500/10");
+            destVoltageBg.classList.remove("bg-yellow-500/10");
+        }
+    }
+
+    
+    init();
+</script>
