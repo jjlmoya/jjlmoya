@@ -44,6 +44,14 @@ export const financeSection: SectionData = {
             iconBg: "mdi:receipt-text-outline",
             iconFg: "mdi:percent-outline",
             color: "#3b82f6"
+        },
+        {
+            title: "Coste de Reunión",
+            description: "El tiempo es dinero. Visualiza el coste real en directo.",
+            href: "/utilidades/calculadora-coste-reunion/",
+            iconBg: "mdi:clock-fast",
+            iconFg: "mdi:cash-multiple",
+            color: "#16a34a"
         }
     ]
 };

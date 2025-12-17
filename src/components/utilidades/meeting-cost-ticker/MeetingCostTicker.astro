@@ -1,0 +1,242 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto space-y-8 select-none">
+    <div class="relative group">
+        <div
+            class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-green-500 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"
+        >
+        </div>
+        <div
+            class="relative bg-white dark:bg-gray-900 border border-white/20 shadow-2xl rounded-2xl p-8 md:p-12 text-center overflow-hidden"
+        >
+            <h3 class="text-sm font-bold tracking-widest text-gray-400 uppercase mb-4">
+                Coste Acumulado
+            </h3>
+
+            <div class="flex items-center justify-center space-x-2 md:space-x-4">
+                <span
+                    class="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-700 tabular-nums tracking-tighter pr-2"
+                    id="cost-display">0,00</span
+                >
+                <span class="text-4xl md:text-6xl text-gray-400 font-light">€</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+            class="bg-white/50 dark:bg-gray-800/50 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
+        >
+            <div class="space-y-6">
+                <div>
+                    <label
+                        class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2"
+                        >Asistentes</label
+                    >
+                    <div class="relative">
+                        <input
+                            type="number"
+                            id="attendees-input"
+                            value="4"
+                            min="1"
+                            class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-lg font-bold text-gray-800 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                        />
+                        <Icon
+                            name="mdi:account-group"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label
+                            class="block text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                            >Salario Promedio</label
+                        >
+                        <select
+                            id="salary-type-select"
+                            class="text-xs bg-gray-100 dark:bg-gray-700 border-none rounded px-2 py-1 text-gray-600 dark:text-gray-300 font-medium cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                        >
+                            <option value="annual">Anual Bruto</option>
+                            <option value="hourly">Por Hora</option>
+                        </select>
+                    </div>
+                    <div class="relative">
+                        <input
+                            type="number"
+                            id="salary-input"
+                            value="45000"
+                            min="0"
+                            class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-lg font-bold text-gray-800 dark:text-white focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all outline-none"
+                        />
+                        <span
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold"
+                            >€</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col justify-center gap-4">
+            <button
+                id="btn-toggle"
+                class="group relative w-full overflow-hidden rounded-xl bg-green-600 p-4 text-center transition-all hover:bg-green-500 hover:shadow-lg hover:shadow-green-500/30 active:scale-[0.98]"
+            >
+                <span
+                    class="relative flex items-center justify-center gap-3 text-xl font-bold text-white"
+                >
+                    <Icon name="mdi:play" class="w-8 h-8" id="icon-play" />
+                    <Icon name="mdi:pause" class="w-8 h-8 hidden" id="icon-pause" />
+                    <span id="btn-toggle-text">Comenzar Reunión</span>
+                </span>
+            </button>
+
+            <button
+                id="btn-reset"
+                class="w-full rounded-xl bg-gray-200 dark:bg-gray-800 p-4 text-center font-bold text-gray-600 dark:text-gray-300 transition-all hover:bg-gray-300 dark:hover:bg-gray-700 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled
+            >
+                <Icon name="mdi:refresh" class="w-5 h-5" />
+                Reiniciar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { MeetingCostService, type MeetingConfig } from "./logic/MeetingCostService";
+
+    class MeetingTickerApp {
+        private isRunning: boolean = false;
+        private startTime: number = 0;
+        private accumulatedCost: number = 0;
+        private animationFrameId: number | null = null;
+
+        private readonly displayEl: HTMLElement;
+        private readonly attendeesInput: HTMLInputElement;
+        private readonly salaryInput: HTMLInputElement;
+        private readonly salaryTypeSelect: HTMLSelectElement;
+        private readonly btnToggle: HTMLButtonElement;
+        private readonly btnReset: HTMLButtonElement;
+        private readonly btnToggleText: HTMLElement;
+        private readonly iconPlay: HTMLElement;
+        private readonly iconPause: HTMLElement;
+
+        constructor() {
+            this.displayEl = document.getElementById("cost-display")!;
+            this.attendeesInput = document.getElementById("attendees-input") as HTMLInputElement;
+            this.salaryInput = document.getElementById("salary-input") as HTMLInputElement;
+            this.salaryTypeSelect = document.getElementById(
+                "salary-type-select"
+            ) as HTMLSelectElement;
+            this.btnToggle = document.getElementById("btn-toggle") as HTMLButtonElement;
+            this.btnReset = document.getElementById("btn-reset") as HTMLButtonElement;
+            this.btnToggleText = document.getElementById("btn-toggle-text")!;
+            this.iconPlay = document.getElementById("icon-play")!;
+            this.iconPause = document.getElementById("icon-pause")!;
+
+            this.bindEvents();
+        }
+
+        private bindEvents(): void {
+            this.btnToggle.addEventListener("click", () => this.toggle());
+            this.btnReset.addEventListener("click", () => this.reset());
+
+            [this.attendeesInput, this.salaryInput, this.salaryTypeSelect].forEach((el) => {
+                el.addEventListener("input", () => this.handleConfigChange());
+            });
+        }
+
+        private getConfig(): MeetingConfig {
+            return {
+                attendees: parseInt(this.attendeesInput.value) || 0,
+                salary: parseFloat(this.salaryInput.value) || 0,
+                salaryType: this.salaryTypeSelect.value as "annual" | "hourly",
+            };
+        }
+
+        private toggle(): void {
+            if (this.isRunning) {
+                this.pause();
+            } else {
+                this.start();
+            }
+        }
+
+        private start(): void {
+            this.isRunning = true;
+            this.startTime = performance.now();
+            this.updateUIState(true);
+            this.tick();
+        }
+
+        private pause(): void {
+            this.isRunning = false;
+            if (this.animationFrameId) {
+                cancelAnimationFrame(this.animationFrameId);
+            }
+            this.accumulatedCost = this.getCurrentTotalCost();
+            this.updateUIState(false);
+        }
+
+        private reset(): void {
+            this.pause();
+            this.accumulatedCost = 0;
+            this.startTime = 0;
+            this.displayEl.textContent = MeetingCostService.formatCurrency(0);
+            this.updateUIState(false, true);
+        }
+
+        private handleConfigChange(): void {
+            if (this.isRunning) {
+                this.accumulatedCost = this.getCurrentTotalCost();
+                this.startTime = performance.now();
+            }
+        }
+
+        private getCurrentTotalCost(): number {
+            if (!this.isRunning) return this.accumulatedCost;
+
+            const elapsedSeconds = (performance.now() - this.startTime) / 1000;
+            const burnRate = MeetingCostService.calculateBurnRatePerSecond(this.getConfig());
+            return this.accumulatedCost + elapsedSeconds * burnRate;
+        }
+
+        private tick(): void {
+            if (!this.isRunning) return;
+
+            const total = this.getCurrentTotalCost();
+            this.displayEl.textContent = MeetingCostService.formatCurrency(total);
+            document.title = `${total.toFixed(2)}€ - Coste Reunión`;
+
+            this.animationFrameId = requestAnimationFrame(() => this.tick());
+        }
+
+        private updateUIState(running: boolean, isReset: boolean = false): void {
+            if (running) {
+                this.btnToggle.classList.replace("bg-green-600", "bg-red-500");
+                this.btnToggle.classList.replace("hover:bg-green-500", "hover:bg-red-600");
+                this.btnToggleText.textContent = "Pausar";
+                this.iconPlay.classList.add("hidden");
+                this.iconPause.classList.remove("hidden");
+                this.btnReset.disabled = false;
+            } else {
+                this.btnToggle.classList.replace("bg-red-500", "bg-green-600");
+                this.btnToggle.classList.replace("hover:bg-red-600", "hover:bg-green-500");
+                this.btnToggleText.textContent = isReset ? "Comenzar Reunión" : "Reanudar";
+                this.iconPlay.classList.remove("hidden");
+                this.iconPause.classList.add("hidden");
+                if (isReset) {
+                    this.btnReset.disabled = true;
+                    document.title = "Calculadora Coste Reunión";
+                }
+            }
+        }
+    }
+
+    new MeetingTickerApp();
+</script>
