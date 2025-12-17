@@ -1,0 +1,461 @@
+---
+
+---
+
+<div
+    class="tinnitus-container relative w-full max-w-4xl mx-auto bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800"
+>
+    
+    <div class="relative h-64 w-full bg-slate-950 flex items-center justify-center overflow-hidden">
+        <canvas id="noise-visualizer" class="absolute inset-0 w-full h-full opacity-60"></canvas>
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-transparent to-slate-900 pointer-events-none"
+        >
+        </div>
+
+        
+        <button
+            id="play-btn"
+            class="relative z-10 group transition-all duration-300 transform hover:scale-105"
+        >
+            <div
+                class="absolute inset-0 bg-teal-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full"
+            >
+            </div>
+            <div
+                class="w-20 h-20 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-full flex items-center justify-center shadow-2xl group-hover:border-teal-500/50 transition-colors"
+            >
+                <svg
+                    id="play-icon"
+                    class="w-8 h-8 text-teal-400 ml-1"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg
+                >
+                <svg
+                    id="stop-icon"
+                    class="w-8 h-8 text-red-400 hidden"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"><path d="M6 6h12v12H6z"></path></svg
+                >
+            </div>
+        </button>
+    </div>
+
+    
+    <div class="p-8 bg-slate-900 text-slate-300">
+        
+        <div class="flex justify-center space-x-4 mb-10">
+            {
+                ["White", "Pink", "Brown"].map((type) => (
+                    <button
+                        class="noise-type-btn px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-slate-700 hover:bg-slate-800 data-[active=true]:bg-teal-900/30 data-[active=true]:border-teal-500/50 data-[active=true]:text-teal-400"
+                        data-type={type.toLowerCase()}
+                        data-active={type === "White" ? "true" : "false"}
+                    >
+                        {type} Noise
+                    </button>
+                ))
+            }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <label class="text-sm font-medium text-slate-400 uppercase tracking-wider"
+                        >Tinnitus Frequency</label
+                    >
+                    <span class="text-teal-400 font-mono text-lg"
+                        ><span id="freq-display">4000</span> Hz</span
+                    >
+                </div>
+                <div class="relative h-12 flex items-center">
+                    <input
+                        type="range"
+                        min="200"
+                        max="12000"
+                        step="50"
+                        value="4000"
+                        id="freq-slider"
+                        class="w-full appearance-none bg-slate-800 h-2 rounded-full cursor-pointer slider-thumb-teal"
+                    />
+                </div>
+                <p class="text-xs text-slate-500">
+                    Mueve este deslizador hasta que coincida con el tono de tu tinnitus para
+                    filtrarlo.
+                </p>
+            </div>
+
+            
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <label class="text-sm font-medium text-slate-400 uppercase tracking-wider"
+                        >Volumen</label
+                    >
+                    <span class="text-teal-400 font-mono text-lg"
+                        ><span id="vol-display">50</span>%</span
+                    >
+                </div>
+                <div class="relative h-12 flex items-center">
+                    <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="50"
+                        id="vol-slider"
+                        class="w-full appearance-none bg-slate-800 h-2 rounded-full cursor-pointer slider-thumb-teal"
+                    />
+                </div>
+                <p class="text-xs text-slate-500">
+                    Ajusta el volumen a un nivel cómodo, justo por debajo de tu tinnitus.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    
+    .slider-thumb-teal::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #0f172a; 
+        border: 2px solid #2dd4bf; 
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
+        transition: transform 0.1s;
+    }
+
+    .slider-thumb-teal::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(45, 212, 191, 0.5);
+    }
+
+    .slider-thumb-teal::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #0f172a;
+        border: 2px solid #2dd4bf;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
+        transition: transform 0.1s;
+    }
+</style>
+
+<script>
+    class TinnitusReliever {
+        silentAudio: HTMLAudioElement | null = null;
+        hasUnlocked = false;
+        ctx: AudioContext | null = null;
+        noiseNode: AudioBufferSourceNode | null = null;
+        gainNode: GainNode | null = null;
+        filterNode: BiquadFilterNode | null = null;
+        analyser: AnalyserNode | null = null;
+        isPlaying = false;
+
+        
+        frequency = 4000;
+        volume = 0.3; 
+        noiseType = "white";
+
+        
+        playBtn: HTMLButtonElement;
+        playIcon: HTMLElement;
+        stopIcon: HTMLElement;
+        freqSlider: HTMLInputElement;
+        volSlider: HTMLInputElement;
+        freqDisplay: HTMLElement;
+        volDisplay: HTMLElement;
+        noiseBtns: NodeListOf<HTMLButtonElement>;
+        canvas: HTMLCanvasElement;
+        canvasCtx: CanvasRenderingContext2D;
+        animationId: number = 0;
+
+        constructor() {
+            this.playBtn = document.querySelector("#play-btn") as HTMLButtonElement;
+            this.playIcon = document.querySelector("#play-icon") as HTMLElement;
+            this.stopIcon = document.querySelector("#stop-icon") as HTMLElement;
+            this.freqSlider = document.querySelector("#freq-slider") as HTMLInputElement;
+            this.volSlider = document.querySelector("#vol-slider") as HTMLInputElement;
+            this.freqDisplay = document.querySelector("#freq-display") as HTMLElement;
+            this.volDisplay = document.querySelector("#vol-display") as HTMLElement;
+            this.noiseBtns = document.querySelectorAll(".noise-type-btn");
+            this.canvas = document.querySelector("#noise-visualizer") as HTMLCanvasElement;
+            this.canvasCtx = this.canvas.getContext("2d")!;
+
+            this.initEvents();
+            this.resizeCanvas();
+            window.addEventListener("resize", () => this.resizeCanvas());
+
+            
+            
+            this.silentAudio = new Audio(
+                "data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YRAAAAAAAAAAAAAAAAAAAA=="
+            );
+            this.silentAudio.loop = false;
+        }
+
+        initEvents() {
+            this.playBtn.addEventListener("click", () => this.togglePlay());
+
+            this.freqSlider.addEventListener("input", (e) => {
+                this.frequency = parseInt((e.target as HTMLInputElement).value);
+                this.freqDisplay.textContent = this.frequency.toString();
+                this.updateAudioParams();
+            });
+
+            this.volSlider.addEventListener("input", (e) => {
+                this.volume = parseInt((e.target as HTMLInputElement).value) / 100;
+                this.volDisplay.textContent = (e.target as HTMLInputElement).value;
+                this.updateAudioParams();
+            });
+
+            this.noiseBtns.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const type = btn.dataset.type!;
+                    if (this.noiseType === type) return;
+
+                    this.noiseType = type;
+
+                    
+                    this.noiseBtns.forEach((b) => (b.dataset.active = "false"));
+                    btn.dataset.active = "true";
+
+                    
+                    if (this.isPlaying) {
+                        this.stopAudio();
+                        this.startAudio();
+                    }
+                });
+            });
+        }
+
+        playSilentUnlock() {
+            if (this.silentAudio) {
+                this.silentAudio.volume = 0.01;
+                this.silentAudio.play().catch((e) => console.error("Silent audio play failed", e));
+            }
+        }
+
+        initAudioContext() {
+            if (!this.ctx) {
+                this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            }
+            if (this.ctx.state === "suspended") {
+                this.ctx.resume();
+            }
+        }
+
+        async startAudio() {
+            this.initAudioContext();
+            if (!this.ctx) return;
+
+            
+            this.gainNode = this.ctx.createGain();
+            this.filterNode = this.ctx.createBiquadFilter();
+            this.analyser = this.ctx.createAnalyser();
+
+            
+            this.filterNode.type = "notch";
+            this.filterNode.frequency.value = this.frequency;
+            
+            
+            
+            
+            this.filterNode.Q.value = 1.5;
+
+            this.filterNode.Q.value = 1.5;
+
+            
+            this.gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
+            this.gainNode.gain.linearRampToValueAtTime(this.volume, this.ctx.currentTime + 1.0); 
+
+            
+            const bufferSize = 2 * this.ctx.sampleRate;
+            const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            this.generateNoise(data, this.noiseType);
+
+            this.noiseNode = this.ctx.createBufferSource();
+            this.noiseNode.buffer = buffer;
+            this.noiseNode.loop = true;
+
+            
+            this.noiseNode.connect(this.filterNode);
+            this.filterNode.connect(this.gainNode);
+            this.gainNode.connect(this.analyser);
+            this.analyser.connect(this.ctx.destination);
+
+            this.noiseNode.start();
+            this.isPlaying = true;
+            this.updateUIActionState();
+            this.draw();
+        }
+
+        stopAudio() {
+            if (this.noiseNode) {
+                this.noiseNode.stop();
+                this.noiseNode.disconnect();
+            }
+            if (this.ctx) {
+                
+            }
+            this.isPlaying = false;
+            this.updateUIActionState();
+            cancelAnimationFrame(this.animationId);
+            this.clearCanvas();
+        }
+
+        togglePlay() {
+            this.initAudioContext();
+
+            
+            if (!this.hasUnlocked) {
+                this.playSilentUnlock();
+                this.hasUnlocked = true;
+            }
+
+            if (this.isPlaying) {
+                this.stopAudio();
+            } else {
+                this.startAudio();
+            }
+        }
+
+        updateAudioParams() {
+            if (!this.ctx) return;
+
+            if (this.filterNode) {
+                
+                this.filterNode.frequency.setTargetAtTime(
+                    this.frequency,
+                    this.ctx.currentTime,
+                    0.1
+                );
+            }
+            if (this.gainNode) {
+                this.gainNode.gain.setTargetAtTime(this.volume, this.ctx.currentTime, 0.1);
+            }
+        }
+
+        updateUIActionState() {
+            if (this.isPlaying) {
+                this.playIcon.classList.add("hidden");
+                this.stopIcon.classList.remove("hidden");
+            } else {
+                this.playIcon.classList.remove("hidden");
+                this.stopIcon.classList.add("hidden");
+            }
+        }
+
+        generateNoise(data: Float32Array, type: string) {
+            const count = data.length;
+            if (type === "white") {
+                for (let i = 0; i < count; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+            } else if (type === "pink") {
+                let b0 = 0,
+                    b1 = 0,
+                    b2 = 0,
+                    b3 = 0,
+                    b4 = 0,
+                    b5 = 0,
+                    b6 = 0;
+                for (let i = 0; i < count; i++) {
+                    const white = Math.random() * 2 - 1;
+                    b0 = 0.99886 * b0 + white * 0.0555179;
+                    b1 = 0.99332 * b1 + white * 0.0750759;
+                    b2 = 0.969 * b2 + white * 0.153852;
+                    b3 = 0.8665 * b3 + white * 0.3104856;
+                    b4 = 0.55 * b4 + white * 0.5329522;
+                    b5 = -0.7616 * b5 - white * 0.016898;
+                    data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+                    data[i] *= 0.11; 
+                    b6 = white * 0.115926;
+                }
+            } else if (type === "brown") {
+                let lastOut = 0;
+                for (let i = 0; i < count; i++) {
+                    const white = Math.random() * 2 - 1;
+                    data[i] = (lastOut + 0.02 * white) / 1.02;
+                    lastOut = data[i];
+                    data[i] *= 3.5; 
+                }
+            }
+        }
+
+        resizeCanvas() {
+            this.canvas.width = this.canvas.offsetWidth;
+            this.canvas.height = this.canvas.offsetHeight;
+        }
+
+        draw() {
+            if (!this.isPlaying || !this.analyser) return;
+
+            this.animationId = requestAnimationFrame(() => this.draw());
+
+            const bufferLength = this.analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            this.analyser.getByteFrequencyData(dataArray);
+
+            const width = this.canvas.width;
+            const height = this.canvas.height;
+            const barWidth = (width / bufferLength) * 2.5;
+            let barHeight;
+            let x = 0;
+
+            this.canvasCtx.clearRect(0, 0, width, height);
+
+            
+            this.canvasCtx.beginPath();
+            this.canvasCtx.moveTo(0, height);
+
+            for (let i = 0; i < bufferLength; i++) {
+                barHeight = (dataArray[i] / 255) * height;
+
+                
+                
+                
+
+                
+                const percent = i / bufferLength;
+                const y = height - barHeight;
+
+                if (i === 0) {
+                    this.canvasCtx.moveTo(x, y);
+                } else {
+                    
+                    const cp1x = x - barWidth / 2;
+                    const cp1y = y; 
+                    
+                    this.canvasCtx.lineTo(x, y);
+                }
+
+                x += barWidth;
+            }
+
+            this.canvasCtx.lineTo(width, height);
+            this.canvasCtx.fillStyle = "rgba(45, 212, 191, 0.2)"; 
+            this.canvasCtx.fill();
+
+            
+            this.canvasCtx.strokeStyle = "#2dd4bf";
+            this.canvasCtx.lineWidth = 2;
+            this.canvasCtx.stroke();
+        }
+
+        clearCanvas() {
+            this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+    }
+
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        new TinnitusReliever();
+    });
+</script>

@@ -36,6 +36,14 @@ export const healthSection: SectionData = {
             title: "Test de Reflejos",
             description: "Mide tu velocidad de reacción en ms. Challenge de rangos.",
             color: "#6366f1",
+        },
+        {
+            href: "/utilidades/alivio-tinnitus/",
+            iconBg: "mdi:ear-hearing",
+            iconFg: "mdi:waveform",
+            title: "Alivio Tinnitus",
+            description: "Terapia de muesca y ruidos de colores para calmar el zumbido.",
+            color: "#2dd4bf"
         }
     ]
 };
