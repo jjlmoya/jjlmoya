@@ -44,6 +44,14 @@ export const diySection: SectionData = {
             title: "Calculadora Passepartout",
             description: "Márgenes perfectos y corrección óptica para enmarcar tus obras.",
             color: "#6366f1"
+        },
+        {
+            href: "/utilidades/optimizador-corte/",
+            iconBg: "mdi:saw-blade",
+            iconFg: "mdi:ruler-square",
+            title: "Optimizador de Cortes",
+            description: "Ahorra material. Calcula la mejor distribución de cortes para madera o metal.",
+            color: "#f97316"
         }
     ]
 };
