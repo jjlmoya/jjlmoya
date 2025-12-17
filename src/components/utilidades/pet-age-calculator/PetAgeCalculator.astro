@@ -1,0 +1,375 @@
+<div class="w-full max-w-4xl mx-auto space-y-12">
+    
+    <div
+        class="bg-white dark:bg-slate-900 rounded-[2rem] p-8 shadow-xl border border-slate-200 dark:border-slate-800"
+    >
+        
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <button
+                class="pet-type-btn active flex flex-col items-center justify-center p-6 rounded-2xl border-2 transition-all duration-300 gap-3"
+                data-type="dog"
+            >
+                <iconify-icon icon="mdi:dog" width="48" height="48"></iconify-icon>
+                <span class="font-bold text-lg">Perro</span>
+            </button>
+            <button
+                class="pet-type-btn flex flex-col items-center justify-center p-6 rounded-2xl border-2 transition-all duration-300 gap-3"
+                data-type="cat"
+            >
+                <iconify-icon icon="mdi:cat" width="48" height="48"></iconify-icon>
+                <span class="font-bold text-lg">Gato</span>
+            </button>
+        </div>
+
+        
+        <div id="dog-size-selector" class="mb-8">
+            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4"
+                >Tamaño del Perro</label
+            >
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button
+                    class="size-btn active p-4 rounded-xl border-2 flex flex-col items-center gap-2"
+                    data-size="small"
+                >
+                    <iconify-icon icon="mdi:dog-side" width="24"></iconify-icon>
+                    <span class="text-sm font-bold">Pequeño</span>
+                    <span class="text-xs text-slate-400">&lt; 9kg</span>
+                </button>
+                <button
+                    class="size-btn p-4 rounded-xl border-2 flex flex-col items-center gap-2"
+                    data-size="medium"
+                >
+                    <iconify-icon icon="mdi:dog-side" width="32"></iconify-icon>
+                    <span class="text-sm font-bold">Mediano</span>
+                    <span class="text-xs text-slate-400">10-22kg</span>
+                </button>
+                <button
+                    class="size-btn p-4 rounded-xl border-2 flex flex-col items-center gap-2"
+                    data-size="large"
+                >
+                    <iconify-icon icon="mdi:dog-side" width="40"></iconify-icon>
+                    <span class="text-sm font-bold">Grande</span>
+                    <span class="text-xs text-slate-400">23-40kg</span>
+                </button>
+                <button
+                    class="size-btn p-4 rounded-xl border-2 flex flex-col items-center gap-2"
+                    data-size="giant"
+                >
+                    <iconify-icon icon="mdi:dog-side" width="48"></iconify-icon>
+                    <span class="text-sm font-bold">Gigante</span>
+                    <span class="text-xs text-slate-400">&gt; 41kg</span>
+                </button>
+            </div>
+        </div>
+
+        
+        <div class="mb-8">
+            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4"
+                >Edad Real</label
+            >
+            <div class="flex items-center gap-4">
+                <input
+                    type="range"
+                    id="age-slider"
+                    min="1"
+                    max="20"
+                    step="1"
+                    value="5"
+                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-indigo-500"
+                />
+                <div class="shrink-0 w-24 text-center">
+                    <span
+                        id="age-display"
+                        class="text-3xl font-black text-indigo-600 dark:text-indigo-400">5</span
+                    >
+                    <span class="text-sm font-medium text-slate-500 block">años</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div
+            class="relative bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-8 text-white overflow-hidden"
+        >
+            <div class="absolute top-0 right-0 opacity-10 -mr-8 -mt-8">
+                <iconify-icon icon="mdi:paw" width="200" height="200"></iconify-icon>
+            </div>
+
+            <div class="relative z-10 text-center">
+                <p class="text-indigo-100 font-medium mb-2">Edad Humana Equivalente</p>
+                <div class="flex items-baseline justify-center gap-2">
+                    <span id="human-age" class="text-7xl font-black tracking-tighter counter-anim"
+                        >36</span
+                    >
+                    <span class="text-2xl font-bold opacity-80">años</span>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-white/20 grid grid-cols-2 gap-4 text-center">
+                    <div>
+                        <p class="text-xs text-indigo-200 uppercase tracking-widest font-bold mb-1">
+                            Etapa de Vida
+                        </p>
+                        <p id="life-stage" class="font-bold text-lg">Adulto</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-indigo-200 uppercase tracking-widest font-bold mb-1">
+                            Próximo Hito
+                        </p>
+                        <p id="next-milestone" class="font-bold text-lg">Senior (7 años)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    
+    .pet-type-btn {
+        background-color: #f8fafc; 
+        border: 2px solid #e2e8f0; 
+        color: #64748b; 
+    }
+    :global(.dark) .pet-type-btn {
+        background-color: #1e293b; 
+        border-color: #334155; 
+        color: #94a3b8; 
+    }
+
+    .pet-type-btn.active {
+        border-color: #6366f1; 
+        background-color: #eef2ff; 
+        color: #4f46e5; 
+        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+        transform: scale(1.05);
+    }
+    :global(.dark) .pet-type-btn.active {
+        background-color: rgba(49, 46, 129, 0.3); 
+        color: #818cf8; 
+    }
+
+    .size-btn {
+        background-color: #f8fafc;
+        border: 2px solid #e2e8f0;
+        color: #64748b;
+        opacity: 0.6;
+    }
+    :global(.dark) .size-btn {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #94a3b8;
+    }
+
+    .size-btn.active {
+        border-color: #6366f1;
+        background-color: #eef2ff;
+        color: #4f46e5;
+        opacity: 1;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+    :global(.dark) .size-btn.active {
+        background-color: rgba(49, 46, 129, 0.3);
+        color: #818cf8;
+    }
+
+    
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        background: #6366f1;
+        cursor: pointer;
+        margin-top: -8px;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        transition: box-shadow 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+        box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.3);
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 8px;
+        cursor: pointer;
+        background: #e2e8f0;
+        border-radius: 4px;
+    }
+    :global(.dark) input[type="range"]::-webkit-slider-runnable-track {
+        background: #334155;
+    }
+</style>
+
+<script>
+    class PetAgeCalculator {
+        
+        private petBtns = document.querySelectorAll(".pet-type-btn");
+        private sizeBtns = document.querySelectorAll(".size-btn");
+        private dogSizeSelector = document.getElementById("dog-size-selector");
+        private ageSlider = document.getElementById("age-slider") as HTMLInputElement;
+        private ageDisplay = document.getElementById("age-display");
+        private humanAgeDisplay = document.getElementById("human-age");
+        private lifeStageDisplay = document.getElementById("life-stage");
+        private nextMilestoneDisplay = document.getElementById("next-milestone");
+
+        
+        private petType: "dog" | "cat" = "dog";
+        private dogSize: "small" | "medium" | "large" | "giant" = "small";
+        private age: number = 5;
+
+        constructor() {
+            this.initEvents();
+            this.update();
+        }
+
+        private initEvents() {
+            
+            this.petBtns.forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    const target = e.currentTarget as HTMLElement;
+                    this.petType = target.dataset.type as "dog" | "cat";
+
+                    
+                    this.petBtns.forEach((b) => b.classList.remove("active"));
+                    target.classList.add("active");
+
+                    
+                    if (this.dogSizeSelector) {
+                        this.dogSizeSelector.style.display =
+                            this.petType === "dog" ? "block" : "none";
+                    }
+
+                    this.update();
+                });
+            });
+
+            
+            this.sizeBtns.forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    const target = e.currentTarget as HTMLElement;
+                    this.dogSize = target.dataset.size as any;
+
+                    this.sizeBtns.forEach((b) => b.classList.remove("active"));
+                    target.classList.add("active");
+
+                    this.update();
+                });
+            });
+
+            
+            if (this.ageSlider) {
+                this.ageSlider.addEventListener("input", () => {
+                    this.age = parseInt(this.ageSlider.value);
+                    if (this.ageDisplay) this.ageDisplay.textContent = this.age.toString();
+                    this.update();
+                });
+            }
+        }
+
+        private calculateHumanAge(): number {
+            if (this.petType === "cat") {
+                
+                if (this.age === 1) return 15;
+                if (this.age === 2) return 24;
+                return 24 + (this.age - 2) * 4;
+            } else {
+                
+                
+                
+                
+                
+
+                let humanAge = 0;
+
+                
+                if (this.age === 1) return 15;
+
+                
+                
+                
+                
+                
+
+                if (this.age === 2) return 24;
+
+                const base = 24;
+                const yearsAfterTwo = this.age - 2;
+
+                switch (this.dogSize) {
+                    case "small":
+                        
+                        humanAge = base + yearsAfterTwo * 5; 
+                        break;
+                    case "medium":
+                        
+                        humanAge = base + yearsAfterTwo * 6;
+                        break;
+                    case "large":
+                        
+                        humanAge = base + yearsAfterTwo * 7; 
+                        break;
+                    case "giant":
+                        
+                        humanAge = base + yearsAfterTwo * 8; 
+                        break;
+                }
+
+                return Math.floor(humanAge);
+            }
+        }
+
+        private getLifeStage(humanAge: number): string {
+            if (humanAge < 10) return "Cachorro";
+            if (humanAge < 20) return "Adolescente";
+            if (humanAge < 50) return "Adulto";
+            if (humanAge < 70) return "Senior";
+            return "Geríatrico";
+        }
+
+        private getNextMilestone(): string {
+            const humanAge = this.calculateHumanAge();
+            
+            if (humanAge < 60) return "Senior (60 años)";
+            if (humanAge < 80) return "Geríatrico (80 años)";
+            return "Matusalén";
+        }
+
+        private update() {
+            const humanAge = this.calculateHumanAge();
+
+            
+            if (this.humanAgeDisplay) {
+                this.animateValue(
+                    this.humanAgeDisplay,
+                    parseInt(this.humanAgeDisplay.textContent || "0"),
+                    humanAge,
+                    500
+                );
+            }
+
+            if (this.lifeStageDisplay) {
+                this.lifeStageDisplay.textContent = this.getLifeStage(humanAge);
+            }
+
+            if (this.nextMilestoneDisplay) {
+                this.nextMilestoneDisplay.textContent = this.getNextMilestone();
+            }
+        }
+
+        private animateValue(obj: HTMLElement, start: number, end: number, duration: number) {
+            let startTimestamp: number | null = null;
+            const step = (timestamp: number) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start).toString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        new PetAgeCalculator();
+    });
+</script>
