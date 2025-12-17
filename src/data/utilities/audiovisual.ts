@@ -44,6 +44,14 @@ export const audiovisualSection: SectionData = {
             title: "Lente Cromática",
             description: "Extrae paletas de colores matemáticas de cualquier imagen mediante algoritmos de cuantización.",
             color: "#d946ef"
+        },
+        {
+            href: "/utilidades/calculadora-calidad-impresion/",
+            iconBg: "mdi:printer",
+            iconFg: "mdi:ruler-square",
+            title: "Calculadora de Impresión",
+            description: "Analiza si tu imagen tiene suficiente calidad para imprimir en gran formato sin pixelarse.",
+            color: "#6366f1"
         }
     ]
 };
