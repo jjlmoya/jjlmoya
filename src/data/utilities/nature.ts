@@ -22,5 +22,13 @@ export const natureSection: SectionData = {
             iconBg: "mdi:weather-pouring",
             iconFg: "mdi:water",
         },
+        {
+            title: "Termómetro del Grillo",
+            description: "Calcula la temperatura contando los chirridos de un grillo (Ley de Dolbear).",
+            href: "/utilidades/termometro-grillo/",
+            color: "#10b981", 
+            iconBg: "mdi:thermometer",
+            iconFg: "mdi:grass",
+        },
     ],
 };
