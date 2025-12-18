@@ -37,6 +37,14 @@ export const creativeSection: SectionData = {
             title: "Generador Zalgo",
             description: "Corrompe tus mensajes con cascadas de caracteres Unicode desbordantes.",
             color: "#9333ea"
+        },
+        {
+            href: "/utilidades/generador-patrones-cuentas/",
+            iconBg: "mdi:grid",
+            iconFg: "mdi:palette",
+            title: "Generador de Patrones",
+            description: "Crea esquemas de pixel art y cuentas para Miyuki o Hama desde tus fotos.",
+            color: "#db2777"
         }
     ]
 };
