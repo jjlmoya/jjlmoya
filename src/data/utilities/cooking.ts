@@ -76,6 +76,14 @@ export const cookingSection: SectionData = {
             title: "Selector de Sartenes",
             description: "Encuentra el material ideal y aprende su mantenimiento: Hierro, Acero, Cobre o Antiadherente.",
             color: "#475569"
+        },
+        {
+            href: "/utilidades/diagnostico-platanos/",
+            iconBg: "mdi:fruit-citrus",
+            iconFg: "mdi:microscope",
+            title: "Diagnóstico de Plátanos",
+            description: "Analiza el grado de madurez y recibe consejos científicos de conservación según la temperatura.",
+            color: "#fbbf24"
         }
     ]
 };
