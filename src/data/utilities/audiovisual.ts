@@ -60,6 +60,14 @@ export const audiovisualSection: SectionData = {
             title: "Social Safe Zones",
             description: "Simulador de interfaces para fotos y videos en TikTok, Reels y Shorts.",
             color: "#f43f5e"
+        },
+        {
+            href: "/utilidades/distancia-tv/",
+            iconBg: "mdi:television",
+            iconFg: "mdi:ruler",
+            title: "Distancia TV",
+            description: "Encuentra el punto óptimo de inmersión para tu Home Cinema según THX y SMPTE.",
+            color: "#2563eb"
         }
     ]
 };
