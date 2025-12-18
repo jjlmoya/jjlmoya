@@ -60,6 +60,14 @@ export const diySection: SectionData = {
             title: "Calculadora Caída Tensión",
             description: "Evita cables quemados. Calcula la sección necesaria para 12V, 24V o 230V.",
             color: "#eab308"
+        },
+        {
+            href: "/utilidades/disenador-patrones-cuentas/",
+            iconBg: "mdi:grid",
+            iconFg: "mdi:palette",
+            title: "Diseñador Patrones Cuentas",
+            description: "Esquemas técnicos Miyuki y Brick Stitch a partir de tus fotos.",
+            color: "#f97316"
         }
     ]
 };
