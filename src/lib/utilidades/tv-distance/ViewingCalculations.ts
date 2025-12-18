@@ -28,19 +28,23 @@ export class ViewingCalculations {
     public static calculate(specs: TVSpecs): ViewingDistance {
         const { width: widthCm } = this.getDimensionsFromDiagonal(specs.diagonalInches);
 
+        
         const thxDistance = this.getDistanceByAngle(widthCm, 40) / 100;
         const smpteDistance = this.getDistanceByAngle(widthCm, 30) / 100;
 
-        let resolutionMultiplier = 1;
-        if (specs.resolution === '4k') resolutionMultiplier = 0.65;
-        if (specs.resolution === '8k') resolutionMultiplier = 0.45;
-        if (specs.resolution === '1080p') resolutionMultiplier = 1.2;
+        
+        let visualAcuityMultiplier = 1;
+        if (specs.resolution === '4k') visualAcuityMultiplier = 1.5;
+        if (specs.resolution === '8k') visualAcuityMultiplier = 2.5;
+        if (specs.resolution === '1080p') visualAcuityMultiplier = 1.0;
 
-        const pixelLimitDistance = (widthCm * resolutionMultiplier) / 100;
+        
+        
+        const resAdjustedOptimal = thxDistance / (visualAcuityMultiplier * 0.8 + 0.2);
 
         return {
-            optimal: thxDistance,
-            min: Math.min(thxDistance, pixelLimitDistance),
+            optimal: resAdjustedOptimal,
+            min: resAdjustedOptimal * 0.8,
             max: smpteDistance
         };
     }
