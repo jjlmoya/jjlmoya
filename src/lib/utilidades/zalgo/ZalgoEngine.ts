@@ -40,7 +40,7 @@ export class ZalgoEngine {
 
             if (/\s/.test(text[i])) continue;
 
-            const count = Math.floor(intensity * 15);
+            const count = Math.floor(intensity * 30);
 
             if (up) {
                 for (let j = 0; j < count; j++) {
@@ -48,7 +48,8 @@ export class ZalgoEngine {
                 }
             }
             if (middle) {
-                for (let j = 0; j < Math.floor(count / 2); j++) {
+                const midCount = Math.max(1, Math.floor(count / 3));
+                for (let j = 0; j < midCount; j++) {
                     result += this.MIDDLE[Math.floor(Math.random() * this.MIDDLE.length)];
                 }
             }
