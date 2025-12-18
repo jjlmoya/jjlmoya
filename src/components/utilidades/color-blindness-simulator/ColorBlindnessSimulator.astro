@@ -30,6 +30,13 @@ const blindnessTypes = [
 <ColorBlindnessFilters />
 
 <section class="max-w-6xl mx-auto px-4 py-12 relative">
+    <input
+        id="image-upload"
+        type="file"
+        accept="image/png, image/jpeg, image/webp, image/gif, image/svg+xml"
+        class="hidden"
+    />
+
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div class="lg:col-span-4 space-y-6">
             <div
@@ -67,53 +74,20 @@ const blindnessTypes = [
                         }
                     </div>
                 </div>
-
-                <div class="mt-10 pt-10 border-t border-slate-100 dark:border-zinc-800 space-y-6">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                            <Icon name="mdi:upload" class="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-900 dark:text-white">
-                                Sube tu Imagen
-                            </p>
-                            <p
-                                class="text-[10px] text-slate-500 uppercase tracking-widest font-black mt-0.5"
-                            >
-                                Local y Privado
-                            </p>
-                        </div>
-                    </div>
-
-                    <label
-                        for="image-upload"
-                        class="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-2xl cursor-pointer hover:border-blue-500 dark:hover:border-blue-500 transition-colors bg-slate-50 dark:bg-zinc-950"
-                    >
-                        <span class="text-sm font-medium text-slate-600 dark:text-zinc-400"
-                            >Clic para seleccionar archivo</span
-                        >
-                        <input
-                            id="image-upload"
-                            type="file"
-                            accept="image/png, image/jpeg, image/webp, image/gif, image/svg+xml"
-                            class="hidden"
-                        />
-                    </label>
-                </div>
             </div>
         </div>
 
         <div class="lg:col-span-8 space-y-4">
             <div
                 id="drop-zone"
-                class="bg-slate-100 dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-zinc-800 shadow-inner relative min-h-[500px] flex items-center justify-center overflow-hidden"
+                class="bg-slate-100 dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-zinc-800 shadow-inner relative min-h-[500px] flex items-center justify-center overflow-hidden cursor-pointer group"
             >
                 <div
                     id="placeholder"
-                    class="text-center space-y-6 p-12 transition-all duration-700"
+                    class="text-center space-y-6 p-12 transition-all duration-700 group-hover:scale-105"
                 >
                     <div
-                        class="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 shadow-xl flex items-center justify-center mx-auto mb-8 animate-pulse text-slate-400"
+                        class="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 shadow-xl flex items-center justify-center mx-auto mb-8 animate-pulse text-slate-400 group-hover:text-blue-500 transition-colors"
                     >
                         <Icon name="mdi:image-filter-vintage" class="w-10 h-10" />
                     </div>
@@ -121,17 +95,17 @@ const blindnessTypes = [
                         <h4
                             class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter"
                         >
-                            Área de Trabajo
+                            Subir Imagen
                         </h4>
                         <p class="text-slate-500 mt-2 max-w-xs mx-auto">
-                            Arrastra una fotografía aquí para comenzar la simulación visual.
+                            Haz clic o arrastra una fotografía aquí para comenzar.
                         </p>
                     </div>
                 </div>
 
                 <div
                     id="simulation-container"
-                    class="hidden absolute inset-0 w-full h-full select-none"
+                    class="hidden absolute inset-0 w-full h-full select-none cursor-default"
                 >
                     <img
                         id="img-normal"
@@ -186,7 +160,7 @@ const blindnessTypes = [
                 <button
                     id="reset-btn"
                     class="text-xs font-black uppercase text-blue-600 hover:text-blue-500 transition-colors hidden"
-                    >Restablecer Todo</button
+                    >Nueva Imagen</button
                 >
             </div>
         </div>
@@ -223,6 +197,7 @@ const blindnessTypes = [
     const resetBtn = document.getElementById("reset-btn");
 
     let isDragging = false;
+    let isClickable = true;
 
     function handleImage(file: File) {
         if (!file.type.startsWith("image/")) return;
@@ -234,18 +209,23 @@ const blindnessTypes = [
             placeholder?.classList.add("hidden");
             simContainer?.classList.remove("hidden");
             resetBtn?.classList.remove("hidden");
+            isClickable = false;
             if (imgNormal) {
                 imgNormal.onload = () => {
                     const rect = imgNormal.getBoundingClientRect();
                     if (imgFiltered) {
-                        imgFiltered.style.width = `${rect.width}px`;
-                        imgFiltered.style.height = `${rect.height}px`;
+                        imgFiltered.style.width = Math.round(rect.width) + "px";
+                        imgFiltered.style.height = Math.round(rect.height) + "px";
                     }
                 };
             }
         };
         reader.readAsDataURL(file);
     }
+
+    dropZone?.addEventListener("click", () => {
+        if (isClickable) imageUpload?.click();
+    });
 
     imageUpload?.addEventListener("change", (e) => {
         const file = (e.target as HTMLInputElement).files?.[0];
@@ -273,21 +253,25 @@ const blindnessTypes = [
         const rect = simContainer.getBoundingClientRect();
         let position = ((clientX - rect.left) / rect.width) * 100;
         position = Math.max(0, Math.min(100, position));
-        filteredLayer.style.width = `${position}%`;
-        sliderHandle.style.left = `${position}%`;
+        filteredLayer.style.width = position + "%";
+        sliderHandle.style.left = position + "%";
     };
 
-    dropZone?.addEventListener("mousedown", () => {
+    sliderHandle?.addEventListener("mousedown", (e) => {
         isDragging = true;
+        e.stopPropagation();
     });
+
     window.addEventListener("mouseup", () => {
         isDragging = false;
     });
     window.addEventListener("mousemove", (e) => {
         if (isDragging) moveSlider(e.clientX);
     });
-    dropZone?.addEventListener("touchstart", () => {
+
+    sliderHandle?.addEventListener("touchstart", (e) => {
         isDragging = true;
+        e.stopPropagation();
     });
     window.addEventListener("touchend", () => {
         isDragging = false;
@@ -305,7 +289,7 @@ const blindnessTypes = [
                 if (type === "none") {
                     imgFiltered.style.filter = "none";
                 } else {
-                    imgFiltered.style.filter = "url(#" + type + ")";
+                    imgFiltered.style.filter = "url(#" + (type || "none") + ")";
                 }
             }
         });
@@ -315,8 +299,8 @@ const blindnessTypes = [
         if (simContainer && !simContainer.classList.contains("hidden")) {
             const rect = imgNormal.getBoundingClientRect();
             if (imgFiltered) {
-                imgFiltered.style.width = `${rect.width}px`;
-                imgFiltered.style.height = `${rect.height}px`;
+                imgFiltered.style.width = Math.round(rect.width) + "px";
+                imgFiltered.style.height = Math.round(rect.height) + "px";
             }
         }
     });
@@ -330,6 +314,7 @@ const blindnessTypes = [
         placeholder?.classList.remove("hidden");
         simContainer?.classList.add("hidden");
         resetBtn.classList.add("hidden");
+        isClickable = true;
         typeBtns.forEach((b) => b.classList.remove("active"));
         document.querySelector('[data-type="none"]')?.classList.add("active");
         if (filteredLayer) filteredLayer.style.width = "50%";
