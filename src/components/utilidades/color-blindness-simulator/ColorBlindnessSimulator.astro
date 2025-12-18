@@ -3,16 +3,15 @@ import { Icon } from "astro-icon/components";
 import ColorBlindnessFilters from "./ColorBlindnessFilters.astro";
 
 const blindnessTypes = [
-    { id: "none", name: "Visión Normal", description: "Sin filtros aplicados." },
-    {
-        id: "protanopia",
-        name: "Protanopia",
-        description: "Insensibilidad al rojo. Los rojos parecen marrones.",
-    },
     {
         id: "deuteranopia",
         name: "Deuteranopia",
         description: "Insensibilidad al verde. El tipo más común.",
+    },
+    {
+        id: "protanopia",
+        name: "Protanopia",
+        description: "Insensibilidad al rojo. Los rojos parecen marrones.",
     },
     {
         id: "tritanopia",
@@ -286,11 +285,7 @@ const blindnessTypes = [
             typeBtns.forEach((b) => b.classList.remove("active"));
             btn.classList.add("active");
             if (imgFiltered) {
-                if (type === "none") {
-                    imgFiltered.style.filter = "none";
-                } else {
-                    imgFiltered.style.filter = "url(#" + (type || "none") + ")";
-                }
+                imgFiltered.style.filter = "url(#" + (type || "deuteranopia") + ")";
             }
         });
     });
@@ -309,16 +304,17 @@ const blindnessTypes = [
         if (imgNormal) imgNormal.src = "";
         if (imgFiltered) {
             imgFiltered.src = "";
-            imgFiltered.style.filter = "none";
+            imgFiltered.style.filter = "url(#deuteranopia)";
         }
         placeholder?.classList.remove("hidden");
         simContainer?.classList.add("hidden");
         resetBtn.classList.add("hidden");
         isClickable = true;
         typeBtns.forEach((b) => b.classList.remove("active"));
-        document.querySelector('[data-type="none"]')?.classList.add("active");
+        document.querySelector('[data-type="deuteranopia"]')?.classList.add("active");
         if (filteredLayer) filteredLayer.style.width = "50%";
         if (sliderHandle) sliderHandle.style.left = "50%";
     });
-    document.querySelector('[data-type="none"]')?.classList.add("active");
+    document.querySelector('[data-type="deuteranopia"]')?.classList.add("active");
+    if (imgFiltered) imgFiltered.style.filter = "url(#deuteranopia)";
 </script>
