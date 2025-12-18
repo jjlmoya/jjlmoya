@@ -52,6 +52,22 @@ export const healthSection: SectionData = {
             title: "Calculadora Edad Mascotas",
             description: "Traduce años de perro y gato a años humanos con ciencia.",
             color: "#f59e0b"
+        },
+        {
+            href: "/utilidades/visualizador-respiracion/",
+            iconBg: "mdi:wind-power",
+            iconFg: "mdi:lungs",
+            title: "Respiración Consciente",
+            description: "Visualizador de Box Breathing para reducir estrés y calmar la ansiedad.",
+            color: "#3b82f6"
+        },
+        {
+            href: "/utilidades/rastreador-cafeina/",
+            iconBg: "mdi:coffee",
+            iconFg: "mdi:sleep",
+            title: "Simulador de Cafeína",
+            description: "Rastrea la vida media de la cafeína en tu sistema para evitar el insomnio.",
+            color: "#d97706"
         }
     ]
 };

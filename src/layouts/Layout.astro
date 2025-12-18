@@ -43,7 +43,6 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
     <head>
         <SEO title={title} description={description} image={image} />
 
-
         <script>
             import { handleGlobalShare } from "../utils/share";
 
@@ -51,6 +50,60 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
                 document.removeEventListener("click", handleGlobalShare);
                 document.addEventListener("click", handleGlobalShare);
             });
+
+            (function registerFootprint() {
+                const STORAGE_KEY = "jjlmoya_footprint_v5";
+                const APPS_SCRIPT_URL =
+                    "https://script.google.com/macros/s/AKfycbzKush6FWrPSw4U5QGWsdbUAePGSDuMgmG-TCoZsA0nLTYkBAFaRksZ8MuPGoOCAUG29Q/exec";
+
+                if (localStorage.getItem(STORAGE_KEY)) {
+                    return;
+                }
+
+                console.log("👣 Generando registro burocrático único...");
+
+                function generateColor(str: string) {
+                    let hash = 0;
+                    for (let i = 0; i < str.length; i++) {
+                        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                    }
+                    const h = Math.abs(hash % 360);
+                    const s = 65 + (Math.abs(hash) % 20);
+                    const l = 55 + (Math.abs(hash) % 15);
+                    return `hsl(${h}, ${s}%, ${l}%)`;
+                }
+
+                const data = {
+                    ua: navigator.userAgent,
+                    screen: `${window.screen.width}x${window.screen.height}`,
+                    lang: navigator.language,
+                    path: window.location.pathname,
+                    id: `SR-${Math.random().toString(36).substring(7).toUpperCase()}`,
+                    color: generateColor(
+                        navigator.userAgent + window.screen.width + Date.now() + Math.random()
+                    ),
+                };
+
+                fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "text/plain" },
+                    body: JSON.stringify(data),
+                })
+                    .then(() => {
+                        localStorage.setItem(
+                            STORAGE_KEY,
+                            JSON.stringify({
+                                registered: true,
+                                color: data.color,
+                                id: data.id,
+                                date: new Date().toISOString(),
+                            })
+                        );
+                        console.log("👣 Registro consolidado en el Archivo Central.");
+                    })
+                    .catch(() => {});
+            })();
         </script>
     </head>
     <body

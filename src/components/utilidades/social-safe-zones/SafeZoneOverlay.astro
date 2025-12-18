@@ -1,0 +1,484 @@
+---
+import { Icon } from "astro-icon/components";
+import tiktokIcon from "../../../icons/social/tiktok.svg?raw";
+import instagramIcon from "../../../icons/social/instagram.svg?raw";
+import youtubeIcon from "../../../icons/social/youtube.svg?raw";
+
+const platforms = [
+    {
+        id: "tiktok",
+        name: "TikTok",
+        svg: tiktokIcon,
+    },
+    {
+        id: "reels",
+        name: "IG Reels",
+        svg: instagramIcon,
+    },
+    {
+        id: "shorts",
+        name: "YT Shorts",
+        svg: youtubeIcon,
+    },
+];
+---
+
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" is:inline></script>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-4 space-y-6">
+            <div
+                class="bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 border border-slate-200 dark:border-zinc-800 shadow-xl shadow-slate-200/50 dark:shadow-none"
+            >
+                <h2
+                    class="text-xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3"
+                >
+                    <div
+                        class="w-10 h-10 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-600"
+                    >
+                        <Icon name="mdi:settings-outline" class="w-5 h-5" />
+                    </div>
+                    Configuración
+                </h2>
+
+                <div class="space-y-8">
+                    <div>
+                        <label
+                            class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-3"
+                        >
+                            Plataforma de Destino
+                        </label>
+                        <div class="grid grid-cols-3 gap-3">
+                            {
+                                platforms.map((p) => (
+                                    <button
+                                        data-platform={p.id}
+                                        class="platform-btn group flex flex-col items-center gap-2 p-3 rounded-2xl border border-slate-100 dark:border-zinc-800 hover:border-indigo-500/50 transition-all bg-slate-50 dark:bg-zinc-950"
+                                    >
+                                        <div
+                                            class="w-6 h-6 transition-all [&>svg]:w-full [&>svg]:h-full"
+                                            set:html={p.svg}
+                                        />
+                                        <span class="text-[9px] font-bold opacity-50 group-hover:opacity-100 transition-opacity">
+                                            {p.name}
+                                        </span>
+                                    </button>
+                                ))
+                            }
+                        </div>
+                    </div>
+
+                    <div>
+                        <label
+                            class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-3"
+                            >Subir Contenido</label
+                        >
+                        <label
+                            class="relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-[2.5rem] cursor-pointer hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-all group overflow-hidden"
+                        >
+                            <div
+                                class="flex flex-col items-center justify-center pt-5 pb-6 relative z-10"
+                            >
+                                <Icon
+                                    name="mdi:file-image-outline"
+                                    class="w-10 h-10 text-slate-300 group-hover:scale-110 group-hover:text-indigo-500 transition-all mb-2"
+                                />
+                                <p class="text-[10px] font-bold text-slate-500 uppercase">
+                                    Selecciona imagen o video
+                                </p>
+                            </div>
+                            <input
+                                type="file"
+                                id="media-input"
+                                class="hidden"
+                                accept="image/*,video/*"
+                            />
+                        </label>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-100 dark:border-zinc-800">
+                        <div
+                            class="flex items-center justify-between text-[10px] font-bold uppercase text-slate-400 mb-4 tracking-widest"
+                        >
+                            <span>Relieve de Interfaz</span>
+                            <span id="opacity-val" class="text-indigo-500">85%</span>
+                        </div>
+                        <input
+                            type="range"
+                            id="opacity-slider"
+                            min="0"
+                            max="100"
+                            value="85"
+                            class="w-full h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full appearance-none cursor-pointer accent-indigo-500"
+                        />
+                    </div>
+
+                    <div class="space-y-3">
+                        <label
+                            class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-zinc-950 border border-slate-100 dark:border-zinc-800 cursor-pointer group transition-all hover:border-indigo-500/30"
+                        >
+                            <input
+                                type="checkbox"
+                                id="toggle-mask"
+                                class="w-4 h-4 rounded text-indigo-500 border-gray-300 focus:ring-indigo-500"
+                            />
+                            <span
+                                class="text-[10px] font-bold uppercase text-slate-600 dark:text-zinc-400 group-hover:text-indigo-500"
+                                >Grisar Zonas Críticas</span
+                            >
+                        </label>
+                        <label
+                            class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-zinc-950 border border-slate-100 dark:border-zinc-800 cursor-pointer group transition-all hover:border-indigo-500/30"
+                        >
+                            <input
+                                type="checkbox"
+                                id="toggle-grid"
+                                class="w-4 h-4 rounded text-indigo-500 border-gray-300 focus:ring-indigo-500"
+                            />
+                            <span
+                                class="text-[10px] font-bold uppercase text-slate-600 dark:text-zinc-400 group-hover:text-indigo-500"
+                                >Regla de Tercios</span
+                            >
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                id="reset-preview"
+                class="w-full py-4 rounded-3xl bg-slate-100 dark:bg-zinc-900 text-slate-500 dark:text-zinc-400 hover:text-rose-500 transition-all text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 border border-transparent hover:border-rose-500/30"
+            >
+                <Icon name="mdi:restore" class="w-5 h-5" />
+                Refrescar Canvas
+            </button>
+        </div>
+
+        <div
+            class="lg:col-span-8 flex flex-col items-center justify-center min-h-[700px] bg-slate-50 dark:bg-zinc-950/50 rounded-[4rem] p-10 border border-slate-200 dark:border-zinc-800 overflow-hidden relative shadow-inner"
+        >
+            <div
+                class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent pointer-events-none"
+            >
+            </div>
+
+            <div
+                id="visualizer-container"
+                class="relative bg-black rounded-[3.5rem] shadow-[0_0_100px_rgba(0,0,0,0.3)] dark:shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden aspect-[9/16] h-[78vh] max-h-[850px] border-[12px] border-slate-900 ring-1 ring-white/5 group"
+            >
+                <div
+                    class="absolute top-0 left-0 w-full h-8 flex justify-between px-8 items-center bg-gradient-to-b from-black/40 to-transparent z-[60] pointer-events-none text-white font-medium text-[10px]"
+                >
+                    <div id="status-time">11:51</div>
+                    <div
+                        class="w-24 h-6 bg-black rounded-b-3xl absolute top-0 left-1/2 -translate-x-1/2"
+                    >
+                    </div>
+                    <div class="flex gap-1.5 items-center">
+                        <iconify-icon icon="mdi:signal" class="text-xs"></iconify-icon>
+                        <iconify-icon icon="mdi:wifi" class="text-xs"></iconify-icon>
+                        <iconify-icon icon="mdi:battery-90" class="text-xs"></iconify-icon>
+                    </div>
+                </div>
+
+                <div
+                    id="media-display"
+                    class="absolute inset-0 flex items-center justify-center overflow-hidden"
+                >
+                    <div
+                        class="text-slate-800 dark:text-slate-200 text-center opacity-40 group-hover:opacity-100 transition-opacity"
+                    >
+                        <iconify-icon icon="mdi:camera-plus-outline" class="text-7xl mb-4"
+                        ></iconify-icon>
+                        <p class="text-[10px] font-black uppercase tracking-[0.3em]">
+                            Carga tu contenido
+                        </p>
+                        <p
+                            class="text-[9px] mt-2 opacity-50 underline cursor-pointer hover:text-indigo-500"
+                            onclick="document.getElementById('media-input').click()"
+                        >
+                            O usa un ejemplo
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="safe-overlay"
+                    class="absolute inset-0 pointer-events-none transition-all duration-300 z-50 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                >
+                </div>
+
+                <div
+                    id="mask-overlay"
+                    class="absolute inset-0 z-40 transition-all duration-500 pointer-events-none translate-y-full flex flex-col justify-between"
+                >
+                    <div class="h-[15%] bg-black/60 border-b border-white/10 backdrop-blur-sm">
+                    </div>
+                    <div class="flex-1"></div>
+                    <div class="h-[25%] bg-black/60 border-t border-white/10 backdrop-blur-sm">
+                    </div>
+                    <div
+                        class="absolute right-0 top-[20%] bottom-[20%] w-[18%] bg-black/60 border-l border-white/10 backdrop-blur-sm"
+                    >
+                    </div>
+                </div>
+
+                <div
+                    id="grid-overlay"
+                    class="absolute inset-0 z-45 opacity-0 transition-opacity pointer-events-none"
+                >
+                    <div class="h-full w-full border-x-2 border-white/10 relative">
+                        <div class="absolute top-1/3 left-0 w-full h-[2px] bg-white/10"></div>
+                        <div class="absolute top-2/3 left-0 w-full h-[2px] bg-white/10"></div>
+                        <div class="absolute left-1/3 top-0 h-full w-[2px] bg-white/10"></div>
+                        <div class="absolute left-2/3 top-0 h-full w-[2px] bg-white/10"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                id="platform-banner"
+                class="mt-8 px-6 py-2 rounded-full bg-black text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-xl ring-1 ring-white/10"
+            >
+                Simulando TikTok 9:16
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const mediaInput = document.getElementById("media-input") as HTMLInputElement;
+    const mediaDisplay = document.getElementById("media-display");
+    const safeOverlay = document.getElementById("safe-overlay");
+    const opacitySlider = document.getElementById("opacity-slider") as HTMLInputElement;
+    const opacityVal = document.getElementById("opacity-val");
+    const toggleMask = document.getElementById("toggle-mask") as HTMLInputElement;
+    const maskOverlay = document.getElementById("mask-overlay");
+    const toggleGrid = document.getElementById("toggle-grid") as HTMLInputElement;
+    const gridOverlay = document.getElementById("grid-overlay");
+    const resetBtn = document.getElementById("reset-preview");
+    const platformBtns = document.querySelectorAll(".platform-btn");
+    const platformBanner = document.getElementById("platform-banner");
+    const statusTime = document.getElementById("status-time");
+
+    let currentPlatform = "tiktok";
+
+    function updateClock() {
+        const now = new Date();
+        if (statusTime)
+            statusTime.textContent = now.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    const platformUIs: Record<string, string> = {
+        tiktok: `
+            <div class="absolute top-4 left-0 w-full flex justify-between px-6 items-center">
+                <iconify-icon icon="mdi:live-tv" class="text-2xl text-white"></iconify-icon>
+                <div class="flex gap-4 text-white/50 text-[10px] font-bold uppercase tracking-widest">
+                    <span>Siguiendo</span>
+                    <span class="text-white relative after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-4 after:h-[2px] after:bg-white">Para ti</span>
+                </div>
+                <iconify-icon icon="mdi:magnify" class="text-2xl text-white"></iconify-icon>
+            </div>
+            
+            <div class="absolute right-3 bottom-24 flex flex-col gap-5 items-center">
+                <div class="w-11 h-11 rounded-full border-2 border-white relative bg-zinc-800 shadow-lg">
+                    <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-rose-500 rounded-full w-4 h-4 flex items-center justify-center text-[12px] font-bold text-white shadow-md">+</div>
+                </div>
+                <div class="flex flex-col items-center gap-0.5"><iconify-icon icon="ph:heart-fill" class="text-4xl text-white"></iconify-icon><span class="text-[10px] text-white font-bold drop-shadow-md">1.2M</span></div>
+                <div class="flex flex-col items-center gap-0.5"><iconify-icon icon="ph:chat-circle-dots-fill" class="text-4xl text-white"></iconify-icon><span class="text-[10px] text-white font-bold drop-shadow-md">4,890</span></div>
+                <div class="flex flex-col items-center gap-0.5"><iconify-icon icon="ph:bookmark-simple-fill" class="text-4xl text-white"></iconify-icon><span class="text-[10px] text-white font-bold drop-shadow-md">250K</span></div>
+                <div class="flex flex-col items-center gap-0.5"><iconify-icon icon="ph:share-fat-fill" class="text-4xl text-white"></iconify-icon><span class="text-[10px] text-white font-bold drop-shadow-md">45.2K</span></div>
+                <div class="w-10 h-10 rounded-full bg-zinc-900 mt-2 border-8 border-zinc-800 border-t-zinc-700 animate-[spin_3s_linear_infinite] shadow-lg"></div>
+            </div>
+            
+            <div class="absolute left-4 bottom-14 right-16 space-y-2.5">
+                <div class="font-bold text-white text-[15px] flex items-center gap-1.5">jjlmoya <iconify-icon icon="mdi:check-decagram" class="text-blue-400 text-xs"></iconify-icon></div>
+                <div class="text-white/95 text-[13px] leading-tight line-clamp-2 pr-4">Diseño de interfaces reales para creadores de contenido que buscan la perfección visual. #uxdesign #socialmedia #creators</div>
+                <div class="flex items-center gap-2 text-white/90 text-[11px] px-3 py-1 bg-black/30 rounded-full backdrop-blur-md w-fit border border-white/10">
+                    <iconify-icon icon="mdi:music" class="animate-pulse"></iconify-icon>
+                    <span>jjlmoya - Sonido Original - jjlmoya</span>
+                </div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 w-full h-[52px] bg-black border-t border-white/5 flex items-center justify-around px-2 pb-1 text-white/60">
+                <div class="flex flex-col items-center gap-0.5 text-white active:scale-90 transition-transform"><iconify-icon icon="ph:house-fill" class="text-2xl"></iconify-icon><span class="text-[8px] font-bold">Inicio</span></div>
+                <div class="flex flex-col items-center gap-0.5"><iconify-icon icon="ph:users" class="text-2xl"></iconify-icon><span class="text-[8px] font-bold">Amigos</span></div>
+                <div class="w-11 h-7 bg-white rounded-lg flex items-center justify-center relative"><div class="absolute -left-1 w-full h-full bg-[#00f2ea] rounded-lg -z-10"></div><div class="absolute -right-1 w-full h-full bg-rose-500 rounded-lg -z-10"></div><iconify-icon icon="mdi:plus" class="text-black text-2xl"></iconify-icon></div>
+                <div class="flex flex-col items-center gap-0.5"><iconify-icon icon="ph:chat-dots" class="text-2xl"></iconify-icon><span class="text-[8px] font-bold">Bandeja de entrada</span></div>
+                <div class="flex flex-col items-center gap-0.5"><iconify-icon icon="ph:user" class="text-2xl"></iconify-icon><span class="text-[8px] font-bold">Perfil</span></div>
+            </div>
+        `,
+        reels: `
+            <div class="absolute top-8 left-6 text-white text-2xl font-bold flex items-center gap-1">Reels <iconify-icon icon="mdi:chevron-down"></iconify-icon></div>
+            <div class="absolute top-8 right-6 text-white text-2xl transition-transform hover:scale-110"><iconify-icon icon="mdi:camera-outline"></iconify-icon></div>
+            
+            <div class="absolute right-4 bottom-14 flex flex-col gap-6 items-center">
+                <div class="flex flex-col items-center gap-1"><iconify-icon icon="ph:heart" class="text-3xl text-white"></iconify-icon><span class="text-[10px] text-white font-medium">102K</span></div>
+                <div class="flex flex-col items-center gap-1"><iconify-icon icon="ph:chat-circle" class="text-3xl text-white"></iconify-icon><span class="text-[10px] text-white font-medium">1,245</span></div>
+                <div class="flex flex-col items-center gap-1"><iconify-icon icon="ph:paper-plane-tilt" class="text-3xl text-white"></iconify-icon></div>
+                <iconify-icon icon="ph:dots-three-vertical-bold" class="text-2xl text-white"></iconify-icon>
+                <div class="w-7 h-7 rounded border-2 border-white overflow-hidden"><div class="w-full h-full bg-slate-800"></div></div>
+            </div>
+
+            <div class="absolute left-4 bottom-6 right-16 space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-600 p-[2px] shadow-lg shadow-rose-500/20"><div class="w-full h-full rounded-full bg-black"></div></div>
+                    <span class="font-bold text-white text-[13px] tracking-tight">jjlmoya</span>
+                    <button class="px-3 py-1 border-2 border-white/50 rounded-lg text-[11px] font-bold text-white bg-white/5 backdrop-blur-sm active:scale-95 transition-all">Seguir</button>
+                </div>
+                <div class="text-white text-[13px] leading-tight line-clamp-1 opacity-95">Esta interfaz de Instagram es idéntica a la real. ¿A que sí? 🔥 #reels #ux #simulador</div>
+                <div class="flex items-center gap-2 text-white/90 text-[10px] font-medium max-w-[150px] truncate">
+                    <iconify-icon icon="mdi:music-note"></iconify-icon>
+                    <span>Música Tendencia - Original Audio</span>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-0 left-0 w-full h-[52px] bg-black border-t border-white/5 flex items-center justify-around text-white">
+                 <iconify-icon icon="ph:house-fill" class="text-2xl opacity-40"></iconify-icon>
+                 <iconify-icon icon="ph:magnifying-glass-bold" class="text-2xl opacity-40"></iconify-icon>
+                 <iconify-icon icon="ph:plus-square-bold" class="text-2xl opacity-40"></iconify-icon>
+                 <iconify-icon icon="ph:video-bold" class="text-3xl"></iconify-icon>
+                 <iconify-icon icon="ph:user-circle-bold" class="text-2xl opacity-40"></iconify-icon>
+            </div>
+        `,
+        shorts: `
+             <div class="absolute top-6 left-1/2 -translate-x-1/2 flex items-center justify-center w-full px-4 justify-between">
+                <iconify-icon icon="mdi:arrow-left" class="text-3xl text-white"></iconify-icon>
+                <div class="flex gap-6 items-center">
+                    <iconify-icon icon="mdi:magnify" class="text-3xl text-white"></iconify-icon>
+                    <iconify-icon icon="mdi:dots-vertical" class="text-3xl text-white"></iconify-icon>
+                </div>
+            </div>
+
+            <div class="absolute right-2 bottom-20 flex flex-col gap-6 items-center group">
+                <div class="flex flex-col items-center"><div class="p-3 bg-white/10 rounded-full backdrop-blur-sm active:bg-white/20 transition-all"><iconify-icon icon="ph:thumbs-up-fill" class="text-3xl text-white"></iconify-icon></div><span class="text-[10px] text-white font-bold mt-1 shadow-md">1.2M</span></div>
+                <div class="flex flex-col items-center"><div class="p-3 bg-white/10 rounded-full backdrop-blur-sm active:bg-white/20 transition-all"><iconify-icon icon="ph:thumbs-down-fill" class="text-3xl text-white"></iconify-icon></div><span class="text-[10px] text-white font-bold mt-1 shadow-md">No me gusta</span></div>
+                <div class="flex flex-col items-center"><div class="p-3 bg-white/10 rounded-full backdrop-blur-sm active:bg-white/20 transition-all"><iconify-icon icon="ph:chat-text-fill" class="text-3xl text-white"></iconify-icon></div><span class="text-[10px] text-white font-bold mt-1 shadow-md">34K</span></div>
+                <div class="flex flex-col items-center"><div class="p-3 bg-white/10 rounded-full backdrop-blur-sm active:bg-white/20 transition-all"><iconify-icon icon="ph:share-fat-fill" class="text-3xl text-white"></iconify-icon></div><span class="text-[10px] text-white font-bold mt-1 shadow-md">Compartir</span></div>
+                <div class="flex flex-col items-center"><div class="p-3 bg-white/10 rounded-full backdrop-blur-sm active:bg-white/20 transition-all"><iconify-icon icon="ph:arrows-clockwise-bold" class="text-3xl text-white"></iconify-icon></div><span class="text-[10px] text-white font-bold mt-1 shadow-md">Remix</span></div>
+                <div class="w-11 h-11 rounded-xl bg-slate-800 border-2 border-white/10 overflow-hidden shadow-lg shadow-black/40"></div>
+            </div>
+
+            <div class="absolute left-4 bottom-8 right-20 space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-rose-600 shadow-xl border border-white/20"></div>
+                    <span class="text-white font-black text-sm drop-shadow-lg">@jjlmoya</span>
+                    <button class="bg-white text-black px-4 py-1.5 rounded-full text-xs font-black shadow-lg hover:scale-105 active:scale-95 transition-all">SUSCRIBIRSE</button>
+                </div>
+                <div class="text-white text-[15px] font-bold line-clamp-2 leading-tight drop-shadow-lg">¡Simulando interfaces reales para Shorts! #youtube #youtubeshorts #simulador</div>
+                <div class="flex items-center gap-2">
+                    <div class="bg-white/10 px-3 py-1 rounded flex items-center gap-2 backdrop-blur-sm"><iconify-icon icon="mdi:flash" class="text-white animate-bounce"></iconify-icon><span class="text-white text-[11px] font-bold">SHORT</span></div>
+                </div>
+            </div>
+        `,
+    };
+
+    function updateOverlay() {
+        if (!safeOverlay) return;
+        safeOverlay.innerHTML = platformUIs[currentPlatform];
+        safeOverlay.style.opacity = (parseInt(opacitySlider.value) / 100).toString();
+
+        if (platformBanner) {
+            platformBanner.textContent = `Simulando ${currentPlatform === "tiktok" ? "TikTok" : currentPlatform === "reels" ? "Instagram Reels" : "YouTube Shorts"} 9:16`;
+        }
+    }
+
+    platformBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            currentPlatform = btn.getAttribute("data-platform") || "tiktok";
+            platformBtns.forEach((b) => {
+                b.classList.remove(
+                    "border-indigo-500",
+                    "bg-indigo-500/10",
+                    "ring-2",
+                    "ring-indigo-500/20"
+                );
+                b.querySelector("iconify-icon")?.classList.remove("text-indigo-500");
+            });
+            btn.classList.add(
+                "border-indigo-500",
+                "bg-indigo-500/10",
+                "ring-2",
+                "ring-indigo-500/20"
+            );
+            btn.querySelector("iconify-icon")?.classList.add("text-indigo-500");
+            updateOverlay();
+        });
+    });
+
+    mediaInput?.addEventListener("change", (e: any) => {
+        const file = e.target.files[0];
+        if (!file || !mediaDisplay) return;
+
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+            if (file.type.startsWith("video/")) {
+                mediaDisplay.innerHTML = `<video src="${event.target.result}" autoplay loop muted class="w-full h-full object-cover"></video>`;
+            } else {
+                mediaDisplay.innerHTML = `<img src="${event.target.result}" class="w-full h-full object-cover" />`;
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+
+    opacitySlider?.addEventListener("input", () => {
+        if (opacityVal) opacityVal.textContent = `${opacitySlider.value}%`;
+        updateOverlay();
+    });
+
+    toggleMask?.addEventListener("change", () => {
+        if (maskOverlay) {
+            maskOverlay.classList.toggle("translate-y-0", toggleMask.checked);
+            maskOverlay.classList.toggle("translate-y-full", !toggleMask.checked);
+        }
+    });
+
+    toggleGrid?.addEventListener("change", () => {
+        if (gridOverlay) {
+            gridOverlay.classList.toggle("opacity-100", toggleGrid.checked);
+            gridOverlay.classList.toggle("opacity-0", !toggleGrid.checked);
+        }
+    });
+
+    resetBtn?.addEventListener("click", () => {
+        if (mediaDisplay) {
+            mediaDisplay.innerHTML = `
+                <div class="text-slate-800 dark:text-slate-200 text-center opacity-40 group-hover:opacity-100 transition-opacity">
+                    <iconify-icon icon="mdi:camera-plus-outline" class="text-7xl mb-4 block mx-auto"></iconify-icon>
+                    <p class="text-[10px] font-black uppercase tracking-[0.3em]">Carga tu contenido</p>
+                    <p class="text-[9px] mt-2 opacity-50 underline cursor-pointer hover:text-indigo-500" onclick="document.getElementById('media-input').click()">O usa un ejemplo</p>
+                </div>`;
+        }
+        mediaInput.value = "";
+    });
+
+    const initialBtn = document.querySelector('[data-platform="tiktok"]');
+    if (initialBtn) {
+        initialBtn.classList.add(
+            "border-indigo-500",
+            "bg-indigo-500/10",
+            "ring-2",
+            "ring-indigo-500/20"
+        );
+        initialBtn.querySelector("iconify-icon")?.classList.add("text-indigo-500");
+    }
+    updateOverlay();
+</script>
+
+<style>
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: #6366f1;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid #0f172a;
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    }
+</style>

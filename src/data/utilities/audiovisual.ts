@@ -52,6 +52,14 @@ export const audiovisualSection: SectionData = {
             title: "Calculadora de Impresión",
             description: "Analiza si tu imagen tiene suficiente calidad para imprimir en gran formato sin pixelarse.",
             color: "#6366f1"
+        },
+        {
+            href: "/utilidades/simulador-redes/",
+            iconBg: "mdi:layers-triple",
+            iconFg: "mdi:phone-rotate-portrait",
+            title: "Social Safe Zones",
+            description: "Simulador de interfaces para fotos y videos en TikTok, Reels y Shorts.",
+            color: "#f43f5e"
         }
     ]
 };

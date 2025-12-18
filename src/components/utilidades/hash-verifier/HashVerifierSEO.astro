@@ -1,0 +1,282 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<section
+    class="mt-12 space-y-16 text-slate-600 dark:text-zinc-300 max-w-4xl mx-auto px-4 lg:px-0 leading-relaxed antialiased"
+>
+    
+    <div class="space-y-6">
+        <h2
+            class="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight"
+        >
+            ¿Cómo verificar la integridad de un archivo? La ciencia del Checksum SHA-256
+        </h2>
+        <div class="prose prose-lg dark:prose-invert">
+            <p>
+                En la era digital, la confianza es un recurso escaso. Cuando descargas una imagen
+                ISO de Linux, un instalador de software crítico o un monedero de criptomonedas,
+                ¿cómo puedes estar seguro de que lo que tienes en tu disco duro es exactamente lo
+                que el desarrollador publicó? Aquí es donde entra en juego el **verificador de hash
+                SHA-256**.
+            </p>
+            <p>
+                La **integridad de archivos** no se trata solo de evitar virus o malware; también se
+                trata de detectar corrupciones accidentales durante la descarga. Un solo bit erróneo
+                en un archivo de varios gigabytes puede hacer que un sistema operativo sea inestable
+                o que una transacción financiera sea inválida. El hash SHA-256 actúa como una <strong
+                    >huella digital criptográfica</strong
+                >: única, inmutable y extremadamente difícil de falsificar.
+            </p>
+        </div>
+    </div>
+
+    
+    <div
+        class="bg-white dark:bg-zinc-900/50 p-8 rounded-3xl border border-slate-200 dark:border-zinc-800 shadow-sm"
+    >
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+            <Icon name="mdi:compare-horizontal" class="w-7 h-7 text-indigo-500" />
+            Por qué SHA-256 es el estándar (SHA-2 vs MD5 y SHA-1)
+        </h2>
+        <div class="grid md:grid-cols-2 gap-10">
+            <div class="space-y-4">
+                <h3
+                    class="text-lg font-bold text-slate-800 dark:text-zinc-100 flex items-center gap-2"
+                >
+                    <Icon name="mdi:alert-decagram" class="w-5 h-5 text-rose-500" />
+                    El riesgo de MD5 y SHA-1
+                </h3>
+                <p class="text-sm">
+                    Antiguamente, MD5 y SHA-1 eran los algoritmos estándar. Sin embargo, ambos han
+                    sido víctimas de lo que en criptografía llamamos <strong>colisiones</strong>.
+                    Una colisión ocurre cuando dos archivos distintos producen el mismo hash. En
+                    2017, Google demostró una colisión práctica en SHA-1 (ataque SHAttered), lo que
+                    invalidó su uso para seguridad crítica.
+                </p>
+            </div>
+            <div class="space-y-4">
+                <h3
+                    class="text-lg font-bold text-slate-800 dark:text-zinc-100 flex items-center gap-2"
+                >
+                    <Icon name="mdi:shield-check" class="w-5 h-5 text-emerald-500" />
+                    La robustez de SHA-256
+                </h3>
+                <p class="text-sm">
+                    SHA-256 pertenece a la familia SHA-2 y genera una cadena de 256 bits (64
+                    caracteres hexadecimales). Con <strong>2<sup>256</sup></strong> combinaciones posibles,
+                    la probabilidad de encontrar una colisión accidental es menor que la de que te caiga
+                    un meteorito mientras ganas la lotería. Es el algoritmo utilizado por Bitcoin para
+                    asegurar su blockchain y por gobiernos para proteger información clasificada.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="space-y-8">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+            ¿Cómo se calcula un Hash SHA-256 localmente?
+        </h2>
+        <p>
+            Muchos usuarios se preguntan si es seguro subir archivos a un verificador online. La
+            respuesta es simple: <strong>no debería ser necesario subir nada</strong>. Nuestra
+            herramienta utiliza la API <code>FileReader</code> de JavaScript para leer el archivo directamente
+            en tu navegador.
+        </p>
+
+        <div class="grid sm:grid-cols-3 gap-6">
+            <div class="space-y-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-400"
+                >
+                    1
+                </div>
+                <h4 class="font-bold text-slate-900 dark:text-white">Fragmentación (Chunking)</h4>
+                <p class="text-xs text-slate-500">
+                    El archivo se divide en bloques (pedazos) pequeños para no colapsar la memoria
+                    RAM de tu equipo.
+                </p>
+            </div>
+            <div class="space-y-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-400"
+                >
+                    2
+                </div>
+                <h4 class="font-bold text-slate-900 dark:text-white">Transformación Matemática</h4>
+                <p class="text-xs text-slate-500">
+                    Cada bloque se somete a operaciones bit a bit: rotaciones, XOR y constantes
+                    lógicas complejas.
+                </p>
+            </div>
+            <div class="space-y-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center font-bold text-indigo-600 dark:text-indigo-400"
+                >
+                    3
+                </div>
+                <h4 class="font-bold text-slate-900 dark:text-white">Firma Acumulada</h4>
+                <p class="text-xs text-slate-500">
+                    El resultado de cada bloque se "encadena" con el siguiente, creando un resultado
+                    final único para todo el archivo.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="space-y-12">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">
+            Casos de uso: Cuándo DEBES verificar un Checksum
+        </h2>
+
+        <div class="space-y-8">
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div
+                    class="w-12 h-12 flex-none bg-emerald-100 dark:bg-emerald-500/20 rounded-2xl flex items-center justify-center"
+                >
+                    <Icon name="mdi:linux" class="w-6 h-6 text-emerald-600" />
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+                        Distribuciones de Software y ISOs
+                    </h3>
+                    <p>
+                        Al descargar una ISO de Ubuntu o Debian, el sitio oficial siempre
+                        proporciona un archivo <code>SHA256SUMS</code>. Un hash incorrecto suele ser
+                        señal de un error en el disco o de una descarga incompleta que causará
+                        errores de instalación.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div
+                    class="w-12 h-12 flex-none bg-indigo-100 dark:bg-indigo-500/20 rounded-2xl flex items-center justify-center"
+                >
+                    <Icon name="mdi:wallet" class="w-6 h-6 text-indigo-600" />
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+                        Criptomonedas y Seguridad Extrema
+                    </h3>
+                    <p>
+                        Si instalas un software como Ledger Live o un nodo de Bitcoin, verificar el
+                        binario es vital. Un atacante podría interceptar tu conexión (ataque
+                        Man-in-the-Middle) y servirte una versión modificada que robe tus claves
+                        privadas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div
+                    class="w-12 h-12 flex-none bg-amber-100 dark:bg-amber-500/20 rounded-2xl flex items-center justify-center"
+                >
+                    <Icon name="mdi:database" class="w-6 h-6 text-amber-600" />
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+                        Copias de Seguridad (Backups)
+                    </h3>
+                    <p>
+                        Para almacenamiento a largo plazo, guardar el hash SHA-256 junto a tus
+                        archivos te permite detectar la "degradación de bits" (Bit Rot), asegurando
+                        que tus fotos y documentos sigan intactos años después.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="p-8 bg-zinc-900 dark:bg-white text-white dark:text-slate-900 rounded-3xl shadow-xl">
+        <h2 class="text-2xl font-bold mb-6">Guía: ¿Qué hacer si el Hash no coincide?</h2>
+        <p class="mb-6 opacity-90">
+            Si después de comparar el hash generado con el valor esperado recibes un aviso de
+            "CORRUPTO" o "ERROR", sigue estos pasos inmediatamente:
+        </p>
+        <ul class="space-y-4 list-disc pl-5 opacity-90">
+            <li>
+                <strong>Borra el archivo:</strong> No intentes abrirlo, ejecutarlo o instalarlo bajo
+                ninguna circunstancia.
+            </li>
+            <li>
+                <strong>Limpia la caché:</strong> A veces los servidores proxy guardan versiones corruptas.
+            </li>
+            <li>
+                <strong>Usa una conexión segura:</strong> Asegúrate de estar navegando por HTTPS y evita
+                redes Wi-Fi públicas sin VPN.
+            </li>
+            <li>
+                <strong>Descarga de una fuente alternativa:</strong> Usa un "mirror" oficial o torrent
+                si el sitio lo permite.
+            </li>
+        </ul>
+    </div>
+
+    
+    <div class="space-y-10">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">
+            Preguntas frecuentes sobre SHA-256
+        </h2>
+
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                    ¿Es el algoritmo SHA-256 reversible?
+                </h3>
+                <p class="text-sm">
+                    No. Es una función unidireccional. No existe una operación matemática que
+                    permita obtener el archivo original a partir de su hash de 64 caracteres. La
+                    única forma es mediante ataques de fuerza bruta, los cuales son
+                    computacionalmente imposibles en la actualidad.
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                    ¿Afecta el nombre del archivo al hash?
+                </h3>
+                <p class="text-sm">
+                    No. El hash se calcula exclusivamente basándose en el contenido binario del
+                    archivo. Si cambias el nombre de <code>foto.jpg</code> a <code>imagen.jpg</code
+                    >, el hash seguirá siendo idéntico.
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                    ¿Pueden dos archivos diferentes tener el mismo SHA-256?
+                </h3>
+                <p class="text-sm">
+                    Teóricamente sí (paradoja del cumpleaños), pero en la práctica, las
+                    posibilidades son astronómicamente bajas. Hasta la fecha, no se ha descubierto
+                    ninguna colisión real para SHA-256 producida por el hombre o la naturaleza.
+                </p>
+            </div>
+
+            <div class="space-y-2">
+                <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                    ¿Es seguro procesar archivos grandes en el navegador?
+                </h3>
+                <p class="text-sm">
+                    Sí. Gracias al procesamiento por "bloques" que implementamos en esta
+                    herramienta, puedes procesar archivos de 10GB o más sin saturar la RAM de tu
+                    navegador, ya que el archivo nunca se carga por completo en memoria.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="pt-12 border-t border-slate-200 dark:border-zinc-800 text-center">
+        <p class="text-sm text-slate-500 uppercase tracking-widest font-bold">
+            Herramienta de Auditoría de Seguridad
+        </p>
+        <p class="text-xs mt-2 italic text-slate-400">
+            Diseñada para garantizar la integridad absoluta de tus datos digitales.
+        </p>
+    </div>
+</section>

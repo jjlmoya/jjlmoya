@@ -4,6 +4,7 @@ This guide outlines the standard workflow for adding a new tool to the Utilities
 
 ## 1. Design Philosophy
 *   **Aesthetics First**: The UI must look premium. Use glassmorphism, subtle gradients (`emerald`, `indigo`, `blue`), animations, and clean whitespace.
+*   **Theme Aware**: Do NOT design exclusively for dark mode. Use Tailwind's `dark:` classes to ensure the utility looks spectacular in both light and dark themes. Prioritize clean, breathable layouts.
 *   **Interactive**: Elements should react to the user. Hover states, transitions, and immediate feedback are mandatory.
 *   **Visual**: If a result can be visualized (charts, bars, counters), do it. Don't just show a number.
 *   **Language**: All user-facing text must be in **Spanish**.
@@ -74,12 +75,16 @@ You must register the new tool in the appropriate category file (e.g., `files.ts
 
 ## 3. SEO & Content
 *   **SEO Component**: Do not use Lorem Ipsum. Write valuable content. Explain "How to use", "Why this matters", or "The Math behind it".
-*   **Meta Tags**: Ensure the title is click-worthy (e.g., "Calculadora de IVA Inverso" is better than just "IVA").
-*   **Links & Bibliography**: External links to official sources, tools, or further reading are highly encouraged. "Compartir es vivir".
+*   **Content Volume**: The SEO component must contain at least **800 words** of high-quality, relevant text.
+*   **Search Intent**: Use titles and text that people actually search for on Google. Research keywords and include common questions (H2, H3) that users ask about the topic.
+*   **Meta Tags**: Ensure the title is click-worthy (e.g., "Calculadora de IVA Inverso" es mejor que "IVA").
+*   **Bibliography & Sources**: 
+    *   **Standard Component**: You MUST use the `<Bibliography />` standard component in the `bibliography` slot of `LayoutUtility`.
+    *   **Scientific Value**: Don't just link to Wikipedia. Use the one that you use. Prioritize high-value, scientific sources (Research papers, academic journals, official documentation from NIST, IEEE, etc.). (in your life and in your code please)
+    *   **Traceability**: Explicitly show where the formulas, logic, or data used in the tool were extracted from. "Compartir es vivir".
 
 ## 4. Assets & Images
 *   **Style**: **"Artist Ink and Watercolor"**.
-    *   Minimalist white background.
     *   Vibrant ink splashes (matching the utility's color theme).
     *   Concept art style, High Quality, 8k.
     *   *No 3D realistic renders. No photographs.*

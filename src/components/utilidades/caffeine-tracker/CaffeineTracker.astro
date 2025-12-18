@@ -1,0 +1,484 @@
+---
+import { Icon } from "astro-icon/components";
+import { DRINK_PRESETS, METABOLISM_PROFILES } from "./caffeine-logic";
+---
+
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" is:inline></script>
+
+<section class="max-w-6xl mx-auto px-4 py-8">
+    <div
+        class="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-[3rem] shadow-2xl overflow-hidden shadow-indigo-500/5 transition-all duration-500 max-h-[85vh] flex flex-col"
+    >
+        <div class="grid lg:grid-cols-12 overflow-hidden h-full min-h-0">
+            <div
+                class="lg:col-span-4 bg-slate-50 dark:bg-zinc-900/50 p-6 border-r border-slate-200 dark:border-zinc-800 overflow-y-auto custom-scrollbar flex flex-col gap-6"
+            >
+                <div>
+                    <h2
+                        class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2"
+                    >
+                        <Icon name="mdi:coffee" class="text-amber-700 dark:text-amber-500" />
+                        Añadir Bebida
+                    </h2>
+                    <div class="grid grid-cols-1 gap-2" id="drink-grid">
+                        {
+                            DRINK_PRESETS.map((drink) => (
+                                <button
+                                    data-mg={drink.mg}
+                                    data-name={drink.name}
+                                    data-icon={drink.icon}
+                                    class="drink-btn relative w-full flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 hover:border-amber-500/50 hover:shadow-md transition-all group text-left overflow-hidden"
+                                >
+                                    <div class="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/30 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors pointer-events-none">
+                                        <Icon name={drink.icon} class="w-5 h-5 icon-to-fly" />
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-bold text-slate-800 dark:text-zinc-100 text-xs truncate">
+                                            {drink.name}
+                                        </h3>
+                                        <p class="text-[9px] text-slate-500 uppercase tracking-wider font-mono truncate">
+                                            {drink.mg}mg
+                                        </p>
+                                    </div>
+                                    <Icon
+                                        name="mdi:plus-circle"
+                                        class="w-4 h-4 text-slate-300 group-hover:text-amber-500 transition-colors"
+                                    />
+                                </button>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-200 dark:border-zinc-800">
+                    <h3
+                        class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-zinc-500 mb-3 flex justify-between items-center"
+                    >
+                        Metabolismo
+                    </h3>
+                    <div class="grid grid-cols-1 gap-1.5">
+                        {
+                            METABOLISM_PROFILES.map((profile) => (
+                                <label class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white dark:hover:bg-zinc-800 cursor-pointer transition-colors group border border-transparent hover:border-slate-200 dark:hover:border-zinc-700">
+                                    <input
+                                        type="radio"
+                                        name="metabolism"
+                                        value={profile.halfLife}
+                                        checked={profile.id === "normal"}
+                                        class="accent-amber-600 w-3.5 h-3.5"
+                                    />
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-bold text-slate-800 dark:text-zinc-200 group-hover:text-amber-600 transition-colors">
+                                            {profile.label}
+                                        </div>
+                                        <p class="text-[9px] text-slate-500 leading-tight truncate">
+                                            {profile.description}
+                                        </p>
+                                    </div>
+                                </label>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-200 dark:border-zinc-800">
+                    <h3
+                        class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-zinc-500 mb-3 flex justify-between items-center"
+                    >
+                        Consumo Acumulado
+                        <span
+                            id="journal-count"
+                            class="text-[9px] bg-slate-200 dark:bg-zinc-800 px-1.5 py-0.5 rounded-full font-bold transition-all duration-300"
+                            >0</span
+                        >
+                    </h3>
+                    <div id="drink-journal" class="space-y-1.5">
+                        <div
+                            class="text-center py-6 opacity-30 border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-xl"
+                        >
+                            <p class="text-[9px] font-bold uppercase tracking-widest">Vacío</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="lg:col-span-8 flex flex-col h-full bg-white dark:bg-zinc-950 overflow-hidden"
+            >
+                <div
+                    class="p-8 border-b border-slate-100 dark:border-zinc-900 bg-slate-50/30 dark:bg-zinc-900/10"
+                >
+                    <div class="flex flex-wrap items-center justify-between gap-8">
+                        <div class="flex gap-12 text-left">
+                            <div class="space-y-0.5">
+                                <span
+                                    class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block"
+                                    >En Sangre ahora</span
+                                >
+                                <div
+                                    id="current-mg-container"
+                                    class="text-4xl font-black text-slate-900 dark:text-white tabular-nums flex items-baseline gap-1 transition-all duration-300 origin-left"
+                                >
+                                    <span id="current-mg">0</span><span
+                                        class="text-sm font-normal text-slate-400">mg</span
+                                    >
+                                </div>
+                            </div>
+                            <div class="space-y-0.5">
+                                <span
+                                    class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block"
+                                    >Tiempo de limpieza</span
+                                >
+                                <div
+                                    class="text-4xl font-black text-slate-900 dark:text-white tabular-nums flex items-baseline gap-1"
+                                >
+                                    <span id="elimination-time">--</span><span
+                                        class="text-sm font-normal text-slate-400">h</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            id="reset-btn"
+                            class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-zinc-900 text-slate-500 hover:text-rose-500 transition-colors text-[10px] font-bold uppercase tracking-widest flex items-center gap-2"
+                        >
+                            <Icon name="mdi:refresh" class="w-4 h-4" />
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 p-8 overflow-y-auto custom-scrollbar flex flex-col gap-8">
+                    <div class="min-h-[250px] relative w-full">
+                        <div
+                            class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-30"
+                        >
+                            {
+                                [150, 100, 50, 0].map((val) => (
+                                    <div class="w-full border-t border-slate-200 dark:border-zinc-800 flex justify-end">
+                                        <span class="text-[8px] font-mono -mt-2 pr-2 text-slate-400">
+                                            {val}mg
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <svg
+                            id="decaysvg"
+                            class="w-full h-full overflow-visible"
+                            preserveAspectRatio="none"
+                        >
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.3"
+                                    ></stop>
+                                    <stop offset="100%" stop-color="#6366f1" stop-opacity="0"
+                                    ></stop>
+                                </linearGradient>
+                            </defs>
+                            <path id="chart-area" fill="url(#chartGradient)"></path>
+                            <path
+                                id="chart-line"
+                                fill="none"
+                                class="stroke-amber-500 dark:stroke-amber-400"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+
+                    <div
+                        class="bg-slate-900 dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden ring-1 ring-white/10 shrink-0"
+                    >
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-indigo-500/10 pointer-events-none"
+                        >
+                        </div>
+                        <div
+                            class="flex flex-col md:flex-row items-center justify-between gap-10 relative z-10"
+                        >
+                            <div class="space-y-5 w-full md:w-3/5">
+                                <div class="flex justify-between items-center text-left">
+                                    <label
+                                        class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400"
+                                        >¿A qué hora dormirás?</label
+                                    >
+                                    <span
+                                        id="sleep-time-display"
+                                        class="text-xs font-mono text-amber-500 font-bold"
+                                        >En 12.0h</span
+                                    >
+                                </div>
+                                <input
+                                    type="range"
+                                    id="sleep-slider"
+                                    min="0"
+                                    max="24"
+                                    value="12"
+                                    step="0.5"
+                                    class="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-amber-500"
+                                />
+                            </div>
+                            <div class="text-center md:text-right shrink-0">
+                                <div
+                                    id="sleep-status"
+                                    class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest mb-3 inline-block"
+                                >
+                                    --
+                                </div>
+                                <div
+                                    class="text-5xl font-black text-white leading-none tracking-tighter"
+                                >
+                                    <span id="final-mg">0</span><span
+                                        class="text-sm font-normal ml-2 opacity-40">mg</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { calculateDecay } from "./caffeine-logic";
+
+    const currentMgEl = document.getElementById("current-mg");
+    const currentMgContainer = document.getElementById("current-mg-container");
+    const eliminationTimeEl = document.getElementById("elimination-time");
+    const finalMgEl = document.getElementById("final-mg");
+    const sleepSlider = document.getElementById("sleep-slider") as HTMLInputElement;
+    const sleepTimeDisplay = document.getElementById("sleep-time-display");
+    const sleepStatus = document.getElementById("sleep-status");
+    const chartLine = document.getElementById("chart-line") as any;
+    const chartArea = document.getElementById("chart-area") as any;
+    const svg = document.getElementById("decaysvg") as any;
+    const resetBtn = document.getElementById("reset-btn");
+    const journalCountEl = document.getElementById("journal-count");
+    const drinkJournalEl = document.getElementById("drink-journal");
+
+    let totalMg = 0;
+    let halfLife = 5.5;
+    let journal: { id: number; name: string; mg: number; icon: string }[] = [];
+
+    function update(triggerAnimation = false) {
+        if (!currentMgEl || !finalMgEl || !sleepSlider || !eliminationTimeEl) return;
+
+        totalMg = journal.reduce((acc, curr) => acc + curr.mg, 0);
+        currentMgEl.textContent = Math.round(totalMg).toString();
+
+        if (triggerAnimation && currentMgContainer) {
+            currentMgContainer.classList.add("scale-110", "text-amber-500");
+            setTimeout(
+                () => currentMgContainer.classList.remove("scale-110", "text-amber-500"),
+                200
+            );
+        }
+
+        const sleepHours = parseFloat(sleepSlider.value);
+        if (sleepTimeDisplay) {
+            const sleepDate = new Date();
+            sleepDate.setMinutes(sleepDate.getMinutes() + sleepHours * 60);
+            const timeStr = sleepDate.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+            sleepTimeDisplay.textContent = `A las ${timeStr} (+${sleepHours.toFixed(1)}h)`;
+        }
+        const finalMg = calculateDecay(totalMg, sleepHours, halfLife);
+        finalMgEl.textContent = Math.round(finalMg).toString();
+
+        if (finalMg < 5) {
+            sleepStatus!.textContent = "Óptimo";
+            sleepStatus!.className =
+                "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 mb-3 inline-block shadow-lg shadow-emerald-500/10";
+        } else if (finalMg < 20) {
+            sleepStatus!.textContent = "Moderado";
+            sleepStatus!.className =
+                "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-amber-500/20 text-amber-500 border border-amber-500/30 mb-3 inline-block shadow-lg shadow-amber-500/10";
+        } else {
+            sleepStatus!.textContent = "Crítico";
+            sleepStatus!.className =
+                "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-rose-500/20 text-rose-500 border border-rose-500/30 mb-3 inline-block shadow-lg shadow-rose-500/20 scale-105";
+        }
+
+        if (totalMg > 0) {
+            const timeToTarget = halfLife * Math.log2(totalMg / 5);
+            eliminationTimeEl.textContent =
+                timeToTarget > 0 ? Math.round(timeToTarget).toString() : "0";
+        } else {
+            eliminationTimeEl.textContent = "--";
+        }
+
+        renderJournal();
+        drawChart();
+    }
+
+    function renderJournal() {
+        if (!drinkJournalEl || !journalCountEl) return;
+        journalCountEl.textContent = journal.length.toString();
+
+        if (journal.length === 0) {
+            drinkJournalEl.innerHTML = `<div class="text-center py-6 opacity-30 border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-xl"><p class="text-[9px] font-bold uppercase tracking-widest">Vacío</p></div>`;
+            return;
+        }
+
+        drinkJournalEl.innerHTML = journal
+            .slice()
+            .reverse()
+            .map(
+                (item) => `
+            <div id="item-${item.id}" class="group flex items-center gap-2.5 p-2 bg-white dark:bg-zinc-900 rounded-lg border border-slate-200 dark:border-zinc-800 transition-all duration-300">
+                <div class="p-1.5 bg-slate-50 dark:bg-zinc-800 rounded text-slate-400 group-hover:text-amber-500 shrink-0 flex items-center justify-center">
+                    <iconify-icon icon="${item.icon}" class="w-3 h-3 block"></iconify-icon>
+                </div>
+                <div class="flex-1 min-w-0 text-left">
+                    <div class="text-[10px] font-bold text-slate-700 dark:text-zinc-200 truncate leading-none mb-0.5">${item.name}</div>
+                    <div class="text-[8px] font-mono text-amber-500 font-bold leading-none">${item.mg}mg</div>
+                </div>
+                <button data-id="${item.id}" class="remove-btn p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-500/10 rounded transition-all shrink-0 flex items-center justify-center">
+                    <iconify-icon icon="mdi:close-circle-outline" class="w-3 h-3 block"></iconify-icon>
+                </button>
+            </div>
+        `
+            )
+            .join("");
+
+        drinkJournalEl.querySelectorAll(".remove-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = parseInt(btn.getAttribute("data-id") || "0");
+                const element = document.getElementById(`item-${id}`);
+                if (element) {
+                    element.classList.add("opacity-0", "-translate-x-4");
+                    setTimeout(() => {
+                        journal = journal.filter((item) => item.id !== id);
+                        update();
+                    }, 300);
+                } else {
+                    journal = journal.filter((item) => item.id !== id);
+                    update();
+                }
+            });
+        });
+    }
+
+    function drawChart() {
+        if (!svg || !chartLine || !chartArea) return;
+        const width = svg.clientWidth;
+        const height = svg.clientHeight;
+        const maxMg = Math.max(150, totalMg + 20);
+        const duration = 24;
+        let linePath = "M 0 " + height;
+        let areaPath = "M 0 " + height;
+        for (let h = 0; h <= duration; h += 0.2) {
+            const mg = calculateDecay(totalMg, h, halfLife);
+            const x = (h / duration) * width;
+            const y = height - (mg / maxMg) * height;
+            if (h === 0) {
+                linePath = `M ${x} ${y}`;
+                areaPath = `M ${x} ${height} L ${x} ${y}`;
+            } else {
+                linePath += ` L ${x} ${y}`;
+                areaPath += ` L ${x} ${y}`;
+            }
+        }
+        areaPath += ` L ${width} ${height} Z`;
+        chartLine.setAttribute("d", linePath);
+        chartArea.setAttribute("d", areaPath);
+    }
+
+    function flyToJournal(btn: HTMLElement, iconName: string) {
+        const iconSource = btn.querySelector(".icon-to-fly");
+        if (!iconSource || !journalCountEl) return;
+        const sourceRect = iconSource.getBoundingClientRect();
+        const targetRect = journalCountEl.getBoundingClientRect();
+
+        const flyer = document.createElement("div");
+        flyer.className =
+            "fixed z-[100] pointer-events-none text-amber-500 flex items-center justify-center";
+        flyer.style.left = `${sourceRect.left}px`;
+        flyer.style.top = `${sourceRect.top}px`;
+        flyer.style.width = `${sourceRect.width}px`;
+        flyer.style.height = `${sourceRect.height}px`;
+        flyer.innerHTML = `<iconify-icon icon="${iconName}" class="w-full h-full"></iconify-icon>`;
+        document.body.appendChild(flyer);
+
+        const duration = 600;
+        const startTime = performance.now();
+        function animate(currentTime: number) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeProgress = progress * (2 - progress);
+            const x = sourceRect.left + (targetRect.left - sourceRect.left) * easeProgress;
+            const y = sourceRect.top + (targetRect.top - sourceRect.top) * easeProgress;
+            flyer.style.transform = `translate(${x - sourceRect.left}px, ${y - sourceRect.top}px) scale(${1 - progress * 0.5})`;
+            flyer.style.opacity = `${1 - progress / 2}`;
+            if (progress < 1) requestAnimationFrame(animate);
+            else {
+                flyer.remove();
+                journalCountEl!.classList.add("scale-125", "bg-amber-500", "text-white");
+                setTimeout(
+                    () =>
+                        journalCountEl!.classList.remove("scale-125", "bg-amber-500", "text-white"),
+                    200
+                );
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    document.querySelectorAll(".drink-btn").forEach((btn: any) => {
+        btn.addEventListener("click", () => {
+            const mg = parseInt(btn.getAttribute("data-mg") || "0");
+            const name = btn.getAttribute("data-name") || "";
+            const icon = btn.getAttribute("data-icon") || "";
+            flyToJournal(btn, icon);
+            journal.push({ id: Date.now(), name, mg, icon });
+            update(true);
+        });
+    });
+
+    document.querySelectorAll('input[name="metabolism"]').forEach((radio) => {
+        radio.addEventListener("change", (e: any) => {
+            halfLife = parseFloat(e.target.value);
+            update();
+        });
+    });
+
+    sleepSlider?.addEventListener("input", () => update());
+    resetBtn?.addEventListener("click", () => {
+        journal = [];
+        update();
+    });
+    window.addEventListener("resize", drawChart);
+    update();
+</script>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(155, 155, 155, 0.1);
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(155, 155, 155, 0.3);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: #f59e0b;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid #0f172a;
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+    }
+</style>

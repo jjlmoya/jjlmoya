@@ -1,0 +1,363 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<section class="max-w-4xl mx-auto px-4 py-8">
+    <div
+        class="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 relative group"
+        id="drop-zone"
+    >
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-indigo-500/5 pointer-events-none"
+        >
+        </div>
+        <div
+            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+        </div>
+
+        <div
+            id="initial-state"
+            class="relative z-10 flex flex-col items-center justify-center text-center p-12 min-h-[400px]"
+        >
+            <div
+                class="w-20 h-20 mb-8 rounded-2xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-center group-hover:border-emerald-500/50 transition-all duration-500 group-hover:scale-110 shadow-lg shadow-emerald-500/5 dark:shadow-emerald-500/10"
+            >
+                <Icon
+                    name="mdi:shield-key-outline"
+                    class="w-10 h-10 text-emerald-600 dark:text-emerald-500"
+                />
+            </div>
+
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">
+                Verificador de Hash Local
+            </h2>
+            <p class="text-slate-600 dark:text-zinc-400 max-w-md mx-auto mb-8 text-lg">
+                Suelta cualquier archivo para generar su firma <span
+                    class="text-emerald-600 dark:text-emerald-400 font-mono font-bold">SHA-256</span
+                > al instante.
+            </p>
+
+            <label
+                for="file-upload"
+                class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 dark:shadow-emerald-600/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex items-center gap-3 active:scale-95"
+            >
+                <Icon name="mdi:file-upload-outline" class="w-5 h-5" />
+                Seleccionar Archivo
+            </label>
+            <input id="file-upload" type="file" class="hidden" />
+
+            <p
+                class="mt-6 text-xs text-slate-400 dark:text-zinc-500 font-mono flex items-center gap-2"
+            >
+                <Icon name="mdi:incognito" class="w-4 h-4" />
+                Seguridad Total: Los archivos nunca salen de tu dispositivo.
+            </p>
+        </div>
+
+        <div
+            id="processing-state"
+            class="hidden relative z-10 p-12 min-h-[400px] flex flex-col items-center justify-center"
+        >
+            <div class="relative w-24 h-24 mb-8">
+                <div class="absolute inset-0 border-4 border-emerald-500/20 rounded-full"></div>
+                <div
+                    id="progress-spinner"
+                    class="absolute inset-0 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"
+                >
+                </div>
+                <div
+                    id="progress-percent"
+                    class="absolute inset-0 flex items-center justify-center text-emerald-600 dark:text-emerald-500 font-mono font-bold text-sm"
+                >
+                    0%
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                Calculando Firma...
+            </h3>
+            <p
+                id="file-info"
+                class="text-slate-500 dark:text-zinc-500 font-mono text-xs truncate max-w-xs mb-8"
+            >
+            </p>
+
+            <div
+                class="w-full max-w-sm h-1.5 bg-slate-100 dark:bg-zinc-900 rounded-full overflow-hidden border border-slate-200 dark:border-zinc-800"
+            >
+                <div
+                    id="progress-bar"
+                    class="h-full bg-emerald-500 transition-all duration-300"
+                    style="width: 0%"
+                >
+                </div>
+            </div>
+        </div>
+
+        <div
+            id="result-state"
+            class="hidden relative z-10 p-8 md:p-12 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500"
+        >
+            <div
+                class="flex flex-col md:flex-row items-center justify-between gap-6 border-b border-slate-100 dark:border-zinc-800 pb-8"
+            >
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                        <Icon
+                            name="mdi:check-circle-outline"
+                            class="w-8 h-8 text-emerald-600 dark:text-emerald-500"
+                        />
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">
+                            Cómputo Exitoso
+                        </h3>
+                        <p
+                            id="result-filename"
+                            class="text-slate-500 dark:text-zinc-400 font-mono text-xs"
+                        >
+                        </p>
+                    </div>
+                </div>
+                <button
+                    id="reset-btn"
+                    class="text-slate-400 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2 text-sm font-medium"
+                >
+                    <Icon name="mdi:refresh" class="w-4 h-4" />
+                    Verificar otro
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <label
+                    class="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500"
+                    >Hash SHA-256</label
+                >
+                <div class="relative group">
+                    <div
+                        id="hash-output"
+                        class="w-full p-4 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl font-mono text-emerald-700 dark:text-emerald-400 break-all text-sm selection:bg-emerald-500/30"
+                    >
+                    </div>
+                    <button
+                        id="copy-btn"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-700 text-slate-500 dark:text-zinc-300 rounded-lg transition-all opacity-0 group-hover:opacity-100 shadow-sm"
+                    >
+                        <Icon name="mdi:content-copy" class="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="space-y-4 bg-slate-50/50 dark:bg-zinc-900/50 p-6 rounded-2xl border border-slate-200 dark:border-zinc-800"
+            >
+                <div class="flex items-center justify-between mb-2">
+                    <label
+                        class="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-zinc-500"
+                        >Comparar con Original</label
+                    >
+                    <span
+                        id="compare-status"
+                        class="hidden px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter"
+                    ></span>
+                </div>
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="compare-input"
+                        placeholder="Pega aquí el hash esperado..."
+                        class="w-full p-4 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-xl font-mono text-slate-900 dark:text-zinc-300 text-sm focus:outline-none focus:border-emerald-500/50 transition-colors shadow-inner"
+                    />
+                    <div id="match-icon" class="hidden absolute right-4 top-1/2 -translate-y-1/2">
+                        <Icon
+                            name="mdi:check-bold"
+                            class="w-5 h-5 text-emerald-600 dark:text-emerald-500"
+                        />
+                    </div>
+                    <div
+                        id="mismatch-icon"
+                        class="hidden absolute right-4 top-1/2 -translate-y-1/2"
+                    >
+                        <Icon
+                            name="mdi:close-bold"
+                            class="w-5 h-5 text-rose-600 dark:text-rose-500"
+                        />
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-400 dark:text-zinc-500 italic">
+                    * La comparación ignora mayúsculas y espacios en blanco.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { SHA256 } from "./hash-verifier";
+
+    const dropZone = document.getElementById("drop-zone");
+    const initialState = document.getElementById("initial-state");
+    const processingState = document.getElementById("processing-state");
+    const resultState = document.getElementById("result-state");
+    const fileInput = document.getElementById("file-upload") as HTMLInputElement;
+    const progressBar = document.getElementById("progress-bar");
+    const progressPercent = document.getElementById("progress-percent");
+    const fileInfo = document.getElementById("file-info");
+    const hashOutput = document.getElementById("hash-output");
+    const resultFilename = document.getElementById("result-filename");
+    const copyBtn = document.getElementById("copy-btn");
+    const compareInput = document.getElementById("compare-input") as HTMLInputElement;
+    const compareStatus = document.getElementById("compare-status");
+    const matchIcon = document.getElementById("match-icon");
+    const mismatchIcon = document.getElementById("mismatch-icon");
+    const resetBtn = document.getElementById("reset-btn");
+
+    let currentHash = "";
+
+    ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropZone?.addEventListener(
+            eventName,
+            (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            },
+            false
+        );
+    });
+
+    ["dragenter", "dragover"].forEach((eventName) => {
+        dropZone?.addEventListener(
+            eventName,
+            () => dropZone.classList.add("border-emerald-500/50", "bg-emerald-500/5"),
+            false
+        );
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+        dropZone?.addEventListener(
+            eventName,
+            () => dropZone.classList.remove("border-emerald-500/50", "bg-emerald-500/5"),
+            false
+        );
+    });
+
+    dropZone?.addEventListener(
+        "drop",
+        (e) => {
+            const files = (e as DragEvent).dataTransfer?.files;
+            if (files?.length) handleFile(files[0]);
+        },
+        false
+    );
+
+    fileInput?.addEventListener("change", () => {
+        if (fileInput.files?.length) handleFile(fileInput.files[0]);
+    });
+
+    async function handleFile(file: File) {
+        initialState?.classList.add("hidden");
+        resultState?.classList.add("hidden");
+        processingState?.classList.remove("hidden");
+
+        if (fileInfo) fileInfo.textContent = `${file.name} (${formatSize(file.size)})`;
+        if (resultFilename) resultFilename.textContent = file.name;
+
+        const sha256 = new SHA256();
+        const chunkSize = 1024 * 1024 * 2;
+        let offset = 0;
+
+        const processNextChunk = () => {
+            const reader = new FileReader();
+            const blob = file.slice(offset, offset + chunkSize);
+
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target?.result as ArrayBuffer);
+                sha256.update(data);
+
+                offset += data.length;
+                const progress = Math.round((offset / file.size) * 100);
+
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (progressPercent) progressPercent.textContent = `${progress}%`;
+
+                if (offset < file.size) {
+                    setTimeout(processNextChunk, 0);
+                } else {
+                    currentHash = sha256.finalize();
+                    showResult(currentHash);
+                }
+            };
+
+            reader.readAsArrayBuffer(blob);
+        };
+
+        processNextChunk();
+    }
+
+    function showResult(hash: string) {
+        processingState?.classList.add("hidden");
+        resultState?.classList.remove("hidden");
+        if (hashOutput) hashOutput.textContent = hash;
+
+        compareInput.value = "";
+        updateComparison();
+    }
+
+    function formatSize(bytes: number) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    }
+
+    compareInput?.addEventListener("input", updateComparison);
+
+    function updateComparison() {
+        if (!compareStatus) return;
+        const input = compareInput.value.trim().toLowerCase().replace(/\s/g, "");
+        if (!input) {
+            compareStatus.classList.add("hidden");
+            matchIcon?.classList.add("hidden");
+            mismatchIcon?.classList.add("hidden");
+            compareInput.classList.remove("border-emerald-500", "border-rose-500");
+            return;
+        }
+
+        const matches = input === currentHash.toLowerCase();
+        compareStatus?.classList.remove("hidden");
+
+        if (matches) {
+            compareStatus.textContent = "VERIFICADO";
+            compareStatus.className =
+                "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-200 dark:border-emerald-500/20";
+            matchIcon?.classList.remove("hidden");
+            mismatchIcon?.classList.add("hidden");
+            compareInput.classList.add("border-emerald-500");
+            compareInput.classList.remove("border-rose-500");
+        } else {
+            compareStatus.textContent = "CORRUPTO / ERROR";
+            compareStatus.className =
+                "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-500 border border-rose-200 dark:border-rose-500/20";
+            matchIcon?.classList.add("hidden");
+            mismatchIcon?.classList.remove("hidden");
+            compareInput.classList.add("border-rose-500");
+            compareInput.classList.remove("border-emerald-500");
+        }
+    }
+
+    copyBtn?.addEventListener("click", () => {
+        navigator.clipboard.writeText(currentHash);
+        const originalIcon = copyBtn.innerHTML;
+        copyBtn.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-600 dark:text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        setTimeout(() => (copyBtn.innerHTML = originalIcon), 2000);
+    });
+
+    resetBtn?.addEventListener("click", () => {
+        resultState?.classList.add("hidden");
+        initialState?.classList.remove("hidden");
+        fileInput.value = "";
+    });
+</script>

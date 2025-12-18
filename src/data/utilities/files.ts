@@ -28,6 +28,14 @@ export const filesSection: SectionData = {
             title: "Contador de Caracteres",
             description: "Cuentapalabras y caracteres visual. Analiza tiempos de lectura y voz.",
             color: "#6366f1"
+        },
+        {
+            href: "/utilidades/verificador-hash/",
+            iconBg: "mdi:shield-check-outline",
+            iconFg: "mdi:fingerprint",
+            title: "Verificador de Hash",
+            description: "Calcula firmas SHA-256 de archivos locales para verificar su integridad.",
+            color: "#10b981"
         }
     ]
 };

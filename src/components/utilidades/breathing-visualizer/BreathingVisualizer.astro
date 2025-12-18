@@ -1,0 +1,466 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<section class="max-w-4xl mx-auto px-4 py-12 flex flex-col items-center">
+    <div
+        class="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-[3rem] p-8 md:p-16 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center min-h-[650px] transition-all duration-500"
+        id="breathing-container"
+    >
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-emerald-500/5 pointer-events-none"
+        >
+        </div>
+        <div
+            id="phase-glow"
+            class="absolute inset-0 bg-blue-500/0 transition-colors duration-1000 blur-[120px] pointer-events-none"
+        >
+        </div>
+
+        <div class="relative z-10 flex flex-col items-center justify-center">
+            <div
+                id="round-indicator"
+                class="hidden mb-8 px-4 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold uppercase tracking-widest"
+            >
+                Ronda <span id="current-round">1</span>
+            </div>
+
+            <div class="relative flex items-center justify-center">
+                <div
+                    id="ring-1"
+                    class="absolute w-64 h-64 border-2 border-blue-500/20 rounded-full scale-100"
+                >
+                </div>
+                <div
+                    id="ring-2"
+                    class="absolute w-64 h-64 border-2 border-emerald-500/10 rounded-full scale-100 delay-75"
+                >
+                </div>
+
+                <div
+                    id="orb"
+                    class="w-48 h-48 rounded-full bg-gradient-to-br from-blue-500/80 to-emerald-500/80 shadow-[0_0_50px_rgba(59,130,246,0.3)] backdrop-blur-sm flex items-center justify-center relative transition-transform duration-[4000ms] ease-linear"
+                >
+                    <div class="absolute inset-2 border-2 border-white/20 rounded-full"></div>
+                    <div
+                        id="orb-text"
+                        class="text-white font-bold text-xl uppercase tracking-widest text-center select-none animate-pulse px-4"
+                    >
+                        Paz
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-20 text-center z-10 space-y-2">
+            <div
+                id="phase-label"
+                class="text-slate-400 dark:text-zinc-500 font-mono text-sm uppercase tracking-[0.3em]"
+            >
+                Selecciona una técnica para comenzar
+            </div>
+            <div
+                id="timer-display"
+                class="text-5xl font-black text-slate-900 dark:text-white tabular-nums"
+            >
+                00
+            </div>
+            <div
+                id="breath-count-container"
+                class="hidden text-xs font-bold text-blue-500 uppercase tracking-widest mt-2"
+            >
+                Respiración <span id="current-breath">1</span> / 30
+            </div>
+        </div>
+
+        <div class="mt-12 flex flex-col items-center gap-6 z-10 w-full">
+            <div
+                class="flex flex-wrap justify-center items-center gap-3 p-2 bg-slate-100 dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-zinc-800 w-full max-w-2xl"
+            >
+                <button
+                    id="btn-box"
+                    class="flex-1 px-4 py-3 rounded-2xl text-xs font-bold transition-all bg-white dark:bg-zinc-800 shadow-sm text-slate-900 dark:text-white"
+                >
+                    Box Breathing (4-4)
+                </button>
+                <button
+                    id="btn-relax"
+                    class="flex-1 px-4 py-3 rounded-2xl text-xs font-bold transition-all text-slate-500 dark:text-zinc-500 hover:text-slate-900"
+                >
+                    4-7-8 Relax
+                </button>
+                <button
+                    id="btn-wimhof"
+                    class="flex-1 px-4 py-3 rounded-2xl text-xs font-bold transition-all text-slate-500 dark:text-zinc-500 hover:text-slate-900"
+                >
+                    Wim Hof (30 ciclos)
+                </button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <button
+                    id="start-btn"
+                    class="group relative px-12 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-lg rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-blue-500/20"
+                >
+                    <span class="relative z-10 flex items-center gap-3">
+                        <Icon name="mdi:play" class="w-6 h-6" id="start-icon" />
+                        <span id="start-text">INICIAR SESIÓN</span>
+                    </span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-blue-600 to-emerald-600 opacity-0 group-hover:opacity-10 transition-opacity"
+                    >
+                    </div>
+                </button>
+
+                <div class="flex items-center gap-4">
+                    <button
+                        id="loop-toggle"
+                        class="p-4 bg-slate-100 dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 text-slate-400 hover:text-blue-500 transition-all shadow-sm"
+                        title="Repetir automáticamente"
+                    >
+                        <Icon name="mdi:repeat" class="w-5 h-5" id="loop-icon" />
+                    </button>
+                    <button
+                        id="vibration-toggle"
+                        class="p-4 bg-slate-100 dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 text-slate-400 hover:text-blue-500 transition-all shadow-sm"
+                        title="Vibración"
+                    >
+                        <Icon name="mdi:vibrate" class="w-5 h-5" id="vib-icon" />
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes pulse-ring {
+        0% {
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+    .animate-ring {
+        animation: pulse-ring 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    .loop-active {
+        color: #3b82f6 !important;
+        background-color: rgba(59, 130, 246, 0.1) !important;
+        border-color: rgba(59, 130, 246, 0.2) !important;
+    }
+    .vib-active {
+        color: #10b981 !important;
+        background-color: rgba(16, 185, 129, 0.1) !important;
+        border-color: rgba(16, 185, 129, 0.2) !important;
+    }
+</style>
+
+<script>
+    const orb = document.getElementById("orb");
+    const orbText = document.getElementById("orb-text");
+    const phaseLabel = document.getElementById("phase-label");
+    const timerDisplay = document.getElementById("timer-display");
+    const startBtn = document.getElementById("start-btn");
+    const startText = document.getElementById("start-text");
+    const startIcon = document.getElementById("start-icon");
+    const glow = document.getElementById("phase-glow");
+    const ring1 = document.getElementById("ring-1");
+    const ring2 = document.getElementById("ring-2");
+    const btnBox = document.getElementById("btn-box");
+    const btnRelax = document.getElementById("btn-relax");
+    const btnWimhof = document.getElementById("btn-wimhof");
+    const loopToggle = document.getElementById("loop-toggle");
+    const vibToggle = document.getElementById("vibration-toggle");
+    const roundIndicator = document.getElementById("round-indicator");
+    const currentRoundEl = document.getElementById("current-round");
+    const breathCountContainer = document.getElementById("breath-count-container");
+    const currentBreathEl = document.getElementById("current-breath");
+
+    let isRunning = false;
+    let currentPhase = 0;
+    let timer = 0;
+    let currentRound = 1;
+    let currentBreath = 1;
+    let isLooping = false;
+    let vibrationEnabled = true;
+    let technique = "box";
+
+    const techniques: any = {
+        box: [
+            {
+                name: "Inhalar",
+                duration: 4,
+                label: "Llena tus pulmones",
+                color: "blue",
+                scale: 1.5,
+            },
+            { name: "Retener", duration: 4, label: "Mantén el aire", color: "indigo", scale: 1.5 },
+            {
+                name: "Exhalar",
+                duration: 4,
+                label: "Suelta suavemente",
+                color: "emerald",
+                scale: 0.8,
+            },
+            { name: "Vacío", duration: 4, label: "Pausa y relaja", color: "slate", scale: 0.8 },
+        ],
+        relax: [
+            { name: "Inhalar", duration: 4, label: "Por la nariz", color: "blue", scale: 1.5 },
+            {
+                name: "Retener",
+                duration: 7,
+                label: "Contén el aliento",
+                color: "indigo",
+                scale: 1.5,
+            },
+            {
+                name: "Exhalar",
+                duration: 8,
+                label: "Suelta por la boca",
+                color: "emerald",
+                scale: 0.8,
+            },
+        ],
+        wimhof: {
+            breaths: 30,
+            inhaleTime: 1.5,
+            exhaleTime: 1.5,
+            retentionTime: 60, 
+            recoveryTime: 15,
+        },
+    };
+
+    function updateUI() {
+        let config;
+        if (technique === "wimhof") {
+            const wh = techniques.wimhof;
+            if (currentPhase === 0) {
+                
+                config = {
+                    name: "Inhalar",
+                    duration: wh.inhaleTime,
+                    label: "Toma aire profundo",
+                    color: "blue",
+                    scale: 1.6,
+                };
+                if (timer < wh.inhaleTime / 2) {
+                    config = {
+                        name: "Soltar",
+                        duration: wh.exhaleTime,
+                        label: "Deja que salga",
+                        color: "emerald",
+                        scale: 1.1,
+                    };
+                }
+            } else if (currentPhase === 1) {
+                
+                config = {
+                    name: "Retener",
+                    duration: wh.retentionTime,
+                    label: "Retención sin aire",
+                    color: "indigo",
+                    scale: 0.7,
+                };
+            } else {
+                
+                config = {
+                    name: "Recuperar",
+                    duration: wh.recoveryTime,
+                    label: "Inhala y mantén",
+                    color: "blue",
+                    scale: 1.3,
+                };
+            }
+        } else {
+            config = techniques[technique][currentPhase];
+        }
+
+        if (orbText) orbText.textContent = config.name;
+        if (phaseLabel) phaseLabel.textContent = config.label;
+        if (timerDisplay) timerDisplay.textContent = Math.ceil(timer).toString().padStart(2, "0");
+
+        if (orb) {
+            orb.style.transitionDuration = `${technique === "wimhof" && currentPhase === 0 ? 0.7 : config.duration}s`;
+            orb.style.transform = `scale(${config.scale})`;
+        }
+
+        if (glow) {
+            const colors: any = {
+                blue: "rgba(59, 130, 246, 0.15)",
+                indigo: "rgba(99, 102, 241, 0.15)",
+                emerald: "rgba(16, 185, 129, 0.15)",
+                slate: "rgba(107, 114, 128, 0.1)",
+            };
+            glow.style.backgroundColor = colors[config.color];
+        }
+
+        if (vibrationEnabled && (timer === config.duration || timer === 1)) {
+            window.navigator.vibrate?.(100);
+        }
+    }
+
+    let interval: any;
+
+    function startSession() {
+        isRunning = true;
+        currentPhase = 0;
+        currentRound = 1;
+        currentBreath = 1;
+
+        if (technique === "wimhof") {
+            timer = techniques.wimhof.inhaleTime;
+            breathCountContainer?.classList.remove("hidden");
+            roundIndicator?.classList.remove("hidden");
+        } else {
+            timer = techniques[technique][0].duration;
+            breathCountContainer?.classList.add("hidden");
+            roundIndicator?.classList.toggle("hidden", !isLooping);
+        }
+
+        if (startText) startText.textContent = "DETENER";
+        if (startIcon) startIcon.setAttribute("name", "mdi:stop");
+        ring1?.classList.add("animate-ring");
+        ring2?.classList.add("animate-ring");
+
+        updateUI();
+
+        interval = setInterval(
+            () => {
+                if (technique === "wimhof") {
+                    timer -= 0.1;
+                    if (timer <= 0) {
+                        if (currentPhase === 0) {
+                            
+                            if (orbText?.textContent === "Inhalar") {
+                                timer = techniques.wimhof.exhaleTime;
+                            } else {
+                                currentBreath++;
+                                if (currentBreath > techniques.wimhof.breaths) {
+                                    currentPhase = 1;
+                                    timer = techniques.wimhof.retentionTime;
+                                    breathCountContainer?.classList.add("hidden");
+                                } else {
+                                    timer = techniques.wimhof.inhaleTime;
+                                    if (currentBreathEl)
+                                        currentBreathEl.textContent = currentBreath.toString();
+                                }
+                            }
+                        } else if (currentPhase === 1) {
+                            
+                            currentPhase = 2;
+                            timer = techniques.wimhof.recoveryTime;
+                        } else {
+                            
+                            if (isLooping) {
+                                currentRound++;
+                                if (currentRoundEl)
+                                    currentRoundEl.textContent = currentRound.toString();
+                                currentPhase = 0;
+                                currentBreath = 1;
+                                timer = techniques.wimhof.inhaleTime;
+                                breathCountContainer?.classList.remove("hidden");
+                                if (currentBreathEl) currentBreathEl.textContent = "1";
+                            } else {
+                                stopSession();
+                                return;
+                            }
+                        }
+                    }
+                } else {
+                    timer--;
+                    if (timer < 1) {
+                        currentPhase++;
+                        if (currentPhase >= techniques[technique].length) {
+                            if (isLooping) {
+                                currentRound++;
+                                if (currentRoundEl)
+                                    currentRoundEl.textContent = currentRound.toString();
+                                currentPhase = 0;
+                                roundIndicator?.classList.remove("hidden");
+                            } else {
+                                stopSession();
+                                return;
+                            }
+                        }
+                        timer = techniques[technique][currentPhase].duration;
+                    }
+                }
+                updateUI();
+            },
+            technique === "wimhof" ? 100 : 1000
+        );
+    }
+
+    function stopSession() {
+        isRunning = false;
+        clearInterval(interval);
+        if (startText) startText.textContent = "INICIAR SESIÓN";
+        if (startIcon) startIcon.setAttribute("name", "mdi:play");
+        if (phaseLabel) phaseLabel.textContent = "Sesión terminada";
+        if (orbText) orbText.textContent = "Paz";
+        ring1?.classList.remove("animate-ring");
+        ring2?.classList.remove("animate-ring");
+        roundIndicator?.classList.add("hidden");
+        breathCountContainer?.classList.add("hidden");
+        if (orb) {
+            orb.style.transitionDuration = "1s";
+            orb.style.transform = "scale(1)";
+        }
+        if (glow) glow.style.backgroundColor = "transparent";
+    }
+
+    startBtn?.addEventListener("click", () => (isRunning ? stopSession() : startSession()));
+
+    const updateButtons = () => {
+        [btnBox, btnRelax, btnWimhof].forEach((btn) => {
+            const isTarget =
+                (btn === btnBox && technique === "box") ||
+                (btn === btnRelax && technique === "relax") ||
+                (btn === btnWimhof && technique === "wimhof");
+            btn?.classList.toggle("bg-white", isTarget);
+            btn?.classList.toggle("dark:bg-zinc-800", isTarget);
+            btn?.classList.toggle("shadow-sm", isTarget);
+            btn?.classList.toggle("text-slate-900", isTarget);
+            btn?.classList.toggle("dark:text-white", isTarget);
+            btn?.classList.toggle("text-slate-500", !isTarget);
+        });
+    };
+
+    btnBox?.addEventListener("click", () => {
+        if (!isRunning) {
+            technique = "box";
+            updateButtons();
+        }
+    });
+    btnRelax?.addEventListener("click", () => {
+        if (!isRunning) {
+            technique = "relax";
+            updateButtons();
+        }
+    });
+    btnWimhof?.addEventListener("click", () => {
+        if (!isRunning) {
+            technique = "wimhof";
+            updateButtons();
+        }
+    });
+
+    loopToggle?.addEventListener("click", () => {
+        isLooping = !isLooping;
+        loopToggle.classList.toggle("loop-active", isLooping);
+    });
+
+    vibToggle?.addEventListener("click", () => {
+        vibrationEnabled = !vibrationEnabled;
+        vibToggle.classList.toggle("vib-active", vibrationEnabled);
+    });
+
+    document.addEventListener("astro:before-preparation", () => clearInterval(interval));
+
+    
+    if (vibrationEnabled) vibToggle?.classList.add("vib-active");
+</script>
