@@ -28,6 +28,14 @@ export const devSection: SectionData = {
             title: "Calculadora Costes LLM",
             description: "Estima el precio de tus proyectos con GPT-4, Claude y Gemini.",
             color: "#6366f1"
+        },
+        {
+            href: "/utilidades/tipografia-musical/",
+            iconBg: "mdi:music-note",
+            iconFg: "mdi:format-size",
+            title: "Tipografía Musical",
+            description: "Calculadora de escalas modulares armónicas para jerarquías tipográficas perfectas.",
+            color: "#6366f1"
         }
     ]
 };

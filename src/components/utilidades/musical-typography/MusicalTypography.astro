@@ -1,0 +1,300 @@
+---
+import { Icon } from "astro-icon/components";
+
+
+const RATIOS = [
+    { name: "Segunda Menor", value: 1.067 },
+    { name: "Segunda Mayor", value: 1.125 },
+    { name: "Tercera Menor", value: 1.2 },
+    { name: "Tercera Mayor", value: 1.25 },
+    { name: "Cuarta Perfecta", value: 1.333 },
+    { name: "Cuarta Aumentada", value: 1.414 },
+    { name: "Quinta Perfecta", value: 1.5 },
+    { name: "Proporción Áurea", value: 1.618 },
+    { name: "Sexta Mayor", value: 1.667 },
+    { name: "Séptima Menor", value: 1.778 },
+    { name: "Séptima Mayor", value: 1.875 },
+    { name: "Octava", value: 2.0 },
+];
+---
+
+<section class="max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        
+        <div
+            class="h-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700/50 p-6 md:p-8 backdrop-blur-sm"
+        >
+            <div
+                class="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4"
+            >
+                <div
+                    class="p-2.5 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl text-indigo-600 dark:text-indigo-400 shadow-sm"
+                >
+                    <Icon name="mdi:tune" class="w-6 h-6" />
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+                    Configuración
+                </h2>
+            </div>
+
+            <div class="space-y-8">
+                
+                <div>
+                    <label
+                        for="base-size"
+                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                        Tamaño Base (px)
+                    </label>
+                    <div class="relative group">
+                        <input
+                            type="number"
+                            id="base-size"
+                            value="16"
+                            min="8"
+                            max="32"
+                            class="block w-full rounded-xl border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:ring-2 transition-all p-3 pl-4"
+                        />
+                        <div
+                            class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none"
+                        >
+                            <span class="text-gray-400 font-medium">px</span>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        El tamaño de tu texto de párrafo (normalmente 16px).
+                    </p>
+                </div>
+
+                
+                <div>
+                    <label
+                        for="ratio-select"
+                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                        Escala Musical (Ratio)
+                    </label>
+                    <div class="relative">
+                        <select
+                            id="ratio-select"
+                            class="block w-full rounded-xl border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:ring-2 transition-all p-3 pr-10 appearance-none"
+                        >
+                            {
+                                RATIOS.map((ratio) => (
+                                    <option value={ratio.value} selected={ratio.value === 1.5}>
+                                        {ratio.name} ({ratio.value.toFixed(3)})
+                                    </option>
+                                ))
+                            }
+                        </select>
+                        <div
+                            class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400"
+                        >
+                            <Icon name="mdi:chevron-down" class="w-5 h-5" />
+                        </div>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        Determina cuánto crece el tamaño en cada paso.
+                    </p>
+                </div>
+
+                
+                <div
+                    class="p-5 bg-indigo-50/50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800/50"
+                >
+                    <h3
+                        class="text-xs font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider mb-4 flex items-center gap-2"
+                    >
+                        <Icon name="mdi:calculator-variant" class="w-4 h-4" />
+                        Valores Calculados
+                    </h3>
+                    <div
+                        id="scale-preview"
+                        class="space-y-2.5 text-sm font-mono text-gray-600 dark:text-gray-300"
+                    >
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div
+            class="h-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700/50 p-6 md:p-8 backdrop-blur-sm flex flex-col"
+        >
+            <div
+                class="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4"
+            >
+                <div
+                    class="p-2.5 bg-pink-50 dark:bg-pink-900/30 rounded-xl text-pink-600 dark:text-pink-400 shadow-sm"
+                >
+                    <Icon name="mdi:format-size" class="w-6 h-6" />
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+                    Previsualización
+                </h2>
+            </div>
+
+            <div
+                class="flex-grow relative bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-100 dark:border-gray-700/50 p-4 mb-4 overflow-hidden"
+            >
+                <div
+                    class="absolute inset-0 p-4 overflow-y-auto space-y-8 custom-scrollbar"
+                    id="type-preview-container"
+                >
+                    
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button
+                    id="copy-css-btn"
+                    class="w-full group relative overflow-hidden flex items-center justify-center px-6 py-3.5 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 active:scale-[0.98]"
+                >
+                    <span
+                        class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:animate-shine"
+                    ></span>
+                    <Icon name="mdi:content-copy" class="w-5 h-5 mr-2" />
+                    Copiar Variables CSS
+                </button>
+                <p
+                    id="copy-feedback"
+                    class="text-center text-xs font-medium text-emerald-600 dark:text-emerald-400 mt-3 opacity-0 transition-opacity flex items-center justify-center gap-1.5"
+                >
+                    <Icon name="mdi:check-circle" class="w-4 h-4" />
+                    ¡Variables copiadas al portapapeles!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    
+    const LEVELS = [-2, -1, 0, 1, 2, 3, 4, 5];
+
+    
+    const baseSizeInput = document.getElementById("base-size") as HTMLInputElement;
+    const ratioSelect = document.getElementById("ratio-select") as HTMLSelectElement;
+    const scalePreview = document.getElementById("scale-preview");
+    const typePreviewContainer = document.getElementById("type-preview-container");
+    const copyBtn = document.getElementById("copy-css-btn");
+    const copyFeedback = document.getElementById("copy-feedback");
+
+    function calculateScale(base: number, ratio: number) {
+        return LEVELS.map((level) => {
+            const size = base * Math.pow(ratio, level);
+            return {
+                level,
+                size: size,
+                rem: size / 16, 
+            };
+        });
+    }
+
+    function updateUI() {
+        if (!baseSizeInput || !ratioSelect) return;
+
+        const base = parseFloat(baseSizeInput.value) || 16;
+        const ratio = parseFloat(ratioSelect.value) || 1.5;
+        const scale = calculateScale(base, ratio);
+
+        
+        if (scalePreview) {
+            scalePreview.innerHTML = scale
+                .slice()
+                .reverse()
+                .map(
+                    (item) => `
+                <div class="flex justify-between items-center ${item.level === 0 ? "text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-900/30 rounded px-2 -mx-2" : ""}">
+                    <span class="opacity-70">step-${item.level}</span>
+                    <span class="${item.level === 0 ? "" : "opacity-90"}">${item.size.toFixed(2)}px <span class="opacity-40 mx-1">/</span> ${item.rem.toFixed(3)}rem</span>
+                </div>
+            `
+                )
+                .join("");
+        }
+
+        
+        if (typePreviewContainer) {
+            typePreviewContainer.innerHTML = scale
+                .slice()
+                .reverse()
+                .map(
+                    (item) => `
+                <div class="border-b border-gray-200 dark:border-gray-700/50 pb-4 last:border-0 last:pb-0">
+                    <div class="flex items-baseline gap-2 mb-1">
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">Step ${item.level}</span>
+                        <span class="text-xs text-gray-400 font-mono">${item.size.toFixed(1)}px</span>
+                    </div>
+                    <p style="font-size: ${item.size}px; line-height: 1.1;" class="font-bold text-gray-900 dark:text-white truncate transition-all duration-300">
+                        Tipografía Musical
+                    </p>
+                    ${item.level >= 2 ? `<p style="font-size: ${Math.max(12, item.size * 0.45)}px; line-height: 1.4;" class="text-gray-500 dark:text-gray-400 mt-1 truncate opacity-80">Una escala armónica perfecta para tu diseño.</p>` : ""}
+                </div>
+            `
+                )
+                .join("");
+        }
+    }
+
+    function generateCSS() {
+        if (!baseSizeInput || !ratioSelect) return "";
+
+        const base = parseFloat(baseSizeInput.value) || 16;
+        const ratio = parseFloat(ratioSelect.value) || 1.5;
+        const scale = calculateScale(base, ratio);
+
+        let css = `\n:root {\n  --ratio: ${ratio};\n`;
+        scale.forEach((item) => {
+            css += `  --step-${item.level}: ${item.rem.toFixed(3)}rem; \n`;
+        });
+        css += `}\n`;
+        return css;
+    }
+
+    
+    baseSizeInput?.addEventListener("input", updateUI);
+    ratioSelect?.addEventListener("change", updateUI);
+
+    copyBtn?.addEventListener("click", () => {
+        const css = generateCSS();
+        if (css) {
+            navigator.clipboard.writeText(css).then(() => {
+                if (copyFeedback) {
+                    copyFeedback.classList.remove("opacity-0");
+                    setTimeout(() => copyFeedback.classList.add("opacity-0"), 3000);
+                }
+            });
+        }
+    });
+
+    
+    updateUI();
+</script>
+
+<style>
+    
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(156, 163, 175, 0.3);
+        border-radius: 20px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(156, 163, 175, 0.5);
+    }
+
+    @keyframes shine {
+        100% {
+            transform: translateX(100%);
+        }
+    }
+    .group:hover .animate-shine {
+        animation: shine 1s;
+    }
+</style>
