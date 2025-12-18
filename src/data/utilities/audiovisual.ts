@@ -68,6 +68,14 @@ export const audiovisualSection: SectionData = {
             title: "Distancia TV",
             description: "Encuentra el punto óptimo de inmersión para tu Home Cinema según THX y SMPTE.",
             color: "#2563eb"
+        },
+        {
+            href: "/utilidades/simulador-daltonismo/",
+            iconBg: "mdi:eye-check-outline",
+            iconFg: "mdi:circle-slice-4",
+            title: "Simulador de Daltonismo",
+            description: "Visualiza tus imágenes como personas con diferentes tipos de deficiencia cromática (CVD).",
+            color: "#3b82f6"
         }
     ]
 };

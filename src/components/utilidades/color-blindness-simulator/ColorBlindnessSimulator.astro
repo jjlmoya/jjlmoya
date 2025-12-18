@@ -1,0 +1,320 @@
+---
+import { Icon } from "astro-icon/components";
+import ColorBlindnessFilters from "./ColorBlindnessFilters.astro";
+
+const blindnessTypes = [
+    {
+        id: "deuteranopia",
+        name: "Deuteranopia",
+        description: "Insensibilidad al verde. El tipo más común.",
+    },
+    {
+        id: "protanopia",
+        name: "Protanopia",
+        description: "Insensibilidad al rojo. Los rojos parecen marrones.",
+    },
+    {
+        id: "tritanopia",
+        name: "Tritanopia",
+        description: "Insensibilidad al azul. Verdes/azules se confunden.",
+    },
+    {
+        id: "achromatopsia",
+        name: "Acromatopsia",
+        description: "Visión en blanco y negro. Falta total de color.",
+    },
+];
+---
+
+<ColorBlindnessFilters />
+
+<section class="max-w-6xl mx-auto px-4 py-12 relative">
+    <input
+        id="image-upload"
+        type="file"
+        accept="image/png, image/jpeg, image/webp, image/gif, image/svg+xml"
+        class="hidden"
+    />
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-4 space-y-6">
+            <div
+                class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-slate-200 dark:border-zinc-800 rounded-3xl p-8 shadow-xl"
+            >
+                <h3
+                    class="text-xl font-black text-slate-900 dark:text-white mb-6 flex items-center gap-2"
+                >
+                    <Icon name="mdi:eye-settings-outline" class="w-6 h-6 text-blue-600" />
+                    Simulador
+                </h3>
+
+                <div class="space-y-4">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500">
+                        Selecciona el tipo de daltonismo
+                    </p>
+                    <div class="grid grid-cols-1 gap-2">
+                        {
+                            blindnessTypes.map((type) => (
+                                <button
+                                    data-type={type.id}
+                                    class="type-btn text-left p-4 rounded-2xl border border-slate-200 dark:border-zinc-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all group relative overflow-hidden"
+                                >
+                                    <div class="relative z-10">
+                                        <span class="block font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors uppercase text-sm tracking-tight">
+                                            {type.name}
+                                        </span>
+                                        <span class="block text-xs text-slate-500 dark:text-zinc-500 mt-1 leading-snug">
+                                            {type.description}
+                                        </span>
+                                    </div>
+                                    <div class="absolute inset-0 bg-blue-50 dark:bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </button>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-8 space-y-4">
+            <div
+                id="drop-zone"
+                class="bg-slate-100 dark:bg-zinc-900 rounded-[2.5rem] border border-slate-200 dark:border-zinc-800 shadow-inner relative min-h-[500px] flex items-center justify-center overflow-hidden cursor-pointer group"
+            >
+                <div
+                    id="placeholder"
+                    class="text-center space-y-6 p-12 transition-all duration-700 group-hover:scale-105"
+                >
+                    <div
+                        class="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 shadow-xl flex items-center justify-center mx-auto mb-8 animate-pulse text-slate-400 group-hover:text-blue-500 transition-colors"
+                    >
+                        <Icon name="mdi:image-filter-vintage" class="w-10 h-10" />
+                    </div>
+                    <div>
+                        <h4
+                            class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter"
+                        >
+                            Subir Imagen
+                        </h4>
+                        <p class="text-slate-500 mt-2 max-w-xs mx-auto">
+                            Haz clic o arrastra una fotografía aquí para comenzar.
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="simulation-container"
+                    class="hidden absolute inset-0 w-full h-full select-none cursor-default"
+                >
+                    <img
+                        id="img-normal"
+                        class="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                    />
+                    <div
+                        id="filtered-layer"
+                        class="absolute inset-0 w-full h-full overflow-hidden border-r-2 border-white shadow-2xl z-10"
+                        style="width: 50%;"
+                    >
+                        <img
+                            id="img-filtered"
+                            class="absolute inset-0 w-full h-full object-contain pointer-events-none max-w-none"
+                        />
+                    </div>
+                    <div
+                        id="slider-handle"
+                        class="absolute top-0 bottom-0 w-1 bg-white z-20 cursor-ew-resize flex items-center justify-center"
+                        style="left: 50%;"
+                    >
+                        <div
+                            class="w-10 h-10 bg-white dark:bg-zinc-800 rounded-xl shadow-2xl flex items-center justify-center border border-slate-200 dark:border-zinc-700"
+                        >
+                            <Icon
+                                name="mdi:unfold-more-vertical"
+                                class="w-6 h-6 text-slate-600 dark:text-zinc-300 transform rotate-90"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="absolute top-6 right-6 z-30 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-[10px] font-black text-white uppercase tracking-widest shadow-lg"
+                    >
+                        Original
+                    </div>
+                    <div
+                        class="absolute top-6 left-6 z-30 px-3 py-1 bg-blue-600/80 backdrop-blur-md rounded-full border border-blue-500/20 text-[10px] font-black text-white uppercase tracking-widest shadow-lg"
+                    >
+                        Simulado
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="flex justify-between items-center px-6 py-4 bg-slate-50 dark:bg-zinc-900/50 rounded-2xl border border-slate-100 dark:border-zinc-800"
+            >
+                <div
+                    class="flex items-center gap-2 text-xs text-slate-500 uppercase font-bold tracking-widest"
+                >
+                    <Icon name="mdi:information-outline" class="w-4 h-4" />
+                    Usa el deslizador central para comparar detalles
+                </div>
+                <button
+                    id="reset-btn"
+                    class="text-xs font-black uppercase text-blue-600 hover:text-blue-500 transition-colors hidden"
+                    >Nueva Imagen</button
+                >
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    #filtered-layer img {
+        width: 100%;
+        height: 100%;
+    }
+    .type-btn.active {
+        border-color: #2563eb;
+        background-color: rgba(37, 99, 235, 0.1);
+    }
+    .dark .type-btn.active {
+        background-color: rgba(37, 99, 235, 0.2);
+    }
+    .type-btn.active span:first-child {
+        color: #2563eb;
+    }
+</style>
+
+<script>
+    const dropZone = document.getElementById("drop-zone");
+    const imageUpload = document.getElementById("image-upload") as HTMLInputElement;
+    const placeholder = document.getElementById("placeholder");
+    const simContainer = document.getElementById("simulation-container");
+    const imgNormal = document.getElementById("img-normal") as HTMLImageElement;
+    const imgFiltered = document.getElementById("img-filtered") as HTMLImageElement;
+    const filteredLayer = document.getElementById("filtered-layer") as HTMLElement;
+    const sliderHandle = document.getElementById("slider-handle") as HTMLElement;
+    const typeBtns = document.querySelectorAll(".type-btn");
+    const resetBtn = document.getElementById("reset-btn");
+
+    let isDragging = false;
+    let isClickable = true;
+
+    function handleImage(file: File) {
+        if (!file.type.startsWith("image/")) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const url = e.target?.result as string;
+            if (imgNormal) imgNormal.src = url;
+            if (imgFiltered) imgFiltered.src = url;
+            placeholder?.classList.add("hidden");
+            simContainer?.classList.remove("hidden");
+            resetBtn?.classList.remove("hidden");
+            isClickable = false;
+            if (imgNormal) {
+                imgNormal.onload = () => {
+                    const rect = imgNormal.getBoundingClientRect();
+                    if (imgFiltered) {
+                        imgFiltered.style.width = Math.round(rect.width) + "px";
+                        imgFiltered.style.height = Math.round(rect.height) + "px";
+                    }
+                };
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    dropZone?.addEventListener("click", () => {
+        if (isClickable) imageUpload?.click();
+    });
+
+    imageUpload?.addEventListener("change", (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file) handleImage(file);
+    });
+
+    dropZone?.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("border-blue-500", "bg-blue-50/50");
+    });
+
+    dropZone?.addEventListener("dragleave", () => {
+        dropZone.classList.remove("border-blue-500", "bg-blue-50/50");
+    });
+
+    dropZone?.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("border-blue-500", "bg-blue-50/50");
+        const file = e.dataTransfer?.files[0];
+        if (file) handleImage(file);
+    });
+
+    const moveSlider = (clientX: number) => {
+        if (!simContainer || !filteredLayer || !sliderHandle) return;
+        const rect = simContainer.getBoundingClientRect();
+        let position = ((clientX - rect.left) / rect.width) * 100;
+        position = Math.max(0, Math.min(100, position));
+        filteredLayer.style.width = position + "%";
+        sliderHandle.style.left = position + "%";
+    };
+
+    sliderHandle?.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        e.stopPropagation();
+    });
+
+    window.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+    window.addEventListener("mousemove", (e) => {
+        if (isDragging) moveSlider(e.clientX);
+    });
+
+    sliderHandle?.addEventListener("touchstart", (e) => {
+        isDragging = true;
+        e.stopPropagation();
+    });
+    window.addEventListener("touchend", () => {
+        isDragging = false;
+    });
+    window.addEventListener("touchmove", (e) => {
+        if (isDragging) moveSlider(e.touches[0].clientX);
+    });
+
+    typeBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const type = btn.getAttribute("data-type");
+            typeBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            if (imgFiltered) {
+                imgFiltered.style.filter = "url(#" + (type || "deuteranopia") + ")";
+            }
+        });
+    });
+
+    window.addEventListener("resize", () => {
+        if (simContainer && !simContainer.classList.contains("hidden")) {
+            const rect = imgNormal.getBoundingClientRect();
+            if (imgFiltered) {
+                imgFiltered.style.width = Math.round(rect.width) + "px";
+                imgFiltered.style.height = Math.round(rect.height) + "px";
+            }
+        }
+    });
+
+    resetBtn?.addEventListener("click", () => {
+        if (imgNormal) imgNormal.src = "";
+        if (imgFiltered) {
+            imgFiltered.src = "";
+            imgFiltered.style.filter = "url(#deuteranopia)";
+        }
+        placeholder?.classList.remove("hidden");
+        simContainer?.classList.add("hidden");
+        resetBtn.classList.add("hidden");
+        isClickable = true;
+        typeBtns.forEach((b) => b.classList.remove("active"));
+        document.querySelector('[data-type="deuteranopia"]')?.classList.add("active");
+        if (filteredLayer) filteredLayer.style.width = "50%";
+        if (sliderHandle) sliderHandle.style.left = "50%";
+    });
+    document.querySelector('[data-type="deuteranopia"]')?.classList.add("active");
+    if (imgFiltered) imgFiltered.style.filter = "url(#deuteranopia)";
+</script>
