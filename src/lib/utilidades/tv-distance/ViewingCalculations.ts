@@ -1,0 +1,47 @@
+
+export interface TVSpecs {
+    diagonalInches: number;
+    resolution: '1080p' | '4k' | '8k';
+    aspectRatio: number;
+}
+
+export interface ViewingDistance {
+    optimal: number;
+    min: number;
+    max: number;
+}
+
+export class ViewingCalculations {
+    public static getDimensionsFromDiagonal(diagonalInches: number, aspectRatio: number = 16 / 9): { width: number, height: number } {
+        const diagonalCm = diagonalInches * 2.54;
+        const angle = Math.atan(1 / aspectRatio);
+        const height = diagonalCm * Math.sin(angle);
+        const width = diagonalCm * Math.cos(angle);
+        return { width, height };
+    }
+
+    public static getDistanceByAngle(widthCm: number, fieldOfViewDegrees: number): number {
+        const fovRadians = (fieldOfViewDegrees * Math.PI) / 180;
+        return widthCm / (2 * Math.tan(fovRadians / 2));
+    }
+
+    public static calculate(specs: TVSpecs): ViewingDistance {
+        const { width: widthCm } = this.getDimensionsFromDiagonal(specs.diagonalInches);
+
+        const thxDistance = this.getDistanceByAngle(widthCm, 40) / 100;
+        const smpteDistance = this.getDistanceByAngle(widthCm, 30) / 100;
+
+        let resolutionMultiplier = 1;
+        if (specs.resolution === '4k') resolutionMultiplier = 0.65;
+        if (specs.resolution === '8k') resolutionMultiplier = 0.45;
+        if (specs.resolution === '1080p') resolutionMultiplier = 1.2;
+
+        const pixelLimitDistance = (widthCm * resolutionMultiplier) / 100;
+
+        return {
+            optimal: thxDistance,
+            min: Math.min(thxDistance, pixelLimitDistance),
+            max: smpteDistance
+        };
+    }
+}

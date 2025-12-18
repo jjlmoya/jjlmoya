@@ -1,0 +1,332 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<section class="max-w-5xl mx-auto px-4 py-12 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div class="lg:col-span-4 space-y-6">
+            <div
+                class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-slate-200 dark:border-zinc-800 rounded-3xl p-8 shadow-xl"
+            >
+                <h3
+                    class="text-lg font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-2"
+                >
+                    <Icon
+                        name="mdi:television-classic"
+                        class="w-5 h-5 text-blue-600 dark:text-blue-400"
+                    />
+                    Especificaciones
+                </h3>
+
+                <div class="space-y-8">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <label
+                                class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400"
+                                >Tamaño Diagonal</label
+                            >
+                            <span
+                                id="diagonal-value"
+                                class="text-sm font-mono font-bold text-blue-600 dark:text-blue-400"
+                                >55"</span
+                            >
+                        </div>
+                        <input
+                            type="range"
+                            id="diagonal-slider"
+                            min="32"
+                            max="100"
+                            step="1"
+                            value="55"
+                            class="w-full h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full appearance-none cursor-pointer accent-blue-600"
+                        />
+                    </div>
+
+                    <div class="space-y-4">
+                        <label
+                            class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-zinc-400"
+                            >Resolución</label
+                        >
+                        <div class="grid grid-cols-3 gap-2">
+                            {
+                                ["1080p", "4K", "8K"].map((res) => (
+                                    <button
+                                        data-res={res.toLowerCase()}
+                                        class={`res-btn py-3 rounded-xl border text-xs font-bold transition-all ${res === "4K" ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20" : "bg-white dark:bg-zinc-950 text-slate-600 dark:text-zinc-400 border-slate-200 dark:border-zinc-800 hover:border-blue-500/50"}`}
+                                    >
+                                        {res}
+                                    </button>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 bg-blue-500/5 border border-blue-500/10 rounded-2xl space-y-4">
+                <div class="flex items-center gap-3">
+                    <Icon name="mdi:information-outline" class="w-5 h-5 text-blue-500" />
+                    <span class="text-sm font-bold text-blue-700 dark:text-blue-400"
+                        >Recomendación THX</span
+                    >
+                </div>
+                <p class="text-xs leading-relaxed text-blue-600 dark:text-blue-400/80">
+                    THX recomienda una distancia que cubra un ángulo de visión de 40 grados para una
+                    experiencia cinematográfica inmersiva.
+                </p>
+            </div>
+        </div>
+
+        <div class="lg:col-span-8 space-y-8">
+            <div
+                class="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-3xl p-8 shadow-2xl relative min-h-[500px] flex flex-col items-center justify-end overflow-hidden group"
+            >
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.05),transparent)] pointer-events-none"
+                >
+                </div>
+
+                <div class="w-full max-w-2xl mx-auto flex flex-col items-center relative py-20">
+                    <div
+                        id="room-diagram"
+                        class="w-full h-64 relative mb-20 flex justify-center items-center"
+                    >
+                        <div
+                            id="tv-visual"
+                            class="relative bg-slate-900 rounded-lg border-4 border-slate-800 shadow-2xl transition-all duration-500 flex flex-col items-center justify-center"
+                        >
+                            <div
+                                class="w-full h-full bg-slate-950 rounded-sm overflow-hidden relative"
+                            >
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent"
+                                >
+                                </div>
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center opacity-20"
+                                >
+                                    <Icon
+                                        name="mdi:movie-open-play"
+                                        class="w-12 h-12 text-blue-400"
+                                    />
+                                </div>
+                            </div>
+                            <div
+                                class="absolute top-full w-1/4 h-8 bg-slate-800 -mt-0.5 rounded-b-lg"
+                            >
+                            </div>
+                            <div
+                                class="absolute top-[calc(100%+30px)] w-1/2 h-2 bg-slate-800 rounded-full"
+                            >
+                            </div>
+
+                            <div
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 bg-blue-600 text-[10px] font-bold text-white px-2 py-0.5 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                <span id="tv-width-display">0</span> cm
+                            </div>
+                        </div>
+
+                        <div
+                            id="user-visual"
+                            class="absolute bottom-[-140px] left-1/2 -translate-x-1/2 transition-all duration-700 flex flex-col items-center"
+                        >
+                            <div
+                                class="relative w-16 h-12 bg-indigo-600 dark:bg-indigo-500 rounded-t-2xl shadow-lg shadow-indigo-500/20"
+                            >
+                                <div
+                                    class="absolute -top-6 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#f3e0c0] dark:bg-[#d4b996] shadow-md border-b-2 border-slate-300 dark:border-zinc-700"
+                                >
+                                </div>
+                                <div
+                                    class="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-10 border-t-4 border-indigo-700 dark:border-indigo-400 opacity-20"
+                                >
+                                </div>
+                                <div
+                                    class="absolute top-1/2 left-0 w-3 h-6 bg-indigo-700 dark:bg-indigo-400 rounded-full -translate-x-1/2"
+                                >
+                                </div>
+                                <div
+                                    class="absolute top-1/2 right-0 w-3 h-6 bg-indigo-700 dark:bg-indigo-400 rounded-full translate-x-1/2"
+                                >
+                                </div>
+                            </div>
+
+                            <div
+                                class="h-24 w-px bg-gradient-to-b from-blue-500 to-transparent opacity-20 mt-2"
+                            >
+                            </div>
+
+                            <div
+                                class="absolute top-full mt-4 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 px-4 py-2 rounded-xl shadow-lg whitespace-nowrap"
+                            >
+                                <span
+                                    class="text-xs font-bold text-slate-500 dark:text-zinc-400 mr-2 uppercase tracking-widest"
+                                    >Distancia:</span
+                                >
+                                <span
+                                    id="distance-display"
+                                    class="text-lg font-mono font-black text-blue-600 dark:text-blue-400"
+                                    >0.00m</span
+                                >
+                            </div>
+                        </div>
+
+                        <div
+                            class="absolute inset-0 pointer-events-none opacity-5 dark:opacity-10"
+                            style="background-image: linear-gradient(90deg, currentColor 1px, transparent 1px), linear-gradient(0deg, currentColor 1px, transparent 1px); background-size: 20px 20px;"
+                        >
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="w-full grid grid-cols-3 gap-4 pt-10 border-t border-slate-100 dark:border-zinc-900"
+                >
+                    <div class="text-center p-4">
+                        <span
+                            class="block text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1"
+                            >Mínimo (Máx Inmersión)</span
+                        >
+                        <span
+                            id="min-dist"
+                            class="text-xl font-black text-slate-900 dark:text-white">0.00m</span
+                        >
+                    </div>
+                    <div
+                        class="text-center p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10"
+                    >
+                        <span
+                            class="block text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-1"
+                            >Óptimo (Películas)</span
+                        >
+                        <span
+                            id="opt-dist"
+                            class="text-2xl font-black text-blue-600 dark:text-blue-400">0.00m</span
+                        >
+                    </div>
+                    <div class="text-center p-4">
+                        <span
+                            class="block text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1"
+                            >Máximo (Uso Diario)</span
+                        >
+                        <span
+                            id="max-dist"
+                            class="text-xl font-black text-slate-900 dark:text-white">0.00m</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #2563eb;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 4px solid white;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+    .dark input[type="range"]::-webkit-slider-thumb {
+        border-color: #18181b;
+    }
+</style>
+
+<script>
+    import { ViewingCalculations } from "../../../lib/utilidades/tv-distance/ViewingCalculations";
+
+    const diagonalSlider = document.getElementById("diagonal-slider") as HTMLInputElement;
+    const diagonalValue = document.getElementById("diagonal-value");
+    const resButtons = document.querySelectorAll(".res-btn");
+    const distanceDisplay = document.getElementById("distance-display");
+    const minDisplay = document.getElementById("min-dist");
+    const optDisplay = document.getElementById("opt-dist");
+    const maxDisplay = document.getElementById("max-dist");
+    const tvVisual = document.getElementById("tv-visual");
+    const userVisual = document.getElementById("user-visual");
+    const widthDisplay = document.getElementById("tv-width-display");
+
+    let currentRes = "4k";
+
+    function update() {
+        const diagonal = parseInt(diagonalSlider.value);
+        if (diagonalValue) diagonalValue.textContent = `${diagonal}"`;
+
+        const specs = {
+            diagonalInches: diagonal,
+            resolution: currentRes as any,
+            aspectRatio: 16 / 9,
+        };
+        const results = ViewingCalculations.calculate(specs);
+        const { width: widthCm, height: heightCm } =
+            ViewingCalculations.getDimensionsFromDiagonal(diagonal);
+
+        if (minDisplay) minDisplay.textContent = `${results.min.toFixed(2)}m`;
+        if (optDisplay) optDisplay.textContent = `${results.optimal.toFixed(2)}m`;
+        if (maxDisplay) maxDisplay.textContent = `${results.max.toFixed(2)}m`;
+        if (distanceDisplay) distanceDisplay.textContent = `${results.optimal.toFixed(2)}m`;
+        if (widthDisplay) widthDisplay.textContent = Math.round(widthCm).toString();
+
+        if (tvVisual) {
+            tvVisual.style.width = `${widthCm * 2}px`;
+            tvVisual.style.height = `${heightCm * 2}px`;
+        }
+
+        if (userVisual) {
+            const distanceScale = 120 + results.optimal * 50;
+            userVisual.style.bottom = `-${distanceScale}px`;
+        }
+    }
+
+    diagonalSlider?.addEventListener("input", update);
+    resButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            resButtons.forEach((b) =>
+                b.classList.remove(
+                    "bg-blue-600",
+                    "text-white",
+                    "border-blue-600",
+                    "shadow-lg",
+                    "shadow-blue-600/20"
+                )
+            );
+            resButtons.forEach((b) =>
+                b.classList.add(
+                    "bg-white",
+                    "dark:bg-zinc-950",
+                    "text-slate-600",
+                    "dark:text-zinc-400",
+                    "border-slate-200",
+                    "dark:border-zinc-800"
+                )
+            );
+
+            btn.classList.remove(
+                "bg-white",
+                "dark:bg-zinc-950",
+                "text-slate-600",
+                "dark:text-zinc-400",
+                "border-slate-200",
+                "dark:border-zinc-800"
+            );
+            btn.classList.add(
+                "bg-blue-600",
+                "text-white",
+                "border-blue-600",
+                "shadow-lg",
+                "shadow-blue-600/20"
+            );
+
+            currentRes = btn.getAttribute("data-res") || "4k";
+            update();
+        });
+    });
+
+    update();
+</script>
