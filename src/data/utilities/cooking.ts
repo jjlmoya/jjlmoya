@@ -79,7 +79,7 @@ export const cookingSection: SectionData = {
         },
         {
             href: "/utilidades/diagnostico-platanos/",
-            iconBg: "mdi:fruit-citrus",
+            iconBg: "mdi:clipboard-pulse",
             iconFg: "mdi:microscope",
             title: "Diagnóstico de Plátanos",
             description: "Analiza el grado de madurez y recibe consejos científicos de conservación según la temperatura.",
