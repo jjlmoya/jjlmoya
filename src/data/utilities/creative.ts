@@ -29,6 +29,14 @@ export const creativeSection: SectionData = {
             title: "Pintor de Sinestesia",
             description: "Visualiza el color de las palabras según la sinestesia grafema-color.",
             color: "#8b5cf6"
+        },
+        {
+            href: "/utilidades/generador-zalgo/",
+            iconBg: "mdi:skull-outline",
+            iconFg: "mdi:matrix",
+            title: "Generador Zalgo",
+            description: "Corrompe tus mensajes con cascadas de caracteres Unicode desbordantes.",
+            color: "#9333ea"
         }
     ]
 };
