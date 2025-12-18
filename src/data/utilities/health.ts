@@ -68,6 +68,14 @@ export const healthSection: SectionData = {
             title: "Simulador de Cafeína",
             description: "Rastrea la vida media de la cafeína en tu sistema para evitar el insomnio.",
             color: "#d97706"
+        },
+        {
+            href: "/utilidades/purificador-agua/",
+            iconBg: "mdi:water-opacity",
+            iconFg: "mdi:water-plus",
+            title: "Purificador de Agua",
+            description: "Calculadora de dosis de lejía para potabilizar agua en emergencias. Guía de supervivencia OMS/CDC.",
+            color: "#06b6d4"
         }
     ]
 };
