@@ -3,7 +3,6 @@ import { Icon } from "astro-icon/components";
 ---
 
 <section class="max-w-4xl mx-auto px-4 relative">
-    
     <div
         id="disclaimer-modal"
         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
@@ -36,9 +35,7 @@ import { Icon } from "astro-icon/components";
         </div>
     </div>
 
-    
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-        
         <div
             class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 md:p-8"
         >
@@ -52,7 +49,6 @@ import { Icon } from "astro-icon/components";
             </div>
 
             <div class="space-y-8">
-                
                 <div>
                     <span class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3"
                         >Estado del Agua</span
@@ -103,7 +99,6 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
-                
                 <div>
                     <label
                         for="liters"
@@ -129,29 +124,22 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div
             class="bg-cyan-600 rounded-2xl shadow-xl overflow-hidden relative flex flex-col items-center justify-center p-8 text-white"
         >
-            <div
-                class="absolute inset-0 bg-[url('/images/noise.png')] opacity-10 mix-blend-overlay"
-            >
-            </div>
+            <div class="absolute inset-0 opacity-10 mix-blend-overlay"></div>
 
-            
             <div class="relative w-24 h-40 mb-8">
-                
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-20 text-white/90">
                     <Icon name="mdi:eyedropper" class="w-full h-full rotate-180" />
                 </div>
-                
+
                 <div
                     id="drop-anim"
                     class="hidden absolute top-16 left-1/2 -translate-x-1/2 w-4 h-4 bg-white rounded-full rounded-tl-none -rotate-45 shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                 >
                 </div>
 
-                
                 <div class="absolute bottom-0 w-full h-2 bg-white/20 rounded-full blur-sm"></div>
             </div>
 
@@ -178,7 +166,6 @@ import { Icon } from "astro-icon/components";
 </section>
 
 <script>
-    
     const modal = document.getElementById("disclaimer-modal");
     const acceptBtn = document.getElementById("accept-disclaimer");
     const litersInput = document.getElementById("liters") as HTMLInputElement;
@@ -187,12 +174,10 @@ import { Icon } from "astro-icon/components";
     const resultMl = document.getElementById("result-ml");
     const dropAnim = document.getElementById("drop-anim");
 
-    
-    const DROPS_PER_ML = 20; 
-    const BL_CLEAR = 2; 
-    const BL_CLOUDY = 4; 
+    const DROPS_PER_ML = 20;
+    const BL_CLEAR = 2;
+    const BL_CLOUDY = 4;
 
-    
     const hasAccepted = localStorage.getItem("water-purifier-accepted");
     if (!hasAccepted) {
         if (modal) modal.classList.remove("hidden");
@@ -208,7 +193,6 @@ import { Icon } from "astro-icon/components";
         }
     });
 
-    
     function calculate() {
         if (!litersInput || !resultDrops || !resultMl) return;
 
@@ -224,7 +208,6 @@ import { Icon } from "astro-icon/components";
         const drops = Math.ceil(liters * factor);
         const ml = drops / DROPS_PER_ML;
 
-        
         resultDrops.textContent = drops.toString();
         resultMl.textContent = `~ ${ml.toFixed(2)} ml`;
 
@@ -234,23 +217,18 @@ import { Icon } from "astro-icon/components";
     function triggerAnimation() {
         if (!dropAnim) return;
 
-        
         dropAnim.classList.remove("animate-drop");
         dropAnim.classList.add("hidden");
 
-        
         void dropAnim.offsetWidth;
 
-        
         dropAnim.classList.remove("hidden");
         dropAnim.classList.add("animate-drop");
     }
 
-    
     litersInput?.addEventListener("input", calculate);
     conditionInputs.forEach((input) => input.addEventListener("change", calculate));
 
-    
     calculate();
 </script>
 
