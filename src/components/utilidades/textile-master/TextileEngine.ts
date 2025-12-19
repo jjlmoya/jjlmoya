@@ -118,7 +118,7 @@ export const TEXTILE_CARE_DATA: Record<string, CareInstructions> = {
         ironing: 'No planchar',
         donts: ['Suavizante (rompe fibras)', 'Escurrir fuerte', 'Calor'],
         sos: 'Si ha perdido elasticidad, es irreversible (las fibras se han roto), intenta no estirarlo más.',
-        icon: 'mdi:reflex'
+        icon: 'mdi:arm-flex'
     },
     viscose: {
         id: 'viscose',
