@@ -61,6 +61,13 @@ export const diySection: SectionData = {
             description: "Evita cables quemados. Calcula la sección necesaria para 12V, 24V o 230V.",
             color: "#eab308"
         },
-
+        {
+            href: "/utilidades/calculadora-espacio-muebles/",
+            iconBg: "mdi:elevator-passenger",
+            iconFg: "mdi:sofa",
+            title: "¿Cabe el Mueble?",
+            description: "Comprueba si tus muebles entran en el ascensor o por la puerta.",
+            color: "#6366f1"
+        }
     ]
 };

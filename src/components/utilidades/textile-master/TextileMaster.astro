@@ -1,0 +1,308 @@
+---
+import { Icon } from "astro-icon/components";
+import { TEXTILE_CARE_DATA } from "./TextileEngine";
+
+const fibers = Object.values(TEXTILE_CARE_DATA);
+---
+
+<div class="textile-master-container max-w-5xl mx-auto p-4 sm:p-8" id="textile-master-root">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-4 space-y-4">
+            <h2
+                class="text-xl font-bold text-slate-900 dark:text-white mb-6 uppercase tracking-wider text-xs"
+            >
+                Selecciona el Material
+            </h2>
+            <div class="grid grid-cols-2 lg:grid-cols-1 gap-3">
+                {
+                    fibers.map((f) => (
+                        <button
+                            data-fiber-id={f.id}
+                            class="fiber-btn flex items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-indigo-500 dark:hover:border-indigo-400 transition-all text-left group"
+                        >
+                            <div class="bg-slate-50 dark:bg-slate-900 p-2 rounded-lg group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-colors">
+                                <Icon
+                                    name={f.icon}
+                                    class="w-6 h-6 text-slate-500 group-hover:text-indigo-500"
+                                />
+                            </div>
+                            <span class="font-bold text-slate-700 dark:text-slate-200 text-sm">
+                                {f.fiber}
+                            </span>
+                        </button>
+                    ))
+                }
+            </div>
+        </div>
+
+        
+        <div class="lg:col-span-8">
+            <div
+                id="welcome-message"
+                class="bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800"
+            >
+                <Icon
+                    name="mdi:washing-machine"
+                    class="w-20 h-20 mx-auto text-slate-300 dark:text-slate-700 mb-6"
+                />
+                <h3 class="text-2xl font-bold text-slate-500 dark:text-slate-600">
+                    Selecciona un tejido para ver su guía de cuidado
+                </h3>
+            </div>
+
+            <div id="care-card" class="hidden animate-in fade-in zoom-in-95 duration-500">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-white/20 dark:border-slate-700"
+                >
+                    <div class="bg-indigo-600 p-8 text-white relative">
+                        <div class="flex items-center gap-4 relative z-10">
+                            <div
+                                id="header-icon-bg"
+                                class="bg-white/20 p-4 rounded-2xl backdrop-blur-md"
+                            >
+                                <Icon name="mdi:sheep" class="w-10 h-10" id="header-icon" />
+                            </div>
+                            <div>
+                                <h3 class="text-3xl font-black tracking-tight" id="fiber-name">
+                                    Lana Merino
+                                </h3>
+                                <p class="opacity-80 font-medium">
+                                    Instrucciones de mantenimiento premium
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div
+                            class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"
+                        >
+                        </div>
+                        <div
+                            class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-400/20 rounded-full blur-3xl"
+                        >
+                        </div>
+                    </div>
+
+                    <div class="p-8 space-y-8">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            
+                            <div
+                                class="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 text-center"
+                            >
+                                <Icon
+                                    name="mdi:thermometer"
+                                    class="w-8 h-8 mx-auto text-blue-500 mb-3"
+                                />
+                                <span
+                                    class="block text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1"
+                                    >Temperatura Máx</span
+                                >
+                                <span
+                                    class="text-xl font-black text-slate-900 dark:text-white"
+                                    id="max-temp">30°C</span
+                                >
+                            </div>
+
+                            
+                            <div
+                                class="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 text-center"
+                            >
+                                <Icon
+                                    name="mdi:iron"
+                                    class="w-8 h-8 mx-auto text-orange-500 mb-3"
+                                />
+                                <span
+                                    class="block text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1"
+                                    >Planchado</span
+                                >
+                                <span
+                                    class="text-xl font-black text-slate-900 dark:text-white"
+                                    id="ironing-info">Solo vapor</span
+                                >
+                            </div>
+
+                            
+                            <div
+                                class="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 text-center"
+                            >
+                                <Icon
+                                    name="mdi:weather-sunny"
+                                    class="w-8 h-8 mx-auto text-amber-500 mb-3"
+                                />
+                                <span
+                                    class="block text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1"
+                                    >Secado</span
+                                >
+                                <span
+                                    class="text-xl font-black text-slate-900 dark:text-white"
+                                    id="drying-info">Horizontal</span
+                                >
+                            </div>
+                        </div>
+
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4
+                                    class="flex items-center gap-2 font-bold transform text-slate-900 dark:text-white mb-4"
+                                >
+                                    <Icon name="mdi:close-octagon" class="w-5 h-5 text-red-500" />
+                                    Cosas a EVITAR
+                                </h4>
+                                <ul id="donts-list" class="space-y-2">
+                                    
+                                </ul>
+                            </div>
+                            
+                            <div
+                                class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800"
+                            >
+                                <h4
+                                    class="font-bold text-blue-900 dark:text-blue-200 mb-2 flex items-center gap-2"
+                                >
+                                    <Icon name="mdi:earth" class="w-5 h-5" />
+                                    Alerta de Gravedad
+                                </h4>
+                                <p
+                                    class="text-sm text-blue-800 dark:text-blue-300"
+                                    id="gravity-warning"
+                                >
+                                    Secado Horizontal: Imprescindible para evitar que el peso del
+                                    agua estire las fibras y deforme la prenda permanentemente.
+                                </p>
+                            </div>
+                        </div>
+
+                        
+                        <div
+                            class="bg-emerald-50 dark:bg-emerald-900/20 p-8 rounded-3xl border border-emerald-100 dark:border-emerald-800 relative overflow-hidden group"
+                        >
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="bg-emerald-500 p-2 rounded-lg">
+                                        <Icon name="mdi:medication" class="w-6 h-6 text-white" />
+                                    </div>
+                                    <h4 class="font-bold text-emerald-900 dark:text-emerald-200">
+                                        Sección SOS: Emergencias
+                                    </h4>
+                                </div>
+                                <p
+                                    class="text-emerald-800 dark:text-emerald-300 italic"
+                                    id="sos-info"
+                                >
+                                    Si se ha encogido, sumérgelo en agua tibia con acondicionador de
+                                    pelo durante 30 min y estira suavemente.
+                                </p>
+                            </div>
+                            <Icon
+                                name="mdi:star"
+                                class="absolute -right-4 -bottom-4 w-24 h-24 text-emerald-200 dark:text-emerald-800/30 rotate-12 transition-transform group-hover:scale-110"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { TEXTILE_CARE_DATA } from "./TextileEngine";
+
+    const root = document.getElementById("textile-master-root");
+    if (root) {
+        const welcome = document.getElementById("welcome-message");
+        const careCard = document.getElementById("care-card");
+        const fiberBtns = document.querySelectorAll(".fiber-btn");
+
+        
+        const fName = document.getElementById("fiber-name");
+        const fIcon = document.getElementById("header-icon");
+        const fTemp = document.getElementById("max-temp");
+        const fIron = document.getElementById("ironing-info");
+        const fDry = document.getElementById("drying-info");
+        const fDonts = document.getElementById("donts-list");
+        const fGravity = document.getElementById("gravity-warning");
+        const fSos = document.getElementById("sos-info");
+
+        const gravityTexts = {
+            horizontal:
+                "Secado Horizontal: Imprescindible para evitar que el peso del agua estire las fibras y deforme la prenda permanentemente. Usa una toalla sobre una superficie plana.",
+            vertical:
+                "Secado Vertical: Puedes colgar la prenda en percha (acolchada si es posible) para que el propio peso ayude a eliminar arrugas.",
+            "padded-vertical":
+                "Secado Vertical Delicado: Usa perchas acolchadas y asegura que no haya pinzas que puedan dejar marcas permanentes en el tejido.",
+        };
+
+        fiberBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-fiber-id");
+                if (!id) return;
+                const data = (TEXTILE_CARE_DATA as any)[id];
+                if (!data) return;
+
+                
+                fiberBtns.forEach((b) =>
+                    b.classList.remove(
+                        "ring-2",
+                        "ring-indigo-500",
+                        "bg-indigo-50",
+                        "dark:bg-indigo-900/20"
+                    )
+                );
+                btn.classList.add(
+                    "ring-2",
+                    "ring-indigo-500",
+                    "bg-indigo-50",
+                    "dark:bg-indigo-900/20"
+                );
+
+                
+                welcome?.classList.add("hidden");
+                careCard?.classList.remove("hidden");
+
+                
+                if (fName) fName.textContent = data.fiber;
+                
+                
+                
+                
+                if (fTemp) fTemp.textContent = data.maxTemp;
+                if (fIron) fIron.textContent = data.ironing;
+                if (fDry)
+                    fDry.textContent = data.drying.charAt(0).toUpperCase() + data.drying.slice(1);
+
+                if (fDonts) {
+                    fDonts.innerHTML = data.donts
+                        .map(
+                            (d: string) => `
+                        <li class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-sm">
+                            <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+                            ${d}
+                        </li>
+                    `
+                        )
+                        .join("");
+                }
+
+                if (fGravity) {
+                    const dryKey = data.drying as keyof typeof gravityTexts;
+                    fGravity.textContent = gravityTexts[dryKey] || "";
+                }
+                if (fSos) fSos.textContent = data.sos;
+
+                
+                if (window.innerWidth < 1024) {
+                    careCard?.scrollIntoView({ behavior: "smooth" });
+                }
+            });
+        });
+    }
+</script>
+
+<style>
+    .fiber-btn:active {
+        transform: scale(0.98);
+    }
+</style>

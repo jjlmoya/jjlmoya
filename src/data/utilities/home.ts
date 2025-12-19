@@ -28,6 +28,22 @@ export const homeSection: SectionData = {
             title: "Calculadora Distancia Proyector",
             description: "Calcula dónde poner el proyector según las pulgadas de pantalla.",
             color: "#06b6d4"
+        },
+        {
+            href: "/utilidades/veracidad-textil/",
+            iconBg: "mdi:tag-text-outline",
+            iconFg: "mdi:microscope",
+            title: "Veracidad Textil",
+            description: "¿Calidad o plástico? Analiza la etiqueta de tu ropa.",
+            color: "#6366f1"
+        },
+        {
+            href: "/utilidades/guia-lavado-textil/",
+            iconBg: "mdi:washing-machine",
+            iconFg: "mdi:water-check",
+            title: "Maestro Textil",
+            description: "Guía científica para lavar y cuidar cada tipo de fibra.",
+            color: "#3b82f6"
         }
     ]
 };

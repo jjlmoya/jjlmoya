@@ -37,5 +37,13 @@ export const scienceSection: SectionData = {
             description: "Calcula los efectos de un impacto cósmico. Energía, cráter, radiación y veredicto de supervivencia.",
             color: "#f97316"
         },
+        {
+            href: "/utilidades/detector-microondas/",
+            iconBg: "mdi:microwave",
+            iconFg: "mdi:wifi-strength-alert-outline",
+            title: "Detector de Microondas",
+            description: "Mide interferencias RF de tu cocina usando WiFi.",
+            color: "#e11d48"
+        }
     ]
 };

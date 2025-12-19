@@ -1,0 +1,327 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="furniture-fit-container max-w-5xl mx-auto p-4 sm:p-8" id="furniture-fit-root">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        <div class="space-y-8">
+            <div
+                class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-100 dark:border-slate-800"
+            >
+                <h2
+                    class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2"
+                >
+                    <Icon name="mdi:elevator-passenger" class="w-6 h-6 text-indigo-500" />
+                    Dimensiones del Espacio
+                </h2>
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-2"
+                            >Ancho (cm)</label
+                        >
+                        <input
+                            type="number"
+                            id="con-w"
+                            value="120"
+                            class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-2"
+                            >Alto (cm)</label
+                        >
+                        <input
+                            type="number"
+                            id="con-h"
+                            value="210"
+                            class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-2"
+                            >Fondo (cm)</label
+                        >
+                        <input
+                            type="number"
+                            id="con-d"
+                            value="120"
+                            class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white"
+                        />
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-400 italic">
+                    Ej: Ascensor estándar, marco de puerta, o furgoneta.
+                </p>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-100 dark:border-slate-800"
+            >
+                <h2
+                    class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2"
+                >
+                    <Icon name="mdi:sofa" class="w-6 h-6 text-emerald-500" />
+                    Dimensiones del Mueble
+                </h2>
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-2"
+                            >Largo (cm)</label
+                        >
+                        <input
+                            type="number"
+                            id="obj-w"
+                            value="220"
+                            class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-2"
+                            >Alto (cm)</label
+                        >
+                        <input
+                            type="number"
+                            id="obj-h"
+                            value="90"
+                            class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-2"
+                            >Fondo (cm)</label
+                        >
+                        <input
+                            type="number"
+                            id="obj-d"
+                            value="80"
+                            class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-slate-900 dark:text-white"
+                        />
+                    </div>
+                </div>
+                <div
+                    class="flex items-center gap-4 pt-4 border-t border-slate-50 dark:border-slate-800"
+                >
+                    <div class="flex-grow">
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1"
+                            >Margen de Error (cm)</label
+                        >
+                        <input
+                            type="range"
+                            id="margin-input"
+                            min="0"
+                            max="10"
+                            value="2"
+                            class="w-full accent-indigo-500"
+                        />
+                    </div>
+                    <span id="margin-val" class="text-xs font-mono font-bold text-slate-500 w-8"
+                        >2cm</span
+                    >
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="flex flex-col gap-8">
+            
+            <div
+                class="bg-slate-50 dark:bg-slate-950 rounded-[2.5rem] aspect-square relative overflow-hidden border border-slate-200 dark:border-slate-800 group"
+            >
+                <div
+                    class="absolute inset-0 flex items-center justify-center p-12 perspective-1000"
+                >
+                    
+                    <div
+                        id="visual-container"
+                        class="relative preserve-3d transition-transform duration-700 w-full h-full flex items-center justify-center rotate-x-12 rotate-y-[-12deg]"
+                    >
+                        
+                        <div
+                            id="space-box"
+                            class="absolute border-2 border-dashed border-slate-300 dark:border-slate-700 bg-white/5"
+                            style="width: 100px; height: 175px; transform: translateZ(50px)"
+                        >
+                        </div>
+                        
+                        <div
+                            id="object-box"
+                            class="absolute bg-indigo-500/80 border border-indigo-400 backdrop-blur-sm shadow-2xl transition-all duration-500"
+                            style="width: 80px; height: 183px; transform: rotate(45deg)"
+                        >
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute bottom-6 left-6 flex items-center gap-2">
+                    <Icon name="mdi:cube-outline" class="w-5 h-5 text-slate-400" />
+                    <span class="text-[10px] uppercase font-black tracking-widest text-slate-400"
+                        >Vista 3D Interactiva</span
+                    >
+                </div>
+            </div>
+
+            
+            <div
+                id="verdict-card"
+                class="p-8 rounded-3xl border-l-8 transition-all duration-500 shadow-xl overflow-hidden relative"
+            >
+                <div class="relative z-10 flex items-start gap-4">
+                    <div id="verdict-icon-container" class="p-4 rounded-2xl bg-white/20">
+                        <Icon name="mdi:check" class="w-10 h-10" id="verdict-icon" />
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black mb-1" id="verdict-title">¿Cabe?</h3>
+                        <p class="text-sm opacity-90 leading-relaxed" id="verdict-reason">
+                            Introduce las medidas para comprobar la compatibilidad espacial.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-white/10 relative z-10 hidden" id="diag-info">
+                    <div class="flex justify-between items-center text-xs opacity-70">
+                        <span>Diagonal Máxima (Pitágoras 3D):</span>
+                        <span id="diag-val" class="font-mono font-bold">0cm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { FurnitureEngine } from "./FurnitureEngine";
+
+    const root = document.getElementById("furniture-fit-root");
+    if (root) {
+        
+        const conW = document.getElementById("con-w") as HTMLInputElement;
+        const conH = document.getElementById("con-h") as HTMLInputElement;
+        const conD = document.getElementById("con-d") as HTMLInputElement;
+        const objW = document.getElementById("obj-w") as HTMLInputElement;
+        const objH = document.getElementById("obj-h") as HTMLInputElement;
+        const objD = document.getElementById("obj-d") as HTMLInputElement;
+        const marginInput = document.getElementById("margin-input") as HTMLInputElement;
+        const marginVal = document.getElementById("margin-val");
+
+        
+        const verdictCard = document.getElementById("verdict-card");
+        const verdictTitle = document.getElementById("verdict-title");
+        const verdictReason = document.getElementById("verdict-reason");
+        const diagInfo = document.getElementById("diag-info");
+        const diagVal = document.getElementById("diag-val");
+
+        
+        const spaceBox = document.getElementById("space-box");
+        const objectBox = document.getElementById("object-box");
+        const visualContainer = document.getElementById("visual-container");
+
+        function update() {
+            const container = {
+                width: parseFloat(conW.value) || 0,
+                height: parseFloat(conH.value) || 0,
+                depth: parseFloat(conD.value) || 0,
+            };
+            const object = {
+                width: parseFloat(objW.value) || 0,
+                height: parseFloat(objH.value) || 0,
+                depth: parseFloat(objD.value) || 0,
+            };
+            const margin = parseFloat(marginInput.value) || 0;
+            if (marginVal) marginVal.textContent = `${margin}cm`;
+
+            const result = FurnitureEngine.calculateFit(object, container, margin);
+
+            
+            if (verdictTitle)
+                verdictTitle.textContent = result.fits ? "¡SÍ, CABE AL PELO!" : "NO CABE";
+            if (verdictReason) verdictReason.textContent = result.reason;
+
+            if (verdictCard) {
+                if (result.fits) {
+                    verdictCard.className =
+                        "p-8 rounded-3xl border-l-8 bg-emerald-500 text-white shadow-emerald-500/20";
+                } else {
+                    verdictCard.className =
+                        "p-8 rounded-3xl border-l-8 bg-rose-500 text-white shadow-rose-500/20";
+                }
+            }
+
+            if (diagInfo) {
+                if (result.maxDiagonal > 0) {
+                    diagInfo.classList.remove("hidden");
+                    if (diagVal) diagVal.textContent = `${result.maxDiagonal.toFixed(1)}cm`;
+                } else {
+                    diagInfo.classList.add("hidden");
+                }
+            }
+
+            
+            const max = Math.max(
+                container.width,
+                container.height,
+                container.depth,
+                object.width,
+                object.height,
+                object.depth
+            );
+            const scale = 200 / max;
+
+            if (spaceBox) {
+                spaceBox.style.width = `${container.width * scale}px`;
+                spaceBox.style.height = `${container.height * scale}px`;
+                
+                
+                
+            }
+
+            if (objectBox) {
+                objectBox.style.width = `${object.width * scale}px`;
+                objectBox.style.height = `${object.height * scale}px`;
+
+                
+                if (result.reason.includes("diagonal")) {
+                    const angle = Math.atan2(container.height, container.width) * (180 / Math.PI);
+                    objectBox.style.transform = `rotate(-${angle}deg)`;
+                } else {
+                    objectBox.style.transform = `rotate(0deg)`;
+                }
+
+                objectBox.className = result.fits
+                    ? "absolute bg-emerald-500/40 border border-emerald-400 backdrop-blur-sm shadow-2xl transition-all duration-500"
+                    : "absolute bg-rose-500/60 border border-rose-400 backdrop-blur-sm shadow-2xl transition-all duration-500";
+            }
+        }
+
+        [conW, conH, conD, objW, objH, objD, marginInput].forEach((el) => {
+            el.addEventListener("input", update);
+        });
+
+        
+        window.addEventListener("mousemove", (e) => {
+            if (!visualContainer) return;
+            const x = (e.clientX / window.innerWidth - 0.5) * 40;
+            const y = (e.clientY / window.innerHeight - 0.5) * -40;
+            visualContainer.style.transform = `rotateX(${12 + y}deg) rotateY(${-12 + x}deg)`;
+        });
+
+        update();
+    }
+</script>
+
+<style>
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+    .preserve-3d {
+        transform-style: preserve-3d;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
