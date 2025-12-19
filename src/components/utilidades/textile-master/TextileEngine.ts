@@ -20,6 +20,26 @@ export const TEXTILE_CARE_DATA: Record<string, CareInstructions> = {
         sos: 'Si se ha encogido, sumérgelo en agua tibia con acondicionador de pelo durante 30 min y estira suavemente.',
         icon: 'mdi:sheep'
     },
+    wool: {
+        id: 'wool',
+        fiber: 'Lana (Genérica)',
+        maxTemp: '30°C',
+        drying: 'horizontal',
+        ironing: 'Baja (con traño húmedo)',
+        donts: ['Agua caliente', 'Secadora', 'Retorcer'],
+        sos: 'Usa vapor para recuperar la esponjosidad si se ha apelmazado.',
+        icon: 'mdi:texture-box'
+    },
+    mohair: {
+        id: 'mohair',
+        fiber: 'Mohair',
+        maxTemp: 'Fría',
+        drying: 'horizontal',
+        ironing: 'No planchar (solo vapor)',
+        donts: ['Fricción fuerte', 'Colgar húmedo', 'Calor directo'],
+        sos: 'Cepilla con un cepillo de cerdas suaves para levantar el pelo si se ve aplastado.',
+        icon: 'mdi:auto-fix'
+    },
     silk: {
         id: 'silk',
         fiber: 'Seda Naturtal',
@@ -62,13 +82,43 @@ export const TEXTILE_CARE_DATA: Record<string, CareInstructions> = {
     },
     polyester: {
         id: 'polyester',
-        fiber: 'Poliéster/Sintéticos',
+        fiber: 'Poliéster',
+        maxTemp: '40°C',
+        drying: 'vertical',
+        ironing: 'Baja',
+        donts: ['Plancha caliente (derrite)', 'Limpieza en seco'],
+        sos: 'Para eliminar la electricidad estática, toca un objeto metálico o usa suavizante específico.',
+        icon: 'mdi:bottle-wine-outline'
+    },
+    acrylic: {
+        id: 'acrylic',
+        fiber: 'Acrílico',
+        maxTemp: '30°C',
+        drying: 'vertical',
+        ironing: 'Muy baja',
+        donts: ['Secadora caliente', 'Vapor excesivo'],
+        sos: 'Si aparecen bolitas, usa un quitapelusas eléctrico con cuidado.',
+        icon: 'mdi:flask-outline'
+    },
+    nylon: {
+        id: 'nylon',
+        fiber: 'Nailon / Poliamida',
         maxTemp: '30°C',
         drying: 'vertical',
         ironing: 'Baja',
-        donts: ['Plancha directa caliente', 'Suavizante en exceso'],
-        sos: 'Para el olor persistente a sudor, añade un chorro de vinagre en el compartimento del suavizante.',
-        icon: 'mdi:bottle-wine-outline'
+        donts: ['Lejía', 'Luz solar prolongada (amarillea)'],
+        sos: 'Lava junto con otros sintéticos para evitar transferencias de color.',
+        icon: 'mdi:parachute'
+    },
+    elastane: {
+        id: 'elastane',
+        fiber: 'Elastano (Lycra/Spandex)',
+        maxTemp: 'Fría',
+        drying: 'vertical',
+        ironing: 'No planchar',
+        donts: ['Suavizante (rompe fibras)', 'Escurrir fuerte', 'Calor'],
+        sos: 'Si ha perdido elasticidad, es irreversible (las fibras se han roto), intenta no estirarlo más.',
+        icon: 'mdi:reflex'
     },
     viscose: {
         id: 'viscose',

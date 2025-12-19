@@ -2,9 +2,9 @@ export interface Fiber {
     id: string;
     name: string;
     type: 'natural' | 'semi-synthetic' | 'synthetic';
-    breathability: number; 
-    durability: number;    
-    warmth: number;       
+    breathability: number;
+    durability: number;
+    warmth: number;
     isNoble: boolean;
 }
 
@@ -26,6 +26,7 @@ export const FIBER_DATA: Record<string, Fiber> = {
     nylon: { id: 'nylon', name: 'Nailon', type: 'synthetic', breathability: 4, durability: 10, warmth: 4, isNoble: false },
     polyamide: { id: 'polyamide', name: 'Poliamida', type: 'synthetic', breathability: 4, durability: 10, warmth: 4, isNoble: false },
     elastane: { id: 'elastane', name: 'Elastano', type: 'synthetic', breathability: 3, durability: 7, warmth: 2, isNoble: false },
+    mohair: { id: 'mohair', name: 'Mohair', type: 'natural', breathability: 8, durability: 6, warmth: 9, isNoble: true },
 };
 
 export interface CompositionRow {
@@ -36,8 +37,8 @@ export interface CompositionRow {
 export interface Verdict {
     label: string;
     description: string;
-    color: string; 
-    intensity: number; 
+    color: string;
+    intensity: number;
 }
 
 export class FabricEngine {
@@ -65,7 +66,7 @@ export class FabricEngine {
             .filter(r => FIBER_DATA[r.fiberId]?.type === 'synthetic')
             .reduce((acc, r) => acc + r.percentage, 0);
 
-        
+
         if (polyAcrylicPerc > 50) {
             return {
                 label: 'Plástico Caro',
@@ -132,12 +133,12 @@ export class FabricEngine {
         const fibers = composition.map(c => FIBER_DATA[c.fiberId]).filter(Boolean);
         if (fibers.length === 0) return '';
 
-        
+
         if (fibers.some(f => f.id === 'silk' || f.id === 'cashmere')) {
             return 'MUY DELICADO: Lavar a mano en frío. No usar secadora. Evitar escurrir con fuerza.';
         }
-        if (fibers.some(f => f.id === 'wool' || f.id === 'alpaca' || f.id === 'merino')) {
-            return 'LANAS: Lavar en frío con programa especial. Secar en plano para evitar deformaciones.';
+        if (fibers.some(f => f.id === 'wool' || f.id === 'alpaca' || f.id === 'merino' || f.id === 'mohair')) {
+            return 'LANAS / PELO NOBLE: Lavar en frío con programa especial. Secar en plano para evitar deformaciones. No usar secadora.';
         }
         if (fibers.some(f => f.id === 'linen')) {
             return 'LINO: Tiende a arrugarse mucho. Planchar ligeramente húmedo para mejores resultados.';
