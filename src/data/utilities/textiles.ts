@@ -18,7 +18,7 @@ export interface StainType {
     id: string;
     name: string;
     category: 'organic' | 'protein' | 'oil' | 'synthetic';
-    protocols: Record<string, StainProtocol>; // key is fiber type: 'natural' | 'synthetic' | 'delicate'
+    protocols: Record<string, StainProtocol>;
 }
 
 export interface TextileFiber {
