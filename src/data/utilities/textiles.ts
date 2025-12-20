@@ -1,3 +1,5 @@
+import type { SectionData } from "./types";
+
 export interface TextileFiber {
     id: string;
     name: string;
@@ -273,3 +275,28 @@ export const TEXTILE_DATA: Record<string, TextileFiber> = {
         color: '#450A0A'
     }
 };
+
+export const textileSection: SectionData = {
+    title: "Textiles",
+    icon: "mdi:texture",
+    theme: "indigo",
+    utilities: [
+        {
+            href: "/utilidades/veracidad-textil/",
+            iconBg: "mdi:tag-text-outline",
+            iconFg: "mdi:microscope",
+            title: "Veracidad Textil",
+            description: "¿Calidad o plástico? Analiza la etiqueta de tu ropa.",
+            color: "#6366f1"
+        },
+        {
+            href: "/utilidades/guia-lavado-textil/",
+            iconBg: "mdi:washing-machine",
+            iconFg: "mdi:water-check",
+            title: "Maestro Textil",
+            description: "Guía científica para lavar y cuidar cada tipo de fibra.",
+            color: "#3b82f6"
+        }
+    ]
+};
+
