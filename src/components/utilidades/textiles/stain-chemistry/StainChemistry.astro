@@ -3,7 +3,7 @@ import { TEXTILE_DATA, STAIN_DATA } from "../../../../data/utilities/textiles";
 import type { StainType } from "../../../../data/utilities/textiles";
 import { Icon } from "astro-icon/components";
 
-const fibers = Object.values(TEXTILE_DATA);
+const fibers = Object.entries(TEXTILE_DATA).map(([id, data]) => ({ id, ...data }));
 ---
 
 <div class="max-w-4xl mx-auto p-2 md:p-8">
@@ -32,7 +32,7 @@ const fibers = Object.values(TEXTILE_DATA);
                                     <option
                                         value={fiber.id}
                                         data-fiber-type={
-                                            fiber.type === "synthetic"
+                                            fiber.family === "synthetic"
                                                 ? "synthetic"
                                                 : fiber.isNoble
                                                   ? "delicate"

@@ -1,3 +1,4 @@
+import type { SectionData } from './types';
 
 export interface WashingSymbol {
     id: string;
@@ -59,21 +60,6 @@ export interface StainType {
     };
 }
 
-export interface Utility {
-    href: string;
-    iconBg: string;
-    iconFg: string;
-    title: string;
-    description: string;
-    color: string;
-}
-
-export interface SectionData {
-    title: string;
-    icon: string;
-    theme: "emerald" | "amber" | "orange" | "purple" | "blue" | "pink" | "cyan" | "indigo" | "slate" | "rose" | "nature";
-    utilities: Utility[];
-}
 
 export const TEXTILE_DATA: Record<string, TextileData> = {
     cotton: {
@@ -370,41 +356,41 @@ export const BURN_TEST_DATA: BurnTestResult[] = [
 ];
 
 export const textileSection: SectionData = {
-    title: "Textiles",
-    icon: "mdi:texture",
-    theme: "indigo",
+    title: 'Textiles',
+    icon: 'mdi:texture',
+    theme: 'indigo',
     utilities: [
         {
-            href: "/utilidades/veracidad-textil/",
-            iconBg: "mdi:tag-text-outline",
-            iconFg: "mdi:microscope",
-            title: "Veracidad Textil",
-            description: "¿Calidad o plástico? Analiza la etiqueta de tu ropa.",
-            color: "#6366f1"
+            href: '/utilidades/veracidad-textil/',
+            iconBg: 'mdi:tag-text-outline',
+            iconFg: 'mdi:microscope',
+            title: 'Veracidad Textil',
+            description: '¿Calidad o plástico? Analiza la etiqueta de tu ropa.',
+            color: '#6366f1'
         },
         {
-            href: "/utilidades/guia-lavado-textil/",
-            iconBg: "mdi:washing-machine",
-            iconFg: "mdi:water-check",
-            title: "Maestro Textil",
-            description: "Guía científica para lavar y cuidar cada tipo de fibra.",
-            color: "#3b82f6"
+            href: '/utilidades/guia-lavado-textil/',
+            iconBg: 'mdi:washing-machine',
+            iconFg: 'mdi:water-check',
+            title: 'Maestro Textil',
+            description: 'Guía científica para lavar y cuidar cada tipo de fibra.',
+            color: '#3b82f6'
         },
         {
-            href: "/utilidades/protocolo-quimico-manchas/",
-            iconBg: "mdi:test-tube",
-            iconFg: "mdi:iv-bag",
-            title: "Química de Manchas",
-            description: "Protocolos científicos para eliminar manchas según el tipo de fibra.",
-            color: "#8b5cf6"
+            href: '/utilidades/protocolo-quimico-manchas/',
+            iconBg: 'mdi:test-tube',
+            iconFg: 'mdi:iv-bag',
+            title: 'Química de Manchas',
+            description: 'Protocolos científicos para eliminar manchas según el tipo de fibra.',
+            color: '#8b5cf6'
         },
         {
-            href: "/utilidades/identificador-fibras-combustion/",
-            iconBg: "mdi:fire",
-            iconFg: "mdi:microscope",
-            title: "Prueba de Combustión",
-            description: "Identifica la composición real de una tela quemando una pequeña muestra.",
-            color: "#ef4444"
+            href: '/utilidades/identificador-fibras-combustion/',
+            iconBg: 'mdi:fire',
+            iconFg: 'mdi:microscope',
+            title: 'Prueba de Combustión',
+            description: 'Identifica la composición real de una tela quemando una pequeña muestra.',
+            color: '#ef4444'
         }
     ]
 };

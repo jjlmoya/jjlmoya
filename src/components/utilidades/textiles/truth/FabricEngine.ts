@@ -105,7 +105,7 @@ export class FabricEngine {
     }
 
     static getCareWarning(composition: CompositionRow[]): string {
-        // Check IDs directly from composition
+
         const has = (id: string) => composition.some(c => c.fiberId === id);
         const hasAny = (ids: string[]) => composition.some(c => ids.includes(c.fiberId));
 
