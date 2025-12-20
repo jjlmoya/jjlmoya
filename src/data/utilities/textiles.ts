@@ -1,4 +1,25 @@
-import type { SectionData } from "./types";
+import type { SectionData, UtilityItem } from "./types";
+
+export interface ChemicalAgent {
+    id: string;
+    name: string;
+    description: string;
+    warning?: string;
+}
+
+export interface StainProtocol {
+    agentId: string;
+    temperature: string;
+    method: string;
+    notes?: string;
+}
+
+export interface StainType {
+    id: string;
+    name: string;
+    category: 'organic' | 'protein' | 'oil' | 'synthetic';
+    protocols: Record<string, StainProtocol>;
+}
 
 export interface TextileFiber {
     id: string;
@@ -276,6 +297,81 @@ export const TEXTILE_DATA: Record<string, TextileFiber> = {
     }
 };
 
+export const CHEMICAL_AGENTS: Record<string, ChemicalAgent> = {
+    percarbonate: {
+        id: 'percarbonate',
+        name: 'Percarbonato de Sodio',
+        description: 'Blanqueador oxigenado biodegradable. Libera oxígeno activo al disolverse.',
+        warning: 'Evitar en fibras de proteína (seda, lana) a altas concentraciones.'
+    },
+    isopropyl: {
+        id: 'isopropyl',
+        name: 'Alcohol Isopropílico',
+        description: 'Solvente eficaz para pigmentos y grasas ligeras.',
+        warning: 'Puede dañar el brillo en sedas y disolver algunos acrílicos si no se diluye.'
+    },
+    acetone: {
+        id: 'acetone',
+        name: 'Acetona',
+        description: 'Solvente potente para lacas y pegamentos.',
+        warning: 'PROHIBIDO en acetatos y triacetatos (disuelve la fibra).'
+    },
+    enzyme: {
+        id: 'enzyme',
+        name: 'Detergente Enzimático',
+        description: 'Contiene proteasas que rompen manchas biológicas.',
+        warning: 'Uso con precaución en lana y seda (son proteínas).'
+    },
+    vinegar: {
+        id: 'vinegar',
+        name: 'Vinagre Blanco',
+        description: 'Ácido acético suave para neutralizar olores y fijar colores.',
+    }
+};
+
+export const STAIN_DATA: StainType[] = [
+    {
+        id: 'wine',
+        name: 'Vino Tinto / Fruta',
+        category: 'organic',
+        protocols: {
+            natural: { agentId: 'percarbonate', temperature: '40-60°C', method: 'Remojo prolongado' },
+            synthetic: { agentId: 'percarbonate', temperature: '40°C', method: 'Pasta directa' },
+            delicate: { agentId: 'vinegar', temperature: 'Fría', method: 'Aclarado con agua con gas y vinagre', notes: 'No frotar' }
+        }
+    },
+    {
+        id: 'blood',
+        name: 'Sangre',
+        category: 'protein',
+        protocols: {
+            natural: { agentId: 'enzyme', temperature: 'Fría', method: 'Remojo en agua salada y luego enzima' },
+            synthetic: { agentId: 'enzyme', temperature: 'Fría', method: 'Aplicación directa' },
+            delicate: { agentId: 'vinegar', temperature: 'Fría', method: 'Aclarado inmediato, evitar calor' }
+        }
+    },
+    {
+        id: 'grease',
+        name: 'Grasa / Aceite',
+        category: 'oil',
+        protocols: {
+            natural: { agentId: 'isopropyl', temperature: '40°C', method: 'Disolver con alcohol y luego lavar' },
+            synthetic: { agentId: 'isopropyl', temperature: '40°C', method: 'Poner papel absorbente debajo' },
+            delicate: { agentId: 'isopropyl', temperature: 'Fría', method: 'Diluir alcohol al 50%' }
+        }
+    },
+    {
+        id: 'ink',
+        name: 'Tinta / Marcador',
+        category: 'synthetic',
+        protocols: {
+            natural: { agentId: 'isopropyl', temperature: 'Ambiente', method: 'Esponjar desde fuera hacia dentro' },
+            synthetic: { agentId: 'isopropyl', temperature: 'Ambiente', method: 'Precaución con la dispersión' },
+            delicate: { agentId: 'isopropyl', temperature: 'Fría', method: 'Diluir y probar en zona oculta' }
+        }
+    }
+];
+
 export const textileSection: SectionData = {
     title: "Textiles",
     icon: "mdi:texture",
@@ -296,7 +392,16 @@ export const textileSection: SectionData = {
             title: "Maestro Textil",
             description: "Guía científica para lavar y cuidar cada tipo de fibra.",
             color: "#3b82f6"
+        },
+        {
+            href: "/utilidades/protocolo-quimico-manchas/",
+            iconBg: "mdi:test-tube",
+            iconFg: "mdi:iv-bag",
+            title: "Química de Manchas",
+            description: "Protocolos científicos para eliminar manchas según el tipo de fibra.",
+            color: "#8b5cf6"
         }
     ]
 };
+
 
