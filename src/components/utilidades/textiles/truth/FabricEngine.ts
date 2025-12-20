@@ -38,7 +38,7 @@ export class FabricEngine {
             .reduce((acc, r) => acc + r.percentage, 0);
 
         const syntheticPerc = composition
-            .filter(r => FIBER_DATA[r.fiberId]?.type === 'synthetic')
+            .filter(r => FIBER_DATA[r.fiberId]?.family === 'synthetic')
             .reduce((acc, r) => acc + r.percentage, 0);
 
 
@@ -105,20 +105,22 @@ export class FabricEngine {
     }
 
     static getCareWarning(composition: CompositionRow[]): string {
-        const fibers = composition.map(c => FIBER_DATA[c.fiberId]).filter(Boolean);
-        if (fibers.length === 0) return '';
+        // Check IDs directly from composition
+        const has = (id: string) => composition.some(c => c.fiberId === id);
+        const hasAny = (ids: string[]) => composition.some(c => ids.includes(c.fiberId));
 
+        if (composition.length === 0) return '';
 
-        if (fibers.some(f => f.id === 'silk' || f.id === 'cashmere')) {
+        if (hasAny(['silk', 'cashmere'])) {
             return 'MUY DELICADO: Lavar a mano en frío. No usar secadora. Evitar escurrir con fuerza.';
         }
-        if (fibers.some(f => f.id === 'wool' || f.id === 'alpaca' || f.id === 'merino' || f.id === 'mohair')) {
+        if (hasAny(['wool', 'alpaca', 'merino', 'mohair'])) {
             return 'LANAS / PELO NOBLE: Lavar en frío con programa especial. Secar en plano para evitar deformaciones. No usar secadora.';
         }
-        if (fibers.some(f => f.id === 'linen')) {
+        if (has('linen')) {
             return 'LINO: Tiende a arrugarse mucho. Planchar ligeramente húmedo para mejores resultados.';
         }
-        if (fibers.some(f => f.id === 'viscose' || f.id === 'modal')) {
+        if (hasAny(['viscose', 'modal'])) {
             return 'SEMISINTÉTICOS: Se debilita en mojado. Tratar con cuidado y no centrifugar fuerte.';
         }
         return 'LAVADO ESTÁNDAR: Sigue siempre las instrucciones de la etiqueta física.';
