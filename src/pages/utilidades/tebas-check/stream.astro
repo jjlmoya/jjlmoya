@@ -1,0 +1,194 @@
+---
+import SEO from "../../../components/SEO.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <SEO title="Tebas-Check Stream Overlay" description="Widget para OBS" />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap"
+            rel="stylesheet"
+        />
+        <style is:global>
+            html,
+            body {
+                background-color: transparent !important;
+                background: none !important;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+            }
+
+            body {
+                font-family: "Outfit", sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            #app {
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: transparent !important;
+            }
+
+            .state-container {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+                text-align: center;
+                animation: zoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+
+            .state-container.active {
+                display: flex;
+            }
+
+            @keyframes zoomIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.8);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            .status-img {
+                width: 280px;
+                height: 280px;
+                border-radius: 2.5rem;
+                object-fit: cover;
+            }
+
+            .status-text {
+                font-size: 4.5rem;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: -0.04em;
+                margin: 0;
+                line-height: 0.9;
+            }
+
+            .loading-spinner {
+                animation: spin 1s linear infinite;
+                color: rgba(128, 128, 128, 0.2);
+            }
+
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            #state-blocked {
+                color: #ef4444;
+            }
+            #state-success {
+                color: #10b981;
+            }
+            #state-no-internet {
+                color: #71717a;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div id="state-loading" class="state-container active">
+                <Icon
+                    name="mdi:loading"
+                    class="loading-spinner"
+                    style="width: 100px; height: 100px;"
+                />
+            </div>
+
+            <div id="state-blocked" class="state-container">
+                <img
+                    src="/assets/utilidades/tebas-check/tebas_enfadado.png"
+                    class="status-img"
+                    style="border: 6px solid #ef4444;"
+                />
+                <h1 class="status-text">BLOQUEADOS</h1>
+            </div>
+
+            <div id="state-success" class="state-container">
+                <img
+                    src="/assets/utilidades/tebas-check/tebas_triste.png"
+                    class="status-img"
+                    style="border: 6px solid #10b981;"
+                />
+                <h1 class="status-text">LIBRES</h1>
+            </div>
+
+            <div id="state-no-internet" class="state-container">
+                <Icon name="mdi:router-wireless-off" style="width: 140px; height: 140px;" />
+                <h1 class="status-text" style="font-size: 3rem;">SIN CONEXIÓN</h1>
+            </div>
+        </div>
+
+        <script>
+            const states = {
+                loading: document.getElementById("state-loading"),
+                blocked: document.getElementById("state-blocked"),
+                success: document.getElementById("state-success"),
+                noInternet: document.getElementById("state-no-internet"),
+            };
+
+            function showState(id: keyof typeof states) {
+                Object.values(states).forEach((el) => el?.classList.remove("active"));
+                states[id]?.classList.add("active");
+            }
+
+            async function runCheck() {
+                const params = new URLSearchParams(window.location.search);
+                const force = params.get("force");
+
+                if (force) {
+                    if (force === "blocked") return showState("blocked");
+                    if (force === "no-internet") return showState("noInternet");
+                    if (force === "success") return showState("success");
+                }
+
+                showState("loading");
+
+                try {
+                    const [google, cf] = await Promise.all([
+                        fetch("https://www.google.es/favicon.ico", {
+                            mode: "no-cors",
+                            cache: "no-store",
+                        })
+                            .then(() => true)
+                            .catch(() => false),
+                        fetch("https://1.1.1.1/cdn-cgi/trace", {
+                            mode: "no-cors",
+                            cache: "no-store",
+                        })
+                            .then(() => true)
+                            .catch(() => false),
+                    ]);
+
+                    if (google && !cf) showState("blocked");
+                    else if (!google) showState("noInternet");
+                    else showState("success");
+                } catch (e) {
+                    showState("noInternet");
+                }
+            }
+
+            runCheck();
+            setInterval(runCheck, 120000);
+        </script>
+    </body>
+</html>

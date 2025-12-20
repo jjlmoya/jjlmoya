@@ -1,0 +1,326 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    isStreamOnly?: boolean;
+}
+
+const { isStreamOnly = false } = Astro.props;
+---
+
+<div
+    id="standard-ui"
+    class:list={[
+        "w-full max-w-2xl mx-auto p-4 transition-opacity duration-500",
+        { hidden: isStreamOnly },
+    ]}
+>
+    <div
+        class="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 relative"
+    >
+        <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+            <Icon name="mdi:cctv" class="w-32 h-32 text-indigo-900 dark:text-white" />
+        </div>
+
+        <div class="p-8 md:p-10 space-y-8 relative z-10">
+            <div
+                id="status-container"
+                class="min-h-[220px] flex flex-col items-center justify-center text-center transition-all duration-300"
+            >
+                <div
+                    id="loading-state"
+                    class="flex flex-col items-center gap-6 animate-in fade-in zoom-in duration-500"
+                >
+                    <div class="relative">
+                        <div
+                            class="w-24 h-24 rounded-full border-4 border-zinc-100 dark:border-zinc-800 flex items-center justify-center bg-white dark:bg-zinc-900 z-10 relative"
+                        >
+                            <Icon
+                                name="mdi:eye-refresh-outline"
+                                class="w-10 h-10 text-indigo-500 animate-spin-slow"
+                            />
+                        </div>
+                        <div
+                            class="absolute inset-0 rounded-full animate-ping opacity-20 bg-indigo-500"
+                        >
+                        </div>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-2xl font-black text-zinc-900 dark:text-white mb-2 uppercase italic"
+                        >
+                            Escaneando la matrix...
+                        </h3>
+                        <p
+                            class="text-zinc-500 dark:text-zinc-400 font-medium animate-pulse"
+                            id="loading-text"
+                        >
+                            Buscando bloques de hormigón en tu fibra...
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="result-state"
+                    class="hidden w-full space-y-4 animate-in slide-in-from-bottom-8 duration-500"
+                >
+                    <div
+                        id="res-blocked"
+                        class="hidden bg-red-50 dark:bg-red-900/10 p-6 rounded-2xl border-2 border-red-500 dark:border-red-500/50 flex flex-col md:flex-row gap-6 items-center shadow-[0_0_30px_rgba(239,68,68,0.2)]"
+                    >
+                        <div class="relative shrink-0">
+                            <img
+                                src="/assets/utilidades/tebas-check/tebas_enfadado.png"
+                                alt="Tebas Enfadado"
+                                class="w-24 h-24 rounded-2xl border-2 border-red-500/20 object-cover shadow-lg"
+                            />
+                            <div
+                                class="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full shadow-lg animate-bounce"
+                            >
+                                <Icon name="mdi:gavel" class="w-4 h-4" />
+                            </div>
+                        </div>
+                        <div class="text-center md:text-left">
+                            <h3
+                                class="text-2xl font-black text-red-700 dark:text-red-400 mb-2 uppercase italic transform -skew-x-6"
+                            >
+                                BLOQUEANDO...
+                            </h3>
+                            <div class="space-y-2 text-red-800 dark:text-red-200">
+                                <p class="font-bold">Diagnóstico: "Censura Selectiva"</p>
+                                <p class="text-sm opacity-80">
+                                    Te ha señalado con el dedo. Cloudflare está en el gulag de tu
+                                    ISP. No verás ni los anuncios hasta que se calme.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        id="res-no-internet"
+                        class="hidden bg-zinc-100 dark:bg-zinc-800 p-6 rounded-2xl border-2 border-zinc-300 dark:border-zinc-700 flex flex-col md:flex-row gap-6 items-center opacity-80 grayscale"
+                    >
+                        <div
+                            class="w-20 h-20 flex items-center justify-center shrink-0 text-zinc-500"
+                        >
+                            <Icon name="mdi:router-wireless-off" class="w-12 h-12" />
+                        </div>
+                        <div class="text-center md:text-left">
+                            <h3 class="text-xl font-black text-zinc-900 dark:text-white mb-1">
+                                NI PA' PIRATEAR SIRVES
+                            </h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 text-sm">
+                                Ni Google responde. No culpes a la Liga de que no has pagado el
+                                recibo o tu router ha decidido suicidarse. Reinicia y deja de
+                                llorar.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        id="res-success"
+                        class="hidden bg-emerald-50 dark:bg-emerald-900/10 p-6 rounded-2xl border border-emerald-200 dark:border-emerald-800 flex flex-col md:flex-row gap-6 items-center shadow-[0_0_30px_rgba(16,185,129,0.1)]"
+                    >
+                        <div class="relative shrink-0">
+                            <img
+                                src="/assets/utilidades/tebas-check/tebas_triste.png"
+                                alt="Tebas Llorando"
+                                class="w-24 h-24 rounded-2xl border-2 border-emerald-500/20 object-cover shadow-lg"
+                            />
+                            <div
+                                class="absolute -top-2 -right-2 bg-emerald-500 text-white p-1 rounded-full shadow-lg"
+                            >
+                                <Icon name="mdi:emoticon-sad-outline" class="w-4 h-4" />
+                            </div>
+                        </div>
+                        <div class="text-center md:text-left">
+                            <h3
+                                class="text-xl font-black text-emerald-700 dark:text-emerald-400 mb-1 uppercase tracking-tight italic"
+                            >
+                                SOIS LIBRES
+                            </h3>
+                            <p
+                                class="text-emerald-800/80 dark:text-emerald-200/80 text-sm font-medium"
+                            >
+                                No detectamos el mazo judicial en tu conexión. Hoy Tebas llora
+                                fuerte porque no puede bloquearte nada. Disfruta de tu libertad
+                                provisional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center pt-4 border-t border-zinc-100 dark:border-zinc-800/50">
+                <button
+                    id="retry-btn"
+                    class="hidden group relative overflow-hidden bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-sm py-3 px-6 rounded-xl hover:scale-105 transition-all duration-200 shadow-lg"
+                >
+                    <span class="flex items-center gap-2">
+                        <Icon
+                            name="mdi:reload"
+                            class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"
+                        />
+                        <span>Provocar a la justicia otra vez</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        <div
+            class="bg-[#0c0c0c] p-5 border-t border-zinc-800 font-mono text-[10px] md:text-xs leading-relaxed text-zinc-400 overflow-hidden"
+        >
+            <div class="flex items-center justify-between mb-3 opacity-50 select-none">
+                <span class="flex gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500/50"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500/50"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500/50"></span>
+                </span>
+                <span>TEBAS_OS v2.1.0</span>
+            </div>
+            <div id="console-output" class="h-32 overflow-y-auto space-y-1 scrollbar-hide"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const standardUi = document.getElementById("standard-ui");
+    const loadingState = document.getElementById("loading-state");
+    const resultState = document.getElementById("result-state");
+    const output = document.getElementById("console-output");
+    const loadingText = document.getElementById("loading-text");
+    const retryBtn = document.getElementById("retry-btn");
+
+    const resBlocked = document.getElementById("res-blocked");
+    const resNoInternet = document.getElementById("res-no-internet");
+    const resSuccess = document.getElementById("res-success");
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const MESSAGES = [
+        "Negociando con tu router...",
+        "Esquivando la circular del juzgado...",
+        "Comprobando si eres pirata (guiño, guiño)...",
+        "Pingueando a Google para ver si existes...",
+        "Consultando el oráculo de la IP compartida...",
+        "Revisando si Tebas ha pagado la cuota de autónomos...",
+        "Buscando el botón de 'saltar intro' en la vida...",
+        "Analizando tu historial de búsquedas en .es...",
+        "Calculando la probabilidad de que te toque la lotería (spoiler: 0%)...",
+        "Intentando descifrar el contrato de tu operadora...",
+    ];
+
+    const log = (msg: string, type: "neutral" | "error" | "success" | "info" = "neutral") => {
+        if (!output) return;
+        const color =
+            type === "error"
+                ? "text-red-400"
+                : type === "success"
+                  ? "text-emerald-400"
+                  : "text-zinc-500";
+        const div = document.createElement("div");
+        div.className = `${color} border-l-2 border-transparent pl-2 hover:border-zinc-700 transition-colors`;
+        if (type === "error") div.classList.add("border-red-900/50", "bg-red-900/10");
+        if (type === "success") div.classList.add("border-emerald-900/50", "bg-emerald-900/10");
+
+        div.innerHTML = `<span class="opacity-30 mr-2">[${new Date().toLocaleTimeString().split(" ")[0]}]</span>${msg}`;
+        output.appendChild(div);
+        output.scrollTop = output.scrollHeight;
+    };
+
+    const runDiagnostic = async () => {
+        loadingState?.classList.remove("hidden");
+        resultState?.classList.add("hidden");
+        resBlocked?.classList.add("hidden");
+        resNoInternet?.classList.add("hidden");
+        resSuccess?.classList.add("hidden");
+        retryBtn?.classList.add("hidden");
+        if (output) output.innerHTML = "";
+        log("INICIANDO PROTOCOLO 'TEBAS_WATCH'...", "neutral");
+
+        const msgInterval = setInterval(() => {
+            if (loadingText)
+                loadingText.innerText = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+        }, 800);
+        await new Promise((r) => setTimeout(r, 1500));
+
+        const CONFIG = {
+            CONTROL: "https://www.google.es/favicon.ico",
+            TARGET: "https://1.1.1.1/cdn-cgi/trace",
+            TIMEOUT: 3000,
+        };
+
+        const check = async (url: string, label: string) => {
+            log(`> Lanzando petición a ${label}...`);
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
+            try {
+                const start = performance.now();
+                await fetch(url, { mode: "no-cors", cache: "no-store", signal: controller.signal });
+                const time = (performance.now() - start).toFixed(0);
+                log(`> ${label} respondió en ${time}ms`, "success");
+                return true;
+            } catch (e: any) {
+                if (e.name === "AbortError")
+                    log(`> ${label} HA SIDO NEUTRALIZADO (Timeout ${CONFIG.TIMEOUT}ms)`, "error");
+                else log(`> ${label} ERROR: ${e.message}`, "error");
+                return false;
+            } finally {
+                clearTimeout(id);
+            }
+        };
+
+        try {
+            let googleAlive, cfAlive;
+            const force = urlParams.get("force");
+
+            if (force) {
+                log(`MODO QA: FORZANDO ESTADO [${force.toUpperCase()}]`, "neutral");
+                if (force === "blocked") {
+                    googleAlive = true;
+                    cfAlive = false;
+                } else if (force === "no-internet") {
+                    googleAlive = false;
+                    cfAlive = false;
+                } else {
+                    googleAlive = true;
+                    cfAlive = true;
+                }
+                await new Promise((r) => setTimeout(r, 1000));
+            } else {
+                [googleAlive, cfAlive] = await Promise.all([
+                    check(CONFIG.CONTROL, "GOOGLE_SERVICES"),
+                    check(CONFIG.TARGET, "CLOUDFLARE_EDGE"),
+                ]);
+            }
+
+            clearInterval(msgInterval);
+            loadingState?.classList.add("hidden");
+            resultState?.classList.remove("hidden");
+            retryBtn?.classList.remove("hidden");
+
+            if (googleAlive && !cfAlive) {
+                log("!!! ALERTA: INTERFERENCIA JUDICIAL DETECTADA !!!", "error");
+                resBlocked?.classList.remove("hidden");
+            } else if (!googleAlive) {
+                log("ERROR CRÍTICO: CAPA 8 (USUARIO)", "error");
+                resNoInternet?.classList.remove("hidden");
+            } else {
+                log("STATUS: LIBERTAD PROVISIONAL. TEBAS ESTÁ TRISTE.", "success");
+                resSuccess?.classList.remove("hidden");
+            }
+
+            try {
+                const ipReq = await fetch("https://ipapi.co/json/");
+                const ipData = await ipReq.json();
+                if (ipData.org) log(`ISP VIGILANTE: ${ipData.org}`, "neutral");
+            } catch (e) {}
+        } catch (error) {
+            log("ERROR CRÍTICO DEL SISTEMA", "error");
+        }
+    };
+
+    runDiagnostic();
+
+    retryBtn?.addEventListener("click", runDiagnostic);
+</script>
