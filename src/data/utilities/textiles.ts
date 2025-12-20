@@ -1,0 +1,277 @@
+export interface TextileFiber {
+    id: string;
+    name: string;
+    type: 'natural' | 'semi-synthetic' | 'synthetic';
+    // Propiedades para análisis de calidad
+    breathability: number;
+    durability: number;
+    warmth: number;
+    isNoble: boolean;
+    // Propiedades para guía de cuidados
+    maxTemp: string;
+    drying: 'horizontal' | 'vertical' | 'padded-vertical';
+    ironing: string;
+    donts: string[];
+    sos: string;
+    icon: string;
+    color: string;
+}
+
+export const TEXTILE_DATA: Record<string, TextileFiber> = {
+    merino: {
+        id: 'merino',
+        name: 'Lana Merino',
+        type: 'natural',
+        breathability: 8,
+        durability: 7,
+        warmth: 9,
+        isNoble: true,
+        maxTemp: '30°C',
+        drying: 'horizontal',
+        ironing: 'Solo vapor',
+        donts: ['Suavizantes', 'Colgar en percha', 'Centrifugado fuerte'],
+        sos: 'Si se ha encogido, sumérgelo en agua tibia con acondicionador de pelo durante 30 min y estira suavemente.',
+        icon: 'mdi:sheep',
+        color: '#111827'
+    },
+    wool: {
+        id: 'wool',
+        name: 'Lana (Genérica)',
+        type: 'natural',
+        breathability: 7,
+        durability: 8,
+        warmth: 9,
+        isNoble: true,
+        maxTemp: '30°C',
+        drying: 'horizontal',
+        ironing: 'Baja (con traño húmedo)',
+        donts: ['Agua caliente', 'Secadora', 'Retorcer'],
+        sos: 'Usa vapor para recuperar la esponjosidad si se ha apelmazado.',
+        icon: 'mdi:sheep',
+        color: '#020617'
+    },
+    mohair: {
+        id: 'mohair',
+        name: 'Mohair',
+        type: 'natural',
+        breathability: 8,
+        durability: 6,
+        warmth: 9,
+        isNoble: true,
+        maxTemp: 'Fría',
+        drying: 'horizontal',
+        ironing: 'No planchar (solo vapor)',
+        donts: ['Fricción fuerte', 'Colgar húmedo', 'Calor directo'],
+        sos: 'Cepilla con un cepillo de cerdas suaves para levantar el pelo si se ve aplastado.',
+        icon: 'mdi:sheep',
+        color: '#431407'
+    },
+    silk: {
+        id: 'silk',
+        name: 'Seda Natural',
+        type: 'natural',
+        breathability: 9,
+        durability: 4,
+        warmth: 6,
+        isNoble: true,
+        maxTemp: 'Fría',
+        drying: 'padded-vertical',
+        ironing: 'Muy baja (del revés)',
+        donts: ['Retorcer', 'Escurrir', 'Luz solar directa'],
+        sos: 'Para recuperar el brillo, añade una cucharada de vinagre blanco al último aclarado.',
+        icon: 'mdi:butterfly',
+        color: '#422006'
+    },
+    linen: {
+        id: 'linen',
+        name: 'Lino',
+        type: 'natural',
+        breathability: 10,
+        durability: 6,
+        warmth: 2,
+        isNoble: false,
+        maxTemp: '40-60°C',
+        drying: 'vertical',
+        ironing: 'Alta (húmedo)',
+        donts: ['Secado excesivo', 'Doblado húmedo'],
+        sos: 'Si está muy arrugado, mételo en una bolsa en la nevera unas horas antes de planchar.',
+        icon: 'mdi:sprout',
+        color: '#064E3B'
+    },
+    hemp: {
+        id: 'hemp',
+        name: 'Cáñamo',
+        type: 'natural',
+        breathability: 9,
+        durability: 9,
+        warmth: 3,
+        isNoble: false,
+        maxTemp: '40°C',
+        drying: 'vertical',
+        ironing: 'Alta',
+        donts: ['Doblado húmedo', 'Secado excesivo'],
+        sos: 'Fibra muy resistente; el uso frecuente la hace más suave.',
+        icon: 'mdi:sprout',
+        color: '#14532D'
+    },
+    cashmere: {
+        id: 'cashmere',
+        name: 'Cachemira',
+        type: 'natural',
+        breathability: 8,
+        durability: 3,
+        warmth: 10,
+        isNoble: true,
+        maxTemp: '<20°C',
+        drying: 'horizontal',
+        ironing: 'Baja (del revés)',
+        donts: ['Lavado frecuente', 'Fricción'],
+        sos: 'Usa un peine para cachemira para eliminar las bolitas, nunca una cuchilla.',
+        icon: 'mdi:sheep',
+        color: '#0f172a'
+    },
+    alpaca: {
+        id: 'alpaca',
+        name: 'Alpaca',
+        type: 'natural',
+        breathability: 8,
+        durability: 6,
+        warmth: 10,
+        isNoble: true,
+        maxTemp: '<20°C',
+        drying: 'horizontal',
+        ironing: 'Sin contacto (vapor)',
+        donts: ['Agitación', 'Calor', 'Frotar fuerte'],
+        sos: 'Usa champú de bebé en lugar de detergente para mantener las fibras suaves.',
+        icon: 'mdi:sheep',
+        color: '#292524'
+    },
+    cotton: {
+        id: 'cotton',
+        name: 'Algodón',
+        type: 'natural',
+        breathability: 8,
+        durability: 7,
+        warmth: 4,
+        isNoble: false,
+        maxTemp: '60°C',
+        drying: 'vertical',
+        ironing: 'Alta',
+        donts: ['Lejía (en color)', 'Mezclar con toallas'],
+        sos: 'Para eliminar manchas de sudor amarillas, usa una pasta de bicarbonato y limón antes de lavar.',
+        icon: 'mdi:cloud',
+        color: '#042F2E'
+    },
+    viscose: {
+        id: 'viscose',
+        name: 'Viscosa (Rayón)',
+        type: 'semi-synthetic',
+        breathability: 7,
+        durability: 3,
+        warmth: 4,
+        isNoble: false,
+        maxTemp: '30°C',
+        drying: 'vertical',
+        ironing: 'Baja',
+        donts: ['Centrifugado fuerte', 'Escurrir a mano'],
+        sos: 'Si la prenda parece "acartonada" al secarse, planchar con vapor para recuperar la caída.',
+        icon: 'mdi:factory',
+        color: '#3B0764'
+    },
+    modal: {
+        id: 'modal',
+        name: 'Modal',
+        type: 'semi-synthetic',
+        breathability: 8,
+        durability: 4,
+        warmth: 4,
+        isNoble: false,
+        maxTemp: '30°C',
+        drying: 'vertical',
+        ironing: 'Baja',
+        donts: ['Retorcer', 'Escurrir'],
+        sos: 'Más resistente que la viscosa, pero sigue prefiriendo ciclos delicados.',
+        icon: 'mdi:factory',
+        color: '#5b21b6'
+    },
+    lyocell: {
+        id: 'lyocell',
+        name: 'Lyocell',
+        type: 'semi-synthetic',
+        breathability: 8,
+        durability: 5,
+        warmth: 4,
+        isNoble: false,
+        maxTemp: '30°C',
+        drying: 'vertical',
+        ironing: 'Media',
+        donts: ['Fricción excesiva'],
+        sos: 'La más resistente de las fibras celulósicas; tolera mejor el uso diario.',
+        icon: 'mdi:factory',
+        color: '#6d28d9'
+    },
+    polyester: {
+        id: 'polyester',
+        name: 'Poliéster',
+        type: 'synthetic',
+        breathability: 2,
+        durability: 9,
+        warmth: 5,
+        isNoble: false,
+        maxTemp: '40°C',
+        drying: 'vertical',
+        ironing: 'Baja',
+        donts: ['Plancha caliente (derrite)', 'Limpieza en seco'],
+        sos: 'Para eliminar la electricidad estática, toca un objeto metálico o usa suavizante específico.',
+        icon: 'mdi:bottle-soda-classic-outline',
+        color: '#172554'
+    },
+    acrylic: {
+        id: 'acrylic',
+        name: 'Acrílico',
+        type: 'synthetic',
+        breathability: 3,
+        durability: 6,
+        warmth: 8,
+        isNoble: false,
+        maxTemp: '30°C',
+        drying: 'vertical',
+        ironing: 'Muy baja',
+        donts: ['Secadora caliente', 'Vapor excesivo'],
+        sos: 'Si aparecen bolitas, usa un quitapelusas eléctrico con cuidado.',
+        icon: 'mdi:flask-outline',
+        color: '#500724'
+    },
+    nylon: {
+        id: 'nylon',
+        name: 'Nailon / Poliamida',
+        type: 'synthetic',
+        breathability: 4,
+        durability: 10,
+        warmth: 4,
+        isNoble: false,
+        maxTemp: '30°C',
+        drying: 'vertical',
+        ironing: 'Baja',
+        donts: ['Lejía', 'Luz solar prolongada (amarillea)'],
+        sos: 'Lava junto con otros sintéticos para evitar transferencias de color.',
+        icon: 'mdi:parachute',
+        color: '#1E1B4B'
+    },
+    elastane: {
+        id: 'elastane',
+        name: 'Elastano',
+        type: 'synthetic',
+        breathability: 3,
+        durability: 7,
+        warmth: 2,
+        isNoble: false,
+        maxTemp: 'Fría',
+        drying: 'vertical',
+        ironing: 'No planchar',
+        donts: ['Suavizante (rompe fibras)', 'Escurrir fuerte', 'Calor'],
+        sos: 'Si ha perdido elasticidad, es irreversible (las fibras se han roto).',
+        icon: 'mdi:resize',
+        color: '#450A0A'
+    }
+};

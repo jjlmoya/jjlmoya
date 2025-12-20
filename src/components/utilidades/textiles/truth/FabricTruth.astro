@@ -26,23 +26,30 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
                 
             </div>
 
-            <button
-                id="add-row-btn"
-                class="flex items-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl transition-all font-medium"
-            >
-                <Icon name="mdi:plus" class="w-5 h-5" />
-                Añadir Fibra
-            </button>
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                <button
+                    id="add-row-btn"
+                    class="flex items-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl transition-all font-medium"
+                >
+                    <Icon name="mdi:plus" class="w-5 h-5" />
+                    Añadir Fibra
+                </button>
+
+                <div id="total-indicator" class="px-6 py-3 rounded-xl font-mono font-bold transition-all">
+                    Total: <span id="total-val">0</span>%
+                </div>
+            </div>
         </div>
 
         
         <div class="p-6 sm:p-10 bg-slate-50/50 dark:bg-slate-900/50">
             <div id="empty-state" class="text-center py-10">
                 <Icon
-                    name="mdi:label-outline"
+                    name="mdi:alert-circle-outline"
                     class="w-16 h-16 mx-auto text-slate-300 dark:text-slate-700 mb-4"
                 />
-                <p class="text-slate-500">Introduce la composición para ver el veredicto</p>
+                <p class="text-slate-500 font-medium">La composición debe sumar exactamente 100% para ver el veredicto</p>
+                <p id="total-helper" class="text-xs text-slate-400 mt-2 italic"></p>
             </div>
 
             <div
@@ -179,9 +186,9 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
 
                 <div class="text-center">
                     <p
-                        class="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-tighter"
+                        class="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-widest"
                     >
-                        * Los datos de transpirabilidad, durabilidad y calidez son estimaciones
+                        Los datos de transpirabilidad, durabilidad y calidez son estimaciones
                         basadas en promedios de la industria para cada tipo de fibra.
                     </p>
                 </div>
@@ -190,27 +197,39 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
     </div>
 </div>
 
+<datalist id="perc-list">
+    <option value="100">100%</option>
+    <option value="95">95%</option>
+    <option value="80">80%</option>
+    <option value="50">50%</option>
+    <option value="30">30%</option>
+    <option value="10">10%</option>
+    <option value="5">5%</option>
+    <option value="2">2%</option>
+</datalist>
+
 <template id="fiber-row-template">
     <div
         class="fiber-row flex flex-wrap sm:flex-nowrap items-center gap-3 animate-in fade-in slide-in-from-left-2 duration-300"
     >
-        <div class="flex-grow min-w-[150px]">
+        <div class="flex-grow min-w-[200px]">
             <select
                 class="fiber-select w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-900 dark:text-white appearance-none cursor-pointer"
             >
                 {fibers.map((f) => <option value={f.id}>{f.name}</option>)}
             </select>
         </div>
-        <div class="w-32 relative">
+        <div class="w-32 relative group">
             <input
                 type="number"
                 min="0"
                 max="100"
                 step="1"
                 placeholder="0"
+                list="perc-list"
                 class="fiber-perc w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-900 dark:text-white pr-8"
             />
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">%</span>
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover:text-indigo-500 transition-colors font-bold">%</span>
         </div>
         <button class="remove-row-btn p-3 text-slate-400 hover:text-red-500 transition-colors">
             <Icon name="mdi:close-circle-outline" class="w-6 h-6" />
@@ -229,6 +248,9 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
 
         const emptyState = document.getElementById("empty-state");
         const resultContent = document.getElementById("result-content");
+        const totalVal = document.getElementById("total-val");
+        const totalIndicator = document.getElementById("total-indicator");
+        const totalHelper = document.getElementById("total-helper");
 
         
         const verdictCard = document.getElementById("verdict-card");
@@ -254,7 +276,7 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
             gray: { bg: "bg-slate-200", text: "text-slate-600", border: "border-slate-300" },
         };
 
-        function updateAnaysis() {
+        function updateAnalysis() {
             const rows = container?.querySelectorAll(".fiber-row");
             if (!rows) return;
 
@@ -271,7 +293,27 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
 
             const total = composition.reduce((acc, c) => acc + c.percentage, 0);
 
-            if (total === 0) {
+            
+            if (totalVal) totalVal.textContent = total.toString();
+            if (totalIndicator) {
+                if (total === 100) {
+                    totalIndicator.className = "px-6 py-3 rounded-xl font-mono font-bold transition-all bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50";
+                } else if (total > 100) {
+                    totalIndicator.className = "px-6 py-3 rounded-xl font-mono font-bold transition-all bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/50 animate-pulse";
+                } else {
+                    totalIndicator.className = "px-6 py-3 rounded-xl font-mono font-bold transition-all bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400";
+                }
+            }
+
+            if (totalHelper) {
+                if (total === 100) {
+                    totalHelper.textContent = "";
+                } else {
+                    totalHelper.textContent = `Actual: ${total}% (faltan ${100 - total}%)`;
+                }
+            }
+
+            if (total !== 100) {
                 emptyState?.classList.remove("hidden");
                 resultContent?.classList.add("hidden");
                 return;
@@ -308,8 +350,19 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
 
         function addRow() {
             if (!template || !container) return;
+
+            
+            const currentRows = container.querySelectorAll(".fiber-row");
+            let currentTotal = 0;
+            currentRows.forEach(r => {
+                const inp = r.querySelector(".fiber-perc") as HTMLInputElement;
+                currentTotal += parseFloat(inp.value) || 0;
+            });
+
+            if (currentTotal >= 100) return;
+
             const clone = template.content.cloneNode(true) as HTMLElement;
-            const row = clone.querySelector(".fiber-row");
+            const row = clone.querySelector(".fiber-row") as HTMLElement;
             if (!row) return;
 
             const select = row.querySelector(".fiber-select") as HTMLSelectElement;
@@ -320,17 +373,37 @@ const fibers = Object.values(FIBER_DATA).sort((a, b) => a.name.localeCompare(b.n
             if (container.children.length === 0) {
                 select.value = "cotton";
                 input.value = "100";
+            } else {
+                input.value = (100 - currentTotal).toString();
             }
 
-            select.addEventListener("change", updateAnaysis);
-            input.addEventListener("input", updateAnaysis);
+            select.addEventListener("change", updateAnalysis);
+            
+            input.addEventListener("input", (e) => {
+                const rows = container.querySelectorAll(".fiber-row");
+                let otherTotal = 0;
+                rows.forEach(r => {
+                    if (r === row) return;
+                    const inp = r.querySelector(".fiber-perc") as HTMLInputElement;
+                    otherTotal += parseFloat(inp.value) || 0;
+                });
+
+                let val = parseFloat(input.value) || 0;
+                if (val + otherTotal > 100) {
+                    val = 100 - otherTotal;
+                    input.value = val.toString();
+                }
+                
+                updateAnalysis();
+            });
+
             removeBtn?.addEventListener("click", () => {
                 row.remove();
-                updateAnaysis();
+                updateAnalysis();
             });
 
             container.appendChild(row);
-            updateAnaysis();
+            updateAnalysis();
         }
 
         addBtn?.addEventListener("click", addRow);
