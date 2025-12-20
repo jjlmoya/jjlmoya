@@ -2,12 +2,10 @@ export interface TextileFiber {
     id: string;
     name: string;
     type: 'natural' | 'semi-synthetic' | 'synthetic';
-    // Propiedades para análisis de calidad
     breathability: number;
     durability: number;
     warmth: number;
     isNoble: boolean;
-    // Propiedades para guía de cuidados
     maxTemp: string;
     drying: 'horizontal' | 'vertical' | 'padded-vertical';
     ironing: string;
