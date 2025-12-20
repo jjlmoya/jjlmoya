@@ -3,7 +3,7 @@ import { TEXTILE_DATA, STAIN_DATA } from "../../../../data/utilities/textiles";
 import type { StainType } from "../../../../data/utilities/textiles";
 import { Icon } from "astro-icon/components";
 
-const fibers = Object.values(TEXTILE_DATA);
+const fibers = Object.entries(TEXTILE_DATA).map(([id, data]) => ({ id, ...data }));
 ---
 
 <div class="max-w-4xl mx-auto p-2 md:p-8">
@@ -32,7 +32,7 @@ const fibers = Object.values(TEXTILE_DATA);
                                     <option
                                         value={fiber.id}
                                         data-fiber-type={
-                                            fiber.type === "synthetic"
+                                            fiber.family === "synthetic"
                                                 ? "synthetic"
                                                 : fiber.isNoble
                                                   ? "delicate"
@@ -274,7 +274,11 @@ const fibers = Object.values(TEXTILE_DATA);
 </div>
 
 <script>
-    import { STAIN_DATA, CHEMICAL_AGENTS } from "../../../../data/utilities/textiles";
+    import {
+        STAIN_DATA,
+        CHEMICAL_AGENTS,
+        type StainType,
+    } from "../../../../data/utilities/textiles";
 
     const fiberSelect = document.getElementById("fiber-select") as HTMLSelectElement;
     const stainSelect = document.getElementById("stain-select") as HTMLSelectElement;
@@ -293,7 +297,8 @@ const fibers = Object.values(TEXTILE_DATA);
         const stain = STAIN_DATA.find((s) => s.id === stainId);
         if (!stain) return;
 
-        const protocol = stain.protocols[fiberType] || stain.protocols.natural;
+        const protocol =
+            stain.protocols[fiberType as keyof StainType["protocols"]] || stain.protocols.natural;
         if (!protocol) return;
 
         const agent = CHEMICAL_AGENTS[protocol.agentId];

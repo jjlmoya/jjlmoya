@@ -1,4 +1,39 @@
-import type { SectionData, UtilityItem } from "./types";
+import type { SectionData } from './types';
+
+export interface WashingSymbol {
+    id: string;
+    description: string;
+    icon: string;
+    category: 'washing' | 'bleaching' | 'drying' | 'ironing' | 'professional';
+}
+
+export interface TextileData {
+    name: string;
+    description: string;
+    family: 'natural' | 'synthetic' | 'artificial';
+    origin: string;
+    breathability: number;
+    durability: number;
+    warmth: number;
+    washing: string;
+    drying: string;
+    ironing: string;
+    donts: string[];
+    sos: string;
+    icon: string;
+    color: string;
+    isNoble?: boolean;
+}
+
+export type TextileFiber = TextileData;
+
+export interface BurnTestResult {
+    fiberId: string;
+    flame: string;
+    odor: string;
+    smoke: string;
+    residue: string;
+}
 
 export interface ChemicalAgent {
     id: string;
@@ -17,283 +52,151 @@ export interface StainProtocol {
 export interface StainType {
     id: string;
     name: string;
-    category: 'organic' | 'protein' | 'oil' | 'synthetic';
-    protocols: Record<string, StainProtocol>;
+    category: 'organic' | 'protein' | 'oil' | 'synthetic' | 'mineral';
+    protocols: {
+        natural: StainProtocol;
+        synthetic: StainProtocol;
+        delicate: StainProtocol;
+    };
 }
 
-export interface TextileFiber {
-    id: string;
-    name: string;
-    type: 'natural' | 'semi-synthetic' | 'synthetic';
-    breathability: number;
-    durability: number;
-    warmth: number;
-    isNoble: boolean;
-    maxTemp: string;
-    drying: 'horizontal' | 'vertical' | 'padded-vertical';
-    ironing: string;
-    donts: string[];
-    sos: string;
-    icon: string;
-    color: string;
-}
 
-export const TEXTILE_DATA: Record<string, TextileFiber> = {
-    merino: {
-        id: 'merino',
-        name: 'Lana Merino',
-        type: 'natural',
-        breathability: 8,
-        durability: 7,
-        warmth: 9,
-        isNoble: true,
-        maxTemp: '30°C',
-        drying: 'horizontal',
-        ironing: 'Solo vapor',
-        donts: ['Suavizantes', 'Colgar en percha', 'Centrifugado fuerte'],
-        sos: 'Si se ha encogido, sumérgelo en agua tibia con acondicionador de pelo durante 30 min y estira suavemente.',
-        icon: 'mdi:sheep',
-        color: '#111827'
-    },
-    wool: {
-        id: 'wool',
-        name: 'Lana (Genérica)',
-        type: 'natural',
-        breathability: 7,
-        durability: 8,
-        warmth: 9,
-        isNoble: true,
-        maxTemp: '30°C',
-        drying: 'horizontal',
-        ironing: 'Baja (con traño húmedo)',
-        donts: ['Agua caliente', 'Secadora', 'Retorcer'],
-        sos: 'Usa vapor para recuperar la esponjosidad si se ha apelmazado.',
-        icon: 'mdi:sheep',
-        color: '#020617'
-    },
-    mohair: {
-        id: 'mohair',
-        name: 'Mohair',
-        type: 'natural',
-        breathability: 8,
-        durability: 6,
-        warmth: 9,
-        isNoble: true,
-        maxTemp: 'Fría',
-        drying: 'horizontal',
-        ironing: 'No planchar (solo vapor)',
-        donts: ['Fricción fuerte', 'Colgar húmedo', 'Calor directo'],
-        sos: 'Cepilla con un cepillo de cerdas suaves para levantar el pelo si se ve aplastado.',
-        icon: 'mdi:sheep',
-        color: '#431407'
-    },
-    silk: {
-        id: 'silk',
-        name: 'Seda Natural',
-        type: 'natural',
+export const TEXTILE_DATA: Record<string, TextileData> = {
+    cotton: {
+        name: 'Algodón',
+        description: 'Fibra vegetal natural, suave y transpirable. El rey de los básicos.',
+        family: 'natural',
+        origin: 'Cápsula de la planta de algodón (Gosypium)',
         breathability: 9,
-        durability: 4,
-        warmth: 6,
-        isNoble: true,
-        maxTemp: 'Fría',
-        drying: 'padded-vertical',
-        ironing: 'Muy baja (del revés)',
-        donts: ['Retorcer', 'Escurrir', 'Luz solar directa'],
-        sos: 'Para recuperar el brillo, añade una cucharada de vinagre blanco al último aclarado.',
-        icon: 'mdi:butterfly',
-        color: '#422006'
+        durability: 7,
+        warmth: 4,
+        washing: 'Agua fría o templada (encoge con calor). Permite centrifugado fuerte.',
+        drying: 'Secadora a temp media o aire libre (sol directo puede amarillear blancos).',
+        ironing: 'Plancha alta con vapor mientras está húmedo.',
+        donts: ['Dejar húmedo mucho tiempo (moho)', 'Lejía excesiva (debilita fibra)'],
+        sos: '¿Encogido? Remoja en agua tibia con acondicionador para pelo y estira suavemente.',
+        icon: 'mdi:tshirt-crew',
+        color: '#60A5FA',
+        isNoble: false
     },
     linen: {
-        id: 'linen',
         name: 'Lino',
-        type: 'natural',
+        description: 'Fibra vegetal muy fuerte, fresca y con arruga característica.',
+        family: 'natural',
+        origin: 'Tallo de la planta de lino',
         breathability: 10,
-        durability: 6,
-        warmth: 2,
-        isNoble: false,
-        maxTemp: '40-60°C',
-        drying: 'vertical',
-        ironing: 'Alta (húmedo)',
-        donts: ['Secado excesivo', 'Doblado húmedo'],
-        sos: 'Si está muy arrugado, mételo en una bolsa en la nevera unas horas antes de planchar.',
-        icon: 'mdi:sprout',
-        color: '#064E3B'
-    },
-    hemp: {
-        id: 'hemp',
-        name: 'Cáñamo',
-        type: 'natural',
-        breathability: 9,
         durability: 9,
-        warmth: 3,
-        isNoble: false,
-        maxTemp: '40°C',
-        drying: 'vertical',
-        ironing: 'Alta',
-        donts: ['Doblado húmedo', 'Secado excesivo'],
-        sos: 'Fibra muy resistente; el uso frecuente la hace más suave.',
-        icon: 'mdi:sprout',
-        color: '#14532D'
+        warmth: 2,
+        washing: 'Ciclo delicado, no llenar mucho el tambor (necesita agua para no romperse).',
+        drying: 'Aire libre. NUNCA secadora (rompe las fibras y marca arrugas eternas).',
+        ironing: 'Plancha máxima temperatura, siempre con la prenda muy húmeda.',
+        donts: ['Centrifugado fuerte', 'Doblar siempre por el mismo sitio (se corta)'],
+        sos: '¿Brillo por planchado? Pasa un paño con vinagre blanco.',
+        icon: 'mdi:leaf',
+        color: '#A7F3D0',
+        isNoble: true
     },
-    cashmere: {
-        id: 'cashmere',
-        name: 'Cachemira',
-        type: 'natural',
-        breathability: 8,
-        durability: 3,
-        warmth: 10,
-        isNoble: true,
-        maxTemp: '<20°C',
-        drying: 'horizontal',
-        ironing: 'Baja (del revés)',
-        donts: ['Lavado frecuente', 'Fricción'],
-        sos: 'Usa un peine para cachemira para eliminar las bolitas, nunca una cuchilla.',
-        icon: 'mdi:sheep',
-        color: '#0f172a'
-    },
-    alpaca: {
-        id: 'alpaca',
-        name: 'Alpaca',
-        type: 'natural',
+    wool: {
+        name: 'Lana / Merino',
+        description: 'Fibra animal proteica, aislante térmico excelente y elástica.',
+        family: 'natural',
+        origin: 'Vellón de oveja',
         breathability: 8,
         durability: 6,
         warmth: 10,
-        isNoble: true,
-        maxTemp: '<20°C',
-        drying: 'horizontal',
-        ironing: 'Sin contacto (vapor)',
-        donts: ['Agitación', 'Calor', 'Frotar fuerte'],
-        sos: 'Usa champú de bebé en lugar de detergente para mantener las fibras suaves.',
+        washing: 'A mano o ciclo lana. Jabón neutro. NUNCA agua caliente (se afieltra).',
+        drying: 'Horizontal sobre toalla. Nunca colgar (se deforma).',
+        ironing: 'Vapor vertical o plancha media con paño encima.',
+        donts: ['Agua caliente', 'Frotar o retorcer', 'Lejía (la disuelve)'],
+        sos: '¿Afieltrada? Casi imposible, pero remojo con suavizante puede relajar algo.',
         icon: 'mdi:sheep',
-        color: '#292524'
+        color: '#FCD34D',
+        isNoble: true
     },
-    cotton: {
-        id: 'cotton',
-        name: 'Algodón',
-        type: 'natural',
-        breathability: 8,
-        durability: 7,
-        warmth: 4,
-        isNoble: false,
-        maxTemp: '60°C',
-        drying: 'vertical',
-        ironing: 'Alta',
-        donts: ['Lejía (en color)', 'Mezclar con toallas'],
-        sos: 'Para eliminar manchas de sudor amarillas, usa una pasta de bicarbonato y limón antes de lavar.',
-        icon: 'mdi:cloud',
-        color: '#042F2E'
-    },
-    viscose: {
-        id: 'viscose',
-        name: 'Viscosa (Rayón)',
-        type: 'semi-synthetic',
+    silk: {
+        name: 'Seda',
+        description: 'Fibra animal de filamento continuo. Brillo natural y tacto seco.',
+        family: 'natural',
+        origin: 'Capullo del gusano de seda',
         breathability: 7,
-        durability: 3,
-        warmth: 4,
-        isNoble: false,
-        maxTemp: '30°C',
-        drying: 'vertical',
-        ironing: 'Baja',
-        donts: ['Centrifugado fuerte', 'Escurrir a mano'],
-        sos: 'Si la prenda parece "acartonada" al secarse, planchar con vapor para recuperar la caída.',
-        icon: 'mdi:factory',
-        color: '#3B0764'
-    },
-    modal: {
-        id: 'modal',
-        name: 'Modal',
-        type: 'semi-synthetic',
-        breathability: 8,
-        durability: 4,
-        warmth: 4,
-        isNoble: false,
-        maxTemp: '30°C',
-        drying: 'vertical',
-        ironing: 'Baja',
-        donts: ['Retorcer', 'Escurrir'],
-        sos: 'Más resistente que la viscosa, pero sigue prefiriendo ciclos delicados.',
-        icon: 'mdi:factory',
-        color: '#5b21b6'
-    },
-    lyocell: {
-        id: 'lyocell',
-        name: 'Lyocell',
-        type: 'semi-synthetic',
-        breathability: 8,
         durability: 5,
-        warmth: 4,
-        isNoble: false,
-        maxTemp: '30°C',
-        drying: 'vertical',
-        ironing: 'Media',
-        donts: ['Fricción excesiva'],
-        sos: 'La más resistente de las fibras celulósicas; tolera mejor el uso diario.',
-        icon: 'mdi:factory',
-        color: '#6d28d9'
+        warmth: 6,
+        washing: 'A mano en agua fría con champú neutro. No retorcer.',
+        drying: 'Enrollar en toalla para quitar humedad. Secar a la sombra.',
+        ironing: 'Plancha baja, del revés y sin vapor directo.',
+        donts: ['Sol directo (quema)', 'Perfume/Desodorante (mancha)', 'Agua (hace cercos)'],
+        sos: '¿Mancha de agua? Frota suavemente la seda contra sí misma.',
+        icon: 'mdi:ticket-percent',
+        color: '#F472B6',
+        isNoble: true
     },
     polyester: {
-        id: 'polyester',
         name: 'Poliéster',
-        type: 'synthetic',
+        description: 'Fibra sintética de petróleo. Resistente, no arruga, no respira.',
+        family: 'synthetic',
+        origin: 'Polímeros derivados del petróleo',
         breathability: 2,
-        durability: 9,
+        durability: 10,
         warmth: 5,
-        isNoble: false,
-        maxTemp: '40°C',
-        drying: 'vertical',
-        ironing: 'Baja',
-        donts: ['Plancha caliente (derrite)', 'Limpieza en seco'],
-        sos: 'Para eliminar la electricidad estática, toca un objeto metálico o usa suavizante específico.',
-        icon: 'mdi:bottle-soda-classic-outline',
-        color: '#172554'
+        washing: 'Agua tibia/fría. Admite todo, pero atrapa olores y grasas.',
+        drying: 'Secadora baja o aire. Seca muy rápido.',
+        ironing: 'Plancha baja/media. Cuidado, se funde.',
+        donts: ['Calor excesivo', 'Suavizante (crea capa cerosa que atrapa más olor)'],
+        sos: '¿Olor persistente? Remojo en agua con vinagre antes de lavar.',
+        icon: 'mdi:oil',
+        color: '#94A3B8',
+        isNoble: false
     },
-    acrylic: {
-        id: 'acrylic',
-        name: 'Acrílico',
-        type: 'synthetic',
-        breathability: 3,
-        durability: 6,
-        warmth: 8,
-        isNoble: false,
-        maxTemp: '30°C',
-        drying: 'vertical',
-        ironing: 'Muy baja',
-        donts: ['Secadora caliente', 'Vapor excesivo'],
-        sos: 'Si aparecen bolitas, usa un quitapelusas eléctrico con cuidado.',
-        icon: 'mdi:flask-outline',
-        color: '#500724'
+    viscose: {
+        name: 'Viscosa / Rayón',
+        description: 'Semisintética de celulosa regenerada. Tacto seda, muy absorbente.',
+        family: 'artificial',
+        origin: 'Pulpa de madera tratada químicamente',
+        breathability: 8,
+        durability: 4,
+        warmth: 3,
+        washing: 'Delicado en frío. Se vuelve muy débil mojada.',
+        drying: 'Horizontal o percha acolchada. No secadora.',
+        ironing: 'Media, del revés. Sin vapor directo si es posible.',
+        donts: ['Retorcer mojada (se rompe)', 'Remojos largos'],
+        sos: '¿Encogida y dura? Plancha con mucho vapor para relajar la fibra.',
+        icon: 'mdi:forest',
+        color: '#C084FC',
+        isNoble: false
     },
     nylon: {
-        id: 'nylon',
-        name: 'Nailon / Poliamida',
-        type: 'synthetic',
-        breathability: 4,
+        name: 'Nailon (Poliamida)',
+        description: 'Sintética muy resistente a tracción y abrasión. ',
+        family: 'synthetic',
+        origin: 'Derivado del petróleo (poliamida)',
+        breathability: 3,
         durability: 10,
         warmth: 4,
-        isNoble: false,
-        maxTemp: '30°C',
-        drying: 'vertical',
-        ironing: 'Baja',
-        donts: ['Lejía', 'Luz solar prolongada (amarillea)'],
-        sos: 'Lava junto con otros sintéticos para evitar transferencias de color.',
+        washing: 'Ciclo normal. Cuidado con mezclar colores (los absorbe).',
+        drying: 'Aire libre. Secadora baja.',
+        ironing: 'Muy baja. Se funde rapidísimo.',
+        donts: ['Lejía (amarillea)', 'Secar al sol directo (se "pasa")'],
+        sos: '¿Grisáceo? Lavar con blanqueador oxigenado.',
         icon: 'mdi:parachute',
-        color: '#1E1B4B'
+        color: '#2DD4BF',
+        isNoble: false
     },
-    elastane: {
-        id: 'elastane',
-        name: 'Elastano',
-        type: 'synthetic',
-        breathability: 3,
-        durability: 7,
-        warmth: 2,
-        isNoble: false,
-        maxTemp: 'Fría',
-        drying: 'vertical',
+    acrylic: {
+        name: 'Acrílico',
+        description: 'Sintético imitación lana. Suave, caliente, hace bolas.',
+        family: 'synthetic',
+        origin: 'Poliacupacrilonitrilo',
+        breathability: 4,
+        durability: 6,
+        warmth: 8,
+        washing: 'Agua templada. Mucho suavizante para estática.',
+        drying: 'Aire. El calor deforma la prenda permanentemente.',
         ironing: 'No planchar',
         donts: ['Suavizante (rompe fibras)', 'Escurrir fuerte', 'Calor'],
         sos: 'Si ha perdido elasticidad, es irreversible (las fibras se han roto).',
         icon: 'mdi:resize',
-        color: '#450A0A'
+        color: '#450A0A',
+        isNoble: false
     }
 };
 
@@ -372,36 +275,122 @@ export const STAIN_DATA: StainType[] = [
     }
 ];
 
+export const BURN_OPTIONS = {
+    flame: {
+        cellulosic: 'Arde RÁPIDO y con BRILLO (Llama amarilla). No se funde. Sigue ardiendo al retirar.',
+        protein: 'Arde LENTAMENTE, chisporrotea y se ENCOGE alejándose de la llama. Se autoextingue al retirar.',
+        synthetic: 'Se FUNDE y contrae rápidamente, gotea como plástico derretido. Llama humeante.'
+    },
+    odor: {
+        paper: 'Papel quemado, madera, hojas secas.',
+        hair: 'Pelo quemado, cuerno quemado, plumas.',
+        chemical_sweet: 'Químico AROMÁTICO (dulce, afrutado).',
+        chemical_sharp: 'Químico ACRE (vinagre, lacre).',
+        chemical_fishy: 'Químico AGRIO (pescado, carne asada).',
+        vegetable: 'Vegetales cocidos (apio).'
+    },
+    residue: {
+        ash_soft: 'Ceniza GRIS/NEGRA fina, suave y volátil (se deshace al tocar).',
+        ash_shape: 'Ceniza GRIS mantiene forma de la fibra (friable).',
+        bead_crushable: 'Masa negra hueca/quebradiza (se pulveriza fácilmente con los dedos).',
+        bead_hard: 'Bola DURA y vítrea. Imposible de romper con los dedos.',
+        bead_irregular: 'Masa negra DURA e irregular.'
+    },
+    smoke: {
+        white_gray: 'Blanco / Gris claro.',
+        gray: 'Gris medio.',
+        black: 'Negro DENSO y oscuro.'
+    }
+};
+
+export const BURN_TEST_DATA: BurnTestResult[] = [
+    {
+        fiberId: 'cotton',
+        flame: BURN_OPTIONS.flame.cellulosic,
+        odor: BURN_OPTIONS.odor.paper,
+        smoke: BURN_OPTIONS.smoke.white_gray,
+        residue: BURN_OPTIONS.residue.ash_soft
+    },
+    {
+        fiberId: 'linen',
+        flame: BURN_OPTIONS.flame.cellulosic,
+        odor: BURN_OPTIONS.odor.paper,
+        smoke: BURN_OPTIONS.smoke.white_gray,
+        residue: BURN_OPTIONS.residue.ash_shape
+    },
+    {
+        fiberId: 'wool',
+        flame: BURN_OPTIONS.flame.protein,
+        odor: BURN_OPTIONS.odor.hair,
+        smoke: BURN_OPTIONS.smoke.gray,
+        residue: BURN_OPTIONS.residue.bead_crushable
+    },
+    {
+        fiberId: 'silk',
+        flame: BURN_OPTIONS.flame.protein,
+        odor: BURN_OPTIONS.odor.hair,
+        smoke: BURN_OPTIONS.smoke.gray,
+        residue: BURN_OPTIONS.residue.bead_crushable
+    },
+    {
+        fiberId: 'polyester',
+        flame: BURN_OPTIONS.flame.synthetic,
+        odor: BURN_OPTIONS.odor.chemical_sweet,
+        smoke: BURN_OPTIONS.smoke.black,
+        residue: BURN_OPTIONS.residue.bead_hard
+    },
+    {
+        fiberId: 'nylon',
+        flame: BURN_OPTIONS.flame.synthetic,
+        odor: BURN_OPTIONS.odor.vegetable,
+        smoke: BURN_OPTIONS.smoke.white_gray,
+        residue: BURN_OPTIONS.residue.bead_hard
+    },
+    {
+        fiberId: 'acrylic',
+        flame: BURN_OPTIONS.flame.synthetic,
+        odor: BURN_OPTIONS.odor.chemical_fishy,
+        smoke: BURN_OPTIONS.smoke.black,
+        residue: BURN_OPTIONS.residue.bead_irregular
+    }
+];
+
 export const textileSection: SectionData = {
-    title: "Textiles",
-    icon: "mdi:texture",
-    theme: "indigo",
+    title: 'Textiles',
+    icon: 'mdi:texture',
+    theme: 'indigo',
     utilities: [
         {
-            href: "/utilidades/veracidad-textil/",
-            iconBg: "mdi:tag-text-outline",
-            iconFg: "mdi:microscope",
-            title: "Veracidad Textil",
-            description: "¿Calidad o plástico? Analiza la etiqueta de tu ropa.",
-            color: "#6366f1"
+            href: '/utilidades/veracidad-textil/',
+            iconBg: 'mdi:tag-text-outline',
+            iconFg: 'mdi:microscope',
+            title: 'Veracidad Textil',
+            description: '¿Calidad o plástico? Analiza la etiqueta de tu ropa.',
+            color: '#6366f1'
         },
         {
-            href: "/utilidades/guia-lavado-textil/",
-            iconBg: "mdi:washing-machine",
-            iconFg: "mdi:water-check",
-            title: "Maestro Textil",
-            description: "Guía científica para lavar y cuidar cada tipo de fibra.",
-            color: "#3b82f6"
+            href: '/utilidades/guia-lavado-textil/',
+            iconBg: 'mdi:washing-machine',
+            iconFg: 'mdi:water-check',
+            title: 'Maestro Textil',
+            description: 'Guía científica para lavar y cuidar cada tipo de fibra.',
+            color: '#3b82f6'
         },
         {
-            href: "/utilidades/protocolo-quimico-manchas/",
-            iconBg: "mdi:test-tube",
-            iconFg: "mdi:iv-bag",
-            title: "Química de Manchas",
-            description: "Protocolos científicos para eliminar manchas según el tipo de fibra.",
-            color: "#8b5cf6"
+            href: '/utilidades/protocolo-quimico-manchas/',
+            iconBg: 'mdi:test-tube',
+            iconFg: 'mdi:iv-bag',
+            title: 'Química de Manchas',
+            description: 'Protocolos científicos para eliminar manchas según el tipo de fibra.',
+            color: '#8b5cf6'
+        },
+        {
+            href: '/utilidades/identificador-fibras-combustion/',
+            iconBg: 'mdi:fire',
+            iconFg: 'mdi:microscope',
+            title: 'Prueba de Combustión',
+            description: 'Identifica la composición real de una tela quemando una pequeña muestra.',
+            color: '#ef4444'
         }
     ]
 };
-
-
