@@ -5,201 +5,279 @@ import { Icon } from "astro-icon/components";
 const fibers = Object.values(TEXTILE_DATA);
 ---
 
-<div class="max-w-4xl mx-auto p-4 md:p-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Selector de Fibra -->
-        <div class="space-y-6">
-            <div>
-                <label
-                    class="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-4 uppercase tracking-wider"
-                >
-                    1. Selecciona la Fibra
-                </label>
-                <div class="grid grid-cols-2 gap-3" id="fiber-selector">
-                    {
-                        fibers.map((fiber) => (
-                            <button
-                                data-fiber-id={fiber.id}
-                                data-fiber-type={
-                                    fiber.type === "synthetic"
-                                        ? "synthetic"
-                                        : fiber.isNoble
-                                          ? "delicate"
-                                          : "natural"
-                                }
-                                class="group relative flex flex-col items-center p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition-all duration-300 bg-white dark:bg-slate-900 overflow-hidden active:scale-95"
-                            >
-                                <div class="text-3xl mb-2 group-hover:scale-110 transition-transform duration-300">
-                                    <Icon name={fiber.icon} />
-                                </div>
-                                <span class="text-sm font-bold text-center leading-tight">
-                                    {fiber.name}
-                                </span>
-                                <div class="absolute inset-0 bg-indigo-500/5 opacity-0 group-[.selected]:opacity-100 transition-opacity" />
-                            </button>
-                        ))
-                    }
-                </div>
-            </div>
-
-            <div>
-                <label
-                    class="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-4 uppercase tracking-wider"
-                >
-                    2. Tipo de Mancha
-                </label>
-                <div class="grid grid-cols-1 gap-2" id="stain-selector">
-                    {
-                        STAIN_DATA.map((stain) => (
-                            <button
-                                data-stain-id={stain.id}
-                                class="flex items-center justify-between p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors bg-white dark:bg-slate-900 active:scale-[0.98]"
-                            >
-                                <span class="font-medium">{stain.name}</span>
-                                <Icon name="mdi:chevron-right" class="text-slate-400" />
-                            </button>
-                        ))
-                    }
-                </div>
-            </div>
-        </div>
-
-        <!-- Protocolo Resultante -->
-        <div class="relative">
-            <div
-                id="protocol-display"
-                class="sticky top-24 opacity-40 grayscale pointer-events-none transition-all duration-500"
-            >
-                <div
-                    class="p-8 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-2xl shadow-indigo-500/20 overflow-hidden relative"
-                >
-                    <!-- Glassmorphism overlay -->
-                    <div class="absolute inset-0 bg-white/10 backdrop-blur-sm -z-10"></div>
-
-                    <div class="relative z-10 space-y-8">
-                        <div class="flex items-center gap-4">
-                            <div class="p-3 bg-white/20 rounded-2xl">
-                                <Icon name="mdi:flask-outline" class="text-3xl" />
-                            </div>
-                            <div>
-                                <h3 class="text-xs uppercase tracking-widest font-bold opacity-70">
-                                    Protocolo Técnico
-                                </h3>
-                                <p class="text-2xl font-black italic" id="protocol-title">
-                                    Selecciona datos...
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div class="flex items-start gap-4">
-                                <Icon name="mdi:beaker-outline" class="text-2xl opacity-70 mt-1" />
-                                <div>
-                                    <p class="text-xs font-bold uppercase opacity-60">
-                                        Agente Químico
-                                    </p>
-                                    <p class="text-lg font-bold" id="protocol-agent">-</p>
-                                    <p
-                                        class="text-xs opacity-80 mt-1 italic"
-                                        id="protocol-agent-desc"
-                                    >
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <Icon name="mdi:thermometer" class="text-2xl opacity-70 mt-1" />
-                                <div>
-                                    <p class="text-xs font-bold uppercase opacity-60">
-                                        Temperatura Óptima
-                                    </p>
-                                    <p class="text-lg font-bold" id="protocol-temp">-</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <Icon
-                                    name="mdi:hand-wash-outline"
-                                    class="text-2xl opacity-70 mt-1"
-                                />
-                                <div>
-                                    <p class="text-xs font-bold uppercase opacity-60">
-                                        Método de Aplicación
-                                    </p>
-                                    <p class="text-lg font-bold" id="protocol-method">-</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            id="protocol-warning"
-                            class="hidden p-4 rounded-xl bg-orange-500/30 border border-orange-200/50 backdrop-blur-md"
+<div class="max-w-2xl mx-auto p-4 md:p-6 lg:p-10">
+    <div
+        class="bg-slate-50 dark:bg-slate-950 rounded-[2.5rem] p-1 border border-slate-200 dark:border-slate-800 shadow-2xl"
+    >
+        <div class="bg-white dark:bg-slate-900 rounded-[2.2rem] p-6 md:p-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <!-- Selector de Fibra -->
+                <div class="group">
+                    <label
+                        class="block text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3 ml-1"
+                    >
+                        1. Fibra de la prenda
+                    </label>
+                    <div class="relative">
+                        <select
+                            id="fiber-select"
+                            class="w-full h-16 pl-14 pr-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-800 rounded-2xl appearance-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-bold text-slate-900 dark:text-white outline-none cursor-pointer"
                         >
-                            <div class="flex gap-3">
-                                <Icon name="mdi:alert-decagram" class="text-xl shrink-0" />
-                                <p class="text-xs leading-relaxed" id="warning-text"></p>
-                            </div>
+                            <option value="" disabled selected>Tipo de tejido...</option>
+                            {
+                                fibers.map((fiber) => (
+                                    <option
+                                        value={fiber.id}
+                                        data-fiber-type={
+                                            fiber.type === "synthetic"
+                                                ? "synthetic"
+                                                : fiber.isNoble
+                                                  ? "delicate"
+                                                  : "natural"
+                                        }
+                                    >
+                                        {fiber.name}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                        <div
+                            class="absolute left-5 top-1/2 -translate-y-1/2 text-2xl text-slate-400"
+                        >
+                            <Icon name="mdi:tshirt-crew-outline" />
+                        </div>
+                        <div
+                            class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:translate-y-[-40%] transition-transform"
+                        >
+                            <Icon name="mdi:chevron-down" />
                         </div>
                     </div>
                 </div>
 
-                <!-- Empty State Decoration -->
-                <div
-                    id="empty-hint"
-                    class="mt-8 text-center text-slate-400 dark:text-slate-600 animate-pulse"
-                >
-                    <p class="text-sm font-medium italic">
-                        Completa la selección para ver el protocolo
-                    </p>
+                <!-- Selector de Mancha -->
+                <div class="group">
+                    <label
+                        class="block text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.2em] mb-3 ml-1"
+                    >
+                        2. Origen de la Mancha
+                    </label>
+                    <div class="relative">
+                        <select
+                            id="stain-select"
+                            class="w-full h-16 pl-14 pr-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-800 rounded-2xl appearance-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all font-bold text-slate-900 dark:text-white outline-none cursor-pointer"
+                        >
+                            <option value="" disabled selected>¿Qué ha ocurrido?</option>
+                            {
+                                STAIN_DATA.map((stain) => (
+                                    <option value={stain.id}>{stain.name}</option>
+                                ))
+                            }
+                        </select>
+                        <div
+                            class="absolute left-5 top-1/2 -translate-y-1/2 text-2xl text-slate-400"
+                        >
+                            <Icon name="mdi:opacity" />
+                        </div>
+                        <div
+                            class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:translate-y-[-40%] transition-transform"
+                        >
+                            <Icon name="mdi:chevron-down" />
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Protocolo Resultante -->
+            <div id="protocol-display" class="hidden animate-in fade-in zoom-in-95 duration-700">
+                <div class="relative group">
+                    <!-- Glow effect -->
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2rem] blur opacity-20 group-hover:opacity-30 transition duration-1000"
+                    >
+                    </div>
+
+                    <div
+                        class="relative p-8 md:p-10 rounded-[2rem] bg-slate-950 text-white shadow-2xl overflow-hidden border border-white/10"
+                    >
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                            <!-- Main Left -->
+                            <div class="lg:col-span-12 space-y-8">
+                                <div class="flex items-center gap-6">
+                                    <div
+                                        class="w-16 h-16 rounded-2xl bg-indigo-500 flex items-center justify-center text-3xl shadow-lg shadow-indigo-500/40"
+                                    >
+                                        <Icon name="mdi:flask-round-bottom-outline" />
+                                    </div>
+                                    <div>
+                                        <h3
+                                            class="text-xs uppercase font-black tracking-[0.3em] text-indigo-400 mb-1"
+                                        >
+                                            Hoja de Ruta Química
+                                        </h3>
+                                        <p
+                                            class="text-3xl font-black text-white"
+                                            id="protocol-title"
+                                        >
+                                            Protocolo
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                                    <div
+                                        class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors"
+                                    >
+                                        <div class="flex items-center gap-3 mb-4 text-indigo-400">
+                                            <Icon name="mdi:beaker-outline" class="text-xl" />
+                                            <span
+                                                class="text-[10px] uppercase font-black tracking-widest"
+                                                >Agente Reactivo</span
+                                            >
+                                        </div>
+                                        <p class="text-xl font-bold mb-2" id="protocol-agent">-</p>
+                                        <p
+                                            class="text-sm text-slate-400 leading-relaxed font-medium"
+                                            id="protocol-agent-desc"
+                                        >
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors"
+                                    >
+                                        <div class="flex items-center gap-3 mb-4 text-indigo-400">
+                                            <Icon name="mdi:thermometer-minus" class="text-xl" />
+                                            <span
+                                                class="text-[10px] uppercase font-black tracking-widest"
+                                                >Gradiente Térmico</span
+                                            >
+                                        </div>
+                                        <p class="text-3xl font-black" id="protocol-temp">-</p>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="bg-white/5 p-8 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors"
+                                >
+                                    <div class="flex items-center gap-3 mb-6 text-indigo-400">
+                                        <Icon name="mdi:hand-wash-outline" class="text-xl" />
+                                        <span
+                                            class="text-[10px] uppercase font-black tracking-widest"
+                                            >Procedimiento Operativo</span
+                                        >
+                                    </div>
+                                    <p
+                                        class="text-lg font-medium leading-relaxed"
+                                        id="protocol-method"
+                                    >
+                                        -
+                                    </p>
+                                </div>
+
+                                <div
+                                    id="protocol-warning"
+                                    class="hidden p-5 rounded-2xl bg-red-500/10 border border-red-500/20"
+                                >
+                                    <div class="flex gap-4">
+                                        <div
+                                            class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-xl shrink-0 text-red-400"
+                                        >
+                                            <Icon name="mdi:alert-octagram" />
+                                        </div>
+                                        <div>
+                                            <p
+                                                class="text-[10px] uppercase font-black text-red-400 tracking-wider mb-1"
+                                            >
+                                                Advertencia Crítica
+                                            </p>
+                                            <p
+                                                class="text-sm font-bold text-red-50"
+                                                id="warning-text"
+                                            >
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                id="empty-state"
+                class="group py-16 text-center border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[2rem] hover:border-indigo-500/30 transition-colors duration-500"
+            >
+                <div
+                    class="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20 transition-all duration-500"
+                >
+                    <Icon
+                        name="mdi:selection-search"
+                        class="text-4xl text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 transition-colors"
+                    />
+                </div>
+                <h4 class="text-slate-900 dark:text-white font-bold mb-2">Sistema a la espera</h4>
+                <p class="text-sm font-medium text-slate-400 max-w-[240px] mx-auto leading-relaxed">
+                    Configura las variables para desplegar el protocolo molecular
+                </p>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    import { TEXTILE_DATA, STAIN_DATA, CHEMICAL_AGENTS } from "../../../../data/utilities/textiles";
+    import { STAIN_DATA, CHEMICAL_AGENTS } from "../../../../data/utilities/textiles";
 
-    let selectedFiberId = null;
-    let selectedFiberType = null;
-    let selectedStainId = null;
-
-    const fiberButtons = document.querySelectorAll("#fiber-selector button");
-    const stainButtons = document.querySelectorAll("#stain-selector button");
+    const fiberSelect = document.getElementById("fiber-select") as HTMLSelectElement;
+    const stainSelect = document.getElementById("stain-select") as HTMLSelectElement;
     const display = document.getElementById("protocol-display");
-    const emptyHint = document.getElementById("empty-hint");
+    const emptyState = document.getElementById("empty-state");
 
     function updateProtocol() {
-        if (!selectedFiberId || !selectedStainId) return;
+        const fiberId = fiberSelect.value;
+        const stainId = stainSelect.value;
 
-        display.classList.remove("opacity-40", "grayscale", "pointer-events-none");
-        emptyHint.classList.add("hidden");
+        if (!fiberId || !stainId || !display || !emptyState) return;
 
-        const stain = STAIN_DATA.find((s) => s.id === selectedStainId);
+        const fiberOption = fiberSelect.options[fiberSelect.selectedIndex];
+        const fiberType = (fiberOption.dataset.fiberType as string) || "natural";
+
+        const stain = STAIN_DATA.find((s) => s.id === stainId);
         if (!stain) return;
 
-        const protocol = stain.protocols[selectedFiberType] || stain.protocols.natural;
+        const protocol = stain.protocols[fiberType] || stain.protocols.natural;
         if (!protocol) return;
 
         const agent = CHEMICAL_AGENTS[protocol.agentId];
         if (!agent) return;
 
-        document.getElementById("protocol-title").textContent = stain.name;
-        document.getElementById("protocol-agent").textContent = agent.name;
-        document.getElementById("protocol-agent-desc").textContent = agent.description;
-        document.getElementById("protocol-temp").textContent = protocol.temperature;
-        document.getElementById("protocol-method").textContent = protocol.method;
+        // UI Updates
+        emptyState.classList.add("hidden");
+        display.classList.remove("hidden");
+
+        const titleEl = document.getElementById("protocol-title");
+        const agentEl = document.getElementById("protocol-agent");
+        const agentDescEl = document.getElementById("protocol-agent-desc");
+        const tempEl = document.getElementById("protocol-temp");
+        const methodEl = document.getElementById("protocol-method");
+
+        if (titleEl) titleEl.textContent = stain.name;
+        if (agentEl) agentEl.textContent = agent.name;
+        if (agentDescEl) agentDescEl.textContent = agent.description;
+        if (tempEl) tempEl.textContent = protocol.temperature;
+        if (methodEl) methodEl.textContent = protocol.method;
 
         // Warning Logic
         const warningDiv = document.getElementById("protocol-warning");
         const warningText = document.getElementById("warning-text");
 
+        if (!warningDiv || !warningText) return;
+
         let warning = agent.warning || "";
 
-        // Custom cross-checks
-        if (selectedFiberType === "delicate" && protocol.agentId === "percarbonate") {
+        if (fiberType === "delicate" && protocol.agentId === "percarbonate") {
             warning =
-                "¡CRÍTICO! El percarbonato puede dañar fibras animales. Usa concentraciones muy bajas o prueba primero.";
+                "RIESGO DE DEGRADACIÓN MOLECULAR. Fibras animales altamente sensibles al percarbonato. Realizar test en zona no visible.";
         }
 
         if (warning) {
@@ -210,52 +288,6 @@ const fibers = Object.values(TEXTILE_DATA);
         }
     }
 
-    fiberButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            fiberButtons.forEach((b) =>
-                b.classList.remove(
-                    "selected",
-                    "border-indigo-500",
-                    "bg-indigo-50/50",
-                    "dark:bg-indigo-900/20"
-                )
-            );
-            btn.classList.add(
-                "selected",
-                "border-indigo-500",
-                "bg-indigo-50/50",
-                "dark:bg-indigo-900/20"
-            );
-            selectedFiberId = btn.dataset.fiberId;
-            selectedFiberType = btn.dataset.fiberType;
-            updateProtocol();
-        });
-    });
-
-    stainButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            stainButtons.forEach((b) =>
-                b.classList.remove(
-                    "bg-indigo-50",
-                    "dark:bg-indigo-900/30",
-                    "border-indigo-200",
-                    "dark:border-indigo-800"
-                )
-            );
-            btn.classList.add(
-                "bg-indigo-50",
-                "dark:bg-indigo-900/30",
-                "border-indigo-200",
-                "dark:border-indigo-800"
-            );
-            selectedStainId = btn.dataset.stainId;
-            updateProtocol();
-        });
-    });
+    fiberSelect.addEventListener("change", updateProtocol);
+    stainSelect.addEventListener("change", updateProtocol);
 </script>
-
-<style>
-    .selected {
-        box-shadow: 0 0 0 4px rgb(99 102 241 / 0.2);
-    }
-</style>
