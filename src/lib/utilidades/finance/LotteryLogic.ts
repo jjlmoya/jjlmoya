@@ -7,7 +7,7 @@ export interface LotteryGame {
     jackpot: number;
     odds: number;
     description: string;
-    payoutRate: number; // Percentage of sales returned in prizes
+    payoutRate: number;
 }
 
 export const LOTTERY_DATA: Record<LotteryId, LotteryGame> = {
@@ -92,14 +92,14 @@ export class LotteryLogic {
             expectedValue,
             recommendation,
             optimalTickets,
-            efficiency: (game.payoutRate / 100) * (tickets / totalCost) // Simplified metric
+            efficiency: (game.payoutRate / 100) * (tickets / totalCost)
         };
     }
 
     static compareGames() {
         return Object.values(LOTTERY_DATA).map(game => ({
             name: game.name,
-            score: (game.payoutRate / 100) / (game.odds / 1000000), // Arbitrary score for comparison
+            score: (game.payoutRate / 100) / (game.odds / 1000000),
             odds: game.odds
         })).sort((a, b) => b.score - a.score);
     }
