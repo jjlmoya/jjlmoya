@@ -69,19 +69,22 @@ export class LotteryLogic {
         let optimalTickets = 1;
 
         if (id === 'gordo' || id === 'nino') {
-            if (tickets < 10) {
-                recommendation = "Para asegurar al menos un reintegro estadístico, deberías comprar 10 décimos con terminaciones distintas (0-9).";
-                optimalTickets = 10;
-            } else {
-                recommendation = "Ya tienes cubiertas las terminaciones básicas. Aumentar más solo incrementa el riesgo sin mejorar la eficiencia del reintegro.";
+            if (tickets < 5) {
+                recommendation = "Para una gestión de riesgo básica, se suele buscar diversificar terminaciones. Jugar pocas unidades mantiene la ilusión con el mínimo riesgo de capital.";
+                optimalTickets = 1;
+            } else if (tickets < 10) {
+                recommendation = "Acercarse a los 10 décimos (200€) garantiza estadísticamente un reintegro, pero recuerda que esto supone recuperar solo el 10% de lo invertido en ese nivel.";
                 optimalTickets = tickets;
+            } else {
+                recommendation = "Has superado el umbral de diversificación básica. A partir de aquí, cada décimo extra aumenta tu exposición al riesgo sin mejorar la eficiencia de retorno.";
+                optimalTickets = 10;
             }
         } else {
-            if (totalCost > 20) {
-                recommendation = "Estás gastando mucho en un juego de azar puro. Es más eficiente jugar una cantidad pequeña de forma recurrente que mucho un solo día.";
-                optimalTickets = Math.floor(10 / game.cost);
+            if (totalCost > 15) {
+                recommendation = "En juegos de probabilidad extrema, no hay 'estrategia óptima' más allá de limitar estrictamente el gasto. Reducir la cuantía es la mejor jugada.";
+                optimalTickets = Math.floor(5 / game.cost);
             } else {
-                recommendation = "Mantener el gasto bajo control es la mejor estrategia en loterías de baja probabilidad.";
+                recommendation = "Mantener una participación simbólica es la forma más racional de participar en sorteos con botes astronómicos.";
                 optimalTickets = tickets;
             }
         }
