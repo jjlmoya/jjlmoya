@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import targetIps from "../../../data/tebas/ips.json";
 
 interface Props {
     isStreamOnly?: boolean;
@@ -10,6 +11,7 @@ const { isStreamOnly = false } = Astro.props;
 
 <div
     id="standard-ui"
+    data-targets={JSON.stringify(targetIps)}
     class:list={[
         "w-full max-w-2xl mx-auto p-4 transition-opacity duration-500",
         { hidden: isStreamOnly },
@@ -88,9 +90,9 @@ const { isStreamOnly = false } = Astro.props;
                             </h3>
                             <div class="space-y-2 text-red-800 dark:text-red-200">
                                 <p class="font-bold">Diagnóstico: "Censura Selectiva"</p>
-                                <p class="text-sm opacity-80">
-                                    Te ha señalado con el dedo. Cloudflare está en el gulag de tu
-                                    ISP. No verás ni los anuncios hasta que se calme.
+                                <p class="text-sm opacity-80" id="blocked-reason">
+                                    Detectamos interferencia en tu ISP. Cloudflare o los DNS están
+                                    siendo manipulados.
                                 </p>
                             </div>
                         </div>
@@ -110,9 +112,8 @@ const { isStreamOnly = false } = Astro.props;
                                 NI PA' PIRATEAR SIRVES
                             </h3>
                             <p class="text-zinc-600 dark:text-zinc-400 text-sm">
-                                Ni Google responde. No culpes a la Liga de que no has pagado el
-                                recibo o tu router ha decidido suicidarse. Reinicia y deja de
-                                llorar.
+                                No hay respuesta de Google. Comprueba tu cable o si has pagado el
+                                recibo.
                             </p>
                         </div>
                     </div>
@@ -142,9 +143,8 @@ const { isStreamOnly = false } = Astro.props;
                             <p
                                 class="text-emerald-800/80 dark:text-emerald-200/80 text-sm font-medium"
                             >
-                                No detectamos el mazo judicial en tu conexión. Hoy Tebas llora
-                                fuerte porque no puede bloquearte nada. Disfruta de tu libertad
-                                provisional.
+                                Tu conexión parece limpia en este momento. Si hay bloqueos globales,
+                                a ti no te están afectando.
                             </p>
                         </div>
                     </div>
@@ -176,7 +176,7 @@ const { isStreamOnly = false } = Astro.props;
                     <span class="w-2.5 h-2.5 rounded-full bg-amber-500/50"></span>
                     <span class="w-2.5 h-2.5 rounded-full bg-green-500/50"></span>
                 </span>
-                <span>TEBAS_OS v2.1.0</span>
+                <span>TEBAS_OS v3.2.0</span>
             </div>
             <div id="console-output" class="h-32 overflow-y-auto space-y-1 scrollbar-hide"></div>
         </div>
@@ -190,12 +190,14 @@ const { isStreamOnly = false } = Astro.props;
     const output = document.getElementById("console-output");
     const loadingText = document.getElementById("loading-text");
     const retryBtn = document.getElementById("retry-btn");
+    const blockedReason = document.getElementById("blocked-reason");
 
     const resBlocked = document.getElementById("res-blocked");
     const resNoInternet = document.getElementById("res-no-internet");
     const resSuccess = document.getElementById("res-success");
 
     const urlParams = new URLSearchParams(window.location.search);
+    const TARGET_IPS = JSON.parse(standardUi?.dataset.targets || "[]");
 
     const MESSAGES = [
         "Negociando con tu router...",
@@ -236,62 +238,130 @@ const { isStreamOnly = false } = Astro.props;
         resSuccess?.classList.add("hidden");
         retryBtn?.classList.add("hidden");
         if (output) output.innerHTML = "";
-        log("INICIANDO PROTOCOLO 'TEBAS_WATCH'...", "neutral");
+        log("INICIANDO PROTOCOLO AUTÓNOMO 'TEBAS_WATCH'...", "neutral");
 
         const msgInterval = setInterval(() => {
             if (loadingText)
                 loadingText.innerText = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
         }, 800);
-        await new Promise((r) => setTimeout(r, 1500));
-
-        const CONFIG = {
-            CONTROL: "https://www.google.es/favicon.ico",
-            TARGET: "https://www.cloudflare.com/favicon.ico",
-            TIMEOUT: 3000,
-        };
-
-        const check = async (url: string, label: string) => {
-            log(`> Lanzando petición a ${label}...`);
-            const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
-            try {
-                const start = performance.now();
-                await fetch(url, { mode: "no-cors", cache: "no-store", signal: controller.signal });
-                const time = (performance.now() - start).toFixed(0);
-                log(`> ${label} respondió en ${time}ms`, "success");
-                return true;
-            } catch (e: any) {
-                if (e.name === "AbortError")
-                    log(`> ${label} HA SIDO NEUTRALIZADO (Timeout ${CONFIG.TIMEOUT}ms)`, "error");
-                else log(`> ${label} ERROR: ${e.message}`, "error");
-                return false;
-            } finally {
-                clearTimeout(id);
-            }
-        };
 
         try {
-            let googleAlive, cfAlive;
             const force = urlParams.get("force");
+            let googleAlive = false;
+            let blocksDetected = 0;
+            let dnsPoisoned = false;
+            let ispName = "Desconocido";
 
-            if (force) {
-                log(`MODO QA: FORZANDO ESTADO [${force.toUpperCase()}]`, "neutral");
-                if (force === "blocked") {
-                    googleAlive = true;
-                    cfAlive = false;
-                } else if (force === "no-internet") {
-                    googleAlive = false;
-                    cfAlive = false;
-                } else {
-                    googleAlive = true;
-                    cfAlive = true;
-                }
-                await new Promise((r) => setTimeout(r, 1000));
-            } else {
-                [googleAlive, cfAlive] = await Promise.all([
-                    check(CONFIG.CONTROL, "GOOGLE_SERVICES"),
-                    check(CONFIG.TARGET, "CLOUDFLARE_EDGE"),
+            try {
+                log("> Detectando ISP y conectividad básica...");
+                const [googleRes, ipRes] = await Promise.all([
+                    fetch("https://www.google.es/favicon.ico", {
+                        mode: "no-cors",
+                        cache: "no-store",
+                    }),
+                    fetch("https://ipapi.co/json/")
+                        .then((r) => r.json())
+                        .catch(() => ({})),
                 ]);
+                googleAlive = true;
+                if (ipRes.org) {
+                    ispName = ipRes.org;
+                    log(`> ISP detectado: ${ispName}`, "neutral");
+                }
+            } catch (e) {
+                log("> Error de conexión básica", "error");
+            }
+
+            if (!googleAlive && !force) {
+                clearInterval(msgInterval);
+                loadingState?.classList.add("hidden");
+                resultState?.classList.remove("hidden");
+                resNoInternet?.classList.remove("hidden");
+                retryBtn?.classList.remove("hidden");
+                return;
+            }
+
+            log("> Ejecutando cruce de datos DNS (DoH vs Local)...");
+            try {
+                const testDomain = "www.cloudflare.com";
+                const dohRes = await fetch(
+                    `https://dns.google/resolve?name=${testDomain}&type=A`
+                ).then((r) => r.json());
+                const realIps = dohRes.Answer?.map((a: any) => a.data) || [];
+
+                log(`> DNS Real (Google): ${realIps.join(", ")}`, "neutral");
+
+                const [domainWorks, ipWorks] = await Promise.all([
+                    fetch(`https://${testDomain}/favicon.ico`, { mode: "no-cors" })
+                        .then(() => true)
+                        .catch(() => false),
+                    fetch(`https://${realIps[0]}/favicon.ico`, { mode: "no-cors" })
+                        .then(() => true)
+                        .catch(() => false),
+                ]);
+
+                if (!domainWorks && ipWorks) {
+                    dnsPoisoned = true;
+                    log("> ALERTA: DNS envenenado detectado.", "error");
+                }
+            } catch (e) {
+                log("> DoH no disponible, saltando cruce DNS.", "neutral");
+            }
+
+            log(`> Lanzando sondas sobre ${TARGET_IPS.length} objetivos críticos...`);
+            const subset = TARGET_IPS.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+            const probe = async (ip: string) => {
+                const start = performance.now();
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+                try {
+                    await fetch(`https://${ip}/favicon.ico`, {
+                        mode: "no-cors",
+                        cache: "no-store",
+                        signal: controller.signal,
+                    });
+                    return { ip, status: "ok", time: performance.now() - start };
+                } catch (e: any) {
+                    const time = performance.now() - start;
+
+                    if (e.name === "AbortError" || time > 2000) {
+                        return { ip, status: "blocked", time };
+                    }
+                    return { ip, status: "ok", time };
+                } finally {
+                    clearTimeout(timeoutId);
+                }
+            };
+
+            const probeResults = await Promise.all(subset.map(probe));
+
+            probeResults.forEach((res) => {
+                if (res.status === "blocked") {
+                    blocksDetected++;
+                    log(`> Objetivo ${res.ip}: NO RESPONDE (Bloqueo IP sospechoso)`, "error");
+                } else {
+                    log(`> Objetivo ${res.ip}: ACTIVO`, "success");
+                }
+            });
+
+            let finalBlocked = false;
+            let reason = "";
+
+            if (force === "blocked") finalBlocked = true;
+            else if (force === "success") finalBlocked = false;
+            else if (force === "no-internet") {
+                googleAlive = false;
+                finalBlocked = false;
+            } else {
+                if (dnsPoisoned) {
+                    finalBlocked = true;
+                    reason = "Tu ISP está manipulando las respuestas DNS para ocultar servidores.";
+                } else if (blocksDetected >= 3) {
+                    finalBlocked = true;
+                    reason = `Se han detectado ${blocksDetected} bloqueos de IP en tu conexión. Es posible que el fútbol esté activo.`;
+                }
             }
 
             clearInterval(msgInterval);
@@ -299,24 +369,20 @@ const { isStreamOnly = false } = Astro.props;
             resultState?.classList.remove("hidden");
             retryBtn?.classList.remove("hidden");
 
-            if (googleAlive && !cfAlive) {
-                log("!!! ALERTA: INTERFERENCIA JUDICIAL DETECTADA !!!", "error");
+            if (finalBlocked) {
+                log("!!! ALERTA DE INTERFERENCIA JUDICIAL !!!", "error");
                 resBlocked?.classList.remove("hidden");
+                if (blockedReason && reason) blockedReason.innerText = reason;
             } else if (!googleAlive) {
-                log("ERROR CRÍTICO: CAPA 8 (USUARIO)", "error");
+                log("SIN ACCESO A INTERNET", "error");
                 resNoInternet?.classList.remove("hidden");
             } else {
-                log("STATUS: LIBERTAD PROVISIONAL. TEBAS ESTÁ TRISTE.", "success");
+                log("CONEXIÓN LIMPIA. DISFRUTA.", "success");
                 resSuccess?.classList.remove("hidden");
             }
-
-            try {
-                const ipReq = await fetch("https://ipapi.co/json/");
-                const ipData = await ipReq.json();
-                if (ipData.org) log(`ISP VIGILANTE: ${ipData.org}`, "neutral");
-            } catch (e) {}
         } catch (error) {
-            log("ERROR CRÍTICO DEL SISTEMA", "error");
+            log("ERROR DE DIAGNÓSTICO", "error");
+            if (msgInterval) clearInterval(msgInterval);
         }
     };
 
