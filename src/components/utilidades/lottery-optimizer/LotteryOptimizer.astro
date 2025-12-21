@@ -1,0 +1,427 @@
+---
+import { Icon } from "astro-icon/components";
+import { LOTTERY_DATA, LotteryLogic } from "../../../lib/utilidades/finance/LotteryLogic";
+---
+
+<div class="space-y-8" id="lottery-optimizer-root">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+            Object.values(LOTTERY_DATA).map((game) => (
+                <button
+                    class="group relative flex flex-col p-6 rounded-3xl border-2 border-slate-100 dark:border-slate-800 hover:border-emerald-500 transition-all cursor-pointer bg-white dark:bg-slate-900 text-left overflow-hidden shadow-sm outline-none focus:outline-none"
+                    data-game-btn
+                    data-id={game.id}
+                >
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-emerald-500/10 transition-colors">
+                            <Icon
+                                name={
+                                    game.id === "gordo" || game.id === "nino"
+                                        ? "mdi:gift-outline"
+                                        : "mdi:clover"
+                                }
+                                class="text-2xl text-slate-400 group-hover:text-emerald-500"
+                            />
+                        </div>
+                        <span class="text-xs font-black text-slate-400 group-hover:text-emerald-500 uppercase tracking-widest">
+                            {game.cost}€
+                        </span>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-1">
+                        {game.name}
+                    </h4>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-4">{game.description}</p>
+                    <div class="mt-auto pt-4 border-t border-slate-50 dark:border-slate-800/50 flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                            Prob: 1/{game.odds.toLocaleString()}
+                        </span>
+                        <Icon
+                            name="mdi:arrow-right"
+                            class="text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all"
+                        />
+                    </div>
+                </button>
+            ))
+        }
+    </div>
+
+    <div
+        id="calculator-panel"
+        class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500"
+    >
+        <div
+            class="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-xl border border-slate-100 dark:border-slate-800 space-y-8"
+        >
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <h3
+                        class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight"
+                        id="selected-game-title"
+                    >
+                        Configura tu Jugada
+                    </h3>
+                    <p class="text-slate-500 text-sm">
+                        Ajusta la cantidad de participaciones para ver tu probabilidad real.
+                    </p>
+                </div>
+                <div
+                    class="flex items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700"
+                >
+                    <div class="text-right">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                            Inversión Total
+                        </p>
+                        <p
+                            class="text-2xl font-black text-slate-900 dark:text-white"
+                            id="display-total-cost"
+                        >
+                            0.00€
+                        </p>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center"
+                    >
+                        <Icon name="mdi:cash-multiple" class="text-2xl" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end">
+                            <label class="text-sm font-bold text-slate-700 dark:text-slate-300"
+                                >Cantidad de Décimos / Apuestas</label
+                            >
+                            <span
+                                class="text-3xl font-black text-emerald-500"
+                                id="ticket-count-display">1</span
+                            >
+                        </div>
+                        <input
+                            type="range"
+                            id="ticket-slider"
+                            min="1"
+                            max="100"
+                            value="1"
+                            class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                        />
+                        <div
+                            class="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+                        >
+                            <span>1 unidad</span>
+                            <span>100 unidades</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-6 rounded-2xl bg-indigo-50/50 dark:bg-slate-800/30 border border-indigo-100 dark:border-slate-700 space-y-4"
+                    >
+                        <div class="flex items-center gap-3">
+                            <Icon name="mdi:lightbulb-on-outline" class="text-xl text-indigo-500" />
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">
+                                Estrategia Óptima
+                            </h4>
+                        </div>
+                        <p
+                            class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed"
+                            id="recommendation-text"
+                        >
+                            Selecciona una lotería para ver la recomendación estadística.
+                        </p>
+                        <div id="optimal-tag" class="hidden">
+                            <span
+                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest"
+                            >
+                                <Icon name="mdi:check-circle" class="text-xs" />
+                                Recomendación: <span id="optimal-count">0</span> unidades
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div
+                        class="p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm space-y-2"
+                    >
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                            Probabilidad de Éxito
+                        </p>
+                        <p
+                            class="text-2xl font-black text-slate-900 dark:text-white"
+                            id="stat-probability"
+                        >
+                            0.00%
+                        </p>
+                        <div
+                            class="w-full bg-slate-100 dark:bg-slate-700 h-1 rounded-full overflow-hidden"
+                        >
+                            <div
+                                id="prob-bar"
+                                class="bg-emerald-500 h-full transition-all duration-500"
+                                style="width: 0%"
+                            >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm space-y-2"
+                    >
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                            Valor Esperado (EV)
+                        </p>
+                        <p class="text-2xl font-black text-slate-900 dark:text-white" id="stat-ev">
+                            -0.00€
+                        </p>
+                        <p class="text-[9px] text-slate-400 leading-tight italic">
+                            Retorno teórico por cada jugada realizada.
+                        </p>
+                    </div>
+
+                    <div
+                        class="p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm space-y-2 sm:col-span-2"
+                    >
+                        <div class="flex justify-between items-center">
+                            <p
+                                class="text-[10px] font-black text-slate-400 uppercase tracking-widest"
+                            >
+                                Índice de Rentabilidad Social
+                            </p>
+                            <span
+                                id="efficiency-label"
+                                class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 uppercase"
+                                >Baja</span
+                            >
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <p
+                                class="text-3xl font-black text-slate-900 dark:text-white"
+                                id="stat-efficiency"
+                            >
+                                0.0
+                            </p>
+                            <p class="text-xs text-slate-500 mb-1">/ 100</p>
+                        </div>
+                        <div class="grid grid-cols-10 gap-1 h-2 mt-2">
+                            {
+                                Array.from({ length: 10 }).map((_, i) => (
+                                    <div
+                                        class="bg-slate-100 dark:bg-slate-800 rounded-sm efficiency-segment"
+                                        data-index={i}
+                                    />
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="bg-slate-50 dark:bg-slate-800/20 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800/50 space-y-6"
+    >
+        <div class="flex items-center gap-4">
+            <div
+                class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center"
+            >
+                <Icon name="mdi:compare" class="text-xl" />
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+                    Comparativa de Premios
+                </h3>
+                <p class="text-xs text-slate-500">
+                    Relación entre coste, premio máximo y dificultad estadística.
+                </p>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr
+                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 dark:border-slate-800"
+                    >
+                        <th class="pb-4 font-black">Lotería</th>
+                        <th class="pb-4 font-black text-right">Coste</th>
+                        <th class="pb-4 font-black text-right">Premio Típico</th>
+                        <th class="pb-4 font-black text-right">Dificultad</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
+                    {
+                        Object.values(LOTTERY_DATA).map((game) => (
+                            <tr class="group hover:bg-white dark:hover:bg-slate-800/40 transition-colors">
+                                <td class="py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class={`w-2 h-2 rounded-full ${game.id === "gordo" || game.id === "nino" ? "bg-amber-400" : "bg-emerald-400"}`}
+                                        />
+                                        <span class="text-sm font-bold text-slate-700 dark:text-slate-200">
+                                            {game.name}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-sm font-medium text-slate-500 text-right">
+                                    {game.cost}€
+                                </td>
+                                <td class="py-4 text-sm font-black text-slate-900 dark:text-white text-right">
+                                    {game.jackpot > 1000000
+                                        ? `${(game.jackpot / 1000000).toFixed(1)}M€`
+                                        : `${(game.jackpot / 1000).toFixed(0)}k€`}
+                                </td>
+                                <td class="py-4 text-right">
+                                    <span
+                                        class={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter
+                                    ${
+                                        game.odds < 200000
+                                            ? "bg-emerald-500/10 text-emerald-500"
+                                            : game.odds < 20000000
+                                              ? "bg-amber-500/10 text-amber-500"
+                                              : "bg-rose-500/10 text-rose-500"
+                                    }`}
+                                    >
+                                        {game.odds < 200000
+                                            ? "Accesible"
+                                            : game.odds < 20000000
+                                              ? "Difícil"
+                                              : "Extrema"}
+                                    </span>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
+        <p
+            class="text-[9px] text-slate-400 leading-relaxed italic border-t border-slate-100 dark:border-slate-800 pt-4"
+        >
+            Nota: Los premios de Navidad y El Niño son por décimo (20€). Los de Euromillones,
+            Primitiva y Bonoloto son botes típicos para el primer premio.
+        </p>
+    </div>
+</div>
+
+<script>
+    import {
+        LOTTERY_DATA,
+        LotteryLogic,
+        type LotteryId,
+    } from "../../../lib/utilidades/finance/LotteryLogic";
+
+    const btns = document.querySelectorAll("[data-game-btn]");
+    const panel = document.getElementById("calculator-panel");
+    const title = document.getElementById("selected-game-title");
+    const slider = document.getElementById("ticket-slider") as HTMLInputElement;
+    const ticketCountDisplay = document.getElementById("ticket-count-display");
+    const totalCostDisplay = document.getElementById("display-total-cost");
+    const probDisplay = document.getElementById("stat-probability");
+    const probBar = document.getElementById("prob-bar");
+    const evDisplay = document.getElementById("stat-ev");
+    const efficiencyDisplay = document.getElementById("stat-efficiency");
+    const efficiencyLabel = document.getElementById("efficiency-label");
+    const recommendationText = document.getElementById("recommendation-text");
+    const optimalTag = document.getElementById("optimal-tag");
+    const optimalCount = document.getElementById("optimal-count");
+    const segments = document.querySelectorAll(".efficiency-segment");
+
+    let selectedId: LotteryId | null = null;
+
+    function update() {
+        if (!selectedId) return;
+
+        const tickets = parseInt(slider.value);
+        const stats = LotteryLogic.calculateStats(selectedId, tickets);
+        const game = LOTTERY_DATA[selectedId];
+
+        if (ticketCountDisplay) ticketCountDisplay.textContent = tickets.toString();
+        if (totalCostDisplay) totalCostDisplay.textContent = `${stats.totalCost.toFixed(2)}€`;
+
+        if (probDisplay) probDisplay.textContent = `${stats.winProbability.toFixed(5)}%`;
+        if (probBar) probBar.style.width = `${Math.min(stats.winProbability * 10, 100)}%`;
+
+        if (evDisplay) {
+            evDisplay.textContent = `${stats.expectedValue.toFixed(2)}€`;
+            evDisplay.className = `text-2xl font-black ${stats.expectedValue < 0 ? "text-rose-500" : "text-emerald-500"}`;
+        }
+
+        const eff = Math.min(game.payoutRate, 100);
+        if (efficiencyDisplay) efficiencyDisplay.textContent = eff.toFixed(1);
+
+        if (efficiencyLabel) {
+            if (eff > 65) {
+                efficiencyLabel.textContent = "Alta";
+                efficiencyLabel.className =
+                    "text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 uppercase";
+            } else if (eff > 50) {
+                efficiencyLabel.textContent = "Media";
+                efficiencyLabel.className =
+                    "text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 uppercase";
+            } else {
+                efficiencyLabel.textContent = "Baja";
+                efficiencyLabel.className =
+                    "text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 uppercase";
+            }
+        }
+
+        segments.forEach((seg, i) => {
+            const threshold = (i + 1) * 10;
+            if (eff >= threshold) {
+                (seg as HTMLElement).classList.remove("bg-slate-100", "dark:bg-slate-800");
+                (seg as HTMLElement).classList.add("bg-emerald-500");
+            } else {
+                (seg as HTMLElement).classList.add("bg-slate-100", "dark:bg-slate-800");
+                (seg as HTMLElement).classList.remove("bg-emerald-500");
+            }
+        });
+
+        if (recommendationText) recommendationText.textContent = stats.recommendation;
+        if (optimalTag) optimalTag.classList.remove("hidden");
+        if (optimalCount) optimalCount.textContent = stats.optimalTickets.toString();
+    }
+
+    btns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            btns.forEach((b) => {
+                b.classList.remove(
+                    "border-emerald-500",
+                    "ring-4",
+                    "ring-emerald-500/10",
+                    "bg-emerald-50/10"
+                );
+                b.classList.add("border-slate-100", "dark:border-slate-800");
+            });
+
+            btn.classList.add(
+                "border-emerald-500",
+                "ring-4",
+                "ring-emerald-500/10",
+                "bg-emerald-50/10"
+            );
+            btn.classList.remove("border-slate-100", "dark:border-slate-800");
+
+            selectedId = (btn as HTMLElement).dataset.id as LotteryId;
+            if (panel) panel.classList.remove("hidden");
+            if (title) title.textContent = LOTTERY_DATA[selectedId].name;
+
+            update();
+        });
+    });
+
+    slider?.addEventListener("input", update);
+</script>
+
+<style>
+    input[type="range"]::-webkit-slider-thumb {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #10b981;
+        cursor: pointer;
+        -webkit-appearance: none;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    }
+</style>

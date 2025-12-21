@@ -52,6 +52,14 @@ export const financeSection: SectionData = {
             iconBg: "mdi:clock-fast",
             iconFg: "mdi:cash-multiple",
             color: "#16a34a"
+        },
+        {
+            title: "Optimizador de Loterías",
+            description: "¿Realmente renta jugar? Analiza probabilidades y botes con ciencia.",
+            href: "/utilidades/optimizador-loterias/",
+            iconBg: "mdi:clover",
+            iconFg: "mdi:calculator-variant",
+            color: "#10b981"
         }
     ]
 };
