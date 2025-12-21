@@ -489,10 +489,10 @@ export const textileSection: SectionData = {
             color: '#ef4444'
         },
         {
-            href: '/utilidades/preparacion-textil/',
+            href: '/utilidades/preparacion-fibras-pigmentar/',
             iconBg: 'mdi:flask-round-bottom',
             iconFg: 'mdi:texture',
-            title: 'Preparación de Fibras',
+            title: 'Preparación de Fibras para Pigmentar',
             description: 'Guía técnica de mordentado y calculadora de WOF para teñido.',
             color: '#10b981'
         }
