@@ -1,0 +1,552 @@
+---
+import { Icon } from "astro-icon/components";
+import { TEXTILE_DATA } from "../../../../data/utilities/textiles";
+
+const proteinFibers = ["wool", "silk", "cashmere", "mohair", "angora", "alpaca"];
+
+const fibers = Object.entries(TEXTILE_DATA)
+    .filter(([id, _]) => TEXTILE_DATA[id].family === "natural")
+    .map(([id, data]) => ({
+        id,
+        name: data.name,
+        icon: data.icon,
+        type: proteinFibers.includes(id) ? "protein" : "cellulosic",
+    }));
+---
+
+<div class="max-w-5xl mx-auto p-4 md:p-6 space-y-8" id="fiber-prep-root">
+    <section class="space-y-6">
+        <div class="text-center space-y-2">
+            <h3 class="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                Selección de Perfil
+            </h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                El protocolo químico se divide según el origen molecular de la fibra
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <button
+                class="group relative flex flex-col p-8 rounded-[2.5rem] border-2 border-slate-100 dark:border-slate-800 hover:border-amber-500 transition-all cursor-pointer bg-white dark:bg-slate-900 text-left overflow-hidden shadow-sm"
+                data-fiber-btn
+                data-type="protein"
+            >
+                <div
+                    class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"
+                >
+                    <Icon name="mdi:sheep" class="text-9xl rotate-12" />
+                </div>
+                <div class="relative z-10 space-y-4">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center"
+                    >
+                        <Icon name="mdi:sheep" class="text-3xl" />
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black text-slate-900 dark:text-white uppercase">
+                            Fibras Proteicas
+                        </h4>
+                        <p
+                            class="text-xs font-bold text-amber-600/70 dark:text-amber-500/70 mb-2 uppercase tracking-widest"
+                        >
+                            Origen Animal
+                        </p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Lana, seda, alpaca, mohair o cashmere. Requieren temperaturas
+                            controladas y pH ácido.
+                        </p>
+                    </div>
+                    <div class="flex gap-2">
+                        {
+                            fibers
+                                .filter((f) => f.type === "protein")
+                                .map((f) => (
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-sm"
+                                        title={f.name}
+                                    >
+                                        <Icon name={f.icon} class="text-xs text-slate-400" />
+                                    </div>
+                                ))
+                        }
+                    </div>
+                </div>
+            </button>
+
+            <button
+                class="group relative flex flex-col p-8 rounded-[2.5rem] border-2 border-slate-100 dark:border-slate-800 hover:border-emerald-500 transition-all cursor-pointer bg-white dark:bg-slate-900 text-left overflow-hidden shadow-sm"
+                data-fiber-btn
+                data-type="cellulosic"
+            >
+                <div
+                    class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"
+                >
+                    <Icon name="mdi:leaf" class="text-9xl -rotate-12" />
+                </div>
+                <div class="relative z-10 space-y-4">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center"
+                    >
+                        <Icon name="mdi:leaf" class="text-3xl" />
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black text-slate-900 dark:text-white uppercase">
+                            Fibras Celulósicas
+                        </h4>
+                        <p
+                            class="text-xs font-bold text-emerald-600/70 dark:text-emerald-500/70 mb-2 uppercase tracking-widest"
+                        >
+                            Origen Vegetal
+                        </p>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Algodón, lino, cáñamo o yute. Requieren pre-mordentado con taninos para
+                            fijar el pigmento.
+                        </p>
+                    </div>
+                    <div class="flex gap-2">
+                        {
+                            fibers
+                                .filter((f) => f.type === "cellulosic")
+                                .map((f) => (
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-sm"
+                                        title={f.name}
+                                    >
+                                        <Icon name={f.icon} class="text-xs text-slate-400" />
+                                    </div>
+                                ))
+                        }
+                    </div>
+                </div>
+            </button>
+        </div>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <section
+            class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-xl border border-slate-100 dark:border-slate-800 flex flex-col"
+        >
+            <div class="flex items-center gap-4 mb-6">
+                <div
+                    class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center"
+                >
+                    <Icon name="mdi:calculator" class="text-xl" />
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Calculadora WOF</h3>
+            </div>
+
+            <div class="space-y-6 relative" id="wof-container">
+                <div
+                    id="wof-empty"
+                    class="absolute inset-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-[2px] rounded-2xl flex items-center justify-center p-6 text-center transition-all duration-500"
+                >
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                        Selecciona un perfil para habilitar cálculos
+                    </p>
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2"
+                        >Peso de la Prenda Seca (g)</label
+                    >
+                    <div class="relative">
+                        <input
+                            type="number"
+                            id="weight-input"
+                            class="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl px-4 py-3 text-2xl font-black text-slate-900 dark:text-white focus:border-indigo-500 outline-none transition-all"
+                            placeholder="0"
+                        />
+                        <span
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold"
+                            >gr</span
+                        >
+                    </div>
+                </div>
+
+                <div
+                    class="grid grid-cols-1 gap-4 opacity-40 grayscale pointer-events-none transition-all duration-500"
+                    id="wof-results"
+                >
+                    <div
+                        class="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 flex justify-between items-center"
+                    >
+                        <div class="flex items-center gap-3">
+                            <Icon name="mdi:bottle-tonic-skull" class="text-lg text-indigo-500" />
+                            <span class="text-sm font-bold text-slate-700 dark:text-slate-300"
+                                >Alumbre</span
+                            >
+                        </div>
+                        <span
+                            class="text-xl font-black text-indigo-600 dark:text-indigo-400"
+                            id="alum-val">0g</span
+                        >
+                    </div>
+                    <div
+                        class="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900/50 flex justify-between items-center"
+                        id="cot-container"
+                    >
+                        <div class="flex items-center gap-3">
+                            <Icon name="mdi:spoon-sugar" class="text-lg text-amber-500" />
+                            <span class="text-sm font-bold text-slate-700 dark:text-slate-300"
+                                >Crémor Tártaro</span
+                            >
+                        </div>
+                        <span
+                            class="text-xl font-black text-amber-600 dark:text-amber-400"
+                            id="cot-val">0g</span
+                        >
+                    </div>
+                    <div
+                        class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex justify-between items-center"
+                    >
+                        <div class="flex items-center gap-3">
+                            <Icon name="mdi:nut" class="text-lg text-slate-500" />
+                            <span class="text-sm font-bold text-slate-700 dark:text-slate-300"
+                                >Hierro (Cuidado)</span
+                            >
+                        </div>
+                        <span
+                            class="text-xl font-black text-slate-600 dark:text-slate-400"
+                            id="iron-val">0g</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-xl border border-slate-100 dark:border-slate-800"
+        >
+            <div class="flex items-center gap-4 mb-6">
+                <div
+                    class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-500 flex items-center justify-center"
+                >
+                    <Icon name="mdi:chart-bell-curve" class="text-xl" />
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Rampa Térmica</h3>
+            </div>
+
+            <div class="relative min-h-[300px] flex flex-col justify-center">
+                <div
+                    id="ramp-empty"
+                    class="flex flex-col items-center justify-center p-8 text-center space-y-4 transition-all duration-500"
+                >
+                    <div
+                        class="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 text-slate-300 dark:text-slate-600 flex items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-800"
+                    >
+                        <Icon name="mdi:clock-outline" class="text-3xl" />
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-bold text-slate-400 dark:text-slate-500">
+                            Esperando Selección
+                        </p>
+                        <p
+                            class="text-[10px] text-slate-400/60 uppercase tracking-widest font-black"
+                        >
+                            Elige una fibra para ver el ciclo térmico
+                        </p>
+                    </div>
+                </div>
+
+                <div id="ramp-active" class="hidden space-y-4 animate-in fade-in duration-700">
+                    <div
+                        class="relative w-full aspect-[2/1] bg-slate-50/50 dark:bg-slate-800/20 rounded-2xl p-4 border border-slate-100 dark:border-slate-800/50 overflow-hidden"
+                    >
+                        <svg
+                            viewBox="0 0 240 130"
+                            class="w-full h-full overflow-visible"
+                            id="ramp-svg"
+                        >
+                            <defs>
+                                <linearGradient id="rampGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="rgb(99 102 241 / 0.2)"></stop>
+                                    <stop offset="100%" stop-color="transparent"></stop>
+                                </linearGradient>
+                            </defs>
+
+                            <g
+                                class="text-[7px] font-black fill-slate-400 dark:fill-slate-500 uppercase tracking-tighter"
+                            >
+                                <text x="0" y="23">90°C</text>
+                                <text x="0" y="63">60°C</text>
+                                <text x="0" y="103">30°C</text>
+                            </g>
+
+                            <g
+                                stroke="currentColor"
+                                class="text-slate-100 dark:text-slate-800/50"
+                                stroke-width="0.5"
+                            >
+                                <line x1="25" y1="20" x2="230" y2="20" stroke-dasharray="2 2"
+                                ></line>
+                                <line x1="25" y1="60" x2="230" y2="60" stroke-dasharray="2 2"
+                                ></line>
+                                <line x1="25" y1="100" x2="230" y2="100" stroke-width="1"></line>
+                            </g>
+
+                            <path
+                                id="ramp-fill"
+                                d="M 25 100 L 230 100 L 230 100 L 25 100 Z"
+                                fill="url(#rampGradient)"
+                                class="transition-all duration-1000"></path>
+                            <path
+                                id="ramp-path"
+                                d="M 25 100 L 230 100"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="text-indigo-500 transition-all duration-1000"></path>
+
+                            <g
+                                class="text-[7px] font-black fill-slate-400 dark:fill-slate-500 uppercase tracking-tight"
+                            >
+                                <text x="25" y="115">0'</text>
+                                <text x="93" y="115">60'</text>
+                                <text x="161" y="115">120'</text>
+                                <text x="210" y="115">180'</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section
+        class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-xl border border-slate-100 dark:border-slate-800"
+    >
+        <div class="flex items-center gap-4 mb-6">
+            <div
+                class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center"
+            >
+                <Icon name="mdi:beaker-outline" class="text-xl" />
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+                    Estabilizador de pH
+                </h3>
+                <p class="text-xs text-slate-500">Factor crítico para la saturación del color</p>
+            </div>
+        </div>
+
+        <div class="relative grid grid-cols-1 md:grid-cols-3 gap-6" id="ph-container">
+            <div
+                id="ph-empty"
+                class="absolute inset-0 z-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-[2px] rounded-2xl flex items-center justify-center p-6 text-center transition-all duration-500"
+            >
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                    Selecciona un perfil para habilitar estabilizador
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <label class="block text-xs font-black uppercase tracking-widest text-slate-400"
+                    >Volumen del Baño (L)</label
+                >
+                <input
+                    type="number"
+                    id="ph-vol"
+                    value="5"
+                    class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-2 font-bold focus:border-purple-500 outline-none border border-transparent transition-all"
+                />
+            </div>
+            <div class="space-y-4">
+                <label class="block text-xs font-black uppercase tracking-widest text-slate-400"
+                    >pH Actual</label
+                >
+                <input
+                    type="range"
+                    id="ph-slider"
+                    min="1"
+                    max="14"
+                    step="0.5"
+                    value="7"
+                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                />
+                <div class="flex justify-between text-[10px] font-bold text-slate-400 px-1">
+                    <span>Ácido (1)</span>
+                    <span id="ph-current-label">7.0</span>
+                    <span>Alcalino (14)</span>
+                </div>
+            </div>
+            <div
+                class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center"
+            >
+                <span
+                    class="text-sm font-bold text-slate-600 dark:text-slate-300 text-center"
+                    id="ph-advice">Mantenlo cerca de 7 para empezar</span
+                >
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    import { FiberPrepLogic } from "../../../../lib/utilidades/textiles/FiberPrepLogic";
+
+    let selectedType: any = null;
+    let weight = 0;
+
+    const btns = document.querySelectorAll("[data-fiber-btn]");
+    const weightInput = document.getElementById("weight-input") as HTMLInputElement;
+    const alumVal = document.getElementById("alum-val");
+    const cotVal = document.getElementById("cot-val");
+    const ironVal = document.getElementById("iron-val");
+    const cotContainer = document.getElementById("cot-container");
+    const phSlider = document.getElementById("ph-slider") as HTMLInputElement;
+    const phVol = document.getElementById("ph-vol") as HTMLInputElement;
+    const phAdvice = document.getElementById("ph-advice");
+    const phLabel = document.getElementById("ph-current-label");
+    const wofEmpty = document.getElementById("wof-empty");
+    const wofResults = document.getElementById("wof-results");
+    const phEmpty = document.getElementById("ph-empty");
+    const rampEmpty = document.getElementById("ramp-empty");
+    const rampActive = document.getElementById("ramp-active");
+    const rampPath = document.getElementById("ramp-path");
+    const rampFill = document.getElementById("ramp-fill");
+    const protocolSteps = document.getElementById("protocol-steps");
+
+    function updateCalculations() {
+        if (!selectedType) return;
+        const results = FiberPrepLogic.calculateWOF(weight, selectedType);
+
+        if (wofEmpty) wofEmpty.classList.add("hidden");
+        if (wofResults)
+            wofResults.classList.remove("opacity-40", "grayscale", "pointer-events-none");
+
+        if (alumVal) alumVal.textContent = `${results.alum.toFixed(1)}g`;
+        if (cotVal) cotVal.textContent = `${results.creamOfTartar.toFixed(1)}g`;
+        if (ironVal) ironVal.textContent = `${results.iron.toFixed(1)}g`;
+
+        if (cotContainer) {
+            cotContainer.style.opacity = selectedType === "protein" ? "1" : "0.3";
+        }
+    }
+
+    function updateRamp() {
+        if (!selectedType) return;
+        const protocol = FiberPrepLogic.getProtocol(selectedType);
+
+        let d = "";
+        let fill = "";
+
+        if (selectedType === "protein") {
+            d = "M 25 115 L 65 30 L 165 30 L 225 115";
+            fill = "M 25 115 L 65 30 L 165 30 L 225 115 L 225 115 L 25 115 Z";
+        } else {
+            d = "M 25 115 L 85 115 L 115 40 L 195 40 L 225 115";
+            fill = "M 25 115 L 85 115 L 115 40 L 195 40 L 225 115 L 225 115 L 25 115 Z";
+        }
+
+        if (rampEmpty) rampEmpty.classList.add("hidden");
+        if (rampActive) rampActive.classList.remove("hidden");
+
+        if (rampPath) rampPath.setAttribute("d", d);
+        if (rampFill) rampFill.setAttribute("d", fill);
+
+        if (protocolSteps) {
+            protocolSteps.innerHTML = protocol.steps
+                .slice(1)
+                .map((step, idx) => {
+                    const prevStep = protocol.steps[idx];
+                    const isConstant = prevStep.temp === step.temp;
+                    const tempLabel = isConstant
+                        ? `${step.temp}ºC Constante`
+                        : `${prevStep.temp}ºC → ${step.temp}ºC`;
+
+                    return `
+                        <div class="flex items-center gap-4 py-3 px-4 rounded-xl border border-transparent hover:border-slate-100 dark:hover:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all">
+                            <div class="w-20 shrink-0 flex flex-col items-center border-r border-slate-100 dark:border-slate-800 pr-4">
+                                <span class="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter whitespace-nowrap">${prevStep.time}' → ${step.time}'</span>
+                                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${step.time - prevStep.time} min</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[11px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight truncate">${step.label}</p>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <div class="w-1.5 h-1.5 rounded-full ${isConstant ? "bg-indigo-500" : "bg-orange-500 animate-pulse"}"></div>
+                                    <p class="text-[10px] text-slate-500 font-bold">${tempLabel}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                })
+                .join("");
+        }
+    }
+
+    function updatePH() {
+        const ph = parseFloat(phSlider.value);
+        const volume = parseFloat(phVol.value);
+        if (phLabel) phLabel.textContent = ph.toFixed(1);
+
+        if (phEmpty) phEmpty.classList.add("hidden");
+        const target = selectedType === "protein" ? 4.5 : 7.0;
+        const advice = FiberPrepLogic.adjustPH(ph, target, volume);
+        if (phAdvice) phAdvice.textContent = advice;
+    }
+
+    btns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            btns.forEach((b) => {
+                const type = (b as HTMLElement).dataset.type;
+                const activeColor = type === "protein" ? "border-amber-500" : "border-emerald-500";
+                const activeBg = type === "protein" ? "bg-amber-50/30" : "bg-emerald-50/30";
+
+                b.classList.remove(activeColor, activeBg, "ring-2", "ring-offset-2");
+                b.classList.add("border-slate-100", "dark:border-slate-800");
+
+                if (type === "protein") b.classList.remove("ring-amber-500/20");
+                else b.classList.remove("ring-emerald-500/20");
+            });
+
+            const currentType = (btn as HTMLElement).dataset.type;
+            const activeColor =
+                currentType === "protein" ? "border-amber-500" : "border-emerald-500";
+            const activeBg = currentType === "protein" ? "bg-amber-50/30" : "bg-emerald-50/30";
+            const activeRing =
+                currentType === "protein" ? "ring-amber-500/20" : "ring-emerald-500/20";
+
+            btn.classList.add(activeColor, activeBg, "ring-4", activeRing);
+            btn.classList.remove("border-slate-100", "dark:border-slate-800");
+
+            selectedType = currentType;
+            updateCalculations();
+            updateRamp();
+            updatePH();
+        });
+    });
+
+    weightInput?.addEventListener("input", (e) => {
+        weight = parseFloat((e.target as HTMLInputElement).value) || 0;
+        updateCalculations();
+    });
+
+    phSlider?.addEventListener("input", updatePH);
+    phVol?.addEventListener("input", updatePH);
+</script>
+
+<style>
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    [data-fiber-btn] {
+        animation: slideIn 0.3s ease-out forwards;
+    }
+</style>

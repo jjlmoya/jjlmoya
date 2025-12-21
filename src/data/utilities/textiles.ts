@@ -487,6 +487,14 @@ export const textileSection: SectionData = {
             title: 'Prueba de Combustión',
             description: 'Identifica la composición real de una tela quemando una pequeña muestra.',
             color: '#ef4444'
+        },
+        {
+            href: '/utilidades/preparacion-textil/',
+            iconBg: 'mdi:flask-round-bottom',
+            iconFg: 'mdi:texture',
+            title: 'Preparación de Fibras',
+            description: 'Guía técnica de mordentado y calculadora de WOF para teñido.',
+            color: '#10b981'
         }
     ]
 };
