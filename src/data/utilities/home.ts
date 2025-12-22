@@ -28,6 +28,15 @@ export const homeSection: SectionData = {
             title: "Calculadora Distancia Proyector",
             description: "Calcula dónde poner el proyector según las pulgadas de pantalla.",
             color: "#06b6d4"
+        },
+        {
+            href: "/utilidades/punto-de-rocio/",
+            iconBg: "mdi:water-thermometer",
+            iconFg: "mdi:bacteria",
+            title: "Punto de Rocío",
+            description: "Calcula la temperatura de condensación para evitar moho en casa.",
+            color: "#a855f7"
         }
     ]
 };
+

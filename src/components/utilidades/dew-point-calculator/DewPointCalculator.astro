@@ -1,0 +1,228 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <div
+        class="bg-white dark:bg-gray-900/50 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden group"
+    >
+        <div
+            class="absolute -top-24 -right-24 w-64 h-64 bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/10 dark:group-hover:bg-purple-500/20 transition-colors duration-700"
+        >
+        </div>
+        <div
+            class="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20 transition-colors duration-700"
+        >
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10">
+            <div class="space-y-8">
+                <div>
+                    <label
+                        for="temperature"
+                        class="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-4 flex items-center gap-2"
+                    >
+                        <Icon
+                            name="mdi:thermometer"
+                            class="w-5 h-5 text-purple-500 dark:text-purple-400"
+                        />
+                        Temperatura Ambiente (°C)
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="range"
+                            id="temperature"
+                            min="0"
+                            max="50"
+                            step="0.5"
+                            value="22"
+                            class="w-full h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                        />
+                        <div class="flex justify-between mt-4">
+                            <span
+                                class="text-2xl font-bold text-zinc-900 dark:text-white"
+                                id="tempValue">22°C</span
+                            >
+                            <div class="flex gap-2">
+                                <button
+                                    class="p-2 bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 rounded-lg transition-colors border border-zinc-200 dark:border-white/5 text-zinc-600 dark:text-zinc-400"
+                                    onclick="document.getElementById('temperature').stepDown(); document.getElementById('temperature').dispatchEvent(new Event('input'))"
+                                >
+                                    <Icon name="mdi:minus" class="w-4 h-4" />
+                                </button>
+                                <button
+                                    class="p-2 bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 rounded-lg transition-colors border border-zinc-200 dark:border-white/5 text-zinc-600 dark:text-zinc-400"
+                                    onclick="document.getElementById('temperature').stepUp(); document.getElementById('temperature').dispatchEvent(new Event('input'))"
+                                >
+                                    <Icon name="mdi:plus" class="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        for="humidity"
+                        class="block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-4 flex items-center gap-2"
+                    >
+                        <Icon
+                            name="mdi:water-percent"
+                            class="w-5 h-5 text-blue-500 dark:text-blue-400"
+                        />
+                        Humedad Relativa (%)
+                    </label>
+                    <div class="relative">
+                        <input
+                            type="range"
+                            id="humidity"
+                            min="10"
+                            max="95"
+                            step="1"
+                            value="55"
+                            class="w-full h-2 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                        />
+                        <div class="flex justify-between mt-4">
+                            <span
+                                class="text-2xl font-bold text-zinc-900 dark:text-white"
+                                id="humValue">55%</span
+                            >
+                            <div class="flex gap-2">
+                                <button
+                                    class="p-2 bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 rounded-lg transition-colors border border-zinc-200 dark:border-white/5 text-zinc-600 dark:text-zinc-400"
+                                    onclick="document.getElementById('humidity').stepDown(); document.getElementById('humidity').dispatchEvent(new Event('input'))"
+                                >
+                                    <Icon name="mdi:minus" class="w-4 h-4" />
+                                </button>
+                                <button
+                                    class="p-2 bg-zinc-100 dark:bg-white/5 hover:bg-zinc-200 dark:hover:bg-white/10 rounded-lg transition-colors border border-zinc-200 dark:border-white/5 text-zinc-600 dark:text-zinc-400"
+                                    onclick="document.getElementById('humidity').stepUp(); document.getElementById('humidity').dispatchEvent(new Event('input'))"
+                                >
+                                    <Icon name="mdi:plus" class="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="flex flex-col justify-center items-center p-8 bg-zinc-50 dark:bg-white/5 rounded-[2rem] border border-zinc-100 dark:border-white/10 text-center transition-all duration-500"
+                id="resultCard"
+            >
+                <span
+                    class="text-sm font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-2"
+                    >Punto de Rocío Est.</span
+                >
+                <div
+                    class="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-500 mb-6"
+                    id="dewPointValue"
+                >
+                    --
+                </div>
+
+                <div
+                    id="riskBadge"
+                    class="px-6 py-2 rounded-full text-xs font-bold uppercase tracking-tighter transition-all duration-300"
+                >
+                    Calculando...
+                </div>
+
+                <p
+                    id="riskDescription"
+                    class="mt-6 text-sm text-zinc-600 dark:text-zinc-400 leading-tight max-w-[200px]"
+                >
+                    Ajusta los valores para ver el riesgo de condensación.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { DewPointCalculator } from "../../../lib/utilidades/dew-point-calculator/DewPoint";
+
+    const tempInput = document.getElementById("temperature") as HTMLInputElement;
+    const humInput = document.getElementById("humidity") as HTMLInputElement;
+    const tempValue = document.getElementById("tempValue");
+    const humValue = document.getElementById("humValue");
+    const dewPointDisplay = document.getElementById("dewPointValue");
+    const riskBadge = document.getElementById("riskBadge");
+    const riskDescription = document.getElementById("riskDescription");
+    const resultCard = document.getElementById("resultCard");
+
+    function update() {
+        const t = parseFloat(tempInput.value);
+        const h = parseFloat(humInput.value);
+
+        if (tempValue) tempValue.textContent = `${t}°C`;
+        if (humValue) humValue.textContent = `${h}%`;
+
+        const dp = DewPointCalculator.calculate(t, h);
+        const risk = DewPointCalculator.getMoldRisk(t, dp);
+
+        if (dewPointDisplay) dewPointDisplay.textContent = `${dp}°C`;
+
+        const config = {
+            low: {
+                bg: "bg-emerald-500/10 dark:bg-emerald-500/20",
+                text: "text-emerald-700 dark:text-emerald-400",
+                label: "Riesgo Bajo",
+                border: "border-emerald-500/20",
+                desc: "Tus paredes están a salvo. El aire está seco y saludable.",
+            },
+            medium: {
+                bg: "bg-amber-500/10 dark:bg-amber-500/20",
+                text: "text-amber-700 dark:text-amber-400",
+                label: "Riesgo Moderado",
+                border: "border-amber-500/20",
+                desc: "Vigila las esquinas y ventanas al amanecer.",
+            },
+            high: {
+                bg: "bg-orange-500/10 dark:bg-orange-500/20",
+                text: "text-orange-700 dark:text-orange-400",
+                label: "Riesgo Alto",
+                border: "border-orange-500/20",
+                desc: "Condensación inminente. Ventila la habitación ahora.",
+            },
+            extreme: {
+                bg: "bg-red-500/10 dark:bg-red-500/20",
+                text: "text-red-700 dark:text-red-400",
+                label: "Peligro Extremo",
+                border: "border-red-500/20",
+                desc: "Condensación activa. Riesgo de moho negro estructural.",
+            },
+        };
+
+        const style = config[risk];
+
+        if (riskBadge) {
+            riskBadge.className = `px-6 py-2 rounded-full text-xs font-bold uppercase tracking-tighter border transition-all duration-300 ${style.bg} ${style.text} ${style.border}`;
+            riskBadge.textContent = style.label;
+        }
+
+        if (riskDescription) {
+            riskDescription.textContent = style.desc;
+        }
+
+        if (resultCard) {
+            resultCard.classList.forEach((c) => {
+                if (
+                    c.startsWith("border-emerald-") ||
+                    c.startsWith("border-amber-") ||
+                    c.startsWith("border-orange-") ||
+                    c.startsWith("border-red-")
+                ) {
+                    resultCard.classList.remove(c);
+                }
+            });
+            const colorName = style.text.split("-")[1];
+            resultCard.classList.add(`border-${colorName}-500/20`);
+        }
+    }
+
+    tempInput?.addEventListener("input", update);
+    humInput?.addEventListener("input", update);
+
+    update();
+</script>
