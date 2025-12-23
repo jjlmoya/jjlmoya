@@ -76,6 +76,14 @@ export const healthSection: SectionData = {
             title: "Purificador de Agua",
             description: "Calculadora de dosis de lejía para potabilizar agua en emergencias. Guía de supervivencia OMS/CDC.",
             color: "#06b6d4"
+        },
+        {
+            href: "/utilidades/cronometro-digestion/",
+            iconBg: "mdi:stomach",
+            iconFg: "mdi:clock-fast",
+            title: "Cronómetro de Digestión",
+            description: "Estimador del tránsito gastrointestinal por etapas según macronutrientes.",
+            color: "#f97316"
         }
     ]
 };
