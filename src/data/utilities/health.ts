@@ -84,6 +84,14 @@ export const healthSection: SectionData = {
             title: "Cronómetro de Digestión",
             description: "Estimador del tránsito gastrointestinal por etapas según macronutrientes.",
             color: "#f97316"
+        },
+        {
+            href: "/utilidades/pronostico-mini-aventuras/",
+            iconBg: "mdi:compass",
+            iconFg: "mdi:map-marker-path",
+            title: "Mini Aventuras",
+            description: "Generador aleatorio de retos diarios para romper la monotonía y explorar tu entorno.",
+            color: "#6366f1"
         }
     ]
 };
