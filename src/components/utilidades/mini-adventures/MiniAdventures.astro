@@ -1,0 +1,340 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="max-w-xl mx-auto space-y-8 p-4">
+    <div
+        id="adventure-card"
+        class="relative min-h-[450px] rounded-[2.5rem] bg-zinc-950 border border-white/5 shadow-2xl overflow-hidden transition-all duration-500 hover:border-indigo-500/30"
+    >
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none"
+        >
+        </div>
+
+        <div
+            id="home-view"
+            class="h-full flex flex-col items-center justify-center p-10 text-center space-y-8"
+        >
+            <div
+                class="w-24 h-24 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center shadow-inner group transition-transform hover:scale-110"
+            >
+                <Icon name="mdi:compass-outline" class="w-12 h-12 text-indigo-400 animate-pulse" />
+            </div>
+            <div class="space-y-3">
+                <h3 class="text-3xl font-black text-white tracking-tight">Mini Aventuras</h3>
+                <p class="text-zinc-500 text-lg">
+                    Haz que hoy sea un poco diferente. <br /> ¿Estás listo para explorar?
+                </p>
+            </div>
+            <button
+                id="generate-btn"
+                class="px-8 py-5 bg-white text-black rounded-2xl font-black text-xl hover:bg-zinc-200 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+            >
+                GENERAR AVENTURA
+            </button>
+        </div>
+
+        <div id="adventure-view" class="hidden h-full flex flex-col p-10 space-y-8">
+            <header class="flex justify-between items-center">
+                <div
+                    id="category-badge"
+                    class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border"
+                >
+                </div>
+                <button id="close-btn" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                    <Icon name="mdi:close" class="w-6 h-6" />
+                </button>
+            </header>
+
+            <div class="flex-1 flex flex-col items-center justify-center text-center space-y-6">
+                <div
+                    id="adventure-icon-container"
+                    class="w-20 h-20 rounded-2xl flex items-center justify-center transition-transform duration-500"
+                >
+                    <Icon name="mdi:map" class="w-10 h-10 text-white" id="current-adventure-icon" />
+                </div>
+                <h2
+                    id="adventure-text"
+                    class="text-2xl md:text-3xl font-bold text-white leading-tight px-4"
+                >
+                </h2>
+            </div>
+
+            <footer class="grid grid-cols-2 gap-3 pt-6 border-t border-white/5">
+                <button
+                    id="done-btn"
+                    class="flex items-center justify-center gap-2 py-4 bg-emerald-500 text-black rounded-xl font-black text-sm hover:bg-emerald-400 active:scale-95 transition-all"
+                >
+                    <Icon name="mdi:check-bold" class="w-5 h-5" />
+                    HECHO
+                </button>
+                <button
+                    id="another-btn"
+                    class="flex items-center justify-center gap-2 py-4 bg-zinc-800 text-white rounded-xl font-bold text-sm hover:bg-zinc-700 active:scale-95 transition-all"
+                >
+                    <Icon name="mdi:refresh" class="w-5 h-5" />
+                    OTRA
+                </button>
+                <button
+                    id="share-btn"
+                    class="col-span-2 flex items-center justify-center gap-2 py-4 border border-white/10 text-zinc-400 rounded-xl font-bold text-sm hover:bg-white/5 active:scale-95 transition-all"
+                >
+                    <Icon name="mdi:share-variant" class="w-5 h-5" />
+                    COMPARTIR
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <div class="space-y-6">
+        <div class="grid grid-cols-2 gap-4">
+            <div
+                class="p-6 rounded-3xl bg-zinc-950 border border-white/5 flex flex-col items-center text-center space-y-1"
+            >
+                <span class="text-3xl font-black text-white" id="stat-completed">0</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-500"
+                    >Aventuras</span
+                >
+            </div>
+            <div
+                class="p-6 rounded-3xl bg-zinc-950 border border-white/5 flex flex-col items-center text-center space-y-1"
+            >
+                <span class="text-3xl font-black text-white" id="stat-achievements">0</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-500"
+                    >Insignias</span
+                >
+            </div>
+        </div>
+
+        <div class="bg-zinc-950 border border-white/5 rounded-[2.5rem] p-8 space-y-6">
+            <div class="flex justify-between items-center">
+                <div class="space-y-1">
+                    <span
+                        class="text-[10px] font-black uppercase tracking-widest text-zinc-600 block"
+                        >Tu Progreso</span
+                    >
+                    <h4 class="text-xl font-black text-white">Colección de Trofeos</h4>
+                </div>
+                <div class="text-right">
+                    <span class="text-3xl font-black text-indigo-500" id="total-progress">0%</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-4 sm:grid-cols-5 gap-4" id="achievements-container"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import {
+        ADVENTURES,
+        ADVENTURE_CATEGORIES,
+        type Adventure,
+    } from "../../../data/utilities/mini-adventures";
+    import { ADVENTURE_ACHIEVEMENTS } from "../../../data/utilities/mini-adventures-achievements";
+
+    const homeView = document.getElementById("home-view");
+    const adventureView = document.getElementById("adventure-view");
+    const generateBtn = document.getElementById("generate-btn");
+    const anotherBtn = document.getElementById("another-btn");
+    const doneBtn = document.getElementById("done-btn");
+    const closeBtn = document.getElementById("close-btn");
+    const shareBtn = document.getElementById("share-btn");
+
+    const textEl = document.getElementById("adventure-text");
+    const badgeEl = document.getElementById("category-badge");
+    const iconContainer = document.getElementById("adventure-icon-container");
+    const statCompleted = document.getElementById("stat-completed");
+    const statAchievements = document.getElementById("stat-achievements");
+    const achievementsContainer = document.getElementById("achievements-container");
+    const totalProgressEl = document.getElementById("total-progress");
+
+    let currentAdventure: Adventure | null = null;
+
+    const renderAchievements = (history: number[]) => {
+        if (!achievementsContainer) return;
+
+        achievementsContainer.innerHTML = "";
+
+        const completionsByCategory: Record<string, number> = {};
+        history.forEach((id) => {
+            const adv = ADVENTURES.find((a) => a.id === id);
+            if (adv) {
+                completionsByCategory[adv.categoryId] =
+                    (completionsByCategory[adv.categoryId] || 0) + 1;
+            }
+        });
+
+        ADVENTURE_ACHIEVEMENTS.forEach((achievement) => {
+            const currentCount =
+                achievement.categoryId === "global"
+                    ? history.length
+                    : completionsByCategory[achievement.categoryId] || 0;
+
+            const isEarned = currentCount >= achievement.milestone;
+            const categoryObj =
+                achievement.categoryId !== "global"
+                    ? ADVENTURE_CATEGORIES[achievement.categoryId]
+                    : null;
+
+            const badge = document.createElement("div");
+            badge.className = `aspect-square rounded-[1.5rem] flex items-center justify-center border transition-all duration-700 group relative ${
+                isEarned
+                    ? "bg-zinc-900 border-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] scale-100 hover:scale-110"
+                    : "bg-zinc-950 border-white/5 text-zinc-900 grayscale opacity-40"
+            }`;
+
+            if (isEarned && categoryObj) {
+                badge.style.color = categoryObj.color;
+                badge.style.boxShadow = `0 0 20px ${categoryObj.color}15`;
+            }
+
+            badge.innerHTML = `
+                <span class="text-2xl transition-transform duration-500 group-hover:rotate-12 translate-y-0.5">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="${getIconPath(achievement.icon)}"></path>
+                    </svg>
+                </span>
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 p-4 bg-zinc-900 border border-white/10 rounded-2xl text-center opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-50 shadow-2xl scale-90 group-hover:scale-100">
+                    <div class="w-10 h-10 mx-auto mb-3 rounded-full flex items-center justify-center" style="background-color: ${categoryObj ? categoryObj.color : "#6366f1"}20">
+                         <svg class="w-5 h-5" style="color: ${categoryObj ? categoryObj.color : "#6366f1"}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${getIconPath(achievement.icon)}"></path>
+                        </svg>
+                    </div>
+                    <p class="text-[11px] font-black text-white uppercase tracking-wider mb-1">${achievement.label}</p>
+                    <p class="text-[10px] text-zinc-500 leading-tight mb-3">${achievement.description}</p>
+                    <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div class="h-full bg-indigo-500 transition-all duration-1000" style="width: ${Math.min(100, (currentCount / achievement.milestone) * 100)}%; background-color: ${categoryObj ? categoryObj.color : "#6366f1"}"></div>
+                    </div>
+                    <p class="text-[9px] font-mono text-zinc-600 mt-2 uppercase tracking-widest">${currentCount} / ${achievement.milestone}</p>
+                </div>
+            `;
+
+            achievementsContainer.appendChild(badge);
+        });
+
+        const earnedCount = ADVENTURE_ACHIEVEMENTS.filter((a) => {
+            const current =
+                a.categoryId === "global"
+                    ? history.length
+                    : completionsByCategory[a.categoryId] || 0;
+            return current >= a.milestone;
+        }).length;
+
+        if (statAchievements) statAchievements.textContent = String(earnedCount);
+        if (totalProgressEl)
+            totalProgressEl.textContent = `${Math.round((earnedCount / ADVENTURE_ACHIEVEMENTS.length) * 100)}%`;
+    };
+
+    const getIconPath = (iconName: string) => {
+        const paths: Record<string, string> = {
+            "mdi:footprint":
+                "M11,2C10.5,2 10.1,2.4 10.1,2.9V11.1H8.9C8.4,11.1 8,11.5 8,12V21.1C8,21.6 8.4,22 8.9,22H15.1C15.6,22 16,21.6 16,21.1V12C16,11.5 15.6,11.1 15.1,11.1H13.9V2.9C13.9,2.4 13.5,2 13,2H11Z",
+            "mdi:eye-outline":
+                "M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z",
+            "mdi:map-marker-radius":
+                "M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2M12,4A5,5 0 0,1 17,9C17,12.42 12,18.05 12,18.05C12,18.05 7,12.42 7,9A5,5 0 0,1 12,4M12,6A3,3 0 0,0 9,9A3,3 0 0,0 12,12A3,3 0 0,0 15,9A3,3 0 0,0 12,6Z",
+            "mdi:medal":
+                "M12,2A3,3 0 0,0 9,5V8.18H15V5A3,3 0 0,0 12,2M7,7.18V8.18H8V7.18H7M16,7.18V8.18H17V7.18H16M6,9.18V11.18C6,14.07 8.16,16.46 11,17.06V20H9V22H15V20H13V17.06C15.84,16.46 18,14.07 18,11.18V9.18H6Z",
+            "mdi:map-check":
+                "M20,15.5H22V17.5H20V15.5M20,19.5H22V21.5H20V19.5M3,3V19H12.35L11,17H5V5H19V11.23L21,13.23V3H3M20,14L15.3,18.7L13,16.4L11.5,17.9L15.3,21.7L21.4,15.4L20,14Z",
+            "mdi:silverware-variant":
+                "M10,21V11.5C10,10.67 9.33,10 8.5,10H7.5V3H6.5V10H5.5C4.67,10 4,10.67 4,11.5V21H5V11H6V21H7V11H8V21H10M14.5,18V21H13V18H14.5M19.5,18V21H18V18H19.5M16,21V7.5C16,4.46 18.46,2 21.5,2V21H16Z",
+            "mdi:head-lightbulb":
+                "M12,2A7,7 0 0,0 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H15A1,1 0 0,0 16,17V14.74C17.81,13.47 19,11.38 19,9A7,7 0 0,0 12,2M9,21A1,1 0 0,0 10,22H14A1,1 0 0,0 15,21V20H9V21Z",
+            "mdi:palette-swatch":
+                "M2,13C2,13 2,13 2,13V4C2,2.9 2.9,2 4,2H16C17.1,2 18,2.9 18,4V5H20C21.1,5 22,5.9 22,7V20C22,21.1 21.1,22 20,22H6C4.9,22 4,21.1 4,20V19H4C2.9,19 2,18.1 2,17V13M4,13V17H16V13H4M4,12H16V5C16,4.45 15.55,4 15,4H4V12Z",
+            "mdi:account-group":
+                "M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15.11 17,16.5V19H22V16.5C22,14.28 18.44,13.17 16,13M8,13C5.56,13 2,14.12 2,16.34V19H14V16.34C14,14.12 10.44,13 8,13M8,7A4,4 0 0,0 4,11A4,4 0 0,0 8,15A4,4 0 0,0 12,11A4,4 0 0,0 8,7M16,7A4,4 0 0,0 12,11A4,4 0 0,0 16,15A4,4 0 0,0 20,11A4,4 0 0,0 16,7Z",
+            "mdi:telescope":
+                "M1,14L2.2,12.8C2.6,12.4 3.2,12.4 3.6,12.8L5.4,14.6C5.8,15 5.8,15.6 5.4,16L4.2,17.2C3.8,17.6 3.2,17.6 2.8,17.2L1,15.4C0.6,15 0.6,14.4 1,14M9,11L13,7L15.3,9.3C15.7,9.7 15.7,10.3 15.3,10.7L13.1,12.9C12.7,13.3 12.1,13.3 11.7,12.9L9,10.2M23,3.4L21.6,2L14,9.6V11.1L12.9,12.2V13.6L1,26.2L2.4,27.6L15,15H16.4L17.5,13.9H19L26.6,6.3L25.2,4.9L23,7.1V3.4Z",
+            "mdi:spa":
+                "M12,21C12,21 12,13 7,10C3,7.6 2,5 2,5C2,5 3.5,7 6,7C9,7 12,11 12,11C12,11 15,7 18,7C20.5,7 22,5 22,5C22,5 21,7.6 17,10C12,13 12,21 12,21Z",
+            "mdi:sparkles":
+                "M10,21V19H12V21H10M14,14L10,18L7,15L8.4,13.6L10,15.2L12.6,12.6L14,14M21,11A2,2 0 0,0 19,9H12V3H10V9H3A2,2 0 0,0 1,11V19A2,2 0 0,0 3,21H5V23H7V21H17V23H19V21H21A2,2 0 0,0 23,19V11A2,2 0 0,0 21,11Z",
+            "mdi:calendar-star":
+                "M19,19V8H5V19H19M16,1H18V3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H6V1H8V3H16V1M11,10.5L12,9L13,10.5L14.7,10.7L13.5,11.9L13.8,13.6L12.3,12.8L10.8,13.6L11.1,11.9L9.9,10.7L11,10.5Z",
+            "mdi:trophy-variant":
+                "M18,2H6V5H18V2M18,7H6V9H18V7M12,13L8,9V11C8,13.21 9.79,15 12,15C14.21,15 16,13.21 16,11V9L12,13M12,17C9.24,17 7,14.76 7,12H5V19H19V12H17C17,14.76 14.76,17 12,17M9,21V23H15V21H9Z",
+            "mdi:ghost":
+                "M12,2A9,9 0 0,0 3,11V22L6,19L9,22L12,19L15,22L18,19L21,22V11A9,9 0 0,0 12,2M9,8A2,2 0 0,1 11,10A2,2 0 0,1 9,12A2,2 0 0,1 7,10A2,2 0 0,1 9,8M15,8A2,2 0 0,1 17,10A2,2 0 0,1 15,12A2,2 0 0,1 13,10A2,2 0 0,1 15,8Z",
+            "mdi:map-marker-outline":
+                "M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2M12,4A5,5 0 0,1 17,9C17,12.42 12,18.05 12,18.05C12,18.05 7,12.42 7,9A5,5 0 0,1 12,4M12,6A3,3 0 0,0 9,9A3,3 0 0,0 12,12A3,3 0 0,0 15,9A3,3 0 0,0 12,6Z",
+            "mdi:silverware-clean":
+                "M10,21V11.5C10,10.67 9.33,10 8.5,10H7.5V3H6.5V10H5.5C4.67,10 4,10.67 4,11.5V21H5V11H6V21H7V11H8V21H10M14.5,18V21H13V18H14.5M19.5,18V21H18V18H19.5M16,21V7.5C16,4.46 18.46,2 21.5,2V21H16Z",
+            "mdi:book-open-page-variant":
+                "M20,3H4A2,2 0 0,0 2,5V19A2,2 0 0,0 4,21H20A2,2 0 0,0 22,19V5A2,2 0 0,0 20,3M20,19H13V5H20V19M11,19H4V5H11V19Z",
+            "mdi:head-cog":
+                "M12,2A7,7 0 0,0 5,9C5,11.38 6.19,13.47 8,14.74V17A1,1 0 0,0 9,18H15A1,1 0 0,0 16,17V14.74C17.81,13.47 19,11.38 19,9A7,7 0 0,0 12,2M13,22H11V20H13V22M10.12,19.37L9.06,18.31L10.47,16.9L11.53,17.96L10.12,19.37M14.94,18.31L13.88,19.37L12.47,17.96L13.53,16.9L14.94,18.31Z",
+            "mdi:palette-outline":
+                "M12,22C6.48,22 2,17.52 2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,13.1 21.1,14 20,14H18.4C17.85,14 17.4,14.45 17.4,15C17.4,15.27 17.5,15.5 17.7,15.7C18.1,16.1 18.3,16.6 18.3,17.1C18.3,18.15 17.5,19 16.4,19H14.4C14.4,20.66 13.06,22 11.4,22H12M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C12,20 12,20 12.1,20C12,20 12,20 12,20H14V17H16.4C16.95,17 17.4,16.55 17.4,16C17.4,15.73 17.3,15.5 17.1,15.3C16.7,14.9 16.5,14.4 16.5,13.9C16.5,12.85 17.35,12 18.4,12H20C20,12 20,12 20,11.9C20,7.54 16.41,4 12,4Z",
+            "mdi:magnify":
+                "M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5A4.5,4.5 0 0,0 5,9.5A4.5,4.5 0 0,0 9.5,14A4.5,4.5 0 0,0 14,9.5A4.5,4.5 0 0,0 9.5,5Z",
+            "mdi:leaf":
+                "M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C11,20 15,14 15,14C15,14 19,18 21,18C22,18 22,15 22,15C22,15 21,8 17,8Z",
+        };
+        return paths[iconName] || "M12,2L1,21H23L12,2Z";
+    };
+
+    const loadStats = () => {
+        const history = JSON.parse(localStorage.getItem("mini_adventures_history") || "[]");
+        renderAchievements(history);
+        if (statCompleted) statCompleted.textContent = String(history.length);
+    };
+
+    const showAdventure = () => {
+        const uncompleted = ADVENTURES.filter((a) => a !== currentAdventure);
+        currentAdventure = uncompleted[Math.floor(Math.random() * uncompleted.length)];
+
+        if (!currentAdventure || !textEl || !badgeEl || !iconContainer) return;
+
+        const category = ADVENTURE_CATEGORIES[currentAdventure.categoryId];
+
+        textEl.textContent = currentAdventure.text;
+        badgeEl.textContent = category.label;
+        badgeEl.className = `px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${category.styling}`;
+
+        iconContainer.style.backgroundColor = `${category.color}20`;
+        const iconSvg = iconContainer.querySelector("svg");
+        if (iconSvg) {
+            iconSvg.style.color = category.color;
+        }
+
+        homeView?.classList.add("hidden");
+        adventureView?.classList.remove("hidden");
+        adventureView?.classList.add("animate-in", "fade-in", "zoom-in-95", "duration-500");
+    };
+
+    generateBtn?.addEventListener("click", showAdventure);
+    anotherBtn?.addEventListener("click", showAdventure);
+
+    closeBtn?.addEventListener("click", () => {
+        adventureView?.classList.add("hidden");
+        homeView?.classList.remove("hidden");
+    });
+
+    doneBtn?.addEventListener("click", () => {
+        if (!currentAdventure) return;
+        const history = JSON.parse(localStorage.getItem("mini_adventures_history") || "[]");
+        if (!history.includes(currentAdventure.id)) {
+            history.push(currentAdventure.id);
+            localStorage.setItem("mini_adventures_history", JSON.stringify(history));
+        }
+        loadStats();
+        showAdventure();
+    });
+
+    shareBtn?.addEventListener("click", () => {
+        if (!currentAdventure) return;
+        const text = `¡Acabo de recibir una Mini Aventura! 🗺️\n\n"${currentAdventure.text}"\n\n¿Te atreves? Genera la tuya aquí: ${window.location.href}`;
+        if (navigator.share) {
+            navigator.share({ text }).catch(() => {});
+        } else {
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, "_blank");
+        }
+    });
+
+    loadStats();
+</script>
