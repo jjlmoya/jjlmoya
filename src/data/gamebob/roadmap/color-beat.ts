@@ -4,8 +4,8 @@ export const colorBeatProject: Project = {
     name: "Color Beat",
     description: "Arcade rítmico frenético.",
     image: "/images/gamebob/games/color-beat.png",
-    statusLabel: "Subiendo a las stores",
-    progress: 95,
+    statusLabel: "Lanzado en Google Play",
+    progress: 100,
     tasks: [
         { name: "Concepto y GDD", status: "done" },
         { name: "Prototipado de Mecánicas", status: "done" },
@@ -17,6 +17,6 @@ export const colorBeatProject: Project = {
         { name: "Integración de Audio y SFX", status: "done" },
         { name: "QA y Testing", status: "done" },
         { name: "Preparación de Marketing", status: "done" },
-        { name: "Lanzamiento en Stores", status: "active" },
+        { name: "Lanzamiento en Stores", status: "done" },
     ],
 };
