@@ -1,0 +1,131 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Project } from "../../data/gamebob/roadmap/types";
+
+interface Props {
+    project: Project;
+    index: number;
+}
+
+const { project, index } = Astro.props;
+const isEven = index % 2 === 0;
+
+const statusColors = {
+    released: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
+    developing: "bg-blue-500/10 border-blue-300/30 text-blue-400",
+    qa: "bg-amber-500/10 border-amber-500/30 text-amber-400",
+    planning: "bg-blue-500/10 border-blue-500/30 text-blue-400",
+};
+
+const statusClasses = statusColors[project.statusType] || statusColors.developing;
+
+const nameParts = project.name.includes(":")
+    ? [project.name.split(":")[0], project.name.split(":")[1]]
+    : [project.name, ""];
+---
+
+<div
+    class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mt-24 pt-24 border-t border-white/5 first:mt-0 first:pt-0 first:border-0"
+>
+    <div class:list={["space-y-6", { "order-2": !isEven, "order-2 md:order-1": isEven }]}>
+        <h3
+            class="text-5xl font-black tracking-tighter text-[var(--color-gamebob-text)] uppercase leading-none"
+        >
+            {nameParts[0]}<br />
+            <span style={`color: ${project.color}`}>{nameParts[1].trim()}</span>
+        </h3>
+        <p class="text-gray-400 text-lg leading-relaxed lowercase">
+            {project.homeDescription || project.description}
+        </p>
+
+        <div class="flex items-center gap-4 pt-4">
+            <div
+                class:list={[
+                    "px-4 py-2 border rounded-lg text-sm font-medium",
+                    statusClasses,
+                    { "animate-pulse": project.statusType !== "released" },
+                ]}
+            >
+                {project.statusLabel}
+            </div>
+        </div>
+
+        <div class="flex gap-4 pt-4">
+            {
+                project.links?.googlePlay ? (
+                    <a
+                        href={project.links.googlePlay}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="h-12 px-6 bg-white text-black hover:bg-[var(--color-gamebob-primary)] transition-colors rounded-lg flex items-center gap-3 shadow-lg"
+                    >
+                        <Icon name="mdi:google-play" class="w-6 h-6" />
+                        <div class="text-left">
+                            <div class="text-[10px] leading-none">DISPONIBLE EN</div>
+                            <div class="text-sm font-bold leading-none">Google Play</div>
+                        </div>
+                    </a>
+                ) : (
+                    <div class="flex gap-4 opacity-50 grayscale">
+                        <div class="h-12 px-6 bg-white/10 rounded-lg flex items-center gap-3 text-white">
+                            <Icon name="mdi:google-play" class="w-6 h-6" />
+                            <div class="text-left">
+                                <div class="text-[10px] leading-none">PRÓXIMAMENTE EN</div>
+                                <div class="text-sm font-bold leading-none">Google Play</div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            <button
+                class="h-12 px-6 bg-white/10 rounded-lg flex items-center gap-3 cursor-not-allowed text-white opacity-50 grayscale"
+                title="Próximamente en App Store"
+            >
+                <Icon name="mdi:apple" class="w-6 h-6" />
+                <div class="text-left">
+                    <div class="text-[10px] leading-none text-gray-400">Descárgalo en el</div>
+                    <div class="text-sm font-bold leading-none text-gray-400">App Store</div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <div
+        class:list={[
+            "relative group rounded-2xl overflow-hidden shadow-2xl border border-white/10",
+            { "order-1": !isEven, "order-1 md:order-2": isEven },
+        ]}
+        style={`--tw-shadow-color: ${project.color}33; shadow-color: var(--tw-shadow-color)`}
+    >
+        <div
+            class:list={[
+                "bg-slate-900 flex items-center justify-center relative overflow-hidden",
+                "aspect-[2/3] md:aspect-[3/4]",
+            ]}
+        >
+            {
+                project.image ? (
+                    <img
+                        src={project.image}
+                        alt={`${project.name} Cover`}
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                ) : (
+                    <div class="text-white/10 font-black text-6xl uppercase tracking-widest text-center px-4">
+                        {project.name}
+                    </div>
+                )
+            }
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent z-10"
+                style={`background-image: linear-gradient(to bottom right, ${project.color}33, transparent)`}
+            >
+            </div>
+            <div
+                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 z-20"
+            >
+            </div>
+        </div>
+    </div>
+</div>
