@@ -14,6 +14,15 @@ export interface PostMortemEntry {
 
 export const postMortemEntries: PostMortemEntry[] = [
     {
+        id: "debug-por-url",
+        title: "La Trampa de las SPA: El Debug por URL",
+        date: "2025-12-26",
+        image: "spa-url-debug.png",
+        error: "Diseñar aplicaciones híbridas (Capacitor, WebView) como Single Page Applications (SPA) puras, donde el estado vive solo en memoria y no tiene reflejo en la URL, es un error crítico. Al delegar todo el estado a variables internas, pierdes la capacidad de debuggear el 'webview' directamente saltando a pantallas específicas o compartir un estado concreto con un bug report desde el dispositivo real.",
+        lesson: "En el desarrollo de apps híbridas, la URL debe ser la fuente de verdad del estado visual. Implementar 'Deep Linking' mediante query parameters transforma la DX: añadir `?state=broken&msg=42` permite testear flujos complejos en el dispositivo sin navegación manual y facilita enormemente la generación de screenshots para las stores (Google Play/App Store) usando scripts de automatización. El coste de la recarga se mitiga con frameworks, pero la visibilidad del estado en la URL es vital para la observabilidad en apps que corren dentro de wrappers.",
+        tags: ["state-management", "debugging", "dx", "deep-linking"],
+    },
+    {
         id: "ia-vaga-linter",
         title: "El Junior Brillante (y Peligrosamente Vago)",
         date: "2025-12-26",
