@@ -4,26 +4,46 @@ import { postMortemEntries } from "../../../data/gamebob/post-mortem/entries";
 import { Icon } from "astro-icon/components";
 
 export function getStaticPaths() {
-    return postMortemEntries.map((entry) => ({
+    return postMortemEntries.map((entry, index) => ({
         params: { id: entry.id },
-        props: { entry },
+        props: {
+            entry,
+            prev: index < postMortemEntries.length - 1 ? postMortemEntries[index + 1] : null,
+            next: index > 0 ? postMortemEntries[index - 1] : null,
+        },
     }));
 }
 
-const { entry } = Astro.props;
-
+const { entry, prev, next } = Astro.props;
 
 const imagePath = entry.image ? `/images/gamebob/post-mortem/${entry.image}` : null;
 const ogImage = imagePath || "/images/gamebob/post-mortem/og-post-mortem.png";
+
+// JSON-LD Structured Data
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: entry.title,
+    description: entry.error.substring(0, 160),
+    image: ogImage,
+    datePublished: entry.date,
+    author: {
+        "@type": "Person",
+        name: "jjlmoya",
+    },
+    articleSection: "Post-Mortem",
+    keywords: entry.tags?.join(", "),
+};
 ---
 
 <GameBobLayout
     title={`${entry.title} | Post Mortem`}
-    description={`Mis errores y aprendizajes: ${entry.title}`}
+    description={`Post-Mortem técnico: ${entry.title}. Análisis del error y lecciones aprendidas.`}
     image={ogImage}
 >
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
     <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4 relative">
-        
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-3xl">
             </div>
@@ -34,7 +54,6 @@ const ogImage = imagePath || "/images/gamebob/post-mortem/og-post-mortem.png";
         </div>
 
         <div class="z-10 w-full max-w-3xl">
-            
             <a
                 href="/gamebob/post-mortem/"
                 class="inline-flex items-center gap-2 text-gray-500 hover:text-white mb-8 transition-colors group"
@@ -50,7 +69,6 @@ const ogImage = imagePath || "/images/gamebob/post-mortem/og-post-mortem.png";
                 id="post-mortem-card"
                 class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden"
             >
-                
                 <div class="absolute top-4 right-4 opacity-10 rotate-12 pointer-events-none z-20">
                     <div
                         class="border-4 border-red-500 text-red-500 font-black text-4xl px-4 py-2 uppercase tracking-widest rounded-lg"
@@ -95,7 +113,6 @@ const ogImage = imagePath || "/images/gamebob/post-mortem/og-post-mortem.png";
                 </header>
 
                 <div class="space-y-10">
-                    
                     <section class="relative pl-6 border-l-2 border-red-500/30">
                         <div
                             class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-red-500"
@@ -112,7 +129,6 @@ const ogImage = imagePath || "/images/gamebob/post-mortem/og-post-mortem.png";
                         </p>
                     </section>
 
-                    
                     <section class="relative pl-6 border-l-2 border-emerald-500/30">
                         <div
                             class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-emerald-500"
@@ -128,19 +144,88 @@ const ogImage = imagePath || "/images/gamebob/post-mortem/og-post-mortem.png";
                             {entry.lesson}
                         </p>
                     </section>
+                    {
+                        entry.codeSteps && (
+                            <section class="relative pl-6 border-l-2 border-blue-500/30">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-blue-500" />
+                                <h2 class="text-blue-400 font-mono text-sm uppercase tracking-widest mb-6 flex items-center gap-2">
+                                    <Icon name="mdi:code-braces" class="w-5 h-5" />
+                                    La Solución (El Algoritmo)
+                                </h2>
+
+                                <div class="space-y-8">
+                                    {entry.codeSteps.map((step, index) => (
+                                        <div class="space-y-3">
+                                            <h3 class="text-white font-bold text-lg flex items-center gap-2">
+                                                <span class="w-6 h-6 rounded bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-mono">
+                                                    {index + 1}
+                                                </span>
+                                                {step.title.replace(`${index + 1}. `, "")}
+                                            </h3>
+                                            <div class="bg-[#1e1e1e] rounded-lg overflow-hidden border border-white/10 shadow-xl">
+                                                <div
+                                                    class="bg-[#1e1e1e] rounded-lg border border-white/10 shadow-xl p-5 overflow-x-auto text-sm font-mono text-gray-300 text-left whitespace-pre"
+                                                    set:text={step.code.join("\n")}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <p class="mt-8 text-sm text-gray-400 italic leading-relaxed border-t border-white/5 pt-6">
+                                    Nota: Esta es una forma simplificada de mostrar la idea. Para
+                                    una implementación final, prefiero tests más unitarios y
+                                    verbosos que permitan un control total sobre cada caso de fallo.
+                                </p>
+                            </section>
+                        )
+                    }
                 </div>
 
-                
-                <div class="mt-12 pt-8 border-t border-white/5 flex justify-between items-center">
+                <div
+                    class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6"
+                >
+                    <div class="flex flex-col md:flex-row gap-4 flex-1">
+                        {
+                            prev && (
+                                <a
+                                    href={`/gamebob/post-mortem/${prev.id}/`}
+                                    class="flex-1 p-4 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 transition-all group/nav"
+                                >
+                                    <span class="text-[10px] text-gray-500 font-mono uppercase tracking-widest block mb-1">
+                                        Anterior
+                                    </span>
+                                    <span class="text-white font-bold group-hover/nav:text-red-400 transition-colors line-clamp-1">
+                                        {prev.title}
+                                    </span>
+                                </a>
+                            )
+                        }
+                        {
+                            next && (
+                                <a
+                                    href={`/gamebob/post-mortem/${next.id}/`}
+                                    class="flex-1 p-4 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 transition-all group/nav text-right"
+                                >
+                                    <span class="text-[10px] text-gray-500 font-mono uppercase tracking-widest block mb-1">
+                                        Siguiente
+                                    </span>
+                                    <span class="text-white font-bold group-hover/nav:text-red-400 transition-colors line-clamp-1">
+                                        {next.title}
+                                    </span>
+                                </a>
+                            )
+                        }
+                    </div>
+
                     <button
                         data-share-btn
                         data-share-title={`Post Mortem: ${entry.title}`}
                         data-share-target-id="post-mortem-card"
                         data-share-filename={`post-mortem-${entry.id}.png`}
-                        class="flex items-center gap-2 px-6 py-3 bg-white text-black rounded-full font-bold hover:bg-[var(--color-gamebob-primary)] transition-colors"
+                        class="flex items-center justify-center gap-2 px-6 py-4 bg-white text-black rounded-xl font-bold hover:bg-red-500 hover:text-white transition-all transform hover:scale-105"
                     >
                         <Icon name="mdi:share-variant" class="w-5 h-5" />
-                        Compartir mi desgracia
+                        Compartir
                     </button>
                 </div>
             </article>

@@ -7,71 +7,94 @@ interface Props {
 }
 
 const { entry } = Astro.props;
+const imagePath = entry.image ? `/images/gamebob/post-mortem/${entry.image}` : null;
 ---
 
 <a
     href={`/gamebob/post-mortem/${entry.id}/`}
-    class="block relative p-8 rounded-2xl bg-slate-900/50 border border-white/5 hover:border-red-500/30 transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl"
+    class="group relative flex flex-col h-full bg-[#0a0f1a] rounded-2xl border border-white/5 overflow-hidden transition-all duration-500 hover:border-red-500/40 hover:shadow-[0_0_30px_rgba(239,68,68,0.1)] hover:-translate-y-2"
 >
+    <!-- Top Bar Decorative -->
     <div
-        class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500/50 via-emerald-500/50 to-blue-500/50 opacity-30 group-hover:opacity-100 transition-opacity"
     >
-        <Icon name="mdi:arrow-top-right" class="w-6 h-6 text-white/50" />
     </div>
 
-    <div class="flex flex-col md:flex-row gap-8">
-        
-        <div class="flex-1 space-y-4">
-            <div
-                class="flex items-center gap-2 text-red-400 font-mono text-sm uppercase tracking-widest"
-            >
-                <Icon name="mdi:alert-circle-outline" class="w-5 h-5" />
-                El Error
-            </div>
-            <p class="text-gray-300 leading-relaxed line-clamp-3">
-                {entry.error}
-            </p>
+    <!-- Image Header -->
+    <div class="relative h-48 overflow-hidden bg-slate-900 border-b border-white/5">
+        {
+            imagePath ? (
+                <img
+                    src={imagePath}
+                    alt={entry.title}
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80"
+                />
+            ) : (
+                <div class="w-full h-full flex items-center justify-center opacity-20">
+                    <Icon name="mdi:alert-decagram" class="w-16 h-16 text-red-500" />
+                </div>
+            )
+        }
+
+        <!-- ID Badge -->
+        <div
+            class="absolute top-4 left-4 px-3 py-1 bg-red-600 text-white text-[10px] font-black font-mono rounded shadow-lg shadow-red-900/40 z-10 uppercase tracking-wider"
+        >
+            ID: {entry.id}
         </div>
 
-        
-        <div class="hidden md:block w-px bg-white/10 self-stretch"></div>
-        <div class="md:hidden h-px bg-white/10 w-full"></div>
-
-        
-        <div class="flex-1 space-y-4">
-            <div
-                class="flex items-center gap-2 text-emerald-400 font-mono text-sm uppercase tracking-widest"
-            >
-                <Icon name="mdi:lightbulb-on-outline" class="w-5 h-5" />
-                El Aprendizaje
-            </div>
-            <p class="text-gray-300 leading-relaxed line-clamp-3">
-                {entry.lesson}
-            </p>
+        <!-- Date Badge -->
+        <div
+            class="absolute bottom-4 right-4 text-[10px] font-mono text-gray-400 bg-black/60 backdrop-blur-md px-2 py-1 rounded border border-white/10 z-10"
+        >
+            {entry.date}
         </div>
     </div>
 
-    
-    <div
-        class="mt-8 pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4"
-    >
-        <h2 class="text-xl font-bold text-white group-hover:text-red-400 transition-colors">
+    <!-- Content -->
+    <div class="flex-1 p-6 flex flex-col space-y-4">
+        <h2
+            class="text-xl font-bold text-white group-hover:text-red-400 transition-colors leading-tight line-clamp-2"
+        >
             {entry.title}
         </h2>
 
-        <div class="flex items-center gap-4 text-sm text-gray-500">
-            <time datetime={entry.date} class="font-mono">
-                {entry.date}
-            </time>
+        <div class="space-y-3 flex-1">
+            <div class="flex gap-2">
+                <Icon name="mdi:close-circle-outline" class="w-4 h-4 text-red-500 mt-1 shrink-0" />
+                <p class="text-xs text-gray-400 line-clamp-2 italic leading-relaxed">
+                    "{entry.error}"
+                </p>
+            </div>
+            <div class="flex gap-2">
+                <Icon
+                    name="mdi:check-circle-outline"
+                    class="w-4 h-4 text-emerald-500 mt-1 shrink-0"
+                />
+                <p class="text-xs text-gray-300 line-clamp-2 leading-relaxed">
+                    {entry.lesson}
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="pt-4 border-t border-white/5 flex flex-wrap gap-2">
             {
-                entry.tags && (
-                    <div class="flex gap-2">
-                        {entry.tags.map((tag) => (
-                            <span class="px-2 py-1 rounded-full bg-white/5 text-xs">#{tag}</span>
-                        ))}
-                    </div>
-                )
+                entry.tags &&
+                    entry.tags
+                        .slice(0, 3)
+                        .map((tag) => (
+                            <span class="px-2 py-0.5 rounded-full bg-white/5 text-[10px] text-gray-500 border border-white/5 font-mono">
+                                #{tag}
+                            </span>
+                        ))
             }
         </div>
+    </div>
+
+    <!-- Hover Scanline Effect -->
+    <div
+        class="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-10 transition-opacity bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"
+    >
     </div>
 </a>
