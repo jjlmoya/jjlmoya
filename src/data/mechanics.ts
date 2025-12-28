@@ -184,4 +184,14 @@ export const mechanics: MechanicItem[] = [
         tags: ["dibujo", "creatividad", "reflejos"],
         platforms: "all",
     },
+
+    {
+        title: "Viewport Edge Collision",
+        description:
+            "colisión dinámica. redimensiona la ventana para golpear objetos y aumentar la presión.",
+        url: "/gamebob/mecanicas/viewport-collision/",
+        icon: "mdi:resize",
+        tags: ["física", "browser", "experimental"],
+        platforms: "desktop",
+    },
 ];

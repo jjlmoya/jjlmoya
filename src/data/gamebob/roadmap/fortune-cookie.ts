@@ -14,7 +14,7 @@ export const fortuneCookieProject: Project = {
     },
     tasks: [
         { name: "Concepto y Mecánica de Azar", status: "done" },
-        { name: "Diseño Visual Pixel Art", status: "done" },
+        { name: "Visuales", status: "done" },
         { name: "Implementación de Motor de Mensajes", status: "done" },
         { name: "Fase de QA y Pulido", status: "done" },
         { name: "Publicación en Google Play", status: "done" },

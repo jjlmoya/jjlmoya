@@ -1,0 +1,85 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE =
+    "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/viewport-collision";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/viewport-collision/ViewportCollisionGame.ts";
+---
+
+<MechanicPage
+    title="Viewport Edge Collision"
+    description="Colisión dinámica. Redimensiona la ventana para golpear objetos y aumentar la presión."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/viewport-collision.webp"
+>
+    
+    <Icon slot="icon" name="mdi:arrow-expand-all" class="text-amber-500" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Redimensiona tu navegador"
+        subInstruction="¡Aplasta los objetos con los bordes!"
+        aspectRatio="video"
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-amber-500 mt-1">•</span>
+                <span>Los bordes del canvas actúan como paredes físicas rígidas.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-amber-500 mt-1">•</span>
+                <span>Al redimensionar la ventana, las paredes ganan velocidad ('momentum').</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-amber-500 mt-1">•</span>
+                <span
+                    >La energía cinética de la ventana se transfiere a las partículas al colisionar.</span
+                >
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Redimensionar Ventana</span>
+                <span class="text-xs text-zinc-400">Aplasta y Destruye</span>
+            </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center mt-2">
+                <span class="block text-white font-bold">Solo Escritorio</span>
+                <span class="text-xs text-zinc-400">Mejor experiencia</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { ViewportCollisionGame } from "../../../lib/mechanics/viewport-collision/ViewportCollisionGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: ViewportCollisionGame | null = null;
+
+    if (canvas && overlay) {
+        
+        
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new ViewportCollisionGame(canvas);
+            }
+        });
+
+        
+        document.addEventListener("astro:before-swap", () => {
+            if (game) game.dispose();
+        });
+    }
+</script>

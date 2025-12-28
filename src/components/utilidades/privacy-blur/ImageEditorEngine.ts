@@ -157,7 +157,7 @@ export class ImageEditorEngine {
     private initCanvasListeners() {
         this.canvas.addEventListener('mousedown', (e) => this.startSelection(e));
         this.canvas.addEventListener('mousemove', (e) => this.updateSelection(e));
-        this.canvas.addEventListener('mouseup', (e) => this.endSelection(e));
+        this.canvas.addEventListener('mouseup', () => this.endSelection());
         this.canvas.addEventListener('mouseleave', () => this.cancelSelection());
 
         this.canvas.addEventListener('touchstart', (e) => {
@@ -201,7 +201,7 @@ export class ImageEditorEngine {
         this.redraw();
     }
 
-    private endSelection(e: MouseEvent) {
+    private endSelection() {
         if (!this.isDragging || !this.currentSelection) return;
         this.isDragging = false;
 

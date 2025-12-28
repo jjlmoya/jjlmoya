@@ -76,6 +76,7 @@ export default [
 
 
     {
+        files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.mjs", "**/*.astro"],
         plugins: {
             "no-comments": noComments,
         },

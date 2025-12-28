@@ -46,7 +46,6 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div
             class="relative w-full h-[400px] bg-slate-50 dark:bg-slate-950 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 overflow-hidden cursor-crosshair group flex items-center justify-center"
             id="test-area"
@@ -59,7 +58,6 @@ import { Icon } from "astro-icon/components";
 
             <canvas id="graph-canvas" class="absolute inset-0 w-full h-full opacity-50"></canvas>
 
-            
             <div
                 id="cursor-follower"
                 class="absolute pointer-events-none bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg opacity-0 transition-opacity duration-75"
@@ -84,10 +82,9 @@ import { Icon } from "astro-icon/components";
 
     let lastTime = 0;
     let maxHz = 0;
-    const isActive = false;
+
     let idleTimer: ReturnType<typeof setTimeout>;
 
-    
     function resize() {
         if (!elArea || !canvas) return;
         const rect = elArea.getBoundingClientRect();
@@ -95,7 +92,7 @@ import { Icon } from "astro-icon/components";
         canvas.height = rect.height;
     }
     window.addEventListener("resize", resize);
-    resize(); 
+    resize();
 
     function updateGraph() {
         if (!ctx || !canvas) return;
@@ -105,20 +102,16 @@ import { Icon } from "astro-icon/components";
         ctx.clearRect(0, 0, w, h);
 
         ctx.beginPath();
-        ctx.strokeStyle = "#10b981"; 
+        ctx.strokeStyle = "#10b981";
         ctx.lineWidth = 2;
-
-        const maxVal = 1200; 
-        
-        
 
         const currentMax = Math.max(1000, ...history);
         const stepX = w / MAX_HISTORY;
 
         history.forEach((hz, i) => {
             const x = i * stepX;
-            
-            const y = h - (hz / currentMax) * (h * 0.8); 
+
+            const y = h - (hz / currentMax) * (h * 0.8);
 
             if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
@@ -132,32 +125,25 @@ import { Icon } from "astro-icon/components";
         if (lastTime > 0) {
             const delta = now - lastTime;
             if (delta > 0) {
-                
                 if (delta < 100) {
                     const instantaneousHz = 1000 / delta;
                     history.push(instantaneousHz);
                     if (history.length > MAX_HISTORY) history.shift();
 
-                    
                     if (instantaneousHz > maxHz) {
                         maxHz = instantaneousHz;
                         if (elMax) elMax.textContent = Math.round(maxHz).toString();
                     }
 
-                    
                     const sum = history.reduce((a, b) => a + b, 0);
                     const avg = sum / history.length;
                     if (elAvg) elAvg.textContent = Math.round(avg).toString();
 
                     updateGraph();
 
-                    
                     if (elFollower) {
                         elFollower.textContent = `${Math.round(instantaneousHz)} Hz`;
-                        
-                        
-                        
-                        
+
                         const rect = elArea!.getBoundingClientRect();
                         const x = e.clientX - rect.left + 15;
                         const y = e.clientY - rect.top + 15;
@@ -169,11 +155,10 @@ import { Icon } from "astro-icon/components";
         }
         lastTime = now;
 
-        
         clearTimeout(idleTimer);
         idleTimer = setTimeout(() => {
             if (elFollower) elFollower.style.opacity = "0";
-            lastTime = 0; 
+            lastTime = 0;
         }, 100);
     }
 
