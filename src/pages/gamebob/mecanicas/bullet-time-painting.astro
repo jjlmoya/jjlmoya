@@ -1,0 +1,349 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE =
+    "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/bullet-time-painting";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/bullet-time-painting/BulletTimeGame.ts";
+---
+
+<MechanicPage
+    title="Bullet-Time Painting"
+    description="Planifica tus tácticas y disparos en tiempo pausado. Ejecútalo en ráfagas de 1 segundo de acción pura."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/bullet-time-painting.webp"
+>
+    <Icon slot="icon" name="mdi:strategy" class="text-[#00ffd2]" />
+
+    <div class="max-w-7xl mx-auto px-6 space-y-12 py-10">
+        <div class="relative group">
+            <div
+                class="flex flex-col bg-[#050505] rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.9)]"
+            >
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 items-center px-16 py-12 bg-zinc-950/80 backdrop-blur-3xl border-b border-white/10 gap-12"
+                >
+                    <div class="flex flex-col gap-2">
+                        <span
+                            class="text-[0.65rem] font-black text-[#00ffd2]/50 uppercase tracking-[0.5em]"
+                            >Tactical Sector</span
+                        >
+                        <div class="flex items-center gap-6">
+                            <h2
+                                id="sector-display"
+                                class="text-5xl font-black text-white italic tracking-tighter"
+                            >
+                                Sector 001
+                            </h2>
+                            <div
+                                id="status-dot"
+                                class="h-3 w-3 rounded-full bg-[#00ffd2] animate-pulse shadow-[0_0_20px_#00ffd2]"
+                            >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-8">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-end">
+                                <span
+                                    class="text-[0.7rem] font-black text-rose-500/80 uppercase tracking-[0.2em]"
+                                    >Integridad</span
+                                >
+                                <div id="hp-segments" class="flex gap-2">
+                                    <div
+                                        class="w-4 h-4 rounded-sm bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]"
+                                    >
+                                    </div>
+                                    <div
+                                        class="w-4 h-4 rounded-sm bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]"
+                                    >
+                                    </div>
+                                    <div
+                                        class="w-4 h-4 rounded-sm bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]"
+                                    >
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="h-2 bg-zinc-900/50 rounded-full overflow-hidden border border-white/10"
+                            >
+                                <div
+                                    id="hp-bar-fill"
+                                    class="h-full bg-rose-500 rounded-full transition-all duration-1000 shadow-[0_0_20px_rgba(244,63,94,0.4)]"
+                                >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-end">
+                                <span
+                                    class="text-[0.7rem] font-black text-[#00ffd2]/80 uppercase tracking-[0.2em]"
+                                    >Energía</span
+                                >
+                                <span
+                                    id="energy-percent"
+                                    class="text-sm font-black text-[#00ffd2] tabular-nums"
+                                    >100%</span
+                                >
+                            </div>
+                            <div
+                                class="h-2 bg-zinc-900/50 rounded-full overflow-hidden border border-white/10"
+                            >
+                                <div
+                                    id="energy-bar-fill"
+                                    class="h-full bg-[#00ffd2] rounded-full transition-all duration-500 shadow-[0_0_20px_rgba(0,255,210,0.4)]"
+                                >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-end gap-4">
+                        <div class="flex flex-col items-end gap-2">
+                            <span
+                                class="text-[0.6rem] font-black text-zinc-600 uppercase tracking-widest"
+                                >Estado Sistema</span
+                            >
+                            <div
+                                id="phase-display"
+                                class="text-xs font-black text-zinc-100 uppercase tracking-[0.3em] bg-white/5 py-2 px-6 rounded-xl border border-white/10 italic"
+                            >
+                                Ready_Control
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-2 h-2 rounded-full bg-[#00ffd2] shadow-[0_0_10px_#00ffd2]"
+                                >
+                                </div>
+                                <span
+                                    class="text-[0.6rem] text-zinc-500 font-black uppercase tracking-widest"
+                                    >Alpha</span
+                                >
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_10px_#f43f5e]"
+                                >
+                                </div>
+                                <span
+                                    class="text-[0.6rem] text-zinc-500 font-black uppercase tracking-widest"
+                                    >Hostil</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative bg-black">
+                    <MechanicCanvas
+                        id="game-canvas"
+                        instruction=""
+                        subInstruction=""
+                        verticalOnMobile={true}
+                    />
+                    <div
+                        class="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.2)_50%),linear-gradient(90deg,rgba(255,0,0,0.015),rgba(0,255,0,0.01),rgba(0,255,210,0.015))] bg-[length:100%_4px,3px_100%] z-10 opacity-40"
+                    >
+                    </div>
+                    <div
+                        class="absolute inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-20"
+                    >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-3">
+                <span class="text-[#00ffd2] mt-1.5">•</span>
+                <span
+                    >Progresión por sectores: cada nivel es un nuevo desafío generado
+                    proceduralmente.</span
+                >
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-[#00ffd2] mt-1.5">•</span>
+                <span
+                    >Pool de energía fijo: gestiona tus movimientos y disparos con inteligencia en
+                    cada turno.</span
+                >
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-[#00ffd2] mt-1.5">•</span>
+                <span
+                    >Integridad del casco: dispones de un sistema de HP que se restaura al limpiar
+                    cada sector.</span
+                >
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="col-span-2 flex flex-col gap-3">
+                <div
+                    class="group flex items-center justify-between bg-zinc-950/40 p-5 rounded-2xl border border-white/5 hover:border-[#00ffd2]/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,210,0.05)] w-full"
+                >
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-white font-black uppercase text-[10px] tracking-[0.2em]"
+                            >Click Izquierdo</span
+                        >
+                        <span
+                            class="text-xs text-[#00ffd2] font-bold uppercase tracking-widest opacity-70 group-hover:opacity-100 transition-opacity italic"
+                            >Moverse</span
+                        >
+                    </div>
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-[#00ffd2]/5 border border-[#00ffd2]/10 group-hover:bg-[#00ffd2]/10 transition-all group-hover:scale-110"
+                    >
+                        <Icon name="mdi:mouse-left-click" class="w-6 h-6 text-[#00ffd2]" />
+                    </div>
+                </div>
+
+                <div
+                    class="group flex items-center justify-between bg-zinc-950/40 p-5 rounded-2xl border border-white/5 hover:border-rose-500/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(244,63,94,0.05)] w-full"
+                >
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-white font-black uppercase text-[10px] tracking-[0.2em]"
+                            >Click Derecho</span
+                        >
+                        <span
+                            class="text-xs text-rose-500 font-bold uppercase tracking-widest opacity-70 group-hover:opacity-100 transition-opacity italic"
+                            >Disparar</span
+                        >
+                    </div>
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-rose-500/5 border border-rose-500/10 group-hover:bg-rose-500/10 transition-all group-hover:scale-110"
+                    >
+                        <Icon name="mdi:mouse-right-click" class="w-6 h-6 text-rose-500" />
+                    </div>
+                </div>
+
+                <div
+                    class="group flex items-center justify-between bg-[#00ffd2]/5 p-5 rounded-2xl border border-[#00ffd2]/20 hover:border-[#00ffd2]/50 transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,210,0.15)] w-full"
+                >
+                    <div class="flex flex-col gap-1.5">
+                        <span
+                            class="text-[#00ffd2] font-black uppercase text-[10px] tracking-[0.2em]"
+                            >Espacio</span
+                        >
+                        <span
+                            class="text-xs text-[#00ffd2] font-bold uppercase tracking-widest italic"
+                            >Ejecutar</span
+                        >
+                    </div>
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-[#00ffd2] shadow-[0_0_20px_rgba(0,255,210,0.4)] group-hover:scale-110 transition-all"
+                    >
+                        <Icon name="mdi:keyboard-space" class="w-6 h-6 text-black" />
+                    </div>
+                </div>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<style is:global>
+    .canvas-wrapper {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        aspect-ratio: 1600 / 1200;
+        background: #000;
+    }
+    #game-canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+        image-rendering: crisp-edges;
+        cursor: crosshair;
+        object-fit: contain;
+    }
+</style>
+
+<script>
+    import { BulletTimeGame } from "../../../lib/mechanics/bullet-time-painting/BulletTimeGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+
+    const sectorDisplay = document.getElementById("sector-display");
+    const energyBarFill = document.getElementById("energy-bar-fill");
+    const energyPercent = document.getElementById("energy-percent");
+    const hpBarFill = document.getElementById("hp-bar-fill");
+    const hpSegments = document.getElementById("hp-segments");
+    const phaseDisplay = document.getElementById("phase-display");
+    const statusDot = document.getElementById("status-dot");
+
+    let game: BulletTimeGame | null = null;
+
+    if (canvas && overlay) {
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+
+            if (!game) {
+                game = new BulletTimeGame(canvas);
+                game.start();
+                updateUI();
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            game?.resize();
+        });
+
+        window.addEventListener("keydown", (e) => {
+            if (e.code === "Space") {
+                game?.playAction();
+                e.preventDefault();
+            }
+        });
+
+        function updateUI() {
+            if (game) {
+                const state = (game as any).state;
+                if (state) {
+                    if (sectorDisplay)
+                        sectorDisplay.textContent = `Sector ${state.level.toString().padStart(3, "0")}`;
+                    if (energyBarFill) energyBarFill.style.width = `${state.energy}%`;
+                    if (energyPercent) energyPercent.textContent = `${Math.round(state.energy)}%`;
+                    if (hpBarFill) hpBarFill.style.width = `${(state.hp / state.maxHp) * 100}%`;
+
+                    if (hpSegments) {
+                        const segments = hpSegments.children;
+                        for (let i = 0; i < segments.length; i++) {
+                            const seg = segments[i] as HTMLElement;
+                            if (i < state.hp) {
+                                seg.style.opacity = "1";
+                            } else {
+                                seg.style.opacity = "0.1";
+                            }
+                        }
+                    }
+
+                    if (phaseDisplay) {
+                        phaseDisplay.textContent = state.isExecutionPhase
+                            ? "Tactical_Blitz"
+                            : "Planning_Routine";
+                        phaseDisplay.style.color = state.isExecutionPhase ? "#00ffd2" : "#ffffff";
+                    }
+                    if (statusDot) {
+                        statusDot.style.backgroundColor = state.isExecutionPhase
+                            ? "#f43f5e"
+                            : "#00ffd2";
+                    }
+                }
+            }
+            requestAnimationFrame(updateUI);
+        }
+    }
+</script>

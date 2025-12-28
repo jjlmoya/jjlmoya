@@ -194,4 +194,13 @@ export const mechanics: MechanicItem[] = [
         tags: ["física", "browser", "experimental"],
         platforms: "desktop",
     },
+    {
+        title: "Bullet-Time Painting",
+        description:
+            "planifica tus movimientos y disparos en tiempo pausado y ejecútalos en ráfagas de 1 segundo.",
+        url: "/gamebob/mecanicas/bullet-time-painting/",
+        icon: "mdi:brush",
+        tags: ["táctica", "bullet-time", "física"],
+        platforms: "all",
+    },
 ];
