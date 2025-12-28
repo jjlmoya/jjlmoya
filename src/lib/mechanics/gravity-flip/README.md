@@ -2,7 +2,7 @@
 
 An instant gravity inversion mechanic for runner or platformer games.
 
-> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/gravity-flip)**
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/gravity-flip/)**
 > **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/gravity-flip/GravityFlipMechanic.ts)**
 
 ## How it Works

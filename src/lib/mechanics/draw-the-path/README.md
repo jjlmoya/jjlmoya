@@ -3,7 +3,7 @@
 
 **Draw The Path** is a creative runner where you act as a guardian angel, drawing lines to protect the runner from environmental hazards.
 
-> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/draw-the-path)**
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/draw-the-path/)**
 > **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/draw-the-path/DrawThePathMechanic.ts)**
 
 ## Concept

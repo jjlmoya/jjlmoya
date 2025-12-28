@@ -1,0 +1,125 @@
+---
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE =
+    "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/momentum-transfer";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/momentum-transfer/MomentumTransferGame.ts";
+---
+
+<MechanicPage
+    title="Momentum Transfer"
+    description="No matas enemigos golpeándolos, sino transfiriéndoles tu velocidad."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/momentum-transfer.svg"
+>
+    <Icon slot="icon" name="mdi:billiards" class="text-[#00ffd2]" />
+
+    <div class="max-w-7xl mx-auto px-6 space-y-12 py-10">
+        <div class="relative group">
+            <div
+                class="flex flex-col bg-[#050505] rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.9)]"
+            >
+                <div class="relative bg-black">
+                    <MechanicCanvas
+                        id="game-canvas"
+                        instruction="Tú eres la bola AZUL"
+                        subInstruction="Golpea a los NARANJAS hacia los PINCHOS o VACÍO"
+                        verticalOnMobile={true}
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-3">
+                <span class="text-[#00ffd2] mt-1.5">•</span>
+                <span>Arrastra el mouse para lanzar al jugador.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-[#00ffd2] mt-1.5">•</span>
+                <span
+                    >Choca contra enemigos para transferirles tu velocidad y detenerte en seco.</span
+                >
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-[#00ffd2] mt-1.5">•</span>
+                <span>Empuja a los enemigos hacia los pinchos o el vacío para eliminarlos.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="col-span-2 flex flex-col gap-3">
+                <div
+                    class="group flex items-center justify-between bg-zinc-950/40 p-5 rounded-2xl border border-white/5 hover:border-[#00ffd2]/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,210,0.05)] w-full"
+                >
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-white font-black uppercase text-[10px] tracking-[0.2em]"
+                            >Click & Drag</span
+                        >
+                        <span
+                            class="text-xs text-[#00ffd2] font-bold uppercase tracking-widest opacity-70 group-hover:opacity-100 transition-opacity italic"
+                            >Lanzar Jugador</span
+                        >
+                    </div>
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-[#00ffd2]/5 border border-[#00ffd2]/10 group-hover:bg-[#00ffd2]/10 transition-all group-hover:scale-110"
+                    >
+                        <Icon name="mdi:mouse-left-click" class="w-6 h-6 text-[#00ffd2]" />
+                    </div>
+                </div>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<style is:global>
+    .canvas-wrapper {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        aspect-ratio: 1600 / 1200;
+        background: #000;
+    }
+    #game-canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+        image-rendering: crisp-edges;
+        cursor: crosshair;
+        object-fit: contain;
+    }
+</style>
+
+<script>
+    import { MomentumTransferGame } from "../../../lib/mechanics/momentum-transfer/MomentumTransferGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+
+    let game: MomentumTransferGame | null = null;
+
+    if (canvas && overlay) {
+        
+        canvas.width = 1600;
+        canvas.height = 1200;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+
+            if (!game) {
+                game = new MomentumTransferGame(canvas);
+                game.start();
+            }
+        });
+
+        
+    }
+</script>

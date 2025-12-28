@@ -2,7 +2,7 @@
 
 A simulation of the flocking behavior of birds, based on Craig Reynolds' Boids algorithm.
 
-> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/flocking)**
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/flocking/)**
 > **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/flocking/FlockingMechanic.ts)**
 
 ## How it works

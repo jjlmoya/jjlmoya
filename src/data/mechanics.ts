@@ -203,4 +203,13 @@ export const mechanics: MechanicItem[] = [
         tags: ["táctica", "bullet-time", "física"],
         platforms: "all",
     },
+    {
+        title: "Momentum Transfer",
+        description:
+            "no matas enemigos golpeándolos, sino transfiriéndoles tu velocidad.",
+        url: "/gamebob/mecanicas/momentum-transfer/",
+        icon: "mdi:billiards",
+        tags: ["física", "billar", "arcade"],
+        platforms: "all",
+    },
 ];

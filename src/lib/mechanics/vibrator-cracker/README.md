@@ -3,7 +3,7 @@
 
 **Vibrator Cracker** is a safe-cracking simulation that uses haptic feedback (vibration) to guide the player towards the correct combination.
 
-> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/vibrator-cracker)**
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/vibrator-cracker/)**
 > **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/vibrator-cracker/VibratorCrackerSystem.ts)**
 
 ## Concept

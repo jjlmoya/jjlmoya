@@ -2,7 +2,7 @@
 
 A fast-paced infinite runner mechanic with procedural generation, physics-based movement, and parallax scrolling.
 
-> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/autorunner)**
+> **[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/autorunner/)**
 > **[💻 View Source](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/autorunner/AutorunnerMechanic.ts)**
 
 ## 🕹️ How it Works

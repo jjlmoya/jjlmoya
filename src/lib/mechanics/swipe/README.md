@@ -257,7 +257,7 @@ Improvements welcome! Pull requests appreciated.
 
 ## 🔗 Demo
 
-[View interactive demo](https://www.jjlmoya.es/gamebob/mecanicas/swipe)
+[🎮 Play Live Demo](https://www.jjlmoya.es/gamebob/mecanicas/swipe/)
 [View Source Code](https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/swipe/SwipeGesture.ts)
 
 ---
