@@ -1,0 +1,67 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<Layout
+    title="Scroll Momentum"
+    description="Vuela por el espacio y recolecta scrap en este prototipo de inercia espacial."
+    showBackground={false}
+    headerClass="hidden"
+    footerClass="hidden"
+    mainClass="p-0"
+    bodyClass="overflow-hidden cursor-none"
+>
+    <div class="fixed inset-0 w-full h-full bg-slate-950 overflow-hidden cursor-none">
+        <canvas id="momentum-canvas" class="block w-full h-full touch-none"></canvas>
+
+        <div class="absolute top-6 left-6 z-50">
+            <a
+                href="/gamebob/mecanicas/"
+                class="group flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-sm"
+                aria-label="Volver"
+            >
+                <Icon
+                    name="mdi:arrow-left"
+                    class="w-4 h-4 transition-transform group-hover:-translate-x-0.5"
+                />
+            </a>
+        </div>
+    </div>
+
+    <script>
+        import { ScrollMomentumGame } from "../../../lib/mechanics/scroll-momentum/ScrollMomentumGame";
+
+        const canvas = document.getElementById("momentum-canvas") as HTMLCanvasElement;
+        let game: ScrollMomentumGame | null = null;
+
+        if (canvas) {
+            game = new ScrollMomentumGame(canvas);
+            game.start();
+        }
+
+        document.addEventListener("astro:before-swap", () => {
+            game?.stop();
+        });
+    </script>
+</Layout>
+
+<style>
+    :root {
+        color-scheme: dark;
+    }
+
+    #momentum-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: block;
+        background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+    }
+
+    * {
+        cursor: none !important;
+    }
+</style>
