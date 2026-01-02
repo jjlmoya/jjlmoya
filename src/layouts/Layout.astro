@@ -58,13 +58,21 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
 
                 const STORAGE_KEY = "jjlmoya_footprint_v5";
                 const APPS_SCRIPT_URL =
-                    "https://script.google.com/macros/s/AKfycbzKush6FWrPSw4U5QGWsdbUAePGSDuMgmG-TCoZsA0nLTYkBAFaRksZ8MuPGoOCAUG29Q/exec";
+                    "https://script.google.com/macros/s/AKfycbwCYuz1UvpKD60u8L9B6WIewL8tEHdPP4pTnXN5GcNAXd3XPh4bvJw0n86mLEBMrRE3Yg/exec";
 
-                if (localStorage.getItem(STORAGE_KEY)) {
-                    return;
+                const SYNC_THRESHOLDS = [1, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000];
+
+                let storedData: any = {};
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) storedData = JSON.parse(raw);
+                } catch (e) {
+                    console.error("Error parsing footprint data", e);
                 }
 
-                console.log("👣 Generando registro burocrático único...");
+                const visits = (storedData.visits || 0) + 1;
+
+                const shouldSync = SYNC_THRESHOLDS.includes(visits);
 
                 function generateColor(str: string) {
                     let hash = 0;
@@ -77,36 +85,50 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
                     return `hsl(${h}, ${s}%, ${l}%)`;
                 }
 
-                const data = {
+                const baseData = {
                     ua: navigator.userAgent,
                     screen: `${window.screen.width}x${window.screen.height}`,
                     lang: navigator.language,
                     path: window.location.pathname,
-                    id: `SR-${Math.random().toString(36).substring(7).toUpperCase()}`,
-                    color: generateColor(
-                        navigator.userAgent + window.screen.width + Date.now() + Math.random()
-                    ),
+                    id:
+                        storedData.id ||
+                        `SR-${Math.random().toString(36).substring(7).toUpperCase()}`,
+                    color:
+                        storedData.color ||
+                        generateColor(
+                            navigator.userAgent + window.screen.width + Date.now() + Math.random()
+                        ),
+                    visits: visits,
+                    lastVisit: new Date().toISOString(),
                 };
 
-                fetch(APPS_SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "text/plain" },
-                    body: JSON.stringify(data),
-                })
-                    .then(() => {
-                        localStorage.setItem(
-                            STORAGE_KEY,
-                            JSON.stringify({
-                                registered: true,
-                                color: data.color,
-                                id: data.id,
-                                date: new Date().toISOString(),
-                            })
-                        );
-                        console.log("👣 Registro consolidado en el Archivo Central.");
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify({
+                        ...storedData,
+                        ...baseData,
+                        registered: true,
                     })
-                    .catch(() => {});
+                );
+
+                if (shouldSync) {
+                    console.log(`👣 Sincronizando huella digital (Visita #${visits})...`);
+
+                    fetch(APPS_SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "text/plain" },
+                        body: JSON.stringify(baseData),
+                    })
+                        .then(() => {
+                            console.log("👣 Datos sincronizados con el Archivo Central.");
+                        })
+                        .catch(() => {});
+                } else {
+                    console.log(
+                        `👣 Visita registrada localmente (#${visits}). Sincronización pendiente.`
+                    );
+                }
             })();
         </script>
     </head>
