@@ -2,7 +2,13 @@
 import Layout from "./Layout.astro";
 import BackToUtilities from "../components/ui/BackToUtilities.astro";
 import RelatedUtilities from "../components/utilidades/RelatedUtilities.astro";
+import AppLinksBanner from "../components/utilidades/AppLinksBanner.astro";
 import { sections } from "../data/utilities";
+
+interface AppLinks {
+    android?: string;
+    ios?: string;
+}
 
 interface Props {
     title: string;
@@ -11,6 +17,7 @@ interface Props {
     category?: string;
     gradientFrom?: string;
     gradientTo?: string;
+    appLinks?: AppLinks;
 }
 
 const {
@@ -20,6 +27,7 @@ const {
     category: propCategory,
     gradientFrom = "from-slate-100",
     gradientTo = "to-white",
+    appLinks,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -46,8 +54,9 @@ if (!category) {
         >
         </div>
 
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="mb-12 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                {appLinks && <AppLinksBanner android={appLinks.android} ios={appLinks.ios} />}
                 <BackToUtilities class="mb-8" />
                 <slot name="header">
                     <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6">
