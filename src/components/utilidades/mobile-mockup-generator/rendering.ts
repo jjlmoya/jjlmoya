@@ -88,34 +88,39 @@ export class RenderingEngine {
         this.roundRect(ctx, screenX, screenY, screenW, screenH, (device.radius - 8) * scale);
         ctx.clip();
 
+        let targetScreenY = screenY;
+        let targetScreenH = screenH;
+
+        if (globalSettings.safeArea.show) {
+            const topOffset = device.safeAreaTop * scale;
+            const bottomOffset = device.safeAreaBottom * scale;
+            targetScreenY += topOffset;
+            targetScreenH -= (topOffset + bottomOffset);
+        }
+
         const imgAspect = imgEl.width / imgEl.height;
-        const screenAspect = screenW / screenH;
+        const screenAspect = screenW / targetScreenH;
 
         let drawW, drawH, drawX, drawY;
         if (imgAspect > screenAspect) {
-            drawH = screenH;
-            drawW = screenH * imgAspect;
+            drawH = targetScreenH;
+            drawW = targetScreenH * imgAspect;
             drawX = screenX - (drawW - screenW) / 2;
-            drawY = screenY;
+            drawY = targetScreenY;
         } else {
             drawW = screenW;
             drawH = screenW / imgAspect;
             drawX = screenX;
-            drawY = screenY - (drawH - screenH) / 2;
+            drawY = targetScreenY - (drawH - targetScreenH) / 2;
         }
 
         ctx.drawImage(imgEl, drawX, drawY, drawW, drawH);
 
-
         if (globalSettings.safeArea.show) {
             ctx.fillStyle = globalSettings.safeArea.color;
-
-
             if (device.safeAreaTop > 0) {
                 ctx.fillRect(screenX, screenY, screenW, device.safeAreaTop * scale);
             }
-
-
             if (device.safeAreaBottom > 0) {
                 ctx.fillRect(screenX, screenY + screenH - (device.safeAreaBottom * scale), screenW, device.safeAreaBottom * scale);
             }
