@@ -28,6 +28,8 @@ export class App {
     safeAreaToggle = document.getElementById("safeAreaToggle")!;
     safeAreaDot = document.getElementById("safeAreaDot")!;
     safeAreaColorInput = document.getElementById("safeAreaColor") as HTMLInputElement;
+    massReplaceBtn = document.getElementById("massReplaceBtn")!;
+    massReplaceInput = document.getElementById("massReplaceInput") as HTMLInputElement;
 
     constructor() {
         this.init();
@@ -106,6 +108,9 @@ export class App {
             this.store.save();
             this.renderGrid();
         });
+
+        this.massReplaceBtn.addEventListener("click", () => this.massReplaceInput.click());
+        this.massReplaceInput.addEventListener("change", (e) => this.handleMassReplace(e));
 
 
         this.previewGrid.addEventListener("input", (e) => {
@@ -343,6 +348,54 @@ export class App {
         this.store.save();
         this.updateVisibility();
         this.renderGrid();
+    }
+
+    async handleMassReplace(e: Event) {
+        const files = (e.target as HTMLInputElement).files;
+        if (!files) return;
+
+        const fileList = Array.from(files);
+        for (let i = 0; i < fileList.length; i++) {
+            const dataUrl = await this.readFile(fileList[i]);
+
+            if (this.store.images[i]) {
+                const img = this.store.images[i];
+                const variant = img.variants.find(v => v.id === img.activeVariantId) || img.variants[0];
+                if (variant) {
+                    variant.dataUrl = dataUrl;
+                }
+            } else {
+                const variantId = Math.random().toString(36).substr(2, 9);
+                this.store.images.push({
+                    id: Math.random().toString(36).substr(2, 9),
+                    variants: [
+                        {
+                            id: variantId,
+                            language: "ES",
+                            dataUrl: dataUrl,
+                        },
+                    ],
+                    activeVariantId: variantId,
+                    settings: {
+                        text: "",
+                        spacing: 40,
+                        textSize: 28,
+                        textColor: "#ffffff",
+                        textRotation: 0,
+                        textY: 82,
+                        textX: 50,
+                        deviceOffsetX: 0,
+                        deviceOffsetY: 0,
+                        bgImage: null,
+                    },
+                });
+            }
+        }
+
+        this.store.save();
+        this.updateVisibility();
+        this.renderGrid();
+        this.massReplaceInput.value = "";
     }
 
     updateColors() {
