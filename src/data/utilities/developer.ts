@@ -36,6 +36,14 @@ export const devSection: SectionData = {
             title: "Tipografía Musical",
             description: "Calculadora de escalas modulares armónicas para jerarquías tipográficas perfectas.",
             color: "#6366f1"
+        },
+        {
+            href: "/utilidades/generador-mockups-movil/",
+            iconBg: "mdi:cellphone-screenshot",
+            iconFg: "mdi:image-frame",
+            title: "Generador Mockups Móviles",
+            description: "Crea mockups profesionales de capturas para iPhone y Pixel con fondos personalizados.",
+            color: "#8b5cf6"
         }
     ]
 };

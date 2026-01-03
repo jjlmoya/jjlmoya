@@ -1,0 +1,271 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <div class="flex items-center gap-4">
+            <button
+                id="clearAll"
+                class="hidden px-6 py-3 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-red-200 dark:hover:border-red-900/50 rounded-2xl shadow-sm transition-all flex items-center gap-2 group"
+            >
+                <Icon
+                    name="mdi:trash-can-outline"
+                    class="w-5 h-5 group-hover:scale-110 transition-transform"
+                />
+                Limpiar Lienzo
+            </button>
+            <button
+                id="downloadAll"
+                class="hidden relative overflow-hidden bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black py-3.5 px-8 rounded-2xl shadow-2xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-px transition-all flex items-center gap-3 group"
+            >
+                <span class="relative z-10 flex items-center gap-3">
+                    <Icon
+                        name="mdi:cloud-download"
+                        class="w-5 h-5 group-hover:bounce transition-transform"
+                    />
+                    Exportar Todo (.zip)
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-1 space-y-6">
+            <div
+                class="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm"
+            >
+                <h3
+                    class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2"
+                >
+                    <Icon name="mdi:image-plus" class="w-4 h-4 text-indigo-500" />
+                    Subir Capturas
+                </h3>
+                <div
+                    class="drop-zone relative border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 text-center hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 transition-all cursor-pointer group"
+                >
+                    <input
+                        type="file"
+                        id="imageUpload"
+                        accept="image/*"
+                        multiple
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <input type="file" id="replaceInput" class="hidden" accept="image/*" />
+                    <Icon
+                        name="mdi:cloud-upload"
+                        class="w-12 h-12 mx-auto mb-3 text-slate-400 group-hover:text-indigo-500 transition-colors"
+                    />
+                    <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Arrastra tus imágenes aquí
+                    </p>
+                    <p class="text-xs text-slate-500 mt-1">PNG, JPG o WEBP</p>
+                </div>
+            </div>
+
+            <div
+                class="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6"
+            >
+                <h3
+                    class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2"
+                >
+                    <Icon name="mdi:cog" class="w-4 h-4 text-indigo-500" />
+                    Configuración Global
+                </h3>
+
+                <div class="space-y-3">
+                    <label class="text-xs font-semibold text-slate-500 uppercase">Dispositivo</label
+                    >
+                    <div class="grid grid-cols-2 gap-2">
+                        <button
+                            class="device-btn active p-3 rounded-xl border-2 border-transparent bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex flex-col items-center gap-1"
+                            data-device="iphone"
+                        >
+                            <Icon
+                                name="mdi:apple"
+                                class="w-6 h-6 text-slate-700 dark:text-slate-300"
+                            />
+                            <span class="text-xs font-bold">iPhone</span>
+                        </button>
+                        <button
+                            class="device-btn p-3 rounded-xl border-2 border-transparent bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex flex-col items-center gap-1"
+                            data-device="pixel"
+                        >
+                            <Icon
+                                name="mdi:android"
+                                class="w-6 h-6 text-slate-700 dark:text-slate-300"
+                            />
+                            <span class="text-xs font-bold">Pixel</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label class="text-xs font-semibold text-slate-500 uppercase">Tipografía</label>
+                    <select
+                        id="fontSelect"
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-sm focus:border-indigo-500 focus:ring-0 transition-all outline-none"
+                    >
+                        <option value="Inter">Inter</option>
+                        <option value="Outfit">Outfit</option>
+                        <option value="Poppins">Poppins</option>
+                        <option value="Montserrat">Montserrat</option>
+                        <option value="Playfair Display">Playfair Display</option>
+                    </select>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Fondo</label>
+                        <button
+                            id="swapColors"
+                            class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors text-slate-400"
+                            title="Intercambiar colores"
+                        >
+                            <Icon name="mdi:swap-horizontal" class="w-4 h-4" />
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2" id="gradientPresets"></div>
+                    <div class="flex items-center gap-2 mt-3">
+                        <input
+                            type="color"
+                            id="gradientStart"
+                            value="#6366f1"
+                            class="w-full h-8 rounded-lg cursor-pointer border-none bg-transparent"
+                        />
+                        <Icon name="mdi:arrow-right" class="w-4 h-4 text-slate-400" />
+                        <input
+                            type="color"
+                            id="gradientEnd"
+                            value="#a855f7"
+                            class="w-full h-8 rounded-lg cursor-pointer border-none bg-transparent"
+                        />
+                    </div>
+
+                    <div class="space-y-2 mt-4">
+                        <div
+                            class="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest"
+                        >
+                            <span>Ángulo</span>
+                            <span id="angleValue">135°</span>
+                        </div>
+                        <input
+                            type="range"
+                            id="gradientAngle"
+                            min="0"
+                            max="360"
+                            value="135"
+                            class="w-full h-1 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                        />
+                    </div>
+                </div>
+
+                <div class="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-800/50">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-semibold text-slate-500 uppercase"
+                            >Safe Area (Top/Bottom)</label
+                        >
+                        <button
+                            id="safeAreaToggle"
+                            class="w-10 h-5 bg-slate-200 dark:bg-slate-800 rounded-full relative transition-colors duration-200 focus:outline-none"
+                        >
+                            <div
+                                id="safeAreaDot"
+                                class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-200"
+                            >
+                            </div>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input
+                            type="color"
+                            id="safeAreaColor"
+                            name="safeAreaColor"
+                            class="w-8 h-8 rounded-lg cursor-pointer border-none bg-transparent"
+                            value="#000000"
+                        />
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+                            >Color del área</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2">
+            <div
+                id="emptyState"
+                class="flex flex-col items-center justify-center py-20 bg-slate-50 dark:bg-slate-900/50 rounded-[2.5rem] border-2 border-dashed border-slate-200 dark:border-slate-800"
+            >
+                <div
+                    class="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/30 rounded-3xl flex items-center justify-center mb-6"
+                >
+                    <Icon
+                        name="mdi:image-multiple"
+                        class="w-10 h-10 text-indigo-600 dark:text-indigo-400"
+                    />
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+                    Aún no hay imágenes
+                </h3>
+                <p class="text-slate-500 dark:text-slate-400 mt-2">
+                    Sube tus capturas para empezar a diseñar
+                </p>
+            </div>
+
+            <div id="previewGrid" class="hidden grid sm:grid-cols-2 gap-6"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { App } from "./app";
+    new App();
+</script>
+
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+    }
+    .dark .glass-card {
+        background: rgba(15, 23, 42, 0.7);
+    }
+    .device-btn.active {
+        background-color: rgb(238 242 255);
+        border-color: rgb(79 70 229);
+    }
+    .dark .device-btn.active {
+        background-color: rgba(79, 70, 229, 0.2);
+        border-color: rgb(129 140 248);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background: #4f46e5;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .device-btn {
+        transition: all 0.2s ease;
+    }
+
+    .device-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .device-btn.active {
+        transform: translateY(-1px);
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
