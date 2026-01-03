@@ -676,13 +676,14 @@ export class App {
                 const blob = await new Promise<Blob>((resolve) =>
                     offscreenCanvas.toBlob((b) => resolve(b!), "image/png", 1.0)
                 );
-                const folder = zip.folder(variant.language.toUpperCase());
-                folder?.file(`mockup-${i + 1}.png`, blob);
+                zip.file(`mockup-${i + 1}-${variant.language.toUpperCase()}.png`, blob);
             }
         }
 
+        const timestamp = new Date().toISOString().replace(/[:\-]|\..+/g, "").replace("T", "_");
+        const deviceTag = this.store.device === "iphone" ? "ios" : "android";
         const content = await zip.generateAsync({ type: "blob" });
-        saveAs(content, "mockups-profesionales.zip");
+        saveAs(content, `${timestamp}-store-mocks-${deviceTag}.zip`);
 
         this.downloadBtn.innerHTML = `Listo!`;
         setTimeout(() => {
