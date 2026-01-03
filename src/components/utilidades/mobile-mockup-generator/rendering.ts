@@ -88,6 +88,12 @@ export class RenderingEngine {
         this.roundRect(ctx, screenX, screenY, screenW, screenH, (device.radius - 8) * scale);
         ctx.clip();
 
+
+        if (globalSettings.safeArea.show) {
+            ctx.fillStyle = globalSettings.safeArea.color;
+            ctx.fillRect(screenX, screenY, screenW, screenH);
+        }
+
         let targetScreenY = screenY;
         let targetScreenH = screenH;
 
@@ -102,16 +108,33 @@ export class RenderingEngine {
         const screenAspect = screenW / targetScreenH;
 
         let drawW, drawH, drawX, drawY;
-        if (imgAspect > screenAspect) {
-            drawH = targetScreenH;
-            drawW = targetScreenH * imgAspect;
-            drawX = screenX - (drawW - screenW) / 2;
-            drawY = targetScreenY;
+
+
+        if (globalSettings.safeArea.show) {
+            if (imgAspect > screenAspect) {
+                drawW = screenW;
+                drawH = screenW / imgAspect;
+                drawX = screenX;
+                drawY = targetScreenY + (targetScreenH - drawH) / 2;
+            } else {
+                drawH = targetScreenH;
+                drawW = targetScreenH * imgAspect;
+                drawX = screenX + (screenW - drawW) / 2;
+                drawY = targetScreenY;
+            }
         } else {
-            drawW = screenW;
-            drawH = screenW / imgAspect;
-            drawX = screenX;
-            drawY = targetScreenY - (drawH - targetScreenH) / 2;
+
+            if (imgAspect > screenAspect) {
+                drawH = screenH;
+                drawW = screenH * imgAspect;
+                drawX = screenX - (drawW - screenW) / 2;
+                drawY = screenY;
+            } else {
+                drawW = screenW;
+                drawH = screenW / imgAspect;
+                drawX = screenX;
+                drawY = screenY - (drawH - screenH) / 2;
+            }
         }
 
         ctx.drawImage(imgEl, drawX, drawY, drawW, drawH);

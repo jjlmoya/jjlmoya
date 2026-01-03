@@ -676,7 +676,8 @@ export class App {
                 const blob = await new Promise<Blob>((resolve) =>
                     offscreenCanvas.toBlob((b) => resolve(b!), "image/png", 1.0)
                 );
-                zip.file(`mockup-${i + 1}-${variant.language.toUpperCase()}.png`, blob);
+                const variantSuffix = img.variants.length > 1 ? `-${variant.language.toUpperCase()}` : "";
+                zip.file(`mockup-${i + 1}${variantSuffix}.png`, blob);
             }
         }
 
