@@ -1,0 +1,392 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+import { apps } from "../../data/apps/index";
+import type { Application } from "../../types/apps";
+import { Icon } from "astro-icon/components";
+
+export async function getStaticPaths() {
+    return apps.map((app) => ({
+        params: { slug: app.slug },
+        props: { app },
+    }));
+}
+
+const { app } = Astro.props as { app: Application };
+---
+
+<AppLayout
+    title={`${app.title} — ${app.tagline}`}
+    description={app.description}
+    image={app.media.icon}
+    color={app.theme.primary}
+    favicon={app.media.icon}
+    currentSlug={app.slug}
+>
+    <div
+        class={`theme-${app.slug} light-theme selection:bg-[var(--primary)] selection:text-white transition-colors duration-500 overflow-x-hidden min-h-screen bg-[var(--bg-app)] text-[var(--text-main)]`}
+        style={`
+            --primary: ${app.theme.primary};
+            --primary-gradient: ${app.theme.primaryGradient};
+            --accent: ${app.theme.accent};
+            --font-heading: ${app.theme.fontHeading};
+            --radius-main: ${app.theme.radiusMain};
+            --glow-accent: ${app.theme.glowAccent};
+            --header-title-gradient: ${app.theme.headerTitleGradient};
+            --text-title-gradient: ${app.theme.textTitleGradient};
+            --bg-app: ${app.theme.bgApp};
+            --bg-surface: ${app.theme.bgSurface};
+            --bg-card: ${app.theme.bgCard};
+            --text-main: ${app.theme.textMain};
+            --glass: ${app.theme.glass};
+            --glass-border-color: ${app.theme.glassBorderColor};
+            --glass-highlight: ${app.theme.glassHighlight};
+            --shadow-primary: ${app.theme.shadowPrimary};
+            --shadow-card: ${app.theme.shadowCard};
+        `}
+    >
+        <section class="relative py-28 lg:py-40 px-6">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                <div
+                    class="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left"
+                >
+                    <div
+                        class="w-20 h-20 rounded-2xl bg-[var(--bg-surface)] shadow-2xl mb-10 border border-[var(--glass-border-color)]"
+                    >
+                        <img
+                            src={app.media.icon}
+                            alt={app.title}
+                            class="w-full h-full object-contain"
+                        />
+                    </div>
+
+                    <h1
+                        class="text-5xl sm:text-7xl md:text-9xl font-black tracking-tight leading-none mb-8"
+                        style={`color: var(--primary);`}
+                    >
+                        {app.title}
+                    </h1>
+
+                    <p
+                        class="text-xl sm:text-2xl md:text-4xl font-light opacity-70 max-w-2xl leading-relaxed mb-16"
+                    >
+                        {app.subtitle}
+                    </p>
+
+                    <div
+                        class="flex flex-wrap justify-center lg:justify-start gap-12 md:gap-16 mb-12"
+                    >
+                        {
+                            app.stores.googlePlay ? (
+                                <a
+                                    href={app.stores.googlePlay}
+                                    target="_blank"
+                                    class="store-badge-premium group"
+                                >
+                                    <Icon
+                                        name="mdi:google-play"
+                                        class="w-10 h-10 mb-4 transition-transform group-hover:scale-110"
+                                    />
+                                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase opacity-70 group-hover:opacity-100">
+                                        google play
+                                    </span>
+                                </a>
+                            ) : (
+                                <div class="store-badge-premium opacity-20 pointer-events-none">
+                                    <Icon name="mdi:google-play" class="w-10 h-10 mb-4" />
+                                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase">
+                                        Próximamente
+                                    </span>
+                                </div>
+                            )
+                        }
+
+                        {
+                            app.stores.appStore ? (
+                                <a
+                                    href={app.stores.appStore}
+                                    target="_blank"
+                                    class="store-badge-premium group"
+                                >
+                                    <Icon
+                                        name="mdi:apple"
+                                        class="w-10 h-10 mb-4 transition-transform group-hover:scale-110"
+                                    />
+                                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase opacity-70 group-hover:opacity-100">
+                                        App Store
+                                    </span>
+                                </a>
+                            ) : (
+                                <div class="store-badge-premium opacity-20 pointer-events-none">
+                                    <Icon name="mdi:apple" class="w-10 h-10 mb-4" />
+                                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase">
+                                        Próximamente
+                                    </span>
+                                </div>
+                            )
+                        }
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 relative">
+                    <div
+                        class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[var(--glow-accent)] to-transparent blur-3xl rounded-full -z-10"
+                    >
+                    </div>
+                    <div
+                        class="rounded-[var(--radius-main)] overflow-hidden shadow-[var(--shadow-card)] border border-[var(--glass-border-color)] bg-[var(--bg-surface)] group"
+                    >
+                        <img
+                            src={app.media.hero}
+                            alt={`${app.title} mock`}
+                            class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="absolute top-0 left-0 w-full h-full pointer-events-none -z-10 grid grid-cols-12 opacity-[0.03]"
+            >
+                {
+                    [...Array(11)].map(() => (
+                        <div class="border-l border-black dark:border-white h-full last:border-r" />
+                    ))
+                }
+            </div>
+        </section>
+
+        <section class="py-40 border-y border-[var(--glass-border-color)] bg-[var(--bg-app)]">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-3xl mb-32">
+                    <h2
+                        class="text-4xl sm:text-6xl md:text-8xl font-black tracking-tight mb-8 leading-none text-balance"
+                    >
+                        {app.benefitsTitle.main}
+                        <br /><span class="italic font-light opacity-40"
+                            >{app.benefitsTitle.highlighted}</span
+                        >
+                    </h2>
+                    <p class="text-lg sm:text-xl md:text-3xl font-light opacity-60 leading-relaxed">
+                        {app.description}
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+                    {
+                        app.benefits.map((benefit, i) => (
+                            <div class="group flex gap-8">
+                                <div class="text-5xl md:text-7xl font-black italic opacity-[0.05] group-hover:opacity-[0.1] transition-opacity leading-none shrink-0">
+                                    0{i + 1}
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-black uppercase tracking-tight mb-4 group-hover:translate-x-2 transition-transform">
+                                        {benefit.title}
+                                    </h3>
+                                    <p class="text-xl opacity-70 font-light leading-relaxed">
+                                        {benefit.text}
+                                    </p>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="py-40 px-6">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
+                <div class="lg:col-span-6 flex justify-center">
+                    <div
+                        class="relative w-full max-w-[440px] bg-[var(--bg-surface)] rounded-[var(--radius-main)] shadow-[var(--shadow-card)] overflow-hidden border border-[var(--glass-border-color)] group transition-transform hover:-rotate-1 duration-[1500ms]"
+                    >
+                        <img
+                            src={app.media.screenshots[0]}
+                            alt="Screenshot"
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
+                <div class="lg:col-span-6">
+                    <span
+                        class="text-[10px] font-black uppercase tracking-[0.5em] opacity-30 mb-10 block"
+                        >{app.concept.label}</span
+                    >
+                    <h2
+                        class="text-[10vw] sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-12 break-words"
+                    >
+                        {app.concept.main}
+                        <br />
+                        <span style={`color: var(--primary); font-family: var(--font-heading);`}
+                            >{app.concept.highlighted}</span
+                        >
+                    </h2>
+                    <p
+                        class="text-lg sm:text-2xl md:text-4xl font-light opacity-60 leading-relaxed pl-8 md:pl-12 border-l-4 italic"
+                        style={`border-color: var(--primary);`}
+                    >
+                        "{app.philosophy}"
+                    </p>
+
+                    {
+                        app.highlights.length > 0 && (
+                            <div class="mt-16 md:mt-28 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 lg:gap-12">
+                                {app.highlights.map((stat) => (
+                                    <div>
+                                        <div class="text-[10px] uppercase font-black tracking-widest opacity-30 mb-2">
+                                            {stat.label}
+                                        </div>
+                                        <div
+                                            class="text-2xl md:text-4xl font-black tracking-tighter"
+                                            style={`color: var(--primary);`}
+                                        >
+                                            {stat.value}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    }
+                </div>
+            </div>
+        </section>
+
+        {
+            app.features && app.features.length > 0 && (
+                <section class="py-40 px-6 bg-[var(--bg-app)] brightness-95 dark:brightness-105">
+                    <div class="max-w-7xl mx-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                            {app.features.map((feature) => (
+                                <div class="p-10 rounded-[var(--radius-main)] bg-[var(--bg-card)] border border-[var(--glass-border-color)] shadow-[var(--shadow-card)] group hover:-translate-y-2 transition-transform duration-500">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 bg-[var(--bg-surface)] shadow-xl"
+                                        style={`color: var(--primary);`}
+                                    >
+                                        <Icon
+                                            name={feature.icon || "mdi:check-circle-outline"}
+                                            class="w-8 h-8"
+                                        />
+                                    </div>
+                                    <h4 class="text-xl font-black uppercase tracking-tight mb-4">
+                                        {feature.title}
+                                    </h4>
+                                    <p class="opacity-70 font-light leading-relaxed">
+                                        {feature.text}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )
+        }
+
+        <section
+            class="py-56 px-6 bg-[var(--bg-app)] text-[var(--text-main)] text-center relative overflow-hidden border-t border-[var(--glass-border-color)]"
+        >
+            <div
+                class="absolute inset-0 bg-[var(--primary)] opacity-10 blur-[150px] rounded-full pointer-events-none -translate-y-1/2"
+            >
+            </div>
+            <div class="max-w-4xl mx-auto relative z-10 w-full">
+                <h2
+                    class="text-4xl sm:text-6xl md:text-9xl font-black mb-16 tracking-tighter leading-none uppercase italic"
+                >
+                    ¿Preparado?
+                </h2>
+
+                <div class="flex flex-wrap justify-center gap-12 md:gap-20">
+                    {
+                        app.stores.googlePlay ? (
+                            <a
+                                href={app.stores.googlePlay}
+                                target="_blank"
+                                class="store-badge-premium group"
+                            >
+                                <Icon
+                                    name="mdi:google-play"
+                                    class="w-12 h-12 mb-5 transition-transform group-hover:scale-110"
+                                    style={`color: var(--primary);`}
+                                />
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase">
+                                    Google Play
+                                </span>
+                            </a>
+                        ) : (
+                            <div class="store-badge-premium opacity-20 pointer-events-none">
+                                <Icon name="mdi:google-play" class="w-12 h-12 mb-5" />
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase">
+                                    Próximamente
+                                </span>
+                            </div>
+                        )
+                    }
+
+                    {
+                        app.stores.appStore ? (
+                            <a
+                                href={app.stores.appStore}
+                                target="_blank"
+                                class="store-badge-premium group"
+                            >
+                                <Icon
+                                    name="mdi:apple"
+                                    class="w-12 h-12 mb-5 transition-transform group-hover:scale-110"
+                                    style={`color: var(--primary);`}
+                                />
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase">
+                                    App Store
+                                </span>
+                            </a>
+                        ) : (
+                            <div class="store-badge-premium opacity-20 pointer-events-none">
+                                <Icon name="mdi:apple" class="w-12 h-12 mb-5" />
+                                <span class="text-sm font-bold tracking-[0.2em] uppercase">
+                                    Próximamente
+                                </span>
+                            </div>
+                        )
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</AppLayout>
+
+<style>
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-heading);
+    }
+
+    .store-badge-premium {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        text-align: center;
+    }
+
+    .store-badge-premium.white {
+        color: white;
+    }
+
+    .store-badge-premium:hover {
+        transform: translateY(-8px);
+    }
+
+    section {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: reveal 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    }
+
+    @keyframes reveal {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

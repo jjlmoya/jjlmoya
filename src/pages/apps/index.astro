@@ -1,0 +1,206 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { apps } from "../../data/apps/index";
+import { Icon } from "astro-icon/components";
+---
+
+<Layout title="Apps | jjlmoya" description="Herramientas diseñadas para la precisión y la pasión.">
+    <div
+        class="min-h-screen bg-white dark:bg-black text-black dark:text-white font-sans selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-700"
+    >
+        <header class="relative pt-32 pb-8 px-6">
+            <div class="max-w-7xl mx-auto w-full">
+                <div
+                    class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-6 border-b-2 border-black/10 dark:border-white/10"
+                >
+                    <h1 class="text-6xl md:text-8xl font-black tracking-tighter leading-none">
+                        Aplicaciones
+                    </h1>
+                    <div class="md:max-w-md pb-2 text-right md:text-left">
+                        <p class="text-xl font-light opacity-60">
+                            Herramientas y utilidades personales.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="max-w-7xl mx-auto px-6 py-12">
+            <div class="space-y-24">
+                {
+                    apps.map((app, index) => (
+                        <div class="app-entry relative flex flex-col lg:flex-row gap-16 lg:items-center">
+                            <a
+                                href={`/apps/${app.slug}/`}
+                                class={`lg:w-[35%] relative group block ${index % 2 !== 0 ? "lg:order-2" : ""}`}
+                            >
+                                <div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] bg-neutral-50 dark:bg-neutral-900 border border-black/5 dark:border-white/5 shadow-2xl transition-all duration-1000 group-hover:rounded-[1rem]">
+                                    <img
+                                        src={app.media.hero}
+                                        alt=""
+                                        class="w-full h-full object-cover object-center transition-all duration-[2000ms] group-hover:scale-105"
+                                    />
+                                    <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all duration-1000" />
+                                </div>
+
+                                <div class="absolute -bottom-6 -right-6 hidden md:flex gap-4 group-hover:-translate-y-4 group-hover:-translate-x-4 transition-all duration-1000">
+                                    {app.highlights.slice(0, 3).map((highlight) => (
+                                        <div class="bg-white dark:bg-neutral-800 shadow-2xl rounded-2xl p-6 min-w-[140px] border border-black/5 dark:border-white/5">
+                                            <span class="text-[10px] uppercase font-black tracking-widest opacity-40 block mb-1">
+                                                {highlight.label}
+                                            </span>
+                                            <span
+                                                class="text-2xl font-black italic tracking-tighter"
+                                                style={`color: ${app.theme.primary}`}
+                                            >
+                                                {highlight.value}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </a>
+
+                            <div class={`lg:w-[65%] ${index % 2 !== 0 ? "lg:order-1" : ""}`}>
+                                <div class="flex items-center gap-4 mb-4 opacity-40">
+                                    <span class="text-xs font-black uppercase tracking-widest">
+                                        {app.category}
+                                    </span>
+                                    <div class="w-10 h-px bg-current" />
+                                    <span class="text-xs font-light">0{index + 1}</span>
+                                </div>
+
+                                <a href={`/apps/${app.slug}/`} class="block group">
+                                    <h2 class="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-none dark:text-white uppercase transition-all duration-700">
+                                        {app.title}
+                                    </h2>
+                                </a>
+
+                                <p class="text-xl md:text-2xl font-light opacity-60 mb-10 leading-tight max-w-sm">
+                                    {app.subtitle}
+                                </p>
+
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-10">
+                                    <a
+                                        href={`/apps/${app.slug}/`}
+                                        class="flex items-center gap-6 text-sm font-black uppercase tracking-[0.3em] hover:gap-10 transition-all duration-700"
+                                    >
+                                        <span>Conocer más</span>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2.5"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <>
+                                                <path d="M5 12h14" />
+                                                <path d="m12 5 7 7-7 7" />
+                                            </>
+                                        </svg>
+                                    </a>
+
+                                    <div class="w-full h-px bg-black/5 dark:bg-white/5 sm:w-px sm:h-12" />
+
+                                    <div class="flex gap-8">
+                                        {app.stores.googlePlay ? (
+                                            <a
+                                                href={app.stores.googlePlay}
+                                                target="_blank"
+                                                class="store-badge flex flex-col items-center gap-1 group/store"
+                                            >
+                                                <Icon
+                                                    name="mdi:google-play"
+                                                    class="w-6 h-6 transition-transform group-hover/store:scale-110"
+                                                />
+                                                <span class="text-[9px] font-bold tracking-[0.1em] uppercase opacity-60 group-hover/store:opacity-100">
+                                                    Google Play
+                                                </span>
+                                            </a>
+                                        ) : (
+                                            <div class="store-badge flex flex-col items-center gap-1 opacity-20 cursor-not-allowed">
+                                                <Icon name="mdi:google-play" class="w-6 h-6" />
+                                                <span class="text-[9px] font-bold tracking-[0.1em] uppercase">
+                                                    Próximamente
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {app.stores.appStore ? (
+                                            <a
+                                                href={app.stores.appStore}
+                                                target="_blank"
+                                                class="store-badge flex flex-col items-center gap-1 group/store"
+                                            >
+                                                <Icon
+                                                    name="mdi:apple"
+                                                    class="w-6 h-6 transition-transform group-hover/store:scale-110"
+                                                />
+                                                <span class="text-[9px] font-bold tracking-[0.1em] uppercase opacity-60 group-hover/store:opacity-100">
+                                                    App Store
+                                                </span>
+                                            </a>
+                                        ) : (
+                                            <div class="store-badge flex flex-col items-center gap-1 opacity-20 cursor-not-allowed">
+                                                <Icon name="mdi:apple" class="w-6 h-6" />
+                                                <span class="text-[9px] font-bold tracking-[0.1em] uppercase">
+                                                    Próximamente
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </section>
+
+        <footer
+            class="py-24 relative overflow-hidden bg-neutral-50 dark:bg-neutral-950 border-t border-black/5 dark:border-white/5"
+        >
+            <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-center">
+                <p
+                    class="text-2xl md:text-3xl font-light tracking-tight text-center max-w-3xl leading-tight mb-8"
+                >
+                    Diseño herramientas que <span class="italic font-normal">respetan</span> tu tiempo
+                    y tu inteligencia.
+                </p>
+            </div>
+
+            <div
+                class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/asfalt-dark.png')]"
+            >
+            </div>
+        </footer>
+    </div>
+</Layout>
+
+<style>
+    .animate-in {
+        animation: reveal 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    }
+
+    @keyframes reveal {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .app-entry {
+        transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .app-entry:hover {
+        transform: scale(0.99);
+    }
+</style>
