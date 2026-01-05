@@ -30,4 +30,13 @@ export const prototypes: Prototype[] = [
         description:
             "Propulsión inercial. Usa la velocidad del scroll como motor en un mundo sin fricción.",
     },
+    {
+        title: "Imperio de Deuda",
+        slug: "imperio-deuda",
+        icon: "mdi:office-building",
+        color: "text-blue-500",
+        borderColor: "border-blue-500/30",
+        bgHover: "hover:bg-blue-500/10",
+        description: "Domina el mercado global. Construye distritos, gestiona sinergias y liquida una deuda billonaria.",
+    },
 ];
