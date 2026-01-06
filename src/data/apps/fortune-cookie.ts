@@ -49,7 +49,7 @@ export const fortuneCookie: Application = {
         ]
     },
     stores: {
-        googlePlay: "",
+        googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.cookie.fortune",
         appStore: ""
     },
     benefits: [
