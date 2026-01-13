@@ -6,6 +6,14 @@ export const devSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            href: "/utilidades/cron/",
+            iconBg: "mdi:clock-check",
+            iconFg: "mdi:calendar-clock",
+            title: "Generador de Cron",
+            description: "Crea y traduce expresiones cron a lenguaje humano de forma visual.",
+            color: "#8b5cf6"
+        },
+        {
             href: "/utilidades/json-formatter/",
             iconBg: "mdi:code-json",
             iconFg: "mdi:code-braces",

@@ -1,0 +1,618 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="w-full max-w-4xl mx-auto space-y-12 mb-20">
+    <div
+        class="relative overflow-hidden bg-slate-900 border border-slate-700 rounded-3xl p-10 text-center shadow-2xl"
+    >
+        <div class="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
+        <div
+            class="absolute top-0 right-0 p-32 bg-purple-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"
+        >
+        </div>
+
+        <div class="relative z-10 space-y-4">
+            <h2 class="text-slate-400 text-sm font-mono tracking-widest uppercase mb-4">
+                Expresión Cron
+            </h2>
+            <div
+                class="flex items-center justify-center gap-2 sm:gap-4 font-mono text-3xl sm:text-5xl font-bold text-white"
+            >
+                <div class="group relative">
+                    <span
+                        id="display-minute"
+                        class="text-purple-400 cron-part hover:bg-white/10 rounded px-2 cursor-pointer transition-colors"
+                        >*</span
+                    >
+                    <span
+                        class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                        >Minuto</span
+                    >
+                </div>
+                <span class="text-slate-600"> </span>
+                <div class="group relative">
+                    <span
+                        id="display-hour"
+                        class="text-purple-400 cron-part hover:bg-white/10 rounded px-2 cursor-pointer transition-colors"
+                        >*</span
+                    >
+                    <span
+                        class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                        >Hora</span
+                    >
+                </div>
+                <span class="text-slate-600"> </span>
+                <div class="group relative">
+                    <span
+                        id="display-dom"
+                        class="text-purple-400 cron-part hover:bg-white/10 rounded px-2 cursor-pointer transition-colors"
+                        >*</span
+                    >
+                    <span
+                        class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                        >Día (Mes)</span
+                    >
+                </div>
+                <span class="text-slate-600"> </span>
+                <div class="group relative">
+                    <span
+                        id="display-month"
+                        class="text-purple-400 cron-part hover:bg-white/10 rounded px-2 cursor-pointer transition-colors"
+                        >*</span
+                    >
+                    <span
+                        class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                        >Mes</span
+                    >
+                </div>
+                <span class="text-slate-600"> </span>
+                <div class="group relative">
+                    <span
+                        id="display-dow"
+                        class="text-purple-400 cron-part hover:bg-white/10 rounded px-2 cursor-pointer transition-colors"
+                        >*</span
+                    >
+                    <span
+                        class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                        >Día (Semana)</span
+                    >
+                </div>
+            </div>
+
+            <div class="pt-6">
+                <div
+                    class="inline-block px-4 py-2 bg-slate-800/50 rounded-lg text-slate-300 font-medium border border-slate-700"
+                >
+                    <span id="human-readable">Se ejecuta cada minuto</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+        <div
+            class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm"
+        >
+            <div class="flex gap-4 mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">
+                <button
+                    class="tab-btn active text-sm font-medium px-4 py-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 transition-colors"
+                    data-tab="quick"
+                >
+                    Rápido
+                </button>
+                <button
+                    class="tab-btn text-sm font-medium px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
+                    data-tab="advanced"
+                >
+                    Avanzado
+                </button>
+            </div>
+
+            <div id="tab-quick" class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <button
+                        class="preset-btn p-4 text-left border border-slate-200 dark:border-slate-700 rounded-xl hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group"
+                        data-cron="* * * * *"
+                    >
+                        <div
+                            class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                        >
+                            Cada minuto
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono mt-1">* * * * *</div>
+                    </button>
+                    <button
+                        class="preset-btn p-4 text-left border border-slate-200 dark:border-slate-700 rounded-xl hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group"
+                        data-cron="0 * * * *"
+                    >
+                        <div
+                            class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                        >
+                            Cada hora
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono mt-1">0 * * * *</div>
+                    </button>
+                    <button
+                        class="preset-btn p-4 text-left border border-slate-200 dark:border-slate-700 rounded-xl hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group"
+                        data-cron="0 0 * * *"
+                    >
+                        <div
+                            class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                        >
+                            Diario
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono mt-1">0 0 * * *</div>
+                    </button>
+                    <button
+                        class="preset-btn p-4 text-left border border-slate-200 dark:border-slate-700 rounded-xl hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group"
+                        data-cron="0 0 * * 0"
+                    >
+                        <div
+                            class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                        >
+                            Semanal
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono mt-1">0 0 * * 0</div>
+                    </button>
+                    <button
+                        class="preset-btn p-4 text-left border border-slate-200 dark:border-slate-700 rounded-xl hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group"
+                        data-cron="0 0 1 * *"
+                    >
+                        <div
+                            class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                        >
+                            Mensual
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono mt-1">0 0 1 * *</div>
+                    </button>
+                    <button
+                        class="preset-btn p-4 text-left border border-slate-200 dark:border-slate-700 rounded-xl hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group"
+                        data-cron="0 0 1 1 *"
+                    >
+                        <div
+                            class="font-bold text-slate-700 dark:text-slate-200 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                        >
+                            Anual
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono mt-1">0 0 1 1 *</div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="tab-advanced" class="hidden space-y-6">
+                <div class="space-y-4">
+                    <div class="input-group">
+                        <label
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                            >Minuto (0-59)</label
+                        >
+                        <input
+                            type="text"
+                            id="input-minute"
+                            value="*"
+                            class="cron-input w-full p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-mono focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                        />
+                        <p class="text-xs text-slate-400 mt-1">Ej: *, */5, 0,30</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                            >Hora (0-23)</label
+                        >
+                        <input
+                            type="text"
+                            id="input-hour"
+                            value="*"
+                            class="cron-input w-full p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-mono focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                        />
+                    </div>
+
+                    <div class="input-group">
+                        <label
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                            >Día del Mes (1-31)</label
+                        >
+                        <input
+                            type="text"
+                            id="input-dom"
+                            value="*"
+                            class="cron-input w-full p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-mono focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                        />
+                    </div>
+
+                    <div class="input-group">
+                        <label
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                            >Mes (1-12)</label
+                        >
+                        <input
+                            type="text"
+                            id="input-month"
+                            value="*"
+                            class="cron-input w-full p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-mono focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                        />
+                    </div>
+
+                    <div class="input-group">
+                        <label
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                            >Día de la Semana (0-6)</label
+                        >
+                        <input
+                            type="text"
+                            id="input-dow"
+                            value="*"
+                            class="cron-input w-full p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-mono focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                        />
+                        <p class="text-xs text-slate-400 mt-1">0 = Domingo, 6 = Sábado</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div
+                class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm"
+            >
+                <div class="flex items-center gap-2 mb-4">
+                    <Icon name="mdi:clock-fast" class="w-5 h-5 text-purple-500" />
+                    <h3 class="font-bold text-slate-800 dark:text-white">Próximas Ejecuciones</h3>
+                </div>
+
+                <ul id="next-runs" class="space-y-3">
+                    <li class="h-10 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></li>
+                    <li class="h-10 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></li>
+                    <li class="h-10 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></li>
+                    <li class="h-10 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></li>
+                    <li class="h-10 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></li>
+                </ul>
+            </div>
+
+            <button
+                id="btn-copy"
+                class="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-purple-500/30 transform transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+                <Icon name="mdi:content-copy" class="w-5 h-5" />
+                Copiar Expresión
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+
+    
+    const MINUTE = 0;
+    const HOUR = 1;
+    const DOM = 2;
+    const MONTH = 3;
+    const DOW = 4;
+
+    function parsePart(partStr: string, min: number, max: number): number[] {
+        if (partStr === "*") {
+            return Array.from({ length: max - min + 1 }, (_, i) => i + min);
+        }
+
+        const values = new Set<number>();
+        const parts = partStr.split(",");
+
+        for (const part of parts) {
+            const stepMatch = part.match(/^(\*|\d+(?:-\d+)?)\/(\d+)$/);
+            if (stepMatch) {
+                const rangeStr = stepMatch[1];
+                const step = parseInt(stepMatch[2], 10);
+
+                let start = min,
+                    end = max;
+                if (rangeStr !== "*") {
+                    if (rangeStr.includes("-")) {
+                        const [s, e] = rangeStr.split("-").map(Number);
+                        start = s;
+                        end = e;
+                    } else {
+                        start = parseInt(rangeStr, 10);
+                        end = max;
+                    }
+                }
+
+                for (let i = start; i <= end; i += step) {
+                    if (i >= min && i <= max) values.add(i);
+                }
+                continue;
+            }
+
+            if (part.includes("-")) {
+                const [start, end] = part.split("-").map(Number);
+                for (let i = start; i <= end; i++) {
+                    if (i >= min && i <= max) values.add(i);
+                }
+                continue;
+            }
+
+            const val = parseInt(part, 10);
+            if (!isNaN(val) && val >= min && val <= max) {
+                values.add(val);
+            }
+        }
+        return Array.from(values).sort((a, b) => a - b);
+    }
+
+    function describeCron(cronParts: string[]) {
+        const [m, h, dom, mon, dow] = cronParts;
+
+        if (cronParts.join(" ") === "* * * * *") return "Se ejecuta cada minuto";
+        if (cronParts.join(" ") === "0 * * * *") return "Se ejecuta al inicio de cada hora";
+        if (cronParts.join(" ") === "0 0 * * *") return "Se ejecuta cada día a medianoche";
+
+        let desc = "Se ejecuta ";
+
+        if (m === "*" && h === "*") desc += "cada minuto";
+        else if (m === "0" && h === "*") desc += "cada hora en punto";
+        else if (m !== "*" && h === "*") desc += `en el minuto ${m} de cada hora`;
+        else if (m !== "*" && h !== "*") desc += `a las ${h}:${m.padStart(2, "0")}`;
+        else desc += `minuto(${m}) hora(${h})`;
+
+        if (dom !== "*") desc += ` el día ${dom} del mes`;
+        if (mon !== "*") desc += ` en el mes ${mon}`;
+
+        const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        if (dow !== "*") {
+            if (dow.includes("-") || dow.includes(",")) {
+                desc += ` si es ${dow} (0=Dom, 6=Sab)`;
+            } else {
+                desc += ` el ${days[parseInt(dow)] || dow}`;
+            }
+        }
+
+        return desc;
+    }
+
+    function calculateNextRuns(cronParts: string[]): Date[] {
+        const minutes = parsePart(cronParts[MINUTE], 0, 59);
+        const hours = parsePart(cronParts[HOUR], 0, 23);
+        const doms = parsePart(cronParts[DOM], 1, 31);
+        const months = parsePart(cronParts[MONTH], 1, 12);
+        const dows = parsePart(cronParts[DOW], 0, 6);
+
+        const nextRuns: Date[] = [];
+        const cursor = new Date();
+        cursor.setSeconds(0);
+        cursor.setMilliseconds(0);
+        cursor.setMinutes(cursor.getMinutes() + 1);
+
+        let iterations = 0;
+
+        while (nextRuns.length < 5 && iterations < 20000) {
+            iterations++;
+
+            const curMonth = cursor.getMonth() + 1;
+            if (!months.includes(curMonth)) {
+                cursor.setMonth(cursor.getMonth() + 1);
+                cursor.setDate(1);
+                cursor.setHours(0);
+                cursor.setMinutes(0);
+                continue;
+            }
+
+            const curDom = cursor.getDate();
+            const curDow = cursor.getDay();
+
+            let dayValid = false;
+            const domRestricted = cronParts[DOM] !== "*";
+            const dowRestricted = cronParts[DOW] !== "*";
+
+            if (!domRestricted && !dowRestricted) {
+                dayValid = true;
+            } else if (domRestricted && dowRestricted) {
+                dayValid = doms.includes(curDom) || dows.includes(curDow);
+            } else if (domRestricted) {
+                dayValid = doms.includes(curDom);
+            } else if (dowRestricted) {
+                dayValid = dows.includes(curDow);
+            }
+
+            if (!dayValid) {
+                cursor.setDate(cursor.getDate() + 1);
+                cursor.setHours(0);
+                cursor.setMinutes(0);
+                continue;
+            }
+
+            const curHour = cursor.getHours();
+            if (!hours.includes(curHour)) {
+                cursor.setHours(cursor.getHours() + 1);
+                cursor.setMinutes(0);
+                continue;
+            }
+
+            const curMinute = cursor.getMinutes();
+            if (minutes.includes(curMinute)) {
+                nextRuns.push(new Date(cursor));
+            }
+
+            
+            cursor.setMinutes(cursor.getMinutes() + 1);
+        }
+
+        return nextRuns;
+    }
+
+    let currentCronP = ["*", "*", "*", "*", "*"];
+
+    const displays = {
+        minute: document.getElementById("display-minute"),
+        hour: document.getElementById("display-hour"),
+        dom: document.getElementById("display-dom"),
+        month: document.getElementById("display-month"),
+        dow: document.getElementById("display-dow"),
+    };
+
+    const inputs = {
+        minute: document.getElementById("input-minute") as HTMLInputElement,
+        hour: document.getElementById("input-hour") as HTMLInputElement,
+        dom: document.getElementById("input-dom") as HTMLInputElement,
+        month: document.getElementById("input-month") as HTMLInputElement,
+        dow: document.getElementById("input-dow") as HTMLInputElement,
+    };
+
+    const humanReadable = document.getElementById("human-readable");
+    const nextRunsList = document.getElementById("next-runs");
+    const btnCopy = document.getElementById("btn-copy");
+
+    const tabs = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        quick: document.getElementById("tab-quick"),
+        advanced: document.getElementById("tab-advanced"),
+    };
+
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+            const target = (tab as HTMLElement).dataset.tab;
+
+            
+            tabs.forEach((t) => {
+                t.classList.remove(
+                    "bg-purple-100",
+                    "dark:bg-purple-900/30",
+                    "text-purple-700",
+                    "dark:text-purple-300"
+                );
+                t.classList.add("text-slate-500");
+            });
+            tab.classList.remove("text-slate-500");
+            tab.classList.add(
+                "bg-purple-100",
+                "dark:bg-purple-900/30",
+                "text-purple-700",
+                "dark:text-purple-300"
+            );
+
+            Object.values(tabContents).forEach((el) => el?.classList.add("hidden"));
+            tabContents[target as keyof typeof tabContents]?.classList.remove("hidden");
+        });
+    });
+
+    function updateCron(newCronArray: string[]) {
+        currentCronP = newCronArray;
+
+        
+        displays.minute!.textContent = currentCronP[0];
+        displays.hour!.textContent = currentCronP[1];
+        displays.dom!.textContent = currentCronP[2];
+        displays.month!.textContent = currentCronP[3];
+        displays.dow!.textContent = currentCronP[4];
+
+        
+        inputs.minute.value = currentCronP[0];
+        inputs.hour.value = currentCronP[1];
+        inputs.dom.value = currentCronP[2];
+        inputs.month.value = currentCronP[3];
+        inputs.dow.value = currentCronP[4];
+
+        
+        calculate();
+    }
+
+    function calculate() {
+        
+        try {
+            const desc = describeCron(currentCronP);
+            humanReadable!.textContent = desc;
+            humanReadable!.className = "text-slate-300";
+
+            
+            Object.values(displays).forEach((el) => el?.classList.remove("text-red-500"));
+            Object.values(displays).forEach((el) => el?.classList.add("text-purple-400"));
+        } catch (e) {
+            humanReadable!.textContent = "Expresión inválida";
+            humanReadable!.className = "text-red-400";
+            Object.values(displays).forEach((el) => el?.classList.remove("text-purple-400"));
+            Object.values(displays).forEach((el) => el?.classList.add("text-red-500"));
+        }
+
+        
+        try {
+            const dates = calculateNextRuns(currentCronP);
+            nextRunsList!.innerHTML = "";
+
+            if (dates.length === 0) {
+                nextRunsList!.innerHTML =
+                    '<li class="p-4 text-center text-slate-400 text-sm italic">No se han encontrado ejecuciones próximas razonables.</li>';
+            }
+
+            for (const date of dates) {
+                const li = document.createElement("li");
+                li.className =
+                    "flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800 text-sm";
+
+                
+                const dateStr = new Intl.DateTimeFormat("es-ES", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                }).format(date);
+
+                li.innerHTML = `
+                    <span class="font-medium text-slate-700 dark:text-slate-300 capitalize">${dateStr}</span>
+                    <span class="text-xs text-slate-400">en ${getTimeRemaining(date)}</span>
+                `;
+                nextRunsList!.appendChild(li);
+            }
+        } catch (e) {
+            console.error(e);
+            nextRunsList!.innerHTML =
+                '<li class="p-4 text-center text-slate-400 text-sm italic">Error al calcular fechas.</li>';
+        }
+    }
+
+    function getTimeRemaining(targetDate: Date) {
+        const now = new Date();
+        const diff = targetDate.getTime() - now.getTime();
+
+        if (diff < 0) return "ahora";
+
+        const minutes = Math.floor(diff / 60000);
+        if (minutes < 60) return `${minutes} min`;
+
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours} h`;
+
+        const days = Math.floor(hours / 24);
+        return `${days} días`;
+    }
+
+    Object.keys(inputs).forEach((key, index) => {
+        const input = inputs[key as keyof typeof inputs];
+        input.addEventListener("input", (e) => {
+            const val = (e.target as HTMLInputElement).value;
+            const newArr = [...currentCronP];
+            newArr[index] = val.trim() || "*";
+            updateCron(newArr);
+        });
+    });
+
+    document.querySelectorAll(".preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const cron = (btn as HTMLElement).dataset.cron;
+            if (cron) updateCron(cron.split(" "));
+        });
+    });
+
+    btnCopy?.addEventListener("click", () => {
+        navigator.clipboard.writeText(currentCronP.join(" "));
+        const originalText = btnCopy.innerHTML;
+        btnCopy.innerHTML = `<span class="iconify w-5 h-5" data-icon="mdi:check"></span> Copiado!`;
+        btnCopy.classList.add("bg-green-600");
+        setTimeout(() => {
+            btnCopy.innerHTML = originalText;
+            btnCopy.classList.remove("bg-green-600");
+        }, 2000);
+    });
+
+    calculate();
+</script>
