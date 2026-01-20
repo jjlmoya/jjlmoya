@@ -3,11 +3,25 @@ import Layout from "./Layout.astro";
 import BackToUtilities from "../components/ui/BackToUtilities.astro";
 import RelatedUtilities from "../components/utilidades/RelatedUtilities.astro";
 import AppLinksBanner from "../components/utilidades/AppLinksBanner.astro";
+import UtilityStructuredData from "../components/utilidades/UtilityStructuredData.astro";
+import FAQSection from "../components/utilidades/FAQSection.astro";
 import { sections } from "../data/utilities";
 
 interface AppLinks {
     android?: string;
     ios?: string;
+}
+
+interface FAQItem {
+    question: string;
+    answer: string;
+}
+
+interface HowToStep {
+    name: string;
+    text: string;
+    url?: string;
+    image?: string;
 }
 
 interface Props {
@@ -18,6 +32,8 @@ interface Props {
     gradientFrom?: string;
     gradientTo?: string;
     appLinks?: AppLinks;
+    faqItems?: FAQItem[];
+    howToSteps?: HowToStep[];
 }
 
 const {
@@ -28,6 +44,8 @@ const {
     gradientFrom = "from-slate-100",
     gradientTo = "to-white",
     appLinks,
+    faqItems,
+    howToSteps,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -48,6 +66,15 @@ if (!category) {
 ---
 
 <Layout title={title} description={description} image={image}>
+    <UtilityStructuredData
+        title={title}
+        description={description}
+        url={currentPath}
+        category={category}
+        faqItems={faqItems}
+        howToSteps={howToSteps}
+        slot="head"
+    />
     <div class="relative min-h-screen pt-16 overflow-x-clip">
         <div
             class={`absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${gradientFrom} via-white ${gradientTo} dark:from-slate-900/40 dark:via-zinc-950 dark:to-black -z-10`}
@@ -73,6 +100,8 @@ if (!category) {
             <div>
                 <slot />
             </div>
+
+            {faqItems && faqItems.length > 0 && <FAQSection items={faqItems} />}
 
             <div
                 class="prose prose-lg dark:prose-invert mx-auto mb-20 prose-headings:font-bold prose-a:text-indigo-600 dark:prose-a:text-indigo-400"

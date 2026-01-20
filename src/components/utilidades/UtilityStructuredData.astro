@@ -1,0 +1,141 @@
+---
+import pkg from "../../../package.json";
+
+interface HowToStep {
+    name: string;
+    text: string;
+    url?: string;
+    image?: string;
+}
+
+interface Props {
+    title: string;
+    description: string;
+    url: string;
+    category?: string;
+    faqItems?: Array<{
+        question: string;
+        answer: string;
+    }>;
+    howToSteps?: HowToStep[];
+}
+
+const { title, description, url, category, faqItems, howToSteps } = Astro.props;
+
+const baseUrl = "https://jjlmoya.es";
+const fullUrl = `${baseUrl}${url}`;
+
+const authorPublisher = {
+    "@type": "Person",
+    name: "Juan José López Moya",
+    url: baseUrl,
+    sameAs: ["https://github.com/jjlmoya", "https://www.linkedin.com/in/jjlmoya/"],
+};
+
+const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "jjlmoya.es",
+    url: baseUrl,
+    logo: `${baseUrl}/images/logo.png`,
+    founder: authorPublisher,
+};
+
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+        {
+            "@type": "ListItem",
+            position: 1,
+            name: "Inicio",
+            item: baseUrl,
+        },
+        {
+            "@type": "ListItem",
+            position: 2,
+            name: "Utilidades",
+            item: `${baseUrl}/utilidades`,
+        },
+        ...(category
+            ? [
+                  {
+                      "@type": "ListItem",
+                      position: 3,
+                      name: category,
+                      item: fullUrl,
+                  },
+              ]
+            : []),
+    ],
+};
+
+const webAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: title,
+    description: description,
+    url: fullUrl,
+    applicationCategory: "UtilityApplication",
+    operatingSystem: "Any",
+    softwareVersion: pkg.version,
+    author: authorPublisher,
+    creator: authorPublisher,
+    publisher: organizationSchema,
+    offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "EUR",
+    },
+    browserRequirements: "Requires JavaScript. Requires HTML5.",
+    inLanguage: "es-ES",
+};
+
+const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: title,
+    description: description,
+    inLanguage: "es-ES",
+    url: fullUrl,
+    author: authorPublisher,
+    publisher: organizationSchema,
+    ...(howToSteps && {
+        step: howToSteps.map((step, index) => ({
+            "@type": "HowToStep",
+            position: index + 1,
+            name: step.name,
+            text: step.text,
+            ...(step.url && { url: step.url }),
+            ...(step.image && { image: step.image }),
+        })),
+    }),
+};
+
+const faqSchema = faqItems
+    ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqItems.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                  "@type": "Answer",
+                  text: item.answer,
+              },
+          })),
+      }
+    : null;
+
+const isCalculator =
+    title.toLowerCase().includes("calculadora") ||
+    title.toLowerCase().includes("simulador") ||
+    title.toLowerCase().includes("marcador") ||
+    title.toLowerCase().includes("generador");
+
+const mainSchema = isCalculator ? webAppSchema : howToSchema;
+
+const schemas = [breadcrumbSchema, mainSchema, ...(faqSchema ? [faqSchema] : [])];
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schemas)} />

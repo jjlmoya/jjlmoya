@@ -3,6 +3,43 @@ import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import MouseTester from "../../components/utilidades/mouse-test/MouseTester.astro";
 import MouseTesterSEO from "../../components/utilidades/mouse-test/MouseTesterSEO.astro";
 import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+const faqItems = [
+    {
+        question: "¿Qué es el Polling Rate de un ratón?",
+        answer: "Es la frecuencia con la que el ratón informa de su posición al ordenador, medida en Hz. Un polling rate de 1000Hz significa que el ratón envía datos cada 1 milisegundo, proporcionando un movimiento mucho más fluido.",
+    },
+    {
+        question: "¿Por qué mi test no llega a 1000Hz constantes?",
+        answer: "El navegador solo puede medir el polling rate cuando el ratón está en movimiento. Si lo mueves despacio o tu CPU está muy ocupada, la medición puede fluctuar. Mueve el ratón en círculos rápidos para obtener el pico máximo real.",
+    },
+    {
+        question: "¿Es mejor tener el polling rate más alto posible?",
+        answer: "Generalmente sí para gaming (1000Hz o más), ya que reduce el lag. Sin embargo, tasas extremadamente altas (4000Hz o 8000Hz) consumen muchos recursos de CPU y no todos los juegos están optimizados para ello.",
+    },
+    {
+        question: "¿Cómo afecta la tasa de refresco del monitor al ratón?",
+        answer: "Si tienes un monitor de 144Hz o 240Hz, un polling rate bajo (125Hz) hará que el puntero se vea 'a saltos'. Para monitores de alta frecuencia, es imprescindible usar al menos 500Hz o 1000Hz.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Preparar el área de test",
+        text: "Sitúa el cursor dentro de la zona de captura de la herramienta.",
+    },
+    {
+        name: "Mover el ratón rápidamente",
+        text: "Realiza movimientos circulares rápidos y amplios. La herramienta calculará los intervalos entre cada evento 'mousemove' enviado por el hardware.",
+    },
+    {
+        name: "Observar el gráfico de estabilidad",
+        text: "Revisa si la línea de Hz es constante o si tiene caídas bruscas, lo que podría indicar interferencias en ratones inalámbricos o problemas de CPU.",
+    },
+    {
+        name: "Analizar el tiempo de respuesta",
+        text: "Verifica el 'Delay' medio en milisegundos. Un buen ratón gaming debe mantenerse cerca de 1ms de latencia media.",
+    },
+];
 ---
 
 <LayoutUtility
@@ -10,8 +47,9 @@ import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
     description="Comprueba los Hz reales de tu ratón. Verifica si tu mouse gaming funciona a 1000Hz o más con nuestra herramienta profesional."
     image="/images/utilities/mouse.png"
     gradientFrom="from-emerald-100"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
 >
-    
     <div slot="header">
         <UtilityHeader
             titleHighlight="ratón"
@@ -22,10 +60,8 @@ import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
         />
     </div>
 
-    
     <MouseTester />
 
-    
     <div slot="seo">
         <MouseTesterSEO />
     </div>

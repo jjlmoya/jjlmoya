@@ -3,6 +3,43 @@ import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import KeyCodeVisualizer from "../../components/utilidades/keycode/KeyCodeVisualizer.astro";
 import KeyCodeSEO from "../../components/utilidades/keycode/KeyCodeSEO.astro";
 import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+const faqItems = [
+    {
+        question: "¿Cuál es la diferencia entre event.key y event.code?",
+        answer: "event.key devuelve el valor del carácter impreso (como 'A' o 'a'), mientras que event.code representa la posición física de la tecla en el teclado (como 'KeyA'), independientemente del idioma o estado de las mayúsculas.",
+    },
+    {
+        question: "¿Detecta combinaciones de teclas con modificadores?",
+        answer: "Sí. El visualizador marca en tiempo real si las teclas Ctrl, Alt, Shift o Meta (Cmd en Mac / Windows en PC) están activas durante el evento de teclado.",
+    },
+    {
+        question: "¿Es compatible con teclados internacionales?",
+        answer: "Totalmente. Al mostrar tanto el valor simbólico como el código físico, es la herramienta ideal para depurar comportamientos de teclado en diferentes distribuciones de idiomas.",
+    },
+    {
+        question: "¿Por qué `keyCode` aparece como obsoleto?",
+        answer: "El estándar moderno de la W3C recomienda usar `key` y `code`. `keyCode` está en desuso porque los valores numéricos variaban entre navegadores y no eran consistentes internacionalmente.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Enfocar la ventana",
+        text: "Haz clic en cualquier parte de la herramienta para asegurarte de que el navegador capture los eventos de teclado.",
+    },
+    {
+        name: "Presionar una tecla",
+        text: "Pulsa la tecla física cuya información necesites consultar. Los datos aparecerán instantáneamente en pantalla.",
+    },
+    {
+        name: "Analizar las propiedades",
+        text: "Revisa los valores de 'key', 'code', 'which' y los modificadores activos en la tabla de resultados.",
+    },
+    {
+        name: "Copiar el valor",
+        text: "Copia el nombre exacto de la tecla para usarlo directamente en tus manejadores de eventos (event listeners) de JS.",
+    },
+];
 ---
 
 <LayoutUtility
@@ -10,8 +47,9 @@ import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
     description="La guía definitiva de códigos de teclas. Muestra event.key, event.code y los modificadores en tiempo real. Resuelve tu key mapping en segundos."
     image="/images/utilities/keycode.webp"
     gradientFrom="from-violet-100"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
 >
-    
     <div slot="header">
         <UtilityHeader
             titleHighlight="KeyCode"
@@ -23,10 +61,8 @@ import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
         />
     </div>
 
-    
     <KeyCodeVisualizer />
 
-    
     <div slot="seo">
         <KeyCodeSEO />
     </div>
