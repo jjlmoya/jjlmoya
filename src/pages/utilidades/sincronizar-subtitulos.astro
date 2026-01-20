@@ -3,6 +3,43 @@ import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
 import SrtResync from "../../components/utilidades/srt-resync/SrtResync.astro";
 import SrtResyncSEO from "../../components/utilidades/srt-resync/SrtResyncSEO.astro";
+const faqItems = [
+    {
+        question: "¿Qué es un archivo SRT?",
+        answer: "SRT (SubRip Text) es el formato de subtítulos más común. Es un archivo de texto simple que contiene el número de secuencia, los tiempos de inicio y fin (en formato HH:MM:SS,ms) y el texto del subtítulo.",
+    },
+    {
+        question: "¿Cómo sé cuánto tiempo debo adelantar o retrasar?",
+        answer: "Reproduce el video y fíjate en el momento exacto en que se escucha la primera frase. Resta ese tiempo al tiempo que aparece en el subtítulo original; la diferencia es el desfase (offset) que debes aplicar.",
+    },
+    {
+        question: "¿Puedo sincronizar subtítulos de películas completas?",
+        answer: "Sí, nuestra herramienta aplica el ajuste de tiempo a todas las marcas temporales del archivo de forma proporcional, asegurando que si corriges el inicio, el resto del archivo se desplace correctamente.",
+    },
+    {
+        question: "¿Qué pasa si mis subtítulos se van desfasando poco a poco?",
+        answer: "Eso suele ocurrir por una diferencia en los FPS (fotogramas por segundo) entre el video y el subtítulo. Nuestra herramienta permite ajustes constantes de tiempo, pero si el desfase es progresivo, podrías necesitar un cambio de tasa de frames (frame rate conversion).",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Cargar el archivo SRT",
+        text: "Selecciona tu archivo de subtítulos desde tu ordenador o arrástralo directamente a la zona de carga.",
+    },
+    {
+        name: "Establecer el tiempo de desfase",
+        text: "Introduce los milisegundos o segundos que quieres sumar (adelantar) o restar (retrasar) a los tiempos actuales.",
+    },
+    {
+        name: "Previsualizar los cambios",
+        text: "Revisa cómo quedarían las primeras líneas del archivo con el nuevo ajuste aplicado.",
+    },
+    {
+        name: "Descargar el nuevo archivo",
+        text: "Genera y descarga el archivo SRT ya sincronizado listo para usar en tu reproductor de video favorito.",
+    },
+];
 ---
 
 <LayoutUtility
@@ -10,8 +47,9 @@ import SrtResyncSEO from "../../components/utilidades/srt-resync/SrtResyncSEO.as
     description="Herramienta gratuita para sincronizar subtítulos SRT. Adelanta o retrasa los tiempos de tus subtítulos en segundos o milisegundos fácilmente."
     image="/images/utilities/srt-resync.webp"
     gradientFrom="from-cyan-100"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
 >
-    
     <div slot="header">
         <UtilityHeader
             titleHighlight="Sincronizador"
@@ -23,10 +61,8 @@ import SrtResyncSEO from "../../components/utilidades/srt-resync/SrtResyncSEO.as
         />
     </div>
 
-    
     <SrtResync />
 
-    
     <div slot="seo">
         <SrtResyncSEO />
     </div>

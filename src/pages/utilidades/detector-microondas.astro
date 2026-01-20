@@ -3,6 +3,43 @@ import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
 import MicrowaveDetector from "../../components/utilidades/microwave-detector/MicrowaveDetector.astro";
 import MicrowaveDetectorSEO from "../../components/utilidades/microwave-detector/MicrowaveDetectorSEO.astro";
+const faqItems = [
+    {
+        question: "¿Cómo puede una web detectar mi microondas?",
+        answer: "No usamos sensores mágicos, sino la latencia de red. Tanto el WiFi de 2.4GHz como los hornos microondas operan en la misma frecuencia (aprox. 2450 MHz). Si el blindaje del microondas falla, genera 'ruido' que colisiona con el WiFi, aumentando drásticamente la latencia (ping).",
+    },
+    {
+        question: "¿Es peligroso que mi microondas sufra fugas?",
+        answer: "Una pequeña interferencia en el WiFi es normal y no implica un riesgo inmediato para la salud, ya que la potencia decae rápido con la distancia. Sin embargo, una fuga masiva indica un mal sellado de la puerta o de la rejilla, lo cual debería revisarse por seguridad técnica.",
+    },
+    {
+        question: "¿Por qué el test no funciona con WiFi de 5GHz?",
+        answer: "Porque el WiFi de 5GHz opera en una banda de frecuencia mucho más alta que un microondas. Para que el test sea efectivo, tu dispositivo debe estar conectado a la red de 2.4GHz del router.",
+    },
+    {
+        question: "¿Qué significan los picos de latencia en el gráfico?",
+        answer: "Los picos constantes durante el funcionamiento del microondas sugieren que la señal electromagnética está 'escapando' y saturando el aire, impidiendo que los paquetes de datos WiFi lleguen a tiempo.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Conectar a red WiFi de 2.4GHz",
+        text: "Asegúrate de que tu móvil o portátil NO esté conectado a la banda de 5GHz para que la interferencia sea medible.",
+    },
+    {
+        name: "Iniciar el test de latencia base",
+        text: "Pulsa el botón de inicio con el microondas apagado para establecer una línea base de conexión estable.",
+    },
+    {
+        name: "Encender el microondas",
+        text: "Pon a calentar un vaso de agua durante 30-60 segundos y sitúate cerca del electrodoméstico con tu dispositivo.",
+    },
+    {
+        name: "Analizar el gráfico en tiempo real",
+        text: "Observa si la latencia sube por encima de los 100-200ms o si se producen pérdidas de paquetes mientras el aparato está en funcionamiento.",
+    },
+];
 ---
 
 <LayoutUtility
@@ -10,8 +47,9 @@ import MicrowaveDetectorSEO from "../../components/utilidades/microwave-detector
     description="Analiza si tu microondas pierde radiación midiendo la interferencia en tiempo real sobre tu red WiFi. Herramienta científica de seguridad."
     image="/images/utilities/detector-microondas.png"
     gradientFrom="from-slate-900"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
 >
-    
     <div slot="header">
         <UtilityHeader
             titleHighlight="Detector"
