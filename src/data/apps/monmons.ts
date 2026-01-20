@@ -92,8 +92,18 @@ export const monmons: Application = {
         },
         {
             "title": "Arte Pixel Art",
-            "text": "Estética retro-moderna con ilustraciones cuidadas y  criaturas vibrantes.",
+            "text": "Estética retro-moderna con ilustraciones cuidadas y criaturas vibrantes.",
             "icon": "mdi:palette"
+        }
+    ],
+    "highlights": [
+        {
+            "label": "Visual",
+            "value": "Pixel Art"
+        },
+        {
+            "label": "Combate",
+            "value": "Elemental"
         }
     ]
 };
