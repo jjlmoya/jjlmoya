@@ -1,85 +1,256 @@
 ---
 import { Icon } from "astro-icon/components";
+import { apps } from "../../data/apps/index";
 
 interface Props {
+    appSlug?: string;
     android?: string;
     ios?: string;
 }
 
-const { android, ios } = Astro.props;
+const { appSlug, android: propAndroid, ios: propIos } = Astro.props;
 
-if (!android && !ios) {
-    return null;
-}
+const app = appSlug ? apps.find((a) => a.slug === appSlug) : null;
+
+const isGeneric = !appSlug && !propAndroid && !propIos;
+const android =
+    propAndroid ||
+    app?.stores.googlePlay ||
+    (isGeneric ? "https://play.google.com/store/apps/developer?id=GameBob+Games" : "");
+const ios = propIos || app?.stores.appStore;
+
+const primaryColor = app?.theme.primary || "#6366f1";
+
+const isPizza = appSlug === "pizzametrics";
+
+const theme = isGeneric
+    ? {
+          bg: "bg-slate-50 dark:bg-zinc-950",
+          text: "text-slate-900 dark:text-white",
+          heading: "text-slate-900 dark:text-white",
+          subtitle: "text-slate-500 dark:text-zinc-400",
+          border: "border-slate-200 dark:border-zinc-800",
+          badge: "bg-indigo-50 text-indigo-600 border-indigo-100 dark:bg-indigo-950/30 dark:text-indigo-400 dark:border-indigo-900/50",
+          shine: "via-indigo-500/5",
+          glowOpacity: "opacity-5",
+          backdrop: "bg-white/40 dark:bg-black/40",
+          btnText: "text-white",
+          btnSecondaryBg: "bg-slate-900 text-white hover:bg-black dark:bg-white dark:text-black",
+      }
+    : isPizza
+      ? {
+            bg: "bg-white",
+            text: "text-zinc-900",
+            heading: "text-red-600",
+            subtitle: "text-zinc-500",
+            border: "border-red-500/20",
+            badge: "bg-red-50 text-red-700 border-red-200",
+            shine: "via-red-500/10",
+            glowOpacity: "opacity-10",
+            backdrop: "bg-white/60",
+            btnText: "text-white",
+            btnSecondaryBg: "bg-zinc-900 text-white hover:bg-black",
+        }
+      : {
+            bg: "bg-slate-900 dark:bg-black",
+            text: "text-white",
+            heading: "text-white",
+            subtitle: "text-white/50",
+            border: "border-white/10",
+            badge: "bg-white/10 text-white border-white/10",
+            shine: "via-white/5",
+            glowOpacity: "opacity-20",
+            backdrop: "bg-black/40",
+            btnText: "text-white",
+            btnSecondaryBg: "bg-white text-black hover:bg-zinc-100",
+        };
 ---
 
 <div
-    class="w-full bg-gradient-to-r from-slate-900 to-slate-800 text-white py-3 px-4 shadow-lg mb-8 rounded-xl overflow-hidden relative group"
+    class={`w-full ${theme.bg} pt-6 pb-2 md:pt-5 md:pb-2.5 px-4 sm:px-6 relative overflow-hidden group border-b ${theme.border} shadow-2xl transition-colors duration-500`}
+    style={`--app-primary: ${primaryColor}`}
 >
-    <div
-        class="absolute top-0 left-0 w-full h-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-    >
+    <div class="absolute inset-0 pointer-events-none overflow-hidden text-black">
+        <div
+            class={`absolute top-[-50%] left-[-10%] w-[80%] h-[200%] ${theme.glowOpacity} blur-[80px] rounded-full animate-pulse-slow`}
+            style={`background: var(--app-primary);`}
+        >
+        </div>
+        <div
+            class={`absolute bottom-[-50%] right-[-10%] w-[60%] h-[180%] ${isPizza ? "bg-red-500/5" : "bg-blue-500/20"} blur-[100px] rounded-full animate-pulse-slow-delay`}
+        >
+        </div>
     </div>
 
+    <div class={`absolute inset-0 ${theme.backdrop} backdrop-blur-md`}></div>
+
     <div
-        class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10"
+        class="max-w-7xl md:max-w-4xl mx-auto flex flex-row items-center justify-start md:justify-center gap-3 sm:gap-6 relative z-10"
     >
-        <div class="flex items-center gap-3">
-            <div class="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
-                <Icon name="mdi:cellphone" class="w-6 h-6 text-emerald-400" />
-            </div>
-            <div class="text-center sm:text-left">
-                <h3 class="font-bold text-sm sm:text-base text-slate-100">
-                    ¿Prefieres la versión App?
-                </h3>
-                <p class="text-xs text-slate-400">
-                    Disfruta de una experiencia nativa, sin conexión y con más funciones.
-                </p>
-            </div>
+        <div class="relative group/icon flex-shrink-0 flex -space-x-5 sm:-space-x-6">
+            {
+                isGeneric ? (
+                    apps.slice(0, 3).map((a, i) => (
+                        <div
+                            class="relative"
+                            style={`z-index: ${10 - i}; transform: translateY(${(i - 1) * 4}px)`}
+                        >
+                            <img
+                                src={a.media.icon}
+                                alt=""
+                                class="w-6 h-6 sm:w-8 sm:h-8 rounded-lg shadow-lg border border-white/20 dark:border-white/10"
+                            />
+                        </div>
+                    ))
+                ) : app ? (
+                    <div class="relative">
+                        <div
+                            class={`absolute -inset-1 bg-[var(--app-primary)] ${isPizza ? "opacity-10" : "opacity-30"} blur-md rounded-xl group-hover/icon:opacity-50 transition-opacity duration-500`}
+                        />
+                        <img
+                            src={app.media.icon}
+                            alt={app.title}
+                            class={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10 shadow-lg border ${isPizza ? "border-red-500/10" : "border-white/20"} transition-transform duration-500 group-hover/icon:scale-105`}
+                        />
+                    </div>
+                ) : (
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 p-2.5 bg-white/10 rounded-xl backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                        <Icon name="mdi:cellphone" class="w-full h-full text-indigo-400" />
+                    </div>
+                )
+            }
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="min-w-0 py-0.5 ml-2 sm:ml-0">
+            <div class="flex items-center gap-2 mb-0.5">
+                <h3
+                    class={`font-black text-[10px] sm:text-sm tracking-tight ${theme.heading} leading-none sm:truncate`}
+                >
+                    {
+                        isGeneric
+                            ? "Mis mejores utilidades, ahora en tu móvil."
+                            : app
+                              ? `¡${app.title} ahora es una App!`
+                              : "¿Prefieres la versión App?"
+                    }
+                </h3>
+                {
+                    !isGeneric && (
+                        <span
+                            class={`inline-flex items-center px-1 py-0.5 rounded text-[6px] sm:text-[8px] font-black uppercase tracking-widest ${theme.badge} border backdrop-blur-md whitespace-nowrap`}
+                        >
+                            Nativa
+                        </span>
+                    )
+                }
+            </div>
+            <p
+                class={`text-[9px] sm:text-xs ${theme.subtitle} font-medium leading-tight line-clamp-2 max-w-sm sm:max-w-xl`}
+            >
+                {
+                    isGeneric
+                        ? "Accede a todas mis herramientas y proyectos de forma rápida, optimizada y en un solo lugar."
+                        : appSlug === "pizzametrics"
+                          ? "¡Domina tu masa! Esta utilidad ahora es una App con muchas más funciones y precisión."
+                          : appSlug === "galleta-de-la-fortuna"
+                            ? "Tu destino te espera. Esta utilidad ahora es una App con galletas raras y más funciones."
+                            : "Esta utilidad ahora es una App con muchas más funciones, ¡descárgala ahora!"
+                }
+            </p>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             {
                 android && (
                     <a
                         href={android}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-all duration-300 shadow-lg shadow-emerald-900/20 hover:scale-105 hover:shadow-emerald-900/40 text-xs sm:text-sm font-medium group/btn"
+                        class="flex items-center justify-center bg-black text-white border border-white/20 hover:bg-zinc-900 transition-colors w-9 h-9 rounded-full sm:w-auto sm:h-[42px] sm:px-4 sm:rounded-lg sm:gap-2"
+                        title="Disponible en Google Play"
                     >
-                        <Icon
-                            name="mdi:google-play"
-                            class="w-5 h-5 group-hover/btn:animate-bounce"
-                        />
-                        <span>Google Play</span>
+                        <Icon name="mdi:google-play" class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                        <div class="hidden sm:flex flex-col items-start justify-center leading-none">
+                            <span class="text-[10px] uppercase font-medium opacity-80">
+                                Disponible en
+                            </span>
+                            <span class="text-sm font-bold tracking-tight">Google Play</span>
+                        </div>
                     </a>
                 )
             }
             {
-                ios && (
+                ios ? (
                     <a
                         href={ios}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-white text-slate-900 rounded-lg transition-all duration-300 shadow-lg shadow-white/10 hover:scale-105 hover:shadow-white/20 text-xs sm:text-sm font-medium"
+                        class="flex items-center justify-center bg-black text-white border border-white/20 hover:bg-zinc-900 transition-colors w-9 h-9 rounded-full sm:w-auto sm:h-[42px] sm:px-4 sm:rounded-lg sm:gap-2"
+                        title="Consíguelo en el App Store"
                     >
-                        <Icon name="mdi:apple" class="w-5 h-5" />
-                        <span>App Store</span>
+                        <Icon name="mdi:apple" class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                        <div class="hidden sm:flex flex-col items-start justify-center leading-none">
+                            <span class="text-[10px] bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 font-medium">
+                                Consíguelo en el
+                            </span>
+                            <span class="text-sm font-bold tracking-tight">App Store</span>
+                        </div>
                     </a>
-                )
-            }
-            {
-                !ios && (
-                    <button
-                        disabled
-                        class="flex items-center gap-2 px-4 py-2 bg-slate-700/50 text-slate-500 rounded-lg cursor-not-allowed text-xs sm:text-sm font-medium border border-slate-700"
-                        title="Próximamente en iOS"
+                ) : (
+                    <div
+                        class="flex items-center justify-center bg-black text-white border border-white/5 cursor-not-allowed w-9 h-9 rounded-full sm:w-auto sm:h-[42px] sm:px-4 sm:rounded-lg sm:gap-2 opacity-10 grayscale"
+                        title="Próximamente en el App Store"
                     >
-                        <Icon name="mdi:apple" class="w-5 h-5 opacity-50" />
-                        <span>Próximamente</span>
-                    </button>
+                        <Icon name="mdi:apple" class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                        <div class="hidden sm:flex flex-col items-start justify-center leading-none">
+                            <span class="text-[10px] font-medium opacity-40">Consíguelo en el</span>
+                            <span class="text-sm font-bold tracking-tight opacity-40">
+                                App Store
+                            </span>
+                        </div>
+                    </div>
                 )
             }
         </div>
     </div>
 </div>
+
+<style>
+    @keyframes pulse-slow {
+        0%,
+        100% {
+            opacity: 0.15;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.25;
+            transform: scale(1.1);
+        }
+    }
+    .animate-pulse-slow {
+        animation: pulse-slow 8s ease-in-out infinite;
+    }
+    .animate-pulse-slow-delay {
+        animation: pulse-slow 8s ease-in-out infinite 4s;
+    }
+    @keyframes shine {
+        0% {
+            transform: translateX(-100%) skewX(-20deg);
+        }
+        20%,
+        100% {
+            transform: translateX(200%) skewX(-20deg);
+        }
+    }
+    .animate-shine {
+        animation: shine 5s infinite;
+    }
+    a {
+        text-decoration: none;
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+    }
+    a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.4);
+    }
+</style>

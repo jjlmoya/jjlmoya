@@ -32,6 +32,7 @@ interface Props {
     gradientFrom?: string;
     gradientTo?: string;
     appLinks?: AppLinks;
+    appSlug?: string;
     faqItems?: FAQItem[];
     howToSteps?: HowToStep[];
 }
@@ -44,6 +45,7 @@ const {
     gradientFrom = "from-slate-100",
     gradientTo = "to-white",
     appLinks,
+    appSlug,
     faqItems,
     howToSteps,
 } = Astro.props;
@@ -54,6 +56,7 @@ const normalize = (path: string) => path.replace(/\/+$/, "");
 const targetPath = normalize(currentPath);
 
 let category = propCategory;
+let sectionTheme;
 
 if (!category) {
     const foundSection = sections.find((section) =>
@@ -65,7 +68,7 @@ if (!category) {
 }
 ---
 
-<Layout title={title} description={description} image={image}>
+<Layout title={title} description={description} image={image} fullWidth={true}>
     <UtilityStructuredData
         title={title}
         description={description}
@@ -75,15 +78,18 @@ if (!category) {
         howToSteps={howToSteps}
         slot="head"
     />
-    <div class="relative min-h-screen pt-16 overflow-x-clip">
+    <div class="relative min-h-screen overflow-x-clip">
         <div
             class={`absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${gradientFrom} via-white ${gradientTo} dark:from-slate-900/40 dark:via-zinc-950 dark:to-black -z-10`}
         >
         </div>
 
-        <div class="max-w-6xl mx-auto px-4 sm:px-6">
-            <div class="mb-12 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                {appLinks && <AppLinksBanner android={appLinks.android} ios={appLinks.ios} />}
+        <div class="sticky top-[60px] z-40 transition-all duration-300 w-full">
+            <AppLinksBanner appSlug={appSlug} android={appLinks?.android} ios={appLinks?.ios} />
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 relative focus:outline-none pt-12 sm:pt-20">
+            <div class="text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
                 <BackToUtilities class="mb-8" />
                 <slot name="header">
                     <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6">
@@ -97,7 +103,7 @@ if (!category) {
                 </slot>
             </div>
 
-            <div>
+            <div class="mt-12">
                 <slot />
             </div>
 
