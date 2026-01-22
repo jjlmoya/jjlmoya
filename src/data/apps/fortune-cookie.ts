@@ -61,7 +61,7 @@ export const fortuneCookie: Application = {
         {
             title: "El Brillo del Destino",
             text: "Papeles de Oro, Jade y Negro. No son simples mensajes; son los trofeos de tu constancia y tu intuición.",
-            icon: "mdi:shimmer"
+            icon: "mdi:sparkles"
         },
         {
             title: "La Racha Sagrada",
@@ -71,7 +71,7 @@ export const fortuneCookie: Application = {
         {
             title: "Un Solo Toque",
             text: "Una sola oportunidad al día. Ni una más. La escasez hace que cada descubrimiento sea legendario.",
-            icon: "mdi:touch-app"
+            icon: "mdi:gesture-tap"
         }
     ],
     features: [],

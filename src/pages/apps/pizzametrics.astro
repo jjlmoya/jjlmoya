@@ -1,0 +1,251 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+import { pizzametrics as app } from "../../data/apps/pizzametrics";
+import { Icon } from "astro-icon/components";
+
+const title = `${app.title} — ${app.tagline}`;
+---
+
+<AppLayout
+    title={title}
+    description={app.description}
+    image={app.media.icon}
+    color={app.theme.primary}
+    favicon={app.media.icon}
+    currentSlug={app.slug}
+>
+    <div
+        class="min-h-screen bg-[#FDFBF7] text-[#1A1C2C] selection:bg-[#E63946] selection:text-white overflow-x-hidden pt-20"
+        style={`--primary: ${app.theme.primary}; --accent: ${app.theme.accent};`}
+    >
+        {}
+        <div class="fixed inset-0 pointer-events-none opacity-[0.03]">
+            <div
+                class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/notebook.png')]"
+            >
+            </div>
+        </div>
+
+        {}
+        <section class="relative py-20 lg:py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+                    <div class="flex-1 text-center lg:text-left">
+                        <div
+                            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E63946]/5 border border-[#E63946]/10 mb-8"
+                        >
+                            <span class="w-2 h-2 rounded-full bg-[#E63946] animate-pulse"></span>
+                            <span
+                                class="text-xs font-black uppercase tracking-widest text-[#E63946]"
+                                >{app.category}</span
+                            >
+                        </div>
+
+                        <h1
+                            class="text-7xl md:text-8xl lg:text-[10rem] font-serif font-black tracking-tighter leading-[0.85] mb-8 text-[#E63946]"
+                        >
+                            {app.title}
+                        </h1>
+
+                        <p
+                            class="text-2xl md:text-4xl font-light text-slate-500 max-w-2xl mb-12 leading-tight italic"
+                        >
+                            {app.subtitle}
+                        </p>
+
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4 mb-12">
+                            {
+                                app.stores.googlePlay && (
+                                    <a
+                                        href={app.stores.googlePlay}
+                                        target="_blank"
+                                        class="piz-btn group"
+                                    >
+                                        <Icon name="mdi:google-play" class="w-5 h-5 mr-2" />
+                                        <span>Descargar para Android</span>
+                                    </a>
+                                )
+                            }
+                        </div>
+                    </div>
+
+                    <div class="lg:w-[450px] relative">
+                        <div class="absolute -inset-10 bg-[#E63946]/5 blur-3xl rounded-full"></div>
+                        <div
+                            class="relative rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white group"
+                        >
+                            <img
+                                src={app.media.screenshots[0]}
+                                alt="Pizzametrics App Screenshot"
+                                class="w-full h-auto transition-transform duration-1000 group-hover:scale-105"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {}
+        <div
+            class="bg-[#1A1C2C] py-6 overflow-hidden flex whitespace-nowrap border-y border-white/10"
+        >
+            <div class="flex animate-marquee gap-20 items-center">
+                {
+                    Array(10)
+                        .fill(0)
+                        .map(() => (
+                            <span class="text-white text-xs font-black uppercase tracking-[0.4em] opacity-40">
+                                harina • agua • sal • levadura • tiempo • pasión • pizzametrics •
+                            </span>
+                        ))
+                }
+            </div>
+        </div>
+
+        {}
+        <section class="py-32 px-6 bg-white relative overflow-hidden">
+            <div class="max-w-4xl mx-auto">
+                <span
+                    class="text-[10px] font-black uppercase tracking-[0.5em] text-[#2D6A4F] mb-12 block"
+                    >{app.concept.label}</span
+                >
+                <h2
+                    class="text-5xl md:text-8xl font-serif font-black mb-12 leading-none text-[#1A1C2C]"
+                >
+                    {app.concept.main}<br />
+                    <span class="text-[#E63946] italic font-light">{app.concept.highlighted}</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 mt-20">
+                    <p class="text-xl md:text-2xl font-light leading-relaxed text-slate-600">
+                        {app.philosophy}
+                    </p>
+                    <div class="flex flex-col justify-end">
+                        {
+                            app.quote && (
+                                <blockquote class="italic text-3xl font-serif text-[#1A1C2C]/40 border-l-4 border-[#2D6A4F] pl-8">
+                                    "{app.quote.text}"
+                                </blockquote>
+                            )
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl font-black uppercase tracking-tighter mb-20 text-center">
+                    Métricas de Precisión
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {
+                        app.features.map((feature) => (
+                            <div class="p-10 bg-white border border-slate-100 rounded-[2rem] hover:shadow-xl transition-all duration-500 group">
+                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-8 group-hover:bg-[#E63946] group-hover:text-white transition-colors">
+                                    <Icon name={feature.icon} class="w-6 h-6" />
+                                </div>
+                                <h3 class="text-xl font-black uppercase tracking-tight mb-4">
+                                    {feature.title}
+                                </h3>
+                                <p class="text-slate-500 font-light leading-relaxed">
+                                    {feature.text}
+                                </p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-40 px-6 bg-[#E63946] text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <div
+                    class="absolute top-0 right-0 w-[600px] h-[600px] bg-white rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2"
+                >
+                </div>
+            </div>
+
+            <div class="max-w-5xl mx-auto flex flex-col items-center text-center relative z-10">
+                <h2 class="text-6xl md:text-9xl font-serif font-black tracking-tighter mb-12">
+                    {app.benefitsTitle.main}
+                    <span class="italic font-light opacity-60">{app.benefitsTitle.highlighted}</span
+                    >
+                </h2>
+
+                <div class="flex justify-center gap-8">
+                    {
+                        app.stores.googlePlay && (
+                            <a
+                                href={app.stores.googlePlay}
+                                target="_blank"
+                                class="piz-btn-white group"
+                            >
+                                <Icon name="mdi:google-play" class="w-6 h-6 mr-3" />
+                                <span class="text-xl font-bold italic font-serif">Google Play</span>
+                            </a>
+                        )
+                    }
+                </div>
+
+                <p class="mt-20 text-white/40 text-xs font-black uppercase tracking-[0.5em]">
+                    La ciencia detrás del cornicione perfecto.
+                </p>
+            </div>
+        </section>
+    </div>
+</AppLayout>
+
+<style>
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+    .animate-marquee {
+        animation: marquee 30s linear infinite;
+    }
+
+    .piz-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 1.25rem 2.5rem;
+        background: #1a1c2c;
+        color: white;
+        border-radius: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.8rem;
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .piz-btn:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 20px 40px -10px rgba(26, 28, 44, 0.3);
+    }
+
+    .piz-btn-white {
+        display: inline-flex;
+        align-items: center;
+        padding: 1.5rem 3.5rem;
+        background: white;
+        color: #e63946;
+        border-radius: 1rem;
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .piz-btn-white:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1,
+    h2,
+    h3,
+    blockquote {
+        font-family: "Playfair Display", serif;
+    }
+</style>

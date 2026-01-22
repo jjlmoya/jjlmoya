@@ -1,0 +1,234 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+import { monmons as app } from "../../data/apps/monmons";
+import { Icon } from "astro-icon/components";
+
+const title = `${app.title} — ${app.subtitle}`;
+---
+
+<AppLayout
+    title={title}
+    description={app.description}
+    image={app.media.icon}
+    color={app.theme.primary}
+    favicon={app.media.icon}
+    currentSlug={app.slug}
+>
+    <div
+        class="min-h-screen bg-[#F0F2E8] text-[#1E2510] selection:bg-[#7FB031] selection:text-white overflow-x-hidden pt-20"
+        style={`--primary: ${app.theme.primary}; --accent: ${app.theme.accent};`}
+    >
+        {}
+        <div class="fixed inset-0 pointer-events-none opacity-20">
+            <div
+                class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"
+            >
+            </div>
+            <div
+                class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-[#7FB031]/10 to-transparent"
+            >
+            </div>
+        </div>
+
+        {}
+        <section class="relative py-24 px-6">
+            <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+                <div
+                    class="relative mb-12 transform hover:rotate-3 transition-transform duration-500"
+                >
+                    <div class="absolute -inset-4 bg-[#7FB031] rounded-[2rem] opacity-20 blur-xl">
+                    </div>
+                    <img
+                        src={app.media.icon}
+                        alt={app.title}
+                        class="w-32 h-32 md:w-48 md:h-48 rounded-[2rem] relative z-10 shadow-xl border-4 border-white"
+                    />
+                </div>
+
+                <h1
+                    class="text-7xl md:text-9xl font-black tracking-tight mb-6 text-[#354021] flex flex-col md:flex-row items-center gap-4"
+                >
+                    {app.title}
+                    <span
+                        class="text-3xl md:text-5xl px-6 py-2 bg-[#7FB031] text-white rounded-2xl rotate-[-2deg] shadow-lg"
+                        >RPG</span
+                    >
+                </h1>
+
+                <p class="text-2xl md:text-4xl font-bold text-[#354021]/40 mb-12 italic">
+                    {app.subtitle}
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-6 mb-24">
+                    {
+                        !app.stores.googlePlay && (
+                            <div class="px-8 py-4 bg-white/50 border border-[#354021]/10 rounded-2xl text-[#354021]/40 font-black uppercase tracking-widest flex items-center gap-3">
+                                <Icon name="mdi:google-play" class="w-6 h-6" />
+                                <span>Próximamente</span>
+                            </div>
+                        )
+                    }
+                </div>
+
+                <div class="relative w-full max-w-sm mx-auto">
+                    <div class="absolute -inset-2 bg-[#354021] rounded-[3rem] opacity-5"></div>
+                    <div
+                        class="relative rounded-[2.5rem] overflow-hidden border-8 border-white shadow-2xl bg-[#DCE0CD]"
+                    >
+                        <img
+                            src={app.media.hero}
+                            alt="Monmons Gameplay"
+                            class="w-full h-auto max-h-[600px] object-top"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-32 px-6 bg-[#354021] text-[#F0F2E8] relative overflow-hidden">
+            <div
+                class="absolute top-0 right-0 w-1/2 h-full bg-[#7FB031]/10 -skew-x-12 translate-x-1/2"
+            >
+            </div>
+
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                    <div>
+                        <span
+                            class="text-[10px] font-black uppercase tracking-[0.4em] text-[#7FB031] mb-8 block"
+                            >{app.concept.label}</span
+                        >
+                        <h2 class="text-6xl md:text-[8rem] font-black leading-[0.85] mb-12 italic">
+                            {app.concept.main}<br />
+                            <span class="text-[#7FB031]">{app.concept.highlighted}</span>
+                        </h2>
+                        <p
+                            class="text-xl md:text-2xl font-light text-[#F0F2E8]/60 leading-relaxed mb-12 border-l-4 border-white/10 pl-8"
+                        >
+                            {app.philosophy}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {
+                            app.benefits.map((benefit) => (
+                                <div class="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all">
+                                    <Icon
+                                        name={benefit.icon}
+                                        class="w-10 h-10 text-[#7FB031] mb-6"
+                                    />
+                                    <h3 class="text-xl font-black uppercase mb-4 tracking-tighter">
+                                        {benefit.title}
+                                    </h3>
+                                    <p class="text-[#F0F2E8]/50 text-sm leading-relaxed">
+                                        {benefit.text}
+                                    </p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col lg:flex-row gap-20 items-center">
+                    <div class="lg:w-[400px]">
+                        <div
+                            class="bg-white p-4 rounded-[3rem] shadow-2xl transform -rotate-2 border border-black/5 overflow-hidden"
+                        >
+                            <img
+                                src={app.media.screenshots[0]}
+                                alt="Screenshot"
+                                class="w-full h-auto max-h-[500px] object-cover rounded-[2rem]"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex-1">
+                        <h2 class="text-5xl md:text-7xl font-black mb-12 text-[#354021]">
+                            {app.benefitsTitle.main}<br />
+                            <span class="italic font-light opacity-30"
+                                >{app.benefitsTitle.highlighted}</span
+                            >
+                        </h2>
+                        <p class="text-2xl font-light text-[#354021]/70 leading-relaxed mb-12">
+                            {app.description}
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-12">
+                            {
+                                app.highlights.map((h) => (
+                                    <div>
+                                        <span class="block text-xs font-black uppercase tracking-widest text-[#354021]/30 mb-2">
+                                            {h.label}
+                                        </span>
+                                        <span class="text-4xl font-black text-[#7FB031] leading-none uppercase">
+                                            {h.value}
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-32 px-6 bg-[#E8EBD8]">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {
+                        app.features.map((f) => (
+                            <div class="p-10 bg-white rounded-3xl border-b-8 border-black/5 hover:border-[#7FB031] transition-all hover:-translate-y-2 group">
+                                <div class="w-14 h-14 rounded-2xl bg-[#7FB031]/10 flex items-center justify-center text-[#7FB031] mb-8 group-hover:bg-[#7FB031] group-hover:text-white transition-colors">
+                                    <Icon name={f.icon} class="w-8 h-8" />
+                                </div>
+                                <h4 class="text-xl font-black uppercase mb-4 tracking-tighter">
+                                    {f.title}
+                                </h4>
+                                <p class="text-sm text-[#354021]/60 leading-relaxed">{f.text}</p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-48 px-6 text-center">
+            <div class="max-w-4xl mx-auto">
+                {
+                    app.quote && (
+                        <>
+                            <blockquote class="text-3xl md:text-5xl font-light italic mb-12 text-[#354021]/60">
+                                "{app.quote.text}"
+                            </blockquote>
+                            <cite class="block text-[#7FB031] font-black uppercase tracking-[0.5em] mb-20 not-italic">
+                                — {app.quote.author}
+                            </cite>
+                        </>
+                    )
+                }
+
+                <h3
+                    class="text-6xl md:text-[10rem] font-black tracking-tighter text-[#354021] mb-12 opacity-[0.05] leading-none select-none uppercase"
+                >
+                    Próximamente
+                </h3>
+
+                <div class="flex justify-center flex-wrap gap-8">
+                    <div
+                        class="px-12 py-6 border-4 border-[#354021] text-[#354021] font-black uppercase tracking-widest text-xl rounded-2xl cursor-default"
+                    >
+                        En desarrollo
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</AppLayout>

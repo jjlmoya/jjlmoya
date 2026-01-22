@@ -1,0 +1,275 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+import { colorbeat as app } from "../../data/apps/colorbeat";
+import { Icon } from "astro-icon/components";
+
+const title = `${app.title} — ${app.tagline}`;
+---
+
+<AppLayout
+    title={title}
+    description={app.description}
+    image={app.media.icon}
+    color={app.theme.primary}
+    favicon={app.media.icon}
+    currentSlug={app.slug}
+>
+    <div
+        class="min-h-screen bg-[#080B14] text-white selection:bg-[#00FF9F] selection:text-black overflow-x-hidden pt-20"
+        style={`--primary: ${app.theme.primary}; --accent: ${app.theme.accent};`}
+    >
+        {}
+        <div class="fixed inset-0 pointer-events-none">
+            <div
+                class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#00FF9F] opacity-[0.05] blur-[150px] rounded-full animate-pulse-slow"
+            >
+            </div>
+            <div
+                class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#9D4EDD] opacity-[0.05] blur-[150px] rounded-full animate-pulse-slow-delay"
+            >
+            </div>
+            <div
+                class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.2]"
+            >
+            </div>
+        </div>
+
+        {}
+        <section class="relative py-24 px-6 overflow-hidden">
+            <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+                <div class="relative mb-16">
+                    <div
+                        class="absolute inset-0 bg-[#00FF9F] blur-[100px] opacity-20 animate-pulse"
+                    >
+                    </div>
+                    <img
+                        src={app.media.icon}
+                        alt={app.title}
+                        class="w-32 h-32 md:w-48 md:h-48 rounded-[2rem] relative z-10 shadow-[0_0_50px_rgba(0,255,159,0.3)] border border-[#00FF9F]/20"
+                    />
+                </div>
+
+                <h1
+                    class="text-7xl md:text-9xl font-black tracking-tighter mb-8 italic uppercase relative"
+                >
+                    <span
+                        class="bg-gradient-to-r from-[#00FF9F] via-[#A0FFDE] to-[#00FF9F] bg-clip-text text-transparent"
+                    >
+                        {app.title}
+                    </span>
+                    <span class="absolute -inset-2 blur-2xl bg-[#00FF9F]/20 -z-10"></span>
+                </h1>
+
+                <p
+                    class="text-xl md:text-3xl font-bold tracking-widest text-[#00FF9F]/60 max-w-2xl mb-16 uppercase"
+                >
+                    {app.tagline}
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-6 mb-24">
+                    {
+                        app.stores.googlePlay && (
+                            <a href={app.stores.googlePlay} target="_blank" class="neon-btn group">
+                                <Icon
+                                    name="mdi:google-play"
+                                    class="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform"
+                                />
+                                <span>Play Store</span>
+                            </a>
+                        )
+                    }
+                </div>
+
+                <div class="relative w-full max-w-6xl">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-[#00FF9F] to-[#9D4EDD] rounded-[3rem] blur opacity-20"
+                    >
+                    </div>
+                    <div
+                        class="relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#080B14]"
+                    >
+                        <img src={app.media.hero} alt="Colorbeat Hero" class="w-full h-auto" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-32 px-6 relative overflow-hidden bg-black/50">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                <div>
+                    <span
+                        class="inline-block px-4 py-1 rounded-sm bg-[#00FF9F] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8"
+                        >{app.concept.label}</span
+                    >
+                    <h2
+                        class="text-6xl md:text-8xl font-black italic uppercase leading-[0.85] mb-12"
+                    >
+                        {app.concept.main}<br />
+                        <span class="text-[#00FF9F]">{app.concept.highlighted}</span>
+                    </h2>
+                    <p
+                        class="text-xl md:text-2xl font-light text-white/50 leading-relaxed mb-12 border-l-2 border-[#00FF9F] pl-8"
+                    >
+                        {app.philosophy}
+                    </p>
+
+                    {
+                        app.quote && (
+                            <blockquote class="text-2xl font-black italic text-[#00FF9F]/40 mb-12 uppercase tracking-tighter">
+                                "{app.quote.text}"
+                            </blockquote>
+                        )
+                    }
+
+                    <div class="flex gap-12">
+                        {
+                            app.highlights.map((h) => (
+                                <div>
+                                    <span class="block text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">
+                                        {h.label}
+                                    </span>
+                                    <span class="text-3xl font-black italic text-[#00FF9F] uppercase">
+                                        {h.value}
+                                    </span>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    {
+                        app.benefits.map((benefit, i) => (
+                            <div class="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#00FF9F]/10 hover:border-[#00FF9F]/50 transition-all group">
+                                <Icon
+                                    name={benefit.icon}
+                                    class="w-8 h-8 text-[#00FF9F] mb-6 group-hover:scale-110 transition-transform"
+                                />
+                                <h3 class="text-lg font-black uppercase mb-2 tracking-tight">
+                                    {benefit.title}
+                                </h3>
+                                <p class="text-xs text-white/40 leading-relaxed group-hover:text-white/70">
+                                    {benefit.text}
+                                </p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {
+                        app.features.map((f) => (
+                            <div class="p-10 bg-[#0C101A] rounded-[2rem] border border-white/5 relative group overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-[#00FF9F]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <Icon
+                                    name={f.icon}
+                                    class="w-10 h-10 text-white/20 group-hover:text-[#00FF9F] transition-colors mb-8"
+                                />
+                                <h4 class="text-xl font-black uppercase mb-4 relative z-10">
+                                    {f.title}
+                                </h4>
+                                <p class="text-sm text-white/40 leading-relaxed relative z-10">
+                                    {f.text}
+                                </p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        {}
+        <section class="py-48 px-6 text-center relative">
+            <div class="max-w-4xl mx-auto">
+                <h2
+                    class="text-7xl md:text-[12rem] font-black italic uppercase leading-none opacity-5 mb-12 select-none"
+                >
+                    GAME OVER
+                </h2>
+                <div class="relative z-10">
+                    <h3 class="text-4xl md:text-6xl font-black mb-12 uppercase italic">
+                        ¿Tienes el ritmo?
+                    </h3>
+                    {
+                        app.stores.googlePlay && (
+                            <a
+                                href={app.stores.googlePlay}
+                                target="_blank"
+                                class="neon-btn-large group"
+                            >
+                                <span>REINTENTAR EN PLAY STORE</span>
+                                <div class="absolute inset-0 bg-[#00FF9F] blur-2xl opacity-0 group-hover:opacity-30 transition-opacity" />
+                            </a>
+                        )
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</AppLayout>
+
+<style>
+    @keyframes pulse-slow {
+        0%,
+        100% {
+            opacity: 0.05;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.08;
+            transform: scale(1.1);
+        }
+    }
+    .animate-pulse-slow {
+        animation: pulse-slow 8s ease-in-out infinite;
+    }
+    .animate-pulse-slow-delay {
+        animation: pulse-slow 8s ease-in-out infinite 4s;
+    }
+
+    .neon-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: transparent;
+        color: #00ff9f;
+        border: 2px solid #00ff9f;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.75rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .neon-btn:hover {
+        background: #00ff9f;
+        color: black;
+        box-shadow: 0 0 30px #00ff9f;
+        transform: skew(-5deg);
+    }
+
+    .neon-btn-large {
+        display: inline-block;
+        padding: 2rem 4rem;
+        background: #00ff9f;
+        color: black;
+        font-weight: 950;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        font-size: 1.25rem;
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        position: relative;
+        font-style: italic;
+    }
+    .neon-btn-large:hover {
+        transform: scale(1.05) rotate(-2deg);
+        box-shadow: 0 0 100px rgba(0, 255, 159, 0.5);
+    }
+</style>
