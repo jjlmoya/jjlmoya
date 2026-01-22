@@ -1,0 +1,84 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+    videos: string[];
+    title?: string;
+    subtitle?: string;
+    color?: string;
+}
+
+const {
+    videos,
+    title = "App en Acción",
+    subtitle = "Descubre la experiencia a través de estos breves vistazos.",
+    color = "#B185FF",
+} = Astro.props;
+---
+
+<section class="py-32 px-6 relative overflow-hidden" style={`--accent-color: ${color}`}>
+    {}
+    <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[var(--accent-color)] opacity-[0.03] blur-[120px] pointer-events-none"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-24">
+            <h2 class="text-4xl md:text-6xl font-black tracking-tight mb-6 uppercase italic">
+                {title}
+            </h2>
+            <p class="text-xl text-white/40 font-light max-w-2xl mx-auto">{subtitle}</p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-12 lg:gap-24">
+            {
+                videos.map((id) => (
+                    <div class="relative group">
+                        {}
+                        <div class="relative w-[280px] md:w-[320px] aspect-[9/19] bg-[#0A0A0B] rounded-[3.5rem] p-3 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.05)] overflow-hidden transition-all duration-700 group-hover:scale-[1.03] group-hover:shadow-[0_60px_120px_-25px_rgba(0,0,0,1),0_0_0_1px_var(--accent-color)]">
+                            {}
+                            <div class="absolute -top-1/2 -left-1/2 w-full h-full bg-[var(--accent-color)] opacity-0 group-hover:opacity-[0.05] transition-opacity duration-1000 blur-[80px]" />
+
+                            {}
+                            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-7 bg-[#0A0A0B] rounded-b-[1.5rem] z-30 flex items-center justify-center pt-1 border-x border-b border-white/5">
+                                <div class="w-8 h-1 rounded-full bg-white/5" />
+                                <div class="w-2 h-2 rounded-full bg-white/5 ml-2" />
+                            </div>
+
+                            {}
+                            <div class="relative w-full h-full rounded-[2.8rem] overflow-hidden bg-black shadow-inner">
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&autohide=1&showinfo=0&controls=1&mute=1`}
+                                    title="YouTube video player"
+                                    class="absolute inset-0 w-full h-full opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                />
+                            </div>
+
+                            {}
+                            <div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/[0.02] via-transparent to-white/[0.05] z-20" />
+                        </div>
+
+                        {}
+                        <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                            <div class="flex items-center gap-3 px-5 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse shadow-[0_0_10px_var(--accent-color)]" />
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">
+                                    Showcase Clip
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    iframe {
+        border: none;
+    }
+</style>

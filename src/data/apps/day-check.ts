@@ -105,5 +105,9 @@ export const dayCheck: Application = {
             "label": "Precisión",
             "value": "Total"
         }
+    ],
+    "videos": [
+        "7yrHoCccCiw",
+        "BH3hQ2VlPDc"
     ]
 };

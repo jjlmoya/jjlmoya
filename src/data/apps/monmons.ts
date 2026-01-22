@@ -37,7 +37,7 @@ export const monmons: Application = {
         "highlighted": "Evoluciona y Domina."
     },
     "quote": {
-        "text": "La sencillez de su sistema de tipos contrasta con la profundidad de su progresión estratégica.",
+        "text": "Un tributo táctico a la era dorada del pixel art, donde cada evolución cuenta una historia de maestría.",
         "author": "jjlmoya"
     },
     "media": {

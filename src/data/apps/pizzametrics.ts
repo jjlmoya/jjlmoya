@@ -111,5 +111,9 @@ export const pizzametrics: Application = {
             "label": "Vera",
             "value": "Pizza"
         }
+    ],
+    "videos": [
+        "wDNPmCBqwm8",
+        "nCYASztgWLw"
     ]
 };

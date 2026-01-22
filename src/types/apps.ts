@@ -75,4 +75,5 @@ export interface Application {
     benefits: AppBenefit[];
     features: AppFeature[];
     highlights: AppHighlight[];
+    videos?: string[];
 }

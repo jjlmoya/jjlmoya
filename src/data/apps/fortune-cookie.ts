@@ -75,5 +75,9 @@ export const fortuneCookie: Application = {
         }
     ],
     features: [],
-    highlights: []
+    highlights: [],
+    videos: [
+        "_qaAX3q_IYQ",
+        "AcQFcZsEUT4"
+    ]
 };
