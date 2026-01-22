@@ -1,5 +1,5 @@
-import type { Entity, Vector2D, Obstacle } from '../Types';
-import { CANVAS_WIDTH, CANVAS_HEIGHT, STAGE_PADDING, MOVEMENT_DRAG } from '../Constants';
+import type { Entity, Vector2D, Obstacle } from "../Types";
+import { CANVAS_WIDTH, CANVAS_HEIGHT, STAGE_PADDING, MOVEMENT_DRAG } from "../Constants";
 
 export class PhysicsSystem {
     public static update(entity: Entity, obstacles: Obstacle[]): void {
@@ -8,12 +8,14 @@ export class PhysicsSystem {
         entity.position.x += entity.velocity.x;
         entity.position.y += entity.velocity.y;
 
-        if (entity.type === 'player' || entity.type === 'enemy') {
+        if (entity.type === "player" || entity.type === "enemy") {
             entity.velocity.x *= MOVEMENT_DRAG;
             entity.velocity.y *= MOVEMENT_DRAG;
 
-            const speed = Math.sqrt(entity.velocity.x * entity.velocity.x + entity.velocity.y * entity.velocity.y);
-            const maxSpeed = entity.type === 'player' ? 18 : 6;
+            const speed = Math.sqrt(
+                entity.velocity.x * entity.velocity.x + entity.velocity.y * entity.velocity.y
+            );
+            const maxSpeed = entity.type === "player" ? 18 : 6;
             if (speed > maxSpeed) {
                 entity.velocity.x = (entity.velocity.x / speed) * maxSpeed;
                 entity.velocity.y = (entity.velocity.y / speed) * maxSpeed;
@@ -24,10 +26,14 @@ export class PhysicsSystem {
         this.handleBounds(entity);
     }
 
-    private static handleObstacleCollisions(entity: Entity, prevPos: Vector2D, obstacles: Obstacle[]): void {
-        const isBullet = entity.type === 'bullet' || entity.type === 'enemy_bullet';
+    private static handleObstacleCollisions(
+        entity: Entity,
+        prevPos: Vector2D,
+        obstacles: Obstacle[]
+    ): void {
+        const isBullet = entity.type === "bullet" || entity.type === "enemy_bullet";
 
-        obstacles.forEach(obs => {
+        obstacles.forEach((obs) => {
             if (
                 entity.position.x < obs.x + obs.width &&
                 entity.position.x + entity.size > obs.x &&
@@ -67,11 +73,15 @@ export class PhysicsSystem {
         const minY = STAGE_PADDING;
         const maxY = CANVAS_HEIGHT - STAGE_PADDING - entity.size;
 
-        const isBullet = entity.type === 'bullet' || entity.type === 'enemy_bullet';
+        const isBullet = entity.type === "bullet" || entity.type === "enemy_bullet";
 
         if (isBullet) {
-            if (entity.position.x < minX || entity.position.x > maxX ||
-                entity.position.y < minY || entity.position.y > maxY) {
+            if (
+                entity.position.x < minX ||
+                entity.position.x > maxX ||
+                entity.position.y < minY ||
+                entity.position.y > maxY
+            ) {
                 entity.destroyed = true;
             }
             return;

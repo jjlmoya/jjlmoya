@@ -1,43 +1,76 @@
 ---
 interface Props {
-    side: 'left' | 'right';
+    side: "left" | "right";
 }
 const { side } = Astro.props;
 ---
 
-{side === 'left' ? (
-    <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-        
-        <div class="relative w-full h-full flex items-center justify-center">
-             
-             <svg viewBox="0 0 200 200" class="w-64 h-64 opacity-30 text-[#e7e5e4]">
-                <path d="M100,20 C100,20 120,50 110,100 C100,150 130,180 130,180" fill="none" stroke="currentColor" stroke-width="1" class="animate-grow" />
-                <path d="M90,25 C90,25 70,60 80,110 C90,160 60,190 60,190" fill="none" stroke="currentColor" stroke-width="1" class="animate-grow" style="animation-delay: 0.5s" />
-                <path d="M110,30 C110,30 140,60 130,120 C120,180 150,190 150,190" fill="none" stroke="currentColor" stroke-width="1" class="animate-grow" style="animation-delay: 1s" />
-             </svg>
-        </div>
-    </div>
-) : (
-    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-        <h3 class="font-serif text-3xl text-emerald-700/60 uppercase tracking-widest">El Cabello</h3>
-        
-        <div class="space-y-2">
-            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="hair-count">
-                0
+{
+    side === "left" ? (
+        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
+            <div class="relative w-full h-full flex items-center justify-center">
+                <svg viewBox="0 0 200 200" class="w-64 h-64 opacity-30 text-[#e7e5e4]">
+                    <path
+                        d="M100,20 C100,20 120,50 110,100 C100,150 130,180 130,180"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1"
+                        class="animate-grow"
+                    />
+                    <path
+                        d="M90,25 C90,25 70,60 80,110 C90,160 60,190 60,190"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1"
+                        class="animate-grow"
+                        style="animation-delay: 0.5s"
+                    />
+                    <path
+                        d="M110,30 C110,30 140,60 130,120 C120,180 150,190 150,190"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1"
+                        class="animate-grow"
+                        style="animation-delay: 1s"
+                    />
+                </svg>
             </div>
-            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Metros de Cabello</div>
         </div>
-        
-        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
-            LO CORTÁIS Y VUELVE A SALIR. UNA Y OTRA VEZ. PERSISTENTE.
-        </p>
-    </div>
-)}
+    ) : (
+        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+            <h3 class="font-serif text-3xl text-emerald-700/60 uppercase tracking-widest">
+                El Cabello
+            </h3>
+
+            <div class="space-y-2">
+                <div
+                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
+                    id="hair-count"
+                >
+                    0
+                </div>
+                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                    Metros de Cabello
+                </div>
+            </div>
+
+            <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+                LO CORTÁIS Y VUELVE A SALIR. UNA Y OTRA VEZ. PERSISTENTE.
+            </p>
+        </div>
+    )
+}
 
 <style>
     @keyframes grow {
-        0% { stroke-dasharray: 200; stroke-dashoffset: 200; }
-        100% { stroke-dasharray: 200; stroke-dashoffset: 0; }
+        0% {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+        }
+        100% {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 0;
+        }
     }
     .animate-grow {
         animation: grow 4s ease-out infinite;
@@ -47,14 +80,14 @@ const { side } = Astro.props;
 <script>
     import { calculateGrowthStats } from "../../../../utils/libraryLogic";
 
-    const countEl = document.getElementById('hair-count');
+    const countEl = document.getElementById("hair-count");
 
-    document.addEventListener('update-life-stats', (e: any) => {
+    document.addEventListener("update-life-stats", (e: any) => {
         const { stats } = e.detail;
         if (!countEl || !stats) return;
 
         const { hairMeters } = calculateGrowthStats(stats.daysAlive);
-        
-        countEl.innerText = hairMeters.toFixed(2).replace('.', ',');
+
+        countEl.innerText = hairMeters.toFixed(2).replace(".", ",");
     });
 </script>

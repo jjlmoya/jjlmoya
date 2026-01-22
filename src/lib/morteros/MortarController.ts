@@ -103,11 +103,9 @@ export class MortarController {
         const phase = VITRUVIAN_PHASES[this.state.phase];
         const result = MortarCalculator.calculate(this.state);
 
-        
         if (this.elements.phaseName) this.elements.phaseName.textContent = phase.name;
         if (this.elements.phaseDesc) this.elements.phaseDesc.textContent = phase.description;
 
-        
         this.elements.columnSections.forEach((section) => {
             const sectionPhase = section.getAttribute("data-phase");
             if (sectionPhase === this.state.phase) {
@@ -117,7 +115,6 @@ export class MortarController {
             }
         });
 
-        
         this.elements.materialBtns.forEach((btn) => {
             const material = btn.getAttribute("data-material");
             if (material === this.state.materialType) {
@@ -127,27 +124,21 @@ export class MortarController {
             }
         });
 
-        
         if (this.elements.calTypeContainer) {
             this.elements.calTypeContainer.style.display =
                 this.state.materialType === "cal" ? "block" : "none";
         }
 
-        
         if (this.elements.quantityValue)
             this.elements.quantityValue.textContent = this.state.materialKg.toString();
 
-        
         this.updateSackPile();
 
-        
         if (this.elements.coverageValue)
             this.elements.coverageValue.textContent = result.coverageArea.toFixed(1);
 
-        
         this.updateWallVisualization(result.coverageArea);
 
-        
         if (this.elements.complementaryLabel)
             this.elements.complementaryLabel.textContent = result.complementaryName;
         if (this.elements.complementaryValue)
@@ -156,13 +147,11 @@ export class MortarController {
             ).toString();
         if (this.elements.ratioDisplay) this.elements.ratioDisplay.textContent = result.ratioText;
 
-        
         if (this.elements.thicknessValue)
             this.elements.thicknessValue.textContent = `${phase.thickness} mm`;
         if (this.elements.layersValue)
             this.elements.layersValue.textContent = `${phase.layers} ${phase.layers === 1 ? "mano" : "manos"}`;
 
-        
         this.updateGranulometryCards();
     }
 
@@ -189,7 +178,6 @@ export class MortarController {
         const sackHeight = 50;
         const cols = 4;
 
-        
         for (let i = 0; i < fullSacks; i++) {
             const row = Math.floor(i / cols);
             const col = i % cols;
@@ -207,7 +195,6 @@ export class MortarController {
             `;
         }
 
-        
         if (hasHalfSack) {
             const i = fullSacks;
             const row = Math.floor(i / cols);

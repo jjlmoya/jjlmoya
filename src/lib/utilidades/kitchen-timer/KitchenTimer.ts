@@ -13,46 +13,43 @@ export class KitchenTimer extends EventTarget {
     private intervalId: number | null = null;
     isRunning: boolean = false;
 
-    
     private audioContext: AudioContext | null = null;
 
     constructor(element: HTMLElement) {
         super();
         this.element = element;
 
-        
         this.inputs = {
-            h: element.querySelector('.hours') as HTMLInputElement,
-            m: element.querySelector('.minutes') as HTMLInputElement,
-            s: element.querySelector('.seconds') as HTMLInputElement
+            h: element.querySelector(".hours") as HTMLInputElement,
+            m: element.querySelector(".minutes") as HTMLInputElement,
+            s: element.querySelector(".seconds") as HTMLInputElement,
         };
-        this.btnToggle = element.querySelector('.btn-toggle') as HTMLButtonElement;
-        this.btnReset = element.querySelector('.btn-reset') as HTMLButtonElement;
-        this.btnAdd1m = element.querySelector('.btn-add-1m') as HTMLButtonElement;
-        this.btnAdd5m = element.querySelector('.btn-add-5m') as HTMLButtonElement;
-        this.statusText = element.querySelector('.status-text') as HTMLElement;
-        this.timerNameInput = element.querySelector('.timer-name') as HTMLInputElement;
+        this.btnToggle = element.querySelector(".btn-toggle") as HTMLButtonElement;
+        this.btnReset = element.querySelector(".btn-reset") as HTMLButtonElement;
+        this.btnAdd1m = element.querySelector(".btn-add-1m") as HTMLButtonElement;
+        this.btnAdd5m = element.querySelector(".btn-add-5m") as HTMLButtonElement;
+        this.statusText = element.querySelector(".status-text") as HTMLElement;
+        this.timerNameInput = element.querySelector(".timer-name") as HTMLInputElement;
 
         this.initEvents();
-        this.validateInputs(); 
+        this.validateInputs();
     }
 
     private initEvents() {
-        this.btnToggle.addEventListener('click', () => this.toggle());
-        this.btnReset.addEventListener('click', () => this.reset());
-        this.btnAdd1m.addEventListener('click', () => this.addTime(60));
-        this.btnAdd5m.addEventListener('click', () => this.addTime(300));
+        this.btnToggle.addEventListener("click", () => this.toggle());
+        this.btnReset.addEventListener("click", () => this.reset());
+        this.btnAdd1m.addEventListener("click", () => this.addTime(60));
+        this.btnAdd5m.addEventListener("click", () => this.addTime(300));
 
-        Object.values(this.inputs).forEach(input => {
-            input.addEventListener('change', () => this.validateInputs());
-            input.addEventListener('input', () => {
+        Object.values(this.inputs).forEach((input) => {
+            input.addEventListener("change", () => this.validateInputs());
+            input.addEventListener("input", () => {
                 if (this.isRunning) this.pause();
                 this.checkStartButton();
             });
         });
 
-        
-        this.timerNameInput.addEventListener('input', () => {
+        this.timerNameInput.addEventListener("input", () => {
             this.dispatchUpdate();
         });
     }
@@ -61,7 +58,7 @@ export class KitchenTimer extends EventTarget {
         const h = parseInt(this.inputs.h.value) || 0;
         const m = parseInt(this.inputs.m.value) || 0;
         const s = parseInt(this.inputs.s.value) || 0;
-        return (h * 3600) + (m * 60) + s;
+        return h * 3600 + m * 60 + s;
     }
 
     private setDisplay(totalSec: number) {
@@ -69,9 +66,9 @@ export class KitchenTimer extends EventTarget {
         const m = Math.floor((totalSec % 3600) / 60);
         const s = totalSec % 60;
 
-        this.inputs.h.value = h.toString().padStart(2, '0');
-        this.inputs.m.value = m.toString().padStart(2, '0');
-        this.inputs.s.value = s.toString().padStart(2, '0');
+        this.inputs.h.value = h.toString().padStart(2, "0");
+        this.inputs.m.value = m.toString().padStart(2, "0");
+        this.inputs.s.value = s.toString().padStart(2, "0");
     }
 
     private validateInputs() {
@@ -110,7 +107,7 @@ export class KitchenTimer extends EventTarget {
         if (!this.audioContext) {
             this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         }
-        if (this.audioContext.state === 'suspended') {
+        if (this.audioContext.state === "suspended") {
             this.audioContext.resume();
         }
 
@@ -135,9 +132,14 @@ export class KitchenTimer extends EventTarget {
         this.remainingSeconds = 0;
         this.totalSeconds = 0;
         this.statusText.textContent = "Listo";
-        this.statusText.classList.remove("text-green-500", "text-red-600", "animate-pulse", "animate-bounce");
+        this.statusText.classList.remove(
+            "text-green-500",
+            "text-red-600",
+            "animate-pulse",
+            "animate-bounce"
+        );
         this.statusText.classList.add("text-orange-500");
-        this.element.classList.remove('ring-4', 'ring-red-500', 'bg-red-50', 'dark:bg-red-900/20');
+        this.element.classList.remove("ring-4", "ring-red-500", "bg-red-50", "dark:bg-red-900/20");
         this.dispatchUpdate();
     }
 
@@ -156,7 +158,7 @@ export class KitchenTimer extends EventTarget {
         this.playAlarm();
         this.statusText.textContent = "¡TIEMPO!";
         this.statusText.classList.add("text-red-600", "animate-bounce");
-        this.element.classList.add('ring-4', 'ring-red-500', 'bg-red-50', 'dark:bg-red-900/20');
+        this.element.classList.add("ring-4", "ring-red-500", "bg-red-50", "dark:bg-red-900/20");
 
         if ("Notification" in window && Notification.permission === "granted") {
             new Notification(`Temporizador Terminado de ${this.getName()}`);
@@ -174,7 +176,7 @@ export class KitchenTimer extends EventTarget {
             osc.connect(gain);
             gain.connect(this.audioContext!.destination);
 
-            osc.type = 'square';
+            osc.type = "square";
             osc.frequency.setValueAtTime(880, this.audioContext!.currentTime);
             osc.frequency.setValueAtTime(440, this.audioContext!.currentTime + 0.2);
             osc.frequency.setValueAtTime(880, this.audioContext!.currentTime + 0.4);
@@ -196,31 +198,34 @@ export class KitchenTimer extends EventTarget {
     }
 
     private updateUIState() {
-        const btnText = this.element.querySelector('.btn-toggle .btn-text');
+        const btnText = this.element.querySelector(".btn-toggle .btn-text");
         if (this.isRunning) {
-            this.element.querySelector('.icon-play')?.classList.add('hidden');
-            this.element.querySelector('.icon-pause')?.classList.remove('hidden');
-            if (btnText) btnText.textContent = 'Pausar';
-            this.element.querySelector('.btn-toggle')?.classList.replace('bg-orange-500', 'bg-slate-700');
+            this.element.querySelector(".icon-play")?.classList.add("hidden");
+            this.element.querySelector(".icon-pause")?.classList.remove("hidden");
+            if (btnText) btnText.textContent = "Pausar";
+            this.element
+                .querySelector(".btn-toggle")
+                ?.classList.replace("bg-orange-500", "bg-slate-700");
             this.statusText.textContent = "Contando...";
             this.statusText.classList.replace("text-orange-500", "text-green-500");
-            Object.values(this.inputs).forEach(i => i.disabled = true);
+            Object.values(this.inputs).forEach((i) => (i.disabled = true));
         } else {
-            this.element.querySelector('.icon-play')?.classList.remove('hidden');
-            this.element.querySelector('.icon-pause')?.classList.add('hidden');
-            if (btnText) btnText.textContent = 'Iniciar';
-            this.element.querySelector('.btn-toggle')?.classList.replace('bg-slate-700', 'bg-orange-500');
+            this.element.querySelector(".icon-play")?.classList.remove("hidden");
+            this.element.querySelector(".icon-pause")?.classList.add("hidden");
+            if (btnText) btnText.textContent = "Iniciar";
+            this.element
+                .querySelector(".btn-toggle")
+                ?.classList.replace("bg-slate-700", "bg-orange-500");
 
             if (this.remainingSeconds > 0 && this.remainingSeconds < this.totalSeconds) {
                 this.statusText.textContent = "Pausado";
                 this.statusText.classList.replace("text-green-500", "text-orange-500");
             } else if (this.remainingSeconds === 0 && this.totalSeconds > 0) {
-                
             } else {
                 this.statusText.textContent = "Listo";
                 this.statusText.classList.replace("text-green-500", "text-orange-500");
             }
-            Object.values(this.inputs).forEach(i => i.disabled = false);
+            Object.values(this.inputs).forEach((i) => (i.disabled = false));
         }
         this.checkStartButton();
     }
@@ -228,22 +233,22 @@ export class KitchenTimer extends EventTarget {
     private checkStartButton() {
         if (this.isRunning) {
             this.btnToggle.disabled = false;
-            this.btnToggle.classList.remove('opacity-50', 'cursor-not-allowed');
+            this.btnToggle.classList.remove("opacity-50", "cursor-not-allowed");
             return;
         }
 
         const currentSeconds = this.getInputSeconds();
         if (currentSeconds > 0) {
             this.btnToggle.disabled = false;
-            this.btnToggle.classList.remove('opacity-50', 'cursor-not-allowed');
+            this.btnToggle.classList.remove("opacity-50", "cursor-not-allowed");
         } else {
             this.btnToggle.disabled = true;
-            this.btnToggle.classList.add('opacity-50', 'cursor-not-allowed');
+            this.btnToggle.classList.add("opacity-50", "cursor-not-allowed");
         }
     }
 
     private dispatchUpdate() {
-        this.dispatchEvent(new CustomEvent('update', { detail: this }));
+        this.dispatchEvent(new CustomEvent("update", { detail: this }));
     }
 
     public getName() {

@@ -45,7 +45,6 @@ export function getSearchIndex(): SearchResult[] {
     const results: SearchResult[] = [];
     const pagesDir = path.join(process.cwd(), "src/pages");
 
-    
     if (!fs.existsSync(pagesDir)) {
         console.warn("SearchIndex: src/pages directory not found");
         return [];
@@ -54,19 +53,19 @@ export function getSearchIndex(): SearchResult[] {
     const pageFiles = getAllFiles(pagesDir);
 
     pageFiles.forEach((absolutePath) => {
-        
         const normalizedPath = absolutePath.split(path.sep).join("/");
-        
+
         const relativePart = normalizedPath.split("/src/pages")[1];
 
-        
         if (!relativePart) return;
 
-        
-        
         const virtualPath = `/src/pages${relativePart}`;
 
-        if (virtualPath.includes("404") || virtualPath.includes("[") || virtualPath.includes("index.astro")) {
+        if (
+            virtualPath.includes("404") ||
+            virtualPath.includes("[") ||
+            virtualPath.includes("index.astro")
+        ) {
             if (virtualPath.endsWith("/pages/index.astro")) {
                 results.push({
                     id: "home",
@@ -77,7 +76,7 @@ export function getSearchIndex(): SearchResult[] {
                     icon: "mdi:home",
                 });
             }
-            
+
             return;
         }
 

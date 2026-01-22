@@ -24,7 +24,6 @@ import { Icon } from "astro-icon/components";
     </div>
 </div>
 
-
 <div id="no-results" class="hidden text-center py-12">
     <div
         class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4"
@@ -56,13 +55,11 @@ import { Icon } from "astro-icon/components";
 
         if (!searchInput) return;
 
-        
         if (searchInput.getAttribute("data-search-initialized")) return;
         searchInput.setAttribute("data-search-initialized", "true");
 
         console.log(`Search initialized. Found ${sections.length} sections.`);
 
-        
         const handleKeydown = (e: KeyboardEvent) => {
             if (e.key === "/" && document.activeElement !== searchInput) {
                 e.preventDefault();
@@ -78,7 +75,6 @@ import { Icon } from "astro-icon/components";
 
             let hasResults = false;
 
-            
             sections.forEach((section) => {
                 const sectionEl = section as HTMLElement;
                 const sectionTitle = normalizeText(
@@ -93,23 +89,19 @@ import { Icon } from "astro-icon/components";
                     const title = normalizeText(card.getAttribute("data-title") || "");
                     const description = normalizeText(card.getAttribute("data-description") || "");
 
-                    
-                    
-                    
                     const isMatch =
                         sectionMatches || title.includes(query) || description.includes(query);
                     const el = card as HTMLElement;
 
                     if (isMatch) {
-                        el.style.display = ""; 
+                        el.style.display = "";
                         hasResults = true;
                         visibleCardsCount++;
                     } else {
-                        el.style.display = "none"; 
+                        el.style.display = "none";
                     }
                 });
 
-                
                 if (visibleCardsCount === 0) {
                     sectionEl.style.display = "none";
                 } else {
@@ -117,7 +109,6 @@ import { Icon } from "astro-icon/components";
                 }
             });
 
-            
             if (!hasResults && query.length > 0) {
                 noResults?.classList.remove("hidden");
             } else {
@@ -126,14 +117,12 @@ import { Icon } from "astro-icon/components";
         });
     }
 
-    
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initSearch);
     } else {
         initSearch();
     }
 
-    
     document.addEventListener("astro:page-load", () => {
         initSearch();
     });

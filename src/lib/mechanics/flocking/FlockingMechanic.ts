@@ -63,11 +63,9 @@ export class FlockingMechanic {
 
     public update(mouseX?: number, mouseY?: number) {
         for (const boid of this.boids) {
-            
             boid.acc.x = 0;
             boid.acc.y = 0;
 
-            
             const alignment = this.align(boid);
             const cohesion = this.cohesion(boid);
             const separation = this.separation(boid);
@@ -79,7 +77,6 @@ export class FlockingMechanic {
             boid.acc.x += separation.x * this.config.separationWeight;
             boid.acc.y += separation.y * this.config.separationWeight;
 
-            
             if (mouseX !== undefined && mouseY !== undefined) {
                 const d = this.dist(boid.pos.x, boid.pos.y, mouseX, mouseY);
                 if (d < 100) {
@@ -95,11 +92,9 @@ export class FlockingMechanic {
                 }
             }
 
-            
             boid.vel.x += boid.acc.x;
             boid.vel.y += boid.acc.y;
 
-            
             const speed = Math.sqrt(boid.vel.x * boid.vel.x + boid.vel.y * boid.vel.y);
             if (speed > this.config.maxSpeed) {
                 boid.vel.x = (boid.vel.x / speed) * this.config.maxSpeed;
@@ -109,7 +104,6 @@ export class FlockingMechanic {
             boid.pos.x += boid.vel.x;
             boid.pos.y += boid.vel.y;
 
-            
             if (boid.pos.x < 0) boid.pos.x = this.bounds.width;
             if (boid.pos.x > this.bounds.width) boid.pos.x = 0;
             if (boid.pos.y < 0) boid.pos.y = this.bounds.height;
@@ -134,18 +128,15 @@ export class FlockingMechanic {
             steering.x /= total;
             steering.y /= total;
 
-            
             const speed = Math.sqrt(steering.x * steering.x + steering.y * steering.y);
             if (speed > 0) {
                 steering.x = (steering.x / speed) * this.config.maxSpeed;
                 steering.y = (steering.y / speed) * this.config.maxSpeed;
             }
 
-            
             steering.x -= boid.vel.x;
             steering.y -= boid.vel.y;
 
-            
             const force = Math.sqrt(steering.x * steering.x + steering.y * steering.y);
             if (force > this.config.maxForce) {
                 steering.x = (steering.x / force) * this.config.maxForce;
@@ -173,7 +164,6 @@ export class FlockingMechanic {
             steering.x /= total;
             steering.y /= total;
 
-            
             steering.x -= boid.pos.x;
             steering.y -= boid.pos.y;
 
@@ -208,7 +198,6 @@ export class FlockingMechanic {
                     y: boid.pos.y - other.pos.y,
                 };
 
-                
                 if (d > 0) {
                     diff.x /= d;
                     diff.y /= d;

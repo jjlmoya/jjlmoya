@@ -82,7 +82,6 @@
         const width = canvas.offsetWidth;
         const height = canvas.offsetHeight;
 
-        
         const dpr = window.devicePixelRatio || 1;
         canvas.width = width * dpr;
         canvas.height = height * dpr;
@@ -90,7 +89,7 @@
 
         const center = { x: width / 2, y: height / 2 };
         const radius = Math.min(width, height) * 0.35;
-        const totalPoints = 360; 
+        const totalPoints = 360;
 
         interface Point {
             x: number;
@@ -98,11 +97,10 @@
         }
         const points: Point[] = [];
 
-        
         for (let i = 0; i < totalPoints; i++) {
             const angle = (i / totalPoints) * Math.PI * 2;
             let r = radius;
-            
+
             r += Math.sin(angle * 3) * 20;
             r += Math.cos(angle * 7) * 15;
             r += Math.sin(angle * 13) * 8;
@@ -114,26 +112,24 @@
                 y: center.y + Math.sin(angle) * r,
             });
         }
-        points.push(points[0]); 
+        points.push(points[0]);
 
-        
         const resolutions = [
-            { step: 40, label: "Muy Grande" }, 
+            { step: 40, label: "Muy Grande" },
             { step: 20, label: "Grande" },
             { step: 10, label: "Media" },
             { step: 5, label: "Fina" },
-            { step: 1, label: "Atómica" }, 
+            { step: 1, label: "Atómica" },
         ];
         let currentResIndex = 0;
 
         function draw() {
             if (!ctx) return;
-            
+
             ctx.clearRect(0, 0, width, height);
 
-            
             ctx.beginPath();
-            ctx.strokeStyle = "rgba(34, 211, 238, 0.1)"; 
+            ctx.strokeStyle = "rgba(34, 211, 238, 0.1)";
             ctx.lineWidth = 1;
             ctx.moveTo(points[0].x, points[0].y);
             for (let i = 1; i < points.length; i++) {
@@ -141,13 +137,12 @@
             }
             ctx.stroke();
 
-            
             const res = resolutions[currentResIndex];
             const step = res.step;
             let measuredLen = 0;
 
             ctx.beginPath();
-            ctx.strokeStyle = "#22d3ee"; 
+            ctx.strokeStyle = "#22d3ee";
             ctx.lineWidth = 2;
 
             let currentIdx = 0;
@@ -174,7 +169,6 @@
             }
             ctx.stroke();
 
-            
             ctx.fillStyle = "#fff";
             measurePoints.forEach((p) => {
                 ctx.beginPath();
@@ -182,19 +176,16 @@
                 ctx.fill();
             });
 
-            
             if (rulerEl) rulerEl.innerText = res.label;
-            
+
             const displayLen = Math.floor(measuredLen * 1.5);
             if (lengthEl) lengthEl.innerText = displayLen.toLocaleString() + " km";
 
-            
             currentResIndex = (currentResIndex + 1) % resolutions.length;
         }
 
-        
         draw();
-        
+
         setInterval(draw, 1500);
     }
 </script>

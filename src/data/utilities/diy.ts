@@ -10,8 +10,9 @@ export const diySection: SectionData = {
             iconBg: "mdi:pot",
             iconFg: "mdi:resize",
             title: "Calculadora de Arcilla",
-            description: "Calcula la contracción de arcilla en secado y cocción para dimensiones exactas.",
-            color: "#d97706"
+            description:
+                "Calcula la contracción de arcilla en secado y cocción para dimensiones exactas.",
+            color: "#d97706",
         },
         {
             href: "/utilidades/calculadora-resina/",
@@ -19,7 +20,7 @@ export const diySection: SectionData = {
             iconFg: "mdi:calculator",
             title: "Calculadora de Resina",
             description: "Calcula volumen y mezcla exacta para proyectos epoxi sin desperdicios.",
-            color: "#f59e0b"
+            color: "#f59e0b",
         },
         {
             href: "/utilidades/calculadora-balustres/",
@@ -27,7 +28,7 @@ export const diySection: SectionData = {
             iconFg: "mdi:view-week",
             title: "Calculadora de Balustres",
             description: "Distribución exacta de barrotes cumpliendo normativa.",
-            color: "#2563eb"
+            color: "#2563eb",
         },
         {
             href: "/utilidades/morteros/",
@@ -35,7 +36,7 @@ export const diySection: SectionData = {
             iconFg: "mdi:calculator",
             title: "Calculadora de Morteros",
             description: "Proporciones exactas de cal y arena para enfoscados y revocos.",
-            color: "#a855f7"
+            color: "#a855f7",
         },
         {
             href: "/utilidades/calculadora-passepartout/",
@@ -43,23 +44,25 @@ export const diySection: SectionData = {
             iconFg: "mdi:ruler",
             title: "Calculadora Passepartout",
             description: "Márgenes perfectos y corrección óptica para enmarcar tus obras.",
-            color: "#6366f1"
+            color: "#6366f1",
         },
         {
             href: "/utilidades/optimizador-corte/",
             iconBg: "mdi:saw-blade",
             iconFg: "mdi:ruler-square",
             title: "Optimizador de Cortes",
-            description: "Ahorra material. Calcula la mejor distribución de cortes para madera o metal.",
-            color: "#f97316"
+            description:
+                "Ahorra material. Calcula la mejor distribución de cortes para madera o metal.",
+            color: "#f97316",
         },
         {
             href: "/utilidades/calculadora-caida-tension/",
             iconBg: "mdi:lightning-bolt",
             iconFg: "mdi:transmission-tower",
             title: "Calculadora Caída Tensión",
-            description: "Evita cables quemados. Calcula la sección necesaria para 12V, 24V o 230V.",
-            color: "#eab308"
+            description:
+                "Evita cables quemados. Calcula la sección necesaria para 12V, 24V o 230V.",
+            color: "#eab308",
         },
         {
             href: "/utilidades/calculadora-espacio-muebles/",
@@ -67,7 +70,7 @@ export const diySection: SectionData = {
             iconFg: "mdi:sofa",
             title: "¿Cabe el Mueble?",
             description: "Comprueba si tus muebles entran en el ascensor o por la puerta.",
-            color: "#6366f1"
-        }
-    ]
+            color: "#6366f1",
+        },
+    ],
 };

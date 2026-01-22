@@ -1,4 +1,3 @@
-
 import type { SectionData } from "./types";
 
 export const creativeSection: SectionData = {
@@ -12,7 +11,7 @@ export const creativeSection: SectionData = {
             iconFg: "mdi:emoticon-poop",
             title: "Generador de Excusas",
             description: "Máquina de azar semántica para librarte de compromisos con estilo.",
-            color: "#ec4899"
+            color: "#ec4899",
         },
         {
             href: "/utilidades/galleta-fortuna/",
@@ -20,7 +19,7 @@ export const creativeSection: SectionData = {
             iconFg: "mdi:sparkles",
             title: "Galleta de la Fortuna",
             description: "Consulta tu destino diario y descubre tus números de la suerte.",
-            color: "#f59e0b"
+            color: "#f59e0b",
         },
         {
             href: "/utilidades/pintor-sinestesia/",
@@ -28,7 +27,7 @@ export const creativeSection: SectionData = {
             iconFg: "mdi:eye",
             title: "Pintor de Sinestesia",
             description: "Visualiza el color de las palabras según la sinestesia grafema-color.",
-            color: "#8b5cf6"
+            color: "#8b5cf6",
         },
         {
             href: "/utilidades/generador-zalgo/",
@@ -36,7 +35,7 @@ export const creativeSection: SectionData = {
             iconFg: "mdi:matrix",
             title: "Generador Zalgo",
             description: "Corrompe tus mensajes con cascadas de caracteres Unicode desbordantes.",
-            color: "#9333ea"
+            color: "#9333ea",
         },
         {
             href: "/utilidades/generador-patrones-cuentas/",
@@ -44,7 +43,7 @@ export const creativeSection: SectionData = {
             iconFg: "mdi:palette",
             title: "Generador de Patrones",
             description: "Crea esquemas de pixel art y cuentas para Miyuki o Hama desde tus fotos.",
-            color: "#db2777"
-        }
-    ]
+            color: "#db2777",
+        },
+    ],
 };

@@ -87,27 +87,24 @@ export class AutorunnerGame {
 
         const cx = x + w / 2;
 
-        
         this.ctx.beginPath();
         this.ctx.arc(cx, y + 10, 8, 0, Math.PI * 2);
         this.ctx.fillStyle = "white";
         this.ctx.fill();
         this.ctx.stroke();
 
-        
         this.ctx.beginPath();
         this.ctx.arc(cx + 3, y + 10, 1, 0, Math.PI * 2);
         this.ctx.fillStyle = "black";
         this.ctx.fill();
 
-        
         this.ctx.save();
-        this.ctx.strokeStyle = isDashing ? "#00ff00" : "#ff4444"; 
+        this.ctx.strokeStyle = isDashing ? "#00ff00" : "#ff4444";
         this.ctx.lineWidth = 4;
         this.ctx.beginPath();
         this.ctx.moveTo(cx, y + 22);
         const wave = Math.sin(runTime * 20) * 5;
-        
+
         if (isDashing) {
             this.ctx.quadraticCurveTo(cx - 25, y + 10, cx - 40, y + 5);
         } else {
@@ -116,30 +113,27 @@ export class AutorunnerGame {
         this.ctx.stroke();
         this.ctx.restore();
 
-        
         this.ctx.beginPath();
         this.ctx.moveTo(cx, y + 18);
         this.ctx.lineTo(cx, y + 35);
         this.ctx.stroke();
 
-        
         const armOffset = Math.sin(runTime * 15) * 5;
         this.ctx.beginPath();
-        
+
         this.ctx.moveTo(cx, y + 22);
         this.ctx.lineTo(cx + (grounded ? -10 : -15), y + 30 + (grounded ? armOffset : -10));
-        
+
         this.ctx.moveTo(cx, y + 22);
         this.ctx.lineTo(cx + (grounded ? 10 : 15), y + 30 + (grounded ? -armOffset : -10));
         this.ctx.stroke();
 
-        
         const legOffset = Math.sin(runTime * 15) * 10;
         this.ctx.beginPath();
-        
+
         this.ctx.moveTo(cx, y + 35);
         this.ctx.lineTo(cx - 5 + (grounded ? legOffset : -5), y + 50 + (grounded ? 0 : -5));
-        
+
         this.ctx.moveTo(cx, y + 35);
         this.ctx.lineTo(cx + 5 + (grounded ? -legOffset : 5), y + 50 + (grounded ? 0 : -5));
         this.ctx.stroke();
@@ -148,14 +142,12 @@ export class AutorunnerGame {
     draw() {
         const state = this.mechanic.getState();
 
-        
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.height);
-        gradient.addColorStop(0, "#87CEEB"); 
-        gradient.addColorStop(1, "#E0F7FA"); 
+        gradient.addColorStop(0, "#87CEEB");
+        gradient.addColorStop(1, "#E0F7FA");
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        
         this.ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
         for (const cloud of state.clouds) {
             this.ctx.beginPath();
@@ -171,25 +163,21 @@ export class AutorunnerGame {
             this.ctx.fill();
         }
 
-        
-        this.ctx.fillStyle = "#5D4037"; 
+        this.ctx.fillStyle = "#5D4037";
         for (const plat of state.platforms) {
             this.ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
-            
-            this.ctx.fillStyle = "#7CB342"; 
+
+            this.ctx.fillStyle = "#7CB342";
             this.ctx.fillRect(plat.x, plat.y, plat.width, 15);
             this.ctx.fillStyle = "#5D4037";
         }
 
-        
-        this.ctx.fillStyle = "#424242"; 
+        this.ctx.fillStyle = "#424242";
         for (const obs of state.obstacles) {
-            
             this.ctx.beginPath();
             this.ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 4);
             this.ctx.fill();
 
-            
             this.ctx.fillStyle = "#616161";
             this.ctx.beginPath();
             this.ctx.arc(obs.x + 10, obs.y + 10, 5, 0, Math.PI * 2);
@@ -197,8 +185,7 @@ export class AutorunnerGame {
             this.ctx.fillStyle = "#424242";
         }
 
-        
-        this.ctx.fillStyle = "#FFD700"; 
+        this.ctx.fillStyle = "#FFD700";
         this.ctx.strokeStyle = "#DAA520";
         this.ctx.lineWidth = 2;
         for (const coin of state.coins) {
@@ -213,7 +200,6 @@ export class AutorunnerGame {
             this.ctx.fill();
             this.ctx.stroke();
 
-            
             this.ctx.fillStyle = "rgba(255,255,255,0.6)";
             this.ctx.beginPath();
             this.ctx.arc(cx - r * 0.3, cy - r * 0.3, r * 0.2, 0, Math.PI * 2);
@@ -221,7 +207,6 @@ export class AutorunnerGame {
             this.ctx.fillStyle = "#FFD700";
         }
 
-        
         this.drawPlayer(
             state.player.x,
             state.player.y,
@@ -231,32 +216,26 @@ export class AutorunnerGame {
             state.player.isDashing
         );
 
-        
-
         const badgeHeight = 50;
         const badgeWidth = 180;
         const badgeX = 20;
         const badgeY = 20;
 
-        
         this.ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
         this.ctx.beginPath();
         this.ctx.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, 25);
         this.ctx.fill();
 
-        
         this.ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
         this.ctx.lineWidth = 2;
         this.ctx.stroke();
 
-        
         this.ctx.fillStyle = "white";
         this.ctx.font = "bold 24px monospace";
         this.ctx.textAlign = "left";
         this.ctx.textBaseline = "middle";
         this.ctx.shadowBlur = 0;
 
-        
         this.ctx.fillStyle = "#4FC3F7";
         this.ctx.beginPath();
         this.ctx.arc(badgeX + 25, badgeY + 25, 10, 0, Math.PI * 2);

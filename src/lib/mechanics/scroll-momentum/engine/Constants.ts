@@ -11,5 +11,5 @@ export const CONSTANTS = {
     STAR_COUNT: 800,
     NEBULA_COUNT: 8,
     BASE_LOCATION: { x: 0, y: 0 },
-    UPGRADE_COST: 5
+    UPGRADE_COST: 5,
 };

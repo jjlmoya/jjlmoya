@@ -13,16 +13,18 @@ export class PersistenceManager {
                 growth: this.engine.debtGrowthRate,
                 unlocks: Array.from(this.engine.unlocks),
                 grid: Array.from(this.engine.grid.entries()),
-                cam: this.engine.ui ? {
-                    x: this.engine.ui.cam.x,
-                    y: this.engine.ui.cam.y,
-                    scale: this.engine.ui.cam.scale
-                } : null,
-                biz: this.engine.businesses.map(b => ({
+                cam: this.engine.ui
+                    ? {
+                          x: this.engine.ui.cam.x,
+                          y: this.engine.ui.cam.y,
+                          scale: this.engine.ui.cam.scale,
+                      }
+                    : null,
+                biz: this.engine.businesses.map((b) => ({
                     id: b.id,
                     lvl: b.lvl,
                     cost: b.currentCost,
-                    instances: b.instances
+                    instances: b.instances,
                 })),
             };
             localStorage.setItem(this.KEY, JSON.stringify(data));
@@ -64,11 +66,10 @@ export class PersistenceManager {
                     if (p) {
                         p.purchased = true;
                         this.engine.unlocks.add(p.id);
-                        if (typeof p.effect === 'function') p.effect(this.engine);
+                        if (typeof p.effect === "function") p.effect(this.engine);
                     }
                 });
             }
-
 
             if (d.cam && this.engine.ui) {
                 this.engine.ui.cam.x = d.cam.x;

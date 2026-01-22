@@ -11,7 +11,7 @@ export const musicSection: SectionData = {
             iconFg: "mdi:metronome-tick",
             title: "Metrónomo Online",
             description: "Ritmo perfecto para músicos. Precisión con Web Audio API.",
-            color: "#db2777"
-        }
-    ]
+            color: "#db2777",
+        },
+    ],
 };

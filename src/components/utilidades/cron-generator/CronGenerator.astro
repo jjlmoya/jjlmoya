@@ -282,9 +282,6 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-    
-
-    
     const MINUTE = 0;
     const HOUR = 1;
     const DOM = 2;
@@ -433,7 +430,6 @@ import { Icon } from "astro-icon/components";
                 nextRuns.push(new Date(cursor));
             }
 
-            
             cursor.setMinutes(cursor.getMinutes() + 1);
         }
 
@@ -472,7 +468,6 @@ import { Icon } from "astro-icon/components";
         tab.addEventListener("click", () => {
             const target = (tab as HTMLElement).dataset.tab;
 
-            
             tabs.forEach((t) => {
                 t.classList.remove(
                     "bg-purple-100",
@@ -498,32 +493,27 @@ import { Icon } from "astro-icon/components";
     function updateCron(newCronArray: string[]) {
         currentCronP = newCronArray;
 
-        
         displays.minute!.textContent = currentCronP[0];
         displays.hour!.textContent = currentCronP[1];
         displays.dom!.textContent = currentCronP[2];
         displays.month!.textContent = currentCronP[3];
         displays.dow!.textContent = currentCronP[4];
 
-        
         inputs.minute.value = currentCronP[0];
         inputs.hour.value = currentCronP[1];
         inputs.dom.value = currentCronP[2];
         inputs.month.value = currentCronP[3];
         inputs.dow.value = currentCronP[4];
 
-        
         calculate();
     }
 
     function calculate() {
-        
         try {
             const desc = describeCron(currentCronP);
             humanReadable!.textContent = desc;
             humanReadable!.className = "text-slate-300";
 
-            
             Object.values(displays).forEach((el) => el?.classList.remove("text-red-500"));
             Object.values(displays).forEach((el) => el?.classList.add("text-purple-400"));
         } catch (e) {
@@ -533,7 +523,6 @@ import { Icon } from "astro-icon/components";
             Object.values(displays).forEach((el) => el?.classList.add("text-red-500"));
         }
 
-        
         try {
             const dates = calculateNextRuns(currentCronP);
             nextRunsList!.innerHTML = "";
@@ -548,7 +537,6 @@ import { Icon } from "astro-icon/components";
                 li.className =
                     "flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800 text-sm";
 
-                
                 const dateStr = new Intl.DateTimeFormat("es-ES", {
                     weekday: "short",
                     day: "numeric",

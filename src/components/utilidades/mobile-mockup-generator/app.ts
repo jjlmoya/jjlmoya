@@ -2,7 +2,14 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { Store } from "./store";
 import { RenderingEngine } from "./rendering";
-import { DEVICES, GRADIENTS, GOOGLE_FONTS, EXPORT_WIDTH, EXPORT_HEIGHT, LAYOUT_PRESETS } from "./constants";
+import {
+    DEVICES,
+    GRADIENTS,
+    GOOGLE_FONTS,
+    EXPORT_WIDTH,
+    EXPORT_HEIGHT,
+    LAYOUT_PRESETS,
+} from "./constants";
 import type { MockupImage, MockupVariant } from "./types";
 
 export class App {
@@ -10,7 +17,6 @@ export class App {
     currentTargetId: string | null = null;
     isAddingVariant: boolean = false;
     isReplacingBackground: boolean = false;
-
 
     uploadInput = document.getElementById("imageUpload") as HTMLInputElement;
     previewGrid = document.getElementById("previewGrid")!;
@@ -44,7 +50,7 @@ export class App {
         this.renderGrid();
 
         (window as any).clearBg = (id: string) => {
-            const img = this.store.images.find(i => i.id === id);
+            const img = this.store.images.find((i) => i.id === id);
             if (img) {
                 img.settings.bgImage = null;
                 this.store.save();
@@ -112,7 +118,6 @@ export class App {
         this.massReplaceBtn.addEventListener("click", () => this.massReplaceInput.click());
         this.massReplaceInput.addEventListener("change", (e) => this.handleMassReplace(e));
 
-
         this.previewGrid.addEventListener("input", (e) => {
             const target = e.target as HTMLElement;
             const id = target.dataset.imgId;
@@ -131,10 +136,9 @@ export class App {
                 if (type === "deviceOffsetX") img.settings.deviceOffsetX = parseInt(input.value);
                 if (type === "deviceOffsetY") img.settings.deviceOffsetY = parseInt(input.value);
 
-
                 const label = this.previewGrid.querySelector(`[data-label-for="${type}-${id}"]`);
                 if (label) {
-                    const suffix = type === "textSize" ? "px" : (type === "textRotation" ? "°" : "%");
+                    const suffix = type === "textSize" ? "px" : type === "textRotation" ? "°" : "%";
                     label.textContent = `${input.value}${suffix}`;
                 }
 
@@ -283,8 +287,7 @@ export class App {
                 if (this.isReplacingBackground) {
                     img.settings.bgImage = dataUrl;
                 } else if (this.isAddingVariant) {
-
-                    const existingLangs = img.variants.map(v => v.language);
+                    const existingLangs = img.variants.map((v) => v.language);
                     let newLang = "EN";
                     if (existingLangs.includes("EN")) newLang = "FR";
                     if (existingLangs.includes("FR")) newLang = "DE";
@@ -299,8 +302,8 @@ export class App {
                     img.variants.push(newVariant);
                     img.activeVariantId = newVariant.id;
                 } else {
-
-                    const variant = img.variants.find(v => v.id === img.activeVariantId) || img.variants[0];
+                    const variant =
+                        img.variants.find((v) => v.id === img.activeVariantId) || img.variants[0];
                     if (variant) {
                         variant.dataUrl = dataUrl;
                     }
@@ -360,7 +363,8 @@ export class App {
 
             if (this.store.images[i]) {
                 const img = this.store.images[i];
-                const variant = img.variants.find(v => v.id === img.activeVariantId) || img.variants[0];
+                const variant =
+                    img.variants.find((v) => v.id === img.activeVariantId) || img.variants[0];
                 if (variant) {
                     variant.dataUrl = dataUrl;
                 }
@@ -490,7 +494,8 @@ export class App {
                     <div class="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800/50">
                         <h4 class="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400">Layouts Maestros</h4>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                            ${LAYOUT_PRESETS.map((p, idx) => `
+                            ${LAYOUT_PRESETS.map(
+                                (p, idx) => `
                                 <button 
                                     data-img-id="${img.id}" 
                                     data-preset-index="${idx}"
@@ -498,7 +503,8 @@ export class App {
                                 >
                                     ${p.name}
                                 </button>
-                            `).join('')}
+                            `
+                            ).join("")}
                         </div>
                     </div>
 
@@ -571,7 +577,9 @@ export class App {
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 Fondo Especial
                             </button>
-                            ${img.settings.bgImage ? `
+                            ${
+                                img.settings.bgImage
+                                    ? `
                                 <button 
                                     data-img-id="${img.id}"
                                     onclick="window.clearBg('${img.id}')"
@@ -579,7 +587,9 @@ export class App {
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                 </button>
-                            ` : ''}
+                            `
+                                    : ""
+                            }
                         </div>
                     </div>
 
@@ -639,8 +649,8 @@ export class App {
             font: this.store.font,
             safeArea: {
                 show: this.store.showSafeArea,
-                color: this.store.safeAreaColor
-            }
+                color: this.store.safeAreaColor,
+            },
         });
     }
 
@@ -667,8 +677,8 @@ export class App {
                         font: this.store.font,
                         safeArea: {
                             show: this.store.showSafeArea,
-                            color: this.store.safeAreaColor
-                        }
+                            color: this.store.safeAreaColor,
+                        },
                     },
                     true
                 );
@@ -676,12 +686,16 @@ export class App {
                 const blob = await new Promise<Blob>((resolve) =>
                     offscreenCanvas.toBlob((b) => resolve(b!), "image/png", 1.0)
                 );
-                const variantSuffix = img.variants.length > 1 ? `-${variant.language.toUpperCase()}` : "";
+                const variantSuffix =
+                    img.variants.length > 1 ? `-${variant.language.toUpperCase()}` : "";
                 zip.file(`mockup-${i + 1}${variantSuffix}.png`, blob);
             }
         }
 
-        const timestamp = new Date().toISOString().replace(/[:\-]|\..+/g, "").replace("T", "_");
+        const timestamp = new Date()
+            .toISOString()
+            .replace(/[:\-]|\..+/g, "")
+            .replace("T", "_");
         const deviceTag = this.store.device === "iphone" ? "ios" : "android";
         const content = await zip.generateAsync({ type: "blob" });
         saveAs(content, `${timestamp}-store-mocks-${deviceTag}.zip`);

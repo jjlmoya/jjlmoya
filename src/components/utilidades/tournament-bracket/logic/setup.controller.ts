@@ -37,9 +37,16 @@ export class SetupController {
 
     public render() {
         this.renderer.updatePlayerList(this.players, (i) => this.removePlayer(i));
-        this.renderer.renderShuffleControl(this.isShuffleEnabled, (val) => this.isShuffleEnabled = val);
-        this.renderer.renderScoreControl(this.isScoreEnabled, (val) => this.isScoreEnabled = val);
-        this.renderer.renderHistoryList(this.history, (id) => this.loadTournament(id), (id) => this.deleteTournament(id));
+        this.renderer.renderShuffleControl(
+            this.isShuffleEnabled,
+            (val) => (this.isShuffleEnabled = val)
+        );
+        this.renderer.renderScoreControl(this.isScoreEnabled, (val) => (this.isScoreEnabled = val));
+        this.renderer.renderHistoryList(
+            this.history,
+            (id) => this.loadTournament(id),
+            (id) => this.deleteTournament(id)
+        );
     }
 
     public refreshHistory() {
@@ -49,7 +56,10 @@ export class SetupController {
 
     private addPlayer() {
         const rawValue = this.mediator.getPlayerInput();
-        const names = rawValue.split(',').map(n => n.trim()).filter(n => n.length > 0);
+        const names = rawValue
+            .split(",")
+            .map((n) => n.trim())
+            .filter((n) => n.length > 0);
 
         if (names.length > 0) {
             this.players.push(...names);
@@ -84,7 +94,7 @@ export class SetupController {
     }
 
     private loadTournament(id: string) {
-        const found = this.history.find(t => t.id === id);
+        const found = this.history.find((t) => t.id === id);
         if (found) {
             const manager = TournamentManager.fromJSON(found);
             this.onLoadTournament(manager);
@@ -96,15 +106,8 @@ export class SetupController {
     private deleteTournament(id: string) {
         if (!confirm("¿Borrar este torneo del historial permanentemente?")) return;
 
-        this.history = this.history.filter(t => t.id !== id);
+        this.history = this.history.filter((t) => t.id !== id);
         TournamentStorage.saveHistory(this.history);
-
-        
-        
-        
-        
-        
-        
 
         this.render();
     }

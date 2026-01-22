@@ -3,7 +3,7 @@ import { MobileBracketRenderer } from "./ui/bracket-mobile";
 import { DesktopBracketRenderer } from "./ui/bracket-desktop";
 import type { TournamentData } from "./models";
 
-export const COLORS = {}; 
+export const COLORS = {};
 
 export class TournamentRenderer {
     private setup: SetupRenderer;
@@ -16,7 +16,6 @@ export class TournamentRenderer {
         this.desktop = new DesktopBracketRenderer();
     }
 
-    
     public updatePlayerList(players: string[], onRemove: (index: number) => void) {
         this.setup.updatePlayerList(players, onRemove);
     }
@@ -29,12 +28,19 @@ export class TournamentRenderer {
         this.setup.renderScoreControl(isEnabled, onToggle);
     }
 
-    public renderHistoryList(history: any[], onLoad: (id: string) => void, onDelete: (id: string) => void) {
+    public renderHistoryList(
+        history: any[],
+        onLoad: (id: string) => void,
+        onDelete: (id: string) => void
+    ) {
         this.setup.renderHistoryList(history, onLoad, onDelete);
     }
 
-    
-    public renderMobileView(data: TournamentData, activeRoundIndex: number, onTabClick: (i: number) => void) {
+    public renderMobileView(
+        data: TournamentData,
+        activeRoundIndex: number,
+        onTabClick: (i: number) => void
+    ) {
         this.mobile.render(data, activeRoundIndex, onTabClick);
     }
 

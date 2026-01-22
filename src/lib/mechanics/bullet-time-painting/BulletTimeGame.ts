@@ -1,16 +1,22 @@
-import { EntityManager } from './engine/EntityManager';
-import { InputManager } from './engine/InputManager';
-import { Renderer } from './engine/Renderer';
-import { PhysicsSystem } from './engine/systems/PhysicsSystem';
-import { AISystem } from './engine/systems/AISystem';
-import { CollisionSystem } from './engine/systems/CollisionSystem';
-import { LevelGenerator } from './engine/systems/LevelGenerator';
-import type { GameState, Action, Entity } from './engine/Types';
+import { EntityManager } from "./engine/EntityManager";
+import { InputManager } from "./engine/InputManager";
+import { Renderer } from "./engine/Renderer";
+import { PhysicsSystem } from "./engine/systems/PhysicsSystem";
+import { AISystem } from "./engine/systems/AISystem";
+import { CollisionSystem } from "./engine/systems/CollisionSystem";
+import { LevelGenerator } from "./engine/systems/LevelGenerator";
+import type { GameState, Action, Entity } from "./engine/Types";
 import {
-    MAX_ENERGY, ACTION_DURATION, SHOOT_ENERGY_COST,
-    JUMP_ENERGY_COST_PER_PIXEL, ENERGY_RECOVERY_RATE,
-    CANVAS_WIDTH, CANVAS_HEIGHT, SAVE_KEY, MAX_HP
-} from './engine/Constants';
+    MAX_ENERGY,
+    ACTION_DURATION,
+    SHOOT_ENERGY_COST,
+    JUMP_ENERGY_COST_PER_PIXEL,
+    ENERGY_RECOVERY_RATE,
+    CANVAS_WIDTH,
+    CANVAS_HEIGHT,
+    SAVE_KEY,
+    MAX_HP,
+} from "./engine/Constants";
 
 export class BulletTimeGame {
     private entityManager: EntityManager;
@@ -22,7 +28,7 @@ export class BulletTimeGame {
     constructor(canvas: HTMLCanvasElement) {
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
-        const ctx = canvas.getContext('2d')!;
+        const ctx = canvas.getContext("2d")!;
         this.entityManager = new EntityManager();
         this.renderer = new Renderer(ctx);
 
@@ -44,7 +50,7 @@ export class BulletTimeGame {
             obstacles: obstacles,
             isExecutionPhase: false,
             remainingExecutionFrames: 0,
-            plannedActions: []
+            plannedActions: [],
         };
 
         this.inputManager = new InputManager(this.handleActionCreated.bind(this));
@@ -71,9 +77,11 @@ export class BulletTimeGame {
         if (this.state.isExecutionPhase || !this.state.player) return;
 
         let cost = 0;
-        const mag = Math.sqrt(action.vector.x * action.vector.x + action.vector.y * action.vector.y);
+        const mag = Math.sqrt(
+            action.vector.x * action.vector.x + action.vector.y * action.vector.y
+        );
 
-        if (action.type === 'move') {
+        if (action.type === "move") {
             cost = mag * 5 * JUMP_ENERGY_COST_PER_PIXEL;
         } else {
             cost = SHOOT_ENERGY_COST;
@@ -106,23 +114,25 @@ export class BulletTimeGame {
         const player = this.state.player;
         const playerCenter = {
             x: player.position.x + player.size / 2,
-            y: player.position.y + player.size / 2
+            y: player.position.y + player.size / 2,
         };
 
-        this.state.plannedActions.forEach(action => {
-            if (action.type === 'move') {
+        this.state.plannedActions.forEach((action) => {
+            if (action.type === "move") {
                 player.velocity.x += action.vector.x;
                 player.velocity.y += action.vector.y;
             } else {
-                const mag = Math.sqrt(action.vector.x * action.vector.x + action.vector.y * action.vector.y);
+                const mag = Math.sqrt(
+                    action.vector.x * action.vector.x + action.vector.y * action.vector.y
+                );
                 const normalizedVel = {
                     x: (action.vector.x / (mag || 1)) * 15,
-                    y: (action.vector.y / (mag || 1)) * 15
+                    y: (action.vector.y / (mag || 1)) * 15,
                 };
                 this.entityManager.addBullet(
                     { x: playerCenter.x, y: playerCenter.y },
                     normalizedVel,
-                    'bullet'
+                    "bullet"
                 );
             }
         });
@@ -150,12 +160,12 @@ export class BulletTimeGame {
         const player = this.entityManager.getPlayer();
 
         if (this.state.isExecutionPhase) {
-            entities.forEach(entity => {
+            entities.forEach((entity) => {
                 PhysicsSystem.update(entity, this.state.obstacles);
 
-                if (entity.type === 'enemy') {
+                if (entity.type === "enemy") {
                     AISystem.update(entity, player, (b: Entity) => {
-                        this.entityManager.addBullet(b.position, b.velocity, 'enemy_bullet');
+                        this.entityManager.addBullet(b.position, b.velocity, "enemy_bullet");
                     });
                 }
             });
@@ -168,7 +178,7 @@ export class BulletTimeGame {
                 this.state.isExecutionPhase = false;
                 this.state.energy = MAX_ENERGY;
 
-                const enemies = entities.filter(e => e.type === 'enemy');
+                const enemies = entities.filter((e) => e.type === "enemy");
                 if (enemies.length === 0) {
                     this.nextLevel();
                 }
@@ -184,8 +194,10 @@ export class BulletTimeGame {
             this.state.hp = player.hp || 0;
         }
 
-        this.state.enemies = entities.filter(e => e.type === 'enemy');
-        this.state.bullets = entities.filter(e => e.type === 'bullet' || e.type === 'enemy_bullet');
+        this.state.enemies = entities.filter((e) => e.type === "enemy");
+        this.state.bullets = entities.filter(
+            (e) => e.type === "bullet" || e.type === "enemy_bullet"
+        );
     }
 
     private render(): void {

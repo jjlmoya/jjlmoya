@@ -27,7 +27,6 @@ export class RenderingEngine {
             ctx.scale(dpr, dpr);
         }
 
-
         if (image.settings.bgImage) {
             const bgImg = await this.loadImage(image.settings.bgImage);
             ctx.drawImage(bgImg, 0, 0, width, height);
@@ -50,7 +49,6 @@ export class RenderingEngine {
             ctx.fillRect(0, 0, width, height);
         }
 
-
         const paddingScale = 0.85 - (image.settings.spacing / 100) * 0.35;
         const scale = Math.min(
             (width * paddingScale) / device.width,
@@ -60,10 +58,9 @@ export class RenderingEngine {
         const scaledW = device.width * scale;
         const scaledH = device.height * scale;
 
-
         const deviceX = (width - scaledW) / 2 + (width * (image.settings.deviceOffsetX || 0)) / 100;
-        const deviceY = (height - scaledH) / 2 + (height * (image.settings.deviceOffsetY || 0)) / 100;
-
+        const deviceY =
+            (height - scaledH) / 2 + (height * (image.settings.deviceOffsetY || 0)) / 100;
 
         ctx.save();
         ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
@@ -74,7 +71,6 @@ export class RenderingEngine {
         this.roundRect(ctx, deviceX, deviceY, scaledW, scaledH, device.radius * scale);
         ctx.fill();
         ctx.restore();
-
 
         const screenInset = 8 * scale;
         const screenX = deviceX + screenInset;
@@ -88,7 +84,6 @@ export class RenderingEngine {
         this.roundRect(ctx, screenX, screenY, screenW, screenH, (device.radius - 8) * scale);
         ctx.clip();
 
-
         if (globalSettings.safeArea.show) {
             ctx.fillStyle = globalSettings.safeArea.color;
             ctx.fillRect(screenX, screenY, screenW, screenH);
@@ -101,14 +96,13 @@ export class RenderingEngine {
             const topOffset = device.safeAreaTop * scale;
             const bottomOffset = device.safeAreaBottom * scale;
             targetScreenY += topOffset;
-            targetScreenH -= (topOffset + bottomOffset);
+            targetScreenH -= topOffset + bottomOffset;
         }
 
         const imgAspect = imgEl.width / imgEl.height;
         const screenAspect = screenW / targetScreenH;
 
         let drawW, drawH, drawX, drawY;
-
 
         if (globalSettings.safeArea.show) {
             if (imgAspect > screenAspect) {
@@ -123,7 +117,6 @@ export class RenderingEngine {
                 drawY = targetScreenY;
             }
         } else {
-
             if (imgAspect > screenAspect) {
                 drawH = screenH;
                 drawW = screenH * imgAspect;
@@ -145,12 +138,16 @@ export class RenderingEngine {
                 ctx.fillRect(screenX, screenY, screenW, device.safeAreaTop * scale);
             }
             if (device.safeAreaBottom > 0) {
-                ctx.fillRect(screenX, screenY + screenH - (device.safeAreaBottom * scale), screenW, device.safeAreaBottom * scale);
+                ctx.fillRect(
+                    screenX,
+                    screenY + screenH - device.safeAreaBottom * scale,
+                    screenW,
+                    device.safeAreaBottom * scale
+                );
             }
         }
 
         ctx.restore();
-
 
         if (device.notch) {
             ctx.fillStyle = "#0f172a";
@@ -168,10 +165,12 @@ export class RenderingEngine {
             ctx.fill();
         }
 
-
         if (image.settings.text) {
             ctx.save();
-            ctx.translate(width * (image.settings.textX / 100), height * (image.settings.textY / 100));
+            ctx.translate(
+                width * (image.settings.textX / 100),
+                height * (image.settings.textY / 100)
+            );
             ctx.rotate((image.settings.textRotation * Math.PI) / 180);
 
             const fontSize = image.settings.textSize * (isExport ? 1 : 1);

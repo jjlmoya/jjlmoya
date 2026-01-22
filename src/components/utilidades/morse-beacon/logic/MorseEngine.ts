@@ -1,22 +1,64 @@
 export type MorseSignal = "." | "-" | " ";
 
 export const MORSE_DICTIONARY: Record<string, string> = {
-    "A": ".-", "B": "-...", "C": "-.-.", "D": "-..", "E": ".", "F": "..-.",
-    "G": "--.", "H": "....", "I": "..", "J": ".---", "K": "-.-", "L": ".-..",
-    "M": "--", "N": "-.", "O": "---", "P": ".--.", "Q": "--.-", "R": ".-.",
-    "S": "...", "T": "-", "U": "..-", "V": "...-", "W": ".--", "X": "-..-",
-    "Y": "-.--", "Z": "--..",
-    "1": ".----", "2": "..---", "3": "...--", "4": "....-", "5": ".....",
-    "6": "-....", "7": "--...", "8": "---..", "9": "----.", "0": "-----",
-    ".": ".-.-.-", ",": "--..--", "?": "..--..", "'": ".----.", "!": "-.-.--",
-    "/": "-..-.", "(": "-.--.", ")": "-.--.-", "&": ".-...", ":": "---...",
-    ";": "-.-.-.", "=": "-...-", "+": ".-.-.", "-": "-....-", "_": "..--.-",
-    "\"": ".-..-.", "$": "...-..-", "@": ".--.-."
+    A: ".-",
+    B: "-...",
+    C: "-.-.",
+    D: "-..",
+    E: ".",
+    F: "..-.",
+    G: "--.",
+    H: "....",
+    I: "..",
+    J: ".---",
+    K: "-.-",
+    L: ".-..",
+    M: "--",
+    N: "-.",
+    O: "---",
+    P: ".--.",
+    Q: "--.-",
+    R: ".-.",
+    S: "...",
+    T: "-",
+    U: "..-",
+    V: "...-",
+    W: ".--",
+    X: "-..-",
+    Y: "-.--",
+    Z: "--..",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----.",
+    "0": "-----",
+    ".": ".-.-.-",
+    ",": "--..--",
+    "?": "..--..",
+    "'": ".----.",
+    "!": "-.-.--",
+    "/": "-..-.",
+    "(": "-.--.",
+    ")": "-.--.-",
+    "&": ".-...",
+    ":": "---...",
+    ";": "-.-.-.",
+    "=": "-...-",
+    "+": ".-.-.",
+    "-": "-....-",
+    _: "..--.-",
+    '"': ".-..-.",
+    $: "...-..-",
+    "@": ".--.-.",
 };
 
 export interface MorseConfig {
     wpm: number;
-
 }
 
 export class MorseBit {
@@ -29,11 +71,21 @@ export class MorseBit {
         this.isActive = type === "dot" || type === "dash";
 
         switch (type) {
-            case "dot": this.duration = unit; break;
-            case "dash": this.duration = unit * 3; break;
-            case "gap": this.duration = unit; break;
-            case "charSpace": this.duration = unit * 3; break;
-            case "wordSpace": this.duration = unit * 7; break;
+            case "dot":
+                this.duration = unit;
+                break;
+            case "dash":
+                this.duration = unit * 3;
+                break;
+            case "gap":
+                this.duration = unit;
+                break;
+            case "charSpace":
+                this.duration = unit * 3;
+                break;
+            case "wordSpace":
+                this.duration = unit * 7;
+                break;
         }
     }
 }
@@ -50,10 +102,14 @@ export class MorseEngine {
     }
 
     public static textToMorse(text: string): string {
-        return text.toUpperCase().split("").map(char => {
-            if (char === " ") return "/";
-            return MORSE_DICTIONARY[char] || "?";
-        }).join(" ");
+        return text
+            .toUpperCase()
+            .split("")
+            .map((char) => {
+                if (char === " ") return "/";
+                return MORSE_DICTIONARY[char] || "?";
+            })
+            .join(" ");
     }
 
     public static compileSequence(text: string, wpm: number): MorseBit[] {
@@ -78,12 +134,10 @@ export class MorseEngine {
                 if (bit === ".") sequence.push(new MorseBit("dot", unit));
                 if (bit === "-") sequence.push(new MorseBit("dash", unit));
 
-
                 if (j < bits.length - 1) {
                     sequence.push(new MorseBit("gap", unit));
                 }
             }
-
 
             if (i < normalized.length - 1 && normalized[i + 1] !== " ") {
                 sequence.push(new MorseBit("charSpace", unit));
@@ -106,28 +160,22 @@ export class MorseEngine {
             for (const bit of sequence) {
                 if (this.stopSignal) break;
 
-
                 this.onStateChange(bit.isActive, bit);
-
 
                 if (bit.isActive && navigator.vibrate) {
                     navigator.vibrate(bit.duration);
                 }
 
-
                 await this.wait(bit.duration);
-
 
                 if (bit.isActive) {
                     this.onStateChange(false, null);
                 }
             }
 
-
             if (loop && !this.stopSignal) {
                 await this.wait(this.unit * 7);
             }
-
         } while (loop && !this.stopSignal);
 
         this.isPlaying = false;
@@ -135,7 +183,7 @@ export class MorseEngine {
     }
 
     private wait(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     public isActive(): boolean {

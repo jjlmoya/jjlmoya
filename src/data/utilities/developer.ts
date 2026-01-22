@@ -11,7 +11,7 @@ export const devSection: SectionData = {
             iconFg: "mdi:calendar-clock",
             title: "Generador de Cron",
             description: "Crea y traduce expresiones cron a lenguaje humano de forma visual.",
-            color: "#8b5cf6"
+            color: "#8b5cf6",
         },
         {
             href: "/utilidades/json-formatter/",
@@ -19,7 +19,7 @@ export const devSection: SectionData = {
             iconFg: "mdi:code-braces",
             title: "JSON Formatter",
             description: "Valida, repara y formatea JSON. Detección de errores en tiempo real.",
-            color: "#d946ef"
+            color: "#d946ef",
         },
         {
             href: "/utilidades/keycode/",
@@ -27,7 +27,7 @@ export const devSection: SectionData = {
             iconFg: "mdi:keyboard-variant",
             title: "KeyCode Visualizer",
             description: "Visualiza códigos de teclas JavaScript en tiempo real.",
-            color: "#8b5cf6"
+            color: "#8b5cf6",
         },
         {
             href: "/utilidades/calculadora-coste-llm/",
@@ -35,23 +35,25 @@ export const devSection: SectionData = {
             iconFg: "mdi:currency-usd",
             title: "Calculadora Costes LLM",
             description: "Estima el precio de tus proyectos con GPT-4, Claude y Gemini.",
-            color: "#6366f1"
+            color: "#6366f1",
         },
         {
             href: "/utilidades/tipografia-musical/",
             iconBg: "mdi:music-note",
             iconFg: "mdi:format-size",
             title: "Tipografía Musical",
-            description: "Calculadora de escalas modulares armónicas para jerarquías tipográficas perfectas.",
-            color: "#6366f1"
+            description:
+                "Calculadora de escalas modulares armónicas para jerarquías tipográficas perfectas.",
+            color: "#6366f1",
         },
         {
             href: "/utilidades/generador-mockups-movil/",
             iconBg: "mdi:cellphone-screenshot",
             iconFg: "mdi:image-frame",
             title: "Generador Mockups Móviles",
-            description: "Crea mockups profesionales de capturas para iPhone y Pixel con fondos personalizados.",
-            color: "#8b5cf6"
-        }
-    ]
+            description:
+                "Crea mockups profesionales de capturas para iPhone y Pixel con fondos personalizados.",
+            color: "#8b5cf6",
+        },
+    ],
 };

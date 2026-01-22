@@ -3,7 +3,6 @@ const TRASH_ICON = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" view
 const TOURNAMENT_ICON = `<svg xmlns="http://www.w3.org/2000/svg" class="text-xl w-5 h-5 inline-block" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2v2h5v4H2v2h5c1.11 0 2-.89 2-2V7h5v10H9v-1c0-1.11-.89-2-2-2H2v2h5v4H2v2h5c1.11 0 2-.89 2-2v-1h5c1.11 0 2-.89 2-2v-4h6v-2h-6V7c0-1.11-.89-2-2-2H9V4c0-1.11-.89-2-2-2z" /></svg>`;
 const CLOCK_ICON = `<svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 inline-block" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20C7.6 20 4 16.4 4 12S7.6 4 12 4S20 7.6 20 12S16.4 20 12 20M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22S22 17.5 22 12S17.5 2 12 2M16.2 16.2L11 11V7H12.5V10.2L17 14.9L16.2 16.2Z" /></svg>`;
 
-
 export class SetupRenderer {
     listPlayers: HTMLElement | null;
     countPlayers: HTMLElement | null;
@@ -23,20 +22,19 @@ export class SetupRenderer {
         if (!this.listPlayers || !this.countPlayers || !this.btnGenerate) return;
 
         this.countPlayers.textContent = players.length.toString();
-        const clearBtn = document.getElementById('clear-players-btn');
+        const clearBtn = document.getElementById("clear-players-btn");
 
         if (players.length === 0) {
             this.listPlayers.innerHTML =
                 '<li class="text-center text-slate-400 italic text-sm py-4 border-2 border-dashed border-slate-100 rounded-xl">La lista está vacía</li>';
             this.disableGenerateBtn();
-            if (clearBtn) clearBtn.classList.add('hidden');
+            if (clearBtn) clearBtn.classList.add("hidden");
             return;
         }
 
-        if (clearBtn) clearBtn.classList.remove('hidden');
+        if (clearBtn) clearBtn.classList.remove("hidden");
         this.listPlayers.innerHTML = "";
 
-        
         const fragment = document.createDocumentFragment();
 
         players.forEach((player, i) => {
@@ -50,7 +48,8 @@ export class SetupRenderer {
 
             const delBtn = document.createElement("button");
             delBtn.innerHTML = "<span class='icon-[mdi--trash-can-outline]'></span>";
-            delBtn.className = "text-slate-400 hover:text-red-500 transition-colors text-lg p-1 opacity-80 hover:opacity-100";
+            delBtn.className =
+                "text-slate-400 hover:text-red-500 transition-colors text-lg p-1 opacity-80 hover:opacity-100";
             delBtn.onclick = () => onRemove(i);
 
             li.appendChild(nameSpan);
@@ -86,10 +85,8 @@ export class SetupRenderer {
     public renderShuffleControl(isEnabled: boolean, onToggle: (val: boolean) => void) {
         if (!this.shuffleWrapper) return;
 
-        
-        if (!this.shuffleWrapper.querySelector('#shuffle-check')) {
-            
-            const container = document.createElement('div');
+        if (!this.shuffleWrapper.querySelector("#shuffle-check")) {
+            const container = document.createElement("div");
             container.className = "flex flex-col gap-2";
             container.innerHTML = `
                 <label class="flex items-center justify-center gap-3 cursor-pointer select-none group p-2 rounded-lg hover:bg-slate-50 transition-colors">
@@ -112,62 +109,65 @@ export class SetupRenderer {
             `;
             this.shuffleWrapper.appendChild(container);
 
-            const shuffleParams = this.shuffleWrapper.querySelector('#shuffle-check') as HTMLInputElement;
-            shuffleParams?.addEventListener('change', (e) => {
+            const shuffleParams = this.shuffleWrapper.querySelector(
+                "#shuffle-check"
+            ) as HTMLInputElement;
+            shuffleParams?.addEventListener("change", (e) => {
                 onToggle((e.target as HTMLInputElement).checked);
             });
         }
 
-        
-        const check = this.shuffleWrapper.querySelector('#shuffle-check') as HTMLInputElement;
+        const check = this.shuffleWrapper.querySelector("#shuffle-check") as HTMLInputElement;
         if (check) check.checked = isEnabled;
     }
 
     public renderScoreControl(isEnabled: boolean, onToggle: (val: boolean) => void) {
         if (!this.shuffleWrapper) return;
-        
-        
-        
-        
-        
 
-        const scoreCheck = this.shuffleWrapper.querySelector('#score-check') as HTMLInputElement;
+        const scoreCheck = this.shuffleWrapper.querySelector("#score-check") as HTMLInputElement;
         if (scoreCheck) {
             scoreCheck.checked = isEnabled;
-            
-            
-            
-            
-            
-            
+
             scoreCheck.onchange = (e) => onToggle((e.target as HTMLInputElement).checked);
         }
     }
 
-    public renderHistoryList(history: any[], onLoad: (id: string) => void, onDelete: (id: string) => void) {
+    public renderHistoryList(
+        history: any[],
+        onLoad: (id: string) => void,
+        onDelete: (id: string) => void
+    ) {
         if (!this.historyContainer) return;
 
         if (history.length === 0) {
-            this.historyContainer.innerHTML = '<div class="text-center text-slate-400 text-xs py-8 italic bg-slate-50 rounded-xl border border-dashed border-slate-100">No hay torneos anteriores</div>';
+            this.historyContainer.innerHTML =
+                '<div class="text-center text-slate-400 text-xs py-8 italic bg-slate-50 rounded-xl border border-dashed border-slate-100">No hay torneos anteriores</div>';
             return;
         }
 
-        this.historyContainer.innerHTML = '';
+        this.historyContainer.innerHTML = "";
         const sorted = [...history].sort((a, b) => b.createdAt - a.createdAt);
 
         const fragment = document.createDocumentFragment();
-        sorted.forEach(item => {
-            const el = document.createElement('div');
-            el.className = "flex items-center justify-between p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-200 rounded-xl transition-all group animate-fade-in";
+        sorted.forEach((item) => {
+            const el = document.createElement("div");
+            el.className =
+                "flex items-center justify-between p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-200 rounded-xl transition-all group animate-fade-in";
 
-            const date = new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            const finished = item.status === 'FINISHED';
+            const date = new Date(item.createdAt).toLocaleDateString(undefined, {
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+            const finished = item.status === "FINISHED";
 
-            let statusHtml = '';
+            let statusHtml = "";
             if (finished && item.winner) {
                 statusHtml = `<span class="text-green-600 flex items-center gap-1 font-bold text-[10px] bg-green-50 px-1.5 py-0.5 rounded-full border border-green-100">${CROWN_ICON} ${item.winner.name}</span>`;
             } else if (finished) {
-                statusHtml = '<span class="text-green-500 icon-[mdi--check-circle-outline]" title="Finalizado"></span>';
+                statusHtml =
+                    '<span class="text-green-500 icon-[mdi--check-circle-outline]" title="Finalizado"></span>';
             } else {
                 statusHtml = `<span class="text-orange-400" title="En Curso">${CLOCK_ICON}</span>`;
             }
@@ -185,8 +185,8 @@ export class SetupRenderer {
                 </button>
             `;
 
-            el.querySelector('.load-btn')?.addEventListener('click', () => onLoad(item.id));
-            el.querySelector('.delete-btn')?.addEventListener('click', (e) => {
+            el.querySelector(".load-btn")?.addEventListener("click", () => onLoad(item.id));
+            el.querySelector(".delete-btn")?.addEventListener("click", (e) => {
                 e.stopPropagation();
                 onDelete(item.id);
             });

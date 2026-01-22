@@ -11,17 +11,21 @@ export class InputManager {
     }
 
     private setupListeners() {
-        window.addEventListener('keydown', (e) => this.keys[e.key] = true);
-        window.addEventListener('keyup', (e) => this.keys[e.key] = false);
-        window.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            if (Math.abs(e.deltaY) > 0) {
-                this.scrollAccumulator += -Math.sign(e.deltaY) * CONSTANTS.SCROLL_SENSITIVITY;
-            }
-            if (this.onRestart) this.onRestart();
-        }, { passive: false });
+        window.addEventListener("keydown", (e) => (this.keys[e.key] = true));
+        window.addEventListener("keyup", (e) => (this.keys[e.key] = false));
+        window.addEventListener(
+            "wheel",
+            (e) => {
+                e.preventDefault();
+                if (Math.abs(e.deltaY) > 0) {
+                    this.scrollAccumulator += -Math.sign(e.deltaY) * CONSTANTS.SCROLL_SENSITIVITY;
+                }
+                if (this.onRestart) this.onRestart();
+            },
+            { passive: false }
+        );
 
-        window.addEventListener('mousedown', () => {
+        window.addEventListener("mousedown", () => {
             if (this.onRestart) this.onRestart();
         });
     }

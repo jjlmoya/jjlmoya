@@ -1,11 +1,10 @@
-
-import { Renderer } from './engine/Renderer';
-import { InputManager } from './engine/InputManager';
-import { PhysicsSystem } from './engine/systems/PhysicsSystem';
-import { CollisionSystem } from './engine/systems/CollisionSystem';
-import { LevelGenerator } from './engine/systems/LevelGenerator';
-import type { GameState, Vector2 } from './engine/Types';
-import { DRAG_POWER } from './engine/Constants';
+import { Renderer } from "./engine/Renderer";
+import { InputManager } from "./engine/InputManager";
+import { PhysicsSystem } from "./engine/systems/PhysicsSystem";
+import { CollisionSystem } from "./engine/systems/CollisionSystem";
+import { LevelGenerator } from "./engine/systems/LevelGenerator";
+import type { GameState, Vector2 } from "./engine/Types";
+import { DRAG_POWER } from "./engine/Constants";
 
 export class MomentumTransferGame {
     private renderer: Renderer;
@@ -16,7 +15,6 @@ export class MomentumTransferGame {
     constructor(canvas: HTMLCanvasElement) {
         this.renderer = new Renderer(canvas);
 
-        
         const levelData = LevelGenerator.initLevel();
         this.state = {
             player: levelData.player,
@@ -25,7 +23,7 @@ export class MomentumTransferGame {
             isDragging: false,
             dragStart: { x: 0, y: 0 },
             dragCurrent: { x: 0, y: 0 },
-            resetting: false
+            resetting: false,
         };
 
         this.inputManager = new InputManager(
@@ -37,13 +35,11 @@ export class MomentumTransferGame {
     }
 
     private handleDragStart(pos: Vector2) {
-        
         const dx = pos.x - this.state.player.pos.x;
         const dy = pos.y - this.state.player.pos.y;
-        if (dx * dx + dy * dy < this.state.player.radius * this.state.player.radius * 100) { 
+        if (dx * dx + dy * dy < this.state.player.radius * this.state.player.radius * 100) {
             this.state.isDragging = true;
-            this.state.dragStart = pos; 
-            
+            this.state.dragStart = pos;
         }
     }
 
@@ -86,28 +82,25 @@ export class MomentumTransferGame {
     };
 
     private update() {
-        
         PhysicsSystem.update(this.state.player);
-        this.state.enemies.forEach(e => PhysicsSystem.update(e));
+        this.state.enemies.forEach((e) => PhysicsSystem.update(e));
 
-        
         CollisionSystem.checkEntityCollisions(this.state.player, this.state.enemies);
         CollisionSystem.checkEnemyCollisions(this.state.enemies);
-        CollisionSystem.checkObstacleCollisions([this.state.player, ...this.state.enemies], this.state.obstacles);
+        CollisionSystem.checkObstacleCollisions(
+            [this.state.player, ...this.state.enemies],
+            this.state.obstacles
+        );
 
-        
-        this.state.enemies = this.state.enemies.filter(e => !e.isDead);
+        this.state.enemies = this.state.enemies.filter((e) => !e.isDead);
 
-        
         if (this.state.player.isDead) {
             this.reset();
         }
 
-        
-        
         if (this.state.enemies.length === 0 && !this.state.resetting) {
             this.state.resetting = true;
-            
+
             setTimeout(() => this.reset(), 1000);
         }
     }
@@ -117,7 +110,7 @@ export class MomentumTransferGame {
         this.state.player = levelData.player;
         this.state.enemies = levelData.enemies;
         this.state.resetting = false;
-        
+
         this.state.player.vel = { x: 0, y: 0 };
         this.state.player.isDead = false;
     }

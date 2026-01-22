@@ -37,45 +37,32 @@ export class LoanCalculator {
         if (monthlyRate === 0) {
             monthlyPaymentBase = amount / totalMonths;
         } else {
-            monthlyPaymentBase = amount *
-                (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) /
+            monthlyPaymentBase =
+                (amount * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths))) /
                 (Math.pow(1 + monthlyRate, totalMonths) - 1);
         }
 
-        
         let originalTotalInterest = 0;
         let tempBalance = amount;
         for (let i = 0; i < totalMonths; i++) {
             const interest = tempBalance * monthlyRate;
             originalTotalInterest += interest;
-            tempBalance -= (monthlyPaymentBase - interest);
+            tempBalance -= monthlyPaymentBase - interest;
         }
 
-        
         const amortizationTable: AmortizationRow[] = [];
         let remainingBalance = amount;
         let totalInterest = 0;
         let actualMonths = 0;
 
         for (let month = 1; month <= totalMonths; month++) {
-            
             const interestPayment = remainingBalance * monthlyRate;
 
-            
             let principalPayment = monthlyPaymentBase - interestPayment;
 
-            
-            
             let currentExtra = monthlyExtraPayment;
 
-            
-            if ((principalPayment + currentExtra) > remainingBalance) {
-                
-                
-                
-                
-                
-                
+            if (principalPayment + currentExtra > remainingBalance) {
                 if (principalPayment > remainingBalance) {
                     principalPayment = remainingBalance;
                     currentExtra = 0;
@@ -84,10 +71,9 @@ export class LoanCalculator {
                 }
                 remainingBalance = 0;
             } else {
-                remainingBalance -= (principalPayment + currentExtra);
+                remainingBalance -= principalPayment + currentExtra;
             }
 
-            
             if (remainingBalance < 0.01) remainingBalance = 0;
 
             totalInterest += interestPayment;
@@ -99,7 +85,7 @@ export class LoanCalculator {
                 interest: Number(interestPayment.toFixed(2)),
                 principal: Number(principalPayment.toFixed(2)),
                 extraPayment: Number(currentExtra.toFixed(2)),
-                remainingBalance: Number(remainingBalance.toFixed(2))
+                remainingBalance: Number(remainingBalance.toFixed(2)),
             });
 
             if (remainingBalance <= 0) break;
@@ -110,12 +96,12 @@ export class LoanCalculator {
             totalInterest: Number(totalInterest.toFixed(2)),
             totalPaid: Number((amount + totalInterest).toFixed(2)),
             amortizationTable,
-            
+
             originalTotalInterest: Number(originalTotalInterest.toFixed(2)),
             interestSaved: Number((originalTotalInterest - totalInterest).toFixed(2)),
             actualDurationMonths: actualMonths,
             monthsSaved: totalMonths - actualMonths,
-            yearsSaved: Number(((totalMonths - actualMonths) / 12).toFixed(1))
+            yearsSaved: Number(((totalMonths - actualMonths) / 12).toFixed(1)),
         };
 
         return stats;

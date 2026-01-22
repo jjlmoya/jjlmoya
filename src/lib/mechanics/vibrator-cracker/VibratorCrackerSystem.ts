@@ -5,15 +5,12 @@ export class VibratorCrackerSystem {
     lastTickAngle: number = 0;
     isUnlocked: boolean = false;
 
-    
-    private readonly TICK_PATTERN = [15]; 
-    private readonly SUCCESS_PATTERN = [20, 30, 20]; 
+    private readonly TICK_PATTERN = [15];
+    private readonly SUCCESS_PATTERN = [20, 30, 20];
     private readonly UNLOCK_PATTERN = [50, 50, 50, 50, 200];
 
-    
     private audioCtx: AudioContext | null = null;
 
-    
     onTick?: () => void;
     onSuccess?: () => void;
 
@@ -31,7 +28,6 @@ export class VibratorCrackerSystem {
     }
 
     private generateCombination() {
-        
         this.combination = [
             Math.floor(Math.random() * 100),
             Math.floor(Math.random() * 100),
@@ -48,20 +44,16 @@ export class VibratorCrackerSystem {
         this.lastTickAngle = 0;
     }
 
-    
     updateDial(angle: number): { tick: boolean; isCorrect: boolean; unlocked: boolean } {
         if (this.isUnlocked) return { tick: false, isCorrect: false, unlocked: true };
 
         this.currentAngle = angle;
 
-        
         let degrees = ((this.currentAngle * 180) / Math.PI) % 360;
         if (degrees < 0) degrees += 360;
 
-        
         const currentNumber = Math.floor((degrees / 360) * 100);
 
-        
         const lastDegrees = ((this.lastTickAngle * 180) / Math.PI) % 360;
         const lastNumber = Math.floor(
             ((lastDegrees < 0 ? lastDegrees + 360 : lastDegrees) / 360) * 100
@@ -74,13 +66,12 @@ export class VibratorCrackerSystem {
             const isTarget = currentNumber === targetNumber;
 
             if (isTarget) {
-                
                 this.triggerHaptic(this.TICK_PATTERN);
-                this.playClick(500); 
+                this.playClick(500);
                 this.onTick?.();
             } else {
                 this.triggerHaptic(this.TICK_PATTERN);
-                this.playClick(400); 
+                this.playClick(400);
                 this.onTick?.();
             }
 
@@ -93,7 +84,6 @@ export class VibratorCrackerSystem {
     isOnTarget(angle: number): boolean {
         if (this.isUnlocked) return false;
 
-        
         let degrees = ((angle * 180) / Math.PI) % 360;
         if (degrees < 0) degrees += 360;
         const currentNumber = Math.floor((degrees / 360) * 100);
@@ -106,9 +96,8 @@ export class VibratorCrackerSystem {
 
         this.currentNumberIndex++;
 
-        
         this.triggerHaptic(this.SUCCESS_PATTERN);
-        this.playClick(800); 
+        this.playClick(800);
         this.onSuccess?.();
 
         if (this.currentNumberIndex >= this.combination.length) {
@@ -123,7 +112,6 @@ export class VibratorCrackerSystem {
         if (navigator.vibrate) {
             navigator.vibrate(pattern);
         } else {
-            
             this.triggerIOSHaptic();
         }
     }
@@ -131,11 +119,10 @@ export class VibratorCrackerSystem {
     private iosSwitch: HTMLInputElement | null = null;
 
     private triggerIOSHaptic() {
-        
         if (!this.iosSwitch) {
             this.iosSwitch = document.createElement("input");
             this.iosSwitch.type = "checkbox";
-            
+
             this.iosSwitch.setAttribute("switch", "true");
             this.iosSwitch.style.position = "absolute";
             this.iosSwitch.style.opacity = "0";
@@ -143,14 +130,12 @@ export class VibratorCrackerSystem {
             document.body.appendChild(this.iosSwitch);
         }
 
-        
         this.iosSwitch.checked = !this.iosSwitch.checked;
     }
 
     private playClick(frequency: number) {
         if (!this.audioCtx) return;
 
-        
         if (this.audioCtx.state === "suspended") {
             this.audioCtx.resume();
         }

@@ -8,7 +8,10 @@ export const gamePassives = [
         cost: 500,
         requiredLvl: 10,
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("rent-shop"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("rent-shop");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "rent-2",
@@ -19,7 +22,10 @@ export const gamePassives = [
         cost: 5000,
         requiredLvl: 25,
         rank: 2,
-        effect: (e) => { const b = e.getBusiness("rent-shop"); if (b) b.mult *= 3; }
+        effect: (e) => {
+            const b = e.getBusiness("rent-shop");
+            if (b) b.mult *= 3;
+        },
     },
     {
         id: "food-1",
@@ -30,7 +36,10 @@ export const gamePassives = [
         cost: 2500,
         requiredLvl: 15,
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("fast-food"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("fast-food");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "sym-food-rent",
@@ -42,7 +51,10 @@ export const gamePassives = [
         requiredLvl: 20,
         otherReq: { bId: "rent-shop", lvl: 50 },
         rank: 2,
-        effect: (e) => { const b = e.getBusiness("fast-food"); if (b) b.mult *= 5; }
+        effect: (e) => {
+            const b = e.getBusiness("fast-food");
+            if (b) b.mult *= 5;
+        },
     },
     {
         id: "wash-1",
@@ -53,7 +65,10 @@ export const gamePassives = [
         cost: 10000,
         requiredLvl: 20,
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("laundry"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("laundry");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "gym-1",
@@ -64,7 +79,10 @@ export const gamePassives = [
         cost: 100000,
         requiredLvl: 15,
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("gym"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("gym");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "sym-gym-pharma",
@@ -76,7 +94,10 @@ export const gamePassives = [
         requiredLvl: 50,
         otherReq: { bId: "pharmacy", lvl: 10 },
         rank: 2,
-        effect: (e) => { const b = e.getBusiness("gym"); if (b) b.mult *= 10; }
+        effect: (e) => {
+            const b = e.getBusiness("gym");
+            if (b) b.mult *= 10;
+        },
     },
     {
         id: "real-1",
@@ -87,7 +108,10 @@ export const gamePassives = [
         cost: 500000,
         requiredLvl: 10,
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("real-estate"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("real-estate");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "sym-real-rent",
@@ -99,7 +123,10 @@ export const gamePassives = [
         requiredLvl: 30,
         otherReq: { bId: "rent-shop", lvl: 100 },
         rank: 2,
-        effect: (e) => { const b = e.getBusiness("real-estate"); if (b) b.mult *= 5; }
+        effect: (e) => {
+            const b = e.getBusiness("real-estate");
+            if (b) b.mult *= 5;
+        },
     },
     {
         id: "cortex-1",
@@ -110,7 +137,10 @@ export const gamePassives = [
         cost: 5000000,
         requiredLvl: 15,
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("cortex"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("cortex");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "sym-corp-cortex",
@@ -122,7 +152,10 @@ export const gamePassives = [
         requiredLvl: 10,
         otherReq: { bId: "cortex", lvl: 100 },
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("megacorp"); if (b) b.mult *= 20; }
+        effect: (e) => {
+            const b = e.getBusiness("megacorp");
+            if (b) b.mult *= 20;
+        },
     },
     {
         id: "omni-1",
@@ -133,7 +166,10 @@ export const gamePassives = [
         cost: 4000000000,
         requiredLvl: 50,
         rank: 2,
-        effect: (e) => { const b = e.getBusiness("megacorp"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("megacorp");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "sym-log-food",
@@ -145,7 +181,10 @@ export const gamePassives = [
         requiredLvl: 20,
         otherReq: { bId: "fast-food", lvl: 100 },
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("logistics"); if (b) b.mult *= 3; }
+        effect: (e) => {
+            const b = e.getBusiness("logistics");
+            if (b) b.mult *= 3;
+        },
     },
     {
         id: "sym-pharma-bioma",
@@ -157,7 +196,10 @@ export const gamePassives = [
         requiredLvl: 20,
         otherReq: { bId: "arkology", lvl: 5 },
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("pharmacy"); if (b) b.mult *= 10; }
+        effect: (e) => {
+            const b = e.getBusiness("pharmacy");
+            if (b) b.mult *= 10;
+        },
     },
     {
         id: "fusion-1",
@@ -168,7 +210,10 @@ export const gamePassives = [
         cost: 1000000000000,
         requiredLvl: 10,
         rank: 1,
-        effect: (e) => { const b = e.getBusiness("fusion"); if (b) b.mult *= 2; }
+        effect: (e) => {
+            const b = e.getBusiness("fusion");
+            if (b) b.mult *= 2;
+        },
     },
     {
         id: "sym-fusion-sat",
@@ -180,6 +225,9 @@ export const gamePassives = [
         requiredLvl: 25,
         otherReq: { bId: "satellite", lvl: 50 },
         rank: 2,
-        effect: (e) => { const b = e.getBusiness("fusion"); if (b) b.mult *= 5; }
-    }
+        effect: (e) => {
+            const b = e.getBusiness("fusion");
+            if (b) b.mult *= 5;
+        },
+    },
 ];

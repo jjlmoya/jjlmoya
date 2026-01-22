@@ -19,7 +19,7 @@ export class WorldManager {
                 x: (Math.random() - 0.5) * CONSTANTS.WORLD_SIZE,
                 y: (Math.random() - 0.5) * CONSTANTS.WORLD_SIZE,
                 size: Math.random() * 2.5,
-                opacity: 0.1 + Math.random() * 0.7
+                opacity: 0.1 + Math.random() * 0.7,
             });
         }
     }
@@ -30,12 +30,16 @@ export class WorldManager {
         this.nebulas = [];
 
         for (let i = 0; i < CONSTANTS.NEBULA_COUNT; i++) {
-            const colors = ['rgba(14, 165, 233, 0.05)', 'rgba(139, 92, 246, 0.05)', 'rgba(236, 72, 153, 0.05)'];
+            const colors = [
+                "rgba(14, 165, 233, 0.05)",
+                "rgba(139, 92, 246, 0.05)",
+                "rgba(236, 72, 153, 0.05)",
+            ];
             this.nebulas.push({
                 x: (Math.random() - 0.5) * CONSTANTS.WORLD_SIZE,
                 y: (Math.random() - 0.5) * CONSTANTS.WORLD_SIZE,
                 size: 2000 + Math.random() * 3000,
-                color: colors[Math.floor(Math.random() * colors.length)]
+                color: colors[Math.floor(Math.random() * colors.length)],
             });
         }
 
@@ -45,7 +49,7 @@ export class WorldManager {
                 y: (Math.random() - 0.5) * (CONSTANTS.WORLD_SIZE * 0.9),
                 size: 15 + Math.random() * 10,
                 seed: Math.random(),
-                gathered: false
+                gathered: false,
             });
         }
 
@@ -62,7 +66,7 @@ export class WorldManager {
                 x: ox,
                 y: oy,
                 size: 120 + Math.random() * 250,
-                seed: Math.random()
+                seed: Math.random(),
             });
         }
     }

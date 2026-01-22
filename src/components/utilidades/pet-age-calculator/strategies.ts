@@ -1,4 +1,3 @@
-
 export interface PetAgeStrategy {
     calculateHumanAge(chronologicalAge: number, size?: string): number;
     getLifeStage(humanAge: number): string;
@@ -17,11 +16,21 @@ export class DogStrategy implements PetAgeStrategy {
         let multiplier = 5;
 
         switch (size) {
-            case "small": multiplier = 5; break;
-            case "medium": multiplier = 6; break;
-            case "large": multiplier = 7; break;
-            case "giant": multiplier = 8; break;
-            default: multiplier = 6; break;
+            case "small":
+                multiplier = 5;
+                break;
+            case "medium":
+                multiplier = 6;
+                break;
+            case "large":
+                multiplier = 7;
+                break;
+            case "giant":
+                multiplier = 8;
+                break;
+            default:
+                multiplier = 6;
+                break;
         }
 
         return Math.floor(base + yearsAfterTwo * multiplier);
@@ -69,9 +78,11 @@ export class CatStrategy implements PetAgeStrategy {
 export class PetStrategyFactory {
     static getStrategy(type: string): PetAgeStrategy {
         switch (type) {
-            case "cat": return new CatStrategy();
+            case "cat":
+                return new CatStrategy();
             case "dog":
-            default: return new DogStrategy();
+            default:
+                return new DogStrategy();
         }
     }
 }

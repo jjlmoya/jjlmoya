@@ -32,7 +32,7 @@ export class ScrollMomentumGame {
     private upgrades: Upgrades = { engine: 1, hull: 1, steering: 1 };
     private isAtBase: boolean = false;
 
-    private readonly STORAGE_KEY = 'scroll_momentum_save_v1';
+    private readonly STORAGE_KEY = "scroll_momentum_save_v1";
 
     constructor(canvas: HTMLCanvasElement) {
         this.renderer = new Renderer(canvas);
@@ -41,7 +41,7 @@ export class ScrollMomentumGame {
         });
         this.world = new WorldManager();
 
-        window.addEventListener('resize', () => this.renderer.resize());
+        window.addEventListener("resize", () => this.renderer.resize());
 
         this.loadGame();
         this.resetGame(true);
@@ -63,7 +63,7 @@ export class ScrollMomentumGame {
     private saveGame() {
         const data = {
             upgrades: this.upgrades,
-            totalGathered: this.totalGathered
+            totalGathered: this.totalGathered,
         };
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     }
@@ -121,8 +121,10 @@ export class ScrollMomentumGame {
         }
 
         const turnSpeed = CONSTANTS.TURN_ACCEL * (1 + this.upgrades.steering * 0.2);
-        if (this.input.keys['a'] || this.input.keys['A'] || this.input.keys['ArrowLeft']) this.angularVelocity -= turnSpeed;
-        if (this.input.keys['d'] || this.input.keys['D'] || this.input.keys['ArrowRight']) this.angularVelocity += turnSpeed;
+        if (this.input.keys["a"] || this.input.keys["A"] || this.input.keys["ArrowLeft"])
+            this.angularVelocity -= turnSpeed;
+        if (this.input.keys["d"] || this.input.keys["D"] || this.input.keys["ArrowRight"])
+            this.angularVelocity += turnSpeed;
 
         this.angle += this.angularVelocity;
         this.angularVelocity *= CONSTANTS.ANGULAR_DRAG;
@@ -130,18 +132,18 @@ export class ScrollMomentumGame {
         this.x += Math.cos(this.angle) * this.velocity;
         this.y += Math.sin(this.angle) * this.velocity;
 
-        const currentDrag = CONSTANTS.DRAG + (this.upgrades.engine * 0.0005);
+        const currentDrag = CONSTANTS.DRAG + this.upgrades.engine * 0.0005;
         this.velocity *= Math.min(0.998, currentDrag);
 
         if (this.velocity > 0.1) {
             this.particles.push({
                 x: this.x - Math.cos(this.angle) * 35 + (Math.random() - 0.5) * 15,
                 y: this.y - Math.sin(this.angle) * 35 + (Math.random() - 0.5) * 15,
-                alpha: 1.0
+                alpha: 1.0,
             });
         }
-        this.particles.forEach(p => p.alpha -= 0.025);
-        this.particles = this.particles.filter(p => p.alpha > 0);
+        this.particles.forEach((p) => (p.alpha -= 0.025));
+        this.particles = this.particles.filter((p) => p.alpha > 0);
 
         this.checkCollisions();
         this.updateBaseInteraction();
@@ -184,26 +186,26 @@ export class ScrollMomentumGame {
     private handleUpgrades() {
         if (this.totalGathered >= CONSTANTS.UPGRADE_COST) {
             let upgraded = false;
-            if (this.input.keys['1']) {
+            if (this.input.keys["1"]) {
                 this.upgrades.engine++;
                 this.totalGathered -= CONSTANTS.UPGRADE_COST;
                 this.message = "MOTOR MEJORADO";
                 this.messageTimer = 60;
-                this.input.keys['1'] = false;
+                this.input.keys["1"] = false;
                 upgraded = true;
-            } else if (this.input.keys['2']) {
+            } else if (this.input.keys["2"]) {
                 this.upgrades.hull++;
                 this.totalGathered -= CONSTANTS.UPGRADE_COST;
                 this.message = "CASCO REFORZADO";
                 this.messageTimer = 60;
-                this.input.keys['2'] = false;
+                this.input.keys["2"] = false;
                 upgraded = true;
-            } else if (this.input.keys['3']) {
+            } else if (this.input.keys["3"]) {
                 this.upgrades.steering++;
                 this.totalGathered -= CONSTANTS.UPGRADE_COST;
                 this.message = "GIROS OPTIMIZADOS";
                 this.messageTimer = 60;
-                this.input.keys['3'] = false;
+                this.input.keys["3"] = false;
                 upgraded = true;
             }
 
@@ -214,7 +216,7 @@ export class ScrollMomentumGame {
     }
 
     private checkCollisions() {
-        this.world.scrap.forEach(s => {
+        this.world.scrap.forEach((s) => {
             if (!s.gathered) {
                 const dx = s.x - this.x;
                 const dy = s.y - this.y;
@@ -227,7 +229,7 @@ export class ScrollMomentumGame {
             }
         });
 
-        this.world.obstacles.forEach(o => {
+        this.world.obstacles.forEach((o) => {
             const dx = o.x - this.x;
             const dy = o.y - this.y;
             if (Math.sqrt(dx * dx + dy * dy) < o.size / 2 + 25) {
@@ -247,15 +249,30 @@ export class ScrollMomentumGame {
     private draw() {
         this.renderer.clear();
         this.renderer.drawWorld(
-            this.x, this.y, this.angle,
-            this.world.stars, this.world.scrap, this.world.obstacles, this.world.nebulas,
-            this.particles, this.velocity, this.cameraShake, this.time
+            this.x,
+            this.y,
+            this.angle,
+            this.world.stars,
+            this.world.scrap,
+            this.world.obstacles,
+            this.world.nebulas,
+            this.particles,
+            this.velocity,
+            this.cameraShake,
+            this.time
         );
         this.renderer.drawShip(this.velocity, this.angularVelocity, this.pedalFlash);
         this.renderer.drawHUD(
-            this.velocity, this.health, this.totalGathered + this.score,
-            this.world.scrap, this.upgrades, this.isAtBase,
-            this.x, this.y, this.angle, this.time
+            this.velocity,
+            this.health,
+            this.totalGathered + this.score,
+            this.world.scrap,
+            this.upgrades,
+            this.isAtBase,
+            this.x,
+            this.y,
+            this.angle,
+            this.time
         );
         this.renderer.drawMessage(this.message, this.messageTimer);
         if (this.gameOver) this.renderer.drawGameOver();

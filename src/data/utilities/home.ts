@@ -11,7 +11,7 @@ export const homeSection: SectionData = {
             iconFg: "mdi:wifi-lock",
             title: "Generador QR Offline",
             description: "Crea QRs para WiFi, Contactos y URLs. 100% Privado.",
-            color: "#2563eb"
+            color: "#2563eb",
         },
         {
             href: "/utilidades/calculadora-solar/",
@@ -19,7 +19,7 @@ export const homeSection: SectionData = {
             iconFg: "mdi:angle-acute",
             title: "Calculadora Solar",
             description: "Ángulo de inclinación óptimo para placas solares según tu latitud.",
-            color: "#f59e0b"
+            color: "#f59e0b",
         },
         {
             href: "/utilidades/calculadora-tiro-proyector/",
@@ -27,7 +27,7 @@ export const homeSection: SectionData = {
             iconFg: "mdi:video-input-component",
             title: "Calculadora Distancia Proyector",
             description: "Calcula dónde poner el proyector según las pulgadas de pantalla.",
-            color: "#06b6d4"
+            color: "#06b6d4",
         },
         {
             href: "/utilidades/punto-de-rocio/",
@@ -35,8 +35,7 @@ export const homeSection: SectionData = {
             iconFg: "mdi:bacteria",
             title: "Punto de Rocío",
             description: "Calcula la temperatura de condensación para evitar moho en casa.",
-            color: "#a855f7"
-        }
-    ]
+            color: "#a855f7",
+        },
+    ],
 };
-

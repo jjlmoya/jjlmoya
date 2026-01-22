@@ -8,7 +8,7 @@ export const TIRE_SIZES: TireSize[] = [
     { label: "700x25c", diameterInches: 26.5 },
     { label: "700x28c", diameterInches: 26.8 },
     { label: "700x32c", diameterInches: 27.0 },
-    { label: "26\" x 2.0", diameterInches: 26.0 },
+    { label: '26" x 2.0', diameterInches: 26.0 },
 ];
 
 export const calculateGcd = (a: number, b: number): number => {

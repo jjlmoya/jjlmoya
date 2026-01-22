@@ -1,6 +1,14 @@
-import type { Entity, Vector2D, Obstacle } from './Types';
-import { CANVAS_WIDTH, CANVAS_HEIGHT, PLAYER_SIZE, ENEMY_SIZE, BULLET_SIZE, STAGE_PADDING, MAX_HP } from './Constants';
-import { LevelGenerator } from './systems/LevelGenerator';
+import type { Entity, Vector2D, Obstacle } from "./Types";
+import {
+    CANVAS_WIDTH,
+    CANVAS_HEIGHT,
+    PLAYER_SIZE,
+    ENEMY_SIZE,
+    BULLET_SIZE,
+    STAGE_PADDING,
+    MAX_HP,
+} from "./Constants";
+import { LevelGenerator } from "./systems/LevelGenerator";
 
 export class EntityManager {
     private entities: Entity[] = [];
@@ -24,12 +32,15 @@ export class EntityManager {
     private spawnPlayer(): void {
         this.entities.push({
             id: this.generateId(),
-            position: { x: CANVAS_WIDTH / 2 - PLAYER_SIZE / 2, y: CANVAS_HEIGHT / 2 - PLAYER_SIZE / 2 },
+            position: {
+                x: CANVAS_WIDTH / 2 - PLAYER_SIZE / 2,
+                y: CANVAS_HEIGHT / 2 - PLAYER_SIZE / 2,
+            },
             velocity: { x: 0, y: 0 },
             size: PLAYER_SIZE,
-            type: 'player',
+            type: "player",
             destroyed: false,
-            hp: MAX_HP
+            hp: MAX_HP,
         });
     }
 
@@ -45,17 +56,20 @@ export class EntityManager {
             do {
                 pos = {
                     x: margin + Math.random() * (CANVAS_WIDTH - margin * 2),
-                    y: margin + Math.random() * (CANVAS_HEIGHT - margin * 2)
+                    y: margin + Math.random() * (CANVAS_HEIGHT - margin * 2),
                 };
 
-                const inObstacle = obstacles.some(obs =>
-                    pos.x < obs.x + obs.width + 20 &&
-                    pos.x + ENEMY_SIZE > obs.x - 20 &&
-                    pos.y < obs.y + obs.height + 20 &&
-                    pos.y + ENEMY_SIZE > obs.y - 20
+                const inObstacle = obstacles.some(
+                    (obs) =>
+                        pos.x < obs.x + obs.width + 20 &&
+                        pos.x + ENEMY_SIZE > obs.x - 20 &&
+                        pos.y < obs.y + obs.height + 20 &&
+                        pos.y + ENEMY_SIZE > obs.y - 20
                 );
 
-                const distToCenter = Math.sqrt(Math.pow(pos.x - CANVAS_WIDTH / 2, 2) + Math.pow(pos.y - CANVAS_HEIGHT / 2, 2));
+                const distToCenter = Math.sqrt(
+                    Math.pow(pos.x - CANVAS_WIDTH / 2, 2) + Math.pow(pos.y - CANVAS_HEIGHT / 2, 2)
+                );
 
                 invalidPos = inObstacle || distToCenter < 400;
                 attempts++;
@@ -67,12 +81,12 @@ export class EntityManager {
                 position: pos,
                 velocity: {
                     x: (Math.random() - 0.5) * speed,
-                    y: (Math.random() - 0.5) * speed
+                    y: (Math.random() - 0.5) * speed,
                 },
                 size: ENEMY_SIZE,
-                type: 'enemy',
+                type: "enemy",
                 destroyed: false,
-                weaponCooldown: Math.random() * LevelGenerator.getEnemyCooldown(level)
+                weaponCooldown: Math.random() * LevelGenerator.getEnemyCooldown(level),
             });
         }
     }
@@ -82,21 +96,25 @@ export class EntityManager {
     }
 
     public cleanDestroyed(): void {
-        this.entities = this.entities.filter(e => !e.destroyed);
+        this.entities = this.entities.filter((e) => !e.destroyed);
     }
 
     public getPlayer(): Entity | undefined {
-        return this.entities.find(e => e.type === 'player');
+        return this.entities.find((e) => e.type === "player");
     }
 
-    public addBullet(position: Vector2D, velocity: Vector2D, type: 'bullet' | 'enemy_bullet'): void {
+    public addBullet(
+        position: Vector2D,
+        velocity: Vector2D,
+        type: "bullet" | "enemy_bullet"
+    ): void {
         this.entities.push({
             id: this.generateId(),
             position: { ...position },
             velocity: { ...velocity },
             size: BULLET_SIZE,
             type,
-            destroyed: false
+            destroyed: false,
         });
     }
 }

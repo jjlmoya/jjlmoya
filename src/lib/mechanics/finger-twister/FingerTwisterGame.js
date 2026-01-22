@@ -9,7 +9,7 @@ export class FingerTwisterGame {
 
         this.mechanic = new FingerTwisterMechanic(this.width, this.height);
 
-        this.pointers = []; 
+        this.pointers = [];
 
         this.loop = this.loop.bind(this);
         this.handleStart = this.handleStart.bind(this);
@@ -21,13 +21,11 @@ export class FingerTwisterGame {
     }
 
     initInput() {
-        
         this.canvas.addEventListener("touchstart", this.handleStart, { passive: false });
         this.canvas.addEventListener("touchmove", this.handleMove, { passive: false });
         this.canvas.addEventListener("touchend", this.handleEnd);
         this.canvas.addEventListener("touchcancel", this.handleEnd);
 
-        
         this.canvas.addEventListener("mousedown", (e) => {
             this.handleStart({
                 preventDefault: () => {},
@@ -63,7 +61,7 @@ export class FingerTwisterGame {
 
         if (this.mechanic.isGameOver || this.mechanic.isWin) {
             this.mechanic.reset();
-            this.pointers = []; 
+            this.pointers = [];
             return;
         }
 
@@ -117,11 +115,9 @@ export class FingerTwisterGame {
     }
 
     draw() {
-        
         this.ctx.fillStyle = "#1a1a1a";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        
         for (const node of this.mechanic.nodes) {
             this.ctx.beginPath();
             this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
@@ -137,7 +133,6 @@ export class FingerTwisterGame {
                 this.ctx.shadowBlur = 0;
                 this.ctx.stroke();
 
-                
                 const pulse = (Math.sin(Date.now() / 200) + 1) * 0.5;
                 this.ctx.fillStyle = `rgba(255, 255, 255, ${pulse * 0.3})`;
                 this.ctx.fill();
@@ -148,7 +143,6 @@ export class FingerTwisterGame {
             }
         }
 
-        
         for (const p of this.pointers) {
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, 20, 0, Math.PI * 2);
@@ -157,14 +151,12 @@ export class FingerTwisterGame {
             this.ctx.stroke();
         }
 
-        
         this.ctx.fillStyle = "#FFFFFF";
         this.ctx.font = "bold 40px monospace";
         this.ctx.textAlign = "center";
         this.ctx.shadowBlur = 0;
-        this.ctx.fillText(Math.floor(this.mechanic.score / 60), this.width / 2, 50); 
+        this.ctx.fillText(Math.floor(this.mechanic.score / 60), this.width / 2, 50);
 
-        
         if (this.mechanic.isGameOver) {
             this.ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
             this.ctx.fillRect(0, 0, this.width, this.height);
@@ -178,7 +170,6 @@ export class FingerTwisterGame {
             this.ctx.fillText("Tap to Restart", this.width / 2, this.height / 2 + 30);
         }
 
-        
         if (this.mechanic.isWin) {
             this.ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
             this.ctx.fillRect(0, 0, this.width, this.height);
@@ -198,8 +189,6 @@ export class FingerTwisterGame {
         this.canvas.removeEventListener("touchmove", this.handleMove);
         this.canvas.removeEventListener("touchend", this.handleEnd);
         this.canvas.removeEventListener("touchcancel", this.handleEnd);
-
-        
 
         cancelAnimationFrame(this.animationId);
     }

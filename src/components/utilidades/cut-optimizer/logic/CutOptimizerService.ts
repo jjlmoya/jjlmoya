@@ -41,7 +41,7 @@ export class CutOptimizerService {
         kerf: number = 0
     ): OptimizationResult {
         const allCuts: number[] = [];
-        cuts.forEach(req => {
+        cuts.forEach((req) => {
             for (let i = 0; i < req.quantity; i++) {
                 allCuts.push(req.length);
             }
@@ -61,10 +61,12 @@ export class CutOptimizerService {
 
             for (let i = 0; i < stockPieces.length; i++) {
                 const piece = stockPieces[i];
-                
+
                 const currentCuts = piece.cuts as number[];
 
-                const currentUsed = currentCuts.reduce((a, b) => a + b, 0) + (currentCuts.length > 0 ? (currentCuts.length - 1) * kerf : 0);
+                const currentUsed =
+                    currentCuts.reduce((a, b) => a + b, 0) +
+                    (currentCuts.length > 0 ? (currentCuts.length - 1) * kerf : 0);
                 const currentRemaining = stockLength - currentUsed;
                 const spaceRequired = currentCuts.length > 0 ? kerf + cutLength : cutLength;
 
@@ -83,16 +85,16 @@ export class CutOptimizerService {
                 stockPieces.push({
                     stockId: stockPieces.length + 1,
                     stockLength: stockLength,
-                    stockWidth: undefined, 
+                    stockWidth: undefined,
                     cuts: [cutLength],
                     waste: 0,
-                    utilization: 0
+                    utilization: 0,
                 });
             }
         }
 
         let totalWaste = 0;
-        stockPieces.forEach(piece => {
+        stockPieces.forEach((piece) => {
             const currentCuts = piece.cuts as number[];
             const cutsSum = currentCuts.reduce((a, b) => a + b, 0);
             const kerfLoss = currentCuts.length > 1 ? (currentCuts.length - 1) * kerf : 0;
@@ -108,7 +110,7 @@ export class CutOptimizerService {
             totalStockUsed: stockPieces.length,
             totalWaste,
             totalCuts: allCuts.length,
-            stockPieces
+            stockPieces,
         };
     }
 
@@ -118,25 +120,22 @@ export class CutOptimizerService {
         stockWidth: number,
         kerf: number = 0
     ): OptimizationResult {
-        
         const items: { w: number; h: number; id: string }[] = [];
-        cuts.forEach(req => {
+        cuts.forEach((req) => {
             for (let i = 0; i < req.quantity; i++) {
-                items.push({ w: req.length, h: req.width || 0, id: req.id }); 
+                items.push({ w: req.length, h: req.width || 0, id: req.id });
             }
         });
 
-        
-        items.sort((a, b) => (b.w * b.h) - (a.w * a.h));
+        items.sort((a, b) => b.w * b.h - a.w * a.h);
 
         const stockPieces: OptimizedStock[] = [];
-        
+
         const freeRectsMap: Map<number, Rect[]> = new Map();
 
-        items.forEach(item => {
+        items.forEach((item) => {
             let placed = false;
 
-            
             for (let i = 0; i < stockPieces.length; i++) {
                 const freeRects = freeRectsMap.get(i)!;
                 const fit = this.findBestFit(item, freeRects);
@@ -149,17 +148,14 @@ export class CutOptimizerService {
                 }
             }
 
-            
             if (!placed) {
                 const newId = stockPieces.length;
                 const initialFreeRect: Rect = { x: 0, y: 0, w: stockLength, h: stockWidth };
 
-                
                 const fitsNormal = item.w <= stockLength && item.h <= stockWidth;
                 const fitsRotated = item.h <= stockLength && item.w <= stockWidth;
 
                 if (!fitsNormal && !fitsRotated) {
-                    
                     return;
                 }
 
@@ -170,57 +166,44 @@ export class CutOptimizerService {
                     stockWidth,
                     cuts: [],
                     waste: 0,
-                    utilization: 0
+                    utilization: 0,
                 };
                 stockPieces.push(newPiece);
 
                 const freeRects = freeRectsMap.get(newId)!;
-                
+
                 const rotated = !fitsNormal && fitsRotated;
-                
+
                 const w = rotated ? item.h : item.w;
                 const h = rotated ? item.w : item.h;
 
                 const placedRect: Rect = { x: 0, y: 0, w, h };
                 (newPiece.cuts as Rect[]).push(placedRect);
 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-
-                
                 freeRects.splice(0, 1);
                 this.splitFreeRect(initialFreeRect, placedRect, freeRects, kerf);
             }
         });
 
-        
         let totalWaste = 0;
-        stockPieces.forEach(piece => {
+        stockPieces.forEach((piece) => {
             const currentCuts = piece.cuts as Rect[];
-            const usedArea = currentCuts.reduce((acc, c) => acc + (c.w * c.h), 0);
+            const usedArea = currentCuts.reduce((acc, c) => acc + c.w * c.h, 0);
             const totalArea = stockLength * stockWidth;
             piece.utilization = usedArea / totalArea;
-            piece.waste = totalArea - usedArea; 
+            piece.waste = totalArea - usedArea;
             totalWaste += piece.waste;
         });
 
         return {
             totalStockUsed: stockPieces.length,
-            totalCuts: items.length, 
-            totalWaste, 
-            stockPieces
+            totalCuts: items.length,
+            totalWaste,
+            stockPieces,
         };
     }
 
-    private static findBestFit(item: { w: number, h: number }, freeRects: Rect[]) {
+    private static findBestFit(item: { w: number; h: number }, freeRects: Rect[]) {
         let bestAreaFit = Infinity;
         let bestShortSideFit = Infinity;
         let index = -1;
@@ -230,14 +213,16 @@ export class CutOptimizerService {
         for (let i = 0; i < freeRects.length; i++) {
             const free = freeRects[i];
 
-            
             if (item.w <= free.w && item.h <= free.h) {
                 const leftoverHoriz = Math.abs(free.w - item.w);
                 const leftoverVert = Math.abs(free.h - item.h);
                 const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
                 const areaFit = free.w * free.h - item.w * item.h;
 
-                if (areaFit < bestAreaFit || (areaFit === bestAreaFit && shortSideFit < bestShortSideFit)) {
+                if (
+                    areaFit < bestAreaFit ||
+                    (areaFit === bestAreaFit && shortSideFit < bestShortSideFit)
+                ) {
                     bestAreaFit = areaFit;
                     bestShortSideFit = shortSideFit;
                     index = i;
@@ -246,14 +231,16 @@ export class CutOptimizerService {
                 }
             }
 
-            
             if (item.h <= free.w && item.w <= free.h) {
                 const leftoverHoriz = Math.abs(free.w - item.h);
                 const leftoverVert = Math.abs(free.h - item.w);
                 const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
                 const areaFit = free.w * free.h - item.h * item.w;
 
-                if (areaFit < bestAreaFit || (areaFit === bestAreaFit && shortSideFit < bestShortSideFit)) {
+                if (
+                    areaFit < bestAreaFit ||
+                    (areaFit === bestAreaFit && shortSideFit < bestShortSideFit)
+                ) {
                     bestAreaFit = areaFit;
                     bestShortSideFit = shortSideFit;
                     index = i;
@@ -266,36 +253,39 @@ export class CutOptimizerService {
         return { index, rotated, rect: bestRect };
     }
 
-    private static placeItem(item: { w: number, h: number }, rectIndex: number, rotated: boolean, freeRects: Rect[], kerf: number) {
+    private static placeItem(
+        item: { w: number; h: number },
+        rectIndex: number,
+        rotated: boolean,
+        freeRects: Rect[],
+        kerf: number
+    ) {
         const freeRect = freeRects[rectIndex];
         const w = rotated ? item.h : item.w;
         const h = rotated ? item.w : item.h;
 
-        
         freeRects.splice(rectIndex, 1);
 
         const placedRect = { x: freeRect.x, y: freeRect.y, w, h };
         this.splitFreeRect(freeRect, placedRect, freeRects, kerf);
     }
 
-    private static splitFreeRect(freeRect: Rect, placedRect: Rect, freeRects: Rect[], kerf: number) {
-        
-        
-
-        
+    private static splitFreeRect(
+        freeRect: Rect,
+        placedRect: Rect,
+        freeRects: Rect[],
+        kerf: number
+    ) {
         const wRem = freeRect.w - placedRect.w - kerf;
-        
-        const hRem = freeRect.h - placedRect.h - kerf;
 
-        
-        
+        const hRem = freeRect.h - placedRect.h - kerf;
 
         if (wRem > 0) {
             freeRects.push({
                 x: freeRect.x + placedRect.w + kerf,
                 y: freeRect.y,
                 w: wRem,
-                h: placedRect.h
+                h: placedRect.h,
             });
         }
         if (hRem > 0) {
@@ -303,7 +293,7 @@ export class CutOptimizerService {
                 x: freeRect.x,
                 y: freeRect.y + placedRect.h + kerf,
                 w: freeRect.w,
-                h: hRem
+                h: hRem,
             });
         }
     }

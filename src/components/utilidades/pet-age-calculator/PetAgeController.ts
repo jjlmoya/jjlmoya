@@ -1,4 +1,4 @@
-import { PetStrategyFactory } from './strategies';
+import { PetStrategyFactory } from "./strategies";
 
 export class PetAgeCalculatorUI {
     private shareOverlay: HTMLElement | null = null;
@@ -36,8 +36,8 @@ export class PetAgeCalculatorUI {
         this.handleInput = this.handleInput.bind(this);
         this.update = this.update.bind(this);
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', this.init);
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", this.init);
         } else {
             this.init();
         }
@@ -100,7 +100,7 @@ export class PetAgeCalculatorUI {
                 const target = e.currentTarget as HTMLElement;
                 this.petType = target.dataset.type || "dog";
 
-                this.petBtns?.forEach(b => b.classList.remove("active"));
+                this.petBtns?.forEach((b) => b.classList.remove("active"));
                 target.classList.add("active");
 
                 if (this.dogSizeSelector) {
@@ -113,7 +113,7 @@ export class PetAgeCalculatorUI {
         this.sizeBtns?.forEach((btn) => {
             btn.addEventListener("click", (e) => {
                 this.dogSize = (e.currentTarget as HTMLElement).dataset.size || "small";
-                this.sizeBtns?.forEach(b => b.classList.remove("active"));
+                this.sizeBtns?.forEach((b) => b.classList.remove("active"));
                 (e.currentTarget as HTMLElement).classList.add("active");
                 this.update();
             });
@@ -154,7 +154,7 @@ export class PetAgeCalculatorUI {
                 this.shareOverlay.classList.remove("hidden");
                 this.shareOverlay.classList.add("flex");
             }
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
 
             if (this.calculatorContainer) this.calculatorContainer.style.display = "none";
 
@@ -169,7 +169,7 @@ export class PetAgeCalculatorUI {
                 this.shareOverlay.classList.add("hidden");
                 this.shareOverlay.classList.remove("flex");
             }
-            document.body.style.overflow = '';
+            document.body.style.overflow = "";
 
             if (this.calculatorContainer) this.calculatorContainer.style.display = "block";
         }
@@ -223,16 +223,17 @@ export class PetAgeCalculatorUI {
 
         if (this.sharePetName) this.sharePetName.textContent = this.petName;
         if (this.shareHumanAge) this.shareHumanAge.textContent = humanAge.toString();
-        if (this.shareChronologicalAge) this.shareChronologicalAge.textContent = chronologicalAge.toString();
+        if (this.shareChronologicalAge)
+            this.shareChronologicalAge.textContent = chronologicalAge.toString();
         if (this.shareLifeStage) this.shareLifeStage.textContent = lifeStage;
 
         if (this.shareIconDog && this.shareIconCat) {
-            if (this.petType === 'dog') {
-                this.shareIconDog.classList.remove('hidden');
-                this.shareIconCat.classList.add('hidden');
+            if (this.petType === "dog") {
+                this.shareIconDog.classList.remove("hidden");
+                this.shareIconCat.classList.add("hidden");
             } else {
-                this.shareIconDog.classList.add('hidden');
-                this.shareIconCat.classList.remove('hidden');
+                this.shareIconDog.classList.add("hidden");
+                this.shareIconCat.classList.remove("hidden");
             }
         }
     }
@@ -242,7 +243,10 @@ export class PetAgeCalculatorUI {
             if (this.birthYearInput) {
                 this.birthYearInput.focus();
                 this.birthYearInput.classList.add("ring-4", "ring-red-200");
-                setTimeout(() => this.birthYearInput?.classList.remove("ring-4", "ring-red-200"), 500);
+                setTimeout(
+                    () => this.birthYearInput?.classList.remove("ring-4", "ring-red-200"),
+                    500
+                );
             }
             return;
         }
@@ -267,9 +271,8 @@ export class PetAgeCalculatorUI {
             setTimeout(() => {
                 window.location.href = newUrl;
             }, 800);
-
         } catch (err) {
-            console.error('Failed to copy: ', err);
+            console.error("Failed to copy: ", err);
             window.location.href = newUrl;
         }
     }

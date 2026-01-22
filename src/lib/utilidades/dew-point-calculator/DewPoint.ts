@@ -12,12 +12,15 @@ export class DewPointCalculator {
         return Math.round(dewPoint * 10) / 10;
     }
 
-    public static getMoldRisk(temperature: number, dewPoint: number): 'low' | 'medium' | 'high' | 'extreme' {
+    public static getMoldRisk(
+        temperature: number,
+        dewPoint: number
+    ): "low" | "medium" | "high" | "extreme" {
         const difference = temperature - dewPoint;
 
-        if (difference > 5) return 'low';
-        if (difference > 3) return 'medium';
-        if (difference > 1) return 'high';
-        return 'extreme';
+        if (difference > 5) return "low";
+        if (difference > 3) return "medium";
+        if (difference > 1) return "high";
+        return "extreme";
     }
 }

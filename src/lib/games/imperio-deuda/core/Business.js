@@ -1,4 +1,4 @@
-import { businessNames } from '../data/businessNames.js';
+import { businessNames } from "../data/businessNames.js";
 
 export class Business {
     constructor(config) {
@@ -16,7 +16,6 @@ export class Business {
 
         this.currentCost = this.baseCost;
         this.allowedOn = config.allowedOn || "block";
-
 
         this.instances = [];
     }

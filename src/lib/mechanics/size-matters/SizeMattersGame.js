@@ -25,7 +25,7 @@ export class SizeMattersGame {
 
         this.bindInput();
         this.generateInitialObstacles();
-        this.resize(); 
+        this.resize();
         this.loop = this.loop.bind(this);
         requestAnimationFrame(this.loop);
     }
@@ -53,13 +53,11 @@ export class SizeMattersGame {
         this.canvas.addEventListener("touchstart", startGrow, { passive: false });
         this.canvas.addEventListener("touchend", stopGrow);
 
-        
-        
         const updateX = (e) => {
             const rect = this.canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const targetX = clientX - rect.left;
-            
+
             this.player.targetX = targetX;
         };
 
@@ -76,7 +74,6 @@ export class SizeMattersGame {
     addObstacle(y) {
         const type = Math.random() > 0.5 ? "gap" : "breakable";
         if (type === "gap") {
-            
             const gapWidth = 40;
             const gapX = Math.random() * (this.width - gapWidth);
             this.obstacles.push({
@@ -88,7 +85,6 @@ export class SizeMattersGame {
                 passed: false,
             });
         } else {
-            
             const width = 100 + Math.random() * 100;
             const x = Math.random() * (this.width - width);
             this.obstacles.push({
@@ -106,7 +102,6 @@ export class SizeMattersGame {
     update(dt) {
         if (!this.isRunning) return;
 
-        
         const growSpeed = 100 * dt;
         if (this.player.isGrowing) {
             this.player.size = Math.min(this.player.size + growSpeed, this.player.maxSize);
@@ -114,47 +109,30 @@ export class SizeMattersGame {
             this.player.size = Math.max(this.player.size - growSpeed, this.player.minSize);
         }
 
-        
-        
-        
-
-        
-        
         const gravity = 500 * (this.player.size / this.player.maxSize) + 100;
 
         this.player.vy += gravity * dt;
-
-        
 
         this.player.vy *= 0.99;
 
         this.player.y += this.player.vy * dt;
 
-        
         if (this.player.targetX !== undefined) {
             const dx = this.player.targetX - this.player.x;
             this.player.x += dx * 5 * dt;
         }
 
-        
         if (this.player.x < this.player.size) this.player.x = this.player.size;
         if (this.player.x > this.width - this.player.size)
             this.player.x = this.width - this.player.size;
 
-        
         this.cameraY = this.player.y - 200;
 
-        
         this.obstacles.forEach((obs) => {
             if (obs.y < this.cameraY - 100) {
-                
                 obs.remove = true;
                 this.addObstacle(this.obstacles[this.obstacles.length - 1].y + 300);
             }
-
-            
-            
-            
 
             if (obs.type === "breakable" && !obs.broken) {
                 if (
@@ -169,20 +147,17 @@ export class SizeMattersGame {
                     )
                 ) {
                     if (this.player.size > 40) {
-                        
                         obs.broken = true;
                         this.createParticles(obs.x + obs.w / 2, obs.y, "white");
                         this.score += 10;
-                        
+
                         this.player.vy *= 0.5;
                     } else {
-                        
                         this.player.y = obs.y - this.player.size / 2;
                         this.player.vy = 0;
                     }
                 }
             } else if (obs.type === "gap") {
-                
                 if (
                     this.checkRectCircle(
                         0,
@@ -197,7 +172,7 @@ export class SizeMattersGame {
                     this.player.y = obs.y - this.player.size / 2;
                     this.player.vy = 0;
                 }
-                
+
                 if (
                     this.checkRectCircle(
                         obs.gapX + obs.gapWidth,
@@ -217,7 +192,6 @@ export class SizeMattersGame {
 
         this.obstacles = this.obstacles.filter((o) => !o.remove);
 
-        
         this.particles.forEach((p) => {
             p.x += p.vx * dt;
             p.y += p.vy * dt;
@@ -266,7 +240,6 @@ export class SizeMattersGame {
         this.ctx.clearRect(0, 0, this.width, this.height);
         this.ctx.save();
 
-        
         this.ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
         this.ctx.lineWidth = 1;
         const gridSize = 50;
@@ -285,16 +258,14 @@ export class SizeMattersGame {
             this.ctx.stroke();
         }
 
-        
         this.ctx.translate(0, -this.cameraY);
 
-        
         this.obstacles.forEach((obs) => {
             if (obs.type === "breakable") {
                 if (!obs.broken) {
-                    this.ctx.fillStyle = "#ef4444"; 
+                    this.ctx.fillStyle = "#ef4444";
                     this.ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
-                    
+
                     this.ctx.strokeStyle = "rgba(0,0,0,0.2)";
                     this.ctx.beginPath();
                     this.ctx.moveTo(obs.x, obs.y);
@@ -302,7 +273,7 @@ export class SizeMattersGame {
                     this.ctx.stroke();
                 }
             } else if (obs.type === "gap") {
-                this.ctx.fillStyle = "#3b82f6"; 
+                this.ctx.fillStyle = "#3b82f6";
                 this.ctx.fillRect(0, obs.y, obs.gapX, obs.h);
                 this.ctx.fillRect(
                     obs.gapX + obs.gapWidth,
@@ -313,7 +284,6 @@ export class SizeMattersGame {
             }
         });
 
-        
         this.particles.forEach((p) => {
             this.ctx.fillStyle = p.color;
             this.ctx.globalAlpha = p.life * 2;
@@ -321,13 +291,11 @@ export class SizeMattersGame {
             this.ctx.globalAlpha = 1;
         });
 
-        
-        this.ctx.fillStyle = this.player.isGrowing ? "#fbbf24" : "#10b981"; 
+        this.ctx.fillStyle = this.player.isGrowing ? "#fbbf24" : "#10b981";
         this.ctx.beginPath();
         this.ctx.arc(this.player.x, this.player.y, this.player.size / 2, 0, Math.PI * 2);
         this.ctx.fill();
 
-        
         this.ctx.shadowBlur = 20;
         this.ctx.shadowColor = this.player.isGrowing ? "#fbbf24" : "#10b981";
         this.ctx.stroke();
@@ -335,7 +303,6 @@ export class SizeMattersGame {
 
         this.ctx.restore();
 
-        
         this.ctx.fillStyle = "white";
         this.ctx.font = "20px monospace";
         this.ctx.textBaseline = "top";
@@ -343,7 +310,6 @@ export class SizeMattersGame {
         this.ctx.fillText(`SCORE: ${this.score}`, 20, 20);
         this.ctx.fillText(`SIZE: ${Math.round(this.player.size)}`, 20, 50);
 
-        
         if (this.cameraY < 200) {
             this.ctx.fillStyle = "rgba(255,255,255,0.5)";
             this.ctx.textAlign = "center";
@@ -365,6 +331,5 @@ export class SizeMattersGame {
 
     destroy() {
         this.isRunning = false;
-        
     }
 }

@@ -13,8 +13,7 @@ export class TournamentController {
     private setupController: SetupController;
     private activeController: ActiveController;
 
-
-    private currentView: 'SETUP' | 'ACTIVE' = 'SETUP';
+    private currentView: "SETUP" | "ACTIVE" = "SETUP";
 
     constructor() {
         this.renderer = new TournamentRenderer();
@@ -27,10 +26,7 @@ export class TournamentController {
             (m) => this.loadTournament(m)
         );
 
-        this.activeController = new ActiveController(
-            this.mediator,
-            this.renderer
-        );
+        this.activeController = new ActiveController(this.mediator, this.renderer);
 
         this.bindGlobalEvents();
         this.init();
@@ -46,7 +42,7 @@ export class TournamentController {
     }
 
     private startTournament(manager: TournamentManager) {
-        this.currentView = 'ACTIVE';
+        this.currentView = "ACTIVE";
 
         TournamentStorage.saveCurrentId(manager.id);
         const history = TournamentStorage.loadHistory();
@@ -64,7 +60,7 @@ export class TournamentController {
     private resetToSetup() {
         TournamentStorage.removeCurrentId();
         TournamentSharing.clearHash();
-        this.currentView = 'SETUP';
+        this.currentView = "SETUP";
         this.setupController.refreshHistory();
         this.updateView();
     }
@@ -81,20 +77,20 @@ export class TournamentController {
         const currentId = TournamentStorage.loadCurrentId();
         if (currentId) {
             const history = TournamentStorage.loadHistory();
-            const found = history.find(t => t.id === currentId);
+            const found = history.find((t) => t.id === currentId);
             if (found) {
                 const manager = TournamentManager.fromJSON(found);
                 this.startTournament(manager);
                 return;
             }
         }
-        this.currentView = 'SETUP';
+        this.currentView = "SETUP";
     }
 
     private updateView() {
         this.mediator.setVisibility(this.currentView);
 
-        if (this.currentView === 'SETUP') {
+        if (this.currentView === "SETUP") {
             this.setupController.render();
         } else {
             this.activeController.render();

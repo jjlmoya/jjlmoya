@@ -24,7 +24,7 @@ export class RSVPEngine {
 
     public setText(text: string) {
         const rawWords = text.trim().split(/\s+/);
-        this.words = rawWords.map(w => this.processWord(w));
+        this.words = rawWords.map((w) => this.processWord(w));
         this.currentIndex = 0;
     }
 
@@ -80,7 +80,6 @@ export class RSVPEngine {
             pivotIndex = Math.ceil((len - 1) * 0.35);
         }
 
-
         if (pivotIndex >= len) pivotIndex = len - 1;
 
         const left = word.slice(0, pivotIndex);
@@ -89,8 +88,8 @@ export class RSVPEngine {
 
         const lastChar = word[word.length - 1];
         let delayMod = 1;
-        if ('.?!'.includes(lastChar)) delayMod = 2.5;
-        else if (',;:'.includes(lastChar)) delayMod = 2.0;
+        if (".?!".includes(lastChar)) delayMod = 2.5;
+        else if (",;:".includes(lastChar)) delayMod = 2.0;
         else if (len > 12) delayMod = 1.5;
 
         return { original: word, left, pivot, right, delayMod };
@@ -123,5 +122,5 @@ export class RSVPEngine {
         }
 
         this.requestAnimationId = requestAnimationFrame(this.loop);
-    }
+    };
 }

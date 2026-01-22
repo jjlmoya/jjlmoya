@@ -9,12 +9,12 @@ export class Passive {
         this.otherReq = config.otherReq || null;
         this.icon = config.icon || "mdi:plus";
         this.description = config.description || "";
-        this.effect = config.effect || (() => { });
+        this.effect = config.effect || (() => {});
         this.purchased = false;
     }
 
     isUnlocked(engine) {
-        if (!engine || typeof engine.getBusiness !== 'function') return false;
+        if (!engine || typeof engine.getBusiness !== "function") return false;
 
         const b = engine.getBusiness(this.bId);
         if (!b || b.lvl < this.requiredLvl) return false;

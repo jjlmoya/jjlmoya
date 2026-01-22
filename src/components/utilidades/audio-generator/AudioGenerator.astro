@@ -6,7 +6,6 @@ import { Icon } from "astro-icon/components";
     <div
         class="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-slate-200 dark:border-slate-800"
     >
-        
         <div class="flex items-center gap-4 mb-8">
             <div
                 class="p-3 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-2xl"
@@ -19,7 +18,6 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div
             class="relative w-full h-48 bg-black rounded-2xl overflow-hidden mb-8 shadow-inner border border-slate-900"
         >
@@ -32,9 +30,7 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div class="space-y-8">
-            
             <div class="space-y-2">
                 <div class="flex justify-between items-end">
                     <label class="font-bold text-sm uppercase tracking-wider text-slate-500"
@@ -55,7 +51,7 @@ import { Icon } from "astro-icon/components";
                         >
                     </div>
                 </div>
-                
+
                 <input
                     type="range"
                     id="freq-slider"
@@ -71,9 +67,7 @@ import { Icon } from "astro-icon/components";
                 </div>
             </div>
 
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
                 <div class="space-y-2">
                     <label class="font-bold text-sm uppercase tracking-wider text-slate-500"
                         >Forma de Onda</label
@@ -110,7 +104,6 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
-                
                 <div class="space-y-2">
                     <label class="font-bold text-sm uppercase tracking-wider text-slate-500"
                         >Volumen</label
@@ -132,7 +125,6 @@ import { Icon } from "astro-icon/components";
                 </div>
             </div>
 
-            
             <button
                 id="toggle-btn"
                 class="w-full py-6 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xl shadow-xl shadow-rose-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
@@ -146,7 +138,6 @@ import { Icon } from "astro-icon/components";
 </div>
 
 <script>
-    
     let audioCtx: AudioContext | null = null;
     let oscillator: OscillatorNode | null = null;
     let gainNode: GainNode | null = null;
@@ -154,11 +145,9 @@ import { Icon } from "astro-icon/components";
     let isPlaying = false;
     let waveform: OscillatorType = "sine";
 
-    
     const canvas = document.getElementById("osc-canvas") as HTMLCanvasElement;
     const canvasCtx = canvas?.getContext("2d");
 
-    
     const els = {
         freq: document.getElementById("freq-slider") as HTMLInputElement,
         vol: document.getElementById("vol-slider") as HTMLInputElement,
@@ -201,8 +190,8 @@ import { Icon } from "astro-icon/components";
         gainNode.gain.value = parseFloat(els.vol.value);
 
         oscillator.connect(gainNode);
-        gainNode.connect(analyser); 
-        analyser.connect(audioCtx.destination); 
+        gainNode.connect(analyser);
+        analyser.connect(audioCtx.destination);
 
         oscillator.start();
         isPlaying = true;
@@ -244,7 +233,6 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    
     function drawVisualizer() {
         if (!isPlaying || !analyser || !canvasCtx) return;
 
@@ -252,7 +240,6 @@ import { Icon } from "astro-icon/components";
         const dataArray = new Uint8Array(bufferLength);
         analyser.getByteTimeDomainData(dataArray);
 
-        
         const rect = (canvas.parentNode as HTMLElement)?.getBoundingClientRect();
         if (rect && (canvas.width !== rect.width || canvas.height !== rect.height)) {
             canvas.width = rect.width;
@@ -265,7 +252,7 @@ import { Icon } from "astro-icon/components";
         canvasCtx.fillStyle = "rgb(0, 0, 0)";
         canvasCtx.fillRect(0, 0, width, height);
         canvasCtx.lineWidth = 2;
-        canvasCtx.strokeStyle = "rgb(244, 63, 94)"; 
+        canvasCtx.strokeStyle = "rgb(244, 63, 94)";
         canvasCtx.beginPath();
 
         const sliceWidth = (width * 1.0) / bufferLength;
@@ -287,7 +274,6 @@ import { Icon } from "astro-icon/components";
         requestAnimationFrame(drawVisualizer);
     }
 
-    
     els.btn?.addEventListener("click", toggle);
 
     els.freq.addEventListener("input", updateParams);
@@ -300,7 +286,6 @@ import { Icon } from "astro-icon/components";
                 waveform = t as OscillatorType;
                 updateParams();
 
-                
                 els.typeBtns.forEach((b) => {
                     b.classList.remove("bg-rose-500", "text-white", "shadow-lg", "ring-2");
                     b.classList.add("bg-slate-100", "dark:bg-slate-800", "text-slate-500");

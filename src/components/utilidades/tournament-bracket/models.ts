@@ -26,7 +26,7 @@ export interface TournamentData {
     id: string;
     name: string;
     createdAt: number;
-    status: 'SETUP' | 'ACTIVE' | 'FINISHED';
+    status: "SETUP" | "ACTIVE" | "FINISHED";
     rounds: Round[];
     players: Player[];
     winner?: Player | null;

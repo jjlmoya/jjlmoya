@@ -6,41 +6,48 @@
     id="death-input-container"
     class="hidden grid-cols-1 place-items-center mt-8 transition-opacity duration-1000 opacity-0 w-full max-w-3xl mx-auto"
 >
-    
-    <div id="year-section" class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full transition-opacity duration-500 z-20">
-        
-        
+    <div
+        id="year-section"
+        class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full transition-opacity duration-500 z-20"
+    >
         <div class="relative w-full group">
-            
-            <div class="absolute inset-0 pointer-events-none z-20 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(12,10,9,0.4)_40%,rgba(12,10,9,0.9)_80%)]"></div>
-            
-            
-            <div class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-40 bg-orange-500/10 blur-3xl z-10 pointer-events-none"></div>
+            <div
+                class="absolute inset-0 pointer-events-none z-20 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(12,10,9,0.4)_40%,rgba(12,10,9,0.9)_80%)]"
+            >
+            </div>
 
-            
+            <div
+                class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-40 bg-orange-500/10 blur-3xl z-10 pointer-events-none"
+            >
+            </div>
+
             <div
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-56 border-x border-orange-500/20 bg-orange-500/5 z-10 pointer-events-none rounded-lg blur-[1px]"
             >
             </div>
 
-            
-            <div 
-                id="year-slider" 
+            <div
+                id="year-slider"
                 class="flex overflow-x-auto snap-x snap-mandatory w-full py-12 px-[50%] gap-4 no-scrollbar cursor-grab active:cursor-grabbing items-center h-80 select-none"
             >
-                {Array.from({ length: 126 }, (_, i) => 1900 + i).reverse().map(year => (
-                    <div 
-                        class="year-item snap-center shrink-0 transition-all duration-500 select-none flex flex-col items-center justify-center w-12 cursor-pointer group"
-                        data-year={year}
-                    >
-                        
-                        <div class="book-spine wood-spine w-full h-40 rounded-sm relative shadow-lg group-hover:scale-105 transition-all duration-500 flex items-center justify-center overflow-hidden pointer-events-none">
-                            <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent pointer-events-none"></div>
-                            
-                            <span class="book-text writing-vertical font-serif text-[#e7e5e4]/60 text-lg tracking-widest rotate-180 transition-colors duration-300">{year}</span>
-                        </div>
-                    </div>
-                ))}
+                {
+                    Array.from({ length: 126 }, (_, i) => 1900 + i)
+                        .reverse()
+                        .map((year) => (
+                            <div
+                                class="year-item snap-center shrink-0 transition-all duration-500 select-none flex flex-col items-center justify-center w-12 cursor-pointer group"
+                                data-year={year}
+                            >
+                                <div class="book-spine wood-spine w-full h-40 rounded-sm relative shadow-lg group-hover:scale-105 transition-all duration-500 flex items-center justify-center overflow-hidden pointer-events-none">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent pointer-events-none" />
+
+                                    <span class="book-text writing-vertical font-serif text-[#e7e5e4]/60 text-lg tracking-widest rotate-180 transition-colors duration-300">
+                                        {year}
+                                    </span>
+                                </div>
+                            </div>
+                        ))
+                }
             </div>
         </div>
 
@@ -53,8 +60,10 @@
         </button>
     </div>
 
-    
-    <div id="month-section" class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full opacity-0 pointer-events-none transition-opacity duration-500 z-10">
+    <div
+        id="month-section"
+        class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full opacity-0 pointer-events-none transition-opacity duration-500 z-10"
+    >
         <div class="grid grid-cols-3 gap-3 md:gap-4 md:grid-cols-4 w-full max-w-2xl">
             {
                 [
@@ -99,14 +108,13 @@
         let startX;
         let scrollLeft;
 
-        
         const handleShowYearInput = () => {
             if (container) {
                 container.classList.remove("hidden");
-                container.classList.add("grid"); 
+                container.classList.add("grid");
                 setTimeout(() => {
                     container.classList.remove("opacity-0");
-                    
+
                     const defaultYear = document.querySelector('.year-item[data-year="1990"]');
                     defaultYear?.scrollIntoView({
                         behavior: "smooth",
@@ -116,72 +124,69 @@
                 }, 100);
             }
         };
-        document.removeEventListener("show-death-year-input", handleShowYearInput); 
+        document.removeEventListener("show-death-year-input", handleShowYearInput);
         document.addEventListener("show-death-year-input", handleShowYearInput);
 
-        
         if (yearSlider) {
-            yearSlider.addEventListener('mousedown', (e) => {
+            yearSlider.addEventListener("mousedown", (e) => {
                 isDragging = false;
-                yearSlider.classList.add('cursor-grabbing');
-                yearSlider.classList.remove('cursor-grab');
+                yearSlider.classList.add("cursor-grabbing");
+                yearSlider.classList.remove("cursor-grab");
                 startX = e.pageX - yearSlider.offsetLeft;
                 scrollLeft = yearSlider.scrollLeft;
-                
-                
-                yearSlider.style.scrollSnapType = 'none';
+
+                yearSlider.style.scrollSnapType = "none";
             });
 
-            yearSlider.addEventListener('mouseleave', () => {
-                yearSlider.classList.remove('cursor-grabbing');
-                yearSlider.classList.add('cursor-grab');
-                
-                yearSlider.style.scrollSnapType = 'x mandatory';
+            yearSlider.addEventListener("mouseleave", () => {
+                yearSlider.classList.remove("cursor-grabbing");
+                yearSlider.classList.add("cursor-grab");
+
+                yearSlider.style.scrollSnapType = "x mandatory";
             });
 
-            yearSlider.addEventListener('mouseup', () => {
-                yearSlider.classList.remove('cursor-grabbing');
-                yearSlider.classList.add('cursor-grab');
-                
-                yearSlider.style.scrollSnapType = 'x mandatory';
-                
-                
-                setTimeout(() => { isDragging = false; }, 50);
+            yearSlider.addEventListener("mouseup", () => {
+                yearSlider.classList.remove("cursor-grabbing");
+                yearSlider.classList.add("cursor-grab");
+
+                yearSlider.style.scrollSnapType = "x mandatory";
+
+                setTimeout(() => {
+                    isDragging = false;
+                }, 50);
             });
 
-            yearSlider.addEventListener('mousemove', (e) => {
-                if (!yearSlider.classList.contains('cursor-grabbing')) return;
+            yearSlider.addEventListener("mousemove", (e) => {
+                if (!yearSlider.classList.contains("cursor-grabbing")) return;
                 e.preventDefault();
                 const x = e.pageX - yearSlider.offsetLeft;
-                const walk = (x - startX) * 2; 
-                if (Math.abs(walk) > 5) isDragging = true; 
+                const walk = (x - startX) * 2;
+                if (Math.abs(walk) > 5) isDragging = true;
                 yearSlider.scrollLeft = scrollLeft - walk;
             });
         }
 
-        
-        yearItems.forEach(item => {
-            item.addEventListener('click', (e) => {
+        yearItems.forEach((item) => {
+            item.addEventListener("click", (e) => {
                 if (isDragging) {
                     e.preventDefault();
                     e.stopPropagation();
                     return;
                 }
                 item.scrollIntoView({
-                    behavior: 'smooth',
-                    inline: 'center',
-                    block: 'nearest'
+                    behavior: "smooth",
+                    inline: "center",
+                    block: "nearest",
                 });
             });
         });
 
-        
         const updateActiveYear = () => {
             if (!yearSlider) return;
-            
+
             const sliderRect = yearSlider.getBoundingClientRect();
             const center = sliderRect.left + sliderRect.width / 2;
-            
+
             let closestItem = null;
             let minDiff = Infinity;
 
@@ -191,14 +196,13 @@
                 const itemCenter = rect.left + rect.width / 2;
                 const diff = Math.abs(center - itemCenter);
 
-                
-                const spine = el.querySelector('.book-spine');
-                const text = el.querySelector('.book-text');
-                
-                spine?.classList.add('wood-spine', 'h-40', 'opacity-50');
-                spine?.classList.remove('wood-spine-active', 'h-64', 'z-10');
-                text?.classList.add('text-[#e7e5e4]/60');
-                text?.classList.remove('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
+                const spine = el.querySelector(".book-spine");
+                const text = el.querySelector(".book-text");
+
+                spine?.classList.add("wood-spine", "h-40", "opacity-50");
+                spine?.classList.remove("wood-spine-active", "h-64", "z-10");
+                text?.classList.add("text-[#e7e5e4]/60");
+                text?.classList.remove("text-[#e7e5e4]", "font-bold", "text-2xl", "drop-shadow-lg");
 
                 if (diff < minDiff) {
                     minDiff = diff;
@@ -208,35 +212,31 @@
 
             if (closestItem) {
                 const el = closestItem;
-                const spine = el.querySelector('.book-spine');
-                const text = el.querySelector('.book-text');
+                const spine = el.querySelector(".book-spine");
+                const text = el.querySelector(".book-text");
 
-                
-                spine?.classList.remove('wood-spine', 'h-40', 'opacity-50');
-                spine?.classList.add('wood-spine-active', 'h-64', 'z-10');
-                text?.classList.remove('text-[#e7e5e4]/60');
-                text?.classList.add('text-[#e7e5e4]', 'font-bold', 'text-2xl', 'drop-shadow-lg');
+                spine?.classList.remove("wood-spine", "h-40", "opacity-50");
+                spine?.classList.add("wood-spine-active", "h-64", "z-10");
+                text?.classList.remove("text-[#e7e5e4]/60");
+                text?.classList.add("text-[#e7e5e4]", "font-bold", "text-2xl", "drop-shadow-lg");
 
                 selectedYear = parseInt(el.dataset.year || "0");
             }
         };
 
         if (yearSlider) {
-            yearSlider.addEventListener('scroll', () => {
+            yearSlider.addEventListener("scroll", () => {
                 window.requestAnimationFrame(updateActiveYear);
             });
-            
+
             setTimeout(updateActiveYear, 500);
         }
 
-        
         const handleConfirmYear = () => {
             if (selectedYear) {
-                
                 const event = new CustomEvent("year-selected", { detail: { year: selectedYear } });
                 document.dispatchEvent(event);
 
-                
                 if (yearSection) {
                     yearSection.classList.add("opacity-0", "pointer-events-none");
                 }
@@ -244,11 +244,15 @@
         };
 
         if (yearConfirmBtn) {
-            yearConfirmBtn.addEventListener("touchstart", (e) => {
-                e.preventDefault(); 
-                e.stopPropagation();
-                handleConfirmYear();
-            }, { passive: false });
+            yearConfirmBtn.addEventListener(
+                "touchstart",
+                (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleConfirmYear();
+                },
+                { passive: false }
+            );
 
             yearConfirmBtn.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -256,27 +260,22 @@
             });
         }
 
-        
         const handleShowMonthInput = () => {
             if (monthSection) {
-                
                 monthSection.classList.remove("opacity-0", "pointer-events-none");
             }
         };
         document.removeEventListener("show-death-month-input", handleShowMonthInput);
         document.addEventListener("show-death-month-input", handleShowMonthInput);
 
-        
         const handleMonthSelect = (btn) => {
             const month = parseInt(btn.dataset.month || "0");
 
-            
             const event = new CustomEvent("birthdate-selected", {
                 detail: { year: selectedYear, month },
             });
             document.dispatchEvent(event);
 
-            
             if (container) container.classList.add("opacity-0");
             setTimeout(() => {
                 if (container) {
@@ -287,11 +286,15 @@
         };
 
         monthBtns.forEach((btn) => {
-            btn.addEventListener("touchstart", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleMonthSelect(btn);
-            }, { passive: false });
+            btn.addEventListener(
+                "touchstart",
+                (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleMonthSelect(btn);
+                },
+                { passive: false }
+            );
 
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -327,26 +330,53 @@
         text-orientation: mixed;
     }
 
-    
     .wood-spine {
-        background-color: #3e2723; 
-        background-image: 
-            linear-gradient(90deg, rgba(255,255,255,0.03) 0%, transparent 5%, rgba(0,0,0,0.3) 50%, transparent 95%, rgba(255,255,255,0.03) 100%),
-            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 4px, transparent 6px);
+        background-color: #3e2723;
+        background-image:
+            linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.03) 0%,
+                transparent 5%,
+                rgba(0, 0, 0, 0.3) 50%,
+                transparent 95%,
+                rgba(255, 255, 255, 0.03) 100%
+            ),
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 4px,
+                transparent 6px
+            );
         border-left: 1px solid #5d4037;
         border-right: 1px solid #281814;
         border-top: 1px solid #5d4037;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
     }
 
     .wood-spine-active {
-        background-color: #6d4c41; 
-        background-image: 
-            linear-gradient(90deg, rgba(255,255,255,0.1) 0%, transparent 20%, rgba(0,0,0,0.1) 50%, transparent 80%, rgba(255,255,255,0.1) 100%),
-            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 4px, transparent 6px);
+        background-color: #6d4c41;
+        background-image:
+            linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 20%,
+                rgba(0, 0, 0, 0.1) 50%,
+                transparent 80%,
+                rgba(255, 255, 255, 0.1) 100%
+            ),
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.05) 4px,
+                transparent 6px
+            );
         border-left: 1px solid #8d6e63;
         border-right: 1px solid #3e2723;
         border-top: 1px solid #8d6e63;
-        box-shadow: 0 0 30px rgba(249,115,22,0.4), inset 0 0 5px rgba(0,0,0,0.3);
+        box-shadow:
+            0 0 30px rgba(249, 115, 22, 0.4),
+            inset 0 0 5px rgba(0, 0, 0, 0.3);
     }
 </style>

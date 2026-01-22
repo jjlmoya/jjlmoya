@@ -16,7 +16,6 @@ function getPages(dir: string, baseRoute: string = ""): string[] {
         if (stat.isDirectory()) {
             pages = pages.concat(getPages(fullPath, `${baseRoute}/${file}`));
         } else if (file.endsWith(".astro") || file.endsWith(".md") || file.endsWith(".html")) {
-
             if (file.includes("[") || file.startsWith("_") || file.startsWith(".")) return;
 
             let route = baseRoute;
@@ -26,10 +25,8 @@ function getPages(dir: string, baseRoute: string = ""): string[] {
                 route = `${route}/${name}`;
             }
 
-
             if (route === "") route = "/";
             else if (!route.endsWith("/")) route = `${route}/`;
-
 
             route = route.replace(/\/+/g, "/");
 
@@ -48,7 +45,6 @@ describe("Page Availability Tests", () => {
         it(`should load ${path} correctly`, async () => {
             const response = await fetch(`${BASE_URL}${path}`);
 
-
             if (path === "/404/") {
                 expect([200, 404]).toContain(response.status);
             } else {
@@ -57,13 +53,7 @@ describe("Page Availability Tests", () => {
 
             const text = await response.text();
 
-
-
             expect(text).toContain("jjlmoya");
-
-
-
-
 
             expect(text.toLowerCase()).toContain("<html");
             expect(text).toContain("</html>");

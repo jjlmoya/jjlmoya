@@ -18,15 +18,11 @@ export class TapFlyGame {
     }
 
     initInput() {
-        
-        
-        
-
         this.canvas.addEventListener("mousedown", this.handleInput);
         this.canvas.addEventListener(
             "touchstart",
             (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 this.handleInput(e);
             },
             { passive: false }
@@ -47,7 +43,6 @@ export class TapFlyGame {
     }
 
     resize() {
-        
         const rect = this.canvas.getBoundingClientRect();
         this.canvas.width = rect.width;
         this.canvas.height = rect.height;
@@ -60,26 +55,21 @@ export class TapFlyGame {
         this.mechanic.update();
         const state = this.mechanic.getState();
 
-        
         this.ctx.fillStyle = "#4ec0ca";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        
         this.ctx.fillStyle = "#73bf2e";
         this.ctx.strokeStyle = "#558c22";
         this.ctx.lineWidth = 4;
         for (const obs of state.obstacles) {
-            
             this.ctx.fillRect(obs.x, 0, obs.width, obs.gapY);
             this.ctx.strokeRect(obs.x, 0, obs.width, obs.gapY);
 
-            
             const bottomY = obs.gapY + obs.gapHeight;
             this.ctx.fillRect(obs.x, bottomY, obs.width, this.height - bottomY);
             this.ctx.strokeRect(obs.x, bottomY, obs.width, this.height - bottomY);
         }
 
-        
         this.ctx.save();
         this.ctx.translate(state.player.pos.x, state.player.pos.y);
         this.ctx.rotate(state.player.angle);
@@ -90,7 +80,6 @@ export class TapFlyGame {
         this.ctx.fill();
         this.ctx.stroke();
 
-        
         this.ctx.fillStyle = "white";
         this.ctx.beginPath();
         this.ctx.arc(6, -6, 6, 0, Math.PI * 2);
@@ -102,7 +91,6 @@ export class TapFlyGame {
 
         this.ctx.restore();
 
-        
         this.ctx.fillStyle = "white";
         this.ctx.font = "bold 48px monospace";
         this.ctx.textAlign = "center";
@@ -111,10 +99,6 @@ export class TapFlyGame {
         this.ctx.shadowBlur = 4;
 
         if (state.state === "start") {
-            
-            
-            
-            
         } else if (state.state === "playing") {
             this.ctx.fillText(state.score.toString(), this.width / 2, 100);
         } else if (state.state === "gameover") {

@@ -21,9 +21,6 @@ export class ClickerGame {
     }
 
     click(x, y) {
-        
-        
-        
         return this.mechanic.click(x, y);
     }
 
@@ -70,7 +67,6 @@ export class ClickerGame {
 
     destroy() {
         this.mechanic.save();
-        
     }
 }
 

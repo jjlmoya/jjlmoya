@@ -2,7 +2,6 @@ import L from "leaflet";
 import { GeocodingService } from "./GeocodingService";
 import { RouteService } from "./RouteService";
 
-
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -39,7 +38,8 @@ export class RouteManager extends EventTarget {
         this.map = L.map(elementId).setView([40.416775, -3.70379], 6);
 
         L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: "abcd",
             maxZoom: 20,
         }).addTo(this.map);
@@ -57,11 +57,11 @@ export class RouteManager extends EventTarget {
 
     private getNumberedIcon(number: number) {
         return L.divIcon({
-            className: 'number-icon-container',
+            className: "number-icon-container",
             html: `<div class="number-icon">${number}</div>`,
             iconSize: [30, 30],
             iconAnchor: [15, 36],
-            popupAnchor: [0, -36]
+            popupAnchor: [0, -36],
         });
     }
 
@@ -74,7 +74,7 @@ export class RouteManager extends EventTarget {
 
         const marker = L.marker([lat, lng], {
             draggable: true,
-            icon: this.getNumberedIcon(index)
+            icon: this.getNumberedIcon(index),
         }).addTo(this.map);
 
         const point: RoutePoint = { id, lat, lng, marker, name, address: "Cargando dirección..." };
@@ -82,16 +82,14 @@ export class RouteManager extends EventTarget {
 
         this.notifyUpdate();
 
-        
         marker.on("dragend", () => {
             const newPos = marker.getLatLng();
             point.lat = newPos.lat;
             point.lng = newPos.lng;
             this.clearRoute();
-            this.updateAddress(point); 
+            this.updateAddress(point);
         });
 
-        
         await this.updateAddress(point);
     }
 
@@ -116,9 +114,9 @@ export class RouteManager extends EventTarget {
         `;
 
         point.marker.bindPopup(popupContent);
-        point.marker.on('popupopen', () => {
+        point.marker.on("popupopen", () => {
             const btn = document.getElementById(`delete-btn-${point.id}`);
-            btn?.addEventListener('click', () => this.deletePoint(point.id));
+            btn?.addEventListener("click", () => this.deletePoint(point.id));
         });
     }
 
@@ -151,37 +149,39 @@ export class RouteManager extends EventTarget {
             this.map.removeLayer(this.routeLine);
             this.routeLine = null;
         }
-        this.dispatchEvent(new CustomEvent('routeCleared'));
+        this.dispatchEvent(new CustomEvent("routeCleared"));
     }
 
     async optimizeRoute() {
         if (this.points.length < 2) {
-            this.dispatchEvent(new CustomEvent('error', { detail: 'Se necesitan al menos dos puntos para calcular una ruta.' }));
+            this.dispatchEvent(
+                new CustomEvent("error", {
+                    detail: "Se necesitan al menos dos puntos para calcular una ruta.",
+                })
+            );
             return;
         }
 
-        this.dispatchEvent(new CustomEvent('loading', { detail: true }));
+        this.dispatchEvent(new CustomEvent("loading", { detail: true }));
 
         try {
             const { waypoints, trip } = await this.routeService.optimizeRoute(this.points);
 
-            
-            
-            const loopPoints = waypoints.map((wp: any) => {
-                if (wp.waypoint_index !== undefined && wp.waypoint_index < this.points.length) {
-                    return this.points[wp.waypoint_index];
-                }
-                return undefined;
-            }).filter((p: any): p is RoutePoint => p !== undefined);
+            const loopPoints = waypoints
+                .map((wp: any) => {
+                    if (wp.waypoint_index !== undefined && wp.waypoint_index < this.points.length) {
+                        return this.points[wp.waypoint_index];
+                    }
+                    return undefined;
+                })
+                .filter((p: any): p is RoutePoint => p !== undefined);
 
             if (loopPoints.length !== this.points.length) {
                 console.warn("Mismatch in optimized points count, keeping original order");
-                this.dispatchEvent(new CustomEvent('loading', { detail: false }));
+                this.dispatchEvent(new CustomEvent("loading", { detail: false }));
                 return;
             }
 
-            
-            
             const legs = trip.legs;
             let maxLegIndex = -1;
             let maxLegDistance = -1;
@@ -193,54 +193,50 @@ export class RouteManager extends EventTarget {
                 }
             });
 
-            
-            
-            
             const startIdx = (maxLegIndex + 1) % loopPoints.length;
             const newPointsOrder = [
                 ...loopPoints.slice(startIdx),
-                ...loopPoints.slice(0, startIdx)
+                ...loopPoints.slice(0, startIdx),
             ];
 
             this.points = newPointsOrder;
             this.updateAllMarkers();
             this.notifyUpdate();
 
-            
             const finalRoute = await this.routeService.getRoute(this.points);
 
-            
             this.clearRoute();
             const routeGeoJSON = {
                 type: "Feature",
                 properties: {},
-                geometry: finalRoute.geometry
+                geometry: finalRoute.geometry,
             };
 
             this.routeLine = L.geoJSON(routeGeoJSON as any, {
                 style: {
-                    color: '#0891b2',
+                    color: "#0891b2",
                     weight: 5,
                     opacity: 0.8,
-                    lineCap: 'round',
-                    lineJoin: 'round'
-                }
+                    lineCap: "round",
+                    lineJoin: "round",
+                },
             }).addTo(this.map!);
 
             this.map?.fitBounds(this.routeLine.getBounds(), { padding: [50, 50] });
 
-            this.dispatchEvent(new CustomEvent('routeCalculated', { detail: { distance: finalRoute.distance } }));
-
+            this.dispatchEvent(
+                new CustomEvent("routeCalculated", { detail: { distance: finalRoute.distance } })
+            );
         } catch (error) {
             console.error(error);
-            this.dispatchEvent(new CustomEvent('error', { detail: 'Error al calcular la ruta' }));
+            this.dispatchEvent(new CustomEvent("error", { detail: "Error al calcular la ruta" }));
         } finally {
-            this.dispatchEvent(new CustomEvent('loading', { detail: false }));
+            this.dispatchEvent(new CustomEvent("loading", { detail: false }));
         }
     }
 
     panToPoint(id: number) {
-        const point = this.points.find(p => p.id === id);
+        const point = this.points.find((p) => p.id === id);
         if (point && this.map) {
             this.map.flyTo([point.lat, point.lng], 16);
             point.marker.openPopup();
@@ -248,6 +244,6 @@ export class RouteManager extends EventTarget {
     }
 
     private notifyUpdate() {
-        this.dispatchEvent(new CustomEvent('update', { detail: this.points }));
+        this.dispatchEvent(new CustomEvent("update", { detail: this.points }));
     }
 }

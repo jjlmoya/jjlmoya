@@ -1,4 +1,3 @@
-
 import { TournamentManager } from "./manager";
 
 const STORAGE_KEY_HISTORY = "tournament_history_v2";
@@ -31,9 +30,8 @@ export class TournamentStorage {
         localStorage.removeItem(STORAGE_KEY_CURRENT);
     }
 
-    
     static saveTournament(manager: TournamentManager, history: any[]): any[] {
-        const idx = history.findIndex(t => t.id === manager.id);
+        const idx = history.findIndex((t) => t.id === manager.id);
         const json = manager.toJSON();
         const newHistory = [...history];
 

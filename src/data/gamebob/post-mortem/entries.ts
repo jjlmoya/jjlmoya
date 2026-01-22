@@ -51,8 +51,8 @@ export const postMortemEntries: PostMortemEntry[] = [
                     "      ]",
                     "    }",
                     "  }",
-                    "];"
-                ]
+                    "];",
+                ],
             },
             {
                 title: "2. La Barrera Infranqueable (Husky & Lint-Staged)",
@@ -69,8 +69,8 @@ export const postMortemEntries: PostMortemEntry[] = [
                     "    'prettier --write',",
                     "    'vitest run --related --passWithNoTests'",
                     "  ]",
-                    "};"
-                ]
+                    "};",
+                ],
             },
             {
                 title: "3. El Check Final: Tipado Estricto",
@@ -85,10 +85,10 @@ export const postMortemEntries: PostMortemEntry[] = [
                     "    'noUnusedParameters': true,",
                     "    'noEmit': true",
                     "  }",
-                    "}"
-                ]
-            }
-        ]
+                    "}",
+                ],
+            },
+        ],
     },
     {
         id: "ansiedad-stores",
@@ -121,8 +121,8 @@ export const postMortemEntries: PostMortemEntry[] = [
                 code: [
                     "const REFERENCE_LANG = 'es';",
                     "const TARGET_LANGS = ['en', 'de', 'fr', 'it', 'pt'];",
-                    "const TRANSLATION_FILES = ['ui', 'fortunes', 'bestiary'];"
-                ]
+                    "const TRANSLATION_FILES = ['ui', 'fortunes', 'bestiary'];",
+                ],
             },
             {
                 title: "2. El Algoritmo de Paridad",
@@ -140,8 +140,8 @@ export const postMortemEntries: PostMortemEntry[] = [
                     "      });",
                     "    });",
                     "  });",
-                    "});"
-                ]
+                    "});",
+                ],
             },
             {
                 title: "3. Extra: Detectar Valores Vacíos",
@@ -158,9 +158,9 @@ export const postMortemEntries: PostMortemEntry[] = [
                     "      });",
                     "    });",
                     "  });",
-                    "});"
-                ]
-            }
-        ]
-    }
+                    "});",
+                ],
+            },
+        ],
+    },
 ];

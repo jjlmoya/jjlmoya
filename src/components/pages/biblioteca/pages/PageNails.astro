@@ -1,47 +1,84 @@
 ---
 interface Props {
-    side: 'left' | 'right';
+    side: "left" | "right";
 }
 const { side } = Astro.props;
 ---
 
-{side === 'left' ? (
-    <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-        
-        <div class="relative w-full h-full flex items-center justify-center">
-             
-             <svg viewBox="0 0 200 200" class="w-64 h-64 opacity-30 text-[#e7e5e4]">
-                
-                <path d="M60,40 Q80,100 70,160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="animate-scratch" />
-                
-                <path d="M100,30 Q120,100 110,170" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="animate-scratch" style="animation-delay: 0.2s" />
-                
-                <path d="M140,40 Q160,100 150,160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="animate-scratch" style="animation-delay: 0.4s" />
-             </svg>
-        </div>
-    </div>
-) : (
-    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-        <h3 class="font-serif text-3xl text-stone-500/60 uppercase tracking-widest">Las Uñas</h3>
-        
-        <div class="space-y-2">
-            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="nails-count">
-                0
+{
+    side === "left" ? (
+        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
+            <div class="relative w-full h-full flex items-center justify-center">
+                <svg viewBox="0 0 200 200" class="w-64 h-64 opacity-30 text-[#e7e5e4]">
+                    <path
+                        d="M60,40 Q80,100 70,160"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        class="animate-scratch"
+                    />
+
+                    <path
+                        d="M100,30 Q120,100 110,170"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        class="animate-scratch"
+                        style="animation-delay: 0.2s"
+                    />
+
+                    <path
+                        d="M140,40 Q160,100 150,160"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        class="animate-scratch"
+                        style="animation-delay: 0.4s"
+                    />
+                </svg>
             </div>
-            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Metros de Uñas</div>
         </div>
-        
-        <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
-            HAN ARAÑADO EL TIEMPO. UNA DEFENSA ANTIGUA QUE AÚN CONSERVÁIS.
-        </p>
-    </div>
-)}
+    ) : (
+        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+            <h3 class="font-serif text-3xl text-stone-500/60 uppercase tracking-widest">
+                Las Uñas
+            </h3>
+
+            <div class="space-y-2">
+                <div
+                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
+                    id="nails-count"
+                >
+                    0
+                </div>
+                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Metros de Uñas</div>
+            </div>
+
+            <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+                HAN ARAÑADO EL TIEMPO. UNA DEFENSA ANTIGUA QUE AÚN CONSERVÁIS.
+            </p>
+        </div>
+    )
+}
 
 <style>
     @keyframes scratch {
-        0% { stroke-dasharray: 200; stroke-dashoffset: 200; opacity: 0; }
-        20% { opacity: 1; }
-        100% { stroke-dasharray: 200; stroke-dashoffset: 0; opacity: 1; }
+        0% {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            opacity: 0;
+        }
+        20% {
+            opacity: 1;
+        }
+        100% {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
     }
     .animate-scratch {
         animation: scratch 2s ease-out infinite;
@@ -51,14 +88,14 @@ const { side } = Astro.props;
 <script>
     import { calculateGrowthStats } from "../../../../utils/libraryLogic";
 
-    const countEl = document.getElementById('nails-count');
+    const countEl = document.getElementById("nails-count");
 
-    document.addEventListener('update-life-stats', (e: any) => {
+    document.addEventListener("update-life-stats", (e: any) => {
         const { stats } = e.detail;
         if (!countEl || !stats) return;
 
         const { nailsMeters } = calculateGrowthStats(stats.daysAlive);
-        
-        countEl.innerText = nailsMeters.toFixed(2).replace('.', ',');
+
+        countEl.innerText = nailsMeters.toFixed(2).replace(".", ",");
     });
 </script>

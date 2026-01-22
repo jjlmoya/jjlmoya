@@ -5,7 +5,6 @@
 <div
     class="tinnitus-container relative w-full max-w-4xl mx-auto bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800"
 >
-    
     <div class="relative h-64 w-full bg-slate-950 flex items-center justify-center overflow-hidden">
         <canvas id="noise-visualizer" class="absolute inset-0 w-full h-full opacity-60"></canvas>
         <div
@@ -13,7 +12,6 @@
         >
         </div>
 
-        
         <button
             id="play-btn"
             class="relative z-10 group transition-all duration-300 transform hover:scale-105"
@@ -41,9 +39,7 @@
         </button>
     </div>
 
-    
     <div class="p-8 bg-slate-900 text-slate-300">
-        
         <div class="flex justify-center space-x-4 mb-10">
             {
                 ["White", "Pink", "Brown"].map((type) => (
@@ -59,7 +55,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            
             <div class="space-y-4">
                 <div class="flex justify-between items-center">
                     <label class="text-sm font-medium text-slate-400 uppercase tracking-wider"
@@ -86,7 +81,6 @@
                 </p>
             </div>
 
-            
             <div class="space-y-4">
                 <div class="flex justify-between items-center">
                     <label class="text-sm font-medium text-slate-400 uppercase tracking-wider"
@@ -115,15 +109,14 @@
 </div>
 
 <style>
-    
     .slider-thumb-teal::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
         width: 24px;
         height: 24px;
         border-radius: 50%;
-        background: #0f172a; 
-        border: 2px solid #2dd4bf; 
+        background: #0f172a;
+        border: 2px solid #2dd4bf;
         cursor: pointer;
         box-shadow: 0 0 10px rgba(45, 212, 191, 0.3);
         transition: transform 0.1s;
@@ -157,12 +150,10 @@
         analyser: AnalyserNode | null = null;
         isPlaying = false;
 
-        
         frequency = 4000;
-        volume = 0.3; 
+        volume = 0.3;
         noiseType = "white";
 
-        
         playBtn: HTMLButtonElement;
         playIcon: HTMLElement;
         stopIcon: HTMLElement;
@@ -191,8 +182,6 @@
             this.resizeCanvas();
             window.addEventListener("resize", () => this.resizeCanvas());
 
-            
-            
             this.silentAudio = new Audio(
                 "data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YRAAAAAAAAAAAAAAAAAAAA=="
             );
@@ -221,11 +210,9 @@
 
                     this.noiseType = type;
 
-                    
                     this.noiseBtns.forEach((b) => (b.dataset.active = "false"));
                     btn.dataset.active = "true";
 
-                    
                     if (this.isPlaying) {
                         this.stopAudio();
                         this.startAudio();
@@ -254,27 +241,20 @@
             this.initAudioContext();
             if (!this.ctx) return;
 
-            
             this.gainNode = this.ctx.createGain();
             this.filterNode = this.ctx.createBiquadFilter();
             this.analyser = this.ctx.createAnalyser();
 
-            
             this.filterNode.type = "notch";
             this.filterNode.frequency.value = this.frequency;
-            
-            
-            
-            
+
             this.filterNode.Q.value = 1.5;
 
             this.filterNode.Q.value = 1.5;
 
-            
             this.gainNode.gain.setValueAtTime(0, this.ctx.currentTime);
-            this.gainNode.gain.linearRampToValueAtTime(this.volume, this.ctx.currentTime + 1.0); 
+            this.gainNode.gain.linearRampToValueAtTime(this.volume, this.ctx.currentTime + 1.0);
 
-            
             const bufferSize = 2 * this.ctx.sampleRate;
             const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
             const data = buffer.getChannelData(0);
@@ -284,7 +264,6 @@
             this.noiseNode.buffer = buffer;
             this.noiseNode.loop = true;
 
-            
             this.noiseNode.connect(this.filterNode);
             this.filterNode.connect(this.gainNode);
             this.gainNode.connect(this.analyser);
@@ -302,7 +281,6 @@
                 this.noiseNode.disconnect();
             }
             if (this.ctx) {
-                
             }
             this.isPlaying = false;
             this.updateUIActionState();
@@ -313,7 +291,6 @@
         togglePlay() {
             this.initAudioContext();
 
-            
             if (!this.hasUnlocked) {
                 this.playSilentUnlock();
                 this.hasUnlocked = true;
@@ -330,7 +307,6 @@
             if (!this.ctx) return;
 
             if (this.filterNode) {
-                
                 this.filterNode.frequency.setTargetAtTime(
                     this.frequency,
                     this.ctx.currentTime,
@@ -375,7 +351,7 @@
                     b4 = 0.55 * b4 + white * 0.5329522;
                     b5 = -0.7616 * b5 - white * 0.016898;
                     data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-                    data[i] *= 0.11; 
+                    data[i] *= 0.11;
                     b6 = white * 0.115926;
                 }
             } else if (type === "brown") {
@@ -384,7 +360,7 @@
                     const white = Math.random() * 2 - 1;
                     data[i] = (lastOut + 0.02 * white) / 1.02;
                     lastOut = data[i];
-                    data[i] *= 3.5; 
+                    data[i] *= 3.5;
                 }
             }
         }
@@ -411,28 +387,21 @@
 
             this.canvasCtx.clearRect(0, 0, width, height);
 
-            
             this.canvasCtx.beginPath();
             this.canvasCtx.moveTo(0, height);
 
             for (let i = 0; i < bufferLength; i++) {
                 barHeight = (dataArray[i] / 255) * height;
 
-                
-                
-                
-
-                
                 const percent = i / bufferLength;
                 const y = height - barHeight;
 
                 if (i === 0) {
                     this.canvasCtx.moveTo(x, y);
                 } else {
-                    
                     const cp1x = x - barWidth / 2;
-                    const cp1y = y; 
-                    
+                    const cp1y = y;
+
                     this.canvasCtx.lineTo(x, y);
                 }
 
@@ -440,10 +409,9 @@
             }
 
             this.canvasCtx.lineTo(width, height);
-            this.canvasCtx.fillStyle = "rgba(45, 212, 191, 0.2)"; 
+            this.canvasCtx.fillStyle = "rgba(45, 212, 191, 0.2)";
             this.canvasCtx.fill();
 
-            
             this.canvasCtx.strokeStyle = "#2dd4bf";
             this.canvasCtx.lineWidth = 2;
             this.canvasCtx.stroke();
@@ -454,7 +422,6 @@
         }
     }
 
-    
     document.addEventListener("DOMContentLoaded", () => {
         new TinnitusReliever();
     });

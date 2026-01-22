@@ -1,4 +1,3 @@
-
 import type { SectionData } from "./types";
 
 import { financeSection } from "./finance";

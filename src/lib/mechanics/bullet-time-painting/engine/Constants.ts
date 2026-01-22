@@ -16,19 +16,19 @@ export const BULLET_SPEED = 15;
 export const ENEMY_BULLET_SPEED = 8;
 export const MAX_ENEMY_SPEED = 6;
 export const COLORS = {
-    BACKGROUND: '#0a0a0c',
-    PLAYER: '#00ffd2',
-    ENEMY: '#ff3366',
-    BULLET: '#ffffff',
-    ENEMY_BULLET: '#ffaa00',
-    UI_ACCENT: '#00ffd2',
-    ENERGY_BAR: '#00ffd2',
-    TRAJECTORY: 'rgba(0, 255, 210, 0.4)',
-    PREDICTION: 'rgba(255, 255, 255, 0.1)',
-    OBSTACLE: '#1a1a20',
-    OBSTACLE_BORDER: '#333344',
-    GRID: 'rgba(0, 255, 210, 0.05)',
-    FLOOR_DETAILS: 'rgba(0, 255, 210, 0.02)',
+    BACKGROUND: "#0a0a0c",
+    PLAYER: "#00ffd2",
+    ENEMY: "#ff3366",
+    BULLET: "#ffffff",
+    ENEMY_BULLET: "#ffaa00",
+    UI_ACCENT: "#00ffd2",
+    ENERGY_BAR: "#00ffd2",
+    TRAJECTORY: "rgba(0, 255, 210, 0.4)",
+    PREDICTION: "rgba(255, 255, 255, 0.1)",
+    OBSTACLE: "#1a1a20",
+    OBSTACLE_BORDER: "#333344",
+    GRID: "rgba(0, 255, 210, 0.05)",
+    FLOOR_DETAILS: "rgba(0, 255, 210, 0.02)",
 };
 
-export const SAVE_KEY = 'bullet_time_painting_progress';
+export const SAVE_KEY = "bullet_time_painting_progress";

@@ -36,9 +36,9 @@ export class ActiveController {
             }
         });
 
-        const shareBtn = document.getElementById('share-tournament-btn');
+        const shareBtn = document.getElementById("share-tournament-btn");
         if (shareBtn) {
-            shareBtn.addEventListener('click', () => this.shareTournament());
+            shareBtn.addEventListener("click", () => this.shareTournament());
         }
     }
 
@@ -61,30 +61,28 @@ export class ActiveController {
     }
 
     private attachMatchListeners() {
-        
         document.querySelectorAll(".match-btn").forEach((btn) => {
             btn.addEventListener("click", (e) => {
                 const target = e.currentTarget as HTMLElement;
                 const matchId = target.dataset.matchId;
                 const winnerId = target.dataset.winnerId;
-                if (matchId && winnerId && !target.hasAttribute('disabled')) {
+                if (matchId && winnerId && !target.hasAttribute("disabled")) {
                     this.selectWinner(matchId, winnerId);
                 }
             });
         });
 
-        
         document.querySelectorAll(".score-input").forEach((input) => {
             input.addEventListener("change", (e) => {
                 const target = e.target as HTMLInputElement;
                 const matchId = target.dataset.matchId;
-                const playerNum = target.dataset.player; 
+                const playerNum = target.dataset.player;
 
                 if (matchId && playerNum) {
                     this.updateScore(matchId, playerNum, target.value);
                 }
             });
-            
+
             input.addEventListener("click", (e) => e.stopPropagation());
         });
     }
@@ -92,15 +90,14 @@ export class ActiveController {
     private updateScore(matchId: string, playerNum: string, value: string) {
         if (!this.manager) return;
 
-        
         const match = this.findMatch(matchId);
         if (!match) return;
 
-        
-        let s1: number | null = (match.score1 !== undefined && match.score1 !== null) ? match.score1 : null;
-        let s2: number | null = (match.score2 !== undefined && match.score2 !== null) ? match.score2 : null;
+        let s1: number | null =
+            match.score1 !== undefined && match.score1 !== null ? match.score1 : null;
+        let s2: number | null =
+            match.score2 !== undefined && match.score2 !== null ? match.score2 : null;
 
-        
         let val: number | null = null;
         if (value.trim() !== "") {
             val = parseInt(value);
@@ -114,7 +111,7 @@ export class ActiveController {
         this.saveCurrentState();
         this.render();
 
-        if (this.manager.status === 'FINISHED') {
+        if (this.manager.status === "FINISHED") {
             this.mediator.showVictoryToast();
         }
     }
@@ -122,7 +119,7 @@ export class ActiveController {
     private findMatch(matchId: string) {
         if (!this.manager) return null;
         for (const round of this.manager.rounds) {
-            const m = round.matches.find(m => m.id === matchId);
+            const m = round.matches.find((m) => m.id === matchId);
             if (m) return m;
         }
         return null;
@@ -135,14 +132,14 @@ export class ActiveController {
         this.saveCurrentState();
         this.render();
 
-        if (this.manager.status === 'FINISHED') {
+        if (this.manager.status === "FINISHED") {
             this.mediator.showVictoryToast();
         }
     }
 
     private saveCurrentState() {
         if (!this.manager) return;
-        this.history = TournamentStorage.loadHistory(); 
+        this.history = TournamentStorage.loadHistory();
         this.history = TournamentStorage.saveTournament(this.manager, this.history);
     }
 
@@ -158,18 +155,13 @@ export class ActiveController {
             return;
         }
 
-        TournamentNavigator.scrollToMatch(
-            nextMatch.id,
-            this.manager,
-            this.activeRoundMobile,
-            {
-                onMobileRoundChange: (i: number) => {
-                    this.activeRoundMobile = i;
-                    this.render();
-                },
-                onShowToast: () => this.mediator.showVictoryToast()
-            }
-        );
+        TournamentNavigator.scrollToMatch(nextMatch.id, this.manager, this.activeRoundMobile, {
+            onMobileRoundChange: (i: number) => {
+                this.activeRoundMobile = i;
+                this.render();
+            },
+            onShowToast: () => this.mediator.showVictoryToast(),
+        });
     }
 
     private async shareTournament() {
@@ -178,7 +170,7 @@ export class ActiveController {
         if (!TournamentSharing.canShare(this.manager)) {
             this.mediator.showToast(
                 `Solo se pueden compartir torneos de hasta ${32} jugadores`,
-                'error'
+                "error"
             );
             return;
         }
@@ -186,17 +178,16 @@ export class ActiveController {
         const shareUrl = TournamentSharing.generateShareUrl(this.manager);
 
         if (!shareUrl) {
-            this.mediator.showToast('Error al generar el enlace', 'error');
+            this.mediator.showToast("Error al generar el enlace", "error");
             return;
         }
 
         const copied = await TournamentSharing.copyToClipboard(shareUrl);
 
         if (copied) {
-            this.mediator.showToast('Enlace copiado al portapapeles', 'success');
+            this.mediator.showToast("Enlace copiado al portapapeles", "success");
         } else {
-            this.mediator.showToast('No se pudo copiar. URL: ' + shareUrl, 'error');
+            this.mediator.showToast("No se pudo copiar. URL: " + shareUrl, "error");
         }
     }
 }
-

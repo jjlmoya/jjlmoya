@@ -30,11 +30,13 @@ The mechanic is built with a modular engine architecture:
 ### Core Systems
 
 #### Planning Phase
+
 - Player selects actions (Move, Shoot) using mouse input.
 - Actions consume Energy.
 - Visual indicators show planned trajectory.
 
 #### Execution Phase (Blitz)
+
 - Game physics unpause for a fixed duration.
 - Actions are applied to the player entity.
 - AI enemies react and fire.

@@ -54,7 +54,6 @@ export const shareElementAsImage = async ({
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(fullShareText);
             } else {
-
                 const textArea = document.createElement("textarea");
                 textArea.value = fullShareText;
                 textArea.style.position = "fixed";
@@ -81,7 +80,6 @@ export const shareElementAsImage = async ({
     };
 
     try {
-
         const originalTransform = element.style.transform;
         const originalTransition = element.style.transition;
         const originalOpacity = element.style.opacity;
@@ -93,7 +91,6 @@ export const shareElementAsImage = async ({
 
         element.style.background = "radial-gradient(circle at center, #292524 0%, #0c0a09 100%)";
 
-
         const canvas = await html2canvas(element, {
             backgroundColor: null,
             scale: 2,
@@ -101,23 +98,13 @@ export const shareElementAsImage = async ({
             useCORS: true,
             allowTaint: true,
             ignoreElements: (element) => {
-
                 return element.classList.contains("ignore-capture");
             },
             onclone: (clonedDoc) => {
                 try {
                     console.log("[Share] Starting aggressive oklab/oklch sanitization...");
 
-
-
-
-
-
-
-
-
                     let replacements = 0;
-
 
                     const styleTags = clonedDoc.querySelectorAll("style");
                     styleTags.forEach((styleTag) => {
@@ -125,7 +112,6 @@ export const shareElementAsImage = async ({
                             styleTag.innerHTML.includes("oklab") ||
                             styleTag.innerHTML.includes("oklch")
                         ) {
-
                             const newCss = styleTag.innerHTML.replace(
                                 /(oklab|oklch)\([^)]+\)/g,
                                 "#000000"
@@ -134,7 +120,6 @@ export const shareElementAsImage = async ({
                             replacements++;
                         }
                     });
-
 
                     const allElements = clonedDoc.querySelectorAll("*");
                     allElements.forEach((el) => {
@@ -160,28 +145,22 @@ export const shareElementAsImage = async ({
                         const style = window.getComputedStyle(element);
 
                         props.forEach((prop) => {
-
                             const val = style[prop as any];
                             if (val && (val.includes("oklab") || val.includes("oklch"))) {
-
                                 let safeVal = "#000000";
                                 if (prop === "color") safeVal = "#ffffff";
                                 if (prop.includes("background")) safeVal = "rgba(0,0,0,0)";
 
-
                                 if (prop === "color") {
                                     element.style.color = "#e7e5e4";
                                 } else if (prop === "backgroundColor") {
-
                                     element.style.backgroundColor = "#0c0a09";
                                 } else {
-
                                     (element.style as any)[prop] = safeVal;
                                 }
                                 replacements++;
                             }
                         });
-
 
                         if (element instanceof SVGElement) {
                             const svgAttrs = ["fill", "stroke"];
@@ -204,17 +183,12 @@ export const shareElementAsImage = async ({
             },
         });
 
-
         element.style.transform = originalTransform;
         element.style.transition = originalTransition;
         element.style.opacity = originalOpacity;
         element.style.background = originalBackground;
 
-
-
-
         const dataUrl = canvas.toDataURL("image/png");
-
 
         const byteString = atob(dataUrl.split(",")[1]);
         const ab = new ArrayBuffer(byteString.length);
@@ -229,8 +203,6 @@ export const shareElementAsImage = async ({
 
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
-
-
                     console.log("[Share] Creating text backup in clipboard...");
                     await copyToClipboard(fullShareText);
 
@@ -245,7 +217,6 @@ export const shareElementAsImage = async ({
                         `DEBUG: Intentando compartir.\nTexto: ${fullShareText}\nURL: ${url}`
                     );
 
-
                     const isIOS =
                         /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
 
@@ -254,12 +225,8 @@ export const shareElementAsImage = async ({
                     };
 
                     if (isIOS) {
-
-
                         console.log("[Share] iOS detected. Sharing file only.");
                     } else {
-
-
                         shareData.text = fullShareText;
                         shareData.title = title;
                     }
@@ -281,8 +248,6 @@ export const shareElementAsImage = async ({
                 console.log(
                     "[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context)."
                 );
-
-
 
                 let textShared = false;
                 if (navigator.share) {
@@ -308,25 +273,19 @@ export const shareElementAsImage = async ({
                 downloadBlob(blob, fileName);
             }
         } else {
-
             console.warn("Blob generation failed, falling back to text share");
             await shareTextOnly();
         }
     } catch (error: any) {
         console.error("Capture failed:", error);
 
-
-
-
         await shareTextOnly();
     }
 };
 
-
 export async function handleGlobalShare(e: MouseEvent) {
     const target = e.target as HTMLElement;
     const btn = target.closest("[data-share-btn]");
-
 
     if (!btn) return;
 
@@ -335,7 +294,6 @@ export async function handleGlobalShare(e: MouseEvent) {
     const targetId = element.dataset.shareTargetId;
     const fileName = element.dataset.shareFilename || "share.png";
     const shareTitle = element.dataset.shareTitle || "Compartir";
-
 
     if (targetId) {
         const targetEl = document.getElementById(targetId);
@@ -352,14 +310,11 @@ export async function handleGlobalShare(e: MouseEvent) {
         }
     }
 
-
     if (!shareText) return;
 
     const fullText = `${shareText}\n\n${window.location.href}`;
 
-
     const tryShare = async () => {
-
         if (navigator.share) {
             try {
                 await navigator.share({
@@ -368,19 +323,16 @@ export async function handleGlobalShare(e: MouseEvent) {
                 });
                 return true;
             } catch (err) {
-
                 if ((err as Error).name === "AbortError") return true;
                 console.warn("Native share failed, falling back to clipboard:", err);
             }
         }
-
 
         return await copyToClipboard();
     };
 
     const copyToClipboard = async () => {
         try {
-
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             const isSecure = window.isSecureContext;
 
@@ -412,7 +364,6 @@ export async function handleGlobalShare(e: MouseEvent) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
 
-
             textArea.style.top = "0";
             textArea.style.left = "0";
             textArea.style.position = "fixed";
@@ -421,7 +372,6 @@ export async function handleGlobalShare(e: MouseEvent) {
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-
 
             const successful = document.execCommand("copy");
             document.body.removeChild(textArea);
@@ -440,7 +390,6 @@ export async function handleGlobalShare(e: MouseEvent) {
     };
 
     const showCopiedFeedback = () => {
-
         const originalContent = element.innerHTML;
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -458,7 +407,6 @@ export async function handleGlobalShare(e: MouseEvent) {
 
     await tryShare();
 }
-
 
 if (typeof window !== "undefined") {
     document.addEventListener("click", handleGlobalShare);

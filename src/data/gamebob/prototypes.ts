@@ -37,6 +37,7 @@ export const prototypes: Prototype[] = [
         color: "text-blue-500",
         borderColor: "border-blue-500/30",
         bgHover: "hover:bg-blue-500/10",
-        description: "Domina el mercado global. Construye distritos, gestiona sinergias y liquida una deuda billonaria.",
+        description:
+            "Domina el mercado global. Construye distritos, gestiona sinergias y liquida una deuda billonaria.",
     },
 ];

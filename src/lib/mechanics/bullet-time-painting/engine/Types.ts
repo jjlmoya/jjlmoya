@@ -15,14 +15,14 @@ export interface Entity {
     position: Vector2D;
     velocity: Vector2D;
     size: number;
-    type: 'player' | 'enemy' | 'bullet' | 'enemy_bullet';
+    type: "player" | "enemy" | "bullet" | "enemy_bullet";
     destroyed: boolean;
     hp?: number;
     weaponCooldown?: number;
 }
 
 export interface Action {
-    type: 'move' | 'shoot';
+    type: "move" | "shoot";
     vector: Vector2D;
 }
 

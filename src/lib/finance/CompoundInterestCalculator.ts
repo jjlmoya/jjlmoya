@@ -31,7 +31,7 @@ export class CompoundInterestCalculator {
                 year,
                 invested: Number(totalInvested.toFixed(2)),
                 interest: Number((currentBalance - totalInvested).toFixed(2)),
-                total: Number(currentBalance.toFixed(2))
+                total: Number(currentBalance.toFixed(2)),
             });
         }
 

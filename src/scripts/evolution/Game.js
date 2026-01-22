@@ -9,18 +9,15 @@ export class Game {
         this.entities = [];
         this.nextId = 1;
 
-        
         this.playground = document.getElementById("playground");
         this.entitiesLayer = document.getElementById("entities-layer");
         this.inventoryContainer = document.getElementById("inventory");
         this.instructions = document.getElementById("instructions");
 
-        
         this.encyclopediaModal = document.getElementById("encyclopedia-modal");
         this.encyclopediaGrid = document.getElementById("encyclopedia-grid");
         this.encyclopediaStats = document.getElementById("encyclopedia-stats");
 
-        
         this.fx = new FX(this.entitiesLayer);
         this.battleSystem = new BattleSystem({
             overlay: document.getElementById("battle-overlay"),
@@ -46,7 +43,6 @@ export class Game {
             onMoveEntity: (id, clientX, clientY) => this.moveEntity(id, clientX, clientY),
         });
 
-        
         this.battleSystem.onBattleStart = () => {
             this.inputSystem.cleanup();
         };
@@ -54,12 +50,10 @@ export class Game {
             this.inputSystem.cleanup();
         };
 
-        
         this.renderInventory();
         this.setupControls();
         this.startPassiveHealing();
 
-        
         this.loadGame();
         this.loadEncyclopedia();
     }
@@ -102,7 +96,6 @@ export class Game {
                 const saveData = JSON.parse(saved);
                 this.nextId = saveData.nextId || 1;
 
-                
                 this.entities.length = 0;
                 saveData.entities.forEach((e) => {
                     this.entities.push({
@@ -148,12 +141,11 @@ export class Game {
         });
 
         document.getElementById("clear-btn").addEventListener("click", () => {
-            this.entities.length = 0; 
+            this.entities.length = 0;
             this.renderEntities();
             this.saveGame();
         });
 
-        
         const openBtn = document.getElementById("encyclopedia-btn");
         const closeBtn = document.getElementById("close-encyclopedia");
 
@@ -172,16 +164,13 @@ export class Game {
     startPassiveHealing() {
         setInterval(() => {
             this.entities.forEach((entity) => {
-                
                 if (entity.currentHp <= 0 || entity.inBattle) return;
 
                 const maxHp = entity.data.stats.hp;
                 if (entity.currentHp < maxHp) {
-                    
                     const healAmount = Math.max(1, Math.floor(maxHp * 0.02));
                     entity.currentHp = Math.min(maxHp, entity.currentHp + healAmount);
 
-                    
                     const hpBar = document.getElementById(`hp-bar-${entity.id}`);
                     if (hpBar) {
                         const pct = (entity.currentHp / maxHp) * 100;
@@ -260,7 +249,6 @@ export class Game {
         el.style.top = `${entity.y}px`;
         el.style.transform = "translate(-50%, -50%)";
 
-        
         const typeColor = this.getTypeColor(entity.data.types);
         let visualClass = `${typeColor.text} drop-shadow-[0_0_15px_rgba(${typeColor.glow},0.5)]`;
         let bgClass = `bg-slate-900/80 border-[rgba(${typeColor.bg},0.3)]`;
@@ -270,7 +258,6 @@ export class Game {
             bgClass = "bg-amber-900/20 border-amber-700/30";
         }
 
-        
         let slotsHtml = "";
         if (entity.type === "creature") {
             slotsHtml = `<div class="absolute -top-4 flex gap-1">`;
@@ -286,13 +273,11 @@ export class Game {
             slotsHtml += `</div>`;
         }
 
-        
         const levelHtml =
             entity.type === "creature"
                 ? `<div class="absolute -right-2 -top-2 w-5 h-5 rounded-full bg-amber-500 text-slate-900 text-[10px] font-black flex items-center justify-center border border-white/20 shadow-lg z-20">${entity.level}</div>`
                 : "";
 
-        
         const hpPct = (entity.currentHp / entity.data.stats.hp) * 100;
         const hpColor = hpPct < 30 ? "bg-red-500" : "bg-emerald-500";
         const hpBarHtml = `
@@ -301,7 +286,6 @@ export class Game {
             </div>
         `;
 
-        
         let xpBarHtml = "";
         if (entity.type === "creature") {
             const xpNeeded = entity.level * 100;
@@ -361,13 +345,11 @@ export class Game {
         const entity = this.entities.find((e) => e.id === entityId);
         if (!entity || entity.type !== "creature") return;
 
-        
         let canFeed = false;
 
         if (entity.stomach.length < entity.maxStomach) {
             canFeed = true;
         } else if (entity.data.id === "egg" && entity.stomach.length === 1) {
-            
             const i1 = entity.stomach[0];
             const i2 = ingredient;
             const recipe = this.recipes.find(
@@ -467,7 +449,6 @@ export class Game {
 
         if (!source || !target) return;
 
-        
         if (sourceId === targetId) return;
 
         const canFight = (e) =>
@@ -476,23 +457,19 @@ export class Game {
             (e.data.id === "egg" && e.stomach.length > 0);
 
         if (canFight(source) && canFight(target)) {
-            
             source.inBattle = true;
             target.inBattle = true;
 
             this.battleSystem.start(source, target, (winner, loser) => {
-                
                 source.inBattle = false;
                 target.inBattle = false;
 
-                
                 this.gainXp(winner, 50);
 
-                
                 if (loser.type === "poop" || loser.currentHp <= 0) {
                     const loserIndex = this.entities.findIndex((e) => e.id === loser.id);
                     if (loserIndex !== -1) {
-                        this.entities.splice(loserIndex, 1); 
+                        this.entities.splice(loserIndex, 1);
                     }
                 }
 
@@ -553,7 +530,6 @@ export class Game {
             if (isDiscovered) {
                 const typeColor = this.getTypeColor(recipe.result.types);
 
-                
                 const inputsHtml = recipe.inputs
                     .map((inputId) => {
                         const data = this.getEntityData(inputId);

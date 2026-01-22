@@ -1,12 +1,9 @@
 ---
 
-
 ---
 
 <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
-    
     <div class="space-y-8">
-        
         <div
             class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 relative overflow-hidden group"
         >
@@ -22,7 +19,6 @@
             </h2>
 
             <div class="space-y-6">
-                
                 <div class="grid grid-cols-3 gap-3">
                     <button
                         class="shape-btn active flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-200 bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-transparent shadow-md transform scale-105"
@@ -50,14 +46,10 @@
                     </button>
                 </div>
 
-                
-                <div id="original-inputs" class="space-y-4">
-                    
-                </div>
+                <div id="original-inputs" class="space-y-4"></div>
             </div>
         </div>
 
-        
         <div
             class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 relative overflow-hidden group"
         >
@@ -73,7 +65,6 @@
             </h2>
 
             <div class="space-y-6">
-                
                 <div class="grid grid-cols-3 gap-3">
                     <button
                         class="shape-btn active flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-200 bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-transparent shadow-md transform scale-105"
@@ -101,17 +92,12 @@
                     </button>
                 </div>
 
-                
-                <div id="target-inputs" class="space-y-4">
-                    
-                </div>
+                <div id="target-inputs" class="space-y-4"></div>
             </div>
         </div>
     </div>
 
-    
     <div class="lg:sticky lg:top-8 space-y-6 h-fit">
-        
         <div
             class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-8 shadow-xl relative overflow-hidden"
         >
@@ -133,13 +119,11 @@
             </div>
         </div>
 
-        
         <div
             class="bg-slate-100 dark:bg-slate-950/50 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 flex items-center justify-center min-h-[300px] relative overflow-hidden"
         >
             <div class="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
 
-            
             <svg
                 id="visualizer"
                 width="100%"
@@ -148,7 +132,6 @@
                 class="w-full h-full"
             >
                 <g id="viz-container" transform="translate(200, 150)">
-                    
                     <path
                         id="shape-original"
                         d=""
@@ -165,7 +148,6 @@
                 </g>
             </svg>
 
-            
             <div class="absolute bottom-4 left-4 flex gap-4 text-xs font-medium">
                 <div class="flex items-center gap-2 text-rose-600 dark:text-rose-400">
                     <div class="w-3 h-3 border border-current bg-rose-500/20 rounded-sm"></div>
@@ -178,7 +160,6 @@
             </div>
         </div>
 
-        
         <div
             class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800"
         >
@@ -200,9 +181,7 @@
                 Calculadora de Ingredientes
             </h3>
 
-            <div id="ingredients-list" class="space-y-4 mb-6">
-                
-            </div>
+            <div id="ingredients-list" class="space-y-4 mb-6"></div>
 
             <button
                 id="add-ingredient-btn"
@@ -237,13 +216,12 @@
 </style>
 
 <script>
-    
     type Shape = "round" | "square" | "rectangular";
 
     interface MoldState {
         shape: Shape;
-        dim1: number; 
-        dim2: number; 
+        dim1: number;
+        dim2: number;
     }
 
     interface Ingredient {
@@ -262,7 +240,6 @@
         currentFactor: 1,
     };
 
-    
     const els = {
         originalInputs: document.getElementById("original-inputs"),
         targetInputs: document.getElementById("target-inputs"),
@@ -274,7 +251,6 @@
         addIngredientBtn: document.getElementById("add-ingredient-btn"),
     };
 
-    
     const getInputsHTML = (type: "original" | "target", shape: Shape, values: MoldState) => {
         const labelClass =
             "block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide";
@@ -311,7 +287,6 @@
         }
     };
 
-    
     const getArea = (s: MoldState) => {
         if (s.shape === "round") {
             return Math.PI * Math.pow(s.dim1 / 2, 2);
@@ -322,12 +297,10 @@
         }
     };
 
-    
     const getPath = (s: MoldState, scale = 5) => {
-        
         if (s.shape === "round") {
             const r = (s.dim1 / 2) * scale;
-            
+
             return `M 0,${-r} A ${r},${r} 0 1,1 0,${r} A ${r},${r} 0 1,1 0,${-r}`;
         } else {
             const w = s.dim1 * scale;
@@ -338,14 +311,12 @@
         }
     };
 
-    
     const update = () => {
         const areaOriginal = getArea(state.original);
         const areaTarget = getArea(state.target);
 
         let factor = areaTarget / areaOriginal;
 
-        
         factor = Math.round(factor * 100) / 100;
 
         if (els.resultFactor) els.resultFactor.textContent = `x${factor.toFixed(2)}`;
@@ -361,10 +332,6 @@
             }
         }
 
-        
-        
-        
-        
         const scale = 6;
 
         if (els.shapeOriginal) els.shapeOriginal.setAttribute("d", getPath(state.original, scale));
@@ -374,7 +341,6 @@
         renderIngredients();
     };
 
-    
     const renderIngredients = () => {
         if (!els.ingredientsList) return;
 
@@ -430,7 +396,6 @@
             .join("");
     };
 
-    
     (window as any).updateIngredient = (id: string, field: "name" | "weight", value: any) => {
         const ing = state.ingredients.find((i) => i.id === id);
         if (ing) {
@@ -445,9 +410,7 @@
         renderIngredients();
     };
 
-    
     const setupListeners = () => {
-        
         document.querySelectorAll(".shape-btn").forEach((btn) => {
             btn.addEventListener("click", (e) => {
                 const target = (e.currentTarget as HTMLElement).dataset.target as
@@ -455,14 +418,12 @@
                     | "target";
                 const shape = (e.currentTarget as HTMLElement).dataset.shape as Shape;
 
-                
                 state[target].shape = shape;
-                
+
                 if (shape === "rectangular" && state[target].dim2 === state[target].dim1) {
                     state[target].dim2 = state[target].dim1 + 5;
                 }
 
-                
                 const activeClasses = [
                     "bg-slate-900",
                     "dark:bg-white",
@@ -495,13 +456,11 @@
                 currentBtn.classList.remove(...inactiveClasses);
                 currentBtn.classList.add(...activeClasses);
 
-                
                 renderInputs(target);
                 update();
             });
         });
 
-        
         const handleInput = (e: Event) => {
             const input = e.target as HTMLInputElement;
             const type = input.dataset.type as "original" | "target";
@@ -516,12 +475,10 @@
         els.originalInputs?.addEventListener("input", handleInput);
         els.targetInputs?.addEventListener("input", handleInput);
 
-        
         els.addIngredientBtn?.addEventListener("click", () => {
             const newId = Math.random().toString(36).slice(2, 11);
             state.ingredients.push({ id: newId, name: "", weight: 0 });
             renderIngredients();
-            
         });
     };
 
@@ -532,7 +489,6 @@
         }
     };
 
-    
     renderInputs("original");
     renderInputs("target");
     setupListeners();

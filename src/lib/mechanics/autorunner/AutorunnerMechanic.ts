@@ -57,7 +57,6 @@ export class AutorunnerMechanic {
         this.clouds = [];
         this.coins = [];
 
-        
         this.platforms.push({
             x: 0,
             y: this.height - 100,
@@ -65,7 +64,6 @@ export class AutorunnerMechanic {
             height: 200,
         });
 
-        
         for (let i = 0; i < 5; i++) {
             this.spawnCloud(Math.random() * this.width);
         }
@@ -81,13 +79,13 @@ export class AutorunnerMechanic {
             this.player.vy = this.jumpForce;
             this.player.grounded = false;
             this.player.jumps++;
-            this.player.isDashing = false; 
+            this.player.isDashing = false;
         }
     }
 
     public dash() {
         if (this.state === "playing" && !this.player.grounded) {
-            this.player.vy = 1200; 
+            this.player.vy = 1200;
             this.player.isDashing = true;
         }
     }
@@ -106,13 +104,11 @@ export class AutorunnerMechanic {
         if (this.state !== "playing") return;
 
         this.score += this.speed * dt * 0.05;
-        this.speed += dt * 10; 
+        this.speed += dt * 10;
 
-        
         this.player.vy += this.gravity * dt;
         this.player.y += this.player.vy * dt;
 
-        
         this.player.grounded = false;
         for (const plat of this.platforms) {
             if (
@@ -134,18 +130,15 @@ export class AutorunnerMechanic {
             }
         }
 
-        
         if (this.player.y > this.height) {
             this.state = "gameover";
         }
 
-        
         const moveX = this.speed * dt;
         this.platforms.forEach((p) => (p.x -= moveX));
         this.obstacles.forEach((o) => (o.x -= moveX));
         this.coins.forEach((c) => (c.x -= moveX));
 
-        
         this.clouds.forEach((c) => {
             c.x -= moveX * c.speedFactor;
             if (c.x + c.width < -100) {
@@ -154,18 +147,15 @@ export class AutorunnerMechanic {
             }
         });
 
-        
         this.platforms = this.platforms.filter((p) => p.x + p.width > -200);
         this.obstacles = this.obstacles.filter((o) => o.x + o.width > -200);
         this.coins = this.coins.filter((c) => c.x + c.width > -200 && !c.collected);
 
-        
         const lastPlat = this.platforms[this.platforms.length - 1];
         if (lastPlat && lastPlat.x + lastPlat.width < this.width + 500) {
             this.spawnChunk();
         }
 
-        
         const hitboxPadding = 8;
         for (const obs of this.obstacles) {
             if (
@@ -178,7 +168,6 @@ export class AutorunnerMechanic {
             }
         }
 
-        
         for (const coin of this.coins) {
             if (
                 !coin.collected &&
@@ -188,7 +177,7 @@ export class AutorunnerMechanic {
                 this.player.y + this.player.height > coin.y
             ) {
                 coin.collected = true;
-                this.score += 100; 
+                this.score += 100;
             }
         }
     }
@@ -200,12 +189,10 @@ export class AutorunnerMechanic {
         const gapSize = 100 + Math.random() * 150;
         const platWidth = 400 + Math.random() * 600;
 
-        
         let y = this.height - 100;
         if (lastPlat) {
-            
             const delta = (Math.random() - 0.5) * 150;
-            
+
             const minY = this.height - 250;
             const maxY = this.height - 80;
             y = Math.max(minY, Math.min(maxY, lastPlat.y + delta));
@@ -218,16 +205,14 @@ export class AutorunnerMechanic {
             height: 400,
         });
 
-        
         const numObstacles = Math.floor(platWidth / 300);
-        
+
         const coinPattern = Math.random();
 
         for (let i = 0; i < numObstacles; i++) {
             const obsX = startX + gapSize + 200 + i * 300 + Math.random() * 100;
 
             if (Math.random() > 0.4) {
-                
                 this.obstacles.push({
                     x: obsX,
                     y: y - 40,
@@ -235,7 +220,6 @@ export class AutorunnerMechanic {
                     height: 40,
                 });
 
-                
                 this.coins.push({ x: obsX, y: y - 120, width: 20, height: 20, collected: false });
                 this.coins.push({
                     x: obsX - 30,
@@ -252,9 +236,7 @@ export class AutorunnerMechanic {
                     collected: false,
                 });
             } else {
-                
                 if (coinPattern < 0.3) {
-                    
                     this.coins.push({
                         x: obsX,
                         y: y - 30,
@@ -277,7 +259,6 @@ export class AutorunnerMechanic {
                         collected: false,
                     });
                 } else if (coinPattern < 0.6) {
-                    
                     this.coins.push({
                         x: obsX,
                         y: y - 30,
@@ -300,7 +281,6 @@ export class AutorunnerMechanic {
                         collected: false,
                     });
                 } else {
-                    
                     this.coins.push({
                         x: obsX + 30,
                         y: y - 150,

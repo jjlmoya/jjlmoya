@@ -22,62 +22,59 @@ export const fortuneCookie: Application = {
         glassBorderColor: "rgba(191, 159, 90, 0.15)",
         glassHighlight: "rgba(255, 255, 255, 0.03)",
         shadowPrimary: "0 10px 40px -12px rgba(191, 159, 90, 0.25)",
-        shadowCard: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
+        shadowCard: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
     },
     tagline: "El azar es solo el principio.",
-    description: "Hay secretos que solo se revelan una vez al día. Encuentra lo inalcanzable, colecciona lo efímero y domina tu racha en un ritual de búsqueda constante.",
-    philosophy: "Esta no es una aplicación de fortuna; es un manifiesto contra lo previsible. En un mundo de ruido, te damos un solo toque al día para cazar lo que otros nunca verán: galletas que solo existen en la sombra y papeles que brillan como oro puro.",
+    description:
+        "Hay secretos que solo se revelan una vez al día. Encuentra lo inalcanzable, colecciona lo efímero y domina tu racha en un ritual de búsqueda constante.",
+    philosophy:
+        "Esta no es una aplicación de fortuna; es un manifiesto contra lo previsible. En un mundo de ruido, te damos un solo toque al día para cazar lo que otros nunca verán: galletas que solo existen en la sombra y papeles que brillan como oro puro.",
     concept: {
         label: "El Manifiesto",
         main: "DOMINA",
-        highlighted: "TU SUERTE."
+        highlighted: "TU SUERTE.",
     },
     benefitsTitle: {
         main: "¿Te atreves a",
-        highlighted: "completarlo?"
+        highlighted: "completarlo?",
     },
     quote: {
         text: "Lo que hoy es un mensaje, mañana será tu tesoro más valioso.",
-        author: "El Galletario"
+        author: "El Galletario",
     },
     media: {
         icon: "/assets/apps/galleta-de-la-fortuna/icon.png",
         showcase: "/assets/apps/galleta-de-la-fortuna/showcase.png",
         hero: "/assets/apps/galleta-de-la-fortuna/hero_mystic.png",
-        screenshots: [
-            "/assets/apps/galleta-de-la-fortuna/screenshot_1.png"
-        ]
+        screenshots: ["/assets/apps/galleta-de-la-fortuna/screenshot_1.png"],
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.cookie.fortune",
-        appStore: ""
+        appStore: "",
     },
     benefits: [
         {
             title: "Lo Inalcanzable",
             text: "Especies de galletas que solo aparecen cuando el mundo real coincide con el digital. ¿Estarás ahí en el momento justo?",
-            icon: "mdi:incognito"
+            icon: "mdi:incognito",
         },
         {
             title: "El Brillo del Destino",
             text: "Papeles de Oro, Jade y Negro. No son simples mensajes; son los trofeos de tu constancia y tu intuición.",
-            icon: "mdi:sparkles"
+            icon: "mdi:sparkles",
         },
         {
             title: "La Racha Sagrada",
             text: "Tu galletario es un espejo de tu destino. Mantén la llama encendida cada día o deja que tus tesoros se desvanezcan.",
-            icon: "mdi:fire"
+            icon: "mdi:fire",
         },
         {
             title: "Un Solo Toque",
             text: "Una sola oportunidad al día. Ni una más. La escasez hace que cada descubrimiento sea legendario.",
-            icon: "mdi:gesture-tap"
-        }
+            icon: "mdi:gesture-tap",
+        },
     ],
     features: [],
     highlights: [],
-    videos: [
-        "_qaAX3q_IYQ",
-        "AcQFcZsEUT4"
-    ]
+    videos: ["_qaAX3q_IYQ", "AcQFcZsEUT4"],
 };

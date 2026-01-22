@@ -22,8 +22,8 @@ export interface MortarState {
 }
 
 export interface CalculationResult {
-    coverageArea: number; 
-    complementaryAmount: number; 
+    coverageArea: number;
+    complementaryAmount: number;
     complementaryName: string;
     ratioText: string;
 }

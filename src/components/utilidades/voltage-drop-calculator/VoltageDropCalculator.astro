@@ -3,13 +3,10 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div class="max-w-3xl mx-auto px-4 py-12">
-    
     <div
         class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden ring-1 ring-slate-900/5 dark:ring-white/10 relative"
     >
-        
         <div class="relative bg-slate-900 text-white p-8 md:p-10 overflow-hidden">
-            
             <div
                 id="hero-pulse"
                 class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 transition-colors duration-700"
@@ -42,7 +39,6 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
-                
                 <div
                     class="bg-white/5 border border-white/10 rounded-2xl p-4 min-w-[160px] backdrop-blur-sm flex flex-col justify-center"
                 >
@@ -56,7 +52,6 @@ import { Icon } from "astro-icon/components";
                         <span class="text-sm font-medium text-slate-400">%</span>
                     </div>
 
-                    
                     <div class="w-full h-2 bg-slate-700/50 rounded-full overflow-hidden flex">
                         <div
                             id="hero-bar-eff"
@@ -70,11 +65,8 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div class="p-6 md:p-8 space-y-8 bg-slate-50 dark:bg-slate-900/50">
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
                 <div
                     class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700"
                 >
@@ -83,7 +75,6 @@ import { Icon } from "astro-icon/components";
                         >Voltaje</label
                     >
                     <div class="flex bg-slate-100 dark:bg-slate-900 rounded-xl p-1 relative">
-                        
                         <div
                             id="voltage-bg"
                             class="absolute top-1 left-1 w-[32%] h-[calc(100%-8px)] bg-white dark:bg-slate-700 rounded-lg shadow-sm transition-all duration-300"
@@ -105,7 +96,6 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
-                
                 <div
                     class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700"
                 >
@@ -147,9 +137,7 @@ import { Icon } from "astro-icon/components";
                 </div>
             </div>
 
-            
             <div class="grid grid-cols-1 gap-6">
-                
                 <div
                     class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row items-center gap-6"
                 >
@@ -186,7 +174,6 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
-                
                 <div
                     class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700"
                 >
@@ -227,7 +214,6 @@ import { Icon } from "astro-icon/components";
                 </div>
             </div>
 
-            
             <div
                 class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700"
             >
@@ -243,7 +229,6 @@ import { Icon } from "astro-icon/components";
                 </div>
 
                 <div class="relative group">
-                    
                     <div
                         class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white dark:from-slate-800 to-transparent z-20 pointer-events-none rounded-l-2xl"
                     >
@@ -257,7 +242,6 @@ import { Icon } from "astro-icon/components";
                         class="flex gap-4 overflow-x-auto py-4 px-12 scrollbar-hide snap-x cursor-grab active:cursor-grabbing"
                         id="gauge-scroll"
                     >
-                        
                     </div>
                 </div>
             </div>
@@ -276,7 +260,6 @@ import { Icon } from "astro-icon/components";
 </style>
 
 <script is:inline>
-    
     const SECTIONS = [
         { val: 0.5, label: "0.5", fill: 6 },
         { val: 0.75, label: "0.75", fill: 8 },
@@ -301,7 +284,6 @@ import { Icon } from "astro-icon/components";
         material: "copper",
     };
 
-    
     function init() {
         renderGauges();
         bindEvents();
@@ -333,16 +315,14 @@ import { Icon } from "astro-icon/components";
     }
 
     function bindEvents() {
-        
         const voltBtns = document.querySelectorAll(".volt-btn");
         const voltBg = document.getElementById("voltage-bg");
         voltBtns.forEach((btn, idx) => {
             btn.addEventListener("click", () => {
                 state.voltage = parseFloat(btn.dataset.val);
-                
+
                 if (voltBg) voltBg.style.left = `${idx * 33.3 + 1}%`;
 
-                
                 voltBtns.forEach(
                     (b) =>
                         (b.className =
@@ -355,7 +335,6 @@ import { Icon } from "astro-icon/components";
             });
         });
 
-        
         const loadInput = document.getElementById("load-val");
         if (loadInput)
             loadInput.addEventListener("input", (e) => {
@@ -363,12 +342,11 @@ import { Icon } from "astro-icon/components";
                 update();
             });
 
-        
         const modeBtns = document.querySelectorAll(".mode-btn");
         modeBtns.forEach((btn) => {
             btn.addEventListener("click", () => {
                 state.isWatts = btn.dataset.mode === "watts";
-                
+
                 modeBtns.forEach((b) => {
                     if (b.dataset.mode === btn.dataset.mode) {
                         b.className =
@@ -385,7 +363,6 @@ import { Icon } from "astro-icon/components";
             });
         });
 
-        
         const lenSlider = document.getElementById("length-slider");
         if (lenSlider) {
             lenSlider.addEventListener("input", (e) => {
@@ -399,7 +376,6 @@ import { Icon } from "astro-icon/components";
             });
         }
 
-        
         const scrollBox = document.getElementById("gauge-scroll");
         if (scrollBox) {
             scrollBox.addEventListener("change", (e) => {
@@ -410,7 +386,6 @@ import { Icon } from "astro-icon/components";
             });
         }
 
-        
         document.querySelectorAll('input[name="material"]').forEach((r) => {
             r.addEventListener("change", (e) => {
                 state.material = e.target.value;
@@ -428,11 +403,9 @@ import { Icon } from "astro-icon/components";
         const dropP = voltage > 0 ? (dropV / voltage) * 100 : 0;
         const destV = Math.max(0, voltage - dropV);
 
-        
         document.getElementById("hero-drop-v").innerText = dropV.toFixed(2);
         document.getElementById("hero-drop-p").innerText = dropP.toFixed(2);
 
-        
         const keptP = Math.max(0, 100 - dropP);
         const heroEff = document.getElementById("hero-eff");
         const heroBarEff = document.getElementById("hero-bar-eff");
@@ -440,7 +413,6 @@ import { Icon } from "astro-icon/components";
         if (heroEff) heroEff.innerText = keptP.toFixed(1);
         if (heroBarEff) heroBarEff.style.width = keptP + "%";
 
-        
         updateStatus(dropP);
         updateWireVisuals(material);
     }
@@ -476,7 +448,6 @@ import { Icon } from "astro-icon/components";
     }
 
     function updateWireVisuals(material) {
-        
         const circles = document.querySelectorAll(".wire-circle");
         circles.forEach((c) => {
             if (material === "aluminum") {

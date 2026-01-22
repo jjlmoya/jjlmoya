@@ -18,7 +18,6 @@ export class ViewportCollisionMechanic {
     private bounds: { width: number; height: number };
     private prevBounds: { width: number; height: number };
 
-    
     private readonly FRICTION = 0.99;
     private readonly BOUNCE_DAMPING = 0.8;
     private readonly WALL_PUSH_FORCE = 1.8;
@@ -57,8 +56,8 @@ export class ViewportCollisionMechanic {
     }
 
     public update() {
-        const wallVelX = (this.bounds.width - this.prevBounds.width);
-        const wallVelY = (this.bounds.height - this.prevBounds.height);
+        const wallVelX = this.bounds.width - this.prevBounds.width;
+        const wallVelY = this.bounds.height - this.prevBounds.height;
 
         for (const p of this.particles) {
             p.pos.x += p.vel.x;

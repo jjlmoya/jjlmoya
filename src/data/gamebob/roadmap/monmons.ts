@@ -3,7 +3,8 @@ import type { Project } from "./types";
 export const monmonsProject: Project = {
     name: "Monmons",
     description: "Coleccionismo de criaturas reinventado para móvil.",
-    homeDescription: "una nueva forma de coleccionar. vincula, progresa y gestiona tu campamento en esta experiencia móvil pura.",
+    homeDescription:
+        "una nueva forma de coleccionar. vincula, progresa y gestiona tu campamento en esta experiencia móvil pura.",
     image: "/images/gamebob/games/monmons.png",
     statusLabel: "En Desarrollo",
     statusType: "developing",

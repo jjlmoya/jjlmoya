@@ -1,5 +1,3 @@
-
-
 export interface SlingshotConfig {
     gravity?: number;
     friction?: number;
@@ -86,9 +84,6 @@ export class SlingshotMechanic {
         };
 
         this.callbacks = callbacks;
-
-        
-        
     }
 
     updateBounds(width: number, height: number): void {

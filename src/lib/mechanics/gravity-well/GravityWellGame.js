@@ -34,7 +34,6 @@ export class GravityWellGame {
     }
 
     handleInput(e) {
-        
         if (e.type === "touchstart") {
             e.preventDefault();
         }
@@ -69,11 +68,9 @@ export class GravityWellGame {
     }
 
     draw() {
-        
         this.ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        
         const wells = this.mechanic.getWells();
         for (const well of wells) {
             const opacity = well.lifetime / well.maxLifetime;
@@ -91,7 +88,6 @@ export class GravityWellGame {
             this.ctx.stroke();
         }
 
-        
         const particles = this.mechanic.getParticles();
         for (const p of particles) {
             this.ctx.beginPath();

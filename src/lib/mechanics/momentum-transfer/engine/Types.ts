@@ -1,4 +1,3 @@
-
 export interface Vector2 {
     x: number;
     y: number;
@@ -9,7 +8,7 @@ export interface Entity {
     pos: Vector2;
     vel: Vector2;
     radius: number;
-    type: 'player' | 'enemy';
+    type: "player" | "enemy";
     isDead: boolean;
     color: string;
 }
@@ -19,7 +18,7 @@ export interface Obstacle {
     y: number;
     width: number;
     height: number;
-    type: 'wall' | 'spike' | 'void';
+    type: "wall" | "spike" | "void";
 }
 
 export interface GameState {

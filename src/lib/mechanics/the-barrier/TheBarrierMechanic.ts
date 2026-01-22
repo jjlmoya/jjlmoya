@@ -11,7 +11,7 @@ export interface Vector {
 export interface Particle {
     pos: Point;
     vel: Vector;
-    prevPos: Point; 
+    prevPos: Point;
     color: string;
     size: number;
     life: number;
@@ -20,7 +20,7 @@ export interface Particle {
 export interface Barrier {
     start: Point;
     end: Point;
-    life: number; 
+    life: number;
     maxLife: number;
 }
 
@@ -32,7 +32,7 @@ export class TheBarrierMechanic {
     private height: number;
     private gravity: number = 0.2;
     private friction: number = 0.99;
-    private restitution: number = 0.7; 
+    private restitution: number = 0.7;
 
     constructor(width: number, height: number) {
         this.width = width;
@@ -43,7 +43,7 @@ export class TheBarrierMechanic {
         this.barriers.push({
             start: { ...start },
             end: { ...end },
-            life: 300, 
+            life: 300,
             maxLife: 300,
         });
     }
@@ -64,12 +64,10 @@ export class TheBarrierMechanic {
     }
 
     public update() {
-        
         if (this.particles.length < 300) {
             this.spawnParticle(Math.random() * this.width, -10);
         }
 
-        
         for (let i = this.barriers.length - 1; i >= 0; i--) {
             this.barriers[i].life--;
             if (this.barriers[i].life <= 0) {
@@ -77,29 +75,22 @@ export class TheBarrierMechanic {
             }
         }
 
-        
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
 
-            
             p.prevPos.x = p.pos.x;
             p.prevPos.y = p.pos.y;
 
-            
             p.vel.y += this.gravity;
             p.vel.x *= this.friction;
             p.vel.y *= this.friction;
 
-            
             p.pos.x += p.vel.x;
             p.pos.y += p.vel.y;
 
-            
             this.checkBarrierCollisions(p);
 
-            
             if (p.pos.y > this.height) {
-                
                 p.pos.y = -10;
                 p.pos.x = Math.random() * this.width;
                 p.vel.y = Math.random() * 2;
@@ -118,7 +109,6 @@ export class TheBarrierMechanic {
 
     private checkBarrierCollisions(p: Particle) {
         for (const barrier of this.barriers) {
-            
             const x1 = barrier.start.x;
             const y1 = barrier.start.y;
             const x2 = barrier.end.x;
@@ -130,38 +120,30 @@ export class TheBarrierMechanic {
             const y4 = p.pos.y;
 
             const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-            if (den === 0) continue; 
+            if (den === 0) continue;
 
             const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
             const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
 
             if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-                
-
-                
                 const dx = x2 - x1;
                 const dy = y2 - y1;
                 const normal = { x: -dy, y: dx };
 
-                
                 const len = Math.sqrt(normal.x * normal.x + normal.y * normal.y);
                 normal.x /= len;
                 normal.y /= len;
 
-                
                 const dot = p.vel.x * normal.x + p.vel.y * normal.y;
                 if (dot > 0) {
                     normal.x = -normal.x;
                     normal.y = -normal.y;
                 }
 
-                
                 const vDotN = p.vel.x * normal.x + p.vel.y * normal.y;
                 p.vel.x = (p.vel.x - 2 * vDotN * normal.x) * this.restitution;
                 p.vel.y = (p.vel.y - 2 * vDotN * normal.y) * this.restitution;
 
-                
-                
                 const ix = x1 + t * (x2 - x1);
                 const iy = y1 + t * (y2 - y1);
 

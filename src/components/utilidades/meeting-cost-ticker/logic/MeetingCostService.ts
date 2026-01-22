@@ -1,4 +1,4 @@
-export type SalaryType = 'annual' | 'hourly';
+export type SalaryType = "annual" | "hourly";
 
 export interface MeetingConfig {
     attendees: number;
@@ -16,16 +16,16 @@ export class MeetingCostService {
     }
 
     private static getHourlyRate(salary: number, type: SalaryType): number {
-        if (type === 'hourly') {
+        if (type === "hourly") {
             return salary;
         }
         return salary / this.ANNUAL_HOURS;
     }
 
     public static formatCurrency(amount: number): string {
-        return amount.toLocaleString('es-ES', {
+        return amount.toLocaleString("es-ES", {
             minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            maximumFractionDigits: 2,
         });
     }
 }

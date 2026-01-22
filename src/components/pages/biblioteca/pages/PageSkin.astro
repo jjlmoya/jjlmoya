@@ -1,43 +1,56 @@
 ---
 interface Props {
-    side: 'left' | 'right';
+    side: "left" | "right";
 }
 const { side } = Astro.props;
 ---
 
-{side === 'left' ? (
-    <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
-        
-        <div class="relative w-full h-full flex items-center justify-center">
-             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dust.png')] opacity-20 animate-drift"></div>
-             
-             
-             <div class="w-48 h-64 border-2 border-[#e7e5e4]/20 rounded-[50%_50%_0_0] relative opacity-50 blur-sm">
-                <div class="absolute inset-0 bg-gradient-to-t from-transparent to-[#e7e5e4]/10"></div>
-             </div>
-        </div>
-    </div>
-) : (
-    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-        <h3 class="font-serif text-3xl text-stone-400/60 uppercase tracking-widest">La Muda</h3>
-        
-        <div class="space-y-2">
-            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="skin-count">
-                0
+{
+    side === "left" ? (
+        <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
+            <div class="relative w-full h-full flex items-center justify-center">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dust.png')] opacity-20 animate-drift" />
+
+                <div class="w-48 h-64 border-2 border-[#e7e5e4]/20 rounded-[50%_50%_0_0] relative opacity-50 blur-sm">
+                    <div class="absolute inset-0 bg-gradient-to-t from-transparent to-[#e7e5e4]/10" />
+                </div>
             </div>
-            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Kilos de Piel Perdida</div>
         </div>
-        
-        <p class="text-xl leading-relaxed text-[#e7e5e4]" style="font-family: 'Cinzel', serif; font-variant: small-caps;">
-            OS REEMPLAZÁIS A VOSOTROS MISMOS CADA POCO TIEMPO. LA PERSONA QUE NACIÓ YA NO EXISTE. TÚ ERES SU HEREDERO.
-        </p>
-    </div>
-)}
+    ) : (
+        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+            <h3 class="font-serif text-3xl text-stone-400/60 uppercase tracking-widest">La Muda</h3>
+
+            <div class="space-y-2">
+                <div
+                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
+                    id="skin-count"
+                >
+                    0
+                </div>
+                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                    Kilos de Piel Perdida
+                </div>
+            </div>
+
+            <p
+                class="text-xl leading-relaxed text-[#e7e5e4]"
+                style="font-family: 'Cinzel', serif; font-variant: small-caps;"
+            >
+                OS REEMPLAZÁIS A VOSOTROS MISMOS CADA POCO TIEMPO. LA PERSONA QUE NACIÓ YA NO
+                EXISTE. TÚ ERES SU HEREDERO.
+            </p>
+        </div>
+    )
+}
 
 <style>
     @keyframes drift {
-        0% { background-position: 0 0; }
-        100% { background-position: 100px 100px; }
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 100px 100px;
+        }
     }
     .animate-drift {
         animation: drift 20s linear infinite;
@@ -47,16 +60,16 @@ const { side } = Astro.props;
 <script>
     import { calculateSkinStats } from "../../../../utils/libraryLogic";
 
-    const countEl = document.getElementById('skin-count');
-    const suitsEl = document.getElementById('skin-suits');
+    const countEl = document.getElementById("skin-count");
+    const suitsEl = document.getElementById("skin-suits");
 
-    document.addEventListener('update-life-stats', (e: any) => {
+    document.addEventListener("update-life-stats", (e: any) => {
         const { stats } = e.detail;
         if (!countEl || !stats) return;
 
         const { skinShedKg, skinSuits } = calculateSkinStats(stats.daysAlive);
-        
-        countEl.innerText = skinShedKg.toFixed(1).replace('.', ',');
+
+        countEl.innerText = skinShedKg.toFixed(1).replace(".", ",");
         if (suitsEl) suitsEl.innerText = `${skinSuits.toFixed(1)} CUERPOS COMPLETOS`;
     });
 </script>

@@ -11,7 +11,7 @@ export const healthSection: SectionData = {
             href: "/utilidades/imc/",
             iconBg: "mdi:human-handsup",
             iconFg: "mdi:scale-bathroom",
-            color: "#3b82f6"
+            color: "#3b82f6",
         },
         {
             href: "/utilidades/marcador/",
@@ -19,15 +19,16 @@ export const healthSection: SectionData = {
             iconFg: "mdi:trophy-variant-outline",
             title: "Marcador Deportivo",
             description: "Contador gigante para pádel y ping-pong.",
-            color: "#f43f5e"
+            color: "#f43f5e",
         },
         {
             href: "/utilidades/torneo/",
             iconBg: "mdi:sitemap",
             iconFg: "mdi:trophy",
             title: "Organizador de Torneos",
-            description: "Crea cuadros de enfrentamientos y gestiona eliminatorias. Ideal para deportes y eSports.",
-            color: "#6366f1"
+            description:
+                "Crea cuadros de enfrentamientos y gestiona eliminatorias. Ideal para deportes y eSports.",
+            color: "#6366f1",
         },
         {
             href: "/utilidades/test-reflejos/",
@@ -43,7 +44,7 @@ export const healthSection: SectionData = {
             iconFg: "mdi:waveform",
             title: "Alivio Tinnitus",
             description: "Terapia de muesca y ruidos de colores para calmar el zumbido.",
-            color: "#2dd4bf"
+            color: "#2dd4bf",
         },
         {
             href: "/utilidades/calculadora-edad-mascotas/",
@@ -51,7 +52,7 @@ export const healthSection: SectionData = {
             iconFg: "mdi:clock-time-eight-outline",
             title: "Calculadora Edad Mascotas",
             description: "Traduce años de perro y gato a años humanos con ciencia.",
-            color: "#f59e0b"
+            color: "#f59e0b",
         },
         {
             href: "/utilidades/visualizador-respiracion/",
@@ -59,39 +60,43 @@ export const healthSection: SectionData = {
             iconFg: "mdi:lungs",
             title: "Respiración Consciente",
             description: "Visualizador de Box Breathing para reducir estrés y calmar la ansiedad.",
-            color: "#3b82f6"
+            color: "#3b82f6",
         },
         {
             href: "/utilidades/rastreador-cafeina/",
             iconBg: "mdi:coffee",
             iconFg: "mdi:sleep",
             title: "Simulador de Cafeína",
-            description: "Rastrea la vida media de la cafeína en tu sistema para evitar el insomnio.",
-            color: "#d97706"
+            description:
+                "Rastrea la vida media de la cafeína en tu sistema para evitar el insomnio.",
+            color: "#d97706",
         },
         {
             href: "/utilidades/purificador-agua/",
             iconBg: "mdi:water-opacity",
             iconFg: "mdi:water-plus",
             title: "Purificador de Agua",
-            description: "Calculadora de dosis de lejía para potabilizar agua en emergencias. Guía de supervivencia OMS/CDC.",
-            color: "#06b6d4"
+            description:
+                "Calculadora de dosis de lejía para potabilizar agua en emergencias. Guía de supervivencia OMS/CDC.",
+            color: "#06b6d4",
         },
         {
             href: "/utilidades/cronometro-digestion/",
             iconBg: "mdi:stomach",
             iconFg: "mdi:clock-fast",
             title: "Cronómetro de Digestión",
-            description: "Estimador del tránsito gastrointestinal por etapas según macronutrientes.",
-            color: "#f97316"
+            description:
+                "Estimador del tránsito gastrointestinal por etapas según macronutrientes.",
+            color: "#f97316",
         },
         {
             href: "/utilidades/pronostico-mini-aventuras/",
             iconBg: "mdi:compass",
             iconFg: "mdi:map-marker-path",
             title: "Mini Aventuras",
-            description: "Generador aleatorio de retos diarios para romper la monotonía y explorar tu entorno.",
-            color: "#6366f1"
-        }
-    ]
+            description:
+                "Generador aleatorio de retos diarios para romper la monotonía y explorar tu entorno.",
+            color: "#6366f1",
+        },
+    ],
 };

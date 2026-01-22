@@ -1,80 +1,118 @@
 ---
 interface Props {
-    side: 'left' | 'right';
+    side: "left" | "right";
 }
 const { side } = Astro.props;
 ---
 
-{side === 'left' ? (
-    <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
-        
-        <div class="relative w-full h-full flex items-center justify-center">
-             <div class="absolute inset-x-0 bottom-0 h-1/3 bg-blue-900/20 blur-xl animate-pulse"></div>
-             
-             
-             <div class="absolute top-1/4 animate-drop">
-                <svg width="40" height="60" viewBox="0 0 40 60" class="text-blue-200/40 fill-current drop-shadow-[0_0_10px_rgba(191,219,254,0.3)]">
-                    <path d="M20,0 C20,0 0,30 0,45 C0,55 10,60 20,60 C30,60 40,55 40,45 C40,30 20,0 20,0 Z" />
-                </svg>
-             </div>
-             
-             
-             <div class="absolute bottom-1/4 w-32 h-8 border border-blue-200/20 rounded-[100%] animate-ripple opacity-0"></div>
-             <div class="absolute bottom-1/4 w-32 h-8 border border-blue-200/10 rounded-[100%] animate-ripple opacity-0" style="animation-delay: 0.5s"></div>
-        </div>
-    </div>
-) : (
-    <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-        <h3 class="font-serif text-3xl text-blue-300/60 uppercase tracking-widest">El Llanto</h3>
-        
-        <div class="space-y-2">
-            <div class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]" id="tears-count">
-                0
+{
+    side === "left" ? (
+        <div class="flex items-center justify-center h-full w-full relative overflow-hidden">
+            <div class="relative w-full h-full flex items-center justify-center">
+                <div class="absolute inset-x-0 bottom-0 h-1/3 bg-blue-900/20 blur-xl animate-pulse" />
+
+                <div class="absolute top-1/4 animate-drop">
+                    <svg
+                        width="40"
+                        height="60"
+                        viewBox="0 0 40 60"
+                        class="text-blue-200/40 fill-current drop-shadow-[0_0_10px_rgba(191,219,254,0.3)]"
+                    >
+                        <path d="M20,0 C20,0 0,30 0,45 C0,55 10,60 20,60 C30,60 40,55 40,45 C40,30 20,0 20,0 Z" />
+                    </svg>
+                </div>
+
+                <div class="absolute bottom-1/4 w-32 h-8 border border-blue-200/20 rounded-[100%] animate-ripple opacity-0" />
+                <div
+                    class="absolute bottom-1/4 w-32 h-8 border border-blue-200/10 rounded-[100%] animate-ripple opacity-0"
+                    style="animation-delay: 0.5s"
+                />
             </div>
-            <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Litros Derramados</div>
         </div>
-        
-        <p class="text-xl leading-relaxed text-[#e7e5e4]" style="font-family: 'Cinzel', serif; font-variant: small-caps;">
-            AGUA SALADA. SE OS ESCAPA CUANDO EL CUERPO NO PUEDE CONTENER TANTOS SENTIMIENTOS. SOIS MUY HÚMEDOS POR DENTRO.
-        </p>
-    </div>
-)}
+    ) : (
+        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
+            <h3 class="font-serif text-3xl text-blue-300/60 uppercase tracking-widest">
+                El Llanto
+            </h3>
+
+            <div class="space-y-2">
+                <div
+                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
+                    id="tears-count"
+                >
+                    0
+                </div>
+                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                    Litros Derramados
+                </div>
+            </div>
+
+            <p
+                class="text-xl leading-relaxed text-[#e7e5e4]"
+                style="font-family: 'Cinzel', serif; font-variant: small-caps;"
+            >
+                AGUA SALADA. SE OS ESCAPA CUANDO EL CUERPO NO PUEDE CONTENER TANTOS SENTIMIENTOS.
+                SOIS MUY HÚMEDOS POR DENTRO.
+            </p>
+        </div>
+    )
+}
 
 <style>
     @keyframes drop {
-        0% { transform: translateY(0) scale(1); opacity: 0; }
-        20% { opacity: 1; }
-        80% { transform: translateY(200px) scale(0.9); opacity: 1; }
-        95% { transform: translateY(220px) scale(1.2, 0.5); opacity: 0; }
-        100% { transform: translateY(220px) scale(1.2, 0.5); opacity: 0; }
+        0% {
+            transform: translateY(0) scale(1);
+            opacity: 0;
+        }
+        20% {
+            opacity: 1;
+        }
+        80% {
+            transform: translateY(200px) scale(0.9);
+            opacity: 1;
+        }
+        95% {
+            transform: translateY(220px) scale(1.2, 0.5);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(220px) scale(1.2, 0.5);
+            opacity: 0;
+        }
     }
     .animate-drop {
         animation: drop 3s infinite ease-in;
     }
-    
+
     @keyframes ripple {
-        0% { transform: scale(0.1); opacity: 1; }
-        100% { transform: scale(2); opacity: 0; }
+        0% {
+            transform: scale(0.1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
     }
     .animate-ripple {
         animation: ripple 3s infinite ease-out;
-        animation-delay: 2.4s; 
+        animation-delay: 2.4s;
     }
 </style>
 
 <script>
     import { calculateTearsStats } from "../../../../utils/libraryLogic";
 
-    const countEl = document.getElementById('tears-count');
-    const dropsEl = document.getElementById('tears-drops');
+    const countEl = document.getElementById("tears-count");
+    const dropsEl = document.getElementById("tears-drops");
 
-    document.addEventListener('update-life-stats', (e: any) => {
+    document.addEventListener("update-life-stats", (e: any) => {
         const { stats } = e.detail;
         if (!countEl || !stats) return;
 
         const { litersTears, tearDrops } = calculateTearsStats(stats.daysAlive);
-        
-        countEl.innerText = litersTears.toFixed(1).replace('.', ',');
+
+        countEl.innerText = litersTears.toFixed(1).replace(".", ",");
         if (dropsEl) dropsEl.innerText = `${Math.floor(tearDrops).toLocaleString()} GOTAS`;
     });
 </script>

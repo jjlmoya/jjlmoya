@@ -11,7 +11,7 @@ export const filesSection: SectionData = {
             iconFg: "mdi:content-paste",
             title: "Portapapeles",
             description: "Pega, visualiza y guarda. Tu portapapeles convertido en archivo.",
-            color: "#3b82f6"
+            color: "#3b82f6",
         },
         {
             href: "/utilidades/format-stripper/",
@@ -19,7 +19,7 @@ export const filesSection: SectionData = {
             iconFg: "mdi:format-clear",
             title: "Format Stripper",
             description: "Limpia texto basura, elimina formatos ocultos y normaliza espacios.",
-            color: "#10b981"
+            color: "#10b981",
         },
         {
             href: "/utilidades/contador-caracteres/",
@@ -27,7 +27,7 @@ export const filesSection: SectionData = {
             iconFg: "mdi:chart-bar",
             title: "Contador de Caracteres",
             description: "Cuentapalabras y caracteres visual. Analiza tiempos de lectura y voz.",
-            color: "#6366f1"
+            color: "#6366f1",
         },
         {
             href: "/utilidades/verificador-hash/",
@@ -35,7 +35,7 @@ export const filesSection: SectionData = {
             iconFg: "mdi:fingerprint",
             title: "Verificador de Hash",
             description: "Calcula firmas SHA-256 de archivos locales para verificar su integridad.",
-            color: "#10b981"
-        }
-    ]
+            color: "#10b981",
+        },
+    ],
 };

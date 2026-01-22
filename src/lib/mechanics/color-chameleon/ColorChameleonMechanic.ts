@@ -56,17 +56,15 @@ export class ColorChameleonMechanic {
 
     public cyclePlayerColor() {
         this.player.colorIndex = (this.player.colorIndex + 1) % this.colorCount;
-        this.player.radius = 35; 
+        this.player.radius = 35;
     }
 
     public update() {
         if (this.isGameOver) return;
 
-        
         this.player.angle += 0.05;
         if (this.player.radius > 30) this.player.radius -= 0.5;
 
-        
         this.spawnTimer++;
         if (this.spawnTimer >= this.spawnInterval) {
             this.spawnEnemy();
@@ -75,7 +73,6 @@ export class ColorChameleonMechanic {
             this.difficultyMultiplier += 0.01;
         }
 
-        
         const centerX = this.width / 2;
         const centerY = this.height / 2;
 
@@ -96,12 +93,11 @@ export class ColorChameleonMechanic {
                     this.player.radius = 38;
                 } else {
                     this.isGameOver = true;
-                    this.createExplosion(centerX, centerY, -1); 
+                    this.createExplosion(centerX, centerY, -1);
                 }
             }
         }
 
-        
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             p.x += p.vx;

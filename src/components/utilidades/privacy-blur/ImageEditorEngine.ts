@@ -1,7 +1,6 @@
-
 export interface Layer {
     id: number;
-    type: 'pixel' | 'blur' | 'solid';
+    type: "pixel" | "blur" | "solid";
     x: number;
     y: number;
     w: number;
@@ -27,8 +26,8 @@ export class ImageEditorEngine {
     private isDragging = false;
     private startX = 0;
     private startY = 0;
-    private currentSelection: { x: number, y: number, w: number, h: number } | null = null;
-    private tool: 'pixel' | 'blur' | 'solid' = 'pixel';
+    private currentSelection: { x: number; y: number; w: number; h: number } | null = null;
+    private tool: "pixel" | "blur" | "solid" = "pixel";
     private intensity = 10;
     private isFaceApiLoaded = false;
 
@@ -42,7 +41,7 @@ export class ImageEditorEngine {
         btnDownloadId: string
     ) {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-        this.ctx = this.canvas.getContext('2d', { willReadFrequently: true })!;
+        this.ctx = this.canvas.getContext("2d", { willReadFrequently: true })!;
 
         this.loader = document.getElementById(loaderId);
         this.loaderText = document.getElementById(loaderTextId);
@@ -66,9 +65,9 @@ export class ImageEditorEngine {
 
                 this.redraw();
 
-                if (this.canvasContainer) this.canvasContainer.classList.remove('hidden');
-                if (this.emptyState) this.emptyState.classList.add('hidden');
-                if (this.btnDownload) this.btnDownload.removeAttribute('disabled');
+                if (this.canvasContainer) this.canvasContainer.classList.remove("hidden");
+                if (this.emptyState) this.emptyState.classList.add("hidden");
+                if (this.btnDownload) this.btnDownload.removeAttribute("disabled");
                 this.updateUndoState();
             };
             img.src = event.target?.result as string;
@@ -98,24 +97,27 @@ export class ImageEditorEngine {
 
     public download() {
         if (!this.image) return;
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.download = `privacidad-protegida-${Date.now()}.png`;
-        link.href = this.canvas.toDataURL('image/png');
+        link.href = this.canvas.toDataURL("image/png");
         link.click();
     }
 
     public async detectFaces() {
         if (!this.image) return;
-        if (this.loader) this.loader.classList.remove('hidden');
+        if (this.loader) this.loader.classList.remove("hidden");
 
         try {
-            if (typeof faceapi === 'undefined') {
+            if (typeof faceapi === "undefined") {
                 throw new Error("FaceAPI not loaded");
             }
 
             if (!this.isFaceApiLoaded) {
-                if (this.loaderText) this.loaderText.textContent = "Descargando modelos (solo una vez)...";
-                await faceapi.loadTinyFaceDetectorModel('https://justadudewhohacks.github.io/face-api.js/models');
+                if (this.loaderText)
+                    this.loaderText.textContent = "Descargando modelos (solo una vez)...";
+                await faceapi.loadTinyFaceDetectorModel(
+                    "https://justadudewhohacks.github.io/face-api.js/models"
+                );
                 this.isFaceApiLoaded = true;
             }
 
@@ -127,7 +129,7 @@ export class ImageEditorEngine {
             );
 
             if (detections.length === 0) {
-                alert('No se detectaron rostros automáticamente.');
+                alert("No se detectaron rostros automáticamente.");
             } else {
                 detections.forEach((d: any) => {
                     const { x, y, width, height } = d.box;
@@ -139,33 +141,39 @@ export class ImageEditorEngine {
                         y: y - pad * 1.5,
                         w: width + pad * 2,
                         h: height + pad * 2,
-                        intensity: this.intensity
+                        intensity: this.intensity,
                     });
                 });
                 this.redraw();
                 this.updateUndoState();
             }
-
         } catch (e) {
             console.error(e);
             alert("Error al iniciar detección facial local.");
         } finally {
-            if (this.loader) this.loader.classList.add('hidden');
+            if (this.loader) this.loader.classList.add("hidden");
         }
     }
 
     private initCanvasListeners() {
-        this.canvas.addEventListener('mousedown', (e) => this.startSelection(e));
-        this.canvas.addEventListener('mousemove', (e) => this.updateSelection(e));
-        this.canvas.addEventListener('mouseup', () => this.endSelection());
-        this.canvas.addEventListener('mouseleave', () => this.cancelSelection());
+        this.canvas.addEventListener("mousedown", (e) => this.startSelection(e));
+        this.canvas.addEventListener("mousemove", (e) => this.updateSelection(e));
+        this.canvas.addEventListener("mouseup", () => this.endSelection());
+        this.canvas.addEventListener("mouseleave", () => this.cancelSelection());
 
-        this.canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const rect = this.canvas.getBoundingClientRect();
-            this.startSelection({ clientX: touch.clientX, clientY: touch.clientY } as any, rect);
-        }, { passive: false });
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = this.canvas.getBoundingClientRect();
+                this.startSelection(
+                    { clientX: touch.clientX, clientY: touch.clientY } as any,
+                    rect
+                );
+            },
+            { passive: false }
+        );
     }
 
     private startSelection(e: MouseEvent, rectOverride?: DOMRect) {
@@ -215,7 +223,7 @@ export class ImageEditorEngine {
                 y: this.currentSelection.y,
                 w: this.currentSelection.w,
                 h: this.currentSelection.h,
-                intensity: this.intensity
+                intensity: this.intensity,
             });
             this.updateUndoState();
         }
@@ -233,17 +241,27 @@ export class ImageEditorEngine {
     private redraw() {
         if (!this.image) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.filter = 'none';
+        this.ctx.filter = "none";
         this.ctx.drawImage(this.image, 0, 0);
 
-        this.layers.forEach(layer => this.applyLayer(layer));
+        this.layers.forEach((layer) => this.applyLayer(layer));
 
         if (this.currentSelection) {
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+            this.ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
             this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(this.currentSelection.x, this.currentSelection.y, this.currentSelection.w, this.currentSelection.h);
-            this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-            this.ctx.strokeRect(this.currentSelection.x - 1, this.currentSelection.y - 1, this.currentSelection.w + 2, this.currentSelection.h + 2);
+            this.ctx.strokeRect(
+                this.currentSelection.x,
+                this.currentSelection.y,
+                this.currentSelection.w,
+                this.currentSelection.h
+            );
+            this.ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+            this.ctx.strokeRect(
+                this.currentSelection.x - 1,
+                this.currentSelection.y - 1,
+                this.currentSelection.w + 2,
+                this.currentSelection.h + 2
+            );
         }
     }
 
@@ -252,16 +270,22 @@ export class ImageEditorEngine {
             this.ctx.imageSmoothingEnabled = true;
             this.ctx.drawImage(
                 this.image!,
-                layer.x, layer.y, layer.w, layer.h,
-                layer.x, layer.y, layer.w, layer.h
+                layer.x,
+                layer.y,
+                layer.w,
+                layer.h,
+                layer.x,
+                layer.y,
+                layer.w,
+                layer.h
             );
             return;
         }
 
-        if (layer.type === 'solid') {
-            this.ctx.fillStyle = '#000000';
+        if (layer.type === "solid") {
+            this.ctx.fillStyle = "#000000";
             this.ctx.fillRect(layer.x, layer.y, layer.w, layer.h);
-        } else if (layer.type === 'blur') {
+        } else if (layer.type === "blur") {
             this.ctx.save();
             this.ctx.beginPath();
             this.ctx.rect(layer.x, layer.y, layer.w, layer.h);
@@ -269,8 +293,8 @@ export class ImageEditorEngine {
             this.ctx.filter = `blur(${layer.intensity * 2}px)`;
             this.ctx.drawImage(this.image!, 0, 0);
             this.ctx.restore();
-            this.ctx.filter = 'none';
-        } else if (layer.type === 'pixel') {
+            this.ctx.filter = "none";
+        } else if (layer.type === "pixel") {
             const size = Math.max(2, layer.intensity);
             const w = Math.floor(layer.w);
             const h = Math.floor(layer.h);
@@ -280,10 +304,10 @@ export class ImageEditorEngine {
 
             this.ctx.imageSmoothingEnabled = false;
 
-            const tempCanvas = document.createElement('canvas');
+            const tempCanvas = document.createElement("canvas");
             tempCanvas.width = w;
             tempCanvas.height = h;
-            const tCtx = tempCanvas.getContext('2d')!;
+            const tCtx = tempCanvas.getContext("2d")!;
             tCtx.imageSmoothingEnabled = false;
 
             tCtx.drawImage(this.image!, layer.x, layer.y, w, h, 0, 0, scaledW, scaledH);

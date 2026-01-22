@@ -1,10 +1,10 @@
-import type { Vector2D, Action } from './Types';
+import type { Vector2D, Action } from "./Types";
 
 export class InputManager {
     private isDrawing = false;
     private startPos: Vector2D | null = null;
     private currentPos: Vector2D | null = null;
-    private drawingType: 'move' | 'shoot' = 'move';
+    private drawingType: "move" | "shoot" = "move";
     private onActionCreated: (action: Action) => void;
     private canvas: HTMLCanvasElement | null = null;
 
@@ -18,10 +18,10 @@ export class InputManager {
 
     public attach(canvas: HTMLCanvasElement): void {
         this.canvas = canvas;
-        canvas.addEventListener('mousedown', this.handleMouseDown);
-        window.addEventListener('mousemove', this.handleMouseMove);
-        window.addEventListener('mouseup', this.handleMouseUp);
-        canvas.addEventListener('contextmenu', this.handleContextMenu);
+        canvas.addEventListener("mousedown", this.handleMouseDown);
+        window.addEventListener("mousemove", this.handleMouseMove);
+        window.addEventListener("mouseup", this.handleMouseUp);
+        canvas.addEventListener("contextmenu", this.handleContextMenu);
     }
 
     private handleContextMenu(e: MouseEvent): void {
@@ -30,7 +30,7 @@ export class InputManager {
 
     private handleMouseDown(e: MouseEvent): void {
         this.isDrawing = true;
-        this.drawingType = e.button === 2 ? 'shoot' : 'move';
+        this.drawingType = e.button === 2 ? "shoot" : "move";
         this.startPos = this.getMousePos(e);
         this.currentPos = { ...this.startPos };
     }
@@ -46,20 +46,19 @@ export class InputManager {
         const endPos = this.getMousePos(e);
         const rawVector = {
             x: (endPos.x - this.startPos.x) / 5,
-            y: (endPos.y - this.startPos.y) / 5
+            y: (endPos.y - this.startPos.y) / 5,
         };
 
-        
         const vector = { ...rawVector };
         const mag = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-        if (this.drawingType === 'move' && mag > 18) {
+        if (this.drawingType === "move" && mag > 18) {
             vector.x = (vector.x / mag) * 18;
             vector.y = (vector.y / mag) * 18;
         }
 
         this.onActionCreated({
             type: this.drawingType,
-            vector
+            vector,
         });
 
         this.isDrawing = false;
@@ -88,7 +87,7 @@ export class InputManager {
 
         return {
             x: (mouseX / actualWidth) * internalWidth,
-            y: (mouseY / actualHeight) * internalHeight
+            y: (mouseY / actualHeight) * internalHeight,
         };
     }
 
@@ -100,21 +99,20 @@ export class InputManager {
         const dy = rawEnd.y - this.startPos.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        
         const maxDist = 90;
         let finalEnd = rawEnd;
 
-        if (this.drawingType === 'move' && dist > maxDist) {
+        if (this.drawingType === "move" && dist > maxDist) {
             finalEnd = {
                 x: this.startPos.x + (dx / dist) * maxDist,
-                y: this.startPos.y + (dy / dist) * maxDist
+                y: this.startPos.y + (dy / dist) * maxDist,
             };
         }
 
         return {
             start: this.startPos,
             end: finalEnd,
-            type: this.drawingType
+            type: this.drawingType,
         };
     }
 }

@@ -8,7 +8,8 @@ export const natureSection: SectionData = {
     utilities: [
         {
             title: "Calculadora de Siembra",
-            description: "Calibra tu sembradora. Calcula el espaciado entre semillas basado en la población por hectárea.",
+            description:
+                "Calibra tu sembradora. Calcula el espaciado entre semillas basado en la población por hectárea.",
             href: "/utilidades/calculadora-siembra/",
             color: "#d97706",
             iconBg: "mdi:tractor",
@@ -16,7 +17,8 @@ export const natureSection: SectionData = {
         },
         {
             title: "Cosechador de Lluvia",
-            description: "Calcula el potencial de recolección de agua tu techo y dimensiona tu tanque.",
+            description:
+                "Calcula el potencial de recolección de agua tu techo y dimensiona tu tanque.",
             href: "/utilidades/calculadora-agua-lluvia/",
             color: "#06b6d4",
             iconBg: "mdi:weather-pouring",
@@ -24,9 +26,10 @@ export const natureSection: SectionData = {
         },
         {
             title: "Termómetro del Grillo",
-            description: "Calcula la temperatura contando los chirridos de un grillo (Ley de Dolbear).",
+            description:
+                "Calcula la temperatura contando los chirridos de un grillo (Ley de Dolbear).",
             href: "/utilidades/termometro-grillo/",
-            color: "#10b981", 
+            color: "#10b981",
             iconBg: "mdi:thermometer",
             iconFg: "mdi:grass",
         },

@@ -25,7 +25,7 @@ const mechanic = new GravityFlipMechanic(startY, {
     gravity: 0.6,
     jumpForce: 0,
     groundY: canvas.height - playerSize,
-    ceilingY: 0
+    ceilingY: 0,
 });
 
 // In the game loop
@@ -43,17 +43,17 @@ function onInput() {
 
 ## Configuration
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `gravity` | `number` | Gravity force applied per frame. |
-| `groundY` | `number` | Y position of the ground. |
-| `ceilingY` | `number` | Y position of the ceiling. |
+| Property   | Type     | Description                      |
+| :--------- | :------- | :------------------------------- |
+| `gravity`  | `number` | Gravity force applied per frame. |
+| `groundY`  | `number` | Y position of the ground.        |
+| `ceilingY` | `number` | Y position of the ceiling.       |
 
 ## State
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `y` | `number` | Current vertical position. |
-| `vy` | `number` | Current vertical velocity. |
-| `gravityDir` | `number` | Gravity direction (1 or -1). |
+| Property     | Type      | Description                                  |
+| :----------- | :-------- | :------------------------------------------- |
+| `y`          | `number`  | Current vertical position.                   |
+| `vy`         | `number`  | Current vertical velocity.                   |
+| `gravityDir` | `number`  | Gravity direction (1 or -1).                 |
 | `isGrounded` | `boolean` | Whether the character is touching a surface. |

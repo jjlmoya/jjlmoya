@@ -6,17 +6,26 @@ export interface ColorSwatch {
 }
 
 function rgbToHex(r: number, g: number, b: number): string {
-    return "#" + [r, g, b].map(x => {
-        const hex = x.toString(16);
-        return hex.length === 1 ? "0" + hex : hex;
-    }).join("");
+    return (
+        "#" +
+        [r, g, b]
+            .map((x) => {
+                const hex = x.toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            })
+            .join("")
+    );
 }
 
 function colorDistSq(c1: RGB, c2: RGB): number {
     return (c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2 + (c1[2] - c2[2]) ** 2;
 }
 
-export function extractPalette(imageData: Uint8ClampedArray, pixelCount: number, colorCount: number = 5): ColorSwatch[] {
+export function extractPalette(
+    imageData: Uint8ClampedArray,
+    pixelCount: number,
+    colorCount: number = 5
+): ColorSwatch[] {
     const pixels: RGB[] = [];
 
     for (let i = 0; i < imageData.length; i += 4) {
@@ -37,9 +46,12 @@ export function extractPalette(imageData: Uint8ClampedArray, pixelCount: number,
             const bucket = buckets[i];
             if (bucket.length === 0) continue;
 
-            let minR = 255, maxR = 0;
-            let minG = 255, maxG = 0;
-            let minB = 255, maxB = 0;
+            let minR = 255,
+                maxR = 0;
+            let minG = 255,
+                maxG = 0;
+            let minB = 255,
+                maxB = 0;
 
             for (const p of bucket) {
                 if (p[0] < minR) minR = p[0];
@@ -79,8 +91,10 @@ export function extractPalette(imageData: Uint8ClampedArray, pixelCount: number,
         buckets.splice(splitIndex, 1, part1, part2);
     }
 
-    return buckets.map(bucket => {
-        let r = 0, g = 0, b = 0;
+    return buckets.map((bucket) => {
+        let r = 0,
+            g = 0,
+            b = 0;
         for (const p of bucket) {
             r += p[0];
             g += p[1];
@@ -93,7 +107,7 @@ export function extractPalette(imageData: Uint8ClampedArray, pixelCount: number,
 
         return {
             rgb: [finalR, finalG, finalB],
-            hex: rgbToHex(finalR, finalG, finalB)
+            hex: rgbToHex(finalR, finalG, finalB),
         };
     });
 }

@@ -11,7 +11,7 @@ export const bikeSection: SectionData = {
             iconFg: "mdi:cog",
             title: "Calculadora Fixie",
             description: "Optimiza tu transmisión. Calcula Skid Patches y Gear Inches.",
-            color: "#ef4444"
+            color: "#ef4444",
         },
         {
             href: "/utilidades/calculadora-radios/",
@@ -19,7 +19,7 @@ export const bikeSection: SectionData = {
             iconFg: "mdi:ruler",
             title: "Calculadora de Radios",
             description: "Longitud exacta de radios para construir ruedas. ERD, PCD y cruces.",
-            color: "#6366f1"
-        }
-    ]
+            color: "#6366f1",
+        },
+    ],
 };

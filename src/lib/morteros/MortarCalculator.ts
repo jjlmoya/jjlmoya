@@ -90,21 +90,18 @@ export class MortarCalculator {
         let ratioText = "";
 
         if (state.materialType === "cal") {
-            
             const calDensity = CAL_DENSITY[state.calType];
             const calVolumeLiters = state.materialKg / calDensity;
 
             const aggregateParts = phase.ratio.arena || phase.ratio.marmol || 0;
             const arenaVolumeLiters = calVolumeLiters * aggregateParts;
 
-            
             const arenaDensity = phase.density;
             complementaryAmount = arenaVolumeLiters * arenaDensity;
 
             complementaryName = phase.ratio.arena ? "Arena" : "Mármol";
             ratioText = `${phase.ratio.cal}:${aggregateParts}`;
         } else {
-            
             const arenaDensity = phase.density;
             const arenaVolumeLiters = state.materialKg / arenaDensity;
 
@@ -112,7 +109,6 @@ export class MortarCalculator {
             const aggregateParts = phase.ratio.arena || phase.ratio.marmol || 0;
             const calVolumeLiters = arenaVolumeLiters * (calParts / aggregateParts);
 
-            
             const calDensity = CAL_DENSITY[state.calType];
             complementaryAmount = calVolumeLiters * calDensity;
 

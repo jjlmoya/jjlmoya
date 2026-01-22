@@ -51,24 +51,25 @@ export class Store {
                     };
                 }
 
-
                 this.images = (data.images || []).map((img: any) => {
                     if (!img.variants) {
                         const variantId = Math.random().toString(36).substr(2, 9);
                         return {
                             id: img.id,
-                            variants: [{
-                                id: variantId,
-                                language: img.language || "ES",
-                                dataUrl: img.dataUrl
-                            }],
+                            variants: [
+                                {
+                                    id: variantId,
+                                    language: img.language || "ES",
+                                    dataUrl: img.dataUrl,
+                                },
+                            ],
                             activeVariantId: variantId,
                             settings: {
                                 ...img.settings,
                                 deviceOffsetX: img.settings.deviceOffsetX || 0,
                                 deviceOffsetY: img.settings.deviceOffsetY || 0,
-                                bgImage: img.settings.bgImage || null
-                            }
+                                bgImage: img.settings.bgImage || null,
+                            },
                         };
                     }
 

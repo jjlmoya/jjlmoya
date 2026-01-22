@@ -1,5 +1,4 @@
 export const fortunes = [
-
     "La suerte que buscas está en otra galleta.",
     "No cuentes los días, haz que los días cuenten.",
     "Un viaje de mil millas comienza con un solo paso.",
@@ -46,7 +45,6 @@ export const fortunes = [
     "La libertad está en ser dueños de nuestra propia vida.",
     "La excelencia no es un acto, es un hábito.",
 
-
     "Pronto recibirás una noticia que cambiará tu perspectiva.",
     "Un viejo amigo reaparecerá con una propuesta interesante.",
     "La oportunidad que esperas llegará cuando dejes de buscarla.",
@@ -86,7 +84,7 @@ export const fortunes = [
     "El amor está más cerca de lo que crees.",
     "Tu luz interior atraerá a las personas adecuadas.",
     "Un cambio de look te traerá buena energía.",
-    "La naturaleza tiene un mensaje para ti; sal a escucharla."
+    "La naturaleza tiene un mensaje para ti; sal a escucharla.",
 ];
 
 export const luckyNumbers = () => {

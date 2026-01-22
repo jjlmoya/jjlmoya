@@ -29,11 +29,13 @@ The mechanic uses a custom physics engine built for this specific interaction:
 ### Core Systems
 
 #### Physics & Collision
+
 - Custom elastic collision resolution in `CollisionSystem.ts`.
 - detects `speed` difference to determine who stops and who flies.
 - Continuous collision detection for fast-moving objects (approximated).
 
 #### Hazard Logic
+
 - **Spikes**: Instant death for any entity.
 - **Void**: Instant death for enemies; Player can "jump" over if moving fast enough (configurable).
 

@@ -6,7 +6,6 @@ export class Player {
         this.x = 100;
         this.y = game.height - this.height - 100;
 
-        
         this.vx = 0;
         this.vy = 0;
         this.weight = 1;
@@ -15,16 +14,14 @@ export class Player {
         this.maxSpeed = 10;
         this.jumpStrength = -20;
 
-        
         this.onGround = false;
         this.canDoubleJump = true;
         this.isSliding = false;
         this.onWall = false;
-        this.wallDir = 0; 
-        this.state = "IDLE"; 
+        this.wallDir = 0;
+        this.state = "IDLE";
 
-        
-        this.color = "#6366f1"; 
+        this.color = "#6366f1";
         this.squash = 1;
         this.stretch = 1;
     }
@@ -58,7 +55,6 @@ export class Player {
     }
 
     handleJump(input) {
-        
         if (input.jumpPressed) {
             if (this.onGround) {
                 this.jump();
@@ -67,10 +63,9 @@ export class Player {
             } else if (this.canDoubleJump) {
                 this.doubleJump();
             }
-            input.jumpPressed = false; 
+            input.jumpPressed = false;
         }
 
-        
         if (!input.keys.jump && this.vy < 0) {
             this.vy *= 0.5;
         }
@@ -89,49 +84,32 @@ export class Player {
         this.canDoubleJump = false;
         this.squash = 0.7;
         this.stretch = 1.3;
-        this.createParticles(5, "#a855f7"); 
+        this.createParticles(5, "#a855f7");
     }
 
     wallJump() {
         this.vy = this.jumpStrength;
-        this.vx = -this.wallDir * 10; 
+        this.vx = -this.wallDir * 10;
         this.onWall = false;
-        this.canDoubleJump = true; 
-        this.createParticles(5, "#fbbf24"); 
+        this.canDoubleJump = true;
+        this.createParticles(5, "#fbbf24");
     }
 
     handleSlide(input) {
         if (input.keys.slide && this.onGround && Math.abs(this.vx) > 1) {
             this.isSliding = true;
-            this.height = 25; 
-            
-            
-            
-            
+            this.height = 25;
 
-            
-            
-            
-            
-            
-            
-            
-            
-            
-
-            
             this.friction = 0.98;
 
-            
             if (this.state !== "SLIDE") {
                 this.vx *= 1.2;
-                this.y += 25; 
+                this.y += 25;
                 this.createParticles(8, "#cbd5e1");
             }
         } else {
             if (this.isSliding) {
-                this.y -= 25; 
-                
+                this.y -= 25;
             }
             this.isSliding = false;
             this.height = 50;
@@ -188,7 +166,6 @@ export class Player {
             }
         });
 
-        
         if (this.x < 0) {
             this.x = 0;
             this.vx = 0;
@@ -202,9 +179,8 @@ export class Player {
             this.wallDir = 1;
         }
 
-        
         if (this.onWall && !this.onGround && this.vy > 0) {
-            this.vy *= 0.8; 
+            this.vy *= 0.8;
         }
     }
 
@@ -242,7 +218,6 @@ export class Player {
     }
 
     updateVisuals() {
-        
         this.squash += (1 - this.squash) * 0.1;
         this.stretch += (1 - this.stretch) * 0.1;
     }
@@ -250,25 +225,17 @@ export class Player {
     draw(ctx) {
         ctx.fillStyle = this.color;
 
-        
         const w = this.width * this.squash;
         const h = this.height * this.stretch;
         const x = this.x + (this.width - w) / 2;
-        const y = this.y + (this.height - h); 
+        const y = this.y + (this.height - h);
 
         ctx.fillRect(x, y, w, h);
 
-        
         ctx.fillStyle = "white";
         const eyeOffset = this.vx >= 0 ? 5 : -5;
-        
+
         if (this.onWall && !this.onGround) {
-            
-            
-            
-            
-            
-            
         }
 
         ctx.fillRect(x + w / 2 + eyeOffset, y + h / 4, 10, 10);

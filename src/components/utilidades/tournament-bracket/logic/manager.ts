@@ -5,18 +5,23 @@ export class TournamentManager implements TournamentData {
     public id: string;
     public name: string;
     public createdAt: number;
-    public status: 'SETUP' | 'ACTIVE' | 'FINISHED';
+    public status: "SETUP" | "ACTIVE" | "FINISHED";
     public rounds: Round[];
     public players: Player[];
     public winner?: Player | null;
     public scoreEnabled: boolean = false;
 
-    constructor(players: string[] = [], name: string = "Torneo Sin Nombre", id: string = "", createdAt: number = 0) {
+    constructor(
+        players: string[] = [],
+        name: string = "Torneo Sin Nombre",
+        id: string = "",
+        createdAt: number = 0
+    ) {
         this.id = id || crypto.randomUUID();
         this.name = name;
         this.createdAt = createdAt || Date.now();
         this.players = players.map((p, i) => ({ id: `p-${i}-${Date.now()}`, name: p }));
-        this.status = 'SETUP';
+        this.status = "SETUP";
         this.rounds = [];
     }
 
@@ -30,13 +35,12 @@ export class TournamentManager implements TournamentData {
     public startTournament(): void {
         if (this.players.length < 2) return;
         this.rounds = BracketGenerator.generate(this.players);
-        this.status = 'ACTIVE';
+        this.status = "ACTIVE";
         this.resolveWalkovers();
     }
 
     public setScore(matchId: string, score1: number | null, score2: number | null): void {
         let match: Match | undefined;
-
 
         for (let i = 0; i < this.rounds.length; i++) {
             const m = this.rounds[i].matches.find((m) => m.id === matchId);
@@ -49,12 +53,15 @@ export class TournamentManager implements TournamentData {
 
         if (!match) return;
 
-        
         if (score1 !== null) match.score1 = score1;
         if (score2 !== null) match.score2 = score2;
 
-        
-        if (match.score1 !== undefined && match.score1 !== null && match.score2 !== undefined && match.score2 !== null) {
+        if (
+            match.score1 !== undefined &&
+            match.score1 !== null &&
+            match.score2 !== undefined &&
+            match.score2 !== null
+        ) {
             if (match.score1 > match.score2 && match.player1) {
                 this.setWinner(matchId, match.player1.id);
             } else if (match.score2 > match.score1 && match.player2) {
@@ -67,7 +74,6 @@ export class TournamentManager implements TournamentData {
         let match: Match | undefined;
         let roundIndex = -1;
 
-        
         for (let i = 0; i < this.rounds.length; i++) {
             const m = this.rounds[i].matches.find((m) => m.id === matchId);
             if (m) {
@@ -85,10 +91,8 @@ export class TournamentManager implements TournamentData {
 
         if (!winner) return;
 
-        
         match.winner = winner;
 
-        
         if (match.nextMatchId) {
             this.propagateToNextRound(match.nextMatchId, roundIndex + 1, winner, match.matchIndex);
         }
@@ -96,20 +100,22 @@ export class TournamentManager implements TournamentData {
         this.checkStatus();
     }
 
-    private propagateToNextRound(nextMatchId: string, nextRoundIndex: number, player: Player, originatingMatchIndex: number) {
+    private propagateToNextRound(
+        nextMatchId: string,
+        nextRoundIndex: number,
+        player: Player,
+        originatingMatchIndex: number
+    ) {
         if (nextRoundIndex >= this.rounds.length) return;
 
         const nextRound = this.rounds[nextRoundIndex];
         const nextMatch = nextRound.matches.find((m) => m.id === nextMatchId);
 
         if (nextMatch) {
-            
             const isPlayer1Slot = originatingMatchIndex % 2 === 0;
 
-            
             const currentPlayerInSlot = isPlayer1Slot ? nextMatch.player1 : nextMatch.player2;
 
-            
             if (currentPlayerInSlot?.id !== player.id) {
                 if (isPlayer1Slot) {
                     nextMatch.player1 = player;
@@ -117,12 +123,14 @@ export class TournamentManager implements TournamentData {
                     nextMatch.player2 = player;
                 }
 
-                
                 nextMatch.winner = null;
 
-                
                 if (nextMatch.nextMatchId) {
-                    this.clearFutureRound(nextMatch.nextMatchId, nextRoundIndex + 1, nextMatch.matchIndex);
+                    this.clearFutureRound(
+                        nextMatch.nextMatchId,
+                        nextRoundIndex + 1,
+                        nextMatch.matchIndex
+                    );
                 }
             }
         }
@@ -132,12 +140,11 @@ export class TournamentManager implements TournamentData {
         if (roundIndex >= this.rounds.length) return;
 
         const round = this.rounds[roundIndex];
-        const match = round.matches.find(m => m.id === matchId);
+        const match = round.matches.find((m) => m.id === matchId);
 
         if (match) {
             const isPlayer1Slot = originatingMatchIndex % 2 === 0;
 
-            
             if (isPlayer1Slot) {
                 match.player1 = null;
             } else {
@@ -146,7 +153,6 @@ export class TournamentManager implements TournamentData {
 
             match.winner = null;
 
-            
             if (match.nextMatchId) {
                 this.clearFutureRound(match.nextMatchId, roundIndex + 1, match.matchIndex);
             }
@@ -154,29 +160,24 @@ export class TournamentManager implements TournamentData {
     }
 
     private resolveWalkovers() {
-        
         let changed = true;
         while (changed) {
             changed = false;
-            this.rounds.forEach(round => {
-                round.matches.forEach(match => {
+            this.rounds.forEach((round) => {
+                round.matches.forEach((match) => {
                     if (match.winner) return;
 
-                    
                     if (match.player1 && !match.player2) {
-                        
-                        
                         if (round.index === 0) {
                             this.setWinner(match.id, match.player1.id);
                             changed = true;
                         } else {
-                            
-                            
                             const sourceMatchIndex = match.matchIndex * 2 + 1;
                             const prevRound = this.rounds[round.index - 1];
-                            const sourceMatch = prevRound?.matches.find(m => m.matchIndex === sourceMatchIndex);
+                            const sourceMatch = prevRound?.matches.find(
+                                (m) => m.matchIndex === sourceMatchIndex
+                            );
 
-                            
                             if (!sourceMatch) {
                                 this.setWinner(match.id, match.player1.id);
                                 changed = true;
@@ -184,18 +185,16 @@ export class TournamentManager implements TournamentData {
                         }
                     }
 
-                    
-                    
-                    
                     if (!match.player1 && match.player2) {
-                        
                         if (round.index === 0) {
                             this.setWinner(match.id, match.player2.id);
                             changed = true;
                         } else {
                             const sourceMatchIndex = match.matchIndex * 2;
                             const prevRound = this.rounds[round.index - 1];
-                            const sourceMatch = prevRound?.matches.find(m => m.matchIndex === sourceMatchIndex);
+                            const sourceMatch = prevRound?.matches.find(
+                                (m) => m.matchIndex === sourceMatchIndex
+                            );
 
                             if (!sourceMatch) {
                                 this.setWinner(match.id, match.player2.id);
@@ -211,14 +210,13 @@ export class TournamentManager implements TournamentData {
     private checkStatus(): void {
         const lastRound = this.rounds[this.rounds.length - 1];
         if (lastRound && lastRound.matches.every((m) => m.winner)) {
-            this.status = 'FINISHED';
+            this.status = "FINISHED";
             if (lastRound.matches.length === 1) {
                 this.winner = lastRound.matches[0].winner;
             }
         }
     }
 
-    
     toJSON(): any {
         return {
             id: this.id,
@@ -228,7 +226,7 @@ export class TournamentManager implements TournamentData {
             rounds: this.rounds,
             status: this.status,
             winner: this.winner,
-            scoreEnabled: this.scoreEnabled
+            scoreEnabled: this.scoreEnabled,
         };
     }
 
@@ -240,11 +238,10 @@ export class TournamentManager implements TournamentData {
             manager.createdAt = json.createdAt || manager.createdAt;
             manager.players = json.players || [];
             manager.rounds = json.rounds || [];
-            manager.status = json.status || 'SETUP';
+            manager.status = json.status || "SETUP";
             manager.winner = json.winner || null;
             manager.scoreEnabled = json.scoreEnabled || false;
         }
         return manager;
     }
 }
-

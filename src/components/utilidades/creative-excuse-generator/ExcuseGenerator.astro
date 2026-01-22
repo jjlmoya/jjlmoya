@@ -3,11 +3,9 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div class="max-w-4xl mx-auto p-4 md:p-8">
-    
     <div
         class="relative bg-white/80 backdrop-blur-xl rounded-[2rem] p-8 md:p-12 shadow-2xl border border-white/50 ring-1 ring-pink-200 overflow-hidden min-h-[500px] flex flex-col items-center justify-center text-center"
     >
-        
         <div
             class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-pink-300/20 rounded-full blur-3xl pointer-events-none"
         >
@@ -17,11 +15,9 @@ import { Icon } from "astro-icon/components";
         >
         </div>
 
-        
         <div
             class="relative z-10 w-full max-w-7xl min-h-[200px] flex flex-col lg:flex-row items-stretch lg:items-center justify-center gap-4 mb-12 perspective-1000"
         >
-            
             <div
                 id="part-1"
                 class="excuse-slot flex-1 min-w-[200px] bg-white/60 backdrop-blur rounded-2xl p-6 border-2 border-pink-100 shadow-lg flex items-center justify-center text-center transform transition-all duration-300 hover:scale-105 hover:bg-white hover:border-pink-300 group"
@@ -37,13 +33,11 @@ import { Icon } from "astro-icon/components";
                 </p>
             </div>
 
-            
             <Icon name="mdi:plus" class="hidden lg:block text-slate-300 size-8 shrink-0" />
             <div class="lg:hidden flex justify-center text-slate-300">
                 <Icon name="mdi:arrow-down" class="size-6" />
             </div>
 
-            
             <div
                 id="part-2"
                 class="excuse-slot flex-1 min-w-[200px] bg-white/60 backdrop-blur rounded-2xl p-6 border-2 border-rose-100 shadow-lg flex items-center justify-center text-center transform transition-all duration-300 hover:scale-105 hover:bg-white hover:border-rose-300 group"
@@ -59,13 +53,11 @@ import { Icon } from "astro-icon/components";
                 </p>
             </div>
 
-            
             <Icon name="mdi:arrow-right" class="hidden lg:block text-slate-300 size-8 shrink-0" />
             <div class="lg:hidden flex justify-center text-slate-300">
                 <Icon name="mdi:arrow-down" class="size-6" />
             </div>
 
-            
             <div
                 id="part-3"
                 class="excuse-slot flex-1 min-w-[200px] bg-white/60 backdrop-blur rounded-2xl p-6 border-2 border-slate-100 shadow-lg flex items-center justify-center text-center transform transition-all duration-300 hover:scale-105 hover:bg-white hover:border-slate-300 group"
@@ -82,7 +74,6 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div class="relative z-10 flex flex-col gap-6 items-center">
             <button
                 id="generate-btn"
@@ -135,7 +126,7 @@ import { Icon } from "astro-icon/components";
 
     function runSlot(element: HTMLElement, options: string[], duration: number) {
         return new Promise<string>((resolve) => {
-            const interval = 50; 
+            const interval = 50;
             const steps = duration / interval;
             let currentStep = 0;
 
@@ -149,7 +140,7 @@ import { Icon } from "astro-icon/components";
                 if (currentStep >= steps) {
                     clearInterval(timer);
                     element.classList.remove("blur-text");
-                    
+
                     const final = options[Math.floor(Math.random() * options.length)];
                     element.innerText = final;
                     resolve(final);
@@ -165,25 +156,20 @@ import { Icon } from "astro-icon/components";
             return;
         }
 
-        
         els.genBtn.setAttribute("disabled", "true");
         els.genBtn.style.opacity = "0.7";
         if (els.copyBtn) {
             els.copyBtn.classList.add("opacity-0", "pointer-events-none", "translate-y-2");
         }
 
-        
-        
-
         const promise1 = runSlot(els.p1 as HTMLElement, EXCUSE_DATA.starts, 800);
-        const promise2 = runSlot(els.p2 as HTMLElement, EXCUSE_DATA.middles, 1400); 
-        const promise3 = runSlot(els.p3 as HTMLElement, EXCUSE_DATA.ends, 2000); 
+        const promise2 = runSlot(els.p2 as HTMLElement, EXCUSE_DATA.middles, 1400);
+        const promise3 = runSlot(els.p3 as HTMLElement, EXCUSE_DATA.ends, 2000);
 
         const [res1, res2, res3] = await Promise.all([promise1, promise2, promise3]);
 
         generatedText = `${res1} ${res2} ${res3}`;
 
-        
         els.genBtn.removeAttribute("disabled");
         els.genBtn.style.opacity = "1";
         if (els.copyBtn) {
@@ -198,10 +184,8 @@ import { Icon } from "astro-icon/components";
         }
     }
 
-    
     els.genBtn?.addEventListener("click", generateExcuse);
 
-    
     if (els.p1) els.p1.innerHTML = "?";
     if (els.p2) els.p2.innerHTML = "?";
     if (els.p3) els.p3.innerHTML = "?";

@@ -1,15 +1,13 @@
 import type { TournamentData } from "../models";
 
-
-
 const THEME = {
     primary: { bg: "bg-indigo-600", text: "text-white", shadow: "shadow-md" },
     default: { bg: "bg-white", text: "text-slate-500", hover: "hover:bg-indigo-50" },
     match: {
         winner: "bg-indigo-100 text-indigo-900 font-bold shadow-inner ring-1 ring-indigo-200",
         hover: "hover:bg-slate-50",
-        bye: "bg-slate-50/50 text-slate-400 italic opacity-60"
-    }
+        bye: "bg-slate-50/50 text-slate-400 italic opacity-60",
+    },
 };
 
 export class MobileBracketRenderer {
@@ -24,7 +22,6 @@ export class MobileBracketRenderer {
 
         const rounds = data.rounds;
 
-        
         let tabsHTML = `<div class="flex overflow-x-auto gap-2 p-1 no-scrollbar snap-x pb-4 sticky top-0 bg-slate-50/95 backdrop-blur z-20 mx-[-0.5rem] px-[0.5rem] mb-4">`;
         rounds.forEach((round, i) => {
             const isActive = i === activeRoundIndex;
@@ -42,7 +39,6 @@ export class MobileBracketRenderer {
         });
         tabsHTML += `</div>`;
 
-        
         let matchesHTML = `<div class="relative min-h-[500px] mt-4">`;
         rounds.forEach((round, i) => {
             const isActive = i === activeRoundIndex;
@@ -50,8 +46,8 @@ export class MobileBracketRenderer {
                 ? "opacity-100 z-10 pointer-events-auto relative translate-x-0"
                 : "opacity-0 z-0 pointer-events-none absolute inset-0 translate-x-8";
 
-            matchesHTML += `<div class="round-content w-full transition-all duration-300 ${visibilityClass} pb-8">`; 
-            matchesHTML += `<div class="flex flex-col gap-4">`; 
+            matchesHTML += `<div class="round-content w-full transition-all duration-300 ${visibilityClass} pb-8">`;
+            matchesHTML += `<div class="flex flex-col gap-4">`;
 
             if (round.matches.length === 0) {
                 matchesHTML += `<div class="text-center p-8 text-slate-400 italic">Ronda vacía</div>`;
@@ -66,11 +62,10 @@ export class MobileBracketRenderer {
 
         this.container.innerHTML = tabsHTML + matchesHTML;
 
-        
-        const tabs = this.container.querySelectorAll('.round-tab');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const idx = parseInt((tab as HTMLElement).dataset.roundIndex || '0');
+        const tabs = this.container.querySelectorAll(".round-tab");
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                const idx = parseInt((tab as HTMLElement).dataset.roundIndex || "0");
                 onTabClick(idx);
             });
         });
@@ -90,22 +85,25 @@ export class MobileBracketRenderer {
              <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative w-full flex flex-col justify-center py-3 px-4">
                 <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-400"></div>
                  <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1">Pase Directo</span>
-                 <div class="font-bold text-slate-800 text-base truncate">${player?.name || 'Esperando...'}</div>
+                 <div class="font-bold text-slate-800 text-base truncate">${player?.name || "Esperando..."}</div>
              </div>
              `;
         }
 
-        const p1Class = winnerId === p1?.id ? THEME.match.winner : (p1 ? THEME.match.hover : "");
-        const p2Class = winnerId === p2?.id ? THEME.match.winner : (p2 ? THEME.match.hover : THEME.match.bye);
+        const p1Class = winnerId === p1?.id ? THEME.match.winner : p1 ? THEME.match.hover : "";
+        const p2Class =
+            winnerId === p2?.id ? THEME.match.winner : p2 ? THEME.match.hover : THEME.match.bye;
 
-        const p1Icon = winnerId === p1?.id ? '<span class="icon-[mdi--trophy] text-indigo-600"></span>' : '';
-        const p2Icon = winnerId === p2?.id ? '<span class="icon-[mdi--trophy] text-indigo-600"></span>' : '';
+        const p1Icon =
+            winnerId === p1?.id ? '<span class="icon-[mdi--trophy] text-indigo-600"></span>' : "";
+        const p2Icon =
+            winnerId === p2?.id ? '<span class="icon-[mdi--trophy] text-indigo-600"></span>' : "";
 
         const p1Disabled = !p1 ? "disabled" : "";
         const p2Disabled = !p2 ? "disabled" : "";
 
-        const score1 = match.score1 !== undefined && match.score1 !== null ? match.score1 : '';
-        const score2 = match.score2 !== undefined && match.score2 !== null ? match.score2 : '';
+        const score1 = match.score1 !== undefined && match.score1 !== null ? match.score1 : "";
+        const score2 = match.score2 !== undefined && match.score2 !== null ? match.score2 : "";
 
         return `
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative w-full flex flex-col justify-center">
@@ -113,7 +111,7 @@ export class MobileBracketRenderer {
            <div class="px-3 py-3 flex flex-col gap-2 w-full">
                <div class="flex items-center gap-2">
                    <button 
-                        class="match-btn flex-grow flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p1Class} ${p1Disabled ? 'cursor-default' : ''}"
+                        class="match-btn flex-grow flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p1Class} ${p1Disabled ? "cursor-default" : ""}"
                         data-match-id="${match.id}"
                         data-winner-id="${p1?.id || ""}"
                         ${p1Disabled}
@@ -123,13 +121,13 @@ export class MobileBracketRenderer {
                    </button>
                    <input 
                         type="number" 
-                        class="score-input w-12 h-9 text-center border border-slate-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none ${hasWinner ? 'bg-slate-50 text-slate-400' : 'bg-white'}"
+                        class="score-input w-12 h-9 text-center border border-slate-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none ${hasWinner ? "bg-slate-50 text-slate-400" : "bg-white"}"
                         data-match-id="${match.id}"
                         data-player="1"
                         value="${score1}"
                         placeholder="-"
                         min="0"
-                        ${!p1 || hasWinner ? 'disabled' : ''}
+                        ${!p1 || hasWinner ? "disabled" : ""}
                    />
                </div>
                
@@ -137,7 +135,7 @@ export class MobileBracketRenderer {
                
                <div class="flex items-center gap-2">
                    <button 
-                        class="match-btn flex-grow flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p2Class} ${p2Disabled ? 'cursor-default' : ''}"
+                        class="match-btn flex-grow flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-left ${p2Class} ${p2Disabled ? "cursor-default" : ""}"
                         data-match-id="${match.id}"
                         data-winner-id="${p2?.id || ""}"
                         ${p2Disabled}
@@ -147,13 +145,13 @@ export class MobileBracketRenderer {
                    </button>
                    <input 
                         type="number" 
-                        class="score-input w-12 h-9 text-center border border-slate-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none ${hasWinner ? 'bg-slate-50 text-slate-400' : 'bg-white'}"
+                        class="score-input w-12 h-9 text-center border border-slate-200 rounded-lg text-sm font-bold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none ${hasWinner ? "bg-slate-50 text-slate-400" : "bg-white"}"
                         data-match-id="${match.id}"
                         data-player="2"
                         value="${score2}"
                         placeholder="-"
                         min="0"
-                        ${!p2 || hasWinner ? 'disabled' : ''}
+                        ${!p2 || hasWinner ? "disabled" : ""}
                    />
                </div>
            </div>

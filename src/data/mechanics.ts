@@ -154,7 +154,8 @@ export const mechanics: MechanicItem[] = [
     },
     {
         title: "Gravity Flip",
-        description: "el suelo es el techo. invierte la gravedad para esquivar obstáculos en este runner psicodélico.",
+        description:
+            "el suelo es el techo. invierte la gravedad para esquivar obstáculos en este runner psicodélico.",
         url: "/gamebob/mecanicas/gravity-flip/",
         icon: "mdi:flip-vertical",
         tags: ["arcade", "física", "runner"],
@@ -162,7 +163,8 @@ export const mechanics: MechanicItem[] = [
     },
     {
         title: "Neon Grapple",
-        description: "spiderman minimalista. balancéate por un mundo infinito usando ganchos de energía.",
+        description:
+            "spiderman minimalista. balancéate por un mundo infinito usando ganchos de energía.",
         url: "/gamebob/mecanicas/neon-grapple/",
         icon: "mdi:hook",
         tags: ["física", "skill", "flow"],
@@ -170,7 +172,8 @@ export const mechanics: MechanicItem[] = [
     },
     {
         title: "Rhythm Jump",
-        description: "alterna tu color para sobrevivir. cyan y magenta son tus únicos aliados en este runner de precisión.",
+        description:
+            "alterna tu color para sobrevivir. cyan y magenta son tus únicos aliados en este runner de precisión.",
         url: "/gamebob/mecanicas/rhythm-jump/",
         icon: "mdi:palette-swatch",
         tags: ["color", "runner", "coordinación"],
@@ -178,7 +181,8 @@ export const mechanics: MechanicItem[] = [
     },
     {
         title: "Draw The Path",
-        description: "protege al corredor. dibuja escudos contra meteoritos y puentes sobre el vacío.",
+        description:
+            "protege al corredor. dibuja escudos contra meteoritos y puentes sobre el vacío.",
         url: "/gamebob/mecanicas/draw-the-path/",
         icon: "mdi:draw",
         tags: ["dibujo", "creatividad", "reflejos"],
@@ -205,8 +209,7 @@ export const mechanics: MechanicItem[] = [
     },
     {
         title: "Momentum Transfer",
-        description:
-            "no matas enemigos golpeándolos, sino transfiriéndoles tu velocidad.",
+        description: "no matas enemigos golpeándolos, sino transfiriéndoles tu velocidad.",
         url: "/gamebob/mecanicas/momentum-transfer/",
         icon: "mdi:billiards",
         tags: ["física", "billar", "arcade"],

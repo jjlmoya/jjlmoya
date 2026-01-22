@@ -2,8 +2,10 @@ import type { Project } from "./types";
 
 export const missiopolisProject: Project = {
     name: "Missiopolis: Crónicas Urbanas",
-    description: "Tu ciudad es un libro. Aprénde a leerlo. ¿Cuántas veces has pasado por la misma calle sin verla realmente?",
-    homeDescription: "tu ciudad es un libro. aprénde a leerlo. ¿cuántas veces has pasado por la misma calle sin verla realmente?",
+    description:
+        "Tu ciudad es un libro. Aprénde a leerlo. ¿Cuántas veces has pasado por la misma calle sin verla realmente?",
+    homeDescription:
+        "tu ciudad es un libro. aprénde a leerlo. ¿cuántas veces has pasado por la misma calle sin verla realmente?",
     image: "/images/gamebob/games/missiopolis.png",
     statusLabel: "Planificación",
     statusType: "planning",

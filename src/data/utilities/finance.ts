@@ -11,7 +11,7 @@ export const financeSection: SectionData = {
             href: "/utilidades/interes-compuesto/",
             iconBg: "mdi:finance",
             iconFg: "mdi:chart-line-variant",
-            color: "#10b981"
+            color: "#10b981",
         },
         {
             title: "Simulador Hipoteca",
@@ -19,7 +19,7 @@ export const financeSection: SectionData = {
             href: "/utilidades/hipoteca/",
             iconBg: "mdi:home-city-outline",
             iconFg: "mdi:calculator-variant",
-            color: "#6366f1"
+            color: "#6366f1",
         },
         {
             title: "Inflación Histórica",
@@ -27,15 +27,16 @@ export const financeSection: SectionData = {
             href: "/utilidades/inflacion/",
             iconBg: "mdi:chart-line-stacked",
             iconFg: "mdi:cash-clock",
-            color: "#f59e0b"
+            color: "#f59e0b",
         },
         {
             title: "Simulador Sueldo Neto",
-            description: "¿Cuánto llega a tu banco? Cálculo real de IRPF y Seguridad Social en España.",
+            description:
+                "¿Cuánto llega a tu banco? Cálculo real de IRPF y Seguridad Social en España.",
             href: "/utilidades/calculadora-sueldo-neto/",
             iconBg: "mdi:bank-outline",
             iconFg: "mdi:cash-multiple",
-            color: "#059669"
+            color: "#059669",
         },
         {
             title: "Calculadora IVA Inverso",
@@ -43,7 +44,7 @@ export const financeSection: SectionData = {
             href: "/utilidades/calculadora-iva-inverso/",
             iconBg: "mdi:receipt-text-outline",
             iconFg: "mdi:percent-outline",
-            color: "#3b82f6"
+            color: "#3b82f6",
         },
         {
             title: "Coste de Reunión",
@@ -51,7 +52,7 @@ export const financeSection: SectionData = {
             href: "/utilidades/calculadora-coste-reunion/",
             iconBg: "mdi:clock-fast",
             iconFg: "mdi:cash-multiple",
-            color: "#16a34a"
+            color: "#16a34a",
         },
         {
             title: "Optimizador de Loterías",
@@ -59,7 +60,7 @@ export const financeSection: SectionData = {
             href: "/utilidades/optimizador-loterias/",
             iconBg: "mdi:clover",
             iconFg: "mdi:calculator-variant",
-            color: "#10b981"
-        }
-    ]
+            color: "#10b981",
+        },
+    ],
 };

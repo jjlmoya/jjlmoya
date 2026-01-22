@@ -3,7 +3,6 @@ import { Icon } from "astro-icon/components";
 ---
 
 <div class="w-full max-w-6xl mx-auto space-y-6">
-    
     <div
         class="flex flex-wrap items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm"
     >
@@ -42,9 +41,7 @@ import { Icon } from "astro-icon/components";
         </div>
     </div>
 
-    
     <div class="grid lg:grid-cols-2 gap-6">
-        
         <div class="relative group h-[600px] flex flex-col">
             <div
                 class="absolute -inset-1 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-800 dark:to-slate-700 rounded-3xl blur opacity-20 group-focus-within:opacity-40 transition duration-500"
@@ -66,7 +63,6 @@ import { Icon } from "astro-icon/components";
             </div>
         </div>
 
-        
         <div class="relative group h-[600px] flex flex-col">
             <div
                 class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-10 transition duration-500"
@@ -89,7 +85,6 @@ import { Icon } from "astro-icon/components";
         </div>
     </div>
 
-    
     <div
         id="toast"
         class="fixed bottom-8 right-8 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none font-medium text-sm z-50"
@@ -145,17 +140,17 @@ import { Icon } from "astro-icon/components";
         return jsonStr.replace(
             /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
             function (match: string) {
-                let cls = "text-orange-600 dark:text-orange-400"; 
+                let cls = "text-orange-600 dark:text-orange-400";
                 if (/^"/.test(match)) {
                     if (/:$/.test(match)) {
-                        cls = "text-purple-600 dark:text-purple-400"; 
+                        cls = "text-purple-600 dark:text-purple-400";
                     } else {
-                        cls = "text-green-600 dark:text-green-400"; 
+                        cls = "text-green-600 dark:text-green-400";
                     }
                 } else if (/true|false/.test(match)) {
-                    cls = "text-blue-600 dark:text-blue-400"; 
+                    cls = "text-blue-600 dark:text-blue-400";
                 } else if (/null/.test(match)) {
-                    cls = "text-red-600 dark:text-red-400"; 
+                    cls = "text-red-600 dark:text-red-400";
                 }
                 return '<span class="' + cls + '">' + match + "</span>";
             }
@@ -191,22 +186,16 @@ import { Icon } from "astro-icon/components";
     function fixJSON() {
         let raw = inputEditor.value;
 
-        
         try {
-            
-            
             raw = raw.replace(/'([^']+)'\s*:/g, '"$1":');
-            
+
             raw = raw.replace(/:\s*'([^']+)'/g, ': "$1"');
 
-            
             raw = raw.replace(/,\s*([}\]])/g, "$1");
 
-            
             const parsed = JSON.parse(raw);
             currentJSON = parsed;
 
-            
             const formatted = JSON.stringify(parsed, null, isMinified ? 0 : 2);
             if (outputCode) outputCode.innerHTML = highlightJSON(formatted);
             setStatus("valid");
@@ -227,7 +216,6 @@ import { Icon } from "astro-icon/components";
         }, 2000);
     }
 
-    
     inputEditor.addEventListener("input", () => processJSON());
 
     let isMinified = false;
@@ -235,13 +223,11 @@ import { Icon } from "astro-icon/components";
     btnMinify?.addEventListener("click", () => {
         if (currentJSON) {
             isMinified = !isMinified;
-            
-            
+
             const formatted = JSON.stringify(currentJSON, null, isMinified ? 0 : 2);
             if (outputCode) outputCode.innerHTML = highlightJSON(formatted);
             if (sizeInfo) sizeInfo.textContent = formatBytes(new Blob([formatted]).size);
 
-            
             if (isMinified) {
                 btnMinify.innerHTML =
                     '<span class="iconify w-4 h-4" data-icon="mdi:arrow-expand-horizontal"></span> Embellecer';
@@ -261,7 +247,6 @@ import { Icon } from "astro-icon/components";
         }
     });
 
-    
     const outputViewer = document.getElementById("output-viewer");
 
     outputViewer?.addEventListener("keydown", (e) => {
@@ -277,6 +262,5 @@ import { Icon } from "astro-icon/components";
         }
     });
 
-    
     processJSON();
 </script>

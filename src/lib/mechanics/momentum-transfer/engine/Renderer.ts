@@ -1,13 +1,19 @@
-
-import type { GameState, Obstacle } from './Types';
-import { CANVAS_WIDTH, CANVAS_HEIGHT, BG_COLOR, OBS_WALL_COLOR, OBS_SPIKE_COLOR, OBS_VOID_COLOR } from './Constants';
+import type { GameState, Obstacle } from "./Types";
+import {
+    CANVAS_WIDTH,
+    CANVAS_HEIGHT,
+    BG_COLOR,
+    OBS_WALL_COLOR,
+    OBS_SPIKE_COLOR,
+    OBS_VOID_COLOR,
+} from "./Constants";
 
 export class Renderer {
     private ctx: CanvasRenderingContext2D;
 
     constructor(canvas: HTMLCanvasElement) {
-        this.ctx = canvas.getContext('2d')!;
-        
+        this.ctx = canvas.getContext("2d")!;
+
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
     }
@@ -17,13 +23,13 @@ export class Renderer {
         this.drawObstacles(state.obstacles);
         this.drawDragLine(state);
         this.drawEntity(state.player);
-        state.enemies.forEach(enemy => this.drawEntity(enemy));
+        state.enemies.forEach((enemy) => this.drawEntity(enemy));
 
         if (state.enemies.length === 0) {
-            this.ctx.fillStyle = '#fff';
-            this.ctx.font = 'bold 80px monospace';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('¡NIVEL LIMPIO!', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+            this.ctx.fillStyle = "#fff";
+            this.ctx.font = "bold 80px monospace";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText("¡NIVEL LIMPIO!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
         }
     }
 
@@ -33,53 +39,51 @@ export class Renderer {
     }
 
     private drawObstacles(obstacles: Obstacle[]) {
-        obstacles.forEach(obs => {
+        obstacles.forEach((obs) => {
             this.ctx.save();
-            if (obs.type === 'wall') {
+            if (obs.type === "wall") {
                 this.ctx.fillStyle = OBS_WALL_COLOR;
                 this.ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-                this.ctx.strokeStyle = '#aaa';
+                this.ctx.strokeStyle = "#aaa";
                 this.ctx.lineWidth = 2;
                 this.ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
-            } else if (obs.type === 'spike') {
-                
+            } else if (obs.type === "spike") {
                 this.ctx.fillStyle = OBS_SPIKE_COLOR;
                 this.ctx.beginPath();
                 const spikeSize = 20;
                 const rows = Math.ceil(obs.height / spikeSize);
                 const cols = Math.ceil(obs.width / spikeSize);
 
-                
-                this.ctx.fillStyle = '#300';
+                this.ctx.fillStyle = "#300";
                 this.ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
 
-                
-                this.ctx.fillStyle = '#f44';
+                this.ctx.fillStyle = "#f44";
                 for (let i = 0; i < cols; i++) {
                     for (let j = 0; j < rows; j++) {
                         const sx = obs.x + i * spikeSize;
                         const sy = obs.y + j * spikeSize;
-                        if (sx + spikeSize > obs.x + obs.width || sy + spikeSize > obs.y + obs.height) continue;
+                        if (
+                            sx + spikeSize > obs.x + obs.width ||
+                            sy + spikeSize > obs.y + obs.height
+                        )
+                            continue;
 
                         this.ctx.beginPath();
-                        this.ctx.moveTo(sx + spikeSize / 2, sy); 
-                        this.ctx.lineTo(sx + spikeSize, sy + spikeSize); 
-                        this.ctx.lineTo(sx, sy + spikeSize); 
+                        this.ctx.moveTo(sx + spikeSize / 2, sy);
+                        this.ctx.lineTo(sx + spikeSize, sy + spikeSize);
+                        this.ctx.lineTo(sx, sy + spikeSize);
                         this.ctx.fill();
                     }
                 }
 
-                this.ctx.strokeStyle = '#f00';
+                this.ctx.strokeStyle = "#f00";
                 this.ctx.lineWidth = 2;
                 this.ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
-
             } else {
-                
-                this.ctx.fillStyle = '#050505';
+                this.ctx.fillStyle = "#050505";
                 this.ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
 
-                
-                this.ctx.strokeStyle = '#1a1a1a';
+                this.ctx.strokeStyle = "#1a1a1a";
                 this.ctx.lineWidth = 1;
                 this.ctx.beginPath();
                 for (let i = 0; i < obs.width + obs.height; i += 20) {
@@ -88,7 +92,7 @@ export class Renderer {
                 }
                 this.ctx.stroke();
 
-                this.ctx.strokeStyle = '#333';
+                this.ctx.strokeStyle = "#333";
                 this.ctx.lineWidth = 2;
                 this.ctx.setLineDash([5, 5]);
                 this.ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
@@ -103,7 +107,7 @@ export class Renderer {
             this.ctx.beginPath();
             this.ctx.moveTo(state.player.pos.x, state.player.pos.y);
             this.ctx.lineTo(state.dragCurrent.x, state.dragCurrent.y);
-            this.ctx.strokeStyle = '#fff';
+            this.ctx.strokeStyle = "#fff";
             this.ctx.setLineDash([10, 10]);
             this.ctx.lineWidth = 3;
             this.ctx.stroke();
@@ -119,7 +123,6 @@ export class Renderer {
         this.ctx.arc(0, 0, entity.radius, 0, Math.PI * 2);
         this.ctx.fill();
 
-        
         this.ctx.shadowBlur = 15;
         this.ctx.shadowColor = entity.color;
         this.ctx.stroke();

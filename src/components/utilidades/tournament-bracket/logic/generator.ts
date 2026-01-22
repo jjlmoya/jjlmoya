@@ -9,7 +9,6 @@ export class BracketGenerator {
         const bracketSize = Math.pow(2, roundsCount);
         const firstRoundMatches = bracketSize / 2;
 
-
         const rounds: Round[] = [];
 
         const round0Matches: Match[] = [];
@@ -33,7 +32,7 @@ export class BracketGenerator {
                 player2: p2,
                 winner: null,
                 nextMatchId: null,
-                isBye: (p1 !== null && p2 === null) || (p1 === null && p2 !== null)
+                isBye: (p1 !== null && p2 === null) || (p1 === null && p2 !== null),
             };
             round0Matches.push(match);
         }
@@ -41,22 +40,26 @@ export class BracketGenerator {
         rounds.push({
             index: 0,
             name: this.getRoundName(0, roundsCount),
-            matches: round0Matches
+            matches: round0Matches,
         });
 
         for (let r = 1; r < roundsCount; r++) {
             const prevRound = rounds[r - 1];
             const roundMatches: Match[] = [];
 
-            const maxMatchIndex = Math.max(...prevRound.matches.map(m => m.matchIndex));
+            const maxMatchIndex = Math.max(...prevRound.matches.map((m) => m.matchIndex));
             const expectedMatchCount = Math.ceil((maxMatchIndex + 1) / 2);
 
             for (let m = 0; m < expectedMatchCount; m++) {
                 const source1Index = m * 2;
                 const source2Index = m * 2 + 1;
 
-                const hasSource1 = prevRound.matches.some(match => match.matchIndex === source1Index);
-                const hasSource2 = prevRound.matches.some(match => match.matchIndex === source2Index);
+                const hasSource1 = prevRound.matches.some(
+                    (match) => match.matchIndex === source1Index
+                );
+                const hasSource2 = prevRound.matches.some(
+                    (match) => match.matchIndex === source2Index
+                );
 
                 if (!hasSource1 && !hasSource2) {
                     continue;
@@ -76,13 +79,13 @@ export class BracketGenerator {
             rounds.push({
                 index: r,
                 name: this.getRoundName(r, roundsCount),
-                matches: roundMatches
+                matches: roundMatches,
             });
         }
 
         for (let r = 0; r < roundsCount - 1; r++) {
             const currentRound = rounds[r];
-            currentRound.matches.forEach(match => {
+            currentRound.matches.forEach((match) => {
                 const nextMatchIndex = Math.floor(match.matchIndex / 2);
                 match.nextMatchId = `r${r + 1}-m${nextMatchIndex}`;
             });

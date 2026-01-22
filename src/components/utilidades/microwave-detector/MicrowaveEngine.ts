@@ -11,12 +11,10 @@ export class MicrowaveEngine {
     async measurePing(): Promise<PingResult> {
         const start = performance.now();
         try {
-            
-            
             await fetch(`/?nocache=${Math.random()}`, {
-                method: 'HEAD',
-                mode: 'no-cors',
-                cache: 'no-store'
+                method: "HEAD",
+                mode: "no-cors",
+                cache: "no-store",
             });
             const end = performance.now();
             const latency = end - start;
@@ -29,7 +27,7 @@ export class MicrowaveEngine {
             return {
                 latency,
                 jitter,
-                timestamp: Date.now()
+                timestamp: Date.now(),
             };
         } catch (e) {
             console.error("Ping failed", e);
@@ -46,26 +44,37 @@ export class MicrowaveEngine {
         return diffSum / (this.lastPings.length - 1);
     }
 
-    static getInterferenceLevel(jitter: number): { label: string, color: string, description: string } {
-        if (jitter < 2) return {
-            label: 'Señal Limpia',
-            color: 'emerald',
-            description: 'Tu conexión es estable. No hay interferencias electromagnéticas significativas detectadas.'
-        };
-        if (jitter < 10) return {
-            label: 'Interferencia Leve',
-            color: 'yellow',
-            description: 'Se detecta algo de ruido en la señal. Podría ser actividad normal o dispositivos Bluetooth cercanos.'
-        };
-        if (jitter < 30) return {
-            label: 'Interferencia Alta',
-            color: 'orange',
-            description: 'Ruido electromagnético considerable detectado. Si el microondas está encendido, es posible que tenga fugas leves.'
-        };
+    static getInterferenceLevel(jitter: number): {
+        label: string;
+        color: string;
+        description: string;
+    } {
+        if (jitter < 2)
+            return {
+                label: "Señal Limpia",
+                color: "emerald",
+                description:
+                    "Tu conexión es estable. No hay interferencias electromagnéticas significativas detectadas.",
+            };
+        if (jitter < 10)
+            return {
+                label: "Interferencia Leve",
+                color: "yellow",
+                description:
+                    "Se detecta algo de ruido en la señal. Podría ser actividad normal o dispositivos Bluetooth cercanos.",
+            };
+        if (jitter < 30)
+            return {
+                label: "Interferencia Alta",
+                color: "orange",
+                description:
+                    "Ruido electromagnético considerable detectado. Si el microondas está encendido, es posible que tenga fugas leves.",
+            };
         return {
-            label: 'FUGA CRÍTICA / RUIDO EXTREMO',
-            color: 'red',
-            description: 'Inestabilidad masiva en la señal. Si estás junto al microondas, apágalo: la protección RF podría estar degradada.'
+            label: "FUGA CRÍTICA / RUIDO EXTREMO",
+            color: "red",
+            description:
+                "Inestabilidad masiva en la señal. Si estás junto al microondas, apágalo: la protección RF podría estar degradada.",
         };
     }
 }

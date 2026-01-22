@@ -33,7 +33,6 @@ export class SlingshotGame {
             }
         );
 
-        
         this.mechanic.updateBounds(this.width, this.height);
 
         this.audioCtx = null;
@@ -60,16 +59,8 @@ export class SlingshotGame {
             },
             { passive: false }
         );
-        window.addEventListener(
-            "touchmove",
-            () => {
-                
-                
-            },
-            { passive: false }
-        );
-        
-        
+        window.addEventListener("touchmove", () => {}, { passive: false });
+
         window.addEventListener(
             "touchmove",
             (e) => {
@@ -143,14 +134,12 @@ export class SlingshotGame {
     }
 
     draw() {
-        
-        this.ctx.fillStyle = "#f5f5f5"; 
+        this.ctx.fillStyle = "#f5f5f5";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         const state = this.mechanic.getState();
         const dragInfo = this.mechanic.getDragInfo();
 
-        
         if (dragInfo) {
             this.ctx.beginPath();
             this.ctx.moveTo(dragInfo.anchor.x, dragInfo.anchor.y);
@@ -159,18 +148,15 @@ export class SlingshotGame {
             this.ctx.lineWidth = 4;
             this.ctx.stroke();
 
-            
             this.ctx.beginPath();
             this.ctx.arc(dragInfo.anchor.x, dragInfo.anchor.y, 5, 0, Math.PI * 2);
             this.ctx.fillStyle = "rgba(0,0,0,0.2)";
             this.ctx.fill();
         }
 
-        
         this.ctx.save();
         this.ctx.translate(state.x, state.y);
 
-        
         const speed = this.mechanic.getSpeed();
         const stretch = Math.min(speed * 0.02, 0.5);
         const angle = Math.atan2(state.vy, state.vx);
@@ -178,22 +164,19 @@ export class SlingshotGame {
         this.ctx.rotate(angle);
         this.ctx.scale(1 + stretch, 1 - stretch * 0.5);
 
-        
         this.ctx.beginPath();
         this.ctx.arc(4, 4, state.radius, 0, Math.PI * 2);
         this.ctx.fillStyle = "rgba(0,0,0,1)";
         this.ctx.fill();
 
-        
         this.ctx.beginPath();
         this.ctx.arc(0, 0, state.radius, 0, Math.PI * 2);
-        this.ctx.fillStyle = "#facc15"; 
+        this.ctx.fillStyle = "#facc15";
         this.ctx.lineWidth = 4;
         this.ctx.strokeStyle = "#000000";
         this.ctx.fill();
         this.ctx.stroke();
 
-        
         this.ctx.fillStyle = "#000000";
         this.ctx.font = "900 20px Inter, sans-serif";
         this.ctx.textAlign = "center";
@@ -210,8 +193,6 @@ export class SlingshotGame {
             face = ">_<";
         }
 
-        
-        
         this.ctx.fillText(face, 0, 0);
 
         this.ctx.restore();
@@ -221,6 +202,5 @@ export class SlingshotGame {
         this.canvas.removeEventListener("mousedown", this.handleStart);
         window.removeEventListener("mousemove", this.handleMove);
         window.removeEventListener("mouseup", this.handleEnd);
-        
     }
 }

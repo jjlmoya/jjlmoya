@@ -1,12 +1,12 @@
-import type { Entity, Obstacle } from '../Types';
-import { STAGE_PADDING, CANVAS_WIDTH, CANVAS_HEIGHT } from '../Constants';
+import type { Entity, Obstacle } from "../Types";
+import { STAGE_PADDING, CANVAS_WIDTH, CANVAS_HEIGHT } from "../Constants";
 
 export class CollisionSystem {
     public static update(entities: Entity[], obstacles: Obstacle[]): void {
-        entities.forEach(entity => {
+        entities.forEach((entity) => {
             if (entity.destroyed) return;
 
-            if (entity.type === 'bullet' || entity.type === 'enemy_bullet') {
+            if (entity.type === "bullet" || entity.type === "enemy_bullet") {
                 this.handleBulletWorldCollisions(entity, obstacles);
                 this.handleBulletEntityCollisions(entity, entities);
             }
@@ -25,7 +25,7 @@ export class CollisionSystem {
             return;
         }
 
-        obstacles.forEach(obs => {
+        obstacles.forEach((obs) => {
             if (
                 entity.position.x > obs.x &&
                 entity.position.x < obs.x + obs.width &&
@@ -38,17 +38,17 @@ export class CollisionSystem {
     }
 
     private static handleBulletEntityCollisions(bullet: Entity, entities: Entity[]): void {
-        entities.forEach(other => {
+        entities.forEach((other) => {
             if (other.destroyed || other === bullet) return;
 
-            if (bullet.type === 'bullet' && other.type === 'enemy') {
+            if (bullet.type === "bullet" && other.type === "enemy") {
                 if (this.checkCircleCollision(bullet, other)) {
                     bullet.destroyed = true;
                     other.destroyed = true;
                 }
             }
 
-            if (bullet.type === 'enemy_bullet' && other.type === 'player') {
+            if (bullet.type === "enemy_bullet" && other.type === "player") {
                 if (this.checkCircleCollision(bullet, other)) {
                     bullet.destroyed = true;
                     if (other.hp !== undefined) {

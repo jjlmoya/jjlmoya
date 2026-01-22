@@ -14,12 +14,10 @@ export class VibratorCrackerGame {
     lastMouseAngle: number = 0;
     dialRotation: number = 0;
 
-    
     holdTimer: number = 0;
-    readonly HOLD_DURATION: number = 1000; 
+    readonly HOLD_DURATION: number = 1000;
     lastTime: number = 0;
 
-    
     tickAnim: number = 0;
 
     private _boundOnPointerMove: (e: MouseEvent | TouchEvent) => void;
@@ -30,14 +28,12 @@ export class VibratorCrackerGame {
         this.ctx = canvas.getContext("2d")!;
         this.system = new VibratorCrackerSystem();
 
-        
         this.system.onTick = () => {
             this.tickAnim = 1.0;
         };
 
         this.resize();
 
-        
         this._boundOnPointerMove = (e: any) => {
             if (e.type === "touchmove") {
                 if (this.isDragging) {
@@ -66,12 +62,10 @@ export class VibratorCrackerGame {
     }
 
     bindEvents() {
-        
         this.canvas.addEventListener("mousedown", this.onPointerDown.bind(this));
         window.addEventListener("mousemove", this._boundOnPointerMove);
         window.addEventListener("mouseup", this._boundOnPointerUp);
 
-        
         this.canvas.addEventListener(
             "touchstart",
             (e) => {
@@ -80,7 +74,6 @@ export class VibratorCrackerGame {
                 const dy = touch.clientY - this.canvas.getBoundingClientRect().top - this.centerY;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                
                 if (dist < 150) {
                     e.preventDefault();
                     this.onPointerDown(touch);
@@ -105,7 +98,6 @@ export class VibratorCrackerGame {
         const dy = e.clientY - this.canvas.getBoundingClientRect().top - this.centerY;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        
         if (dist < 150) {
             this.isDragging = true;
             this.lastMouseAngle = Math.atan2(dy, dx);
@@ -122,14 +114,12 @@ export class VibratorCrackerGame {
         const currentMouseAngle = Math.atan2(dy, dx);
         let deltaAngle = currentMouseAngle - this.lastMouseAngle;
 
-        
         if (deltaAngle > Math.PI) deltaAngle -= Math.PI * 2;
         if (deltaAngle < -Math.PI) deltaAngle += Math.PI * 2;
 
         this.dialRotation += deltaAngle;
         this.lastMouseAngle = currentMouseAngle;
 
-        
         this.system.updateDial(this.dialRotation);
     }
 
@@ -160,9 +150,8 @@ export class VibratorCrackerGame {
             this.holdTimer = 0;
         }
 
-        
         if (this.tickAnim > 0) {
-            this.tickAnim -= dt * 0.01; 
+            this.tickAnim -= dt * 0.01;
             if (this.tickAnim < 0) this.tickAnim = 0;
         }
     }
@@ -170,16 +159,13 @@ export class VibratorCrackerGame {
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        
         this.ctx.fillStyle = "#111";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        
         this.ctx.save();
         this.ctx.translate(this.centerX, this.centerY);
         this.ctx.rotate(this.dialRotation);
 
-        
         this.ctx.beginPath();
         this.ctx.arc(0, 0, 120, 0, Math.PI * 2);
         this.ctx.fillStyle = "#333";
@@ -188,7 +174,6 @@ export class VibratorCrackerGame {
         this.ctx.lineWidth = 5;
         this.ctx.stroke();
 
-        
         this.ctx.fillStyle = "#fff";
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle";
@@ -222,7 +207,6 @@ export class VibratorCrackerGame {
             }
         }
 
-        
         this.ctx.beginPath();
         this.ctx.arc(0, 0, 40, 0, Math.PI * 2);
         this.ctx.fillStyle = "#222";
@@ -233,27 +217,22 @@ export class VibratorCrackerGame {
 
         this.ctx.restore();
 
-        
-        const indicatorOffset = this.tickAnim * 5; 
+        const indicatorOffset = this.tickAnim * 5;
         this.ctx.beginPath();
         this.ctx.moveTo(this.centerX, this.centerY - 130 - indicatorOffset);
         this.ctx.lineTo(this.centerX - 10, this.centerY - 150 - indicatorOffset);
         this.ctx.lineTo(this.centerX + 10, this.centerY - 150 - indicatorOffset);
         this.ctx.closePath();
 
-        
         if (this.holdTimer > 0 && !this.system.isUnlocked) {
-            
             const progress = Math.min(1, this.holdTimer / this.HOLD_DURATION);
             const r = 225;
             const g = Math.floor(29 + (255 - 29) * progress);
             const b = Math.floor(72 + (0 - 72) * progress);
             this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 
-            
             this.ctx.fill();
 
-            
             this.ctx.beginPath();
             this.ctx.arc(
                 this.centerX,
@@ -266,11 +245,10 @@ export class VibratorCrackerGame {
             this.ctx.lineWidth = 3;
             this.ctx.stroke();
         } else {
-            this.ctx.fillStyle = "#e11d48"; 
+            this.ctx.fillStyle = "#e11d48";
             this.ctx.fill();
         }
 
-        
         this.drawStatus();
     }
 

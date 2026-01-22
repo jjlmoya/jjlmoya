@@ -20,7 +20,7 @@ export class GravityFlipGame {
         y: number;
         width: number;
         height: number;
-        type: 'spike' | 'block';
+        type: "spike" | "block";
         passed: boolean;
     }>;
 
@@ -48,15 +48,15 @@ export class GravityFlipGame {
         this.player = {
             x: this.width * 0.2,
             size: 30,
-            color: '#00f3ff',
-            rotation: 0
+            color: "#00f3ff",
+            rotation: 0,
         };
 
         this.mechanic = new GravityFlipMechanic(this.height / 2, {
             gravity: 0.6,
-            jumpForce: 0, 
+            jumpForce: 0,
             groundY: this.height - this.player.size,
-            ceilingY: 0
+            ceilingY: 0,
         });
 
         this.obstacles = [];
@@ -77,20 +77,24 @@ export class GravityFlipGame {
     }
 
     initInput() {
-        this.canvas.addEventListener('mousedown', this.handleInput);
-        this.canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.handleInput();
-        }, { passive: false });
+        this.canvas.addEventListener("mousedown", this.handleInput);
+        this.canvas.addEventListener(
+            "touchstart",
+            (e) => {
+                e.preventDefault();
+                this.handleInput();
+            },
+            { passive: false }
+        );
 
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
+        window.addEventListener("keydown", (e) => {
+            if (e.code === "Space") {
                 e.preventDefault();
                 this.handleInput();
             }
         });
 
-        window.addEventListener('resize', this.handleResize);
+        window.addEventListener("resize", this.handleResize);
     }
 
     handleResize() {
@@ -102,12 +106,8 @@ export class GravityFlipGame {
 
         this.mechanic.updateBounds(this.height - this.player.size, 0);
 
-        
         const state = this.mechanic.getState();
         if (state.y > this.height - this.player.size) {
-            
-            
-            
         }
     }
 
@@ -140,14 +140,14 @@ export class GravityFlipGame {
     }
 
     spawnObstacle() {
-        const type = Math.random() > 0.5 ? 'spike' : 'block';
+        const type = Math.random() > 0.5 ? "spike" : "block";
         const isTop = Math.random() > 0.5;
 
         let width = 40;
         let height = 40;
         let y = 0;
 
-        if (type === 'spike') {
+        if (type === "spike") {
             width = 40;
             height = 60;
             y = isTop ? 0 : this.height - height;
@@ -163,7 +163,7 @@ export class GravityFlipGame {
             width,
             height,
             type,
-            passed: false
+            passed: false,
         });
     }
 
@@ -176,7 +176,7 @@ export class GravityFlipGame {
                 vy: (Math.random() - 0.5) * 10,
                 life: 1.0,
                 color: color,
-                size: Math.random() * 4 + 2
+                size: Math.random() * 4 + 2,
             });
         }
     }
@@ -205,7 +205,12 @@ export class GravityFlipGame {
                 state.y + this.player.size > obs.y
             ) {
                 this.isGameOver = true;
-                this.createExplosion(this.player.x + this.player.size / 2, state.y + this.player.size / 2, 30, '#ff0055');
+                this.createExplosion(
+                    this.player.x + this.player.size / 2,
+                    state.y + this.player.size / 2,
+                    30,
+                    "#ff0055"
+                );
             }
 
             if (!obs.passed && obs.x + obs.width < this.player.x) {
@@ -229,10 +234,10 @@ export class GravityFlipGame {
     }
 
     draw() {
-        this.ctx.fillStyle = 'rgba(20, 20, 20, 0.3)';
+        this.ctx.fillStyle = "rgba(20, 20, 20, 0.3)";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        this.ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
         this.ctx.lineWidth = 1;
         const gridSize = 50;
         const offset = (this.frameCount * this.gameSpeed * 0.5) % gridSize;
@@ -244,10 +249,10 @@ export class GravityFlipGame {
             this.ctx.stroke();
         }
 
-        this.obstacles.forEach(obs => {
-            this.ctx.fillStyle = obs.type === 'spike' ? '#ff0055' : '#bd00ff';
+        this.obstacles.forEach((obs) => {
+            this.ctx.fillStyle = obs.type === "spike" ? "#ff0055" : "#bd00ff";
 
-            if (obs.type === 'spike') {
+            if (obs.type === "spike") {
                 this.ctx.beginPath();
                 if (obs.y === 0) {
                     this.ctx.moveTo(obs.x, 0);
@@ -261,13 +266,13 @@ export class GravityFlipGame {
                 this.ctx.fill();
 
                 this.ctx.shadowBlur = 10;
-                this.ctx.shadowColor = '#ff0055';
+                this.ctx.shadowColor = "#ff0055";
                 this.ctx.fill();
                 this.ctx.shadowBlur = 0;
             } else {
                 this.ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
                 this.ctx.shadowBlur = 10;
-                this.ctx.shadowColor = '#bd00ff';
+                this.ctx.shadowColor = "#bd00ff";
                 this.ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
                 this.ctx.shadowBlur = 0;
             }
@@ -277,25 +282,33 @@ export class GravityFlipGame {
 
         if (!this.isGameOver) {
             this.ctx.save();
-            this.ctx.translate(this.player.x + this.player.size / 2, state.y + this.player.size / 2);
+            this.ctx.translate(
+                this.player.x + this.player.size / 2,
+                state.y + this.player.size / 2
+            );
             this.ctx.rotate(this.player.rotation);
 
             this.ctx.fillStyle = this.player.color;
             this.ctx.shadowBlur = 15;
             this.ctx.shadowColor = this.player.color;
-            this.ctx.fillRect(-this.player.size / 2, -this.player.size / 2, this.player.size, this.player.size);
+            this.ctx.fillRect(
+                -this.player.size / 2,
+                -this.player.size / 2,
+                this.player.size,
+                this.player.size
+            );
 
-            this.ctx.fillStyle = '#000';
-            this.ctx.font = 'bold 12px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
+            this.ctx.fillStyle = "#000";
+            this.ctx.font = "bold 12px Arial";
+            this.ctx.textAlign = "center";
+            this.ctx.textBaseline = "middle";
             this.ctx.shadowBlur = 0;
-            this.ctx.fillText(state.gravityDir === 1 ? 'OwO' : 'UwU', 0, 0);
+            this.ctx.fillText(state.gravityDir === 1 ? "OwO" : "UwU", 0, 0);
 
             this.ctx.restore();
         }
 
-        this.particles.forEach(p => {
+        this.particles.forEach((p) => {
             this.ctx.globalAlpha = p.life;
             this.ctx.fillStyle = p.color;
             this.ctx.beginPath();
@@ -304,22 +317,22 @@ export class GravityFlipGame {
             this.ctx.globalAlpha = 1;
         });
 
-        this.ctx.fillStyle = '#fff';
-        this.ctx.font = 'bold 24px monospace';
-        this.ctx.textAlign = 'left';
+        this.ctx.fillStyle = "#fff";
+        this.ctx.font = "bold 24px monospace";
+        this.ctx.textAlign = "left";
         this.ctx.fillText(`SCORE: ${this.score}`, 20, 40);
 
         if (this.isGameOver) {
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
             this.ctx.fillRect(0, 0, this.width, this.height);
 
-            this.ctx.fillStyle = '#fff';
-            this.ctx.font = 'bold 40px monospace';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText('GAME OVER', this.width / 2, this.height / 2 - 20);
+            this.ctx.fillStyle = "#fff";
+            this.ctx.font = "bold 40px monospace";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText("GAME OVER", this.width / 2, this.height / 2 - 20);
 
-            this.ctx.font = '20px monospace';
-            this.ctx.fillText('Tap to Restart', this.width / 2, this.height / 2 + 30);
+            this.ctx.font = "20px monospace";
+            this.ctx.fillText("Tap to Restart", this.width / 2, this.height / 2 + 30);
         }
     }
 
@@ -331,8 +344,8 @@ export class GravityFlipGame {
 
     destroy() {
         if (this.animationId) cancelAnimationFrame(this.animationId);
-        this.canvas.removeEventListener('mousedown', this.handleInput);
-        window.removeEventListener('keydown', this.handleInput);
-        window.removeEventListener('resize', this.handleResize);
+        this.canvas.removeEventListener("mousedown", this.handleInput);
+        window.removeEventListener("keydown", this.handleInput);
+        window.removeEventListener("resize", this.handleResize);
     }
 }

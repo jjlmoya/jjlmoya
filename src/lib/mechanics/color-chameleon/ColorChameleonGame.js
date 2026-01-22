@@ -7,7 +7,7 @@ export class ColorChameleonGame {
         this.width = canvas.width;
         this.height = canvas.height;
 
-        this.colors = ["#FF0055", "#00FF55", "#0055FF"]; 
+        this.colors = ["#FF0055", "#00FF55", "#0055FF"];
 
         this.mechanic = new ColorChameleonMechanic(this.width, this.height, this.colors.length);
 
@@ -43,14 +43,12 @@ export class ColorChameleonGame {
     }
 
     draw() {
-        
         this.ctx.fillStyle = "rgba(20, 20, 20, 0.3)";
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         const centerX = this.width / 2;
         const centerY = this.height / 2;
 
-        
         if (!this.mechanic.isGameOver) {
             this.ctx.save();
             this.ctx.translate(centerX, centerY);
@@ -61,7 +59,6 @@ export class ColorChameleonGame {
             this.ctx.shadowColor = color;
             this.ctx.fillStyle = color;
 
-            
             this.ctx.beginPath();
             for (let i = 0; i < 6; i++) {
                 const angle = (i * Math.PI * 2) / 6;
@@ -71,7 +68,6 @@ export class ColorChameleonGame {
             this.ctx.closePath();
             this.ctx.fill();
 
-            
             this.ctx.fillStyle = "#FFFFFF";
             this.ctx.beginPath();
             this.ctx.arc(0, 0, 10, 0, Math.PI * 2);
@@ -80,7 +76,6 @@ export class ColorChameleonGame {
             this.ctx.restore();
         }
 
-        
         for (const enemy of this.mechanic.enemies) {
             this.ctx.save();
             this.ctx.translate(enemy.x, enemy.y);
@@ -91,25 +86,20 @@ export class ColorChameleonGame {
             this.ctx.shadowBlur = 10;
             this.ctx.shadowColor = color;
 
-            
             this.ctx.beginPath();
             if (enemy.colorIndex === 0) {
-                
                 this.ctx.rect(-10, -10, 20, 20);
             } else if (enemy.colorIndex === 1) {
-                
                 this.ctx.moveTo(0, -12);
                 this.ctx.lineTo(12, 10);
                 this.ctx.lineTo(-12, 10);
             } else {
-                
                 this.ctx.arc(0, 0, 12, 0, Math.PI * 2);
             }
             this.ctx.fill();
             this.ctx.restore();
         }
 
-        
         for (const p of this.mechanic.particles) {
             this.ctx.globalAlpha = p.life;
             this.ctx.fillStyle = p.colorIndex === -1 ? "#FFFFFF" : this.colors[p.colorIndex];
@@ -119,7 +109,6 @@ export class ColorChameleonGame {
             this.ctx.globalAlpha = 1.0;
         }
 
-        
         this.ctx.fillStyle = "#FFFFFF";
         this.ctx.font = "bold 40px monospace";
         this.ctx.textAlign = "center";

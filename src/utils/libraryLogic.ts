@@ -75,23 +75,19 @@ export const calculateHeartbeatStats = (daysAlive: number) => {
 };
 
 export const calculateWordsStats = (daysAlive: number) => {
-    
     let remainingDays = daysAlive;
     let wordsSpoken = 0;
 
-    
     const daysBaby = Math.min(remainingDays, 2 * 365);
     wordsSpoken += daysBaby * 50;
     remainingDays -= daysBaby;
 
-    
     if (remainingDays > 0) {
         const daysChild = Math.min(remainingDays, 8 * 365);
         wordsSpoken += daysChild * 10000;
         remainingDays -= daysChild;
     }
 
-    
     if (remainingDays > 0) {
         wordsSpoken += remainingDays * 16000;
     }
@@ -100,14 +96,9 @@ export const calculateWordsStats = (daysAlive: number) => {
 };
 
 export const calculateBlinkStats = (minutesAlive: number) => {
-    
-    
-    
-
     const awakeMinutes = minutesAlive * (2 / 3);
     const totalBlinks = awakeMinutes * 15;
 
-    
     const darknessSeconds = totalBlinks * 0.3;
     const darknessMinutes = Math.floor(darknessSeconds / 60);
     const darknessHours = Math.floor(darknessMinutes / 60);
@@ -117,51 +108,35 @@ export const calculateBlinkStats = (minutesAlive: number) => {
 };
 
 export const calculateTearsStats = (daysAlive: number) => {
-    
-    
-    
-    
-
     const yearsAlive = daysAlive / 365;
-    const litersTears = yearsAlive * 1.2; 
+    const litersTears = yearsAlive * 1.2;
     const tearDrops = (litersTears * 1000) / 0.05;
 
     return { litersTears, tearDrops };
 };
 
 export const calculateSkinStats = (daysAlive: number) => {
-    
-    
-    
-    
-
     const skinShedGrams = daysAlive * 1.5;
     const skinShedKg = skinShedGrams / 1000;
 
-    
     const skinSuits = skinShedKg / 3.5;
 
     return { skinShedKg, skinSuits };
 };
 
 export const calculateMoonStats = (daysAlive: number) => {
-    
     const fullMoons = Math.floor(daysAlive / 29.53);
     return { fullMoons };
 };
 
 export const calculateFoodStats = (daysAlive: number) => {
-    
     const kgEaten = daysAlive * 1.8;
-    
+
     const tonsEaten = kgEaten / 1000;
     return { kgEaten, tonsEaten };
 };
 
 export const calculateGrowthStats = (daysAlive: number) => {
-    
-    
-
     const hairMeters = daysAlive * 0.0004;
     const nailsMeters = daysAlive * 0.0001;
 
@@ -169,16 +144,14 @@ export const calculateGrowthStats = (daysAlive: number) => {
 };
 
 export const calculateSunStats = (daysAlive: number) => {
-    
     const sunrises = daysAlive;
-    
+
     const sunHours = daysAlive * 12;
 
     return { sunrises, sunHours };
 };
 
 export const calculateMindStats = (daysAlive: number) => {
-    
     const thoughts = daysAlive * 60000;
     return { thoughts };
 };

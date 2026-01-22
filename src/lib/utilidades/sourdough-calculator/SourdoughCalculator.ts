@@ -1,5 +1,4 @@
 export class SourdoughCalculator {
-    
     static calculate(
         totalAmount: number,
         starterRatio: number,

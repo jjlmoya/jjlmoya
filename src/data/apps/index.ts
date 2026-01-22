@@ -5,12 +5,6 @@ import { dayCheck } from "./day-check";
 import { monmons } from "./monmons";
 import type { Application } from "../../types/apps";
 
-export const apps: Application[] = [
-    dayCheck,
-    fortuneCookie,
-    colorbeat,
-    pizzametrics,
-    monmons
-];
+export const apps: Application[] = [dayCheck, fortuneCookie, colorbeat, pizzametrics, monmons];
 
 export default apps;

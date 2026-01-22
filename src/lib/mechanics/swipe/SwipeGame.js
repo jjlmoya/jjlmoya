@@ -49,11 +49,9 @@ export class SwipeGame {
                     this.lastDirection = direction.toUpperCase();
                     this.lastVelocity = velocity;
                     this.activeArrow = direction;
-                    this.arrowTimer = 20; 
+                    this.arrowTimer = 20;
                 },
-                onSwipeEnd: () => {
-                    
-                },
+                onSwipeEnd: () => {},
             }
         );
 
@@ -70,7 +68,6 @@ export class SwipeGame {
     }
 
     loop() {
-        
         if (this.arrowTimer > 0) {
             this.arrowTimer--;
         } else {
@@ -81,23 +78,16 @@ export class SwipeGame {
             .map((p) => ({ ...p, alpha: p.alpha * 0.9 }))
             .filter((p) => p.alpha > 0.01);
 
-        
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        
-        
-        
-        
         const bgGrad = this.ctx.createLinearGradient(0, 0, this.width, this.height);
-        bgGrad.addColorStop(0, "#1e1b4b"); 
-        bgGrad.addColorStop(1, "#312e81"); 
+        bgGrad.addColorStop(0, "#1e1b4b");
+        bgGrad.addColorStop(1, "#312e81");
         this.ctx.fillStyle = bgGrad;
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        
         this.drawArrows();
 
-        
         if (this.trailPoints.length > 1) {
             const gradient = this.ctx.createLinearGradient(
                 this.trailPoints[0].x,
@@ -129,7 +119,6 @@ export class SwipeGame {
             this.ctx.stroke();
         }
 
-        
         this.ctx.fillStyle = "white";
         this.ctx.font = "bold 32px monospace";
         this.ctx.textAlign = "center";
@@ -168,14 +157,12 @@ export class SwipeGame {
             this.ctx.translate(cx + arrow.x * offset, cy + arrow.y * offset);
             this.ctx.scale(scale, scale);
 
-            
             const angle = Math.atan2(arrow.y, arrow.x);
             this.ctx.rotate(angle + Math.PI / 2);
 
             this.ctx.fillStyle = arrow.color;
             this.ctx.globalAlpha = alpha;
 
-            
             this.ctx.beginPath();
             this.ctx.moveTo(0, -10);
             this.ctx.lineTo(8, 10);

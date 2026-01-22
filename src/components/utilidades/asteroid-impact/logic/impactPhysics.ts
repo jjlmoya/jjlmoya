@@ -1,4 +1,4 @@
-export type Composition = 'ice' | 'rock' | 'iron';
+export type Composition = "ice" | "rock" | "iron";
 
 export interface ImpactInputs {
     diameter: number;
@@ -17,7 +17,7 @@ export interface ImpactResults {
     shockwave5psi: number;
     seismicMagnitude: number;
     airburst: boolean;
-    survivalVerdict: 'vaporized' | 'severe-burns' | 'ruptured-eardrums' | 'safe';
+    survivalVerdict: "vaporized" | "severe-burns" | "ruptured-eardrums" | "safe";
 }
 
 const DENSITIES: Record<Composition, number> = {
@@ -51,13 +51,13 @@ export class ImpactPhysics {
 
         const seismicMagnitude = Math.min(0.67 * Math.log10(megatons) + 3.87, 10);
 
-        let survivalVerdict: ImpactResults['survivalVerdict'] = 'safe';
+        let survivalVerdict: ImpactResults["survivalVerdict"] = "safe";
         if (distance < craterDiameter / 2) {
-            survivalVerdict = 'vaporized';
+            survivalVerdict = "vaporized";
         } else if (distance < thermalRadius) {
-            survivalVerdict = 'severe-burns';
+            survivalVerdict = "severe-burns";
         } else if (distance < shockwave5psi) {
-            survivalVerdict = 'ruptured-eardrums';
+            survivalVerdict = "ruptured-eardrums";
         }
 
         return {

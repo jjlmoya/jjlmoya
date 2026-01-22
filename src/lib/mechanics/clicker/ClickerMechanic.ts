@@ -3,7 +3,7 @@ export interface Upgrade {
     name: string;
     cost: number;
     costMultiplier: number;
-    power: number; 
+    power: number;
     type: "click" | "auto";
     count: number;
 }
@@ -21,7 +21,7 @@ export interface Particle {
 export class ClickerMechanic {
     private currency: number = 0;
     private clickPower: number = 1;
-    private autoClickRate: number = 0; 
+    private autoClickRate: number = 0;
 
     private upgrades: Upgrade[] = [];
     private particles: Particle[] = [];
@@ -103,7 +103,6 @@ export class ClickerMechanic {
                 this.clickPower = data.clickPower || 1;
                 this.autoClickRate = data.autoClickRate || 0;
 
-                
                 if (data.upgrades) {
                     data.upgrades.forEach((savedUpgrade: any) => {
                         const upgrade = this.upgrades.find((u) => u.id === savedUpgrade.id);
@@ -134,19 +133,17 @@ export class ClickerMechanic {
     }
 
     public update(deltaTime: number) {
-        
         if (this.autoClickRate > 0) {
             const clicks = this.autoClickRate * deltaTime;
             this.currency += clicks;
         }
 
-        
         for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             p.life -= deltaTime;
             p.x += p.vx * deltaTime * 60;
             p.y += p.vy * deltaTime * 60;
-            p.vy += 0.5 * deltaTime * 60; 
+            p.vy += 0.5 * deltaTime * 60;
 
             if (p.life <= 0) {
                 this.particles.splice(i, 1);

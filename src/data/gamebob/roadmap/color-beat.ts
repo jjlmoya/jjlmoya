@@ -3,7 +3,8 @@ import type { Project } from "./types";
 export const colorBeatProject: Project = {
     name: "Color Beat",
     description: "Arcade rítmico frenético.",
-    homeDescription: "un desafío de ritmo y color. pon a prueba tus reflejos en este arcade frenético donde la música dicta el camino.",
+    homeDescription:
+        "un desafío de ritmo y color. pon a prueba tus reflejos en este arcade frenético donde la música dicta el camino.",
     image: "/images/gamebob/games/color-beat.png",
     statusLabel: "Lanzado en Google Play",
     statusType: "released",

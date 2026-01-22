@@ -1,9 +1,9 @@
-import { Resource } from '../core/Resource.js';
-import { Business } from '../core/Business.js';
-import { Passive } from '../core/Passive.js';
-import { Operation } from '../core/Operation.js';
-import { UIManager } from '../ui/UIManager.js';
-import { PersistenceManager } from './PersistenceManager.js';
+import { Resource } from "../core/Resource.js";
+import { Business } from "../core/Business.js";
+import { Passive } from "../core/Passive.js";
+import { Operation } from "../core/Operation.js";
+import { UIManager } from "../ui/UIManager.js";
+import { PersistenceManager } from "./PersistenceManager.js";
 
 export class GameEngine {
     constructor() {
@@ -36,11 +36,11 @@ export class GameEngine {
     }
 
     getBusiness(id) {
-        return this.businesses.find(b => b.id === id);
+        return this.businesses.find((b) => b.id === id);
     }
 
     getPassive(id) {
-        return this.passives.find(p => p.id === id);
+        return this.passives.find((p) => p.id === id);
     }
 
     getTotalIncome() {
@@ -75,14 +75,14 @@ export class GameEngine {
     }
 
     calculateProximityBonuses() {
-        this.businesses.forEach(b => b.proximityMult = 1);
+        this.businesses.forEach((b) => (b.proximityMult = 1));
         for (const [key, data] of this.grid) {
             const bId = data.bizId;
-            const [x1, y1] = key.split(',').map(Number);
+            const [x1, y1] = key.split(",").map(Number);
             for (const [otherKey, otherData] of this.grid) {
                 const otherId = otherData.bizId;
                 if (key === otherKey) continue;
-                const [x2, y2] = otherKey.split(',').map(Number);
+                const [x2, y2] = otherKey.split(",").map(Number);
                 const dist = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
                 if (dist <= 1.5) {
                     if (bId === "rent-shop" && otherId === "fast-food") {
@@ -103,7 +103,7 @@ export class GameEngine {
                 this.bank.sub(p.cost);
                 p.purchased = true;
                 this.unlocks.add(p.id);
-                if (typeof p.effect === 'function') p.effect(this);
+                if (typeof p.effect === "function") p.effect(this);
                 this.ui.render();
                 this.ui.renderIcons();
                 this.ui.updateStats();
@@ -115,17 +115,15 @@ export class GameEngine {
         const op = this.operations.find((x) => x.id === id);
         if (op && this.bank.canAfford(op.cost)) {
             this.bank.sub(op.cost);
-            if (typeof op.effect === 'function') op.effect(this);
+            if (typeof op.effect === "function") op.effect(this);
             this.ui.render();
             this.ui.updateStats();
         }
     }
 
     tick() {
-
         const growth = this.debt.value * this.debtGrowthRate;
         this.debt.add(growth);
-
 
         const income = this.getTotalIncome();
         if (income > 0) {
@@ -134,16 +132,15 @@ export class GameEngine {
             this.debt.sub(step);
         }
 
-
         if (this.ui && this.ui.showBuildingIncome) {
             const now = Date.now();
             if (now - this.lastDopamine > 2000) {
                 this.lastDopamine = now;
-                this.businesses.forEach(b => {
+                this.businesses.forEach((b) => {
                     if (b.lvl > 0) {
                         const incPerInst = b.getInstanceIncome();
                         if (incPerInst > 0) {
-                            b.instances.forEach(inst => {
+                            b.instances.forEach((inst) => {
                                 this.ui.showBuildingIncome(inst.x, inst.y, incPerInst);
                             });
                         }

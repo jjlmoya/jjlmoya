@@ -5,7 +5,7 @@ export interface Node {
     radius: number;
     color: string;
     isHeld: boolean;
-    heldBy: number | null; 
+    heldBy: number | null;
     spawnTime: number;
 }
 
@@ -14,14 +14,14 @@ export class FingerTwisterMechanic {
     public score: number = 0;
     public isGameOver: boolean = false;
     public isWin: boolean = false;
-    public maxNodes: number = 5; 
+    public maxNodes: number = 5;
     public winTimer: number = 0;
 
     private width: number;
     private height: number;
     private nextNodeId: number = 0;
     private spawnTimer: number = 0;
-    private spawnInterval: number = 120; 
+    private spawnInterval: number = 120;
 
     constructor(width: number, height: number) {
         this.width = width;
@@ -38,31 +38,24 @@ export class FingerTwisterMechanic {
         this.nextNodeId = 0;
         this.spawnTimer = 0;
         this.spawnInterval = 120;
-        this.spawnNode(); 
+        this.spawnNode();
     }
 
     public update(pointers: { id: number; x: number; y: number }[]) {
         if (this.isGameOver || this.isWin) return;
 
-        
-        
-        const activeHolds = new Set<number>(); 
+        const activeHolds = new Set<number>();
 
         for (const p of pointers) {
-            
             for (const node of this.nodes) {
                 const dx = p.x - node.x;
                 const dy = p.y - node.y;
                 if (dx * dx + dy * dy < node.radius * node.radius) {
-                    
-
-                    
                     if (!node.isHeld) {
                         node.isHeld = true;
                         node.heldBy = p.id;
                     }
 
-                    
                     if (node.heldBy === p.id) {
                         activeHolds.add(node.id);
                     }
@@ -70,10 +63,8 @@ export class FingerTwisterMechanic {
             }
         }
 
-        
         for (const node of this.nodes) {
             if (node.isHeld) {
-                
                 let stillHeld = false;
                 for (const p of pointers) {
                     const dx = p.x - node.x;
@@ -85,33 +76,26 @@ export class FingerTwisterMechanic {
                 }
 
                 if (!stillHeld) {
-                    
                     this.isGameOver = true;
                     return;
                 }
             }
         }
 
-        
-        
         if (this.nodes.length < this.maxNodes && this.nodes.every((n) => n.isHeld)) {
             this.spawnTimer++;
             if (this.spawnTimer >= this.spawnInterval) {
                 this.spawnNode();
                 this.spawnTimer = 0;
-                
+
                 if (this.spawnInterval > 60) this.spawnInterval -= 5;
             }
         }
 
-        
-        
-        
         if (this.nodes.length > 0 && this.nodes.every((n) => n.isHeld)) {
             this.score++;
         }
 
-        
         if (this.nodes.length === this.maxNodes && this.nodes.every((n) => n.isHeld)) {
             this.winTimer++;
             if (this.winTimer >= 300) {
@@ -132,7 +116,6 @@ export class FingerTwisterMechanic {
             y = margin + Math.random() * (this.height - margin * 2);
             valid = true;
 
-            
             for (const node of this.nodes) {
                 const dx = x - node.x;
                 const dy = y - node.y;

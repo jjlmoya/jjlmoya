@@ -1,4 +1,3 @@
-
 export interface Point {
     x: number;
     y: number;
@@ -24,7 +23,7 @@ export interface Entity {
     vx: number;
     vy: number;
     radius: number;
-    type: 'player' | 'meteor' | 'jumper';
+    type: "player" | "meteor" | "jumper";
     active: boolean;
     grounded: boolean;
 }
@@ -41,13 +40,11 @@ export class DrawThePathMechanic {
     public width: number;
     public height: number;
 
-    
     private gravity = 0.8;
     private runSpeed = 8;
     private jumpForce = -15;
-    private lineLifeTime = 3000; 
+    private lineLifeTime = 3000;
 
-    
     private lastPlatformX: number = 0;
     private nextThreatX: number = 0;
 
@@ -55,9 +52,15 @@ export class DrawThePathMechanic {
         this.width = width;
         this.height = height;
 
-        
         this.player = {
-            x: 0, y: 0, vx: 0, vy: 0, radius: 10, type: 'player', active: false, grounded: false
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0,
+            radius: 10,
+            type: "player",
+            active: false,
+            grounded: false,
         };
 
         this.reset();
@@ -71,20 +74,18 @@ export class DrawThePathMechanic {
         this.platforms = [];
         this.threats = [];
 
-        
         this.lastPlatformX = 0;
-        this.addPlatform(0, this.height - 150, 1000); 
+        this.addPlatform(0, this.height - 150, 1000);
 
-        
         this.player = {
             x: 100,
             y: this.height - 300,
             vx: this.runSpeed,
             vy: 0,
             radius: 15,
-            type: 'player',
+            type: "player",
             active: true,
-            grounded: false
+            grounded: false,
         };
 
         this.nextThreatX = 1500;
@@ -95,7 +96,6 @@ export class DrawThePathMechanic {
 
         const now = performance.now();
 
-        
         for (let i = this.lines.length - 1; i >= 0; i--) {
             const line = this.lines[i];
             if (line === this.currentLine) continue;
@@ -104,63 +104,48 @@ export class DrawThePathMechanic {
             if (age > this.lineLifeTime) {
                 this.lines.splice(i, 1);
             } else {
-                line.opacity = 1 - (age / this.lineLifeTime);
+                line.opacity = 1 - age / this.lineLifeTime;
             }
         }
 
-        
         this.generateWorld();
 
-        
         this.updateEntity(this.player);
 
-        
         for (let i = this.threats.length - 1; i >= 0; i--) {
             const t = this.threats[i];
             this.updateEntity(t);
 
-            
             if (t.y > this.height + 200 || t.x < this.player.x - 1000) {
                 this.threats.splice(i, 1);
                 continue;
             }
 
-            
             if (t.active && this.checkCollisionCircle(this.player, t)) {
                 this.isGameOver = true;
             }
         }
 
-        
         if (this.player.y > this.height + 200) {
             this.isGameOver = true;
         }
 
-        
         this.score = Math.floor(this.player.x / 100);
     }
 
     private updateEntity(e: Entity) {
-        
-        if (e.type === 'player') {
-            e.vx = this.runSpeed; 
+        if (e.type === "player") {
+            e.vx = this.runSpeed;
         }
         e.vy += this.gravity;
 
-        
         let nextX = e.x + e.vx;
         let nextY = e.y + e.vy;
         let grounded = false;
 
-        
-
-        
-        
         for (const plat of this.platforms) {
             if (nextX > plat.x && nextX < plat.x + plat.w) {
-                
                 if (e.y + e.radius <= plat.y && nextY + e.radius >= plat.y) {
-                    
                     nextY = plat.y - e.radius;
                     e.vy = 0;
                     grounded = true;
@@ -168,14 +153,11 @@ export class DrawThePathMechanic {
             }
         }
 
-        
-        
         for (const line of this.lines) {
             for (let i = 0; i < line.points.length - 1; i++) {
                 const p1 = line.points[i];
                 const p2 = line.points[i + 1];
 
-                
                 const minX = Math.min(p1.x, p2.x) - e.radius - 10;
                 const maxX = Math.max(p1.x, p2.x) + e.radius + 10;
                 const minY = Math.min(p1.y, p2.y) - e.radius - 10;
@@ -183,41 +165,34 @@ export class DrawThePathMechanic {
 
                 if (nextX < minX || nextX > maxX || nextY < minY || nextY > maxY) continue;
 
-                
                 const closest = this.getClosestPoint(p1, p2, { x: nextX, y: nextY });
                 const dx = nextX - closest.x;
                 const dy = nextY - closest.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < e.radius) {
-                    
-
-                    
-                    
-                    if (e.type === 'meteor') {
-                        
-                        
+                    if (e.type === "meteor") {
                     }
 
-                    
                     const overlap = e.radius - dist;
-                    
+
                     let nx = dx / dist;
                     let ny = dy / dist;
 
-                    if (dist === 0) { nx = 0; ny = -1; } 
+                    if (dist === 0) {
+                        nx = 0;
+                        ny = -1;
+                    }
 
                     nextX += nx * overlap;
                     nextY += ny * overlap;
 
-                    
                     const vDotN = e.vx * nx + e.vy * ny;
                     if (vDotN < 0) {
                         e.vx -= vDotN * nx;
                         e.vy -= vDotN * ny;
                     }
 
-                    
                     if (ny < -0.5) {
                         grounded = true;
                     }
@@ -225,24 +200,19 @@ export class DrawThePathMechanic {
             }
         }
 
-        
         e.x = nextX;
         e.y = nextY;
         e.grounded = grounded;
 
-        
-        if (e.type === 'jumper' && grounded) {
+        if (e.type === "jumper" && grounded) {
             e.vy = this.jumpForce;
         }
     }
 
     private generateWorld() {
-        
         const buffer = 1500;
         if (this.lastPlatformX < this.player.x + buffer) {
-            
             if (Math.random() > 0.3) {
-                
                 const gap = 100 + Math.random() * 200;
                 const width = 400 + Math.random() * 600;
                 const yChange = (Math.random() - 0.5) * 300;
@@ -251,17 +221,17 @@ export class DrawThePathMechanic {
 
                 this.addPlatform(this.lastPlatformX + gap, y, width);
             } else {
-                
                 this.lastPlatformX += 400 + Math.random() * 300;
             }
         }
 
-        
-        if (this.platforms.length > 0 && this.platforms[0].x + this.platforms[0].w < this.player.x - 1000) {
+        if (
+            this.platforms.length > 0 &&
+            this.platforms[0].x + this.platforms[0].w < this.player.x - 1000
+        ) {
             this.platforms.shift();
         }
 
-        
         if (this.player.x > this.nextThreatX) {
             this.spawnThreat();
             this.nextThreatX += 800 + Math.random() * 1000;
@@ -274,19 +244,19 @@ export class DrawThePathMechanic {
     }
 
     private spawnThreat() {
-        const type = Math.random() > 0.5 ? 'meteor' : 'jumper';
+        const type = Math.random() > 0.5 ? "meteor" : "jumper";
         const x = this.player.x + 1200;
 
-        if (type === 'meteor') {
+        if (type === "meteor") {
             this.threats.push({
                 x: x,
                 y: -100,
                 vx: -3,
                 vy: 5,
                 radius: 25,
-                type: 'meteor',
+                type: "meteor",
                 active: true,
-                grounded: false
+                grounded: false,
             });
         } else {
             this.threats.push({
@@ -295,21 +265,20 @@ export class DrawThePathMechanic {
                 vx: -2,
                 vy: 0,
                 radius: 20,
-                type: 'jumper',
+                type: "jumper",
                 active: true,
-                grounded: false
+                grounded: false,
             });
         }
     }
 
-    
     public startLine(x: number, y: number) {
         if (this.isGameOver) return;
         this.currentLine = {
             points: [{ x, y }],
             id: Date.now(),
             createdAt: performance.now(),
-            opacity: 1
+            opacity: 1,
         };
         this.lines.push(this.currentLine);
     }
@@ -332,11 +301,10 @@ export class DrawThePathMechanic {
         this.height = h;
     }
 
-    
     private checkCollisionCircle(a: Entity, b: Entity): boolean {
         const dx = a.x - b.x;
         const dy = a.y - b.y;
-        return (dx * dx + dy * dy) < (a.radius + b.radius) ** 2;
+        return dx * dx + dy * dy < (a.radius + b.radius) ** 2;
     }
 
     private getClosestPoint(p1: Point, p2: Point, p: Point): Point {
@@ -346,7 +314,7 @@ export class DrawThePathMechanic {
         const clampedT = Math.max(0, Math.min(1, t));
         return {
             x: p1.x + clampedT * dx,
-            y: p1.y + clampedT * dy
+            y: p1.y + clampedT * dy,
         };
     }
 }

@@ -25,22 +25,13 @@ export class ViewportCollisionGame {
         this.resize();
         this.start();
 
-        
         window.addEventListener("resize", this.resize);
     }
 
     public resize() {
-        
-        
-        
-        
-        
-        
-
         const rect = this.canvas.parentElement?.getBoundingClientRect();
         if (!rect) return;
 
-        
         this.canvas.width = rect.width;
         this.canvas.height = rect.height;
 
@@ -75,24 +66,20 @@ export class ViewportCollisionGame {
     private draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        
         const particles = this.mechanic.getParticles();
         for (const p of particles) {
             this.ctx.save();
             this.ctx.translate(p.pos.x, p.pos.y);
             this.ctx.rotate(p.visualRotation);
 
-            
             this.ctx.fillStyle = p.color;
             this.ctx.beginPath();
-            
-            
+
             const size = p.radius * 2;
             const r = p.radius * 0.4;
             this.ctx.roundRect(-p.radius, -p.radius, size, size, r);
             this.ctx.fill();
 
-            
             this.ctx.fillStyle = "rgba(0,0,0,0.2)";
             this.ctx.beginPath();
             this.ctx.arc(0, 0, p.radius * 0.5, 0, Math.PI * 2);
@@ -100,7 +87,6 @@ export class ViewportCollisionGame {
 
             this.ctx.restore();
 
-            
             const speed = Math.sqrt(p.vel.x * p.vel.x + p.vel.y * p.vel.y);
             if (speed > 5) {
                 this.ctx.beginPath();

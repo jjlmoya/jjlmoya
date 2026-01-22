@@ -1,6 +1,5 @@
-
-import type { Vector2 } from './Types';
-import { MAX_DRAG_DISTANCE } from './Constants';
+import type { Vector2 } from "./Types";
+import { MAX_DRAG_DISTANCE } from "./Constants";
 
 export class InputManager {
     private canvas: HTMLCanvasElement;
@@ -12,7 +11,6 @@ export class InputManager {
     private dragStart: Vector2 = { x: 0, y: 0 };
     private dragCurrent: Vector2 = { x: 0, y: 0 };
 
-    
     constructor(
         canvas: HTMLCanvasElement,
         onDragStart: (pos: Vector2) => void,
@@ -28,24 +26,25 @@ export class InputManager {
     }
 
     private attachEvents() {
-        this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
-        window.addEventListener('mousemove', this.handleMouseMove.bind(this));
-        window.addEventListener('mouseup', this.handleMouseUp.bind(this));
+        this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this));
+        window.addEventListener("mousemove", this.handleMouseMove.bind(this));
+        window.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
-        
-        this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
-        window.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-        window.addEventListener('touchend', this.handleTouchEnd.bind(this));
+        this.canvas.addEventListener("touchstart", this.handleTouchStart.bind(this), {
+            passive: false,
+        });
+        window.addEventListener("touchmove", this.handleTouchMove.bind(this), { passive: false });
+        window.addEventListener("touchend", this.handleTouchEnd.bind(this));
     }
 
     public detach() {
-        this.canvas.removeEventListener('mousedown', this.handleMouseDown.bind(this));
-        window.removeEventListener('mousemove', this.handleMouseMove.bind(this));
-        window.removeEventListener('mouseup', this.handleMouseUp.bind(this));
+        this.canvas.removeEventListener("mousedown", this.handleMouseDown.bind(this));
+        window.removeEventListener("mousemove", this.handleMouseMove.bind(this));
+        window.removeEventListener("mouseup", this.handleMouseUp.bind(this));
 
-        this.canvas.removeEventListener('touchstart', this.handleTouchStart.bind(this));
-        window.removeEventListener('touchmove', this.handleTouchMove.bind(this));
-        window.removeEventListener('touchend', this.handleTouchEnd.bind(this));
+        this.canvas.removeEventListener("touchstart", this.handleTouchStart.bind(this));
+        window.removeEventListener("touchmove", this.handleTouchMove.bind(this));
+        window.removeEventListener("touchend", this.handleTouchEnd.bind(this));
     }
 
     private getPos(e: MouseEvent | TouchEvent): Vector2 {
@@ -56,7 +55,6 @@ export class InputManager {
         let clientX, clientY;
 
         if (e instanceof TouchEvent) {
-            
             const touch = e.touches[0] || e.changedTouches[0];
             clientX = touch.clientX;
             clientY = touch.clientY;
@@ -67,7 +65,7 @@ export class InputManager {
 
         return {
             x: (clientX - rect.left) * scaleX,
-            y: (clientY - rect.top) * scaleY
+            y: (clientY - rect.top) * scaleY,
         };
     }
 
@@ -92,7 +90,6 @@ export class InputManager {
         this.onDragEnd(this.dragStart, this.dragCurrent);
     }
 
-    
     private handleTouchStart(e: TouchEvent) {
         e.preventDefault();
         const pos = this.getPos(e);
@@ -113,7 +110,7 @@ export class InputManager {
     private handleTouchEnd(e: TouchEvent) {
         if (!this.isDragging) return;
         this.isDragging = false;
-        
+
         this.onDragEnd(this.dragStart, this.dragCurrent);
     }
 }

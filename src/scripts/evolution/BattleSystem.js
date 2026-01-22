@@ -1,6 +1,6 @@
 export class BattleSystem {
     constructor(ui) {
-        this.ui = ui; 
+        this.ui = ui;
         this.onBattleEnd = null;
         this.onBattleStart = null;
         this.onClose = null;
@@ -34,14 +34,12 @@ export class BattleSystem {
     start(fighter1, fighter2, onBattleEnd) {
         this.onBattleEnd = onBattleEnd;
 
-        
         if (this.onBattleStart) this.onBattleStart();
 
         this.ui.overlay.classList.remove("opacity-0", "pointer-events-none");
         this.ui.closeBtn.classList.add("hidden");
         this.ui.actionText.innerText = "¡COMIENZA LA PELEA!";
 
-        
         const f1Color = this.getTypeColor(fighter1.data.types);
         const f2Color = this.getTypeColor(fighter2.data.types);
 
@@ -50,7 +48,6 @@ export class BattleSystem {
         this.ui.f1.name.innerText = `${fighter1.data.name} (Lvl ${fighter1.level})`;
         this.ui.f2.name.innerText = `${fighter2.data.name} (Lvl ${fighter2.level})`;
 
-        
         let hp1 = fighter1.currentHp;
         let hp2 = fighter2.currentHp;
         const maxHp1 = fighter1.data.stats.hp;
@@ -64,7 +61,6 @@ export class BattleSystem {
         };
         updateHp();
 
-        
         let turn = 0;
         const battleInterval = setInterval(() => {
             turn++;
@@ -78,7 +74,6 @@ export class BattleSystem {
                 ? document.getElementById("fighter-2")
                 : document.getElementById("fighter-1");
 
-            
             if (attackerDiv) {
                 attackerDiv.classList.add(isF1Turn ? "attack-lunge-right" : "attack-lunge-left");
                 setTimeout(
@@ -87,11 +82,9 @@ export class BattleSystem {
                 );
             }
 
-            
             const atkStat = attacker.data.stats.atk || 10;
             const defStat = defender.data.stats.def || 0;
 
-            
             const atkType = (attacker.data.types && attacker.data.types[0]) || "normal";
             const defTypes = defender.data.types || ["normal"];
 
@@ -100,26 +93,21 @@ export class BattleSystem {
                 typeMult *= this.getEffectiveness(atkType, dt);
             });
 
-            
-            const isCrit = Math.random() < 0.0625; 
+            const isCrit = Math.random() < 0.0625;
             const critMult = isCrit ? 1.5 : 1;
 
-            
             let dmg = Math.max(1, atkStat - defStat * 0.5);
             dmg = dmg * typeMult * critMult;
-            dmg += Math.random() * 5; 
+            dmg += Math.random() * 5;
 
-            
             if (isF1Turn) hp2 = Math.max(0, hp2 - dmg);
             else hp1 = Math.max(0, hp1 - dmg);
 
-            
             fighter1.currentHp = hp1;
             fighter2.currentHp = hp2;
 
             updateHp();
 
-            
             setTimeout(() => {
                 if (defenderDiv) {
                     defenderDiv.classList.add("hit-shake");
@@ -131,19 +119,18 @@ export class BattleSystem {
 
                 if (isCrit) {
                     msg += " ¡CRÍTICO!";
-                    color = "#fbbf24"; 
+                    color = "#fbbf24";
                 } else if (typeMult > 1) {
                     msg += " ¡Es muy eficaz!";
                 } else if (typeMult < 1) {
                     msg += " No es muy eficaz...";
-                    color = "#94a3b8"; 
+                    color = "#94a3b8";
                 }
 
                 this.ui.actionText.innerText = msg;
                 this.ui.actionText.style.color = color;
             }, 100);
 
-            
             if (hp1 <= 0 || hp2 <= 0) {
                 clearInterval(battleInterval);
                 const winner = hp1 > 0 ? fighter1 : fighter2;
@@ -151,13 +138,13 @@ export class BattleSystem {
 
                 setTimeout(() => {
                     this.ui.actionText.innerText = `¡${winner.data.name} GANA!`;
-                    this.ui.actionText.style.color = "#fbbf24"; 
+                    this.ui.actionText.style.color = "#fbbf24";
                     this.ui.closeBtn.classList.remove("hidden");
 
                     if (this.onBattleEnd) this.onBattleEnd(winner, loser);
                 }, 600);
             }
-        }, 800); 
+        }, 800);
     }
 
     close() {

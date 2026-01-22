@@ -31,8 +31,8 @@ export class TournamentUIMediator {
         this.dateDisplay = document.getElementById("tournament-date-display");
     }
 
-    setVisibility(state: 'SETUP' | 'ACTIVE') {
-        if (state === 'ACTIVE') {
+    setVisibility(state: "SETUP" | "ACTIVE") {
+        if (state === "ACTIVE") {
             this.setupView?.classList.add("hidden");
             this.setupView?.classList.remove("flex");
             this.bracketView?.classList.remove("hidden");
@@ -51,13 +51,9 @@ export class TournamentUIMediator {
 
     updateHeader(name: string, date: string) {
         if (this.titleDisplay) {
-            
-            if (!this.titleDisplay.querySelector('input')) {
+            if (!this.titleDisplay.querySelector("input")) {
                 this.titleDisplay.textContent = name;
-                
-                
-                
-                
+
                 this.titleDisplay.innerHTML = `${name} <span class="icon-[mdi--pencil] text-slate-400 text-sm ml-2 opacity-50 hover:opacity-100 cursor-pointer" title="Editar Nombre"></span>`;
             }
         }
@@ -68,31 +64,18 @@ export class TournamentUIMediator {
         if (!this.titleDisplay) return;
 
         this.titleDisplay.addEventListener("click", () => {
-            
-            if (this.titleDisplay?.querySelector('input')) return;
+            if (this.titleDisplay?.querySelector("input")) return;
 
-
-            
-
-
-            
-            
-
-            
-            
-            
-            
-            
             const rawText = this.titleDisplay?.textContent || "";
 
-            const input = document.createElement('input');
-            input.type = 'text';
+            const input = document.createElement("input");
+            input.type = "text";
             input.value = rawText.trim();
-            input.className = "bg-transparent border-b-2 border-indigo-500 text-slate-800 font-bold text-center focus:outline-none min-w-[200px] w-auto inline-block";
+            input.className =
+                "bg-transparent border-b-2 border-indigo-500 text-slate-800 font-bold text-center focus:outline-none min-w-[200px] w-auto inline-block";
 
-            
             if (this.titleDisplay) {
-                this.titleDisplay.innerHTML = '';
+                this.titleDisplay.innerHTML = "";
                 this.titleDisplay.appendChild(input);
                 input.focus();
 
@@ -101,13 +84,13 @@ export class TournamentUIMediator {
                     if (newName) {
                         onSave(newName);
                     } else {
-                        onSave(rawText); 
+                        onSave(rawText);
                     }
                 };
 
                 input.onblur = finish;
                 input.onkeydown = (ev) => {
-                    if (ev.key === 'Enter') {
+                    if (ev.key === "Enter") {
                         input.blur();
                     }
                 };
@@ -134,23 +117,24 @@ export class TournamentUIMediator {
 
     showVictoryToast() {
         const toast = document.createElement("div");
-        toast.className = "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-indigo-600 text-white px-8 py-4 rounded-2xl shadow-2xl text-xl font-bold z-50 animate-bounce flex items-center gap-3";
+        toast.className =
+            "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-indigo-600 text-white px-8 py-4 rounded-2xl shadow-2xl text-xl font-bold z-50 animate-bounce flex items-center gap-3";
         toast.innerHTML = `<span class="icon-[mdi--trophy] text-3xl text-yellow-300"></span> <span>¡Torneo Finalizado!</span> <span class="icon-[mdi--trophy] text-3xl text-yellow-300"></span>`;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
 
-    showToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+    showToast(message: string, type: "success" | "error" | "info" = "info") {
         const colors = {
-            success: 'bg-emerald-600',
-            error: 'bg-red-600',
-            info: 'bg-indigo-600'
+            success: "bg-emerald-600",
+            error: "bg-red-600",
+            info: "bg-indigo-600",
         };
 
         const icons = {
-            success: 'mdi--check-circle',
-            error: 'mdi--alert-circle',
-            info: 'mdi--information'
+            success: "mdi--check-circle",
+            error: "mdi--alert-circle",
+            info: "mdi--information",
         };
 
         const toast = document.createElement("div");
@@ -158,8 +142,8 @@ export class TournamentUIMediator {
         toast.innerHTML = `<span class="icon-[${icons[type]}] text-lg"></span> <span>${message}</span>`;
         document.body.appendChild(toast);
         setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 300ms';
+            toast.style.opacity = "0";
+            toast.style.transition = "opacity 300ms";
             setTimeout(() => toast.remove(), 300);
         }, 3000);
     }
