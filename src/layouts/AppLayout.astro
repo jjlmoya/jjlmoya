@@ -49,6 +49,46 @@ const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
         />
 
         <ViewTransitions />
+
+        {
+            currentSlug &&
+                (() => {
+                    const app = apps.find((a) => a.slug === currentSlug);
+                    if (!app) return null;
+                    const site = Astro.site?.origin || "https://www.jjlmoya.es";
+
+                    const schema = {
+                        "@context": "https://schema.org",
+                        "@type": app.category === "Juegos" ? "VideoGame" : "SoftwareApplication",
+                        name: app.title,
+                        description: app.description,
+                        applicationCategory:
+                            app.category === "Juegos" ? "GameApplication" : "MultimediaApplication",
+                        operatingSystem: "ANDROID",
+                        author: {
+                            "@type": "Person",
+                            name: "jjlmoya",
+                            url: site,
+                        },
+                        publisher: {
+                            "@type": "Organization",
+                            name: "GameBob",
+                            logo: {
+                                "@type": "ImageObject",
+                                url: `${site}${app.media.icon}`,
+                            },
+                        },
+                        offers: {
+                            "@type": "Offer",
+                            price: "0",
+                            priceCurrency: "EUR",
+                        },
+                        image: `${site}${app.media.icon}`,
+                    };
+
+                    return <script type="application/ld+json" set:html={JSON.stringify(schema)} />;
+                })()
+        }
     </head>
     <body
         class="bg-white dark:bg-[#050505] text-slate-900 dark:text-neutral-100 antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black min-h-screen flex flex-col"
