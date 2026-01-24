@@ -43,10 +43,10 @@ export const monmons: Application = {
         author: "jjlmoya",
     },
     media: {
-        icon: "/assets/apps/monmons/icon.png",
-        showcase: "/assets/apps/monmons/showcase.png",
-        hero: "/assets/apps/monmons/hero.png",
-        screenshots: ["/assets/apps/monmons/screenshot_real.png"],
+        icon: "/assets/apps/monmons/icon.webp",
+        showcase: "/assets/apps/monmons/showcase.webp",
+        hero: "/assets/apps/monmons/hero.webp",
+        screenshots: ["/assets/apps/monmons/screenshot_real.webp"],
     },
     stores: {
         googlePlay: "",

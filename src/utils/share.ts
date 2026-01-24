@@ -26,7 +26,7 @@ export const shareElementAsImage = async ({
     title,
     text,
     url = window.location.href,
-    fileName = "share-image.png",
+    fileName = "share-image.webp",
     onSuccess,
     onError,
 }: ShareImageOptions) => {
@@ -188,7 +188,7 @@ export const shareElementAsImage = async ({
         element.style.opacity = originalOpacity;
         element.style.background = originalBackground;
 
-        const dataUrl = canvas.toDataURL("image/png");
+        const dataUrl = canvas.toDataURL("image/webp");
 
         const byteString = atob(dataUrl.split(",")[1]);
         const ab = new ArrayBuffer(byteString.length);
@@ -196,10 +196,10 @@ export const shareElementAsImage = async ({
         for (let i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        const blob = new Blob([ab], { type: "image/png" });
+        const blob = new Blob([ab], { type: "image/webp" });
 
         if (blob) {
-            const file = new File([blob], fileName, { type: "image/png" });
+            const file = new File([blob], fileName, { type: "image/webp" });
 
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
@@ -292,7 +292,7 @@ export async function handleGlobalShare(e: MouseEvent) {
     const element = btn as HTMLElement;
     const shareText = element.dataset.shareText;
     const targetId = element.dataset.shareTargetId;
-    const fileName = element.dataset.shareFilename || "share.png";
+    const fileName = element.dataset.shareFilename || "share.webp";
     const shareTitle = element.dataset.shareTitle || "Compartir";
 
     if (targetId) {

@@ -6,7 +6,7 @@ export const missiopolisProject: Project = {
         "Tu ciudad es un libro. Aprénde a leerlo. ¿Cuántas veces has pasado por la misma calle sin verla realmente?",
     homeDescription:
         "tu ciudad es un libro. aprénde a leerlo. ¿cuántas veces has pasado por la misma calle sin verla realmente?",
-    image: "/images/gamebob/games/missiopolis.png",
+    image: "/images/gamebob/games/missiopolis.webp",
     statusLabel: "Planificación",
     statusType: "planning",
     progress: 10,

@@ -43,10 +43,10 @@ export const colorbeat: Application = {
         author: "GameBob",
     },
     media: {
-        icon: "/assets/apps/colorbeat/icon.png",
-        showcase: "/assets/apps/colorbeat/hero.png",
-        hero: "/assets/apps/colorbeat/hero.png",
-        screenshots: ["/assets/apps/colorbeat/screenshot_1.png"],
+        icon: "/assets/apps/colorbeat/icon.webp",
+        showcase: "/assets/apps/colorbeat/hero.webp",
+        hero: "/assets/apps/colorbeat/hero.webp",
+        screenshots: ["/assets/apps/colorbeat/screenshot_1.webp"],
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.colorbeat.app",

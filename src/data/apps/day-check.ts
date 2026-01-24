@@ -43,10 +43,10 @@ export const dayCheck: Application = {
         author: "William Penn",
     },
     media: {
-        icon: "/assets/apps/day-check/icon.jpg",
-        showcase: "/assets/apps/day-check/hero.png",
-        hero: "/assets/apps/day-check/hero.png",
-        screenshots: ["/assets/apps/day-check/hero.png"],
+        icon: "/assets/apps/day-check/icon.webp",
+        showcase: "/assets/apps/day-check/hero.webp",
+        hero: "/assets/apps/day-check/hero.webp",
+        screenshots: ["/assets/apps/day-check/hero.webp"],
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.daycheck.utility",

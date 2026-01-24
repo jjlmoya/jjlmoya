@@ -43,10 +43,10 @@ export const pizzametrics: Application = {
         author: "jjlmoya",
     },
     media: {
-        icon: "/assets/apps/pizzametrics/icon.png",
-        showcase: "/assets/apps/pizzametrics/showcase.png",
-        hero: "/assets/apps/pizzametrics/hero.png",
-        screenshots: ["/assets/apps/pizzametrics/screenshot_real.png"],
+        icon: "/assets/apps/pizzametrics/icon.webp",
+        showcase: "/assets/apps/pizzametrics/showcase.webp",
+        hero: "/assets/apps/pizzametrics/hero.webp",
+        screenshots: ["/assets/apps/pizzametrics/screenshot_real.webp"],
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.pizzametrics",

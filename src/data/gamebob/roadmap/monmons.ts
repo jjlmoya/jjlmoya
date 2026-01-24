@@ -5,7 +5,7 @@ export const monmonsProject: Project = {
     description: "Coleccionismo de criaturas reinventado para móvil.",
     homeDescription:
         "una nueva forma de coleccionar. vincula, progresa y gestiona tu campamento en esta experiencia móvil pura.",
-    image: "/images/gamebob/games/monmons.png",
+    image: "/images/gamebob/games/monmons.webp",
     statusLabel: "En Desarrollo",
     statusType: "developing",
     progress: 40,

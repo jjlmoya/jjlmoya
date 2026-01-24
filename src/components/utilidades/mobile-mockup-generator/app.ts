@@ -684,11 +684,11 @@ export class App {
                 );
 
                 const blob = await new Promise<Blob>((resolve) =>
-                    offscreenCanvas.toBlob((b) => resolve(b!), "image/png", 1.0)
+                    offscreenCanvas.toBlob((b) => resolve(b!), "image/webp", 1.0)
                 );
                 const variantSuffix =
                     img.variants.length > 1 ? `-${variant.language.toUpperCase()}` : "";
-                zip.file(`mockup-${i + 1}${variantSuffix}.png`, blob);
+                zip.file(`mockup-${i + 1}${variantSuffix}.webp`, blob);
             }
         }
 

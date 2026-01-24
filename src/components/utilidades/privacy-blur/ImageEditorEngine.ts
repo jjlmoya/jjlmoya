@@ -98,8 +98,8 @@ export class ImageEditorEngine {
     public download() {
         if (!this.image) return;
         const link = document.createElement("a");
-        link.download = `privacidad-protegida-${Date.now()}.png`;
-        link.href = this.canvas.toDataURL("image/png");
+        link.download = `privacidad-protegida-${Date.now()}.webp`;
+        link.href = this.canvas.toDataURL("image/webp");
         link.click();
     }
 

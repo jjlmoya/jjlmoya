@@ -43,10 +43,10 @@ export const fortuneCookie: Application = {
         author: "El Galletario",
     },
     media: {
-        icon: "/assets/apps/galleta-de-la-fortuna/icon.png",
-        showcase: "/assets/apps/galleta-de-la-fortuna/showcase.png",
-        hero: "/assets/apps/galleta-de-la-fortuna/hero_mystic.png",
-        screenshots: ["/assets/apps/galleta-de-la-fortuna/screenshot_1.png"],
+        icon: "/assets/apps/galleta-de-la-fortuna/icon.webp",
+        showcase: "/assets/apps/galleta-de-la-fortuna/showcase.webp",
+        hero: "/assets/apps/galleta-de-la-fortuna/hero_mystic.webp",
+        screenshots: ["/assets/apps/galleta-de-la-fortuna/screenshot_1.webp"],
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.cookie.fortune",
