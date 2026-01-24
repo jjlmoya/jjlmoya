@@ -7,7 +7,7 @@ export interface InflationItem {
 }
 
 export const getPurchasingPower = (year: number): number => {
-    const yearsDiff = 2025 - year;
+    const yearsDiff = 2026 - year;
     if (year < 1980) return Math.pow(1.06, yearsDiff);
     if (year < 2000) return Math.pow(1.04, yearsDiff);
     return Math.pow(1.025, yearsDiff);

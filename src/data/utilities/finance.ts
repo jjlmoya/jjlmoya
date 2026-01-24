@@ -23,7 +23,7 @@ export const financeSection: SectionData = {
         },
         {
             title: "Inflación Histórica",
-            description: "¿Cuánto vale tu dinero realmente? Simulador de 1980 a 2025.",
+            description: "¿Cuánto vale tu dinero realmente? Simulador de 1980 a 2026.",
             href: "/utilidades/inflacion/",
             iconBg: "mdi:chart-line-stacked",
             iconFg: "mdi:cash-clock",
