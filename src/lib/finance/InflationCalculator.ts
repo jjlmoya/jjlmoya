@@ -46,9 +46,10 @@ export class InflationCalculator {
         2023: 3.1,
         2024: 2.8,
         2025: 2.2,
+        2026: 2.0,
     };
 
-    static calculate(amount: number, startYear: number, endYear: number = 2025): number {
+    static calculate(amount: number, startYear: number, endYear: number = 2026): number {
         if (startYear === endYear) return amount;
 
         let multiplier = 1;
