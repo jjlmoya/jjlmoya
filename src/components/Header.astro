@@ -89,7 +89,7 @@ const { className = "" } = Astro.props;
 
         <button
             id="menu-toggle"
-            class="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-1.5 group z-[100]"
+            class="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-1.5 group z-[110]"
             aria-label="Abrir Menú"
         >
             <span class="w-6 h-0.5 bg-current transition-all duration-300 origin-center line-1"
@@ -98,48 +98,75 @@ const { className = "" } = Astro.props;
             ></span>
         </button>
     </div>
-
-    <div
-        id="mobile-menu-overlay"
-        class="fixed top-0 left-0 w-screen h-screen z-[90] pointer-events-none opacity-0 transition-opacity duration-500"
-    >
-        <div class="absolute inset-0 bg-white/95 dark:bg-black/95 backdrop-blur-xl"></div>
-
-        <div class="relative h-full flex flex-col justify-center items-center gap-8 p-8">
-            <a href="/proyectos/" class="menu-link" style="--delay: 0.1s">
-                <span class="link-number">01</span>
-                <span class="link-text">Proyectos</span>
-            </a>
-            <a href="/conceptos/" class="menu-link" style="--delay: 0.2s">
-                <span class="link-number">02</span>
-                <span class="link-text">Conceptos</span>
-            </a>
-            <a href="/apps/" class="menu-link" style="--delay: 0.3s">
-                <span class="link-number">03</span>
-                <span class="link-text">Apps</span>
-            </a>
-            <a href="/utilidades/" class="menu-link" style="--delay: 0.4s">
-                <span class="link-number">04</span>
-                <span class="link-text">Utilidades</span>
-            </a>
-            <a href="/gamebob/" class="menu-link" style="--delay: 0.5s">
-                <span class="link-number">05</span>
-                <span class="link-text">GameBob</span>
-            </a>
-            <a href="/charlas/" class="menu-link" style="--delay: 0.6s">
-                <span class="link-number">06</span>
-                <span class="link-text">Charlas</span>
-            </a>
-        </div>
-    </div>
 </nav>
 
+<div
+    id="mobile-menu-overlay"
+    class="fixed inset-0 z-[90] pointer-events-none opacity-0 transition-all duration-300 overflow-y-auto bg-white/95 dark:bg-black/95 backdrop-blur-xl"
+>
+    <div
+        class="relative min-h-screen flex flex-col justify-center items-center gap-6 p-8 pt-24 pb-12"
+    >
+        <a href="/proyectos/" class="menu-link" style="--delay: 0.1s">
+            <span class="link-number">01</span>
+            <span class="link-text">Proyectos</span>
+        </a>
+        <a href="/conceptos/" class="menu-link" style="--delay: 0.2s">
+            <span class="link-number">02</span>
+            <span class="link-text">Conceptos</span>
+        </a>
+        <a href="/apps/" class="menu-link" style="--delay: 0.3s">
+            <span class="link-number">03</span>
+            <span class="link-text">Apps</span>
+        </a>
+        <a href="/utilidades/" class="menu-link" style="--delay: 0.4s">
+            <span class="link-number">04</span>
+            <span class="link-text">Utilidades</span>
+        </a>
+        <a href="/gamebob/" class="menu-link" style="--delay: 0.5s">
+            <span class="link-number">05</span>
+            <span class="link-text">GameBob</span>
+        </a>
+        <a href="/charlas/" class="menu-link" style="--delay: 0.6s">
+            <span class="link-number">06</span>
+            <span class="link-text">Charlas</span>
+        </a>
+    </div>
+</div>
+
 <style>
+    :global(body.menu-open) #main-nav {
+        background-color: #ffffff !important;
+        border-bottom-color: #e5e7eb !important;
+    }
+
+    :global(.dark body.menu-open) #main-nav {
+        background-color: #000000 !important;
+        border-bottom-color: #1a1a1a !important;
+    }
+
+    :global(body.menu-open) #main-nav a,
+    :global(body.menu-open) #main-nav button {
+        color: #1a1a1a !important;
+    }
+
+    :global(.dark body.menu-open) #main-nav a,
+    :global(.dark body.menu-open) #main-nav button {
+        color: #ffffff !important;
+    }
+
     :global(body.menu-open) .line-1 {
         transform: translateY(4px) rotate(45deg);
+        background-color: #1a1a1a !important;
     }
     :global(body.menu-open) .line-2 {
         transform: translateY(-4px) rotate(-45deg);
+        background-color: #1a1a1a !important;
+    }
+
+    :global(.dark body.menu-open) .line-1,
+    :global(.dark body.menu-open) .line-2 {
+        background-color: #ffffff !important;
     }
 
     :global(html.menu-open),
@@ -183,10 +210,16 @@ const { className = "" } = Astro.props;
     }
 
     .link-text {
-        font-size: 3rem;
+        font-size: 2.5rem;
         font-weight: 400;
         letter-spacing: -0.02em;
         transition: transform 0.3s ease;
+    }
+
+    @media (min-width: 768px) {
+        .link-text {
+            font-size: 4rem;
+        }
     }
 
     .menu-link:hover .link-text {
@@ -194,9 +227,12 @@ const { className = "" } = Astro.props;
         font-style: italic;
     }
 
-    @media (max-height: 600px) {
+    @media (max-height: 700px) {
         .link-text {
             font-size: 2rem;
+        }
+        .link-number {
+            font-size: 0.75rem;
         }
     }
 </style>
