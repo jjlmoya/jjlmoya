@@ -44,7 +44,10 @@ const { title, description, image } = Astro.props;
 
             :global(nav#main-nav) {
                 border-bottom-color: rgba(29, 218, 188, 0.1) !important;
+                background-color: #000000 !important;
+                backdrop-filter: none !important;
             }
+
             :global(nav#main-nav > div > div > a) {
                 color: var(--color-gamebob-text) !important;
             }
@@ -71,11 +74,19 @@ const { title, description, image } = Astro.props;
         </style>
     </head>
     <body
-        class="min-h-screen flex flex-col antialiased selection:bg-[#1ddabc] selection:text-white"
+        class="min-h-screen flex flex-col antialiased selection:bg-[#1ddabc] selection:text-white bg-black"
     >
+        <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+            <div
+                class="absolute inset-0 opacity-[0.03]"
+                style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"
+            >
+            </div>
+        </div>
+
         <Header />
 
-        <main class="flex-grow pt-24">
+        <main class="flex-grow pt-24 relative z-10">
             <GameBobSubmenu />
             <slot />
         </main>
