@@ -77,4 +77,19 @@ export const fortuneCookie: Application = {
     features: [],
     highlights: [],
     videos: ["_qaAX3q_IYQ", "AcQFcZsEUT4"],
+    bannerText:
+        "Tu destino te espera. Esta utilidad ahora es una App con galletas raras y más funciones.",
+    hasDetailPage: true,
+    roadmap: {
+        statusLabel: "Publicado en Google Play",
+        statusType: "released",
+        progress: 100,
+        tasks: [
+            { name: "Concepto y Mecánica de Azar", status: "done" },
+            { name: "Visuales", status: "done" },
+            { name: "Implementación de Motor de Mensajes", status: "done" },
+            { name: "Fase de QA y Pulido", status: "done" },
+            { name: "Publicación en Google Play", status: "done" },
+        ],
+    },
 };

@@ -45,22 +45,32 @@ import { Icon } from "astro-icon/components";
                             <div class="absolute top-0 left-0 right-0 h-full bg-[var(--app-primary)] opacity-[0.03] pointer-events-none" />
                             <div class="absolute -top-24 -right-24 w-64 h-64 bg-[var(--app-primary)] opacity-10 blur-[80px] rounded-full pointer-events-none" />
 
-                            <a
-                                href={`/apps/${app.slug}/`}
-                                class={`w-full lg:w-[40%] relative group block mb-8 lg:mb-0 ${index % 2 !== 0 ? "lg:order-2" : ""}`}
+                            <div
+                                class={`w-full lg:w-[40%] relative group mb-8 lg:mb-0 ${index % 2 !== 0 ? "lg:order-2" : ""}`}
                             >
-                                <div class="relative aspect-[16/9] lg:aspect-[3/4] overflow-hidden rounded-2xl border border-black/5 dark:border-white/5 shadow-xl transition-all duration-1000 group-hover:rounded-[1rem] bg-[var(--app-surface)]">
+                                <div class="relative aspect-[16/9] lg:aspect-[3/4] overflow-hidden rounded-2xl border border-black/5 dark:border-white/5 shadow-xl transition-all duration-1000 bg-[var(--app-surface)]">
                                     <div class="absolute inset-0 bg-gradient-to-t from-[var(--app-primary)] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-700" />
 
                                     <img
                                         src={app.media.hero}
                                         alt=""
-                                        class="w-full h-full object-cover object-center transition-all duration-[2000ms] group-hover:scale-105"
+                                        class={`w-full h-full object-cover object-center transition-all duration-[2000ms] ${app.hasDetailPage ? "group-hover:scale-105" : "grayscale opacity-50"}`}
                                     />
+
+                                    {app.roadmap.statusType !== "released" && (
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <span class="px-6 py-3 bg-black/60 backdrop-blur-md text-white border border-white/20 rounded-full text-xs font-black uppercase tracking-widest">
+                                                En construcción
+                                            </span>
+                                        </div>
+                                    )}
 
                                     <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all duration-1000" />
                                 </div>
-                            </a>
+                                {app.hasDetailPage && (
+                                    <a href={`/apps/${app.slug}/`} class="absolute inset-0 z-20" />
+                                )}
+                            </div>
 
                             <div
                                 class={`w-full lg:w-[60%] relative z-10 ${index % 2 !== 0 ? "lg:order-1" : ""}`}
@@ -78,40 +88,56 @@ import { Icon } from "astro-icon/components";
                                     </span>
                                 </div>
 
-                                <a href={`/apps/${app.slug}/`} class="block group">
-                                    <h2 class="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] uppercase transition-all duration-700 group-hover:text-[var(--app-primary)] break-words lg:break-normal">
+                                {app.hasDetailPage ? (
+                                    <a href={`/apps/${app.slug}/`} class="block group">
+                                        <h2 class="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] uppercase transition-all duration-700 group-hover:text-[var(--app-primary)] break-words lg:break-normal">
+                                            {app.title}
+                                        </h2>
+                                    </a>
+                                ) : (
+                                    <h2 class="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] uppercase opacity-40 break-words lg:break-normal">
                                         {app.title}
                                     </h2>
-                                </a>
+                                )}
 
                                 <p class="text-base sm:text-xl md:text-2xl font-light opacity-80 mb-8 lg:mb-12 leading-relaxed max-w-lg">
                                     {app.subtitle}
                                 </p>
 
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10">
-                                    <a
-                                        href={`/apps/${app.slug}/`}
-                                        class="flex items-center justify-center sm:justify-start gap-4 lg:gap-6 text-xs lg:text-sm font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] hover:gap-6 lg:hover:gap-10 transition-all duration-700 px-6 py-3 lg:px-10 lg:py-5 rounded-full bg-[var(--app-primary)] text-white shadow-lg shadow-[var(--app-primary)]/30 hover:shadow-[var(--app-primary)]/50 w-full sm:w-fit"
-                                    >
-                                        <span>Explorar</span>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="16"
-                                            height="16"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="3"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            class="lg:w-5 lg:h-5"
+                                    {app.hasDetailPage ? (
+                                        <a
+                                            href={`/apps/${app.slug}/`}
+                                            class="flex items-center justify-center sm:justify-start gap-4 lg:gap-6 text-xs lg:text-sm font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] hover:gap-6 lg:hover:gap-10 transition-all duration-700 px-6 py-3 lg:px-10 lg:py-5 rounded-full bg-[var(--app-primary)] text-white shadow-lg shadow-[var(--app-primary)]/30 hover:shadow-[var(--app-primary)]/50 w-full sm:w-fit"
                                         >
-                                            <>
-                                                <path d="M5 12h14" />
-                                                <path d="m12 5 7 7-7 7" />
-                                            </>
-                                        </svg>
-                                    </a>
+                                            <span>
+                                                {app.roadmap.statusType === "released"
+                                                    ? "Explorar"
+                                                    : "Curiosear"}
+                                            </span>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="3"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="lg:w-5 lg:h-5"
+                                            >
+                                                <>
+                                                    <path d="M5 12h14" />
+                                                    <path d="m12 5 7 7-7 7" />
+                                                </>
+                                            </svg>
+                                        </a>
+                                    ) : (
+                                        <div class="flex items-center justify-center sm:justify-start gap-4 lg:gap-6 text-xs lg:text-sm font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] px-6 py-3 lg:px-10 lg:py-5 rounded-full bg-slate-100 dark:bg-zinc-900 text-slate-400 dark:text-zinc-600 border border-slate-200 dark:border-zinc-800 w-full sm:w-fit cursor-not-allowed">
+                                            <span>Próximamente</span>
+                                        </div>
+                                    )}
 
                                     <div class="hidden sm:block w-px h-8 lg:h-12 bg-current opacity-10" />
 
@@ -179,8 +205,7 @@ import { Icon } from "astro-icon/components";
                 <p
                     class="text-2xl md:text-3xl font-light tracking-tight text-center max-w-3xl leading-tight mb-8"
                 >
-                    Diseño herramientas que <span class="italic font-normal">respetan</span> tu tiempo
-                    y tu inteligencia.
+                    Diseño apps que <span class="italic font-normal">respetan</span> tu tiempo y tu inteligencia.
                 </p>
             </div>
 

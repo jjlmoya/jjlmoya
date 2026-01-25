@@ -107,4 +107,17 @@ export const dayCheck: Application = {
         },
     ],
     videos: ["7yrHoCccCiw", "BH3hQ2VlPDc"],
+    bannerText: "El tiempo, hecho arte. Tu contador de días favorito, ahora en versión App nativa.",
+    hasDetailPage: true,
+    roadmap: {
+        statusLabel: "Lanzado en Google Play",
+        statusType: "released",
+        progress: 100,
+        tasks: [
+            { name: "Cálculo de fechas", status: "done" },
+            { name: "Sistema de Categorías", status: "done" },
+            { name: "Diseño Glassmorphism", status: "done" },
+            { name: "Publicación en Google Play", status: "done" },
+        ],
+    },
 };

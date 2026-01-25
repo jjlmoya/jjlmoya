@@ -75,5 +75,5 @@ export const LEGAL_TRANSLATIONS: Record<string, LegalTranslations> = {
     nl,
     pl,
     sv,
-    hi
+    hi,
 };

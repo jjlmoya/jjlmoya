@@ -113,4 +113,18 @@ export const pizzametrics: Application = {
         },
     ],
     videos: ["wDNPmCBqwm8", "nCYASztgWLw"],
+    bannerText:
+        "¡Domina tu masa! Esta utilidad ahora es una App con muchas más funciones y precisión.",
+    hasDetailPage: true,
+    roadmap: {
+        statusLabel: "Lanzado en Google Play",
+        statusType: "released",
+        progress: 100,
+        tasks: [
+            { name: "Cálculo de harinas y agua", status: "done" },
+            { name: "Algoritmo de fermentación", status: "done" },
+            { name: "Gestión de Biga/Poolish", status: "done" },
+            { name: "Publicación en Google Play", status: "done" },
+        ],
+    },
 };

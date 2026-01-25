@@ -48,6 +48,11 @@ export interface AppFeature {
     icon?: string;
 }
 
+export interface AppTask {
+    name: string;
+    status: "done" | "active" | "pending";
+}
+
 export interface Application {
     slug: string;
     title: string;
@@ -76,4 +81,13 @@ export interface Application {
     features: AppFeature[];
     highlights: AppHighlight[];
     videos?: string[];
+
+    bannerText?: string;
+    hasDetailPage?: boolean;
+    roadmap: {
+        statusLabel: string;
+        statusType: "released" | "developing" | "qa" | "planning";
+        progress: number;
+        tasks: AppTask[];
+    };
 }

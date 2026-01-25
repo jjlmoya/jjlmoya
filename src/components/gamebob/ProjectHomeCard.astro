@@ -1,13 +1,31 @@
 ---
 import { Icon } from "astro-icon/components";
 import type { Project } from "../../data/gamebob/roadmap/types";
+import type { Application } from "../../types/apps";
 
 interface Props {
-    project: Project;
+    project: Project | Application;
     index: number;
 }
 
 const { project, index } = Astro.props;
+
+const name = "title" in project ? project.title : project.name;
+const description = project.description;
+const homeDescription =
+    "homeDescription" in project ? project.homeDescription : project.description;
+const image = "media" in project ? project.media.showcase : project.image;
+const statusLabel = "roadmap" in project ? project.roadmap.statusLabel : project.statusLabel;
+const statusType = "roadmap" in project ? project.roadmap.statusType : project.statusType;
+const color = "theme" in project ? project.theme.primary : project.color;
+const links =
+    "stores" in project
+        ? {
+              googlePlay: project.stores.googlePlay,
+              appStore: project.stores.appStore,
+          }
+        : project.links;
+
 const isEven = index % 2 === 0;
 
 const statusColors = {
@@ -17,11 +35,9 @@ const statusColors = {
     planning: "bg-blue-500/10 border-blue-500/30 text-blue-400",
 };
 
-const statusClasses = statusColors[project.statusType] || statusColors.developing;
+const statusClasses = statusColors[statusType] || statusColors.developing;
 
-const nameParts = project.name.includes(":")
-    ? [project.name.split(":")[0], project.name.split(":")[1]]
-    : [project.name, ""];
+const nameParts = name.includes(":") ? [name.split(":")[0], name.split(":")[1]] : [name, ""];
 ---
 
 <div
@@ -32,10 +48,10 @@ const nameParts = project.name.includes(":")
             class="text-5xl font-black tracking-tighter text-[var(--color-gamebob-text)] uppercase leading-none"
         >
             {nameParts[0]}<br />
-            <span style={`color: ${project.color}`}>{nameParts[1].trim()}</span>
+            <span style={`color: ${color}`}>{nameParts[1].trim()}</span>
         </h3>
         <p class="text-gray-400 text-lg leading-relaxed lowercase">
-            {project.homeDescription || project.description}
+            {homeDescription}
         </p>
 
         <div class="flex items-center gap-4 pt-4">
@@ -43,18 +59,18 @@ const nameParts = project.name.includes(":")
                 class:list={[
                     "px-4 py-2 border rounded-lg text-sm font-medium",
                     statusClasses,
-                    { "animate-pulse": project.statusType !== "released" },
+                    { "animate-pulse": statusType !== "released" },
                 ]}
             >
-                {project.statusLabel}
+                {statusLabel}
             </div>
         </div>
 
         <div class="flex gap-4 pt-4">
             {
-                project.links?.googlePlay ? (
+                links?.googlePlay ? (
                     <a
-                        href={project.links.googlePlay}
+                        href={links.googlePlay}
                         target="_blank"
                         rel="noopener noreferrer"
                         class="h-12 px-6 bg-white text-black hover:bg-[var(--color-gamebob-primary)] transition-colors rounded-lg flex items-center gap-3 shadow-lg"
@@ -96,7 +112,7 @@ const nameParts = project.name.includes(":")
             "relative group rounded-2xl overflow-hidden shadow-2xl border border-white/10",
             { "order-1": !isEven, "order-1 md:order-2": isEven },
         ]}
-        style={`--tw-shadow-color: ${project.color}33; shadow-color: var(--tw-shadow-color)`}
+        style={`--tw-shadow-color: ${color}33; shadow-color: var(--tw-shadow-color)`}
     >
         <div
             class:list={[
@@ -105,21 +121,21 @@ const nameParts = project.name.includes(":")
             ]}
         >
             {
-                project.image ? (
+                image ? (
                     <img
-                        src={project.image}
-                        alt={`${project.name} Cover`}
+                        src={image}
+                        alt={`${name} Cover`}
                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                 ) : (
                     <div class="text-white/10 font-black text-6xl uppercase tracking-widest text-center px-4">
-                        {project.name}
+                        {name}
                     </div>
                 )
             }
             <div
                 class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent z-10"
-                style={`background-image: linear-gradient(to bottom right, ${project.color}33, transparent)`}
+                style={`background-image: linear-gradient(to bottom right, ${color}33, transparent)`}
             >
             </div>
             <div

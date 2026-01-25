@@ -1,0 +1,184 @@
+---
+import { Icon } from "astro-icon/components";
+import { getWidgetHtml } from "../../utils/widget";
+
+interface Props {
+    title: string;
+    url: string;
+}
+
+const { title, url } = Astro.props;
+
+const origin = Astro.url.origin;
+const cleanUrl = url.startsWith("http") ? url : `${origin}${url}`;
+const widgetUrl = cleanUrl.includes("?") ? `${cleanUrl}&widget=true` : `${cleanUrl}?widget=true`;
+
+const widgetId = `jjlmoya-widget-${url.split("/").filter(Boolean).pop() || "utility"}`;
+
+const iframeCode = getWidgetHtml({ widgetId, widgetUrl, cleanUrl });
+---
+
+<section class="mt-12 border-t border-slate-200 dark:border-slate-800 pt-12 pb-8 no-widget-hidden">
+    <div class="max-w-4xl mx-auto">
+        <div
+            class="bg-gradient-to-br from-indigo-50 to-white dark:from-slate-900/50 dark:to-zinc-950 p-8 rounded-3xl border border-indigo-100 dark:border-indigo-900/30 shadow-xl relative overflow-hidden group"
+        >
+            <div
+                class="absolute -right-12 -top-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl group-hover:bg-indigo-500/20 transition-all duration-700"
+            >
+            </div>
+
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-600/20">
+                        <Icon name="mdi:code-tags" class="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
+                            Inserta esta herramienta en tu web
+                        </h2>
+                        <p class="text-slate-600 dark:text-slate-400">
+                            Ofrece valor a tus lectores con una versión interactiva y gratuita.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div
+                        class="bg-white/50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 flex flex-col items-center text-center group/opt"
+                    >
+                        <div
+                            class="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 text-amber-600 rounded-full flex items-center justify-center mb-4 group-hover/opt:scale-110 transition-transform"
+                        >
+                            <Icon name="mdi:link-variant" class="w-6 h-6" />
+                        </div>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-2">
+                            Opción 1: Solo la URL
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 px-4">
+                            Ideal para WordPress, Reddit o plataformas que detectan enlaces
+                            automáticamente.
+                        </p>
+
+                        <div class="mt-auto w-full relative">
+                            <button
+                                id="copy-url-btn"
+                                data-url={cleanUrl}
+                                class="w-full py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:border-amber-500 transition-colors"
+                            >
+                                <span
+                                    class="truncate max-w-[150px] font-mono text-[10px] opacity-70"
+                                    >{cleanUrl}</span
+                                >
+                                <Icon name="mdi:content-copy" class="w-4 h-4 text-amber-500" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white/50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 flex flex-col items-center text-center group/opt"
+                    >
+                        <div
+                            class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-full flex items-center justify-center mb-4 group-hover/opt:scale-110 transition-transform"
+                        >
+                            <Icon name="mdi:code-tags" class="w-6 h-6" />
+                        </div>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-2">
+                            Opción 2: Código Embed
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 px-4">
+                            Para blogs, periódicos locales o cualquier web habitual (Control total
+                            de altura).
+                        </p>
+
+                        <div class="mt-auto w-full flex gap-2">
+                            <button
+                                id="copy-iframe-btn"
+                                data-code={iframeCode}
+                                class="flex-grow py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 transition-all active:scale-95"
+                            >
+                                <Icon name="mdi:content-copy" class="w-4 h-4" />
+                                <span>Copiar iFrame</span>
+                            </button>
+                            <button
+                                id="toggle-code-view"
+                                title="Ver código"
+                                class="p-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                            >
+                                <Icon name="mdi:eye-outline" class="w-5 h-5" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    id="code-container"
+                    class="hidden animate-in fade-in zoom-in-95 duration-300 mt-6"
+                >
+                    <div class="relative">
+                        <pre
+                            class="bg-slate-900 text-slate-300 p-6 rounded-2xl overflow-x-auto text-[10px] border border-slate-800 shadow-inner font-mono leading-relaxed">{iframeCode}</pre>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent pointer-events-none rounded-2xl"
+                        >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const codeContainer = document.getElementById("code-container");
+    const toggleCodeBtn = document.getElementById("toggle-code-view");
+    const copyIframeBtn = document.getElementById("copy-iframe-btn") as HTMLButtonElement;
+    const copyUrlBtn = document.getElementById("copy-url-btn") as HTMLButtonElement;
+
+    function showFeedback(btn: HTMLButtonElement, originalContent: string) {
+        btn.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>¡Copiado!</span>';
+        setTimeout(() => {
+            btn.innerHTML = originalContent;
+        }, 2000);
+    }
+
+    toggleCodeBtn?.addEventListener("click", () => {
+        codeContainer?.classList.toggle("hidden");
+        toggleCodeBtn.classList.toggle(
+            "bg-indigo-100",
+            !codeContainer?.classList.contains("hidden")
+        );
+        toggleCodeBtn.innerHTML = codeContainer?.classList.contains("hidden")
+            ? '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+            : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+    });
+
+    copyUrlBtn?.addEventListener("click", () => {
+        const url = copyUrlBtn.getAttribute("data-url") || "";
+        navigator.clipboard.writeText(url).then(() => {
+            showFeedback(copyUrlBtn, copyUrlBtn.innerHTML);
+        });
+    });
+
+    copyIframeBtn?.addEventListener("click", () => {
+        const code = copyIframeBtn.getAttribute("data-code") || "";
+        navigator.clipboard.writeText(code).then(() => {
+            showFeedback(copyIframeBtn, copyIframeBtn.innerHTML);
+        });
+    });
+</script>
+
+<style>
+    pre {
+        scrollbar-width: thin;
+        scrollbar-color: #475569 transparent;
+    }
+    pre::-webkit-scrollbar {
+        height: 6px;
+    }
+    pre::-webkit-scrollbar-thumb {
+        background-color: #475569;
+        border-radius: 10px;
+    }
+</style>

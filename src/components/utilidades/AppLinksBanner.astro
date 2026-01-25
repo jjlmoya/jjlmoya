@@ -21,8 +21,6 @@ const ios = propIos || app?.stores.appStore;
 
 const primaryColor = app?.theme.primary || "#6366f1";
 
-const isPizza = appSlug === "pizzametrics";
-
 const theme = isGeneric
     ? {
           bg: "bg-slate-50 dark:bg-zinc-950",
@@ -37,33 +35,19 @@ const theme = isGeneric
           btnText: "text-white",
           btnSecondaryBg: "bg-slate-900 text-white hover:bg-black dark:bg-white dark:text-black",
       }
-    : isPizza
-      ? {
-            bg: "bg-white",
-            text: "text-zinc-900",
-            heading: "text-red-600",
-            subtitle: "text-zinc-500",
-            border: "border-red-500/20",
-            badge: "bg-red-50 text-red-700 border-red-200",
-            shine: "via-red-500/10",
-            glowOpacity: "opacity-10",
-            backdrop: "bg-white/60",
-            btnText: "text-white",
-            btnSecondaryBg: "bg-zinc-900 text-white hover:bg-black",
-        }
-      : {
-            bg: "bg-slate-900 dark:bg-black",
-            text: "text-white",
-            heading: "text-white",
-            subtitle: "text-white/50",
-            border: "border-white/10",
-            badge: "bg-white/10 text-white border-white/10",
-            shine: "via-white/5",
-            glowOpacity: "opacity-20",
-            backdrop: "bg-black/40",
-            btnText: "text-white",
-            btnSecondaryBg: "bg-white text-black hover:bg-zinc-100",
-        };
+    : {
+          bg: "bg-slate-900 dark:bg-black",
+          text: "text-white",
+          heading: "text-white",
+          subtitle: "text-white/50",
+          border: "border-white/10",
+          badge: "bg-white/10 text-white border-white/10",
+          shine: "via-white/5",
+          glowOpacity: "opacity-20",
+          backdrop: "bg-black/40",
+          btnText: "text-white",
+          btnSecondaryBg: "bg-white text-black hover:bg-zinc-100",
+      };
 ---
 
 <div
@@ -77,7 +61,7 @@ const theme = isGeneric
         >
         </div>
         <div
-            class={`absolute bottom-[-50%] right-[-10%] w-[60%] h-[180%] ${isPizza ? "bg-red-500/5" : "bg-blue-500/20"} blur-[100px] rounded-full animate-pulse-slow-delay`}
+            class={`absolute bottom-[-50%] right-[-10%] w-[60%] h-[180%] bg-blue-500/20 blur-[100px] rounded-full animate-pulse-slow-delay`}
         >
         </div>
     </div>
@@ -105,12 +89,12 @@ const theme = isGeneric
                 ) : app ? (
                     <div class="relative">
                         <div
-                            class={`absolute -inset-1 bg-[var(--app-primary)] ${isPizza ? "opacity-10" : "opacity-30"} blur-md rounded-xl group-hover/icon:opacity-50 transition-opacity duration-500`}
+                            class={`absolute -inset-1 bg-[var(--app-primary)] opacity-30 blur-md rounded-xl group-hover/icon:opacity-50 transition-opacity duration-500`}
                         />
                         <img
                             src={app.media.icon}
                             alt={app.title}
-                            class={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10 shadow-lg border ${isPizza ? "border-red-500/10" : "border-white/20"} transition-transform duration-500 group-hover/icon:scale-105`}
+                            class={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10 shadow-lg border border-white/20 transition-transform duration-500 group-hover/icon:scale-105`}
                         />
                     </div>
                 ) : (
@@ -150,11 +134,8 @@ const theme = isGeneric
                 {
                     isGeneric
                         ? "Accede a todas mis herramientas y proyectos de forma rápida, optimizada y en un solo lugar."
-                        : appSlug === "pizzametrics"
-                          ? "¡Domina tu masa! Esta utilidad ahora es una App con muchas más funciones y precisión."
-                          : appSlug === "galleta-de-la-fortuna"
-                            ? "Tu destino te espera. Esta utilidad ahora es una App con galletas raras y más funciones."
-                            : "Esta utilidad ahora es una App con muchas más funciones, ¡descárgala ahora!"
+                        : app?.bannerText ||
+                          "Esta utilidad ahora es una App con muchas más funciones, ¡descárgala ahora!"
                 }
             </p>
         </div>

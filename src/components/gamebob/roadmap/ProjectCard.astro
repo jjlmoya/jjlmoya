@@ -3,12 +3,20 @@ import ProgressBar from "./ProgressBar.astro";
 import ProjectTasks from "./ProjectTasks.astro";
 
 import type { Project } from "../../../data/gamebob/roadmap/types";
+import type { Application } from "../../../types/apps";
 
 interface Props {
-    project: Project;
+    project: Project | Application;
 }
 
 const { project } = Astro.props;
+
+const name = "title" in project ? project.title : project.name;
+const description = project.description;
+const image = "media" in project ? project.media.showcase : project.image;
+const statusLabel = "roadmap" in project ? project.roadmap.statusLabel : project.statusLabel;
+const progress = "roadmap" in project ? project.roadmap.progress : project.progress;
+const tasks = "roadmap" in project ? project.roadmap.tasks : project.tasks;
 ---
 
 <div class="h-full">
@@ -17,10 +25,10 @@ const { project } = Astro.props;
     >
         <div class="absolute inset-0 z-0">
             {
-                project.image && (
+                image && (
                     <div
                         class="w-full h-full bg-cover bg-no-repeat opacity-30 group-hover:scale-105 transition-transform duration-700"
-                        style={`background-image: url('${project.image}'); background-position: center;`}
+                        style={`background-image: url('${image}'); background-position: center;`}
                     />
                 )
             }
@@ -36,12 +44,12 @@ const { project } = Astro.props;
                     <div
                         class="text-[var(--color-gamebob-primary)] text-xs font-bold mb-2 uppercase tracking-widest"
                     >
-                        {project.statusLabel}
+                        {statusLabel}
                     </div>
                     <h2 class="text-3xl font-bold text-white mb-2">
-                        {project.name}
+                        {name}
                     </h2>
-                    <p class="text-gray-400">{project.description}</p>
+                    <p class="text-gray-400">{description}</p>
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -56,8 +64,8 @@ const { project } = Astro.props;
             </div>
 
             <div class="flex-grow">
-                <ProgressBar progress={project.progress} />
-                <ProjectTasks tasks={project.tasks} />
+                <ProgressBar progress={progress} />
+                <ProjectTasks tasks={tasks} />
             </div>
         </div>
     </div>

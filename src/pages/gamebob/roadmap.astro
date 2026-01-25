@@ -2,10 +2,11 @@
 import GameBobLayout from "../../layouts/GameBobLayout.astro";
 import RoadmapHeader from "../../components/gamebob/roadmap/RoadmapHeader.astro";
 import ProjectCard from "../../components/gamebob/roadmap/ProjectCard.astro";
-import { colorBeatProject } from "../../data/gamebob/roadmap/color-beat";
-import { fortuneCookieProject } from "../../data/gamebob/roadmap/fortune-cookie";
-import { missiopolisProject } from "../../data/gamebob/roadmap/missiopolis";
-import { monmonsProject } from "../../data/gamebob/roadmap/monmons";
+import { apps } from "../../data/apps/index";
+
+const roadmapApps = apps.filter((app) =>
+    ["colorbeat", "monmons", "galleta-de-la-fortuna", "missiopolis"].includes(app.slug)
+);
 ---
 
 <GameBobLayout
@@ -21,10 +22,7 @@ import { monmonsProject } from "../../data/gamebob/roadmap/monmons";
             />
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <ProjectCard project={colorBeatProject} />
-                <ProjectCard project={monmonsProject} />
-                <ProjectCard project={fortuneCookieProject} />
-                <ProjectCard project={missiopolisProject} />
+                {roadmapApps.map((app) => <ProjectCard project={app} />)}
             </div>
         </div>
     </div>

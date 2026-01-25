@@ -5,6 +5,7 @@ export interface UtilityItem {
     iconBg: string;
     iconFg: string;
     color: string;
+    appSlug?: string;
 }
 
 export interface SectionData {

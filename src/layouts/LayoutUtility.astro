@@ -5,7 +5,9 @@ import RelatedUtilities from "../components/utilidades/RelatedUtilities.astro";
 import AppLinksBanner from "../components/utilidades/AppLinksBanner.astro";
 import UtilityStructuredData from "../components/utilidades/UtilityStructuredData.astro";
 import FAQSection from "../components/utilidades/FAQSection.astro";
+import WidgetCreator from "../components/utilidades/WidgetCreator.astro";
 import { sections } from "../data/utilities";
+import { getWidgetHtml } from "../utils/widget";
 
 interface AppLinks {
     android?: string;
@@ -35,6 +37,7 @@ interface Props {
     appSlug?: string;
     faqItems?: FAQItem[];
     howToSteps?: HowToStep[];
+    hideWidget?: boolean;
 }
 
 const {
@@ -48,6 +51,7 @@ const {
     appSlug,
     faqItems,
     howToSteps,
+    hideWidget = false,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -78,6 +82,13 @@ if (!category) {
         howToSteps={howToSteps}
         slot="head"
     />
+    <link
+        rel="alternate"
+        type="application/json+oembed"
+        href={`https://jjlmoya.es/api/oembed.json?url=${encodeURIComponent(`https://jjlmoya.es${currentPath}`)}`}
+        title={title}
+        slot="head"
+    />
     <div class="relative min-h-screen overflow-x-clip">
         <div
             class={`absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${gradientFrom} via-white ${gradientTo} dark:from-slate-900/40 dark:via-zinc-950 dark:to-black -z-10`}
@@ -89,7 +100,7 @@ if (!category) {
         </div>
 
         <div class="max-w-6xl mx-auto px-4 sm:px-6 relative focus:outline-none pt-12 sm:pt-20">
-            <div class="text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <div class="text-center utility-header-area">
                 <BackToUtilities class="mb-8" />
                 <slot name="header">
                     <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6">
@@ -103,23 +114,174 @@ if (!category) {
                 </slot>
             </div>
 
-            <div class="mt-12">
+            <div class="mt-12 utility-tool-container">
                 <slot />
             </div>
 
-            {faqItems && faqItems.length > 0 && <FAQSection items={faqItems} />}
+            {!hideWidget && <WidgetCreator title={title} url={currentPath} />}
+
+            {
+                faqItems && faqItems.length > 0 && (
+                    <div class="no-widget-hidden">
+                        <FAQSection items={faqItems} />
+                    </div>
+                )
+            }
 
             <div
-                class="prose prose-lg dark:prose-invert mx-auto mb-20 prose-headings:font-bold prose-a:text-indigo-600 dark:prose-a:text-indigo-400"
+                class="prose prose-lg dark:prose-invert mx-auto mb-20 prose-headings:font-bold prose-a:text-indigo-600 dark:prose-a:text-indigo-400 no-widget-hidden"
             >
                 <slot name="seo" />
             </div>
 
-            <div class="max-w-4xl mx-auto mb-16">
+            <div class="max-w-4xl mx-auto mb-16 no-widget-hidden">
                 <slot name="bibliography" />
             </div>
 
-            <RelatedUtilities category={category ?? ""} currentPath={currentPath} />
+            <div class="no-widget-hidden">
+                <RelatedUtilities category={category ?? ""} currentPath={currentPath} />
+            </div>
         </div>
     </div>
 </Layout>
+
+<script>
+    const isWidget = new URLSearchParams(window.location.search).get("widget") === "true";
+    if (isWidget) {
+        document.documentElement.classList.add("is-widget");
+        document.body.classList.add("is-widget");
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const id =
+            urlParams.get("id") ||
+            `jjlmoya-widget-${window.location.pathname.split("/").filter(Boolean).pop() || "utility"}`;
+
+        const report = () => {
+            const container = document.querySelector(".utility-tool-container");
+            if (container) {
+                const h = container.scrollHeight;
+                if (h > 50) {
+                    window.parent.postMessage({ jjlmoyaHeight: h, jjlmoyaId: id }, "*");
+                }
+            } else {
+                const h = document.body.scrollHeight;
+                window.parent.postMessage({ jjlmoyaHeight: h, jjlmoyaId: id }, "*");
+            }
+        };
+
+        report();
+        const itv = setInterval(report, 600);
+        setTimeout(() => clearInterval(itv), 5000);
+        window.addEventListener("load", report);
+        const obs = new ResizeObserver(report);
+        if (document.body) obs.observe(document.body);
+    }
+</script>
+
+<style is:global>
+    html.is-widget,
+    body.is-widget,
+    body.is-widget main,
+    body.is-widget .relative.min-h-screen {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        min-height: auto !important;
+    }
+
+    body.is-widget div[class*="fixed"][class*="-z-10"],
+    body.is-widget div[class*="bg-[radial-gradient"],
+    body.is-widget div[class*="bg-[linear-gradient"] {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+
+    body.is-widget nav,
+    body.is-widget footer,
+    body.is-widget .no-widget-hidden,
+    body.is-widget header,
+    body.is-widget .utility-header-area,
+    body.is-widget [slot="header"],
+    body.is-widget .BackToUtilities,
+    body.is-widget .animate-in,
+    body.is-widget .prose {
+        display: none !important;
+    }
+
+    body.is-widget .utility-tool-container .animate-in {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        animation: none !important;
+    }
+
+    body.is-widget .sticky.top-\[60px\] {
+        display: none !important;
+    }
+
+    body.is-widget .pt-12,
+    body.is-widget .pt-15,
+    body.is-widget .sm\:pt-20,
+    body.is-widget main {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+
+    body.is-widget .utility-tool-container {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    body.is-widget .max-w-6xl,
+    body.is-widget .max-w-5xl,
+    body.is-widget .max-w-4xl,
+    body.is-widget .max-w-3xl,
+    body.is-widget .max-w-2xl {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    body.is-widget .utility-tool-container {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    body.is-widget .utility-tool-container > div,
+    body.is-widget .utility-tool-container > div > div {
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    body.is-widget div[class*="rounded-"][class*="bg-white"],
+    body.is-widget div[class*="rounded-"][class*="dark:bg-slate-900"],
+    body.is-widget div[class*="rounded-"][class*="dark:bg-gray-800"],
+    body.is-widget div[class*="rounded-"][class*="dark:bg-zinc-900"] {
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        border-width: 0 !important;
+        background: transparent !important;
+    }
+
+    body.is-widget .utility-tool-container button[class*="rounded-"],
+    body.is-widget .utility-tool-container input[class*="rounded-"],
+    body.is-widget .utility-tool-container div.active[class*="rounded-"] {
+    }
+
+    body.is-widget .grid {
+        gap: 2rem !important;
+    }
+    body.is-widget .sticky {
+        position: relative !important;
+        top: 0 !important;
+    }
+</style>
