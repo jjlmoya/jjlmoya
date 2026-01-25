@@ -8,25 +8,31 @@ export const GET: APIRoute = ({ request }) => {
     const targetUrl = url.searchParams.get("url") || "";
 
     if (!targetUrl || targetUrl === "") {
-        return new Response(JSON.stringify({
-            error: "Missing url parameter"
-        }), {
-            status: 400,
-            headers: { "Content-Type": "application/json" }
-        });
+        return new Response(
+            JSON.stringify({
+                error: "Missing url parameter",
+            }),
+            {
+                status: 400,
+                headers: { "Content-Type": "application/json" },
+            }
+        );
     }
 
     const lowUrl = targetUrl.toLowerCase();
     const allowedDomains = ["jjlmoya.es", "localhost", "127.0.0.1"];
-    if (!allowedDomains.some(domain => lowUrl.includes(domain))) {
-        return new Response(JSON.stringify({
-            error: "Invalid Domain",
-            message: "This oEmbed provider only supports jjlmoya.es links",
-            received: targetUrl
-        }), {
-            status: 400,
-            headers: { "Content-Type": "application/json" }
-        });
+    if (!allowedDomains.some((domain) => lowUrl.includes(domain))) {
+        return new Response(
+            JSON.stringify({
+                error: "Invalid Domain",
+                message: "This oEmbed provider only supports jjlmoya.es links",
+                received: targetUrl,
+            }),
+            {
+                status: 400,
+                headers: { "Content-Type": "application/json" },
+            }
+        );
     }
 
     const baseUrl = targetUrl.split("?")[0];

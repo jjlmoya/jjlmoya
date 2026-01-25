@@ -67,7 +67,14 @@ const customCommentsPlugin = {
 
 export default [
     {
-        ignores: ["**/dist/", "**/node_modules/", ".astro/", "**/.astro/**", "**/public/**", ".vercel/"],
+        ignores: [
+            "**/dist/",
+            "**/node_modules/",
+            ".astro/",
+            "**/.astro/**",
+            "**/public/**",
+            ".vercel/",
+        ],
     },
     ...tseslint.configs.recommended,
     ...eslintPluginAstro.configs["flat/recommended"],
