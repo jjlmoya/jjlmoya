@@ -159,13 +159,15 @@ if (!category) {
         const report = () => {
             const container = document.querySelector(".utility-tool-container");
             if (container) {
-                const h = container.scrollHeight;
+                const rect = container.getBoundingClientRect();
+                const h = Math.round(rect.height);
+
                 if (h > 50) {
-                    window.parent.postMessage({ jjlmoyaHeight: h, jjlmoyaId: id }, "*");
+                    window.parent.postMessage({ jjlmoyaHeight: h + 4, jjlmoyaId: id }, "*");
                 }
             } else {
                 const h = document.body.scrollHeight;
-                window.parent.postMessage({ jjlmoyaHeight: h, jjlmoyaId: id }, "*");
+                window.parent.postMessage({ jjlmoyaHeight: h + 4, jjlmoyaId: id }, "*");
             }
         };
 
@@ -173,8 +175,14 @@ if (!category) {
         const itv = setInterval(report, 600);
         setTimeout(() => clearInterval(itv), 5000);
         window.addEventListener("load", report);
+
+        const container = document.querySelector(".utility-tool-container");
         const obs = new ResizeObserver(report);
-        if (document.body) obs.observe(document.body);
+        if (container) {
+            obs.observe(container);
+        } else if (document.body) {
+            obs.observe(document.body);
+        }
     }
 </script>
 
