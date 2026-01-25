@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
 import { getWidgetHtml } from "../../utils/widget";
 
+export const prerender = false;
+
 export const GET: APIRoute = ({ request }) => {
     const url = new URL(request.url);
     const targetUrl = url.searchParams.get("url") || "";
@@ -15,7 +17,8 @@ export const GET: APIRoute = ({ request }) => {
     }
 
     const lowUrl = targetUrl.toLowerCase();
-    if (!lowUrl.includes("jjlmoya.es")) {
+    const allowedDomains = ["jjlmoya.es", "localhost", "127.0.0.1"];
+    if (!allowedDomains.some(domain => lowUrl.includes(domain))) {
         return new Response(JSON.stringify({
             error: "Invalid Domain",
             message: "This oEmbed provider only supports jjlmoya.es links",
