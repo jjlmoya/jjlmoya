@@ -9,6 +9,9 @@ export default defineConfig({
     site: "https://www.jjlmoya.es",
     output: "static",
     adapter: vercel(),
+    devToolbar: {
+        enabled: false,
+    },
     integrations: [icon(), sitemap()],
     vite: {
         plugins: [tailwindcss()],

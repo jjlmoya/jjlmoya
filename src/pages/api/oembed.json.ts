@@ -39,7 +39,7 @@ export const GET: APIRoute = ({ request }) => {
     const widgetUrl = `${baseUrl}${baseUrl.endsWith("/") ? "" : "/"}?widget=true`;
     const utilityName = baseUrl.split("/").filter(Boolean).pop() || "utilidad";
     const widgetId = `wj-${utilityName}`;
-    const cleanUrl = baseUrl;
+    const cleanUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
 
     const embedHtml = getWidgetHtml({ widgetId, widgetUrl, cleanUrl });
 
@@ -47,9 +47,9 @@ export const GET: APIRoute = ({ request }) => {
         version: "1.0",
         type: "rich",
         provider_name: "jjlmoya",
-        provider_url: "https://www.jjlmoya.es",
+        provider_url: url.origin,
         author_name: "jjlmoya",
-        author_url: "https://www.jjlmoya.es",
+        author_url: url.origin,
         title: `Widget: ${utilityName.replace(/-/g, " ")}`,
         html: embedHtml,
         width: 800,

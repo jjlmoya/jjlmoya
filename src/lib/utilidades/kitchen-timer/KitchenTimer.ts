@@ -199,31 +199,37 @@ export class KitchenTimer extends EventTarget {
 
     private updateUIState() {
         const btnText = this.element.querySelector(".btn-toggle .btn-text");
+        const btnToggle = this.element.querySelector(".btn-toggle");
+
         if (this.isRunning) {
             this.element.querySelector(".icon-play")?.classList.add("hidden");
             this.element.querySelector(".icon-pause")?.classList.remove("hidden");
             if (btnText) btnText.textContent = "Pausar";
-            this.element
-                .querySelector(".btn-toggle")
-                ?.classList.replace("bg-orange-500", "bg-slate-700");
-            this.statusText.textContent = "Contando...";
-            this.statusText.classList.replace("text-orange-500", "text-green-500");
+
+            
+            btnToggle?.classList.remove("bg-slate-900", "dark:bg-white", "text-white", "dark:text-slate-900");
+            btnToggle?.classList.add("bg-orange-100", "dark:bg-orange-950/40", "text-orange-600", "dark:text-orange-400");
+
+            this.statusText.textContent = "Corriendo";
+            this.statusText.classList.remove("bg-orange-50", "dark:bg-orange-950/30", "text-orange-600", "dark:text-orange-400");
+            this.statusText.classList.add("bg-green-50", "dark:bg-green-950/30", "text-green-600", "dark:text-green-400");
+
             Object.values(this.inputs).forEach((i) => (i.disabled = true));
         } else {
             this.element.querySelector(".icon-play")?.classList.remove("hidden");
             this.element.querySelector(".icon-pause")?.classList.add("hidden");
             if (btnText) btnText.textContent = "Iniciar";
-            this.element
-                .querySelector(".btn-toggle")
-                ?.classList.replace("bg-slate-700", "bg-orange-500");
+
+            btnToggle?.classList.add("bg-slate-900", "dark:bg-white", "text-white", "dark:text-slate-900");
+            btnToggle?.classList.remove("bg-orange-100", "dark:bg-orange-950/40", "text-orange-600", "dark:text-orange-400");
+
+            this.statusText.classList.remove("bg-green-50", "dark:bg-green-950/30", "text-green-600", "dark:text-green-400");
+            this.statusText.classList.add("bg-orange-50", "dark:bg-orange-950/30", "text-orange-600", "dark:text-orange-400");
 
             if (this.remainingSeconds > 0 && this.remainingSeconds < this.totalSeconds) {
                 this.statusText.textContent = "Pausado";
-                this.statusText.classList.replace("text-green-500", "text-orange-500");
-            } else if (this.remainingSeconds === 0 && this.totalSeconds > 0) {
             } else {
                 this.statusText.textContent = "Listo";
-                this.statusText.classList.replace("text-green-500", "text-orange-500");
             }
             Object.values(this.inputs).forEach((i) => (i.disabled = false));
         }

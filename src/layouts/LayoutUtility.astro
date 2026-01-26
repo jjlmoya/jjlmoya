@@ -70,6 +70,9 @@ if (!category) {
         category = foundSection.title;
     }
 }
+
+const isWidget = Astro.url.searchParams.get("widget") === "true";
+const hasBanner = !!(appSlug || appLinks?.android || appLinks?.ios);
 ---
 
 <Layout title={title} description={description} image={image} fullWidth={true}>
@@ -85,21 +88,31 @@ if (!category) {
     <link
         rel="alternate"
         type="application/json+oembed"
-        href={`https://www.jjlmoya.es/api/oembed.json?url=${encodeURIComponent(`https://www.jjlmoya.es${currentPath}`)}`}
+        href={`${Astro.url.origin}/api/oembed.json?url=${encodeURIComponent(`${Astro.url.origin}${Astro.url.pathname}`)}`}
         title={title}
         slot="head"
     />
-    <div class="relative min-h-screen overflow-x-clip">
+    <div class="relative min-h-screen overflow-x-clip utility-layout-wrapper">
         <div
             class={`absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${gradientFrom} via-white ${gradientTo} dark:from-slate-900/40 dark:via-zinc-950 dark:to-black -z-10`}
         >
         </div>
 
-        <div class="sticky top-[60px] z-40 transition-all duration-300 w-full">
-            <AppLinksBanner appSlug={appSlug} android={appLinks?.android} ios={appLinks?.ios} />
-        </div>
+        {
+            (appSlug || appLinks?.android || appLinks?.ios) && (
+                <div class="sticky top-[60px] z-40 transition-all duration-300 w-full">
+                    <AppLinksBanner
+                        appSlug={appSlug}
+                        android={appLinks?.android}
+                        ios={appLinks?.ios}
+                    />
+                </div>
+            )
+        }
 
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 relative focus:outline-none pt-12 sm:pt-20">
+        <div
+            class="max-w-6xl mx-auto px-4 sm:px-6 relative focus:outline-none pt-12 sm:pt-20 utility-main-wrapper"
+        >
             <div class="text-center utility-header-area">
                 <BackToUtilities class="mb-8" />
                 <slot name="header">
@@ -145,29 +158,48 @@ if (!category) {
     </div>
 </Layout>
 
-<script>
+<script is:inline define:vars={{ hasBanner }}>
     const isWidget = new URLSearchParams(window.location.search).get("widget") === "true";
     if (isWidget) {
         document.documentElement.classList.add("is-widget");
         document.body.classList.add("is-widget");
 
         const urlParams = new URLSearchParams(window.location.search);
+
+        const theme = urlParams.get("theme");
+        if (theme === "dark") {
+            document.documentElement.classList.add("dark");
+        } else if (theme === "light") {
+            document.documentElement.classList.remove("dark");
+        }
+
         const id =
             urlParams.get("id") ||
             `jjlmoya-widget-${window.location.pathname.split("/").filter(Boolean).pop() || "utility"}`;
 
         const report = () => {
             const container = document.querySelector(".utility-tool-container");
-            if (container) {
-                const rect = container.getBoundingClientRect();
-                const h = Math.round(rect.height);
+            const banner = document.querySelector(".sticky");
 
-                if (h > 50) {
-                    window.parent.postMessage({ jjlmoyaHeight: h + 4, jjlmoyaId: id }, "*");
+            let h = 0;
+            if (container) {
+                
+                const rect = container.getBoundingClientRect();
+                h = rect.height;
+
+                
+                if (hasBanner && banner) {
+                    const bh = banner.getBoundingClientRect().height;
+                    
+                    if (bh > 10) h += bh;
                 }
             } else {
-                const h = document.body.scrollHeight;
-                window.parent.postMessage({ jjlmoyaHeight: h + 4, jjlmoyaId: id }, "*");
+                h = document.body.scrollHeight;
+            }
+
+            if (h > 50) {
+                
+                window.parent.postMessage({ jjlmoyaHeight: Math.round(h), jjlmoyaId: id }, "*");
             }
         };
 
@@ -206,26 +238,26 @@ if (!category) {
     }
 
     body.is-widget nav,
-    body.is-widget footer,
+    body.is-widget footer:not(.utility-tool-container *),
     body.is-widget .no-widget-hidden,
     body.is-widget header,
     body.is-widget .utility-header-area,
     body.is-widget [slot="header"],
     body.is-widget .BackToUtilities,
-    body.is-widget .animate-in,
     body.is-widget .prose {
         display: none !important;
     }
 
-    body.is-widget .utility-tool-container .animate-in {
-        display: block !important;
+    
+    body.is-widget .animate-in:not(.utility-tool-container *) {
+        display: none !important;
+    }
+
+    
+    body.is-widget .utility-tool-container .animate-in:not(.hidden) {
         opacity: 1 !important;
         visibility: visible !important;
         animation: none !important;
-    }
-
-    body.is-widget .sticky.top-\[60px\] {
-        display: none !important;
     }
 
     body.is-widget .pt-12,
@@ -239,8 +271,28 @@ if (!category) {
     body.is-widget .utility-tool-container {
         margin-top: 0 !important;
         padding-top: 0 !important;
+        padding-bottom: 0 !important;
     }
 
+    body.is-widget .utility-main-wrapper {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    body.is-widget .utility-layout-wrapper,
+    body.is-widget .utility-layout-wrapper > div[class*="absolute"] {
+        min-height: 0 !important;
+        height: auto !important;
+        display: none !important;
+    }
+
+    body.is-widget .utility-layout-wrapper {
+        display: block !important;
+    }
+
+    
     body.is-widget .max-w-6xl,
     body.is-widget .max-w-5xl,
     body.is-widget .max-w-4xl,
@@ -252,42 +304,11 @@ if (!category) {
         padding-right: 0 !important;
     }
 
-    body.is-widget .utility-tool-container {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
-
-    body.is-widget .utility-tool-container > div,
-    body.is-widget .utility-tool-container > div > div {
-        background: transparent !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-        border-radius: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-    }
-
-    body.is-widget div[class*="rounded-"][class*="bg-white"],
-    body.is-widget div[class*="rounded-"][class*="dark:bg-slate-900"],
-    body.is-widget div[class*="rounded-"][class*="dark:bg-gray-800"],
-    body.is-widget div[class*="rounded-"][class*="dark:bg-zinc-900"] {
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        border-width: 0 !important;
-        background: transparent !important;
-    }
-
     body.is-widget .utility-tool-container button[class*="rounded-"],
     body.is-widget .utility-tool-container input[class*="rounded-"],
     body.is-widget .utility-tool-container div.active[class*="rounded-"] {
     }
 
-    body.is-widget .grid {
-        gap: 2rem !important;
-    }
     body.is-widget .sticky {
         position: relative !important;
         top: 0 !important;

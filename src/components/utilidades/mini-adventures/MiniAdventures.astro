@@ -2,10 +2,26 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<div class="max-w-xl mx-auto space-y-8 p-4">
+<div class="mini-adventures-wrapper max-w-xl mx-auto space-y-8 p-4">
+    <style is:global>
+        body.is-widget .mini-adventures-wrapper {
+            padding: 0 !important;
+        }
+        body.is-widget #adventure-card {
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            min-height: auto !important;
+        }
+        body.is-widget #home-view,
+        body.is-widget #adventure-view {
+            padding: 1.5rem !important;
+        }
+    </style>
     <div
         id="adventure-card"
-        class="relative min-h-[450px] rounded-[2.5rem] bg-zinc-950 border border-white/5 shadow-2xl overflow-hidden transition-all duration-500 hover:border-indigo-500/30"
+        class="relative min-h-[450px] rounded-[2.5rem] bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-white/5 shadow-2xl overflow-hidden transition-all duration-500 hover:border-indigo-500/30"
     >
         <div
             class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none"
@@ -17,19 +33,21 @@ import { Icon } from "astro-icon/components";
             class="h-full flex flex-col items-center justify-center p-10 text-center space-y-8"
         >
             <div
-                class="w-24 h-24 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center shadow-inner group transition-transform hover:scale-110"
+                class="w-24 h-24 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-inner group transition-transform hover:scale-110"
             >
                 <Icon name="mdi:compass-outline" class="w-12 h-12 text-indigo-400 animate-pulse" />
             </div>
             <div class="space-y-3">
-                <h3 class="text-3xl font-black text-white tracking-tight">Mini Aventuras</h3>
-                <p class="text-zinc-500 text-lg">
+                <h3 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                    Mini Aventuras
+                </h3>
+                <p class="text-slate-500 dark:text-zinc-500 text-lg">
                     Haz que hoy sea un poco diferente. <br /> ¿Estás listo para explorar?
                 </p>
             </div>
             <button
                 id="generate-btn"
-                class="px-8 py-5 bg-white text-black rounded-2xl font-black text-xl hover:bg-zinc-200 active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+                class="px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-black rounded-2xl font-black text-xl hover:bg-slate-800 dark:hover:bg-zinc-200 active:scale-95 transition-all shadow-xl dark:shadow-[0_0_30px_rgba(255,255,255,0.1)]"
             >
                 GENERAR AVENTURA
             </button>
@@ -42,7 +60,10 @@ import { Icon } from "astro-icon/components";
                     class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border"
                 >
                 </div>
-                <button id="close-btn" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                <button
+                    id="close-btn"
+                    class="p-2 text-slate-400 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
                     <Icon name="mdi:close" class="w-6 h-6" />
                 </button>
             </header>
@@ -56,12 +77,14 @@ import { Icon } from "astro-icon/components";
                 </div>
                 <h2
                     id="adventure-text"
-                    class="text-2xl md:text-3xl font-bold text-white leading-tight px-4"
+                    class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white leading-tight px-4"
                 >
                 </h2>
             </div>
 
-            <footer class="grid grid-cols-2 gap-3 pt-6 border-t border-white/5">
+            <footer
+                class="grid grid-cols-2 gap-3 pt-6 border-t border-slate-100 dark:border-white/5"
+            >
                 <button
                     id="done-btn"
                     class="flex items-center justify-center gap-2 py-4 bg-emerald-500 text-black rounded-xl font-black text-sm hover:bg-emerald-400 active:scale-95 transition-all"
@@ -71,7 +94,7 @@ import { Icon } from "astro-icon/components";
                 </button>
                 <button
                     id="another-btn"
-                    class="flex items-center justify-center gap-2 py-4 bg-zinc-800 text-white rounded-xl font-bold text-sm hover:bg-zinc-700 active:scale-95 transition-all"
+                    class="flex items-center justify-center gap-2 py-4 bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-white rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
                 >
                     <Icon name="mdi:refresh" class="w-5 h-5" />
                     OTRA
@@ -90,31 +113,42 @@ import { Icon } from "astro-icon/components";
     <div class="space-y-6">
         <div class="grid grid-cols-2 gap-4">
             <div
-                class="p-6 rounded-3xl bg-zinc-950 border border-white/5 flex flex-col items-center text-center space-y-1"
+                class="p-6 rounded-3xl bg-white dark:bg-zinc-950 border border-slate-200 dark:border-white/5 flex flex-col items-center text-center space-y-1"
             >
-                <span class="text-3xl font-black text-white" id="stat-completed">0</span>
-                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-500"
+                <span class="text-3xl font-black text-slate-900 dark:text-white" id="stat-completed"
+                    >0</span
+                >
+                <span
+                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500"
                     >Aventuras</span
                 >
             </div>
             <div
-                class="p-6 rounded-3xl bg-zinc-950 border border-white/5 flex flex-col items-center text-center space-y-1"
+                class="p-6 rounded-3xl bg-white dark:bg-zinc-950 border border-slate-200 dark:border-white/5 flex flex-col items-center text-center space-y-1"
             >
-                <span class="text-3xl font-black text-white" id="stat-achievements">0</span>
-                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-500"
+                <span
+                    class="text-3xl font-black text-slate-900 dark:text-white"
+                    id="stat-achievements">0</span
+                >
+                <span
+                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-500"
                     >Insignias</span
                 >
             </div>
         </div>
 
-        <div class="bg-zinc-950 border border-white/5 rounded-[2.5rem] p-8 space-y-6">
+        <div
+            class="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-white/5 rounded-[2.5rem] p-8 space-y-6"
+        >
             <div class="flex justify-between items-center">
                 <div class="space-y-1">
                     <span
-                        class="text-[10px] font-black uppercase tracking-widest text-zinc-600 block"
+                        class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-zinc-600 block"
                         >Tu Progreso</span
                     >
-                    <h4 class="text-xl font-black text-white">Colección de Trofeos</h4>
+                    <h4 class="text-xl font-black text-slate-900 dark:text-white">
+                        Colección de Trofeos
+                    </h4>
                 </div>
                 <div class="text-right">
                     <span class="text-3xl font-black text-indigo-500" id="total-progress">0%</span>

@@ -129,7 +129,7 @@
                 ><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline
                     points="17 18 23 18 23 12"></polyline></svg
             >
-            <span>+0% Inflación Acumulada</span>
+            <span>+0 % Inflación Acumulada</span>
         </div>
         <p class="mt-4 text-xs text-slate-400 max-w-md mx-auto">
             *Cálculo realizado utilizando datos oficiales del INE hasta 2025 y proyecciones
@@ -156,7 +156,9 @@
     });
 
     const formatMoney = (val: number) =>
-        new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(val);
+        new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" })
+            .format(val)
+            .replace(/\u00A0/g, " ");
 
     const update = () => {
         const val = Number(amountEl.value) || 0;
@@ -170,7 +172,7 @@
             const change = ((res - val) / val) * 100;
             const sign = change > 0 ? "+" : "";
             percentEl.querySelector("span")!.innerText =
-                `${sign}${change.toFixed(1)}% Inflación Acumulada`;
+                `${sign}${change.toFixed(1)} % Inflación Acumulada`;
         }
     };
 
