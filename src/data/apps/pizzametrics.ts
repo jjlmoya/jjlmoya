@@ -50,7 +50,7 @@ export const pizzametrics: Application = {
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.pizzametrics",
-        appStore: "",
+        appStore: "https://apps.apple.com/us/app/pizzametrics/id6758212062",
     },
     benefits: [
         {
@@ -117,7 +117,7 @@ export const pizzametrics: Application = {
         "¡Domina tu masa! Esta utilidad ahora es una App con muchas más funciones y precisión.",
     hasDetailPage: true,
     roadmap: {
-        statusLabel: "Lanzado en Google Play",
+        statusLabel: "Lanzado en App Store y Google Play",
         statusType: "released",
         progress: 100,
         tasks: [

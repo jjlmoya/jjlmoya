@@ -50,7 +50,7 @@ export const fortuneCookie: Application = {
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.cookie.fortune",
-        appStore: "",
+        appStore: "https://apps.apple.com/us/app/cookie-fortune-daily-luck/id6758163442",
     },
     benefits: [
         {
@@ -81,7 +81,7 @@ export const fortuneCookie: Application = {
         "Tu destino te espera. Esta utilidad ahora es una App con galletas raras y más funciones.",
     hasDetailPage: true,
     roadmap: {
-        statusLabel: "Publicado en Google Play",
+        statusLabel: "Publicado en App Store y Google Play",
         statusType: "released",
         progress: 100,
         tasks: [
