@@ -44,7 +44,7 @@ export const lexiCrash: Application = {
     },
     media: {
         icon: "/assets/apps/lexi-crash/icon.webp",
-        showcase: "/assets/apps/lexi-crash/showcase.webp",
+        showcase: "/assets/apps/lexi-crash/icon.webp",
         hero: "/assets/apps/lexi-crash/screenshot_2.webp",
         screenshots: [
             "/assets/apps/lexi-crash/screenshot_2.webp",
