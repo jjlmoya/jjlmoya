@@ -26,7 +26,7 @@ export const lexiCrash: Application = {
     },
     tagline: "Combina letras, forma palabras y evita el colapso.",
     description:
-        "LexiCrash es un ecosistema de juegos de palabras diseñado para poner a prueba tu agilidad mental y vocabulario bajo diferentes mecánicas. Desde la presión del modo arcade hasta la lógica de los retos diarios, el juego ofrece múltiples formas de interactuar con el tablero.",
+        "Juego de palabras de alta velocidad. Forma palabras antes de que las letras colapsen el tablero. Modo Crash, Relax, Palabra del Día y retos diarios. Pon a prueba tu vocabulario y agilidad mental.",
     philosophy:
         "LexiCrash ofrece una interfaz limpia y optimizada para una respuesta táctil inmediata. Sin distracciones innecesarias, el enfoque está totalmente en la jugabilidad y la agilidad visual. El catálogo de modos de juego se actualiza periódicamente para ofrecer nuevos retos mecánicos a la comunidad.",
     concept: {
