@@ -5,6 +5,7 @@ export const lexiCrash: Application = {
     title: "LexiCrash",
     subtitle: "Forma palabras, supera retos y evita el colapso.",
     category: "Juegos / Puzle / Agilidad Mental",
+    isGame: true,
     theme: {
         primary: "#00D2FF",
         primaryGradient: "linear-gradient(135deg, #00D2FF 0%, #007AFF 100%)",

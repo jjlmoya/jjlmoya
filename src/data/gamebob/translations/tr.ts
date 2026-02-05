@@ -50,7 +50,7 @@ export const tr = {
         title_p2: "Koşullar",
         description: "Oyunun kuralları. Daha iyi bir deneyim için şeffaflık ve netlik.",
         last_update: "02/01/2026",
-        intro_p1: "Game Bob (Juan José López Moya) tarafından sağlanan hizmetlere hoş geldiniz.",
+        intro_p1: "Game Bob (jjlmoya) tarafından sağlanan hizmetlere hoş geldiniz.",
         intro_p2:
             'Mobil uygulamalarımızdan herhangi birini ("Uygulama") indirerek, kurarak veya kullanarak ya da web sitemize erişerek, aşağıdaki Şartlar ve Koşullara bağlı kalmayı kabul etmiş olursunuz. Bu şartları kabul etmiyorsanız, lütfen Uygulamayı kullanmayın.',
         sections: {
@@ -72,7 +72,7 @@ export const tr = {
             intellectual: {
                 title: "Fikri Mülkiyet",
                 content:
-                    "Uygulamalarımızın tasarımı, kaynak kodu, grafikleri, logoları ve içeriği üzerindeki tüm fikri mülkiyet hakları Juan José López Moya'nın münhasır mülkiyetindedir veya lisans altında kullanılmaktadır. Kullanıcıya herhangi bir mülkiyet hakkı devredilmez.",
+                    "Uygulamalarımızın tasarımı, kaynak kodu, grafikleri, logoları ve içeriği üzerindeki tüm fikri mülkiyet hakları jjlmoya'nın münhasır mülkiyetindedir veya lisans altında kullanılmaktadır. Kullanıcıya herhangi bir mülkiyet hakkı devredilmez.",
             },
             privacy: {
                 title: "Gizlilik ve Veri Koruma",

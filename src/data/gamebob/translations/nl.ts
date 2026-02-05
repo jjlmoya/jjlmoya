@@ -51,7 +51,7 @@ export const nl = {
         description:
             "De regels van het spel. Transparantie en duidelijkheid voor een betere ervaring.",
         last_update: "02/01/2026",
-        intro_p1: "Welkom bij de diensten van Game Bob (Juan José López Moya).",
+        intro_p1: "Welkom bij de diensten van Game Bob (jjlmoya).",
         intro_p2:
             'Door een van onze mobiele applicaties ("de Applicatie") te downloaden, installeren of gebruiken, of door onze website te bezoeken, gaat u akkoord met de volgende Algemene Voorwaarden. Indien u niet akkoord gaat met deze voorwaarden, gebruik de Applicatie dan niet.',
         sections: {
@@ -73,7 +73,7 @@ export const nl = {
             intellectual: {
                 title: "Intellectueel Eigendom",
                 content:
-                    "Alle intellectuele eigendomsrechten op het ontwerp, de broncode, graphics, logo's en inhoud van onze applicaties zijn het exclusieve eigendom van Juan José López Moya of worden onder licentie gebruikt. Er worden geen eigendomsrechten overgedragen aan de gebruiker.",
+                    "Alle intellectuele eigendomsrechten op het ontwerp, de broncode, graphics, logo's en inhoud van onze applicaties zijn het exclusieve eigendom van jjlmoya of worden onder licentie gebruikt. Er worden geen eigendomsrechten overgedragen aan de gebruiker.",
             },
             privacy: {
                 title: "Privacy en Gegevensbescherming",

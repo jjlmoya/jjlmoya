@@ -5,6 +5,7 @@ export const colorbeat: Application = {
     title: "ColorBeat",
     subtitle: "Domina el juego pulsando en el momento exacto.",
     category: "Juegos",
+    isGame: true,
     theme: {
         primary: "hsl(160, 100%, 50%)",
         primaryGradient: "hsl(160, 100%, 50%)",

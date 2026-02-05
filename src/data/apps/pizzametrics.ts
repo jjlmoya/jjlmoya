@@ -5,6 +5,7 @@ export const pizzametrics: Application = {
     title: "Pizzametrics",
     subtitle: "La precisión que tu masa merece.",
     category: "Cocina",
+    isGame: false,
     theme: {
         primary: "hsl(0, 71%, 50%)",
         primaryGradient: "hsl(0, 71%, 50%)",

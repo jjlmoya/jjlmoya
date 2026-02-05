@@ -1,0 +1,709 @@
+---
+export const prerender = true;
+import AppLayout from "../../layouts/AppLayout.astro";
+import { digBot as app } from "../../data/apps/dig-bot";
+import { Icon } from "astro-icon/components";
+import AppVideos from "../../components/apps/AppVideos.astro";
+
+const title = `${app.title} — ${app.tagline}`;
+
+const blockTypes = ["grass", "dirt", "stone", "deep-stone", "sand"];
+const patrolBlocks = Array.from(
+    { length: 200 },
+    () => blockTypes[Math.floor(Math.random() * blockTypes.length)]
+);
+---
+
+<AppLayout
+    title={title}
+    description={app.description}
+    image={app.media.icon}
+    color="#21C55D"
+    favicon={app.media.icon}
+    currentSlug={app.slug}
+>
+    <div
+        class="min-h-screen bg-[#05070B] text-white selection:bg-[#21C55D] selection:text-white overflow-x-hidden relative"
+        style="--primary: #21C55D; --accent: #FACC15; --danger: #EF4444; --dark: #14211A; --darker: #05070B;"
+    >
+        <div class="scanlines pointer-events-none fixed inset-0 z-50 opacity-[0.03]"></div>
+        <div class="vignette pointer-events-none fixed inset-0 z-50 opacity-20"></div>
+
+        <div class="fixed inset-0 pointer-events-none overflow-hidden">
+            <div
+                class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-[#21C55D] opacity-[0.08] blur-[150px] rounded-full animate-pulse-slow"
+            >
+            </div>
+            <div
+                class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[#FACC15] opacity-[0.06] blur-[150px] rounded-full animate-pulse-slower"
+            >
+            </div>
+
+            <div class="floating-blocks">
+                <Icon
+                    name="mdi:cube-outline"
+                    class="block-icon"
+                    style="--delay: 0s; --x: 10%; --y: 20%;"
+                />
+                <Icon
+                    name="mdi:cube-outline"
+                    class="block-icon"
+                    style="--delay: 1.5s; --x: 85%; --y: 15%;"
+                />
+                <Icon
+                    name="mdi:cube-outline"
+                    class="block-icon"
+                    style="--delay: 3s; --x: 15%; --y: 70%;"
+                />
+                <Icon
+                    name="mdi:cube-outline"
+                    class="block-icon"
+                    style="--delay: 4.5s; --x: 75%; --y: 65%;"
+                />
+                <Icon
+                    name="mdi:pickaxe"
+                    class="block-icon"
+                    style="--delay: 2s; --x: 50%; --y: 40%;"
+                />
+                <Icon
+                    name="mdi:robot-industrial"
+                    class="block-icon"
+                    style="--delay: 3.5s; --x: 30%; --y: 85%;"
+                />
+            </div>
+
+            <div
+                class="absolute inset-0 opacity-[0.03]"
+                style="background-image: linear-gradient(#21C55D 1px, transparent 1px), linear-gradient(90deg, #21C55D 1px, transparent 1px); background-size: 60px 60px;"
+            >
+            </div>
+        </div>
+
+        <section class="relative pt-12 pb-28 px-6 overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none">
+                <div
+                    class="absolute inset-0 bg-gradient-to-b from-[#1e3a8a]/20 via-[#05070B] to-[#05070B]"
+                >
+                </div>
+                <div
+                    class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#21C55D]/50 to-transparent opacity-30"
+                >
+                </div>
+                <div
+                    class="absolute top-[-10%] left-[20%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full"
+                >
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                    <div class="flex-1 text-center lg:text-left">
+                        <div class="relative mb-8 group inline-block">
+                            <div
+                                class="absolute inset-0 bg-[#21C55D] blur-[60px] opacity-40 group-hover:opacity-70 transition-opacity duration-700 scale-110"
+                            >
+                            </div>
+                            <img
+                                src={app.media.icon}
+                                alt={app.title}
+                                class="w-24 h-24 md:w-28 md:h-28 rounded-[2rem] relative z-10 shadow-2xl border-4 border-[#21C55D]/30 group-hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+
+                        <h1
+                            class="text-6xl sm:text-8xl lg:text-9xl font-black tracking-tighter mb-4 leading-none mining-title"
+                        >
+                            DIG<span class="text-[#21C55D] glow-text">BOT</span>
+                        </h1>
+
+                        <p
+                            class="text-lg md:text-xl font-bold text-[#21C55D] mb-3 uppercase tracking-wide"
+                        >
+                            {app.subtitle}
+                        </p>
+
+                        <p
+                            class="text-base md:text-lg text-white/60 mb-10 max-w-xl mx-auto lg:mx-0"
+                        >
+                            Estrategia de minería autónoma y gestión de ingeniería
+                        </p>
+
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                            {
+                                app.stores.googlePlay ? (
+                                    <a
+                                        href={app.stores.googlePlay}
+                                        target="_blank"
+                                        class="tech-btn-store group"
+                                    >
+                                        <Icon name="mdi:google-play" class="w-7 h-7 mr-3" />
+                                        <div class="text-left">
+                                            <span class="block text-[9px] font-bold uppercase tracking-widest opacity-70">
+                                                Descarga en
+                                            </span>
+                                            <span class="text-lg font-black">Google Play</span>
+                                        </div>
+                                    </a>
+                                ) : (
+                                    <div class="tech-btn-store-disabled group">
+                                        <Icon
+                                            name="mdi:google-play"
+                                            class="w-7 h-7 mr-3 opacity-50"
+                                        />
+                                        <div class="text-left">
+                                            <span class="block text-[9px] font-bold uppercase tracking-widest opacity-50">
+                                                En Laboratorio
+                                            </span>
+                                            <span class="text-lg font-black opacity-50">
+                                                Android
+                                            </span>
+                                        </div>
+                                    </div>
+                                )
+                            }
+
+                            {
+                                app.stores.appStore ? (
+                                    <a
+                                        href={app.stores.appStore}
+                                        target="_blank"
+                                        class="tech-btn-store group"
+                                    >
+                                        <Icon name="mdi:apple" class="w-7 h-7 mr-3" />
+                                        <div class="text-left">
+                                            <span class="block text-[9px] font-bold uppercase tracking-widest opacity-70">
+                                                Descarga en
+                                            </span>
+                                            <span class="text-lg font-black">App Store</span>
+                                        </div>
+                                    </a>
+                                ) : (
+                                    <div class="tech-btn-store-disabled group">
+                                        <Icon name="mdi:apple" class="w-7 h-7 mr-3 opacity-50" />
+                                        <div class="text-left">
+                                            <span class="block text-[9px] font-bold uppercase tracking-widest opacity-50">
+                                                En Prototipo
+                                            </span>
+                                            <span class="text-lg font-black opacity-50">iOS</span>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </div>
+
+                    <div class="flex-1 w-full max-w-md lg:max-w-lg">
+                        <div class="relative group">
+                            <div
+                                class="absolute -inset-6 bg-gradient-to-r from-[#21C55D] via-[#FACC15] to-[#21C55D] opacity-20 blur-3xl group-hover:opacity-30 transition-opacity animate-pulse-slow"
+                            >
+                            </div>
+                            <div
+                                class="relative rounded-[2rem] overflow-hidden border-4 border-[#21C55D]/20 shadow-2xl transform group-hover:scale-[1.02] transition-transform duration-700 bg-[#14211A]"
+                            >
+                                <img
+                                    src={app.media.hero}
+                                    alt="Dig Bot Gameplay Architecture"
+                                    class="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity"
+                                />
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-[#05070B] via-transparent to-transparent"
+                                >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative h-32 bg-[#05070B] border-y border-[#21C55D]/20 overflow-hidden">
+            <div
+                class="absolute inset-0 grid grid-cols-[repeat(auto-fill,32px)] auto-rows-[32px] gap-[2px] p-[2px] opacity-20"
+            >
+                {
+                    patrolBlocks.map((block) => (
+                        <div class="w-8 h-8 flex-shrink-0">
+                            <img
+                                src={`/assets/apps/dig-bot/blocks/${block}.webp`}
+                                alt=""
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+                    ))
+                }
+            </div>
+            <div
+                class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-60"
+            >
+            </div>
+
+            <div class="bot-patrol absolute bottom-2 h-16 w-16 z-20">
+                <img
+                    src="/assets/apps/dig-bot/bot.webp"
+                    alt="Patrolling Bot"
+                    class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]"
+                />
+            </div>
+        </section>
+
+        <section
+            class="py-24 px-6 border-b border-[#21C55D]/10 bg-gradient-to-b from-[#05070B] via-[#1a1610] to-[#05070B] relative overflow-hidden"
+        >
+            <div class="absolute inset-0 pointer-events-none">
+                <div
+                    class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#FACC15]/20 to-transparent"
+                >
+                </div>
+                <div
+                    class="absolute bottom-1/4 left-[-10%] w-[50%] h-[50%] bg-[#FACC15]/5 blur-[120px] rounded-full"
+                >
+                </div>
+            </div>
+            <div
+                class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-20 bg-gradient-to-b from-[#21C55D] to-transparent"
+            >
+            </div>
+
+            <div class="max-w-5xl mx-auto text-center relative z-10">
+                <span
+                    class="text-[10px] font-black uppercase tracking-[0.5em] text-[#21C55D] mb-6 block"
+                    >{app.concept.label}</span
+                >
+
+                <h2 class="text-5xl md:text-7xl font-black mb-8 leading-tight">
+                    {app.concept.main}
+                    <span class="text-[#21C55D] glow-text block mt-2"
+                        >{app.concept.highlighted}</span
+                    >
+                </h2>
+
+                <div
+                    class="h-1 w-32 bg-gradient-to-r from-transparent via-[#21C55D] to-transparent mx-auto mb-10"
+                >
+                </div>
+
+                <p
+                    class="text-xl md:text-2xl font-medium leading-relaxed text-white/80 max-w-3xl mx-auto mb-16"
+                >
+                    {app.philosophy}
+                </p>
+
+                <div class="flex flex-col items-center">
+                    <div
+                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 w-full max-w-4xl"
+                    >
+                        {
+                            ["grass", "dirt", "stone", "deep-stone", "sand"].map((block) => (
+                                <div class="aspect-square relative group overflow-hidden rounded-xl border-2 border-white/5 transition-all hover:scale-[1.05] hover:z-10 shadow-2xl">
+                                    <img
+                                        src={`/assets/apps/dig-bot/blocks/${block}.webp`}
+                                        alt={block}
+                                        class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700"
+                                    />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex items-bottom p-4">
+                                        <span class="text-xs md:text-sm font-black uppercase tracking-tighter text-white/60 group-hover:text-white transition-colors mt-auto">
+                                            {block.replace("-", " ")}
+                                        </span>
+                                    </div>
+                                    <div class="absolute inset-0 border border-white/10 pointer-events-none" />
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="mecanicas"
+            class="py-28 px-6 relative overflow-hidden bg-gradient-to-b from-[#05070B] via-[#0a111a] to-[#05070B]"
+        >
+            <div class="absolute inset-0 pointer-events-none">
+                <div
+                    class="absolute top-1/2 right-[-10%] w-[40%] h-[40%] bg-cyan-500/5 blur-[100px] rounded-full"
+                >
+                </div>
+                <div
+                    class="absolute inset-0 opacity-[0.03]"
+                    style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 40px 40px;"
+                >
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl md:text-7xl font-black mb-6">
+                        TU ROL DE <span class="text-[#21C55D] glow-text">GESTOR</span>
+                    </h2>
+                    <p class="text-xl text-white/60">No conduzcas al robot, esculpe su mundo</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {
+                        app.benefits.map((benefit, i) => (
+                            <div class="tech-card group">
+                                <div class="absolute inset-0 bg-gradient-to-br from-[#21C55D]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                <div class="relative z-10">
+                                    <div class="flex items-start gap-6 mb-4">
+                                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#21C55D] to-[#166534] flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg shadow-[#21C55D]/50">
+                                            <Icon name={benefit.icon} class="w-7 h-7 text-white" />
+                                        </div>
+                                        <div class="flex-1">
+                                            <h3 class="text-2xl md:text-3xl font-black mb-3 text-white uppercase tracking-tight">
+                                                {benefit.title}
+                                            </h3>
+                                            <p class="text-base md:text-lg text-white/70 leading-relaxed group-hover:text-white/90 transition-colors">
+                                                {benefit.text}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="detalles"
+            class="py-28 px-6 relative overflow-hidden bg-gradient-to-b from-[#05070B] via-[#120a1a] to-[#05070B]"
+        >
+            <div class="absolute inset-0 pointer-events-none">
+                <div
+                    class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#FACC15]/10 to-transparent"
+                >
+                </div>
+                <div
+                    class="absolute top-1/4 left-[-5%] w-[30%] h-[30%] bg-purple-500/5 blur-[100px] rounded-full"
+                >
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto relative z-10">
+                <div class="flex flex-col lg:flex-row gap-16 items-center">
+                    <div class="lg:w-1/2 order-2 lg:order-1">
+                        <h2 class="text-5xl md:text-7xl font-black mb-8 leading-none">
+                            {app.benefitsTitle.main}<br />
+                            <span class="text-[#FACC15] glow-text-gold"
+                                >{app.benefitsTitle.highlighted}</span
+                            >
+                        </h2>
+                        <p class="text-xl md:text-2xl text-white/70 leading-relaxed mb-10">
+                            {app.description}
+                        </p>
+
+                        <div class="space-y-4">
+                            {
+                                app.features.map((feature) => (
+                                    <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-[#21C55D]/30 transition-colors">
+                                        <div class="w-2 h-2 rounded-full bg-[#21C55D] mt-2 flex-shrink-0" />
+                                        <div>
+                                            <h4 class="font-bold text-lg mb-1">{feature.title}</h4>
+                                            <p class="text-white/60 text-sm">{feature.text}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+
+                    <div
+                        class="lg:w-1/2 order-1 lg:order-2 flex justify-center items-center gap-4 lg:gap-6"
+                    >
+                        {
+                            app.media.screenshots.map((screenshot, i) => (
+                                <div class="relative group screenshot-container">
+                                    <div class="absolute -inset-3 bg-[#21C55D] opacity-20 blur-2xl group-hover:opacity-40 transition-opacity rounded-[3rem]" />
+                                    <img
+                                        src={screenshot}
+                                        alt={`Infiltration ${i + 1}`}
+                                        class="relative w-full max-w-[200px] md:max-w-[240px] rounded-[2rem] md:rounded-[2.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)] border-3 md:border-4 border-[#21C55D]/20 group-hover:scale-[1.03] group-hover:border-[#21C55D]/40 transition-all duration-700"
+                                        style={
+                                            i % 2 === 0
+                                                ? "transform: translateY(-30px) rotate(-2deg);"
+                                                : "transform: translateY(30px) rotate(2deg);"
+                                        }
+                                    />
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            class="py-32 px-6 text-center relative overflow-hidden bg-gradient-to-b from-[#05070B] to-[#1a0505]"
+        >
+            <div class="absolute inset-0 pointer-events-none">
+                <div
+                    class="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[60%] h-[60%] bg-red-500/10 blur-[150px] rounded-full animate-pulse-slow"
+                >
+                </div>
+                <div
+                    class="absolute inset-0 opacity-[0.02]"
+                    style="background-image: linear-gradient(#f43f5e 1px, transparent 1px), linear-gradient(90deg, #f43f5e 1px, transparent 1px); background-size: 80px 80px;"
+                >
+                </div>
+            </div>
+            <div
+                class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-white/10 to-transparent"
+            >
+            </div>
+
+            <div class="max-w-4xl mx-auto relative z-10">
+                <h2 class="text-6xl md:text-8xl font-black mb-8 leading-none">
+                    ALCANZA EL
+                    <span class="text-[#EF4444] glow-text-red block mt-2">NÚCLEO</span>
+                </h2>
+                <p class="text-2xl md:text-3xl font-medium mb-16 text-white/60">
+                    Calcula cada impacto, limpia el camino y descubre qué se esconde bajo tierra.
+                </p>
+
+                <div class="flex justify-center flex-wrap gap-6">
+                    <div class="tech-btn-cta-disabled">
+                        <Icon name="mdi:earth" class="w-8 h-8 mr-4 opacity-40" />
+                        <div class="text-left">
+                            <span
+                                class="block text-[10px] font-bold uppercase tracking-widest opacity-40"
+                            >
+                                Estado de la misión
+                            </span>
+                            <span class="text-2xl font-black opacity-40">En Desarrollo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap");
+
+        * {
+            font-family: "Outfit", sans-serif;
+        }
+
+        .mining-title {
+            text-shadow:
+                0 0 20px rgba(34, 197, 94, 0.5),
+                0 0 40px rgba(34, 197, 94, 0.3),
+                0 5px 10px rgba(0, 0, 0, 0.5);
+            animation: title-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes title-pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .glow-text {
+            text-shadow:
+                0 0 30px rgba(34, 197, 94, 0.8),
+                0 0 60px rgba(34, 197, 94, 0.4),
+                0 0 90px rgba(34, 197, 94, 0.2);
+        }
+
+        .glow-text-gold {
+            text-shadow:
+                0 0 30px rgba(250, 204, 21, 0.8),
+                0 0 60px rgba(250, 204, 21, 0.4),
+                0 0 90px rgba(250, 204, 21, 0.2);
+        }
+
+        .glow-text-red {
+            text-shadow:
+                0 0 30px rgba(239, 68, 68, 0.8),
+                0 0 60px rgba(239, 68, 68, 0.4),
+                0 0 90px rgba(239, 68, 68, 0.2);
+        }
+
+        .tech-btn-store {
+            display: inline-flex;
+            align-items: center;
+            padding: 1.25rem 2.5rem;
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+            color: white;
+            border-radius: 1.5rem;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow:
+                0 15px 40px -10px rgba(34, 197, 94, 0.6),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tech-btn-store:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow:
+                0 25px 50px -10px rgba(34, 197, 94, 0.8),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .tech-btn-store-disabled {
+            display: inline-flex;
+            align-items: center;
+            padding: 1.25rem 2.5rem;
+            background: rgba(34, 197, 94, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(34, 197, 94, 0.2);
+            border-radius: 1.5rem;
+            cursor: not-allowed;
+        }
+
+        .tech-btn-cta-disabled {
+            display: inline-flex;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(
+                135deg,
+                rgba(34, 197, 94, 0.1) 0%,
+                rgba(21, 128, 61, 0.1) 100%
+            );
+            color: rgba(255, 255, 255, 0.4);
+            border: 2px solid rgba(34, 197, 94, 0.2);
+            border-radius: 2rem;
+            cursor: not-allowed;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tech-card {
+            position: relative;
+            padding: 2.5rem;
+            background: linear-gradient(
+                135deg,
+                rgba(34, 197, 94, 0.05) 0%,
+                rgba(21, 128, 61, 0.05) 100%
+            );
+            border: 2px solid rgba(34, 197, 94, 0.1);
+            border-radius: 2.5rem;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow: hidden;
+        }
+
+        .tech-card:hover {
+            border-color: rgba(34, 197, 94, 0.3);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow:
+                0 30px 60px -15px rgba(34, 197, 94, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .floating-blocks {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .block-icon {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            color: rgba(34, 197, 94, 0.05);
+            animation: float 10s ease-in-out infinite;
+            animation-delay: var(--delay);
+            left: var(--x);
+            top: var(--y);
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-40px) rotate(15deg);
+            }
+        }
+
+        @keyframes pulse-slow {
+            0%,
+            100% {
+                opacity: 0.08;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.12;
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes pulse-slower {
+            0%,
+            100% {
+                opacity: 0.06;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.1;
+                transform: scale(1.15);
+            }
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 8s ease-in-out infinite;
+        }
+
+        .animate-pulse-slower {
+            animation: pulse-slower 10s ease-in-out infinite;
+        }
+
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 0, 0, 0.5) 51%,
+                transparent 51%
+            );
+            background-size: 100% 4px;
+        }
+
+        .vignette {
+            background: radial-gradient(circle, transparent 50%, black 150%);
+        }
+
+        .bot-patrol {
+            animation:
+                patrol 20s linear infinite,
+                bounce 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes patrol {
+            0% {
+                left: -5%;
+                transform: scaleX(1);
+            }
+            49.9% {
+                transform: scaleX(1);
+            }
+            50% {
+                left: 105%;
+                transform: scaleX(-1);
+            }
+            99.9% {
+                transform: scaleX(-1);
+            }
+            100% {
+                left: -5%;
+                transform: scaleX(1);
+            }
+        }
+
+        @keyframes bounce {
+            from {
+                bottom: 0px;
+            }
+            to {
+                bottom: 4px;
+            }
+        }
+    </style>
+</AppLayout>

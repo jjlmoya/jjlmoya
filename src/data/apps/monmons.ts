@@ -5,6 +5,7 @@ export const monmons: Application = {
     title: "Monmons",
     subtitle: "Conecta con criaturas únicas.",
     category: "Juegos",
+    isGame: true,
     theme: {
         primary: "hsl(102, 23%, 33%)",
         primaryGradient: "hsl(102, 23%, 33%)",

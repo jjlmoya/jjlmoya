@@ -58,6 +58,7 @@ export interface Application {
     title: string;
     subtitle: string;
     category: string;
+    isGame: boolean;
     theme: AppTheme;
     tagline: string;
     description: string;

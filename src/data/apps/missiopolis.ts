@@ -5,6 +5,7 @@ export const missiopolis: Application = {
     title: "Missiopolis: Crónicas Urbanas",
     subtitle: "Tu ciudad es un libro. Aprende a leerlo.",
     category: "Narrativa",
+    isGame: true,
     theme: {
         primary: "#3b82f6",
         primaryGradient: "#3b82f6",

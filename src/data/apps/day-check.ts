@@ -5,6 +5,7 @@ export const dayCheck: Application = {
     title: "Day Check",
     subtitle: "Contador de Días",
     category: "Productividad",
+    isGame: false,
     theme: {
         primary: "hsl(265, 80%, 65%)",
         primaryGradient: "hsl(265, 80%, 65%)",

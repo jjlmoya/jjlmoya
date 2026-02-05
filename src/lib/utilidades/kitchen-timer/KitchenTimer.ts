@@ -206,13 +206,32 @@ export class KitchenTimer extends EventTarget {
             this.element.querySelector(".icon-pause")?.classList.remove("hidden");
             if (btnText) btnText.textContent = "Pausar";
 
-            
-            btnToggle?.classList.remove("bg-slate-900", "dark:bg-white", "text-white", "dark:text-slate-900");
-            btnToggle?.classList.add("bg-orange-100", "dark:bg-orange-950/40", "text-orange-600", "dark:text-orange-400");
+            btnToggle?.classList.remove(
+                "bg-slate-900",
+                "dark:bg-white",
+                "text-white",
+                "dark:text-slate-900"
+            );
+            btnToggle?.classList.add(
+                "bg-orange-100",
+                "dark:bg-orange-950/40",
+                "text-orange-600",
+                "dark:text-orange-400"
+            );
 
             this.statusText.textContent = "Corriendo";
-            this.statusText.classList.remove("bg-orange-50", "dark:bg-orange-950/30", "text-orange-600", "dark:text-orange-400");
-            this.statusText.classList.add("bg-green-50", "dark:bg-green-950/30", "text-green-600", "dark:text-green-400");
+            this.statusText.classList.remove(
+                "bg-orange-50",
+                "dark:bg-orange-950/30",
+                "text-orange-600",
+                "dark:text-orange-400"
+            );
+            this.statusText.classList.add(
+                "bg-green-50",
+                "dark:bg-green-950/30",
+                "text-green-600",
+                "dark:text-green-400"
+            );
 
             Object.values(this.inputs).forEach((i) => (i.disabled = true));
         } else {
@@ -220,11 +239,31 @@ export class KitchenTimer extends EventTarget {
             this.element.querySelector(".icon-pause")?.classList.add("hidden");
             if (btnText) btnText.textContent = "Iniciar";
 
-            btnToggle?.classList.add("bg-slate-900", "dark:bg-white", "text-white", "dark:text-slate-900");
-            btnToggle?.classList.remove("bg-orange-100", "dark:bg-orange-950/40", "text-orange-600", "dark:text-orange-400");
+            btnToggle?.classList.add(
+                "bg-slate-900",
+                "dark:bg-white",
+                "text-white",
+                "dark:text-slate-900"
+            );
+            btnToggle?.classList.remove(
+                "bg-orange-100",
+                "dark:bg-orange-950/40",
+                "text-orange-600",
+                "dark:text-orange-400"
+            );
 
-            this.statusText.classList.remove("bg-green-50", "dark:bg-green-950/30", "text-green-600", "dark:text-green-400");
-            this.statusText.classList.add("bg-orange-50", "dark:bg-orange-950/30", "text-orange-600", "dark:text-orange-400");
+            this.statusText.classList.remove(
+                "bg-green-50",
+                "dark:bg-green-950/30",
+                "text-green-600",
+                "dark:text-green-400"
+            );
+            this.statusText.classList.add(
+                "bg-orange-50",
+                "dark:bg-orange-950/30",
+                "text-orange-600",
+                "dark:text-orange-400"
+            );
 
             if (this.remainingSeconds > 0 && this.remainingSeconds < this.totalSeconds) {
                 this.statusText.textContent = "Pausado";

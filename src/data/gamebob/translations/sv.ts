@@ -50,8 +50,7 @@ export const sv = {
         title_p2: "Villkor",
         description: "Spelets regler. Transparens och tydlighet för en bättre upplevelse.",
         last_update: "02/01/2026",
-        intro_p1:
-            "Välkommen till tjänsterna som tillhandahålls av Game Bob (Juan José López Moya).",
+        intro_p1: "Välkommen till tjänsterna som tillhandahålls av Game Bob (jjlmoya).",
         intro_p2:
             'Genom att ladda ner, installera eller använda någon av våra mobilapplikationer ("Applikationen") eller gå in på vår webbplats, godkänner du att vara bunden av följande Regler och Villkor. Om du inte godkänner dessa villkor, vänligen använd inte Applikationen.',
         sections: {
@@ -73,7 +72,7 @@ export const sv = {
             intellectual: {
                 title: "Immateriella rättigheter",
                 content:
-                    "Alla immateriella rättigheter till design, källkod, grafik, logotyper och innehåll i våra applikationer är Juan José López Moyas exklusiva egendom eller används under licens. Inga äganderätter överförs till användaren.",
+                    "Alla immateriella rättigheter till design, källkod, grafik, logotyper och innehåll i våra applikationer är jjlmoyas exklusiva egendom eller används under licens. Inga äganderätter överförs till användaren.",
             },
             privacy: {
                 title: "Integritet och dataskydd",

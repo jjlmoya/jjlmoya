@@ -50,7 +50,7 @@ export const zh = {
         title_p2: "条件",
         description: "游戏规则。透明和清晰，为您提供更好的体验。",
         last_update: "02/01/2026",
-        intro_p1: "欢迎使用由 Game Bob (Juan José López Moya) 提供的服务。",
+        intro_p1: "欢迎使用由 Game Bob (jjlmoya) 提供的服务。",
         intro_p2:
             "通过下载、安装或使用我们的任何移动应用程序（“应用程序”）或访问我们的网站，即表示您同意受以下条款和条件的约束。如果您不同意这些条款，请勿使用本应用程序。",
         sections: {
@@ -71,7 +71,7 @@ export const zh = {
             intellectual: {
                 title: "知识产权",
                 content:
-                    "我们应用程序的设计、源代码、图形、徽标和内容的所有知识产权均为 Juan José López Moya 的专有财产或经许可使用。不向用户转让任何所有权。",
+                    "我们应用程序的设计、源代码、图形、徽标和内容的所有知识产权均为 jjlmoya 的专有财产或经许可使用。不向用户转让任何所有权。",
             },
             privacy: {
                 title: "隐私与数据保护",

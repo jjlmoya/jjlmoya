@@ -5,6 +5,7 @@ export const fortuneCookie: Application = {
     title: "Galleta de la Fortuna",
     subtitle: "Tu destino en un solo toque.",
     category: "Estilo de Vida / Juegos",
+    isGame: true,
     theme: {
         primary: "#BF9F5A",
         primaryGradient: "linear-gradient(135deg, #BF9F5A 0%, #8C6E3D 100%)",

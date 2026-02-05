@@ -9,7 +9,6 @@ export function getWidgetHtml({
     cleanUrl: string;
     theme?: "light" | "dark";
 }) {
-
     let finalWidgetUrl = widgetUrl;
     const params = new URLSearchParams();
     if (theme) params.append("theme", theme);

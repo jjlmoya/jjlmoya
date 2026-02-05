@@ -50,7 +50,7 @@ export const pl = {
         title_p2: "warunki",
         description: "Zasady gry. Przejrzystość i klarowność dla lepszych wrażeń.",
         last_update: "02/01/2026",
-        intro_p1: "Witamy w usługach świadczonych przez Game Bob (Juan José López Moya).",
+        intro_p1: "Witamy w usługach świadczonych przez Game Bob (jjlmoya).",
         intro_p2:
             "Pobierając, instalując lub korzystając z którejkolwiek z naszych aplikacji mobilnych („Aplikacja”) lub uzyskując dostęp do naszej witryny internetowej, wyrażasz zgodę na przestrzeganie poniższych Warunków i postanowień. Jeśli nie zgadzasz się z tymi warunkami, prosimy o niekorzystanie z Aplikacji.",
         sections: {

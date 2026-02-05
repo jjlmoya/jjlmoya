@@ -50,7 +50,7 @@ export const it = {
         title_p2: "Condizioni",
         description: "Le regole del gioco. Trasparenza e chiarezza per un'esperienza migliore.",
         last_update: "02/01/2026",
-        intro_p1: "Benvenuti ai servizi forniti da Game Bob (Juan José López Moya).",
+        intro_p1: "Benvenuti ai servizi forniti da Game Bob (jjlmoya).",
         intro_p2:
             "Scaricando, installando o utilizzando una qualsiasi delle nostre applicazioni mobili (\"l'Applicazione\") o accedendo al nostro sito web, l'utente accetta di essere vincolato dai seguenti Termini e Condizioni. Se non si accettano questi termini, si prega di non utilizzare l'Applicazione.",
         sections: {
@@ -72,7 +72,7 @@ export const it = {
             intellectual: {
                 title: "Proprietà Intellettuale",
                 content:
-                    "Tutti i diritti di proprietà intellettuale sul design, il codice sorgente, la grafica, i loghi e il contenuto delle nostre applicazioni sono di proprietà esclusiva di Juan José López Moya o sono utilizzati su licenza. All'utente non viene trasferito alcun diritto di proprietà.",
+                    "Tutti i diritti di proprietà intellettuale sul design, il codice sorgente, la grafica, i loghi e il contenuto delle nostre applicazioni sono di proprietà esclusiva di jjlmoya o sono utilizzati su licenza. All'utente non viene trasferito alcun diritto di proprietà.",
             },
             privacy: {
                 title: "Privacy",
