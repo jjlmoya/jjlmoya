@@ -41,7 +41,7 @@ export function getWidgetHtml({
             });
             window._jjshow = update;
         })();
-    <${'/'}script>
+    ` + '</' + 'script>' + `
     <div id="${widgetId}-loader" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; z-index: 10; transition: opacity 0.4s;">
         <div style="width: 24px; height: 24px; border: 2px solid ${isDark ? "#18181b" : "#f3f4f6"}; border-top-color: #94a3b8; border-radius: 50%; animation: jjspin 0.8s linear infinite;"></div>
     </div>
