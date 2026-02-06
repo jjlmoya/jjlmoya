@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from "../../layouts/Layout.astro";
 import { Icon } from "astro-icon/components";
+import storedViews from "../../data/stored-views.json";
 
 const internalReports = [
     {
@@ -547,7 +548,7 @@ const internalReports = [
     </main>
 </Layout>
 
-<script>
+<script define:vars={{ storedViews }}>
     const APPS_SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbzKush6FWrPSw4U5QGWsdbUAePGSDuMgmG-TCoZsA0nLTYkBAFaRksZ8MuPGoOCAUG29Q/exec";
 
@@ -589,41 +590,55 @@ const internalReports = [
                 ? platformMatch[1].split(";")[0].toUpperCase().trim()
                 : "ANDROID_SR";
 
-        try {
-            const response = await fetch(APPS_SCRIPT_URL);
-            const footprints = await response.json();
-            if (totalEl) totalEl.textContent = footprints.length.toString().padStart(4, "0");
+        const storedFootprints = Array.isArray(storedViews) ? storedViews : [];
 
-            if (archive) {
-                const loader = document.getElementById("archive-loader");
-                if (loader) loader.remove();
+        const renderedTimestamps = new Set();
 
-                footprints.forEach((f: any) => {
-                    const block = document.createElement("div");
-                    block.className =
-                        "w-full aspect-square cursor-crosshair hover:scale-150 hover:z-50 transition-transform active:scale-95 duration-200 border border-black/5 hover:border-black/40";
-                    block.style.backgroundColor = f[1];
-                    block.onclick = (e) => {
-                        e.stopPropagation();
-                        showInspector(f);
-                    };
-                    archive.appendChild(block);
-                });
-            }
-        } catch (err) {
-            if (totalEl) totalEl.textContent = "0001";
+        function appendFootprints(data) {
+            if (!archive) return;
+
+            const loader = document.getElementById("archive-loader");
+            if (loader) loader.remove();
+
+            data.forEach((f) => {
+                if (renderedTimestamps.has(f[0])) return;
+
+                renderedTimestamps.add(f[0]);
+                const block = document.createElement("div");
+                block.className =
+                    "w-full aspect-square cursor-crosshair hover:scale-150 hover:z-50 transition-transform active:scale-95 duration-200 border border-black/5 hover:border-black/40";
+                block.style.backgroundColor = f[1];
+                block.onclick = (e) => {
+                    e.stopPropagation();
+                    showInspector(f);
+                };
+                archive.appendChild(block);
+            });
+
+            if (totalEl) totalEl.textContent = renderedTimestamps.size.toString().padStart(4, "0");
         }
 
-        function showInspector(data: any) {
+        appendFootprints(storedFootprints);
+
+        try {
+            const response = await fetch(APPS_SCRIPT_URL);
+            const fetchedFootprints = await response.json();
+
+            appendFootprints(fetchedFootprints);
+        } catch (err) {
+            console.error("Error fetching live footprints:", err);
+        }
+
+        function showInspector(data) {
             if (!inspector) return;
             inspector.classList.remove("hidden");
             document.body.style.overflow = "hidden";
-            document.getElementById("insp-color")!.style.backgroundColor = data[1];
-            document.getElementById("insp-id")!.textContent = data[4] || "SR-DE-DATA";
-            document.getElementById("insp-os")!.textContent =
+            document.getElementById("insp-color").style.backgroundColor = data[1];
+            document.getElementById("insp-id").textContent = data[4] || "SR-DE-DATA";
+            document.getElementById("insp-os").textContent =
                 data[2].split(")")[0].split("(").pop() || "LINUX_SERVER";
-            document.getElementById("insp-path")!.textContent = data[5] || "/ROOT";
-            document.getElementById("insp-time")!.textContent = new Date(data[0]).toLocaleString(
+            document.getElementById("insp-path").textContent = data[5] || "/ROOT";
+            document.getElementById("insp-time").textContent = new Date(data[0]).toLocaleString(
                 "es-ES"
             );
         }
@@ -642,7 +657,7 @@ const internalReports = [
 
         document.addEventListener("click", (e) => {
             if (inspector && !inspector.classList.contains("hidden")) {
-                const target = e.target as HTMLElement;
+                const target = e.target;
                 if (target === inspector) {
                     closeInspector();
                 }
