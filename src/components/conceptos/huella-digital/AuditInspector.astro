@@ -1,0 +1,235 @@
+---
+
+---
+
+<div id="inspector-overlay" class="hidden fixed inset-0 z-[200] bg-[#f4f1ea] backdrop-blur-sm">
+    <div
+        id="scanner-line"
+        class="absolute left-0 w-full h-px bg-red-600/50 shadow-[0_0_15px_rgba(255,0,0,0.5)] z-[210] hidden"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto w-full h-full p-6 lg:p-12 flex flex-col justify-center relative">
+        <div class="absolute top-8 right-8 flex gap-4">
+            <button
+                id="download-certificate"
+                class="bg-black text-white px-6 py-3 text-xs font-mono font-black hover:bg-black/80 transition-all border border-black group"
+            >
+                GENERAR CERTIFICADO [PNG]
+            </button>
+            <button
+                id="close-inspector-btn"
+                class="bg-red-600 text-white px-6 py-3 text-xs font-mono font-black hover:bg-black transition-all"
+            >
+                CERRAR [ESC]
+            </button>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-12 lg:gap-24 items-center">
+            <div id="inspector-visual" class="relative group">
+                <div
+                    id="insp-color-box"
+                    class="w-64 h-64 md:w-96 md:h-96 border-[12px] border-black shadow-[30px_30px_0px_rgba(0,0,0,0.05)] transition-transform duration-700"
+                >
+                </div>
+
+                <div
+                    class="absolute inset-0 bg-red-600/10 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                >
+                </div>
+            </div>
+
+            <div class="flex-grow space-y-12">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 bg-red-600"></div>
+                        <span
+                            class="text-[10px] font-mono font-black uppercase tracking-widest opacity-40"
+                            >Expediente de Sujeto</span
+                        >
+                    </div>
+                    <h2
+                        id="insp-id-title"
+                        class="text-6xl md:text-8xl font-black font-mono tracking-tighter uppercase italic leading-none"
+                    >
+                        SR-XXXX
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 font-mono">
+                    <div class="space-y-1 border-l-4 border-black/10 pl-6">
+                        <p class="text-[9px] font-black uppercase opacity-40">Entorno Técmico</p>
+                        <p id="insp-os-val" class="text-xl md:text-2xl font-black uppercase">---</p>
+                    </div>
+                    <div class="space-y-1 border-l-4 border-black/10 pl-6">
+                        <p class="text-[9px] font-black uppercase opacity-40">Punto de Captura</p>
+                        <p id="insp-path-val" class="text-xl md:text-2xl font-black uppercase">
+                            ---
+                        </p>
+                    </div>
+                    <div class="space-y-1 border-l-4 border-black/10 pl-6">
+                        <p class="text-[9px] font-black uppercase opacity-40">Marca Temporal</p>
+                        <p id="insp-time-val" class="text-xl md:text-2xl font-black uppercase">
+                            ---
+                        </p>
+                    </div>
+                    <div class="space-y-1 border-l-4 border-black/10 pl-6">
+                        <p class="text-[9px] font-black uppercase opacity-40">Hash Cromático</p>
+                        <p id="insp-hex-val" class="text-xl md:text-2xl font-black uppercase">
+                            #------
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="inspector-log"
+                    class="bg-black text-[10px] font-mono p-4 text-[#00ff00] h-32 overflow-hidden relative"
+                >
+                    <div id="log-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes scan {
+        0% {
+            top: 0;
+        }
+        100% {
+            top: 100vh;
+        }
+    }
+    .scanning #scanner-line {
+        display: block;
+        animation: scan 2s linear infinite;
+    }
+</style>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+    const overlay = document.getElementById("inspector-overlay");
+    const logContent = document.getElementById("log-content");
+    let currentData: any = null;
+
+    window.addEventListener("show-footprint-detail", (e: any) => {
+        const data = e.detail;
+        currentData = data;
+        if (!overlay) return;
+
+        overlay.classList.remove("hidden");
+        overlay.classList.add("scanning");
+        document.body.style.overflow = "hidden";
+
+        const colorBox = document.getElementById("insp-color-box");
+        const idTitle = document.getElementById("insp-id-title");
+        const osVal = document.getElementById("insp-os-val");
+        const pathVal = document.getElementById("insp-path-val");
+        const hexVal = document.getElementById("insp-hex-val");
+        const timeVal = document.getElementById("insp-time-val");
+
+        if (colorBox) colorBox.style.backgroundColor = data[1];
+        if (idTitle) idTitle.textContent = data[4] || "SR-DE-DATA";
+        if (osVal)
+            osVal.textContent = (data[2] || "").split(")")[0].split("(").pop() || "LINUX_SERVER";
+        if (pathVal) pathVal.textContent = data[5] || "/ROOT";
+        if (hexVal) hexVal.textContent = data[1].toUpperCase();
+        if (timeVal) timeVal.textContent = new Date(data[0]).toLocaleString("es-ES");
+
+        startLogEffect();
+
+        setTimeout(() => {
+            overlay.classList.remove("scanning");
+        }, 2000);
+    });
+
+    function startLogEffect() {
+        if (!logContent) return;
+        const messages = [
+            "> INICIANDO PROTOCOLO DE AUDITORÍA...",
+            `> LOCALIZANDO HASH ${currentData[1]}...`,
+            `> EXTRRAYENDO METADATOS DE AGENTE...`,
+            "> VERIFICANDO INTEGRIDAD DEL ARCHIVO...",
+            "> CAPTURA PASIVA CONFIRMADA.",
+            "> ESTADO: ARCHIVADO PERMANENTE.",
+        ];
+        logContent.innerHTML = "";
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i >= messages.length) {
+                clearInterval(interval);
+                return;
+            }
+            const p = document.createElement("p");
+            p.textContent = messages[i];
+            logContent.appendChild(p);
+            i++;
+        }, 300);
+    }
+
+    function closeInspector() {
+        if (!overlay) return;
+        overlay.classList.add("hidden");
+        document.body.style.overflow = "";
+    }
+
+    document.getElementById("close-inspector-btn")?.addEventListener("click", closeInspector);
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeInspector();
+    });
+
+    document.getElementById("download-certificate")?.addEventListener("click", async () => {
+        const btn = document.getElementById("download-certificate") as HTMLButtonElement;
+        const originalText = btn.textContent;
+        btn.textContent = "GENERANDO...";
+
+        try {
+            const cert = document.createElement("div");
+            cert.style.position = "absolute";
+            cert.style.left = "-9999px";
+            cert.style.width = "800px";
+            cert.style.height = "1000px";
+            cert.style.padding = "80px";
+            cert.style.backgroundColor = "#f4f1ea";
+            cert.style.fontFamily = "monospace";
+            cert.style.display = "flex";
+            cert.style.flexDirection = "column";
+            cert.style.alignItems = "center";
+            cert.style.justifyContent = "center";
+            cert.style.border = "20px solid black";
+
+            cert.innerHTML = `
+                <div style="border: 2px solid black; padding: 20px; width: 100%; text-align: center; margin-bottom: 40px;">
+                    <h1 style="font-size: 24px; font-weight: 900; margin: 0;">CERTIFICADO DE EXISTENCIA TÉCNICA</h1>
+                    <p style="font-size: 10px; opacity: 0.5;">REGISTRO CENTRAL DE HUELLAS // JJLMOYA.ES</p>
+                </div>
+                <div style="width: 400px; height: 400px; background-color: ${currentData[1]}; border: 10px solid black; margin-bottom: 40px;"></div>
+                <div style="width: 100%; text-align: left; line-height: 2;">
+                    <p><strong>SUJETO ID:</strong> ${currentData[4] || "SR-0000"}</p>
+                    <p><strong>COLOR REF:</strong> ${currentData[1].toUpperCase()}</p>
+                    <p><strong>ENTORNO:</strong> ${currentData[2]}</p>
+                    <p><strong>CAPTURA:</strong> ${new Date(currentData[0]).toLocaleString()}</p>
+                    <p><strong>AUTORIDAD:</strong> SISTEMA DE REGISTRO PASIVO ALPHA</p>
+                </div>
+                <div style="margin-top: 60px; width: 100%; border-top: 1px solid black; padding-top: 20px; font-size: 10px; text-align: justify; opacity: 0.6;">
+                    Este documento certifica que el rastro digital del sujeto ha sido capturado e indexado de forma inmutable en los servidores de jjlmoya.es. La persistencia técnica es irrevocable.
+                </div>
+            `;
+            document.body.appendChild(cert);
+
+            const canvas = await (window as any).html2canvas(cert);
+            const link = document.createElement("a");
+            link.download = `huella-${currentData[4] || "sr"}.webp`;
+            link.href = canvas.toDataURL();
+            link.click();
+
+            document.body.removeChild(cert);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            btn.textContent = originalText;
+        }
+    });
+</script>

@@ -1,0 +1,132 @@
+---
+
+---
+
+<section class="w-full max-w-6xl px-8 py-8">
+    <div
+        class="flex flex-col md:flex-row justify-between items-center gap-8 border-b-2 border-black pb-8"
+    >
+        <div class="space-y-2">
+            <h2 class="text-2xl font-black uppercase italic tracking-tighter">
+                Mural de Permanencia Colectiva
+            </h2>
+            <p class="text-[10px] font-mono font-bold uppercase opacity-40">
+                Estrato geológico de metadatos [Haga clic en un bloque para auditar]
+            </p>
+        </div>
+        <div class="flex items-center gap-6">
+            <div id="grid-controls" class="flex gap-2">
+                <button
+                    data-size="small"
+                    class="p-2 border border-black hover:bg-black hover:text-white transition-colors"
+                    title="Densidad Alta"
+                >
+                    <div class="w-3 h-3 border border-current"></div>
+                </button>
+                <button
+                    data-size="large"
+                    class="p-2 border border-black hover:bg-black hover:text-white transition-colors"
+                    title="Densidad Baja"
+                >
+                    <div class="w-5 h-5 border border-current"></div>
+                </button>
+            </div>
+            <div class="h-8 w-px bg-black/10"></div>
+            <div class="flex items-center gap-4 bg-black/5 px-4 py-2 border border-black/10">
+                <div class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></div>
+                <span class="text-[9px] font-mono font-bold uppercase tracking-widest"
+                    >Vista: Archivo Completo</span
+                >
+            </div>
+        </div>
+    </div>
+
+    <div
+        id="mural-container"
+        class="grid grid-cols-20 sm:grid-cols-30 md:grid-cols-50 gap-0 p-0 bg-white/20 border border-black/5 min-h-[600px] shadow-inner relative content-start"
+    >
+        <div
+            id="mural-loader"
+            class="absolute inset-0 flex flex-col items-center justify-center gap-6 z-10 bg-[#f4f1ea]/80 backdrop-blur-sm"
+        >
+            <div class="relative w-16 h-16">
+                <div class="absolute inset-0 border-4 border-black/10 rounded-full"></div>
+                <div
+                    class="absolute inset-0 border-4 border-black border-t-transparent rounded-full animate-spin"
+                >
+                </div>
+            </div>
+            <span class="text-[10px] font-mono font-black animate-pulse tracking-widest uppercase"
+                >Decodificando Archivo...</span
+            >
+        </div>
+    </div>
+
+    <div class="flex flex-col items-center gap-4 py-8">
+        <p
+            class="text-[9px] font-mono font-bold uppercase tracking-widest text-black/30 text-center"
+        >
+            Total de huellas indexadas en el estrato: <span id="mural-count" class="text-black/60"
+                >0</span
+            >
+        </p>
+    </div>
+</section>
+
+<script>
+    const container = document.getElementById("mural-container");
+    const muralCount = document.getElementById("mural-count");
+    const renderedTimestamps = new Set<number | string>();
+    const currentCols = 50;
+
+    type Footprint = [number | string, string];
+
+    function handleUpdate(footprints: Footprint[]) {
+        if (!container || !footprints) return;
+
+        if (footprints.length === renderedTimestamps.size) return;
+
+        const loader = document.getElementById("mural-loader");
+        if (loader) loader.remove();
+
+        container.innerHTML = "";
+        renderedTimestamps.clear();
+
+        footprints.forEach((f: Footprint) => {
+            if (renderedTimestamps.has(f[0])) return;
+            renderedTimestamps.add(f[0]);
+
+            const block = document.createElement("div");
+            block.className =
+                "w-full aspect-square cursor-crosshair hover:scale-150 hover:z-50 transition-all active:scale-95 duration-200 hover:border hover:border-black/60";
+            block.style.backgroundColor = f[1];
+            block.onclick = (e: MouseEvent) => {
+                e.stopPropagation();
+                window.dispatchEvent(new CustomEvent("show-footprint-detail", { detail: f }));
+            };
+            container.appendChild(block);
+        });
+
+        if (muralCount) muralCount.textContent = renderedTimestamps.size.toString();
+    }
+
+    window.addEventListener("footprints-updated", (e: any) => {
+        handleUpdate(e.detail);
+    });
+
+    if ((window as any).footprints) {
+        handleUpdate((window as any).footprints as Footprint[]);
+    }
+
+    document.querySelectorAll("#grid-controls button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            if (!container) return;
+            const size = btn.getAttribute("data-size");
+            if (size === "small") {
+                container.classList.replace("md:grid-cols-50", "md:grid-cols-80");
+            } else {
+                container.classList.replace("md:grid-cols-80", "md:grid-cols-50");
+            }
+        });
+    });
+</script>

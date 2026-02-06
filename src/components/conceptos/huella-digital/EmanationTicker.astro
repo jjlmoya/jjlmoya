@@ -1,0 +1,60 @@
+---
+
+---
+
+<div
+    class="w-full bg-black text-[#00ff00] font-mono text-[10px] py-1 overflow-hidden whitespace-nowrap border-y border-[#00ff00]/20 relative z-[100]"
+>
+    <div
+        id="ticker-content"
+        class="inline-block animate-[ticker_60s_linear_infinite] hover:[animation-play-state:paused] cursor-default"
+    >
+        <span class="opacity-50">[SISTEMA OPERATIVO]</span> ESPERANDO SEÑAL...
+        <span class="mx-8 opacity-20">||</span>
+        <span class="opacity-50">[SISTEMA OPERATIVO]</span> CONFIGURANDO RECEPCIÓN...
+    </div>
+</div>
+
+<style>
+    @keyframes ticker {
+        0% {
+            transform: translateX(100vw);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+</style>
+
+<script>
+    type Footprint = [number | string, string, string, string, string, string];
+
+    function handleUpdate(footprints: Footprint[]) {
+        const ticker = document.getElementById("ticker-content");
+        if (!ticker || !footprints || !footprints.length) return;
+
+        const recent = footprints.slice(-20).reverse();
+        ticker.innerHTML = recent
+            .map((f) => {
+                const id = f[4] || "SR-UNKNOWN";
+                const os = ((f[2] || "").split(")")[0].split("(").pop() || "UNKN").toUpperCase();
+                const color = f[1];
+                const path = f[5] || "/";
+                return `<span class="inline-flex items-center gap-2">
+                <span style="color: ${color}">●</span>
+                <span class="opacity-40">[${id}]</span> 
+                DETECTADO EN <span class="text-white">${path}</span> 
+                <span class="opacity-40">//</span> OS: ${os}
+            </span>`;
+            })
+            .join('<span class="mx-12 opacity-20">||</span>');
+    }
+
+    window.addEventListener("footprints-updated", (e: any) => {
+        handleUpdate(e.detail);
+    });
+
+    if ((window as any).footprints) {
+        handleUpdate((window as any).footprints);
+    }
+</script>

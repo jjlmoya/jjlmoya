@@ -1,0 +1,104 @@
+---
+
+---
+
+<section class="w-full py-16 bg-black text-white flex justify-center relative overflow-hidden">
+    <div
+        class="absolute inset-0 opacity-10 pointer-events-none grayscale contrast-150 mix-blend-overlay"
+    >
+        <div class="w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+    </div>
+
+    <div
+        class="max-w-4xl w-full px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10"
+    >
+        <div class="lg:col-span-12 mb-12 text-center">
+            <span class="text-xs font-mono font-bold tracking-[0.6em] uppercase opacity-40"
+                >SECCIÓN 02 // Auditoría del Sujeto</span
+            >
+            <h2
+                class="text-4xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter italic mt-4"
+            >
+                Usted es su Propio Rastro
+            </h2>
+        </div>
+
+        <div
+            class="lg:col-span-11 xl:lg:col-span-7 p-12 border-2 border-white/20 bg-white/5 backdrop-blur-sm space-y-12"
+        >
+            <div class="space-y-10">
+                <div>
+                    <p class="text-[10px] font-mono font-bold uppercase opacity-30 mb-2">
+                        Identificador Gubernamental
+                    </p>
+                    <p
+                        id="user-id-val"
+                        class="text-5xl font-black font-mono tracking-tighter text-yellow-400"
+                    >
+                        SR-XXXX
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-10 font-mono text-[10px] uppercase">
+                    <div class="space-y-1">
+                        <p class="opacity-30">Cromatismo</p>
+                        <p id="user-hex-val" class="font-bold text-lg">#FFFFFF</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="opacity-30">Procedencia</p>
+                        <p id="user-os-val" class="font-bold text-lg">UNKN-OS</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/10 flex items-center gap-4">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <p class="text-[9px] font-mono font-bold uppercase tracking-widest">
+                    Sujeto verificado y archivado con éxito.
+                </p>
+            </div>
+        </div>
+
+        <div class="lg:col-span-11 xl:lg:col-span-5 flex flex-col items-center gap-6">
+            <div
+                id="user-aura-box"
+                class="w-full aspect-square border-8 border-white shadow-[0_0_100px_rgba(255,255,255,0.1)] transition-colors duration-1000"
+            >
+            </div>
+            <p
+                class="text-[10px] font-mono font-bold uppercase tracking-widest text-center opacity-40"
+            >
+                Su huella cromática en jjlmoya.es
+            </p>
+        </div>
+    </div>
+</section>
+
+<script>
+    function updateSelfIdentity(data?: any) {
+        const localData = data || JSON.parse(localStorage.getItem("jjlmoya_footprint_v5") || "{}");
+        if (!localData.id) return;
+
+        const myColor = localData.color || "#cccccc";
+        const myId = localData.id;
+
+        const aura = document.getElementById("user-aura-box");
+        const hex = document.getElementById("user-hex-val");
+        const id = document.getElementById("user-id-val");
+        const os = document.getElementById("user-os-val");
+
+        if (aura) aura.style.backgroundColor = myColor;
+        if (hex) hex.textContent = myColor.toUpperCase();
+        if (id) id.textContent = myId;
+
+        const platformMatch = navigator.userAgent.match(/\(([^)]+)\)/);
+        if (os)
+            os.textContent = platformMatch
+                ? platformMatch[1].split(";")[0].toUpperCase().trim()
+                : "ANDROID_SR";
+    }
+
+    window.addEventListener("user-id-ready", (e: any) => {
+        updateSelfIdentity(e.detail);
+    });
+
+    updateSelfIdentity();
+</script>
