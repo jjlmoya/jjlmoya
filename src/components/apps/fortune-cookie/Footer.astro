@@ -1,0 +1,84 @@
+---
+import { Icon } from "astro-icon/components";
+import type { Application } from "../../../types/apps";
+
+interface Props {
+    app: Application;
+}
+
+const { app } = Astro.props;
+---
+
+<footer class="relative py-24 px-6 bg-black text-center overflow-hidden">
+    <div
+        class="absolute inset-0 pointer-events-none bg-radial from-[#BF9F5A]/5 to-transparent blur-[100px]"
+    >
+    </div>
+
+    <div class="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
+        <div class="mb-12">
+            <h3 class="text-4xl md:text-6xl font-serif font-black text-[#F2E5BD] mb-4">
+                ¿Te sumas?
+            </h3>
+            <p class="text-xl font-light text-white/50 max-w-lg mx-auto">
+                Tu racha empieza con un solo clic.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-6">
+            {
+                app.stores.appStore && (
+                    <a href={app.stores.appStore} target="_blank" class="premium-btn-large group">
+                        <Icon name="mdi:apple" class="w-8 h-8 mr-4 text-[#F2E5BD]" />
+                        <div class="text-left">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest opacity-50 text-[#F2E5BD]">
+                                Descargar en
+                            </span>
+                            <span class="text-xl font-bold text-[#F2E5BD]">App Store</span>
+                        </div>
+                    </a>
+                )
+            }
+            {
+                app.stores.googlePlay && (
+                    <a href={app.stores.googlePlay} target="_blank" class="premium-btn-large group">
+                        <Icon name="mdi:google-play" class="w-8 h-8 mr-4 text-[#F2E5BD]" />
+                        <div class="text-left">
+                            <span class="block text-[10px] font-bold uppercase tracking-widest opacity-50 text-[#F2E5BD]">
+                                Descargar en
+                            </span>
+                            <span class="text-xl font-bold text-[#F2E5BD]">Google Play</span>
+                        </div>
+                    </a>
+                )
+            }
+        </div>
+    </div>
+</footer>
+
+<style>
+    .premium-btn-large {
+        display: inline-flex;
+        align-items: center;
+        padding: 1.5rem 3rem;
+        background: transparent;
+        color: #f2e5bd;
+        border: 1px solid #bf9f5a;
+        border-radius: 100px;
+        text-decoration: none;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .premium-btn-large:hover {
+        background: #bf9f5a;
+        color: black;
+        transform: translateY(-5px);
+        box-shadow: 0 20px 50px -15px rgba(191, 159, 90, 0.4);
+    }
+
+    .premium-btn-large:hover :global(span),
+    .premium-btn-large:hover :global(svg) {
+        color: black !important;
+        opacity: 1 !important;
+    }
+</style>

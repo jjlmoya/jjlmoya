@@ -82,6 +82,7 @@ export interface Application {
     features: AppFeature[];
     highlights: AppHighlight[];
     videos?: string[];
+    shorts?: string[];
 
     bannerText?: string;
     hasDetailPage?: boolean;

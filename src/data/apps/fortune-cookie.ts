@@ -25,11 +25,11 @@ export const fortuneCookie: Application = {
         shadowPrimary: "0 10px 40px -12px rgba(191, 159, 90, 0.25)",
         shadowCard: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
     },
-    tagline: "El azar es solo el principio.",
+    tagline: "La mayoría no sabe esperar. Tú sí.",
     description:
-        "Hay secretos que solo se revelan una vez al día. Encuentra lo inalcanzable, colecciona lo efímero y domina tu racha en un ritual de búsqueda constante.",
+        "Un solo toque al día. Haz que cuente. No coleccionas frases, coleccionas constancia. Si fallas un día, tu altar se apaga.",
     philosophy:
-        "Esta no es una aplicación de fortuna; es un manifiesto contra lo previsible. En un mundo de ruido, te damos un solo toque al día para cazar lo que otros nunca verán: galletas que solo existen en la sombra y papeles que brillan como oro puro.",
+        "Esta no es una aplicación de fortuna; es un manifiesto contra lo previsible. En un mundo de dopamina rápida, te damos un solo toque al día. Caza lo que otros nunca verán: galletas de Jade, Oro y Negro que solo existen en la sombra.",
     concept: {
         label: "El Manifiesto",
         main: "DOMINA",
@@ -78,6 +78,7 @@ export const fortuneCookie: Application = {
     features: [],
     highlights: [],
     videos: ["_qaAX3q_IYQ", "AcQFcZsEUT4"],
+    shorts: ["xLaoqTuhaHw", "yMzMi6loU14"],
     bannerText:
         "Tu destino te espera. Esta utilidad ahora es una App con galletas raras y más funciones.",
     hasDetailPage: true,

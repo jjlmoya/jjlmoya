@@ -1,0 +1,147 @@
+---
+import { Icon } from "astro-icon/components";
+import QRCode from "qrcode";
+import type { Application } from "../../../types/apps";
+
+interface Props {
+    app: Application;
+}
+
+const { app } = Astro.props;
+
+const qrCodeUrl = await QRCode.toDataURL(
+    "https://www.jjlmoya.es/apps/galleta-de-la-fortuna/descarga/",
+    {
+        color: {
+            dark: "#BF9F5A",
+            light: "#00000000",
+        },
+        margin: 1,
+        width: 200,
+    }
+);
+---
+
+<section
+    class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden pt-20"
+>
+    <div class="absolute inset-0 pointer-events-none">
+        <div
+            class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#BF9F5A] opacity-[0.05] blur-[100px] rounded-full animate-pulse-slow"
+        >
+        </div>
+        <div
+            class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#BF9F5A] opacity-[0.03] blur-[120px] rounded-full animate-pulse-slow delay-1000"
+        >
+        </div>
+    </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
+        <div class="mb-12 relative group cursor-default">
+            <div
+                class="absolute inset-0 bg-[#BF9F5A] blur-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-700"
+            >
+            </div>
+            <img
+                src={app.media.icon}
+                alt={app.title}
+                class="w-32 h-32 md:w-36 md:h-36 rounded-[2.5rem] relative z-10 shadow-2xl border border-white/10 group-hover:scale-105 transition-transform duration-500"
+            />
+        </div>
+
+        <h1
+            class="text-5xl md:text-7xl lg:text-8xl font-serif font-black tracking-tight mb-8 leading-tight"
+        >
+            <span
+                class="bg-gradient-to-b from-[#F2E5BD] to-[#BF9F5A] bg-clip-text text-transparent"
+            >
+                {app.tagline}
+            </span>
+        </h1>
+
+        <p class="text-xl md:text-2xl font-light text-white/60 max-w-2xl mb-12 leading-relaxed">
+            {app.description}
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+            {
+                app.stores.appStore && (
+                    <a href={app.stores.appStore} target="_blank" class="premium-btn group">
+                        <Icon
+                            name="mdi:apple"
+                            class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform"
+                        />
+                        <span>App Store</span>
+                    </a>
+                )
+            }
+            {
+                app.stores.googlePlay && (
+                    <a href={app.stores.googlePlay} target="_blank" class="premium-btn group">
+                        <Icon
+                            name="mdi:google-play"
+                            class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform"
+                        />
+                        <span>Google Play</span>
+                    </a>
+                )
+            }
+        </div>
+
+        <div class="mt-12 group relative hidden md:block">
+            <div
+                class="absolute inset-0 bg-[#BF9F5A] blur-xl opacity-20 group-hover:opacity-40 transition-opacity rounded-xl"
+            >
+            </div>
+            <div
+                class="relative bg-black/80 backdrop-blur-sm p-4 rounded-xl border border-[#BF9F5A]/30 flex flex-col items-center gap-2 group-hover:scale-105 transition-transform duration-300"
+            >
+                <img src={qrCodeUrl} alt="Escanear para descargar" class="w-32 h-32 opacity-90" />
+                <span class="text-[10px] font-bold uppercase tracking-widest text-[#F2E5BD]/70"
+                    >Escanear para descargar</span
+                >
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
+        <Icon name="mdi:chevron-down" class="w-8 h-8 text-[#BF9F5A]" />
+    </div>
+</section>
+
+<style>
+    .premium-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: #bf9f5a;
+        color: black;
+        border-radius: 100px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        box-shadow: 0 10px 30px -10px rgba(191, 159, 90, 0.5);
+    }
+
+    .premium-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px -10px rgba(191, 159, 90, 0.7);
+        filter: brightness(1.1);
+    }
+
+    .animate-pulse-slow {
+        animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            opacity: 0.05;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.1;
+            transform: scale(1.1);
+        }
+    }
+</style>
