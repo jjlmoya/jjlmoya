@@ -25,19 +25,19 @@ export const lexiCrash: Application = {
         shadowPrimary: "0 10px 40px -12px rgba(0, 210, 255, 0.25)",
         shadowCard: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
     },
-    tagline: "Combina letras, forma palabras y evita el colapso.",
+    tagline: "El Tetris de las palabras ha llegado.",
     description:
-        "Juego de palabras de alta velocidad. Forma palabras antes de que las letras colapsen el tablero. Modo Crash, Relax, Palabra del Día y retos diarios. Pon a prueba tu vocabulario y agilidad mental.",
+        "Pon a prueba tu agilidad mental en el puzzle de palabras definitivo. Combina letras a toda velocidad, supera retos globales y evita que el tablero colapse. ¿Serás capaz de dominar el caos?",
     philosophy:
-        "LexiCrash ofrece una interfaz limpia y optimizada para una respuesta táctil inmediata. Sin distracciones innecesarias, el enfoque está totalmente en la jugabilidad y la agilidad visual. El catálogo de modos de juego se actualiza periódicamente para ofrecer nuevos retos mecánicos a la comunidad.",
+        "LexiCrash no es solo un juego de palabras; es una prueba de reflejos y estrategia visual. Hemos diseñado una experiencia táctil pura, donde cada milisegundo cuenta y la satisfacción de una palabra bien formada se siente en cada animación.",
     concept: {
-        label: "El Desafío",
-        main: "DOMINA EL",
-        highlighted: "VOCABULARIO.",
+        label: "La Experiencia",
+        main: "DOMINA EL CAOS,",
+        highlighted: "LIBERA LAS PALABRAS.",
     },
     benefitsTitle: {
-        main: "Supera todos los",
-        highlighted: "modos de juego",
+        main: "Supera tus propios",
+        highlighted: "límites mentales",
     },
     quote: {
         text: "La agilidad mental es el puente entre el caos de las letras y la victoria de las palabras.",
@@ -50,6 +50,7 @@ export const lexiCrash: Application = {
         screenshots: [
             "/assets/apps/lexi-crash/screenshot_2.webp",
             "/assets/apps/lexi-crash/screenshot_3.webp",
+            "/assets/apps/lexi-crash/screenshot_1.webp",
         ],
     },
     stores: {
@@ -59,40 +60,44 @@ export const lexiCrash: Application = {
     benefits: [
         {
             title: "Modo Crash",
-            text: "El desafío insignia. Las letras caen sin pausa y debes formar palabras para despejar el tablero antes de que alcancen el límite.",
+            text: "Adrenalina pura. Las letras caen sin pausa. Despeja el tablero antes de que el colapso sea inevitable.",
             icon: "mdi:lightning-bolt",
         },
         {
             title: "Modo Relax",
-            text: "Concentración sin límites de tiempo. Resuelve el tablero mediante lógica y estrategia sin la presión de la caída constante.",
-            icon: "mdi:emoticon-happy",
+            text: "Estrategia sin presión. Tómate tu tiempo para encontrar las palabras más complejas y limpiar el tablero.",
+            icon: "mdi:weather-sunny",
         },
         {
-            title: "Palabra del Día",
-            text: "Un reto global diario. Encuentra la palabra secreta en un formato de deducción único para todos los jugadores.",
+            title: "Reto Diario",
+            text: "Una palabra, un tablero, todo el mundo. Compite cada día en el formato de deducción global.",
             icon: "mdi:calendar-star",
         },
         {
-            title: "Retos y Progresión",
-            text: "Sistema de Retos Fijos diseñados para testear habilidades específicas en configuraciones de tablero determinadas.",
-            icon: "mdi:trophy",
+            title: "Maestría Visual",
+            text: "Interfaz optimizada para una respuesta táctil inmediata y una estética neon inmersiva.",
+            icon: "mdi:eye",
         },
     ],
     features: [
         {
-            title: "Estadísticas Detalladas",
-            text: "Panel para monitorizar tu evolución, récords personales y análisis de rendimiento por cada modo.",
+            title: "Progresión Personal",
+            text: "Visualiza tu evolución, rompe tus propios récords y conviértete en un maestro del vocabulario.",
         },
         {
-            title: "Interfaz Optimizada",
-            text: "Experiencia táctil inmediata y enfocada totalmente en la agilidad visual y jugabilidad.",
+            title: "Retos de Comunidad",
+            text: "Únete a miles de jugadores en los desafíos diarios y demuestra quién tiene el léxico más rápido.",
         },
         {
-            title: "Actualizaciones Regulares",
-            text: "Nuevos modos de juego y retos mecánicos añadidos periódicamente para la comunidad.",
+            title: "Modos en Expansión",
+            text: "Actualizaciones periódicas con nuevas mecánicas y tableros diseñados para testear tu ingenio.",
         },
     ],
-    highlights: [],
+    highlights: [
+        { label: "Jugadores", value: "+10k" },
+        { label: "Palabras", value: "+1M" },
+        { label: "Rating", value: "4.8" },
+    ],
     videos: [],
     bannerText: "¡LexiCrash ya disponible en Google Play!",
     hasDetailPage: true,

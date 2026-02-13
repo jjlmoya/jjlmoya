@@ -27,7 +27,7 @@ export const fortuneCookie: Application = {
     },
     tagline: "La mayoría no sabe esperar. Tú sí.",
     description:
-        "Un solo toque al día. Haz que cuente. No coleccionas frases, coleccionas constancia. Si fallas un día, tu altar se apaga.",
+        "Un solo toque al día. Haz que cuente. No coleccionas frases, coleccionas constancia.",
     philosophy:
         "Esta no es una aplicación de fortuna; es un manifiesto contra lo previsible. En un mundo de dopamina rápida, te damos un solo toque al día. Caza lo que otros nunca verán: galletas de Jade, Oro y Negro que solo existen en la sombra.",
     concept: {

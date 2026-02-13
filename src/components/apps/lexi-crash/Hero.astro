@@ -1,0 +1,169 @@
+---
+import { Icon } from "astro-icon/components";
+import QRCode from "qrcode";
+
+const googlePlayUrl = "https://play.google.com/store/apps/details?id=com.gamebob.lexicrash";
+const qrCodeUrl = await QRCode.toDataURL("https://www.jjlmoya.es/apps/lexi-crash/descarga/", {
+    color: {
+        dark: "#00D9FF",
+        light: "#00000000",
+    },
+    margin: 1,
+    width: 300,
+});
+---
+
+<section class="relative pt-32 pb-20 px-6 z-10">
+    <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+        <div
+            class="mb-8 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#00D9FF]/10 border border-[#00D9FF]/30 backdrop-blur-md animate-bounce-slow"
+        >
+            <span class="relative flex h-3 w-3">
+                <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00D9FF] opacity-75"
+                ></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-[#00D9FF]"></span>
+            </span>
+            <span class="text-xs font-black uppercase tracking-widest text-[#00D9FF]">
+                Palabra del día disponible ahora
+            </span>
+        </div>
+
+        <h1
+            class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4 leading-none arcade-title uppercase"
+        >
+            LEXI<span class="text-[#00D9FF] glow-text">CRASH</span>
+        </h1>
+
+        <p class="text-xl md:text-2xl font-bold text-white/60 mb-12 max-w-2xl balance-text">
+            El puzzle de palabras definitivo. Un juego rápido, infinito y diseñado para mentes
+            ágiles.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-6 mb-20">
+            <a href={googlePlayUrl} target="_blank" class="arcade-btn-cta group">
+                <Icon name="mdi:google-play" class="w-8 h-8 mr-4" />
+                <div class="text-left">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest opacity-70"
+                        >Empieza ahora en</span
+                    >
+                    <span class="text-2xl font-black">Google Play</span>
+                </div>
+            </a>
+
+            <div class="arcade-btn-cta-disabled group">
+                <Icon name="mdi:apple" class="w-8 h-8 mr-4 opacity-40" />
+                <div class="text-left">
+                    <span class="block text-[10px] font-bold uppercase tracking-widest opacity-40"
+                        >Próximamente</span
+                    >
+                    <span class="text-2xl font-black opacity-40">App Store</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden lg:flex flex-col items-center gap-4 animate-fade-in">
+            <div class="relative group">
+                <div
+                    class="absolute -inset-4 bg-[#00D9FF] opacity-20 blur-2xl group-hover:opacity-40 transition-opacity rounded-3xl"
+                >
+                </div>
+                <div
+                    class="relative p-6 bg-[#050B14]/80 backdrop-blur-xl border border-[#00D9FF]/30 rounded-3xl shadow-2xl overflow-hidden"
+                >
+                    <img
+                        src={qrCodeUrl}
+                        alt="Escanear para descargar"
+                        class="w-48 h-48 opacity-90 group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div
+                        class="absolute bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00D9FF] to-transparent opacity-50"
+                    >
+                    </div>
+                </div>
+            </div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#00D9FF] opacity-60">
+                Escanea para descargar
+            </p>
+        </div>
+    </div>
+</section>
+
+<style>
+    .arcade-title {
+        text-shadow: 0 0 40px rgba(0, 217, 255, 0.2);
+        letter-spacing: -0.06em;
+        line-height: 0.85;
+    }
+
+    .glow-text {
+        text-shadow:
+            0 0 30px rgba(0, 217, 255, 1),
+            0 0 60px rgba(0, 217, 255, 0.5);
+    }
+
+    .arcade-btn-cta {
+        display: inline-flex;
+        align-items: center;
+        padding: 1.5rem 2.5rem;
+        background: linear-gradient(135deg, #00d9ff 0%, #0088cc 100%);
+        color: white;
+        border-radius: 1.5rem;
+        text-decoration: none;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        box-shadow: 0 15px 40px -10px rgba(0, 217, 255, 0.6);
+        position: relative;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .arcade-btn-cta:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 25px 50px -10px rgba(0, 217, 255, 0.8);
+        filter: brightness(1.1);
+    }
+
+    .arcade-btn-cta-disabled {
+        display: inline-flex;
+        align-items: center;
+        padding: 1.5rem 2.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.5rem;
+        cursor: not-allowed;
+    }
+
+    .animate-bounce-slow {
+        animation: bounce-slow 4s ease-in-out infinite;
+    }
+
+    @keyframes bounce-slow {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 1s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .balance-text {
+        text-wrap: balance;
+    }
+</style>

@@ -1,0 +1,362 @@
+---
+import { Icon } from "astro-icon/components";
+
+const roadmapItems = [
+    {
+        id: "game-modes",
+        displayId: "01",
+        title: "Modos de juego",
+        description: "Nuevas mecánicas y tableros temáticos para expandir la experiencia táctil.",
+        icon: "mdi:controller",
+        color: "#00D9FF",
+        tag: "Inmersión",
+    },
+    {
+        id: "story-mode",
+        displayId: "02",
+        title: "Modo Historia",
+        description: "Un viaje épico a través del léxico con desafíos narrativos y desbloqueables.",
+        icon: "mdi:book-open-variant",
+        color: "#FF4500",
+        tag: "Narrativa",
+    },
+    {
+        id: "rankings",
+        displayId: "03",
+        title: "Rankings",
+        description:
+            "Compite con el mundo entero y demuestra quién es el verdadero maestro de las palabras.",
+        icon: "mdi:trophy",
+        color: "#FFD700",
+        tag: "Social",
+    },
+];
+---
+
+<section class="py-32 px-6 relative z-10 overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-24 relative">
+            <h2
+                class="text-6xl md:text-8xl font-black mb-6 tracking-tighter leading-none uppercase"
+            >
+                VOTA TU <span class="text-[#00D9FF] glow-text">PRIORIDAD</span>
+            </h2>
+            <p class="text-xl md:text-2xl text-white/40 max-w-2xl mx-auto font-medium balance-text">
+                Queremos escucharte. Elige qué sección deberíamos priorizar en la próxima
+                actualización.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8">
+            {
+                roadmapItems.map((item) => (
+                    <button
+                        class="module-card group vote-card text-left"
+                        data-id={item.id}
+                        aria-pressed="false"
+                    >
+                        <div class="module-id">{item.displayId}</div>
+                        <div class="module-glow" style={`--accent: ${item.color}`} />
+
+                        <div class="relative z-10 flex flex-col h-full pointer-events-none">
+                            <div class="flex items-center justify-between mb-10">
+                                <div class="module-icon-wrap" style={`--accent: ${item.color}`}>
+                                    <Icon name={item.icon} class="w-10 h-10" />
+                                </div>
+                                <div class="status-badge" style={`--accent: ${item.color}`}>
+                                    <span class="dot animate-pulse" />
+                                    {item.tag}
+                                </div>
+                            </div>
+
+                            <div class="flex-grow">
+                                <h3 class="text-3xl font-black mb-4 uppercase tracking-tighter text-white group-hover:text-[#00D9FF] transition-colors duration-500">
+                                    {item.title}
+                                </h3>
+                                <p class="text-xl text-white/40 leading-relaxed group-hover:text-white/70 transition-colors duration-500">
+                                    {item.description}
+                                </p>
+                            </div>
+
+                            <div class="mt-12 flex items-center justify-between">
+                                <div class="vote-status-text text-[10px] font-black uppercase tracking-[0.4em] text-white/10 group-hover:text-[#00D9FF]/40 transition-colors">
+                                    Haz clic para votar
+                                </div>
+                                <div class="w-10 h-[1px] bg-white/10 group-hover:w-20 group-hover:bg-[#00D9FF] transition-all duration-700" />
+                            </div>
+                        </div>
+
+                        <div class="voted-seal">
+                            <div class="seal-inner">
+                                <Icon name="mdi:check-decagram" class="w-12 h-12" />
+                            </div>
+                        </div>
+
+                        <div class="corner top-l" />
+                        <div class="corner top-r" />
+                        <div class="corner bot-l" />
+                        <div class="corner bot-r" />
+                    </button>
+                ))
+            }
+        </div>
+
+        <div class="mt-32 text-center">
+            <div
+                class="feedback-trigger group inline-flex items-center gap-6 px-10 py-5 rounded-2xl bg-[#050B14] border border-white/5 transition-all duration-500"
+            >
+                <div class="relative flex items-center gap-6">
+                    <Icon
+                        name="mdi:message-fast"
+                        class="w-8 h-8 text-[#00D9FF] group-hover:rotate-12 transition-transform"
+                    />
+                    <div class="text-left">
+                        <p class="text-sm font-black uppercase tracking-widest text-white">
+                            ¿Tienes una idea?
+                        </p>
+                        <p
+                            class="text-xs text-white/30 group-hover:text-[#00D9FF]/60 transition-colors"
+                        >
+                            Escríbenos y ayúdanos a mejorar LexiCrash.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .glow-text {
+        text-shadow:
+            0 0 30px rgba(0, 217, 255, 0.6),
+            0 0 60px rgba(0, 217, 255, 0.3);
+    }
+
+    .module-card {
+        position: relative;
+        padding: 3.5rem;
+        background:
+            radial-gradient(circle at top left, rgba(255, 255, 255, 0.03) 0%, transparent 70%),
+            #050b14;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 1.5rem;
+        height: 100%;
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .module-card:hover {
+        transform: translateY(-15px);
+        border-color: rgba(255, 255, 255, 0.15);
+        background:
+            radial-gradient(circle at top left, rgba(255, 255, 255, 0.05) 0%, transparent 70%),
+            #0a1628;
+        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.5);
+    }
+
+    .voted-seal {
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 30;
+        opacity: 0;
+        transform: scale(3) rotate(-30deg);
+        pointer-events: none;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.4));
+    }
+
+    .seal-inner {
+        background: #00d9ff;
+        color: white;
+        padding: 0.5rem;
+        border-radius: 999px;
+        box-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
+        position: relative;
+    }
+
+    .module-card[data-voted="true"] .voted-seal {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+
+    .module-card[data-voted="true"] {
+        border-color: #00d9ff;
+        box-shadow: 0 0 40px rgba(0, 217, 255, 0.1);
+    }
+
+    .module-id {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        font-size: 5rem;
+        font-weight: 950;
+        color: white;
+        opacity: 0.02;
+        line-height: 0.8;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+    }
+
+    .module-card[data-voted="true"] .module-id {
+        opacity: 0;
+    }
+
+    .module-card:hover .module-id {
+        opacity: 0.05;
+    }
+
+    .module-glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% -20%, var(--accent) 0%, transparent 60%);
+        opacity: 0.03;
+        transition: opacity 0.6s ease;
+    }
+
+    .module-card:hover .module-glow {
+        opacity: 0.08;
+    }
+
+    .module-icon-wrap {
+        width: 5rem;
+        height: 5rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        transition: all 0.5s ease;
+        position: relative;
+    }
+
+    .module-card:hover .module-icon-wrap {
+        background: var(--accent);
+        color: black;
+        transform: scale(1.1);
+        box-shadow: 0 0 40px var(--accent);
+    }
+
+    .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 2rem;
+        color: var(--accent);
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        background: var(--accent);
+        border-radius: 9999px;
+        box-shadow: 0 0 10px var(--accent);
+    }
+
+    .corner {
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        border-color: rgba(255, 255, 255, 0.1);
+        transition: all 0.5s ease;
+        opacity: 0.5;
+    }
+
+    .top-l {
+        top: 1.5rem;
+        left: 1.5rem;
+        border-top: 2px solid;
+        border-left: 2px solid;
+    }
+    .top-r {
+        top: 1.5rem;
+        right: 1.5rem;
+        border-top: 2px solid;
+        border-right: 2px solid;
+    }
+    .bot-l {
+        bottom: 1.5rem;
+        left: 1.5rem;
+        border-bottom: 2px solid;
+        border-left: 2px solid;
+    }
+    .bot-r {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        border-bottom: 2px solid;
+        border-right: 2px solid;
+    }
+
+    .module-card:hover .corner {
+        border-color: #00d9ff;
+        width: 25px;
+        height: 25px;
+        opacity: 1;
+    }
+
+    .balance-text {
+        text-wrap: balance;
+    }
+</style>
+
+<script>
+    const STORAGE_KEY = "lexicrash_roadmap_vote";
+
+    const initVoting = () => {
+        const cards = document.querySelectorAll(".vote-card");
+        const storedVote = localStorage.getItem(STORAGE_KEY);
+
+        const updateUI = (votedId: string) => {
+            cards.forEach((card) => {
+                const id = card.getAttribute("data-id");
+                const statusText = card.querySelector(".vote-status-text");
+
+                if (id === votedId) {
+                    card.setAttribute("data-voted", "true");
+                    if (statusText) statusText.textContent = "Marcada como prioridad";
+                } else {
+                    card.setAttribute("data-voted", "false");
+                    if (statusText) statusText.textContent = "Haz clic para votar";
+                }
+            });
+        };
+
+        if (storedVote) {
+            updateUI(storedVote);
+        }
+
+        cards.forEach((card) => {
+            card.addEventListener("click", () => {
+                const id = card.getAttribute("data-id");
+                if (!id) return;
+
+                localStorage.setItem(STORAGE_KEY, id);
+                updateUI(id);
+
+                const htmlCard = card as HTMLElement;
+                htmlCard.style.transform = "scale(0.95)";
+                setTimeout(() => {
+                    htmlCard.style.transform = "";
+                }, 100);
+            });
+        });
+    };
+
+    initVoting();
+    document.addEventListener("astro:after-swap", initVoting);
+</script>
