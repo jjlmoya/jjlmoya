@@ -16,6 +16,7 @@ import { hi } from "./translations/hi";
 
 export type LegalTranslations = {
     privacy: {
+        discord: { title: string; subtitle: string };
         badge: string;
         title_p1: string;
         title_p2: string;

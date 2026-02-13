@@ -1,5 +1,6 @@
 export const zh = {
     privacy: {
+        discord: { title: "加入社区", subtitle: "官方服务器" },
         badge: "完全透明",
         title_p1: "隐私",
         title_p2: "政策",
@@ -74,6 +75,7 @@ export const zh = {
                     "我们应用程序的设计、源代码、图形、徽标和内容的所有知识产权均为 jjlmoya 的专有财产或经许可使用。不向用户转让任何所有权。",
             },
             privacy: {
+        discord: { title: "加入社区", subtitle: "官方服务器" },
                 title: "隐私与数据保护",
                 content:
                     "您的隐私对我们非常重要。应用程序的使用还受我们的隐私政策约束，该政策描述了我们如何收集、使用和共享信息（例如广告标识符或匿名使用数据）。",

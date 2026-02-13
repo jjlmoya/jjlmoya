@@ -1,5 +1,6 @@
 export const pl = {
     privacy: {
+        discord: { title: "Dołącz do społeczności", subtitle: "Oficjalny serwer" },
         badge: "Pełna przejrzystość",
         title_p1: "Polityka",
         title_p2: "prywatności",
@@ -75,6 +76,7 @@ export const pl = {
                     "Wszelkie prawa własności intelektualnej do projektu, kodu źródłowego, grafiki, logo i treści naszych aplikacji są wyłączną własnością Juana José Lópeza Moyi lub są używane na podstawie licencji. Żadne prawa własności nie są przenoszone na użytkownika.",
             },
             privacy: {
+        discord: { title: "Dołącz do społeczności", subtitle: "Oficjalny serwer" },
                 title: "Prywatność i ochrona danych",
                 content:
                     "Twoja prywatność jest dla nas ważna. Korzystanie z Aplikacji podlega również naszej Polityce prywatności, która opisuje, w jaki sposób gromadzimy, używamy i udostępniamy informacje (np. identyfikatory reklamowe lub anonimowe dane o użytkowaniu).",

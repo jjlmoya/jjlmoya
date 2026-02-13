@@ -1,5 +1,6 @@
 export const en = {
     privacy: {
+        discord: { title: "Join the community", subtitle: "Official Server" },
         badge: "Full Transparency",
         title_p1: "Privacy",
         title_p2: "Policy",

@@ -1,5 +1,6 @@
 export const pt = {
     privacy: {
+        discord: { title: "Junte-se à comunidade", subtitle: "Servidor Oficial" },
         badge: "Transparência Total",
         title_p1: "Política de",
         title_p2: "Privacidade",
@@ -75,6 +76,7 @@ export const pt = {
                     "Todos os direitos de propriedade intelectual sobre o design, código fonte, gráficos, logótipos e conteúdo das nossas aplicações são propriedade exclusiva de jjlmoya ou são utilizados sob licença. Não é transferido qualquer direito de propriedade para o utilizador.",
             },
             privacy: {
+        discord: { title: "Junte-se à comunidade", subtitle: "Servidor Oficial" },
                 title: "Privacidade e Proteção de Dados",
                 content:
                     "Sua privacidade é importante para nós. O uso da Aplicação também é regido pela nossa Política de Privacidade, que descreve como recolhemos, utilizamos e partilhamos a informação (por exemplo, identificadores de publicidade ou dados anónimos de utilização).",
