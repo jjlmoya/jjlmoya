@@ -1,0 +1,535 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="gamepad-minigame-wrapper w-full max-w-4xl mx-auto p-6 font-sans mt-12 mb-20">
+    <div
+        class="bg-slate-950 dark:bg-black rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-10 relative overflow-hidden min-h-[500px] flex flex-col items-center justify-center border border-white/5 text-white group"
+    >
+        <div
+            class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px] group-hover:bg-indigo-500/30 transition-all duration-700"
+        >
+        </div>
+        <div
+            class="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-500/20 rounded-full blur-[100px] group-hover:bg-emerald-500/30 transition-all duration-700"
+        >
+        </div>
+
+        <div
+            id="game-intro"
+            class="relative z-10 text-center animate-in fade-in zoom-in duration-500"
+        >
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 mb-6 shadow-2xl"
+            >
+                <Icon name="mdi:controller" class="w-10 h-10 text-emerald-400 animate-pulse" />
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tight">
+                ¿Reflejos <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400"
+                    >Pro Gamer</span
+                >?
+            </h2>
+            <p class="text-slate-400 mb-10 max-w-md mx-auto text-lg leading-relaxed">
+                Pon a prueba la latencia de tu mando y tu velocidad de reacción. Tienes <span
+                    class="text-white font-bold">30 segundos</span
+                > para dominar los botones.
+            </p>
+            <button
+                id="start-game-btn"
+                class="group/btn relative px-10 py-5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl font-black text-xl shadow-[0_10px_30px_rgba(16,185,129,0.3)] hover:shadow-[0_15px_40px_rgba(16,185,129,0.5)] hover:scale-105 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:pointer-events-none overflow-hidden"
+            >
+                <span class="relative z-10">¡EMPEZAR DESAFÍO!</span>
+                <div
+                    class="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"
+                >
+                </div>
+            </button>
+            <div
+                id="game-controller-warning"
+                class="mt-6 text-sm font-medium flex items-center justify-center gap-2"
+            >
+                <Icon name="mdi:alert-circle" class="w-4 h-4" />
+                Conecta un mando o usa el teclado
+            </div>
+        </div>
+
+        <div id="game-play" class="relative z-10 w-full hidden flex-col items-center">
+            <div class="flex justify-between items-center w-full mb-12">
+                <div class="flex flex-col">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-black"
+                        >Cronómetro</span
+                    >
+                    <div class="text-4xl font-mono font-black text-emerald-400" id="game-timer">
+                        30.0s
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-1 bg-white/10 rounded-full mb-2 mx-auto overflow-hidden">
+                        <div
+                            id="game-progress-bar"
+                            class="h-full bg-emerald-500 w-full transition-all duration-100 ease-linear"
+                        >
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-black"
+                        >Puntuación</span
+                    >
+                    <div class="text-4xl font-mono font-black text-white" id="game-score">000</div>
+                </div>
+            </div>
+
+            <div id="target-container" class="relative h-72 w-72 flex items-center justify-center">
+                <div
+                    class="absolute inset-0 rounded-full border border-white/5 animate-ping duration-1000"
+                >
+                </div>
+                <div class="absolute inset-4 rounded-full border border-white/10"></div>
+
+                <div
+                    id="target-button"
+                    class="w-40 h-40 rounded-3xl backdrop-blur-2xl border-2 border-white/20 flex flex-col items-center justify-center text-6xl font-black shadow-[0_0_50px_rgba(255,255,255,0.1)] transition-all duration-150 transform scale-0"
+                >
+                    <span id="target-label" class="mb-1">?</span>
+                    <span id="target-sub" class="text-[10px] uppercase tracking-tighter opacity-40"
+                        >PRESS</span
+                    >
+                </div>
+
+                <div
+                    id="hit-flash"
+                    class="absolute inset-0 bg-emerald-500/30 rounded-full blur-3xl opacity-0 pointer-events-none transition-opacity duration-150"
+                >
+                </div>
+                <div
+                    id="miss-flash"
+                    class="absolute inset-0 bg-rose-500/30 rounded-full blur-3xl opacity-0 pointer-events-none transition-opacity duration-150"
+                >
+                </div>
+            </div>
+
+            <div
+                class="mt-12 flex items-center gap-3 px-6 py-3 bg-white/5 rounded-full border border-white/10 backdrop-blur-md"
+            >
+                <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-sm font-medium text-slate-300" id="game-instruction"
+                    >¡Pulsa rápido!</span
+                >
+            </div>
+        </div>
+
+        <div
+            id="game-results"
+            class="relative z-10 hidden text-center animate-in fade-in zoom-in duration-700"
+        >
+            <div class="mb-6 relative inline-block">
+                <Icon
+                    name="mdi:trophy"
+                    class="w-24 h-24 text-yellow-400 filter drop-shadow-[0_0_30px_rgba(250,204,21,0.4)]"
+                />
+                <div
+                    class="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs font-black px-2 py-1 rounded-lg shadow-xl"
+                >
+                    NUEVO RÉCORD
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-400 mb-2">¡Desafío Completado!</h2>
+            <div class="text-8xl font-black text-white mb-6 tracking-tighter" id="final-score">
+                0
+            </div>
+            <p class="text-slate-300 mb-10 text-lg" id="game-feedback">
+                ¡Eres una leyenda de los botones!
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                    id="restart-game-btn"
+                    class="px-8 py-4 bg-white text-black rounded-2xl font-black text-lg transition-all hover:scale-105 active:scale-95 shadow-xl"
+                >
+                    JUGAR DE NUEVO
+                </button>
+                <button
+                    id="share-btn"
+                    class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-black text-lg border border-white/10 transition-all"
+                >
+                    COMPARTIR RANGO
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .target-pop {
+        animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes pop {
+        0% {
+            transform: scale(0) rotate(-10deg);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+    }
+
+    .shake {
+        animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes shake {
+        10%,
+        90% {
+            transform: translate3d(-1px, 0, 0);
+        }
+        20%,
+        80% {
+            transform: translate3d(2px, 0, 0);
+        }
+        30%,
+        50%,
+        70% {
+            transform: translate3d(-4px, 0, 0);
+        }
+        40%,
+        60% {
+            transform: translate3d(4px, 0, 0);
+        }
+    }
+</style>
+
+<script>
+    const BUTTON_MAP = [
+        { label: "A", color: "bg-emerald-500", text: "text-emerald-50", index: 0, type: "button" },
+        { label: "B", color: "bg-rose-500", text: "text-rose-50", index: 1, type: "button" },
+        { label: "X", color: "bg-sky-500", text: "text-sky-50", index: 2, type: "button" },
+        { label: "Y", color: "bg-yellow-500", text: "text-yellow-50", index: 3, type: "button" },
+        {
+            label: "↑",
+            color: "bg-indigo-500",
+            text: "text-indigo-50",
+            index: -1,
+            type: "axis",
+            axis: 1,
+            value: -1,
+        },
+        {
+            label: "↓",
+            color: "bg-indigo-500",
+            text: "text-indigo-50",
+            index: -1,
+            type: "axis",
+            axis: 1,
+            value: 1,
+        },
+        {
+            label: "←",
+            color: "bg-indigo-500",
+            text: "text-indigo-50",
+            index: -1,
+            type: "axis",
+            axis: 0,
+            value: -1,
+        },
+        {
+            label: "→",
+            color: "bg-indigo-500",
+            text: "text-indigo-50",
+            index: -1,
+            type: "axis",
+            axis: 0,
+            value: 1,
+        },
+    ];
+
+    let gameActive = false;
+    let score = 0;
+    let timeLeft = 30;
+    let currentTarget: (typeof BUTTON_MAP)[0] | null = null;
+    let timerInterval: ReturnType<typeof setInterval> | null = null;
+    let axisCooldown = false;
+
+    const introScreen = document.getElementById("game-intro");
+    const playScreen = document.getElementById("game-play");
+    const resultsScreen = document.getElementById("game-results");
+    const startBtn = document.getElementById("start-game-btn");
+    const restartBtn = document.getElementById("restart-game-btn");
+    const shareBtn = document.getElementById("share-btn");
+    const timerEl = document.getElementById("game-timer");
+    const scoreEl = document.getElementById("game-score");
+    const progressBar = document.getElementById("game-progress-bar");
+    const targetBtn = document.getElementById("target-button");
+    const targetLabel = document.getElementById("target-label");
+    const targetSub = document.getElementById("target-sub");
+    const finalScoreEl = document.getElementById("final-score");
+    const controllerWarning = document.getElementById("game-controller-warning");
+    const hitFlash = document.getElementById("hit-flash");
+    const missFlash = document.getElementById("miss-flash");
+
+    function checkGamepad() {
+        const gamepads = navigator.getGamepads();
+        let connected = false;
+        for (const gp of gamepads) {
+            if (gp) {
+                connected = true;
+                break;
+            }
+        }
+
+        if (startBtn) (startBtn as HTMLButtonElement).disabled = false;
+
+        if (connected) {
+            controllerWarning?.classList.add("hidden");
+        } else {
+            if (controllerWarning) {
+                controllerWarning.innerHTML = `
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="flex items-center gap-2 text-slate-400">
+                             Usa las teclas <b>A, B, X, Y</b> o las <b>Flechas</b>
+                        </span>
+                    </div>
+                `;
+            }
+            controllerWarning?.classList.remove("hidden");
+        }
+    }
+
+    setInterval(checkGamepad, 1000);
+
+    function startTimer() {
+        timeLeft = 30;
+        updateTimerUI();
+
+        timerInterval = setInterval(() => {
+            timeLeft -= 0.1;
+            if (timeLeft <= 0) {
+                timeLeft = 0;
+                endGame();
+            }
+            updateTimerUI();
+        }, 100);
+    }
+
+    function updateTimerUI() {
+        if (timerEl) timerEl.textContent = `${timeLeft.toFixed(1)}s`;
+        if (progressBar) progressBar.style.width = `${(timeLeft / 30) * 100}%`;
+
+        if (timeLeft < 5) {
+            timerEl?.classList.add("text-rose-500");
+            timerEl?.classList.remove("text-emerald-400");
+        } else {
+            timerEl?.classList.remove("text-rose-500");
+            timerEl?.classList.add("text-emerald-400");
+        }
+    }
+
+    function spawnTarget() {
+        currentTarget = BUTTON_MAP[Math.floor(Math.random() * BUTTON_MAP.length)];
+
+        if (targetBtn && targetLabel && targetSub) {
+            targetBtn.className = `w-40 h-40 rounded-3xl backdrop-blur-2xl border-2 border-white/20 flex flex-col items-center justify-center text-6xl font-black shadow-[0_0_50px_rgba(255,255,255,0.1)] transition-all duration-150 transform target-pop ${currentTarget.color} ${currentTarget.text}`;
+            targetLabel.textContent = currentTarget.label;
+            targetSub.textContent = currentTarget.type === "axis" ? "MOVER STICK" : "PULSA";
+
+            setTimeout(() => {
+                targetBtn.classList.remove("target-pop");
+            }, 300);
+        }
+    }
+
+    function startGame() {
+        score = 0;
+        if (scoreEl) scoreEl.textContent = "000";
+        gameActive = true;
+
+        introScreen?.classList.add("hidden");
+        resultsScreen?.classList.add("hidden");
+        playScreen?.classList.remove("hidden");
+        playScreen?.classList.add("flex");
+
+        startTimer();
+        spawnTarget();
+        requestAnimationFrame(gameLoop);
+    }
+
+    function getRank(s: number) {
+        if (s > 50)
+            return {
+                name: "LEGENDARIO",
+                desc: "Tus dedos se mueven a la velocidad del sonido.",
+                intro: "Vine a ver si mi mando iba bien y tanto que va bien",
+                flavor: "¡Tengo dedos de relámpago! ⚡",
+            };
+        if (s > 35)
+            return {
+                name: "PRO GAMER",
+                desc: "Tienes reflejos de acero y un mando bien calibrado.",
+                intro: "Vine a ver si mi mando iba bien y tanto que va bien",
+                flavor: "¡Mi mando vuela! 🚀",
+            };
+        if (s > 20)
+            return {
+                name: "GAMER",
+                desc: "No está mal, pero para el competitivo te falta calle.",
+                intro: "Vine a ver si mi mando iba bien y... ¡sospecho que algún botón me ha troleado!",
+                flavor: "¡Casi lo tengo! 😎",
+            };
+        return {
+            name: "MANCO",
+            desc: "¿Seguro que tienes el mando encendido?",
+            intro: "Vine a ver si mi mando iba bien y... ¡este botón se encalla fijo! No puede ser que haya fallado tanto",
+            flavor: "¡El mando me tiene manía! 😅",
+        };
+    }
+
+    function endGame() {
+        gameActive = false;
+        if (timerInterval) clearInterval(timerInterval as any);
+
+        playScreen?.classList.add("hidden");
+        resultsScreen?.classList.remove("hidden");
+        if (finalScoreEl) finalScoreEl.textContent = score.toString();
+
+        const rank = getRank(score);
+        const feedbackEl = document.getElementById("game-feedback");
+        if (feedbackEl) {
+            feedbackEl.innerHTML = `<span class="text-white block font-black text-xl mb-1">${rank.name}</span> <span class="text-slate-400">${rank.desc}</span>`;
+        }
+    }
+
+    function handleHit() {
+        score++;
+        if (scoreEl) scoreEl.textContent = score.toString().padStart(3, "0");
+
+        if (hitFlash) {
+            hitFlash.style.opacity = "1";
+            setTimeout(() => {
+                hitFlash.style.opacity = "0";
+            }, 100);
+        }
+
+        spawnTarget();
+    }
+
+    function handleMiss() {
+        if (missFlash) {
+            missFlash.style.opacity = "1";
+            setTimeout(() => {
+                missFlash.style.opacity = "0";
+            }, 100);
+        }
+
+        targetBtn?.classList.add("shake");
+        setTimeout(() => {
+            targetBtn?.classList.remove("shake");
+        }, 400);
+    }
+
+    const prevButtons = new Array(17).fill(false);
+
+    window.addEventListener("keydown", (e) => {
+        if (!gameActive) {
+            if (
+                e.key === "Enter" &&
+                (!introScreen?.classList.contains("hidden") ||
+                    !resultsScreen?.classList.contains("hidden"))
+            ) {
+                startGame();
+            }
+            return;
+        }
+
+        const key = e.key.toLowerCase();
+        let hit = false;
+        let miss = false;
+
+        if (currentTarget?.type === "button") {
+            if (key === "a" && currentTarget.index === 0) hit = true;
+            else if (key === "b" && currentTarget.index === 1) hit = true;
+            else if (key === "x" && currentTarget.index === 2) hit = true;
+            else if (key === "y" && currentTarget.index === 3) hit = true;
+            else if (key === "enter") hit = true;
+            else if (["a", "b", "x", "y"].includes(key)) miss = true;
+        } else if (currentTarget?.type === "axis") {
+            if (e.key === "ArrowUp" && currentTarget.label === "↑") hit = true;
+            else if (e.key === "ArrowDown" && currentTarget.label === "↓") hit = true;
+            else if (e.key === "ArrowLeft" && currentTarget.label === "←") hit = true;
+            else if (e.key === "ArrowRight" && currentTarget.label === "→") hit = true;
+            else if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key))
+                miss = true;
+        }
+
+        if (hit) handleHit();
+        else if (miss) handleMiss();
+    });
+
+    shareBtn?.addEventListener("click", () => {
+        const rank = getRank(score);
+        const url = window.location.href;
+        const text = `🎮 ${rank.intro}. Hice ${score} aciertos. ${rank.flavor} ¿Me superas?`;
+
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: "Test de Mando GameBob",
+                    text: text,
+                    url: url,
+                })
+                .catch(() => {
+                    navigator.clipboard.writeText(`${text} ${url}`);
+                    alert("¡Mensaje copiado al portapapeles!");
+                });
+        } else {
+            navigator.clipboard.writeText(`${text} ${url}`);
+            alert("¡Mensaje copiado al portapapeles!");
+        }
+    });
+
+    function gameLoop() {
+        if (!gameActive) return;
+
+        const gamepads = navigator.getGamepads();
+        for (const gp of gamepads) {
+            if (gp) {
+                gp.buttons.forEach((b, i) => {
+                    if (b.pressed && !prevButtons[i]) {
+                        if (currentTarget?.type === "button" && i === currentTarget.index) {
+                            handleHit();
+                        } else if (i < 4) {
+                            handleMiss();
+                        }
+                        prevButtons[i] = true;
+                    } else if (!b.pressed && prevButtons[i]) {
+                        prevButtons[i] = false;
+                    }
+                });
+
+                if (currentTarget?.type === "axis" && !axisCooldown) {
+                    const axis = currentTarget.axis;
+                    const targetVal = currentTarget.value;
+                    if (axis !== undefined && targetVal !== undefined) {
+                        const val = gp.axes[axis];
+                        if (targetVal > 0 ? val > 0.5 : val < -0.5) {
+                            handleHit();
+                            axisCooldown = true;
+                            setTimeout(() => (axisCooldown = false), 200);
+                        }
+                    }
+                }
+            }
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    startBtn?.addEventListener("click", startGame);
+    restartBtn?.addEventListener("click", startGame);
+
+    window.addEventListener("gamepadconnected", () => {
+        checkGamepad();
+    });
+</script>
