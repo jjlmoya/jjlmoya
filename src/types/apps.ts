@@ -86,6 +86,8 @@ export interface Application {
 
     bannerText?: string;
     hasDetailPage?: boolean;
+    price?: string;
+    domain?: string;
     roadmap: {
         statusLabel: string;
         statusType: "released" | "developing" | "qa" | "planning";

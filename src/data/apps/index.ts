@@ -6,9 +6,11 @@ import { monmons } from "./monmons";
 import { missiopolis } from "./missiopolis";
 import { lexiCrash } from "./lexi-crash";
 import { digBot } from "./dig-bot";
+import { fastTask } from "./fast-task";
 import type { Application } from "../../types/apps";
 
 export const apps: Application[] = [
+    fastTask,
     dayCheck,
     digBot,
     lexiCrash,

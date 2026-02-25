@@ -1,0 +1,503 @@
+---
+export const prerender = true;
+import AppLayout from "../../layouts/AppLayout.astro";
+import { fastTask as app } from "../../data/apps/fast-task";
+import { Icon } from "astro-icon/components";
+
+const title = `${app.title} — ${app.tagline}`;
+---
+
+<AppLayout
+    title={title}
+    description={app.description}
+    image={app.media.icon}
+    color={app.theme.primary}
+    favicon={app.media.icon}
+    currentSlug={app.slug}
+>
+    <div
+        class="min-h-screen bg-[#05080a] text-white selection:bg-[#04D991] selection:text-black overflow-x-hidden pt-20"
+        style={`--primary: ${app.theme.primary}; --accent: ${app.theme.accent};`}
+    >
+        <div class="fixed inset-0 pointer-events-none">
+            <div
+                class="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#04D991] opacity-[0.03] blur-[150px] rounded-full animate-pulse-slow"
+            >
+            </div>
+            <div
+                class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#04D991] opacity-[0.05] blur-[120px] rounded-full animate-pulse-slow-delay"
+            >
+            </div>
+        </div>
+
+        <section class="relative py-24 px-6 overflow-hidden">
+            <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+                <div class="relative mb-16">
+                    <div class="absolute inset-0 bg-[#04D991] blur-[80px] opacity-20 animate-pulse">
+                    </div>
+                    <img
+                        src={app.media.icon}
+                        alt={app.title}
+                        class="w-32 h-32 md:w-48 md:h-48 rounded-3xl relative z-10 shadow-[0_0_40px_rgba(4,217,145,0.25)] border border-[#04D991]/20"
+                    />
+                </div>
+
+                <h1
+                    class="text-6xl sm:text-8xl md:text-9xl font-black tracking-tighter mb-6 relative leading-none uppercase italic"
+                >
+                    <span
+                        class="bg-gradient-to-br from-[#04D991] via-[#00FF9F] to-[#00A86B] bg-clip-text text-transparent"
+                    >
+                        {app.title}
+                    </span>
+                </h1>
+
+                <p
+                    class="text-xl md:text-3xl font-bold tracking-tight text-[#E5FFF4]/80 max-w-2xl mb-12 uppercase"
+                >
+                    {app.tagline}
+                </p>
+
+                <div class="flex flex-col items-center gap-4 mb-12">
+                    <div
+                        class="text-4xl md:text-6xl font-black text-[#04D991] tracking-tighter italic"
+                    >
+                        {app.price}
+                    </div>
+                    <div class="text-xs uppercase tracking-[0.3em] opacity-40 font-bold">
+                        Pago único profesional
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-6 mb-24">
+                    <div class="store-btn-disabled group">
+                        <Icon name="mdi:apple" class="w-6 h-6 mr-3 opacity-20" />
+                        <span class="font-bold uppercase tracking-widest text-[10px]"
+                            >App Store</span
+                        >
+                        <span
+                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
+                            >Próximamente</span
+                        >
+                    </div>
+                    <div class="store-btn-disabled group">
+                        <Icon name="mdi:google-play" class="w-6 h-6 mr-3 opacity-20" />
+                        <span class="font-bold uppercase tracking-widest text-[10px]"
+                            >Play Store</span
+                        >
+                        <span
+                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
+                            >Próximamente</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 relative overflow-hidden bg-black/40 border-y border-white/5">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div>
+                    <span
+                        class="inline-block px-4 py-1.5 rounded-sm bg-[#04D991] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8"
+                        >{app.concept.label}</span
+                    >
+                    <h2 class="text-5xl md:text-7xl font-black leading-[0.9] mb-8 uppercase italic">
+                        {app.concept.main}<br />
+                        <span class="text-[#04D991]">{app.concept.highlighted}</span>
+                    </h2>
+                    <p
+                        class="text-xl md:text-2xl font-light text-white/50 leading-relaxed mb-10 border-l-2 border-[#04D991] pl-8"
+                    >
+                        {app.philosophy}
+                    </p>
+
+                    <div class="flex flex-wrap gap-12">
+                        {
+                            app.highlights.map((h) => (
+                                <div>
+                                    <span class="block text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">
+                                        {h.label}
+                                    </span>
+                                    <span class="text-3xl font-black italic text-[#04D991] uppercase">
+                                        {h.value}
+                                    </span>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {
+                        app.benefits.map((benefit) => (
+                            <div class="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#04D991]/10 hover:border-[#04D991]/50 transition-all group">
+                                <Icon
+                                    name={benefit.icon || "mdi:check"}
+                                    class="w-10 h-10 text-[#04D991] mb-6 group-hover:scale-110 transition-transform"
+                                />
+                                <h3 class="text-lg font-black uppercase mb-3 tracking-tight">
+                                    {benefit.title}
+                                </h3>
+                                <p class="text-xs text-white/40 leading-relaxed group-hover:text-white/70">
+                                    {benefit.text}
+                                </p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="py-32 px-6 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                    <div class="order-2 lg:order-1">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div
+                                class="p-8 bg-white/[0.02] border border-white/5 rounded-3xl flex flex-col items-center text-center group hover:bg-[#04D991]/5 hover:border-[#04D991]/20 transition-all"
+                            >
+                                <img
+                                    src="/assets/apps/fast-task/integrations/github.svg"
+                                    class="w-16 h-16 mb-6 opacity-20 group-hover:opacity-100 transition-all filter brightness-0 invert"
+                                    alt="GitHub"
+                                />
+                                <span class="text-xl font-black uppercase italic">GitHub</span>
+                            </div>
+                            <div
+                                class="p-8 bg-white/[0.02] border border-white/5 rounded-3xl flex flex-col items-center text-center group hover:bg-[#04D991]/5 hover:border-[#04D991]/20 transition-all"
+                            >
+                                <img
+                                    src="/assets/apps/fast-task/integrations/linear.svg"
+                                    class="w-16 h-16 mb-6 opacity-20 group-hover:opacity-100 transition-all filter brightness-0 invert"
+                                    alt="Linear"
+                                />
+                                <span class="text-xl font-black uppercase italic">Linear</span>
+                            </div>
+                            <div
+                                class="p-8 bg-white/[0.02] border border-white/5 rounded-3xl flex flex-col items-center text-center group hover:bg-[#04D991]/5 hover:border-[#04D991]/20 transition-all"
+                            >
+                                <img
+                                    src="/assets/apps/fast-task/integrations/make.svg"
+                                    class="w-16 h-16 mb-6 opacity-20 group-hover:opacity-100 transition-all filter brightness-0 invert"
+                                    alt="Make"
+                                />
+                                <span class="text-xl font-black uppercase italic">Make</span>
+                            </div>
+                            <div
+                                class="p-8 bg-white/[0.02] border border-white/5 rounded-3xl flex flex-col items-center text-center group hover:bg-[#04D991]/5 hover:border-[#04D991]/20 transition-all border-dashed"
+                            >
+                                <img
+                                    src="/assets/apps/fast-task/integrations/discord.svg"
+                                    class="w-16 h-16 mb-6 opacity-10 filter brightness-0 invert"
+                                    alt="Discord"
+                                />
+                                <span class="text-sm font-bold uppercase opacity-40">Discord</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-1 lg:order-2">
+                        <span
+                            class="text-[#04D991] text-xs font-black uppercase tracking-[0.3em] mb-4 block"
+                            >Ecosistema Abierto</span
+                        >
+                        <h2
+                            class="text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8"
+                        >
+                            Integraciones <span class="text-[#04D991]">Nativas</span>
+                        </h2>
+                        <p class="text-xl text-white/50 leading-relaxed mb-8">
+                            Fast Task se conecta directamente con las herramientas que ya usas. Sin
+                            intermediarios, sin latencia.
+                        </p>
+                        <div class="p-6 bg-[#04D991]/10 border border-[#04D991]/30 rounded-2xl">
+                            <p class="text-white font-bold mb-2">
+                                ¿Necesitas una integración específica?
+                            </p>
+                            <p class="text-white/60 text-sm mb-4">
+                                Si tu herramienta favorita no está en la lista, escríbenos. Las
+                                gestionamos bajo demanda para usuarios profesionales.
+                            </p>
+                            <a
+                                href="mailto:juanjo1989@gmail.com"
+                                class="text-[#04D991] font-black uppercase tracking-widest text-xs flex items-center gap-2 hover:gap-4 transition-all"
+                            >
+                                Contactar soporte <Icon name="mdi:arrow-right" class="w-4 h-4" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 bg-[#04D991] text-black">
+            <div class="max-w-4xl mx-auto text-center">
+                <span
+                    class="inline-block px-4 py-1 bg-black text-[#04D991] text-[10px] font-black uppercase tracking-[0.3em] mb-8"
+                    >Early Adopter Program</span
+                >
+                <h2 class="text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8">
+                    Te la <span class="text-white">regalamos</span>
+                </h2>
+                <p
+                    class="text-xl md:text-2xl font-bold leading-tight mb-12 max-w-2xl mx-auto opacity-80"
+                >
+                    Buscamos feedback real de profesionales exigentes. Si te comprometes a usar la
+                    app y darnos tu opinión sincera, la licencia es tuya. <span class="text-white"
+                        >De por vida.</span
+                    >
+                </p>
+                <div class="inline-block bg-black text-white px-8 py-6 rounded-3xl text-left">
+                    <div class="flex items-center gap-4 mb-2">
+                        <span class="text-3xl font-black italic text-[#04D991]">33/100</span>
+                        <span class="text-xs uppercase font-bold tracking-widest opacity-40"
+                            >Licencias Restantes</span
+                        >
+                    </div>
+                    <p class="text-sm opacity-60 mb-6">
+                        Solo para los primeros 100 que nos escriban demostrando interés real.
+                    </p>
+                    <a
+                        href="mailto:juanjo1989@gmail.com?subject=Interés%20Fast%20Task%20Early%20Adopter"
+                        class="block w-full text-center bg-[#04D991] text-black font-black py-4 rounded-xl uppercase tracking-widest hover:scale-105 transition-transform"
+                    >
+                        QUIERO MI LICENCIA
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section
+            class="py-32 px-6 relative overflow-hidden bg-white/[0.02] border-y border-white/5"
+        >
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                    <div>
+                        <span
+                            class="text-[#04D991] text-xs font-black uppercase tracking-[0.3em] mb-4 block"
+                            >Soluciones Enterprise</span
+                        >
+                        <h2
+                            class="text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8"
+                        >
+                            ¿Quieres una app para tu <span class="text-[#04D991]">empresa?</span>
+                        </h2>
+                        <p class="text-xl text-white/50 leading-relaxed mb-12">
+                            Transformamos la productividad de equipos de alto rendimiento.
+                            Desarrollamos herramientas nativas con el mismo ADN de velocidad y
+                            eficiencia de Fast Task, adaptadas a las necesidades específicas de tu
+                            organización.
+                        </p>
+
+                        <div class="space-y-8 mb-12">
+                            <div class="flex items-start gap-4 group">
+                                <div
+                                    class="p-3 bg-[#04D991]/10 rounded-xl group-hover:bg-[#04D991] group-hover:text-black transition-all"
+                                >
+                                    <Icon name="mdi:api" class="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white uppercase tracking-tight mb-1">
+                                        Ecosistema a medida
+                                    </h4>
+                                    <p class="text-sm text-white/40">
+                                        Integraciones con Salesforce, SAP, Jira Enterprise y bases
+                                        de datos propietarias.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a
+                            href="mailto:juanjo1989@gmail.com?subject=Consulta%20B2B%20/%20Enterprise"
+                            class="inline-flex items-center gap-6 text-[#04D991] font-black uppercase tracking-[0.2em] p-8 border-2 border-[#04D991] hover:bg-[#04D991] hover:text-black transition-all duration-500 italic"
+                        >
+                            ¿Hablamos? <Icon name="mdi:message-text" class="w-6 h-6" />
+                        </a>
+                    </div>
+
+                    <div class="relative group">
+                        <div
+                            class="absolute inset-0 bg-[#04D991]/10 blur-[100px] rounded-full group-hover:bg-[#04D991]/20 transition-all duration-1000"
+                        >
+                        </div>
+                        <div
+                            class="relative bg-black/60 backdrop-blur-xl border border-white/10 p-10 md:p-16 rounded-[3rem] shadow-3xl"
+                        >
+                            <div class="flex items-center gap-4 mb-10">
+                                <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+                            </div>
+                            <div class="space-y-6 font-mono text-xs md:text-sm">
+                                <p class="text-white/20">// Custom_Enterprise_Solution.ts</p>
+                                <div class="text-[#04D991]">
+                                    export const <span class="text-white">OrganizationSync</span> = &#123;
+                                    <div class="text-white/60 pl-6 mt-2">
+                                        engine: <span class="text-white"
+                                            >"Zero-Friction_Architecture"</span
+                                        >,
+                                    </div>
+                                    <div class="text-white/60 pl-6">
+                                        ecosystem: <span class="text-white"
+                                            >["Proprietary_Stack", "Legacy_Sync"]</span
+                                        >,
+                                    </div>
+                                    <div class="text-white/60 pl-6">
+                                        privacy: <span class="text-white"
+                                            >"Hardened_Data_Silos"</span
+                                        >,
+                                    </div>
+                                    <div class="text-white/60 pl-6">
+                                        performance: <span class="text-white"
+                                            >"Atomic_Task_Processing"</span
+                                        >,
+                                    </div>
+                                    <div class="text-white/60 pl-6">
+                                        vision: <span class="text-white"
+                                            >"Scale_Without_Complexity"</span
+                                        >
+                                    </div>
+                                    &#125;;
+                                </div>
+                                <div class="mt-12 pt-8 border-t border-white/5">
+                                    <p class="text-white/40 italic">
+                                        // Engineered for deep organizational focus.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 bg-black/20">
+            <div class="max-w-7xl mx-auto text-center mb-16">
+                <h2 class="text-3xl font-black uppercase italic tracking-widest opacity-20">
+                    Preview
+                </h2>
+            </div>
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {
+                        app.media.screenshots.slice(1, 4).map((img, i) => (
+                            <div class="relative group rounded-[1.5rem] overflow-hidden border border-white/5 shadow-2xl">
+                                <img
+                                    src={img}
+                                    alt={`Captura ${i + 1}`}
+                                    class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                />
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 px-6 relative">
+            <div class="max-w-7xl mx-auto">
+                <div class="relative w-full max-w-6xl mx-auto">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-b from-[#04D991]/30 to-transparent rounded-[2rem] blur-xl opacity-20"
+                    >
+                    </div>
+                    <div
+                        class="relative rounded-[2rem] overflow-hidden border border-white/10 bg-[#0d1318] shadow-2xl transition-transform hover:scale-[1.01] duration-700"
+                    >
+                        <img
+                            src="/assets/apps/fast-task/feature-graphic.png"
+                            alt="Fast Task Feature Graphic"
+                            class="w-full h-auto object-cover"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer
+            class="py-32 px-6 text-center relative border-t border-white/5 bg-gradient-to-b from-transparent to-black/80"
+        >
+            <div class="max-w-3xl mx-auto relative z-10">
+                <h2 class="text-5xl md:text-8xl font-black mb-8 italic uppercase leading-none">
+                    Escribe.<br />Olvida.<br /><span class="text-[#04D991]">Paz.</span>
+                </h2>
+                <p class="text-xl text-white/40 mb-12 uppercase tracking-widest font-bold">
+                    Elimina la fricción de tu día
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-6">
+                    <div class="store-btn-disabled group">
+                        <Icon name="mdi:apple" class="w-6 h-6 mr-3 opacity-20" />
+                        <span class="font-bold uppercase tracking-widest text-[10px]"
+                            >App Store</span
+                        >
+                        <span
+                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
+                            >Próximamente</span
+                        >
+                    </div>
+                    <div class="store-btn-disabled group">
+                        <Icon name="mdi:google-play" class="w-6 h-6 mr-3 opacity-20" />
+                        <span class="font-bold uppercase tracking-widest text-[10px]"
+                            >Play Store</span
+                        >
+                        <span
+                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
+                            >Próximamente</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</AppLayout>
+
+<style>
+    @keyframes pulse-slow {
+        0%,
+        100% {
+            opacity: 0.03;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.06;
+            transform: scale(1.05);
+        }
+    }
+    .animate-pulse-slow {
+        animation: pulse-slow 8s ease-in-out infinite;
+    }
+    .animate-pulse-slow-delay {
+        animation: pulse-slow 8s ease-in-out infinite 4s;
+    }
+
+    .neon-btn-large {
+        display: inline-block;
+        padding: 1.5rem 3rem;
+        background: #04d991;
+        color: black;
+        font-weight: 950;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        font-size: 1.1rem;
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        position: relative;
+        font-style: italic;
+    }
+    .neon-btn-large:hover {
+        transform: scale(1.05) rotate(-1deg);
+        box-shadow: 0 0 60px rgba(4, 217, 145, 0.4);
+    }
+
+    .store-btn-disabled {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.2);
+        position: relative;
+        cursor: not-allowed;
+    }
+</style>
