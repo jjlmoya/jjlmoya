@@ -76,7 +76,7 @@ export const tr = {
                     "Uygulamalarımızın tasarımı, kaynak kodu, grafikleri, logoları ve içeriği üzerindeki tüm fikri mülkiyet hakları jjlmoya'nın münhasır mülkiyetindedir veya lisans altında kullanılmaktadır. Kullanıcıya herhangi bir mülkiyet hakkı devredilmez.",
             },
             privacy: {
-        discord: { title: "Topluluğa katılın", subtitle: "Resmi Sunucu" },
+                discord: { title: "Topluluğa katılın", subtitle: "Resmi Sunucu" },
                 title: "Gizlilik ve Veri Koruma",
                 content:
                     "Gizliliğiniz bizim için önemlidir. Uygulamanın kullanımı ayrıca, bilgileri nasıl topladığımızı, kullandığımızı ve paylaştığımızı (örneğin, reklam tanımlayıcıları veya anonim kullanım verileri) açıklayan Gizlilik Politikamıza tabidir.",

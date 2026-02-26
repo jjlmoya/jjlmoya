@@ -76,7 +76,7 @@ export const sv = {
                     "Alla immateriella rättigheter till design, källkod, grafik, logotyper och innehåll i våra applikationer är jjlmoyas exklusiva egendom eller används under licens. Inga äganderätter överförs till användaren.",
             },
             privacy: {
-        discord: { title: "Gå med i gemenskapen", subtitle: "Officiell server" },
+                discord: { title: "Gå med i gemenskapen", subtitle: "Officiell server" },
                 title: "Integritet och dataskydd",
                 content:
                     "Din integritet är viktig för oss. Användningen av Applikationen styrs också av vår integritetspolicy, som beskriver hur vi samlar in, använder och delar information (t.ex. annonsidentifierare eller anonyma användningsdata).",

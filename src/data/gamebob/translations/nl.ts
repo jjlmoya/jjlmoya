@@ -77,7 +77,7 @@ export const nl = {
                     "Alle intellectuele eigendomsrechten op het ontwerp, de broncode, graphics, logo's en inhoud van onze applicaties zijn het exclusieve eigendom van jjlmoya of worden onder licentie gebruikt. Er worden geen eigendomsrechten overgedragen aan de gebruiker.",
             },
             privacy: {
-        discord: { title: "Word lid van de community", subtitle: "Officiële server" },
+                discord: { title: "Word lid van de community", subtitle: "Officiële server" },
                 title: "Privacy en Gegevensbescherming",
                 content:
                     "Uw privacy is belangrijk voor ons. Het gebruik van de Applicatie wordt ook beheerst door ons Privacybeleid, dat beschrijft hoe we informatie verzamelen, gebruiken en delen (bijv. advertentie-ID's of anonieme gebruiksgegevens).",

@@ -44,8 +44,8 @@ export const fastTask: Application = {
         author: "Fast Task Team",
     },
     media: {
-        icon: "/assets/apps/fast-task/icon.png",
-        showcase: "/assets/apps/fast-task/feature-graphic.png",
+        icon: "/assets/apps/fast-task/icon.webp",
+        showcase: "/assets/apps/fast-task/feature-graphic.webp",
         hero: "/assets/apps/fast-task/1.webp",
         screenshots: [
             "/assets/apps/fast-task/1.webp",
@@ -57,10 +57,10 @@ export const fastTask: Application = {
         ],
     },
     stores: {
-        googlePlay: "",
+        googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.fasttask",
         appStore: "",
     },
-    price: "14,95€",
+    price: "17,99€",
     benefits: [
         {
             title: "Captura en 3 segundos",

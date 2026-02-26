@@ -3,6 +3,7 @@ export const prerender = true;
 import AppLayout from "../../layouts/AppLayout.astro";
 import { fastTask as app } from "../../data/apps/fast-task";
 import { Icon } from "astro-icon/components";
+import Simulation3s from "../../components/apps/fast-task/Simulation3s/Simulation3s.astro";
 
 const title = `${app.title} — ${app.tagline}`;
 ---
@@ -43,7 +44,7 @@ const title = `${app.title} — ${app.tagline}`;
                 </div>
 
                 <h1
-                    class="text-6xl sm:text-8xl md:text-9xl font-black tracking-tighter mb-6 relative leading-none uppercase italic"
+                    class="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter mb-6 relative leading-none uppercase italic"
                 >
                     <span
                         class="bg-gradient-to-br from-[#04D991] via-[#00FF9F] to-[#00A86B] bg-clip-text text-transparent"
@@ -70,26 +71,56 @@ const title = `${app.title} — ${app.tagline}`;
                 </div>
 
                 <div class="flex flex-wrap justify-center gap-6 mb-24">
-                    <div class="store-btn-disabled group">
-                        <Icon name="mdi:apple" class="w-6 h-6 mr-3 opacity-20" />
-                        <span class="font-bold uppercase tracking-widest text-[10px]"
-                            >App Store</span
-                        >
-                        <span
-                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
-                            >Próximamente</span
-                        >
-                    </div>
-                    <div class="store-btn-disabled group">
-                        <Icon name="mdi:google-play" class="w-6 h-6 mr-3 opacity-20" />
-                        <span class="font-bold uppercase tracking-widest text-[10px]"
-                            >Play Store</span
-                        >
-                        <span
-                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
-                            >Próximamente</span
-                        >
-                    </div>
+                    {
+                        app.stores.appStore ? (
+                            <a
+                                href={app.stores.appStore}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="store-btn group"
+                            >
+                                <Icon name="mdi:apple" class="w-6 h-6 mr-3" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    App Store
+                                </span>
+                            </a>
+                        ) : (
+                            <div class="store-btn-disabled group">
+                                <Icon name="mdi:apple" class="w-6 h-6 mr-3 opacity-20" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    App Store
+                                </span>
+                                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap">
+                                    Próximamente
+                                </span>
+                            </div>
+                        )
+                    }
+                    {
+                        app.stores.googlePlay ? (
+                            <a
+                                href={app.stores.googlePlay}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="store-btn group"
+                            >
+                                <Icon name="mdi:google-play" class="w-6 h-6 mr-3" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    Play Store
+                                </span>
+                            </a>
+                        ) : (
+                            <div class="store-btn-disabled group">
+                                <Icon name="mdi:google-play" class="w-6 h-6 mr-3 opacity-20" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    Play Store
+                                </span>
+                                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap">
+                                    Próximamente
+                                </span>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </section>
@@ -101,7 +132,9 @@ const title = `${app.title} — ${app.tagline}`;
                         class="inline-block px-4 py-1.5 rounded-sm bg-[#04D991] text-black text-[10px] font-black uppercase tracking-[0.3em] mb-8"
                         >{app.concept.label}</span
                     >
-                    <h2 class="text-5xl md:text-7xl font-black leading-[0.9] mb-8 uppercase italic">
+                    <h2
+                        class="text-4xl sm:text-5xl md:text-7xl font-black leading-[0.9] mb-8 uppercase italic break-words"
+                    >
                         {app.concept.main}<br />
                         <span class="text-[#04D991]">{app.concept.highlighted}</span>
                     </h2>
@@ -130,14 +163,16 @@ const title = `${app.title} — ${app.tagline}`;
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {
                         app.benefits.map((benefit) => (
-                            <div class="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#04D991]/10 hover:border-[#04D991]/50 transition-all group">
-                                <Icon
-                                    name={benefit.icon || "mdi:check"}
-                                    class="w-10 h-10 text-[#04D991] mb-6 group-hover:scale-110 transition-transform"
-                                />
-                                <h3 class="text-lg font-black uppercase mb-3 tracking-tight">
-                                    {benefit.title}
-                                </h3>
+                            <div class="p-6 md:p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-[#04D991]/10 hover:border-[#04D991]/50 transition-all group">
+                                <div class="flex flex-row md:flex-col items-center md:items-start gap-4 md:gap-0 mb-3 md:mb-0">
+                                    <Icon
+                                        name={benefit.icon || "mdi:check"}
+                                        class="w-8 h-8 md:w-10 md:h-10 text-[#04D991] md:mb-6 shrink-0 group-hover:scale-110 transition-transform"
+                                    />
+                                    <h3 class="text-base md:text-lg font-black uppercase md:mb-3 tracking-tight">
+                                        {benefit.title}
+                                    </h3>
+                                </div>
                                 <p class="text-xs text-white/40 leading-relaxed group-hover:text-white/70">
                                     {benefit.text}
                                 </p>
@@ -147,6 +182,8 @@ const title = `${app.title} — ${app.tagline}`;
                 </div>
             </div>
         </section>
+
+        <Simulation3s />
 
         <section class="py-32 px-6 relative overflow-hidden">
             <div class="max-w-7xl mx-auto">
@@ -201,7 +238,7 @@ const title = `${app.title} — ${app.tagline}`;
                             >Ecosistema Abierto</span
                         >
                         <h2
-                            class="text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8"
+                            class="text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8 break-words"
                         >
                             Integraciones <span class="text-[#04D991]">Nativas</span>
                         </h2>
@@ -235,7 +272,9 @@ const title = `${app.title} — ${app.tagline}`;
                     class="inline-block px-4 py-1 bg-black text-[#04D991] text-[10px] font-black uppercase tracking-[0.3em] mb-8"
                     >Early Adopter Program</span
                 >
-                <h2 class="text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8">
+                <h2
+                    class="text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8 break-words"
+                >
                     Te la <span class="text-white">regalamos</span>
                 </h2>
                 <p
@@ -277,7 +316,7 @@ const title = `${app.title} — ${app.tagline}`;
                             >Soluciones Enterprise</span
                         >
                         <h2
-                            class="text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8"
+                            class="text-4xl sm:text-5xl md:text-7xl font-black uppercase italic leading-[0.9] mb-8 break-words"
                         >
                             ¿Quieres una app para tu <span class="text-[#04D991]">empresa?</span>
                         </h2>
@@ -405,7 +444,7 @@ const title = `${app.title} — ${app.tagline}`;
                         class="relative rounded-[2rem] overflow-hidden border border-white/10 bg-[#0d1318] shadow-2xl transition-transform hover:scale-[1.01] duration-700"
                     >
                         <img
-                            src="/assets/apps/fast-task/feature-graphic.png"
+                            src="/assets/apps/fast-task/feature-graphic.webp"
                             alt="Fast Task Feature Graphic"
                             class="w-full h-auto object-cover"
                         />
@@ -418,7 +457,9 @@ const title = `${app.title} — ${app.tagline}`;
             class="py-32 px-6 text-center relative border-t border-white/5 bg-gradient-to-b from-transparent to-black/80"
         >
             <div class="max-w-3xl mx-auto relative z-10">
-                <h2 class="text-5xl md:text-8xl font-black mb-8 italic uppercase leading-none">
+                <h2
+                    class="text-4xl sm:text-5xl md:text-8xl font-black mb-8 italic uppercase leading-none break-words"
+                >
                     Escribe.<br />Olvida.<br /><span class="text-[#04D991]">Paz.</span>
                 </h2>
                 <p class="text-xl text-white/40 mb-12 uppercase tracking-widest font-bold">
@@ -426,26 +467,56 @@ const title = `${app.title} — ${app.tagline}`;
                 </p>
 
                 <div class="flex flex-wrap justify-center gap-6">
-                    <div class="store-btn-disabled group">
-                        <Icon name="mdi:apple" class="w-6 h-6 mr-3 opacity-20" />
-                        <span class="font-bold uppercase tracking-widest text-[10px]"
-                            >App Store</span
-                        >
-                        <span
-                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
-                            >Próximamente</span
-                        >
-                    </div>
-                    <div class="store-btn-disabled group">
-                        <Icon name="mdi:google-play" class="w-6 h-6 mr-3 opacity-20" />
-                        <span class="font-bold uppercase tracking-widest text-[10px]"
-                            >Play Store</span
-                        >
-                        <span
-                            class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap"
-                            >Próximamente</span
-                        >
-                    </div>
+                    {
+                        app.stores.appStore ? (
+                            <a
+                                href={app.stores.appStore}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="store-btn group"
+                            >
+                                <Icon name="mdi:apple" class="w-6 h-6 mr-3" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    App Store
+                                </span>
+                            </a>
+                        ) : (
+                            <div class="store-btn-disabled group">
+                                <Icon name="mdi:apple" class="w-6 h-6 mr-3 opacity-20" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    App Store
+                                </span>
+                                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap">
+                                    Próximamente
+                                </span>
+                            </div>
+                        )
+                    }
+                    {
+                        app.stores.googlePlay ? (
+                            <a
+                                href={app.stores.googlePlay}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="store-btn group"
+                            >
+                                <Icon name="mdi:google-play" class="w-6 h-6 mr-3" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    Play Store
+                                </span>
+                            </a>
+                        ) : (
+                            <div class="store-btn-disabled group">
+                                <Icon name="mdi:google-play" class="w-6 h-6 mr-3 opacity-20" />
+                                <span class="font-bold uppercase tracking-widest text-[10px]">
+                                    Play Store
+                                </span>
+                                <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] opacity-0 group-hover:opacity-40 transition-opacity whitespace-nowrap">
+                                    Próximamente
+                                </span>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </footer>
@@ -487,6 +558,24 @@ const title = `${app.title} — ${app.tagline}`;
     .neon-btn-large:hover {
         transform: scale(1.05) rotate(-1deg);
         box-shadow: 0 0 60px rgba(4, 217, 145, 0.4);
+    }
+
+    .store-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        background: rgba(4, 217, 145, 0.1);
+        border: 1px solid rgba(4, 217, 145, 0.3);
+        border-radius: 12px;
+        color: #04d991;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .store-btn:hover {
+        background: rgba(4, 217, 145, 0.2);
+        border-color: rgba(4, 217, 145, 0.6);
+        transform: translateY(-2px);
     }
 
     .store-btn-disabled {
