@@ -2,18 +2,12 @@
 import "./CssSpecificityCalculatorSEO.css";
 ---
 
-<section class="spec-seo-section">
-    <div class="spec-seo-divider">
-        <div class="spec-seo-divider-line"></div>
-        <span class="spec-seo-divider-text">Documentación Técnica</span>
-        <div class="spec-seo-divider-line"></div>
-    </div>
-
-    <article class="spec-seo-card">
+<section class="seo-section">
+    <article class="seo-card">
         <h2>¿Qué es la Especificidad en CSS?</h2>
         <p>
             La especificidad en CSS es el algoritmo mediante el cual los navegadores deciden qué
-            valores de las propiedades CSS aplicar a un elemento en particular. Básicamente, es una
+            valores de las propiedades aplicarán a un elemento en particular. Básicamente, es una
             puntuación matemática que indica al navegador "cuán específica" es una regla.
         </p>
         <p>
@@ -25,61 +19,64 @@ import "./CssSpecificityCalculatorSEO.css";
         <h3>¿Cómo calcular la Especificidad CSS?</h3>
         <p>
             La especificidad se calcula basándose en tres categorías principales que forman un peso
-            de tres columnas, a menudo expresado como (A, B, C):
+            de tres columnas, a menudo expresado como <strong>(A, B, C)</strong>:
         </p>
-        <ul class="spec-seo-list">
-            <li class="spec-seo-list-item">
+
+        <ul class="seo-list">
+            <li class="seo-list-item">
+                <div class="seo-bullet seo-bullet-1"></div>
                 <span
-                    ><strong>Columna A (IDs):</strong> Suma el número de selectores de identificadores
-                    únicos en la regla. Por ejemplo, <code>#header</code> cuenta como 1 en la columna
-                    A.</span
+                    ><strong>Columna A (IDs):</strong> Suma el número de identificadores únicos en la
+                    regla. Ejemplo: <code>#header</code> cuenta como 1 en la columna A.</span
                 >
             </li>
-            <li class="spec-seo-list-item">
+            <li class="seo-list-item">
+                <div class="seo-bullet seo-bullet-2"></div>
                 <span
                     ><strong>Columna B (Clases, Atributos y Pseudos):</strong> Suma todas las clases
-                    (<code>.btn</code>), selectores de atributo (<code>[type="text"]</code>) y
-                    pseudo-clases (<code>:hover</code>).</span
+                    (<code>.button</code>), atributos (<code>[type="text"]</code>) y pseudo-clases (<code
+                        >:hover</code
+                    >).</span
                 >
             </li>
-            <li class="spec-seo-list-item">
+            <li class="seo-list-item">
+                <div class="seo-bullet seo-bullet-3"></div>
                 <span
-                    ><strong>Columna C (Elementos HTML y Pseudo-elementos):</strong> Suma todos los nombres
-                    de elementos html tradicionales (<code>div</code>, <code>h1</code>, <code
-                        >span</code
-                    >) y pseudo-elementos (<code>::before</code>, <code>::after</code>).</span
+                    ><strong>Columna C (Elementos y Pseudo-elementos):</strong> Suma todos los elementos
+                    html tradicionales (<code>div</code>, <code>h1</code>) y pseudo-elementos (<code
+                        >::before</code
+                    >).</span
                 >
             </li>
         </ul>
 
-        <h3>La regla de oro: No existe acarreo entre columnas</h3>
+        <h3>La regla de oro: No hay acarreo numérico</h3>
         <p>
             A diferencia del sistema numérico base 10 regular, una columna con menor prioridad jamás
             podrá "alcanzar" a una columna con mayor prioridad. Es decir, una regla con una
-            especificidad (0, 10, 0) nunca será más específica que una regla con especificidad (1,
-            0, 0). ¡Un solo ID vence a un millón de clases!
+            especificidad (0, 10, 0) o incluso (0, 50, 0) nunca será más específica que una regla
+            (1, 0, 0). <strong>¡Un solo ID vence a infinitas clases!</strong>
         </p>
 
-        <h3>El terror del !important</h3>
+        <h3>El terror del <code>!important</code></h3>
         <p>
-            La directiva <code>!important</code> es una excepción a las reglas de especificidad regulares.
-            Cuando aplicas <code>!important</code> a una declaración de CSS, esa declaración sobrescribe
-            cualquier otra, sin importar la especificidad que tengan. Su uso desmedido se considera una
-            mala práctica en desarrollo web ya que destruye la cascada natural y hace que el mantenimiento
-            del diseño sea problemático.
+            La directiva <code>!important</code> es una excepción a las reglas de especificidad. Cuando
+            la utilizas, esa declaración sobrescribe cualquier otra automáticamente. Se considera una
+            mala práctica en el desarrollo web moderno ya que destruye la cascada natural y hace que
+            el mantenimiento del diseño sea frustrante y propenso a errores.
         </p>
 
         <h3>Mejores Prácticas (La arquitectura BEM)</h3>
         <p>
-            Para evitar guerras de especificidad en grandes proyectos, la comunidad frontend diseñó
-            metodologías como BEM (Block, Element, Modifier). BEM aboga por el uso exclusivo de
-            selectores de clase a un único nivel de profundidad, manteniendo artificialmente la
-            especificidad baja y plana (0, 1, 0), lo que permite escribir CSS modular y escalable.
+            Para evitar guerras de especificidad en proyectos grandes, la comunidad de Frontend
+            diseñó metodologías como BEM (Block, Element, Modifier). BEM aboga por el uso exclusivo
+            de selectores de clase a un único nivel de profundidad, manteniendo artificialmente la
+            especificidad plana (0, 1, 0).
         </p>
         <p>
-            Nuestra calculadora visual está diseñada para darte claridad instantánea sobre el peso
-            particular de cualquier combinación, garantizando que puedas entender, predecir y
-            corregir qué elementos aplicarán en tu DOM final.
+            Esta calculadora gráfica está diseñada para darte claridad instantánea sobre el peso
+            particular de cualquier combinación de selectores, garantizando que puedas entender
+            perfectamente qué estilos se inyectarán en tu DOM.
         </p>
     </article>
 </section>

@@ -6,6 +6,14 @@ export const devSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            href: "/utilidades/eliminador-css-duplicado/",
+            iconBg: "mdi:file-document-multiple-outline",
+            iconFg: "mdi:auto-fix",
+            title: "Limpiador CSS Duplicado",
+            description: "Analiza, unifica y purga todo tu código CSS redundante y repetido respetando reglas de cascada para optimizar tus hojas de estilo y ahorrar KBs al instante.",
+            color: "#10b981",
+        },
+        {
             href: "/utilidades/convertidor-css-inline/",
             iconBg: "mdi:language-html5",
             iconFg: "mdi:format-paint",
