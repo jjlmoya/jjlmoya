@@ -6,7 +6,7 @@
 - [x] **Convertidor CSS Externo a CSS en línea (Inline):** Muy práctico a la hora de maquetar emails HTML.
 - [x] **Eliminador de CSS Duplicado:** Analiza estilos y limpia redundancias en el código.
 - [x] **Decodificador y Codificador de URLs:** Clásico imprescindible para formatear caracteres especiales en rutas web.
-- [ ] **Calculadora de Aspect Ratio a Píxeles:** Para diseño responsivo rápido y preciso.
+- [x] **Calculadora de Aspect Ratio a Píxeles:** Para diseño responsivo rápido y preciso.
 - [ ] **Convertidor de SVG a CSS:** Transforma un archivo SVG en código incrustado preparado para usar en variables o clases CSS (Data URI, CSS mask).
 - [ ] **Generador de UTM:** Para parametrizar campañas y enlaces fácil y sin errores.
 - [ ] **Convertidor de Texto Enriquecido a Markdown:** Convierte copypaste de Word o Web directo a un `.md` limpio.

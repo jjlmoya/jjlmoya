@@ -1,0 +1,230 @@
+---
+import "./AspectRatioCalculator.css";
+---
+
+<div class="arc-container">
+    <div class="arc-layout">
+        
+        <div class="arc-panel">
+            <div class="arc-title-group">
+                <div class="arc-icon-box">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M21 15V9"
+                        ></path><path d="M9 21h6"></path></svg
+                    >
+                </div>
+                <h2 class="arc-panel-title">Configuración</h2>
+            </div>
+
+            
+            <div class="arc-section">
+                <span class="arc-section-header">Ratio Original</span>
+                <div class="arc-input-grid">
+                    <div class="arc-field">
+                        <label class="arc-label" for="arc-ratio-w">Ancho</label>
+                        <input
+                            type="number"
+                            id="arc-ratio-w"
+                            class="arc-input"
+                            value="16"
+                            min="1"
+                            step="0.1"
+                        />
+                    </div>
+                    <div class="arc-separator">:</div>
+                    <div class="arc-field">
+                        <label class="arc-label" for="arc-ratio-h">Alto</label>
+                        <input
+                            type="number"
+                            id="arc-ratio-h"
+                            class="arc-input"
+                            value="9"
+                            min="1"
+                            step="0.1"
+                        />
+                    </div>
+                </div>
+
+                <div class="arc-presets">
+                    <button class="arc-preset-btn" data-w="16" data-h="9">16:9</button>
+                    <button class="arc-preset-btn" data-w="4" data-h="3">4:3</button>
+                    <button class="arc-preset-btn" data-w="1" data-h="1">1:1</button>
+                    <button class="arc-preset-btn" data-w="21" data-h="9">21:9</button>
+                    <button class="arc-preset-btn" data-w="9" data-h="16">9:16</button>
+                    <button class="arc-preset-btn" data-w="3" data-h="2">3:2</button>
+                </div>
+            </div>
+
+            
+            <div class="arc-section">
+                <span class="arc-section-header">Escale Real</span>
+                <div class="arc-input-grid">
+                    <div class="arc-field">
+                        <label class="arc-label" for="arc-res-w">Píxeles (Ancho)</label>
+                        <input
+                            type="number"
+                            id="arc-res-w"
+                            class="arc-input"
+                            value="1920"
+                            min="1"
+                        />
+                    </div>
+                    <div class="arc-separator">&times;</div>
+                    <div class="arc-field">
+                        <label class="arc-label" for="arc-res-h">Píxeles (Alto)</label>
+                        <input
+                            type="number"
+                            id="arc-res-h"
+                            class="arc-input"
+                            value="1080"
+                            min="1"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="arc-preview-panel">
+            <header class="arc-preview-header">
+                <div class="arc-preview-title">
+                    <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        style="color: var(--arc-primary)"
+                        ><path d="M15 3h6v6"></path><path d="M9 21H3v-6"></path><path d="M21 3l-7 7"
+                        ></path><path d="M3 21l7-7"></path></svg
+                    >
+                    Vista Previa Proporcional
+                </div>
+                <div id="arc-badge" class="arc-badge">16:9 Cinema</div>
+            </header>
+
+            <main class="arc-viewport" id="arc-viewport">
+                <div id="arc-box" class="arc-box">
+                    <span id="arc-box-ratio" class="arc-box-ratio">16:9</span>
+                    <span id="arc-box-res" class="arc-box-res">1920 &times; 1080px</span>
+                </div>
+            </main>
+
+            <footer class="arc-status">
+                <div class="arc-status-item">
+                    <div class="arc-dot"></div>
+                    <span id="arc-status-text">Relación Perfecta</span>
+                </div>
+                <div class="arc-status-item">
+                    <span>100% Offline Tool</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+    const rwInput = document.getElementById("arc-ratio-w") as HTMLInputElement;
+    const rhInput = document.getElementById("arc-ratio-h") as HTMLInputElement;
+    const cwInput = document.getElementById("arc-res-w") as HTMLInputElement;
+    const chInput = document.getElementById("arc-res-h") as HTMLInputElement;
+    const arcBox = document.getElementById("arc-box");
+    const arcBoxRatio = document.getElementById("arc-box-ratio");
+    const arcBoxRes = document.getElementById("arc-box-res");
+    const arcBadge = document.getElementById("arc-badge");
+    const viewport = document.getElementById("arc-viewport");
+    const presetsBtn = document.querySelectorAll(".arc-preset-btn");
+
+    const calculateGcd = (a: number, b: number): number => {
+        return b === 0 ? a : calculateGcd(b, a % b);
+    };
+
+    const updateAll = (source: string) => {
+        const rw = parseFloat(rwInput.value) || 1;
+        const rh = parseFloat(rhInput.value) || 1;
+        const cw = parseFloat(cwInput.value) || 0;
+        const ch = parseFloat(chInput.value) || 0;
+
+        if (source === "ratio" || source === "width") {
+            const newHeight = Math.round((cw / rw) * rh);
+            if (chInput) chInput.value = newHeight.toString();
+        } else if (source === "height") {
+            const newWidth = Math.round((ch / rh) * rw);
+            if (cwInput) cwInput.value = newWidth.toString();
+        }
+
+        renderBox();
+    };
+
+    const renderBox = () => {
+        if (!arcBox || !viewport || !arcBoxRatio || !arcBoxRes || !arcBadge) return;
+
+        const rw = parseFloat(rwInput.value) || 1;
+        const rh = parseFloat(rhInput.value) || 1;
+        const cw = parseFloat(cwInput.value) || 0;
+        const ch = parseFloat(chInput.value) || 0;
+
+        
+        const divisor = calculateGcd(Math.round(rw * 100), Math.round(rh * 100)) / 100;
+        const simpW = Math.round(rw / divisor);
+        const simpH = Math.round(rh / divisor);
+
+        const ratioText = `${simpW}:${simpH}`;
+        arcBoxRatio.textContent = ratioText;
+        arcBoxRes.innerHTML = `${cw} &times; ${ch}px`;
+        arcBadge.textContent = ratioText;
+
+        
+        const viewW = viewport.clientWidth - 80;
+        const viewH = viewport.clientHeight - 80;
+        const containerRatio = viewW / viewH;
+        const targetRatio = rw / rh;
+
+        let finalW, finalH;
+        if (targetRatio > containerRatio) {
+            finalW = viewW;
+            finalH = viewW / targetRatio;
+        } else {
+            finalH = viewH;
+            finalW = viewH * targetRatio;
+        }
+
+        arcBox.style.width = finalW + "px";
+        arcBox.style.height = finalH + "px";
+    };
+
+    
+    rwInput?.addEventListener("input", () => updateAll("ratio"));
+    rhInput?.addEventListener("input", () => updateAll("ratio"));
+    cwInput?.addEventListener("input", () => updateAll("width"));
+    chInput?.addEventListener("input", () => updateAll("height"));
+
+    presetsBtn.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const el = e.currentTarget as HTMLButtonElement;
+            const w = el.dataset.w;
+            const h = el.dataset.h;
+            if (w && h) {
+                rwInput.value = w;
+                rhInput.value = h;
+                updateAll("ratio");
+            }
+        });
+    });
+
+    window.addEventListener("resize", renderBox);
+
+    
+    setTimeout(renderBox, 10);
+</script>

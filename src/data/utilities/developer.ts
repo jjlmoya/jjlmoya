@@ -6,6 +6,14 @@ export const devSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            href: "/utilidades/calculadora-aspect-ratio/",
+            iconBg: "mdi:aspect-ratio",
+            iconFg: "mdi:ruler-square",
+            title: "Calculadora Aspect Ratio",
+            description: "Calcula nuevas resoluciones de imágenes web y mantén proporciones perfectas en tus assets (16:9, 4:3, cuadrados...). Diseñado para proteger tus diseños UI.",
+            color: "#0ea5e9",
+        },
+        {
             href: "/utilidades/codificador-decodificador-url/",
             iconBg: "mdi:link-variant",
             iconFg: "mdi:code-json",
