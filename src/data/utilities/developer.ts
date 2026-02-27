@@ -6,6 +6,14 @@ export const devSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            href: "/utilidades/calculadora-especificidad-css/",
+            iconBg: "mdi:language-css3",
+            iconFg: "mdi:scale-balance",
+            title: "Especificidad CSS",
+            description: "Analiza el peso y la cascada de tus selectores CSS visualmente para evitar guerras de estilos.",
+            color: "#e11d48",
+        },
+        {
             href: "/utilidades/cron/",
             iconBg: "mdi:clock-check",
             iconFg: "mdi:calendar-clock",

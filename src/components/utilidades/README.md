@@ -4,11 +4,13 @@ This guide outlines the standard workflow for adding a new tool to the Utilities
 
 ## 1. Design Philosophy
 
-- **Aesthetics First**: The UI must look premium. Use glassmorphism, subtle gradients (`emerald`, `indigo`, `blue`), animations, and clean whitespace.
-- **Theme Aware**: Do NOT design exclusively for dark mode. Use Tailwind's `dark:` classes to ensure the utility looks spectacular in both light and dark themes. Prioritize clean, breathable layouts.
+- **Aesthetics First**: The UI must look premium. Use glassmorphism, subtle gradients, animations, and clean whitespace.
+- **Theme Aware**: Design for both light and dark themes. Prioritize clean, breathable layouts.
+- **Styling**: **TAILWIND IS STRICTLY FORBIDDEN**. Every utility MUST have its own dedicated `.css` file imported within the component. All styles must follow SOLID principles, be vanilla CSS, and ideally use BEM or scoped CSS to avoid conflicts.
 - **Interactive**: Elements should react to the user. Hover states, transitions, and immediate feedback are mandatory.
 - **Visual**: If a result can be visualized (charts, bars, counters), do it. Don't just show a number.
-- **Language**: All user-facing text must be in **Spanish**.
+- **Language**: All user-facing text must be in **Spanish**, code in English.
+- **No Emojis**: Emojis are strictly forbidden in the codebase and the web content.
 
 ## 2. File Structure
 
