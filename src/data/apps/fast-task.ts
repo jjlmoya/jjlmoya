@@ -60,7 +60,7 @@ export const fastTask: Application = {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.fasttask",
         appStore: "",
     },
-    price: "17,99€",
+    price: "4,95€",
     benefits: [
         {
             title: "Captura en 3 segundos",
