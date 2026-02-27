@@ -6,6 +6,14 @@ export const devSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            href: "/utilidades/convertidor-css-inline/",
+            iconBg: "mdi:language-html5",
+            iconFg: "mdi:format-paint",
+            title: "CSS Inliner Pura",
+            description: "Transforma tu HTML de diseño bruto fusionando todas tus reglas de hojas de estilos externas y clases estáticas en HTML inyectado en línea (Email Safe).",
+            color: "#ec4899",
+        },
+        {
             href: "/utilidades/calculadora-especificidad-css/",
             iconBg: "mdi:language-css3",
             iconFg: "mdi:scale-balance",

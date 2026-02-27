@@ -2,8 +2,8 @@
 
 ## 💻 Desarrollo Web (`developer.ts`)
 
-- [ ] **CSS Specificity Calculator:** Herramienta visual para entender qué selectores CSS tienen más peso.
-- [ ] **Convertidor CSS Externo a CSS en línea (Inline):** Muy práctico a la hora de maquetar emails HTML.
+- [x] **CSS Specificity Calculator:** Herramienta visual para entender qué selectores CSS tienen más peso.
+- [x] **Convertidor CSS Externo a CSS en línea (Inline):** Muy práctico a la hora de maquetar emails HTML.
 - [ ] **Eliminador de CSS Duplicado:** Analiza estilos y limpia redundancias en el código.
 - [ ] **Decodificador y Codificador de URLs:** Clásico imprescindible para formatear caracteres especiales en rutas web.
 - [ ] **Calculadora de Aspect Ratio a Píxeles:** Para diseño responsivo rápido y preciso.

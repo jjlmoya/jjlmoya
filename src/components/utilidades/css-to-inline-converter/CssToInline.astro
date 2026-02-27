@@ -1,0 +1,158 @@
+---
+import "./CssToInline.css";
+---
+
+<div class="inline-container">
+    <div class="inline-header">
+        <h2>Convertidor de CSS Externo a Inline</h2>
+        <p>
+            Inyecta (inline) automáticamente tus clases y estilos CSS directamente en las etiquetas
+            de tu documento HTML. Imprescindible para plantillas de Email.
+        </p>
+    </div>
+
+    <div class="inline-grid">
+        <div class="inline-form-group">
+            <label for="inline-html-input" class="inline-label">HTML Original</label>
+            <textarea
+                id="inline-html-input"
+                class="inline-textarea"
+                placeholder='<div class="mi-clase">Hola Mundo</div>'
+                spellcheck="false"></textarea>
+        </div>
+        <div class="inline-form-group">
+            <label for="inline-css-input" class="inline-label">Reglas CSS</label>
+            <textarea
+                id="inline-css-input"
+                class="inline-textarea"
+                placeholder=".mi-clase { color: red; padding: 10px; }"
+                spellcheck="false"></textarea>
+        </div>
+    </div>
+
+    <div class="inline-actions">
+        <button id="inline-convert-btn" class="inline-button">✨ Inyectar CSS en el HTML</button>
+    </div>
+
+    <div class="inline-output-group">
+        <div class="inline-label">
+            <span>Resultado HTML En línea</span>
+            <button id="inline-copy-btn" class="inline-copy-btn">Copiar Código</button>
+        </div>
+        <textarea
+            id="inline-html-output"
+            class="inline-output"
+            readonly
+            placeholder="Aquí aparecerá tu HTML con los estilos incrustados..."></textarea>
+    </div>
+</div>
+
+<script>
+    const htmlInput = document.getElementById("inline-html-input") as HTMLTextAreaElement;
+    const cssInput = document.getElementById("inline-css-input") as HTMLTextAreaElement;
+    const htmlOutput = document.getElementById("inline-html-output") as HTMLTextAreaElement;
+    const convertBtn = document.getElementById("inline-convert-btn");
+    const copyBtn = document.getElementById("inline-copy-btn");
+
+    function getSpecificity(s: string) {
+        let text = s;
+        const ids = (text.match(/#[a-zA-Z0-9_\-]+/g) || []).length;
+        text = text.replace(/#[a-zA-Z0-9_\-]+/g, " ");
+
+        const classes = (text.match(/\.[a-zA-Z0-9_\-]+/g) || []).length;
+        text = text.replace(/\.[a-zA-Z0-9_\-]+/g, " ");
+
+        const attrs = (text.match(/\[[^\]]+\]/g) || []).length;
+        text = text.replace(/\[[^\]]+\]/g, " ");
+
+        const pElems = (text.match(/::[a-zA-Z0-9_\-]+/g) || []).length;
+        text = text.replace(/::[a-zA-Z0-9_\-]+/g, " ");
+
+        const pClasses = (text.match(/:[a-zA-Z0-9_\-\(\)]+/g) || []).length;
+        text = text.replace(/:[a-zA-Z0-9_\-\(\)]+/g, " ");
+
+        text = text
+            .replace(/[*+>~,]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+        const elems = text ? text.split(" ").length : 0;
+
+        return { val: ids * 100 + (classes + attrs + pClasses) * 10 + (elems + pElems) };
+    }
+
+    if (convertBtn && htmlInput && cssInput && htmlOutput) {
+        convertBtn.addEventListener("click", () => {
+            const rawHtml = htmlInput.value;
+            const rawCss = cssInput.value;
+
+            if (!rawHtml.trim()) return;
+
+            try {
+                const cleanCss = rawCss.replace(/\/\*[\s\S]*?\*\//g, "");
+                const rulesMatches = cleanCss.match(/(?:[^\{\}]+)\s*\{[^\}]+\}/g) || [];
+                const rulesSet: { selector: string; styles: string; spec: number }[] = [];
+
+                rulesMatches.forEach((ruleBlock) => {
+                    const [head, tail] = ruleBlock.split("{");
+                    if (!tail) return;
+
+                    const stylesRaw = tail.replace("}", "").trim();
+                    const selectors = head.split(",").map((s) => s.trim());
+
+                    if (stylesRaw && selectors.length) {
+                        selectors.forEach((sel) => {
+                            if (sel && !sel.startsWith("@")) {
+                                rulesSet.push({
+                                    selector: sel,
+                                    styles: stylesRaw,
+                                    spec: getSpecificity(sel).val,
+                                });
+                            }
+                        });
+                    }
+                });
+
+                rulesSet.sort((a, b) => a.spec - b.spec);
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(rawHtml, "text/html");
+
+                rulesSet.forEach((rule) => {
+                    try {
+                        const nodelist = doc.querySelectorAll(rule.selector);
+                        nodelist.forEach((el) => {
+                            if (el instanceof HTMLElement) {
+                                let existingStyle = el.getAttribute("style") || "";
+                                if (existingStyle && !existingStyle.endsWith(";"))
+                                    existingStyle += "; ";
+                                el.setAttribute("style", existingStyle + rule.styles);
+                            }
+                        });
+                    } catch (e) {}
+                });
+
+                htmlOutput.value = doc.body.innerHTML;
+            } catch (err) {
+                console.error("Error procesando HTML/CSS", err);
+                htmlOutput.value =
+                    "Hubo un error al procesar. Comprueba que el HTML y el CSS estén formados correctamente.";
+            }
+        });
+    }
+
+    if (copyBtn && htmlOutput) {
+        copyBtn.addEventListener("click", async () => {
+            if (!htmlOutput.value) return;
+            try {
+                await navigator.clipboard.writeText(htmlOutput.value);
+                const old = copyBtn.textContent;
+                copyBtn.textContent = "¡Copiado!";
+                setTimeout(() => {
+                    copyBtn.textContent = old;
+                }, 2000);
+            } catch (err) {
+                console.error("Failed to copy", err);
+            }
+        });
+    }
+</script>
