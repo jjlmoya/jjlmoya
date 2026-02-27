@@ -1,0 +1,152 @@
+---
+import "./UrlEncoderDecoder.css";
+---
+
+<div class="urlc-container">
+    <div class="urlc-header">
+        <h2>Codificador / Decodificador de URLs</h2>
+        <p style="color: var(--urlc-text-muted);">
+            Convierte caracteres especiales de una URL en un formato seguro y válido
+            (Percent-Encoding) o devuélvelos a su estado original legible al instante.
+        </p>
+    </div>
+
+    <div class="urlc-grid">
+        <div class="urlc-form-group">
+            <div class="urlc-label">
+                <span>Texto Crudo (Legible)</span>
+                <div class="urlc-toolbar">
+                    <button id="urlc-clear-raw" class="urlc-toolbar-btn">Limpiar</button>
+                    <button id="urlc-copy-raw" class="urlc-toolbar-btn">Copiar</button>
+                </div>
+            </div>
+            <textarea
+                id="urlc-input-raw"
+                class="urlc-textarea"
+                placeholder="https://ejemplo.com/busqueda?q=zapatos de tacón rojo&talla=38"
+                spellcheck="false"></textarea>
+        </div>
+
+        <div class="urlc-actions-middle">
+            <button id="urlc-encode-btn" class="urlc-btn urlc-btn-encode">
+                <svg
+                    class="urlc-btn-icon"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                </svg>
+                Codificar URL
+            </button>
+            <button id="urlc-decode-btn" class="urlc-btn urlc-btn-decode">
+                <svg
+                    class="urlc-btn-icon"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 15l7-7 7 7"></path>
+                </svg>
+                Decodificar
+            </button>
+        </div>
+
+        <div class="urlc-form-group">
+            <div class="urlc-label">
+                <span>URL Formateada (Encoded)</span>
+                <div class="urlc-toolbar">
+                    <button id="urlc-clear-enc" class="urlc-toolbar-btn">Limpiar</button>
+                    <button id="urlc-copy-enc" class="urlc-toolbar-btn">Copiar</button>
+                </div>
+            </div>
+            <textarea
+                id="urlc-input-encoded"
+                class="urlc-textarea is-encoded"
+                placeholder="https%3A%2F%2Fejemplo.com%2Fbusqueda%3Fq%3Dzapatos%20de%20tac%C3%B3n%20rojo%26talla%3D38"
+                spellcheck="false"></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    const inputRaw = document.getElementById("urlc-input-raw") as HTMLTextAreaElement;
+    const inputEnc = document.getElementById("urlc-input-encoded") as HTMLTextAreaElement;
+    const btnEncode = document.getElementById("urlc-encode-btn");
+    const btnDecode = document.getElementById("urlc-decode-btn");
+
+    const copyRaw = document.getElementById("urlc-copy-raw");
+    const copyEnc = document.getElementById("urlc-copy-enc");
+    const clearRaw = document.getElementById("urlc-clear-raw");
+    const clearEnc = document.getElementById("urlc-clear-enc");
+
+    if (btnEncode && inputRaw && inputEnc) {
+        btnEncode.addEventListener("click", () => {
+            const rawText = inputRaw.value;
+            if (!rawText) return;
+
+            try {
+                const encodedText = encodeURIComponent(rawText);
+                inputEnc.value = encodedText;
+            } catch (e) {
+                console.error("Error al codificar", e);
+                inputEnc.value = "Error al intentar codificar la cadena.";
+            }
+        });
+    }
+
+    if (btnDecode && inputRaw && inputEnc) {
+        btnDecode.addEventListener("click", () => {
+            const encText = inputEnc.value;
+            if (!encText) return;
+
+            try {
+                const decodedText = decodeURIComponent(encText);
+                inputRaw.value = decodedText;
+            } catch (e) {
+                console.error("Error al decodificar", e);
+                inputRaw.value = "Error: Cadena codificada no válida.";
+            }
+        });
+    }
+
+    const setupClipboard = (btn: HTMLElement | null, input: HTMLTextAreaElement | null) => {
+        if (!btn || !input) return;
+        btn.addEventListener("click", async () => {
+            if (!input.value) return;
+            try {
+                await navigator.clipboard.writeText(input.value);
+                const oldText = btn.textContent;
+                btn.textContent = "¡Copiado!";
+                setTimeout(() => {
+                    btn.textContent = oldText;
+                }, 1500);
+            } catch (err) {
+                console.error("Fallo al copiar", err);
+            }
+        });
+    };
+
+    const setupClear = (btn: HTMLElement | null, input: HTMLTextAreaElement | null) => {
+        if (!btn || !input) return;
+        btn.addEventListener("click", () => {
+            input.value = "";
+            input.focus();
+        });
+    };
+
+    setupClipboard(copyRaw, inputRaw);
+    setupClipboard(copyEnc, inputEnc);
+    setupClear(clearRaw, inputRaw);
+    setupClear(clearEnc, inputEnc);
+</script>

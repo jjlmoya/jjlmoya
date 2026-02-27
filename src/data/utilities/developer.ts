@@ -6,6 +6,14 @@ export const devSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            href: "/utilidades/codificador-decodificador-url/",
+            iconBg: "mdi:link-variant",
+            iconFg: "mdi:code-json",
+            title: "URL Encoder & Decoder",
+            description: "Codifica caracteres especiales a un formato de web segura (Percent-Encoding) o decodifica rutas enrevesadas a texto legible para los humanos al vuelo.",
+            color: "#f59e0b",
+        },
+        {
             href: "/utilidades/eliminador-css-duplicado/",
             iconBg: "mdi:file-document-multiple-outline",
             iconFg: "mdi:auto-fix",
