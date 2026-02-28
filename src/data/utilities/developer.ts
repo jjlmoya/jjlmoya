@@ -103,5 +103,13 @@ export const devSection: SectionData = {
                 "Crea mockups profesionales de capturas para iPhone y Pixel con fondos personalizados.",
             color: "#8b5cf6",
         },
+        {
+            href: "/utilidades/generador-utm/",
+            iconBg: "mdi:bullhorn",
+            iconFg: "mdi:link-variant",
+            title: "Generador de UTM",
+            description: "Crea y analiza tus enlaces de campaña para Google Analytics con parámetros UTM de forma profesional.",
+            color: "#6366f1",
+        },
     ],
 };

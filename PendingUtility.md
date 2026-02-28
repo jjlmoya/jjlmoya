@@ -8,7 +8,7 @@
 - [x] **Decodificador y Codificador de URLs:** Clásico imprescindible para formatear caracteres especiales en rutas web.
 - [x] **Calculadora de Aspect Ratio a Píxeles:** Para diseño responsivo rápido y preciso.
 - [x] **Convertidor de SVG a CSS:** Transforma un archivo SVG en código incrustado preparado para usar en variables o clases CSS (Data URI, CSS mask).
-- [ ] **Generador de UTM:** Para parametrizar campañas y enlaces fácil y sin errores.
+- [x] **Generador de UTM:** Para parametrizar campañas y enlaces fácil y sin errores.
 - [ ] **Convertidor de Texto Enriquecido a Markdown:** Convierte copypaste de Word o Web directo a un `.md` limpio.
 - [ ] **Formateador para Reddit / Limpiador de Textos:** Utilidades rápidas para trabajar con cadenas de texto y adaptarlas a diferentes foros y estándares.
 
