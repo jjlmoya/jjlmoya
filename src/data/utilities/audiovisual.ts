@@ -90,5 +90,13 @@ export const audiovisualSection: SectionData = {
             description: "Comprime, redimensiona y optimiza el peso de tus fotos sin servidor desde el navegador.",
             color: "#10b981",
         },
+        {
+            href: "/utilidades/generador-imagenes-placeholder/",
+            iconBg: "mdi:image-outline",
+            iconFg: "mdi:pencil-ruler",
+            title: "Generador Placeholder",
+            description: "Crea imágenes de prueba o bocetos con dimensiones y textos a medida al instante.",
+            color: "#eab308",
+        },
     ],
 };

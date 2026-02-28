@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
 
-// Parse arguments
+
 const args = process.argv.slice(2);
 if (args.length < 2) {
     console.error("Usage: node scripts/convert-image-to-webp.mjs <input-path> <output-path>");
@@ -19,7 +19,7 @@ async function convertImage() {
             process.exit(1);
         }
 
-        // Ensure output directory exists
+        
         const outDir = path.dirname(outputPath);
         if (!fs.existsSync(outDir)) {
             fs.mkdirSync(outDir, { recursive: true });

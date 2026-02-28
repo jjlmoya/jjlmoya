@@ -1,0 +1,263 @@
+---
+import "./PlaceholderGenerator.css";
+---
+
+<section class="placeholder-dashboard animate-in">
+    <div class="controls-panel">
+        <div class="control-group">
+            <label>Dimensiones Rápidas</label>
+            <div class="presets-row" id="p-presets">
+                <button type="button" class="preset-pill" data-w="1920" data-h="1080">FHD</button>
+                <button type="button" class="preset-pill" data-w="1280" data-h="720">HD</button>
+                <button type="button" class="preset-pill" data-w="1080" data-h="1080">Insta</button>
+                <button type="button" class="preset-pill" data-w="1200" data-h="630"
+                    >OG Image</button
+                >
+                <button type="button" class="preset-pill active" data-w="800" data-h="600"
+                    >800x600</button
+                >
+                <button type="button" class="preset-pill" data-w="250" data-h="250">Avatar</button>
+            </div>
+        </div>
+
+        <div class="dimensions-group">
+            <div class="control-group">
+                <label for="p-width">Ancho (px)</label>
+                <input type="number" id="p-width" value="800" min="1" max="8000" />
+            </div>
+            <div class="control-group">
+                <label for="p-height">Alto (px)</label>
+                <input type="number" id="p-height" value="600" min="1" max="8000" />
+            </div>
+        </div>
+
+        <div class="color-pickers">
+            <div class="control-group">
+                <label for="p-bg-color">Fondo</label>
+                <div class="color-wrapper">
+                    <input type="color" id="p-bg-color" value="#e2e8f0" />
+                    <input type="text" id="p-bg-text" value="#e2e8f0" maxlength="7" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="p-text-color">Texto</label>
+                <div class="color-wrapper">
+                    <input type="color" id="p-text-color" value="#64748b" />
+                    <input type="text" id="p-text-text" value="#64748b" maxlength="7" />
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="p-custom-text">Texto Personalizado (Opcional)</label>
+            <input type="text" id="p-custom-text" placeholder="Ej: Banner Hero" />
+        </div>
+
+        <div class="typography-group">
+            <div class="control-group">
+                <label for="p-font-family">Tipografía</label>
+                <select id="p-font-family">
+                    <option value="Inter, sans-serif">Sans-serif (Inter)</option>
+                    <option value="Georgia, serif">Serif</option>
+                    <option value="monospace">Monospace</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="p-font-size">Tamaño Base</label>
+                <select id="p-font-size">
+                    <option value="auto">Automático</option>
+                    <option value="16">16px</option>
+                    <option value="24">24px</option>
+                    <option value="32">32px</option>
+                    <option value="48">48px</option>
+                    <option value="64">64px</option>
+                    <option value="128">128px</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label>Formato de Salida</label>
+            <div class="presets-row">
+                <label class="radio-pill">
+                    <input type="radio" name="p-format" value="image/webp" checked />
+                    <span>WebP</span>
+                </label>
+                <label class="radio-pill">
+                    <input type="radio" name="p-format" value="image/png" />
+                    <span>PNG</span>
+                </label>
+                <label class="radio-pill">
+                    <input type="radio" name="p-format" value="image/jpeg" />
+                    <span>JPEG</span>
+                </label>
+            </div>
+        </div>
+
+        <button id="p-download-btn" class="primary-btn">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+            >
+                <path
+                    d="M12 16L7 11L8.4 9.55L11 12.15V4H13V12.15L15.6 9.55L17 11L12 16ZM6 20C5.45 20 4.97917 19.8042 4.5875 19.4125C4.19583 19.0208 4 18.55 4 18V15H6V18H18V15H20V18C20 18.55 19.8042 19.0208 19.4125 19.4125C19.0208 19.8042 18.55 20 18 20H6Z"
+                ></path>
+            </svg>
+            Descargar Imagen
+        </button>
+    </div>
+
+    <div class="preview-panel">
+        <div class="canvas-container">
+            <canvas id="p-canvas" style="display: none;"></canvas>
+            <img id="p-image-preview" alt="Placeholder preview" />
+        </div>
+    </div>
+</section>
+
+<script>
+    const widthInput = document.getElementById("p-width") as HTMLInputElement;
+    const heightInput = document.getElementById("p-height") as HTMLInputElement;
+    const bgColorInput = document.getElementById("p-bg-color") as HTMLInputElement;
+    const bgTextInput = document.getElementById("p-bg-text") as HTMLInputElement;
+    const textColorInput = document.getElementById("p-text-color") as HTMLInputElement;
+    const textTextInput = document.getElementById("p-text-text") as HTMLInputElement;
+    const customTextInput = document.getElementById("p-custom-text") as HTMLInputElement;
+    const fontFamilyInput = document.getElementById("p-font-family") as HTMLSelectElement;
+    const fontSizeInput = document.getElementById("p-font-size") as HTMLSelectElement;
+
+    const canvas = document.getElementById("p-canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+    const downloadBtn = document.getElementById("p-download-btn") as HTMLButtonElement;
+    const imagePreview = document.getElementById("p-image-preview") as HTMLImageElement;
+    const presetBtns = document.querySelectorAll(".preset-pill");
+    const formatRadios = document.querySelectorAll('input[name="p-format"]');
+
+    function renderCanvas() {
+        if (!ctx) return;
+
+        const w = parseInt(widthInput.value) || 800;
+        const h = parseInt(heightInput.value) || 600;
+
+        canvas.width = w;
+        canvas.height = h;
+
+        ctx.fillStyle = bgColorInput.value;
+        ctx.fillRect(0, 0, w, h);
+
+        const textStr = customTextInput.value.trim() || `${w} × ${h}`;
+
+        let targetFontSize = 48;
+        if (fontSizeInput.value === "auto") {
+            const maxW = w * 0.9;
+            const maxH = h * 0.9;
+            targetFontSize = Math.min((maxW / textStr.length) * 1.8, maxH / 2);
+            targetFontSize = Math.max(12, Math.min(targetFontSize, 200));
+        } else {
+            targetFontSize = parseInt(fontSizeInput.value);
+        }
+
+        ctx.fillStyle = textColorInput.value;
+        ctx.font = `600 ${targetFontSize}px ${fontFamilyInput.value}`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.fillText(textStr, w / 2, h / 2);
+
+        const formatInput = document.querySelector(
+            'input[name="p-format"]:checked'
+        ) as HTMLInputElement;
+        const format = formatInput ? formatInput.value : "image/webp";
+        const ext = format.split("/")[1] || "webp";
+
+        const fileName = `placeholder-${w}x${h}.${ext}`;
+        imagePreview.src = canvas.toDataURL(format, 0.9);
+        imagePreview.title = fileName;
+        imagePreview.alt = fileName;
+    }
+
+    function syncHex(e: Event, type: "bg" | "text") {
+        const target = e.target as HTMLInputElement;
+        let val = target.value;
+        if (val.length > 0 && val[0] !== "#") val = "#" + val;
+
+        if (/^#[0-9A-F]{6}$/i.test(val)) {
+            if (type === "bg") {
+                bgColorInput.value = val;
+                bgTextInput.value = val;
+            } else {
+                textColorInput.value = val;
+                textTextInput.value = val;
+            }
+            renderCanvas();
+        }
+    }
+
+    const inputs = [widthInput, heightInput, customTextInput, fontFamilyInput, fontSizeInput];
+    inputs.forEach((input) => input?.addEventListener("input", renderCanvas));
+
+    const updateActivePreset = () => {
+        presetBtns.forEach((p) => {
+            if (
+                p.getAttribute("data-w") === widthInput.value &&
+                p.getAttribute("data-h") === heightInput.value
+            ) {
+                p.classList.add("active");
+            } else {
+                p.classList.remove("active");
+            }
+        });
+    };
+
+    widthInput.addEventListener("input", updateActivePreset);
+    heightInput.addEventListener("input", updateActivePreset);
+
+    presetBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            widthInput.value = btn.getAttribute("data-w")!;
+            heightInput.value = btn.getAttribute("data-h")!;
+
+            updateActivePreset();
+            renderCanvas();
+        });
+    });
+
+    bgColorInput?.addEventListener("input", (e) => {
+        bgTextInput.value = (e.target as HTMLInputElement).value;
+        renderCanvas();
+    });
+
+    textColorInput?.addEventListener("input", (e) => {
+        textTextInput.value = (e.target as HTMLInputElement).value;
+        renderCanvas();
+    });
+
+    bgTextInput?.addEventListener("input", (e) => syncHex(e, "bg"));
+    textTextInput?.addEventListener("input", (e) => syncHex(e, "text"));
+
+    downloadBtn?.addEventListener("click", () => {
+        const w = parseInt(widthInput.value) || 800;
+        const h = parseInt(heightInput.value) || 600;
+        const formatInput = document.querySelector(
+            'input[name="p-format"]:checked'
+        ) as HTMLInputElement;
+        const format = formatInput ? formatInput.value : "image/webp";
+        const ext = format.split("/")[1] || "png";
+
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL(format, 0.9);
+        a.download = `placeholder-${w}x${h}.${ext}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
+
+    formatRadios.forEach((radio) => {
+        radio.addEventListener("change", renderCanvas);
+    });
+
+    renderCanvas();
+</script>

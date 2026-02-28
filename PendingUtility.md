@@ -36,22 +36,7 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 
 # Utilidades Pendientes (Inspiradas en WebUtility.io)
 
-## 💻 Desarrollo Web (`developer.ts`)
-
-- [x] **CSS Specificity Calculator:** Herramienta visual para entender qué selectores CSS tienen más peso.
-- [x] **Convertidor CSS Externo a CSS en línea (Inline):** Muy práctico a la hora de maquetar emails HTML.
-- [x] **Eliminador de CSS Duplicado:** Analiza estilos y limpia redundancias en el código.
-- [x] **Decodificador y Codificador de URLs:** Clásico imprescindible para formatear caracteres especiales en rutas web.
-- [x] **Calculadora de Aspect Ratio a Píxeles:** Para diseño responsivo rápido y preciso.
-- [x] **Convertidor de SVG a CSS:** Transforma un archivo SVG en código incrustado preparado para usar en variables o clases CSS (Data URI, CSS mask).
-- [x] **Generador de UTM:** Para parametrizar campañas y enlaces fácil y sin errores.
-- [x] **Convertidor de Texto Enriquecido a Markdown:** Convierte copypaste de Word o Web directo a un `.md` limpio.
-- [x] **Formateador para Reddit / Limpiador de Textos:** Utilidades rápidas para trabajar con cadenas de texto y adaptarlas a diferentes foros y estándares.
-
 ## 📷 Audiovisual y Diseño Creativo (`audiovisual.ts` / `creative.ts`)
-
-- [x] **Compresor y Redimensionador de Imágenes Online:** Clásico de clásicos. Optimizar peso web sin servidor usando Web APIs (Canvas/Compresión).
-- [ ] **Generador de Imágenes Placeholder:** Crea rápidamente imágenes grises con el texto del tamaño, para maquetadores.
 - [ ] **Extractor de Thumbnails de YouTube en HD:** Introduciendo un ID o Enlace de YouTube te saca la miniatura principal a máxima calidad (manipulación de cadena de URL).
 - [ ] **Convertidor de Imagen a SVG / Data URI / ASCII:** Convertidores de formato altamente valorados para perfiles técnicos.
 - [ ] **Creador Rápido de Collage de Fotos / Añadir Logo y Bordes:** Herramientas orientadas a usuarios promedio que necesitan retocar imágenes sin instalar programas, haciéndose todo en el navegador.
@@ -73,6 +58,5 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 ## 🎲 Randomizers y Relax (Encajable en mini-adventures, juegos u otros)
 
 - [ ] **Lanzadores de Dados (DnD / d20):** Ideal para una mini app web de juegos de rol de mesa.
-- [ ] **Sorteos Interactivos (Ruleta/Spin The Wheel o Elección de un Ganador):** Muy buscado para Instagram/Sorteos, todo con código frontend.
 
 > NOTA: Todas las sugerencias en esta lista son 100% Client-Side y no requieren ningún fetch externo bloqueado por CORS. Funcionan usando manipulación de texto pura y Web APIs modernas del navegador como Canvas y Web Crypto.
