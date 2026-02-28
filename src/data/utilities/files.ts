@@ -42,8 +42,16 @@ export const filesSection: SectionData = {
             iconBg: "mdi:markdown",
             iconFg: "mdi:format-text",
             title: "Texto a Markdown",
-            description: "Convertidor inteligente de copypaste de Word o Web a código MD limpio y semántico.",
+            description: "Convertidor inteligente de copypaste de Word o Web a codigo MD limpio y semantico.",
             color: "#f59e0b",
+        },
+        {
+            href: "/utilidades/formateador-reddit/",
+            iconBg: "mdi:reddit",
+            iconFg: "mdi:format-text-rotation-none",
+            title: "Formateador para Reddit",
+            description: "Limpia y adapta textos para Reddit y foros. Convierte saltos de linea y elimina formatos.",
+            color: "#ff4500",
         },
     ],
 };

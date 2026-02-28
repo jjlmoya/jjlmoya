@@ -1,3 +1,38 @@
+Actúa como un desarrollador experto en Astro y Vanilla CSS para crear utilidades premium en este proyecto. Sigue este proceso sin excepciones:
+
+Identificación y Categorización: Consulta 
+
+PendingUtility.md
+ para la siguiente tarea. Antes de registrarla, revisa 
+
+src/data/utilities/index.ts
+ para identificar el archivo de datos correcto (ej: herramientas de texto van en 
+
+files.ts
+).
+Arquitectura 'Separadita':
+Crea una carpeta en src/components/utilidades/[NombreIngles]/.
+[NombreIngles].astro: Lógica pura client-side (sin comentarios de código).
+[NombreIngles].css: Estilos premium (glassmorphism, transiciones, ...).
+[NombreIngles]SEO.astro: Contenido SEO de 800+ palabras en español.
+[NombreIngles]SEO.css: Estilos premium para el SEO (tipografía Inter, cajas de código elegantes, sin texto 'tirado').
+Infraestructura de Sitio:
+Crea la página en src/pages/utilidades/[nombre-en-castellano].astro.
+Usa el componente LayoutUtility.
+MANDATORIO: Pasa las preguntas frecuentes a través de la propiedad faqItems del layout para generar el Schema JSON-LD automático. No crees listas de FAQ manuales en el HTML del SEO.
+Calidad Visual e Imágenes:
+Genera una imagen SEO con el prompt: 'Artist Ink and Watercolor style, vibrant ink splashes, concept art style, High Quality, 8k. [Descripción de la herramienta]. Vibrant colors. Spanish text: [TITULO]'.
+Convierte la imagen a 
+
+.webp
+ usando sharp y guárdala en public/images/utilities/.
+Validación Técnica:
+Cero Comentarios: No incluyas comentarios de rutas ni notas en los archivos finales.
+TypeScript Estricto: Evita el tipo any y maneja posibles nulos en el DOM.
+Finalización: Ejecuta npm run lint; npm run check; npm run test antes de considerar la tarea terminada. En PowerShell, separa los comandos con ;.
+
+
+
 # Utilidades Pendientes (Inspiradas en WebUtility.io)
 
 ## 💻 Desarrollo Web (`developer.ts`)
@@ -10,7 +45,7 @@
 - [x] **Convertidor de SVG a CSS:** Transforma un archivo SVG en código incrustado preparado para usar en variables o clases CSS (Data URI, CSS mask).
 - [x] **Generador de UTM:** Para parametrizar campañas y enlaces fácil y sin errores.
 - [x] **Convertidor de Texto Enriquecido a Markdown:** Convierte copypaste de Word o Web directo a un `.md` limpio.
-- [ ] **Formateador para Reddit / Limpiador de Textos:** Utilidades rápidas para trabajar con cadenas de texto y adaptarlas a diferentes foros y estándares.
+- [x] **Formateador para Reddit / Limpiador de Textos:** Utilidades rápidas para trabajar con cadenas de texto y adaptarlas a diferentes foros y estándares.
 
 ## 📷 Audiovisual y Diseño Creativo (`audiovisual.ts` / `creative.ts`)
 
