@@ -1,0 +1,259 @@
+---
+import "./ImageToBase64.css";
+---
+
+<section class="base64-dashboard animate-in">
+    <div class="converter-layout">
+        <div class="upload-panel">
+            <div id="b64-drop-zone" class="drop-zone">
+                <input type="file" id="b64-file-input" accept="image/*" class="file-input-hidden" />
+                <div class="drop-content">
+                    <svg
+                        class="upload-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                    >
+                        <path
+                            d="M4 19H20V12H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V12H4V19ZM13 9V16H11V9H6L12 3L18 9H13Z"
+                        ></path>
+                    </svg>
+                    <h3>Arrastra tu imagen aquí</h3>
+                    <p>o haz clic para explorar tus archivos</p>
+                    <span class="format-badge">Soporta JPG, PNG, WEBP, SVG, GIF</span>
+                </div>
+                <div id="b64-preview-container" class="preview-container hidden">
+                    <img id="b64-image-preview" src="" alt="Vista previa de imagen" />
+                    <button
+                        type="button"
+                        id="b64-clear-btn"
+                        class="clear-btn"
+                        aria-label="Limpiar imagen"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="currentColor"
+                        >
+                            <path
+                                d="M12 10.5858L16.9497 5.63604L18.364 7.05025L13.4142 12L18.364 16.9497L16.9497 18.364L12 13.4142L7.05025 18.364L5.63604 16.9497L10.5858 12L5.63604 7.05025L7.05025 5.63604L12 10.5858Z"
+                            ></path>
+                        </svg>
+                    </button>
+                    <div id="b64-info" class="image-info">
+                        <span id="b64-name" class="info-pill name-pill">...</span>
+                        <span id="b64-size" class="info-pill size-pill">...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-panel">
+            <div class="output-group">
+                <div class="output-header">
+                    <label>Data URI (Listo para CSS / HTML <code>src=""</code>)</label>
+                    <button
+                        class="copy-btn tooltip"
+                        data-target="data-uri"
+                        aria-label="Copiar Data URI"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                        >
+                            <path
+                                d="M7 6V3C7 2.44772 7.44772 2 8 2H20C20.5523 2 21 2.44772 21 3V15C21 15.5523 20.5523 16 20 16H17V19C17 19.5523 16.5523 20 16 20H4C3.44772 20 3 19.5523 3 19V7C3 6.44772 3.44772 6 4 6H7ZM15 16V6H9V16H15ZM5 8V18H15V20H4V8H5ZM17 14V4H9V6H17V14H19V4Z"
+                            ></path>
+                        </svg>
+                        <span>Copiar</span>
+                    </button>
+                </div>
+                <div class="code-wrapper">
+                    <textarea
+                        id="b64-data-uri"
+                        readonly
+                        placeholder="Sube una imagen para ver el código Data URI..."
+                        spellcheck="false"></textarea>
+                </div>
+            </div>
+
+            <div class="output-group">
+                <div class="output-header">
+                    <label>Solo Base64 (Texto plano codificado)</label>
+                    <button
+                        class="copy-btn tooltip"
+                        data-target="base64-only"
+                        aria-label="Copiar solo Base64"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                        >
+                            <path
+                                d="M7 6V3C7 2.44772 7.44772 2 8 2H20C20.5523 2 21 2.44772 21 3V15C21 15.5523 20.5523 16 20 16H17V19C17 19.5523 16.5523 20 16 20H4C3.44772 20 3 19.5523 3 19V7C3 6.44772 3.44772 6 4 6H7ZM15 16V6H9V16H15ZM5 8V18H15V20H4V8H5ZM17 14V4H9V6H17V14H19V4Z"
+                            ></path>
+                        </svg>
+                        <span>Copiar</span>
+                    </button>
+                </div>
+                <div class="code-wrapper">
+                    <textarea
+                        id="b64-pure-b64"
+                        readonly
+                        placeholder="Sube una imagen para ver el código Base64 puro..."
+                        spellcheck="false"></textarea>
+                </div>
+            </div>
+
+            <div id="copy-toast" class="toast hidden">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                >
+                    <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"
+                    ></path>
+                </svg>
+                ¡Código copiado al portapapeles!
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const dropZone = document.getElementById("b64-drop-zone") as HTMLDivElement;
+    const fileInput = document.getElementById("b64-file-input") as HTMLInputElement;
+    const previewContainer = document.getElementById("b64-preview-container") as HTMLDivElement;
+    const imagePreview = document.getElementById("b64-image-preview") as HTMLImageElement;
+    const clearBtn = document.getElementById("b64-clear-btn") as HTMLButtonElement;
+    const nameLabel = document.getElementById("b64-name") as HTMLSpanElement;
+    const sizeLabel = document.getElementById("b64-size") as HTMLSpanElement;
+
+    const uriTextarea = document.getElementById("b64-data-uri") as HTMLTextAreaElement;
+    const pureTextarea = document.getElementById("b64-pure-b64") as HTMLTextAreaElement;
+    const copyBtns = document.querySelectorAll(".copy-btn");
+    const toast = document.getElementById("copy-toast") as HTMLDivElement;
+
+    let tooltipTimeout: number | undefined;
+
+    function formatBytes(bytes: number, decimals = 2) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+    }
+
+    function handleFile(file: File) {
+        if (!file.type.startsWith("image/")) {
+            alert("Por favor sube un archivo de imagen válido.");
+            return;
+        }
+
+        nameLabel.textContent = file.name;
+        sizeLabel.textContent = formatBytes(file.size);
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            if (e.target && e.target.result) {
+                const resultStr = e.target.result as string;
+
+                previewContainer.classList.remove("hidden");
+                imagePreview.src = resultStr;
+
+                uriTextarea.value = resultStr;
+
+                const pureB64 = resultStr.split(",")[1];
+                pureTextarea.value = pureB64 || "";
+            }
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileInput.addEventListener("change", (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files && target.files.length > 0) {
+            handleFile(target.files[0]);
+        }
+    });
+
+    clearBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        previewContainer.classList.add("hidden");
+        imagePreview.src = "";
+        fileInput.value = "";
+        uriTextarea.value = "";
+        pureTextarea.value = "";
+        nameLabel.textContent = "...";
+        sizeLabel.textContent = "...";
+    });
+
+    copyBtns.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const targetId = btn.getAttribute("data-target");
+            const textArea = targetId === "data-uri" ? uriTextarea : pureTextarea;
+
+            if (!textArea.value) return;
+
+            try {
+                await navigator.clipboard.writeText(textArea.value);
+                showToast();
+
+                const span = btn.querySelector("span");
+                if (span) {
+                    const originalText = span.textContent;
+                    span.textContent = "¡Copiado!";
+                    if (tooltipTimeout) clearTimeout(tooltipTimeout);
+                    tooltipTimeout = window.setTimeout(() => {
+                        span.textContent = originalText;
+                    }, 2000);
+                }
+            } catch (err) {
+                console.error("Failed to copy", err);
+            }
+        });
+    });
+
+    function showToast() {
+        toast.classList.remove("hidden");
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => {
+                toast.classList.add("hidden");
+            }, 300);
+        }, 2000);
+    }
+</script>

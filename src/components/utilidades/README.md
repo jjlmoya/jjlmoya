@@ -81,7 +81,7 @@ You must register the new tool in the appropriate category file. **Categorize co
 
 ## 3. SEO & Content
 
-- **SEO Component**: Do not use Lorem Ipsum. Write valuable content.
+- **SEO Component**: Do not use Lorem Ipsum. Write valuable content. **MANDATORY**: The text must focus on organic Google ranking using user-centric keywords and key phrases (e.g., "how to resize an image", "download youtube thumbnail"). Do NOT write self-justifying text about the technical architecture, how good the web app is, or that you are a "senior" developer. Focus purely on answering what the user is searching for on Google.
 - **Premium Styling**: SEO components MUST have their own `.css`. Use high-end typography, styled lists, and proper spacing. **No manual FAQ lists** in the HTML if using `faqItems` prop.
 - **Content Volume**: At least **800 words** of high-quality text.
 - **Micro-interactions**: Use CSS transitions on list items and hover effects.

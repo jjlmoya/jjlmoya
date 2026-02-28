@@ -106,5 +106,13 @@ export const audiovisualSection: SectionData = {
             description: "Descarga las portadas de videos de YouTube en Máxima Calidad usando solo la URL.",
             color: "#ef4444",
         },
+        {
+            href: "/utilidades/convertidor-imagen-base64/",
+            iconBg: "mdi:file-image",
+            iconFg: "mdi:code-tags",
+            title: "Imagen a Base64",
+            description: "Convierte imágenes a formato Data URI o Base64 para incrustar directo en tu HTML o CSS.",
+            color: "#0ea5e9",
+        },
     ],
 };

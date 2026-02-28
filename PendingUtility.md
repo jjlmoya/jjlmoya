@@ -38,7 +38,7 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 
 ## 📷 Audiovisual y Diseño Creativo (`audiovisual.ts` / `creative.ts`)
 - [x] **Extractor de Thumbnails de YouTube en HD:** Introduciendo un ID o Enlace de YouTube te saca la miniatura principal a máxima calidad (manipulación de cadena de URL).
-- [ ] **Convertidor de Imagen a SVG / Data URI / ASCII:** Convertidores de formato altamente valorados para perfiles técnicos.
+- [x] **Convertidor de Imagen a SVG / Data URI / ASCII:** Convertidores de formato altamente valorados para perfiles técnicos.
 - [ ] **Creador Rápido de Collage de Fotos / Añadir Logo y Bordes:** Herramientas orientadas a usuarios promedio que necesitan retocar imágenes sin instalar programas, haciéndose todo en el navegador.
 
 ## ⚙️ Archivos y Herramientas Varias (`files.ts` / `tools.ts` / `utilities`)
