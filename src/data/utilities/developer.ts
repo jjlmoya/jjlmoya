@@ -10,7 +10,8 @@ export const devSection: SectionData = {
             iconBg: "mdi:svg",
             iconFg: "mdi:code-braces",
             title: "Convertidor SVG a CSS",
-            description: "Transforma tus iconos vectoriales en código CSS optimizado (Background o Mask) para mejorar el rendimiento y la personalización de tu web.",
+            description:
+                "Transforma tus iconos vectoriales en código CSS optimizado (Background o Mask) para mejorar el rendimiento y la personalización de tu web.",
             color: "#ec4899",
         },
         {
@@ -18,7 +19,8 @@ export const devSection: SectionData = {
             iconBg: "mdi:aspect-ratio",
             iconFg: "mdi:ruler-square",
             title: "Calculadora Aspect Ratio",
-            description: "Calcula nuevas resoluciones de imágenes web y mantén proporciones perfectas en tus assets (16:9, 4:3, cuadrados...). Diseñado para proteger tus diseños UI.",
+            description:
+                "Calcula nuevas resoluciones de imágenes web y mantén proporciones perfectas en tus assets (16:9, 4:3, cuadrados...). Diseñado para proteger tus diseños UI.",
             color: "#0ea5e9",
         },
         {
@@ -26,7 +28,8 @@ export const devSection: SectionData = {
             iconBg: "mdi:link-variant",
             iconFg: "mdi:code-json",
             title: "URL Encoder & Decoder",
-            description: "Codifica caracteres especiales a un formato de web segura (Percent-Encoding) o decodifica rutas enrevesadas a texto legible para los humanos al vuelo.",
+            description:
+                "Codifica caracteres especiales a un formato de web segura (Percent-Encoding) o decodifica rutas enrevesadas a texto legible para los humanos al vuelo.",
             color: "#f59e0b",
         },
         {
@@ -34,7 +37,8 @@ export const devSection: SectionData = {
             iconBg: "mdi:file-document-multiple-outline",
             iconFg: "mdi:auto-fix",
             title: "Limpiador CSS Duplicado",
-            description: "Analiza, unifica y purga todo tu código CSS redundante y repetido respetando reglas de cascada para optimizar tus hojas de estilo y ahorrar KBs al instante.",
+            description:
+                "Analiza, unifica y purga todo tu código CSS redundante y repetido respetando reglas de cascada para optimizar tus hojas de estilo y ahorrar KBs al instante.",
             color: "#10b981",
         },
         {
@@ -42,7 +46,8 @@ export const devSection: SectionData = {
             iconBg: "mdi:language-html5",
             iconFg: "mdi:format-paint",
             title: "CSS Inliner Pura",
-            description: "Transforma tu HTML de diseño bruto fusionando todas tus reglas de hojas de estilos externas y clases estáticas en HTML inyectado en línea (Email Safe).",
+            description:
+                "Transforma tu HTML de diseño bruto fusionando todas tus reglas de hojas de estilos externas y clases estáticas en HTML inyectado en línea (Email Safe).",
             color: "#ec4899",
         },
         {
@@ -50,7 +55,8 @@ export const devSection: SectionData = {
             iconBg: "mdi:language-css3",
             iconFg: "mdi:scale-balance",
             title: "Especificidad CSS",
-            description: "Analiza el peso y la cascada de tus selectores CSS visualmente para evitar guerras de estilos.",
+            description:
+                "Analiza el peso y la cascada de tus selectores CSS visualmente para evitar guerras de estilos.",
             color: "#e11d48",
         },
         {
@@ -108,7 +114,8 @@ export const devSection: SectionData = {
             iconBg: "mdi:bullhorn",
             iconFg: "mdi:link-variant",
             title: "Generador de UTM",
-            description: "Crea y analiza tus enlaces de campaña para Google Analytics con parámetros UTM de forma profesional.",
+            description:
+                "Crea y analiza tus enlaces de campaña para Google Analytics con parámetros UTM de forma profesional.",
             color: "#6366f1",
         },
     ],

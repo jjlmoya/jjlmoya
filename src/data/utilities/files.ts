@@ -42,7 +42,8 @@ export const filesSection: SectionData = {
             iconBg: "mdi:markdown",
             iconFg: "mdi:format-text",
             title: "Texto a Markdown",
-            description: "Convertidor inteligente de copypaste de Word o Web a codigo MD limpio y semantico.",
+            description:
+                "Convertidor inteligente de copypaste de Word o Web a codigo MD limpio y semantico.",
             color: "#f59e0b",
         },
         {
@@ -50,7 +51,8 @@ export const filesSection: SectionData = {
             iconBg: "mdi:reddit",
             iconFg: "mdi:format-text-rotation-none",
             title: "Formateador para Reddit",
-            description: "Limpia y adapta textos para Reddit y foros. Convierte saltos de linea y elimina formatos.",
+            description:
+                "Limpia y adapta textos para Reddit y foros. Convierte saltos de linea y elimina formatos.",
             color: "#ff4500",
         },
         {
@@ -58,7 +60,8 @@ export const filesSection: SectionData = {
             iconBg: "mdi:google-drive",
             iconFg: "mdi:download",
             title: "Descarga Directa de Drive",
-            description: "Convierte el link de compartir en un ID que descarga instantáneamente sin abrir el visor de Drive.",
+            description:
+                "Convierte el link de compartir en un ID que descarga instantáneamente sin abrir el visor de Drive.",
             color: "#34a853",
         },
     ],

@@ -1,12 +1,12 @@
 Actúa como un desarrollador experto en Astro y Vanilla CSS para crear utilidades premium en este proyecto. Sigue este proceso sin excepciones:
 
-Identificación y Categorización: Consulta 
+Identificación y Categorización: Consulta
 
 PendingUtility.md
- para la siguiente tarea. Antes de registrarla, revisa 
+para la siguiente tarea. Antes de registrarla, revisa
 
 src/data/utilities/index.ts
- para identificar el archivo de datos correcto (ej: herramientas de texto van en 
+para identificar el archivo de datos correcto (ej: herramientas de texto van en
 
 files.ts
 ).
@@ -24,19 +24,20 @@ MANDATORIO: Pon `export const prerender = true;` siempre al inicio del frontmatt
 Calidad Visual e Imágenes:
 Genera una imagen SEO con el prompt: 'Artist Ink and Watercolor style, vibrant ink splashes, concept art style, High Quality, 8k. [Concepto visual de la herramienta, NO usar texto ni descripciones largas, solo la idea gráfica]. Vibrant colors. Minimalist short Spanish text: [TITULO CORTO]'.
 Convierte la imagen a `.webp` usando el script genérico que tenemos preparado (no la conviertas creando scripts on-the-fly):
+
 ```bash
 node scripts/convert-image-to-webp.mjs <ruta_imagen_original.png> public/images/utilities/<nombre-herramienta>.webp
 ```
+
 Validación Técnica:
 Cero Comentarios: No incluyas comentarios de rutas ni notas en los archivos finales.
 TypeScript Estricto: Evita el tipo any y maneja posibles nulos en el DOM.
 Finalización: Ejecuta npm run lint; npm run check; npm run test antes de considerar la tarea terminada. En PowerShell, separa los comandos con ;.
 
-
-
 # Utilidades Pendientes (Inspiradas en WebUtility.io)
 
 ## 📷 Audiovisual y Diseño Creativo (`audiovisual.ts` / `creative.ts`)
+
 - [x] **Extractor de Thumbnails de YouTube en HD:** Introduciendo un ID o Enlace de YouTube te saca la miniatura principal a máxima calidad (manipulación de cadena de URL).
 - [x] **Convertidor de Imagen a SVG / Data URI / ASCII:** Convertidores de formato altamente valorados para perfiles técnicos.
 - [ ] **Creador Rápido de Collage de Fotos / Añadir Logo y Bordes:** Herramientas orientadas a usuarios promedio que necesitan retocar imágenes sin instalar programas, haciéndose todo en el navegador.
@@ -44,7 +45,7 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 ## ⚙️ Archivos y Herramientas Varias (`files.ts` / `tools.ts` / `utilities`)
 
 - [x] **Enlace de Descarga Directa para Google Drive:** Convierte el link de "compartir" en un ID que descarga instantáneamente sin abrir el visor de Drive.
-- [ ] **Generador de Enlaces para WhatsApp:** Formulario sencillo (Número + Mensaje) para conseguir el enlace corto `wa.me/...` .
+- [x] **Generador de Enlaces para WhatsApp:** Formulario sencillo (Número + Mensaje) para conseguir el enlace corto `wa.me/...` .
 - [ ] **Convertidor de URL a Código QR (e Imagen a QR):** Generador rápido, seguro, limpio de publicidad, usando una librería en el cliente para pintar el SVG/Canvas.
 
 ## 📋 Textos, Oficina y Productividad (`tools.ts`)

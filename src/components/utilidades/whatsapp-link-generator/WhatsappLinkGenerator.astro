@@ -1,0 +1,234 @@
+---
+import "./WhatsappLinkGenerator.css";
+---
+
+<section class="whatsapp-utility">
+    <div class="glass-panel">
+        <form id="wa-form" class="wa-form">
+            <div class="input-group">
+                <label for="wa-phone">Teléfono de WhatsApp</label>
+                <div class="phone-row">
+                    <div class="prefix-container">
+                        <select id="wa-prefix" class="prefix-select">
+                            <option value="34" selected>🇪🇸 +34</option>
+                            <option value="52">🇲🇽 +52</option>
+                            <option value="54">🇦🇷 +54</option>
+                            <option value="57">🇨🇴 +57</option>
+                            <option value="56">🇨🇱 +56</option>
+                            <option value="51">🇵🇪 +51</option>
+                            <option value="1">🇺🇸 +1</option>
+                        </select>
+                        <div class="select-icon">▼</div>
+                    </div>
+                    <input
+                        type="tel"
+                        id="wa-phone"
+                        class="phone-input"
+                        placeholder="600 00 00 00"
+                        inputmode="numeric"
+                    />
+                </div>
+                <div id="wa-error-msg" class="error-msg-inline hidden">
+                    Por favor, introduce un número válido.
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="wa-message">Mensaje inicial (opcional)</label>
+                <textarea
+                    id="wa-message"
+                    rows="3"
+                    placeholder="¡Hola! Me gustaría más información sobre el servicio..."
+                ></textarea>
+            </div>
+
+            <button type="button" id="wa-generate-btn" class="primary-btn wa-btn">
+                <svg viewBox="0 0 24 24" width="24" height="24" class="wa-icon">
+                    <path
+                        fill="currentColor"
+                        d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 6.46 17.5 2 12.04 2M12.05 19.83C10.55 19.83 9.12 19.43 7.89 18.71L7.6 18.53L4.5 19.34L5.32 16.29L5.13 15.98C4.34 14.74 3.93 13.3 3.93 11.91C3.93 7.46 7.55 3.84 12.05 3.84C16.55 3.84 20.17 7.46 20.17 11.92C20.17 16.38 16.55 19.83 12.05 19.83M16.5 14.85C16.26 14.73 15.06 14.13 14.84 14.05C14.62 13.97 14.47 13.93 14.31 14.17C14.15 14.41 13.7 14.96 13.56 15.12C13.43 15.28 13.29 15.3 13.05 15.18C12.8 15.06 11.93 14.77 10.89 13.85C10.08 13.13 9.53 12.24 9.38 12C9.23 11.75 9.36 11.64 9.48 11.53C9.6 11.41 9.73 11.26 9.87 11.1C10 10.95 10.05 10.84 10.13 10.68C10.21 10.53 10.17 10.39 10.1 10.27C10.04 10.15 9.49 8.81 9.27 8.25C9.05 7.7 8.83 7.78 8.68 7.77C8.54 7.77 8.38 7.77 8.23 7.77C8.07 7.77 7.83 7.83 7.62 8.06C7.4 8.29 6.8 8.86 6.8 10.03C6.8 11.19 7.66 12.31 7.77 12.47C7.89 12.63 9.49 15.11 11.93 16.16C12.51 16.41 12.96 16.56 13.31 16.67C13.89 16.85 14.42 16.82 14.84 16.74C15.31 16.65 16.26 16.14 16.46 15.58C16.65 15.01 16.65 14.53 16.5 14.85Z"
+                    ></path>
+                </svg>
+                Generar Enlace
+            </button>
+        </form>
+
+        <div id="result-container" class="result-container hidden">
+            <label>Link Directo Generado</label>
+            <div class="output-wrapper mb-2">
+                <div class="output-inner">
+                    <input type="text" id="wa-link-output" readonly />
+                    <button id="wa-copy-btn" class="icon-btn" title="Copiar al portapapeles">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path
+                                fill="currentColor"
+                                d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a
+                    id="wa-test-btn"
+                    class="secondary-btn flex-1"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer">Probar Chat</a
+                >
+
+                <button id="wa-qr-btn" class="secondary-btn flex-1 qr-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" class="mr-2 inline">
+                        <path
+                            fill="currentColor"
+                            d="M3,3H9V9H3V3M5,5V7H7V5H5M15,3H21V9H15V3M17,5V7H19V5H17M3,15H9V21H3V15M5,17V19H7V17H5M18,15H21V18H18V15M15,18H18V21H15V18M11,3H13V6H11V3M11,18H13V21H11V18M11,9H13V15H11V9M9,11H8V13H11V11M16,11H13V13H16V11Z"
+                        ></path>
+                    </svg>
+                    Mostrar QR
+                </button>
+            </div>
+            <canvas id="qr-canvas" class="qr-canvas hidden"></canvas>
+        </div>
+    </div>
+</section>
+
+<script>
+    function cleanPhone(phone: string): string {
+        return phone.replace(/\D/g, "");
+    }
+
+    function generateLink() {
+        const errorMsg = document.getElementById("wa-error-msg") as HTMLDivElement;
+        const resultContainer = document.getElementById("result-container") as HTMLDivElement;
+        const qrCanvas = document.getElementById("qr-canvas") as HTMLCanvasElement;
+        const phoneInput = document.getElementById("wa-phone") as HTMLInputElement;
+        const prefixSelect = document.getElementById("wa-prefix") as HTMLSelectElement;
+        const messageInput = document.getElementById("wa-message") as HTMLTextAreaElement;
+        const linkOutput = document.getElementById("wa-link-output") as HTMLInputElement;
+        const testBtn = document.getElementById("wa-test-btn") as HTMLAnchorElement;
+
+        if (!errorMsg || !resultContainer || !qrCanvas || !phoneInput) return;
+
+        errorMsg.classList.add("hidden");
+        resultContainer.classList.add("hidden");
+        errorMsg.classList.add("hidden");
+        phoneInput.classList.remove("input-error");
+
+        const rawPhone = phoneInput.value;
+        const clean = cleanPhone(rawPhone);
+
+        if (!clean || clean.length < 5) {
+            errorMsg.classList.remove("hidden");
+            phoneInput.classList.add("input-error");
+            resultContainer.classList.add("hidden");
+            return;
+        }
+
+        const prefix = prefixSelect ? prefixSelect.value : "34";
+        const txt = messageInput ? messageInput.value.trim() : "";
+
+        let generatedUrl = `https://wa.me/${prefix}${clean}`;
+        if (txt) {
+            generatedUrl += `?text=${encodeURIComponent(txt)}`;
+        }
+
+        if (linkOutput) linkOutput.value = generatedUrl;
+        if (testBtn) testBtn.href = generatedUrl;
+
+        
+        resultContainer.dataset.url = generatedUrl;
+        resultContainer.classList.remove("hidden");
+    }
+
+    function initWaLink() {
+        const phoneInput = document.getElementById("wa-phone") as HTMLInputElement | null;
+        const errorMsg = document.getElementById("wa-error-msg") as HTMLDivElement | null;
+
+        if (phoneInput && errorMsg) {
+            phoneInput.addEventListener("input", () => {
+                phoneInput.classList.remove("input-error");
+                errorMsg.classList.add("hidden");
+            });
+        }
+
+        
+        const form = document.getElementById("wa-form") as HTMLFormElement | null;
+        if (form) {
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                generateLink();
+            });
+        }
+
+        const generateBtn = document.getElementById("wa-generate-btn") as HTMLButtonElement | null;
+        if (generateBtn) {
+            generateBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                generateLink();
+            });
+        }
+
+        const copyBtn = document.getElementById("wa-copy-btn") as HTMLButtonElement | null;
+        if (copyBtn) {
+            copyBtn.addEventListener("click", () => {
+                const linkOutput = document.getElementById("wa-link-output") as HTMLInputElement;
+                if (!linkOutput) return;
+
+                linkOutput.select();
+                navigator.clipboard.writeText(linkOutput.value).then(() => {
+                    const originalTitle = copyBtn.getAttribute("title");
+                    copyBtn.setAttribute("title", "Copiado!");
+                    setTimeout(() => {
+                        if (originalTitle) {
+                            copyBtn.setAttribute("title", originalTitle);
+                        }
+                    }, 2000);
+                });
+            });
+        }
+
+        const qrBtn = document.getElementById("wa-qr-btn") as HTMLButtonElement | null;
+        if (qrBtn) {
+            qrBtn.addEventListener("click", () => {
+                const resultContainer = document.getElementById("result-container");
+                const url = resultContainer?.dataset.url;
+                const qrCanvas = document.getElementById("qr-canvas") as HTMLCanvasElement;
+
+                if (!qrCanvas || !url) return;
+
+                if (qrCanvas.classList.contains("hidden")) {
+                    import("qrcode").then((QRCode) => {
+                        QRCode.default.toCanvas(
+                            qrCanvas,
+                            url,
+                            {
+                                width: 200,
+                                margin: 2,
+                                color: { dark: "#0f172aff", light: "#ffffffff" },
+                            },
+                            function (err: Error | null | undefined) {
+                                if (err) console.error(err);
+                                qrCanvas.classList.remove("hidden");
+                            }
+                        );
+                    });
+                } else {
+                    qrCanvas.classList.add("hidden");
+                }
+            });
+        }
+    }
+
+    
+    document.addEventListener(
+        "astro:page-load",
+        () => {
+            initWaLink();
+        },
+        { once: false }
+    );
+
+    
+    initWaLink();
+</script>

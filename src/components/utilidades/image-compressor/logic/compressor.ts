@@ -72,9 +72,7 @@ export function processImage(
                 const dataUrl = canvas.toDataURL(format, quality);
 
                 const head = "data:" + format + ";base64,";
-                const calculatedSize = Math.round(
-                    ((dataUrl.length - head.length) * 3) / 4
-                );
+                const calculatedSize = Math.round(((dataUrl.length - head.length) * 3) / 4);
 
                 if (
                     calculatedSize >= item.originalSize &&

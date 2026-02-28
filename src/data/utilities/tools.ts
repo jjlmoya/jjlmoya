@@ -47,5 +47,14 @@ export const toolsSection: SectionData = {
                 "Tecnología de lectura de alto rendimiento. Lee a 1000+ palabras por minuto.",
             color: "#4f46e5",
         },
+        {
+            href: "/utilidades/generador-enlaces-whatsapp/",
+            iconBg: "mdi:whatsapp",
+            iconFg: "mdi:qrcode-scan",
+            title: "Enlace para WhatsApp",
+            description:
+                "Genera un link corto wa.me para que te hablen sin guardarte en la agenda.",
+            color: "#22c55e",
+        },
     ],
 };

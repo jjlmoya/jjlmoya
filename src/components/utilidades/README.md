@@ -42,8 +42,8 @@ import SuperCalculatorSEO from "../../components/utilidades/super-calculator/Sup
 const faqItems = [
     {
         question: "¿Cómo funciona esto?",
-        answer: "Explicación breve y clara que genera Schema JSON-LD automáticamente."
-    }
+        answer: "Explicación breve y clara que genera Schema JSON-LD automáticamente.",
+    },
 ];
 ---
 

@@ -1,7 +1,6 @@
-import sharp from 'sharp';
-import fs from 'fs';
-import path from 'path';
-
+import sharp from "sharp";
+import fs from "fs";
+import path from "path";
 
 const args = process.argv.slice(2);
 if (args.length < 2) {
@@ -19,15 +18,12 @@ async function convertImage() {
             process.exit(1);
         }
 
-        
         const outDir = path.dirname(outputPath);
         if (!fs.existsSync(outDir)) {
             fs.mkdirSync(outDir, { recursive: true });
         }
 
-        await sharp(inputPath)
-            .webp({ quality: 90 })
-            .toFile(outputPath);
+        await sharp(inputPath).webp({ quality: 90 }).toFile(outputPath);
 
         console.log(`Successfully converted. Saved to: ${outputPath}`);
     } catch (err) {

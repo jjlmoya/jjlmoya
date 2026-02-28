@@ -70,22 +70,18 @@ import "./DuplicateCssRemover.css";
     function cleanCss(rawCss: string) {
         if (!rawCss.trim()) return "";
 
-        
         const css = rawCss.replace(/\/\*[\s\S]*?\*\//g, "");
 
-        
-        
         const ruleRegex = /(?:[^\{\}]+)\s*\{[^\}]+\}/g;
         const matches = css.match(ruleRegex) || [];
 
-        
         const stylesMap = new Map<string, Map<string, string>>();
 
         matches.forEach((ruleBlock) => {
             const [head, tail] = ruleBlock.split("{");
             if (!tail) return;
 
-            const selector = head.trim().replace(/\s+/g, " "); 
+            const selector = head.trim().replace(/\s+/g, " ");
             const propertiesRaw = tail.replace("}", "").trim();
 
             if (!selector || !propertiesRaw) return;
@@ -102,14 +98,12 @@ import "./DuplicateCssRemover.css";
                     const key = parts[0].trim();
                     const val = parts.slice(1).join(":").trim();
                     if (key && val) {
-                        
                         propMap.set(key, val);
                     }
                 }
             });
         });
 
-        
         let finalCss = "";
         stylesMap.forEach((propMap, selector) => {
             if (propMap.size === 0) return;

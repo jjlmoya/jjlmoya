@@ -87,7 +87,8 @@ export const audiovisualSection: SectionData = {
             iconBg: "mdi:image-size-select-small",
             iconFg: "mdi:file-image-outline",
             title: "Compresor de Imágenes",
-            description: "Comprime, redimensiona y optimiza el peso de tus fotos sin servidor desde el navegador.",
+            description:
+                "Comprime, redimensiona y optimiza el peso de tus fotos sin servidor desde el navegador.",
             color: "#10b981",
         },
         {
@@ -95,7 +96,8 @@ export const audiovisualSection: SectionData = {
             iconBg: "mdi:image-outline",
             iconFg: "mdi:pencil-ruler",
             title: "Generador Placeholder",
-            description: "Crea imágenes de prueba o bocetos con dimensiones y textos a medida al instante.",
+            description:
+                "Crea imágenes de prueba o bocetos con dimensiones y textos a medida al instante.",
             color: "#eab308",
         },
         {
@@ -103,7 +105,8 @@ export const audiovisualSection: SectionData = {
             iconBg: "mdi:youtube",
             iconFg: "mdi:image-search",
             title: "Extractor de Miniaturas",
-            description: "Descarga las portadas de videos de YouTube en Máxima Calidad usando solo la URL.",
+            description:
+                "Descarga las portadas de videos de YouTube en Máxima Calidad usando solo la URL.",
             color: "#ef4444",
         },
         {
@@ -111,7 +114,8 @@ export const audiovisualSection: SectionData = {
             iconBg: "mdi:file-image",
             iconFg: "mdi:code-tags",
             title: "Imagen a Base64",
-            description: "Convierte imágenes a formato Data URI o Base64 para incrustar directo en tu HTML o CSS.",
+            description:
+                "Convierte imágenes a formato Data URI o Base64 para incrustar directo en tu HTML o CSS.",
             color: "#0ea5e9",
         },
     ],
