@@ -22,7 +22,7 @@ Usa el componente LayoutUtility.
 MANDATORIO: Pasa las preguntas frecuentes a través de la propiedad faqItems del layout para generar el Schema JSON-LD automático. No crees listas de FAQ manuales en el HTML del SEO.
 MANDATORIO: Pon `export const prerender = true;` siempre al inicio del frontmatter de la página de la utilidad, antes de cualquier import.
 Calidad Visual e Imágenes:
-Genera una imagen SEO con el prompt: 'Artist Ink and Watercolor style, vibrant ink splashes, concept art style, High Quality, 8k. [Descripción de la herramienta]. Vibrant colors. Spanish text: [TITULO]'.
+Genera una imagen SEO con el prompt: 'Artist Ink and Watercolor style, vibrant ink splashes, concept art style, High Quality, 8k. [Concepto visual de la herramienta, NO usar texto ni descripciones largas, solo la idea gráfica]. Vibrant colors. Minimalist short Spanish text: [TITULO CORTO]'.
 Convierte la imagen a `.webp` usando el script genérico que tenemos preparado (no la conviertas creando scripts on-the-fly):
 ```bash
 node scripts/convert-image-to-webp.mjs <ruta_imagen_original.png> public/images/utilities/<nombre-herramienta>.webp
@@ -43,7 +43,7 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 
 ## ⚙️ Archivos y Herramientas Varias (`files.ts` / `tools.ts` / `utilities`)
 
-- [ ] **Enlace de Descarga Directa para Google Drive:** Convierte el link de "compartir" en un ID que descarga instantáneamente sin abrir el visor de Drive.
+- [x] **Enlace de Descarga Directa para Google Drive:** Convierte el link de "compartir" en un ID que descarga instantáneamente sin abrir el visor de Drive.
 - [ ] **Generador de Enlaces para WhatsApp:** Formulario sencillo (Número + Mensaje) para conseguir el enlace corto `wa.me/...` .
 - [ ] **Convertidor de URL a Código QR (e Imagen a QR):** Generador rápido, seguro, limpio de publicidad, usando una librería en el cliente para pintar el SVG/Canvas.
 

@@ -93,7 +93,8 @@ You must register the new tool in the appropriate category file. **Categorize co
     - Vibrant ink splashes (matching the utility's color theme).
     - Concept art style, High Quality, 8k.
     - _No 3D realistic renders. No photographs._
-    - **Text**: If the image contains text, it MUST be in **Spanish**.
+    - **Visual Concept Over Text**: The prompt should focus on illustrating the application's concept graphically.
+    - **Text**: **Minimize text in images**. Too much text becomes unreadable when scaled down. If any text is included, it MUST be a very short, punchy title in **Spanish** or nothing at all.
 - **Format**: `.webp` (due to local conversion limitations, prefer webp for others).
 - **Location**: `public/images/utilities/`.
 

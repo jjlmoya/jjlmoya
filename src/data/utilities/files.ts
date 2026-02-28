@@ -53,5 +53,13 @@ export const filesSection: SectionData = {
             description: "Limpia y adapta textos para Reddit y foros. Convierte saltos de linea y elimina formatos.",
             color: "#ff4500",
         },
+        {
+            href: "/utilidades/enlace-descarga-directa-google-drive/",
+            iconBg: "mdi:google-drive",
+            iconFg: "mdi:download",
+            title: "Descarga Directa de Drive",
+            description: "Convierte el link de compartir en un ID que descarga instantáneamente sin abrir el visor de Drive.",
+            color: "#34a853",
+        },
     ],
 };
