@@ -1,0 +1,80 @@
+---
+import "./RichTextToMarkdown.css";
+---
+
+<div class="markdown-converter-container animate-in">
+    <div class="converter-layout">
+        <div class="input-area">
+            <div class="label-hint">
+                <span>Pega aquí tu contenido enriquecido (Word, Web...)</span>
+            </div>
+            <div
+                id="rich-editor"
+                class="editor-surface"
+                contenteditable="true"
+                placeholder="Pega aquí el texto..."
+            >
+            </div>
+        </div>
+
+        <div class="output-area">
+            <div class="label-hint">
+                <span>Markdown Resultante</span>
+                <button
+                    id="copy-md"
+                    class="primary-btn"
+                    style="padding: 0.25rem 0.75rem; font-size: 0.8rem; margin: 0;">Copiar</button
+                >
+            </div>
+            <pre id="md-output" class="markdown-output"></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    const editor = document.getElementById("rich-editor");
+    const output = document.getElementById("md-output");
+    const copyBtn = document.getElementById("copy-md");
+
+    const toMarkdown = (el: HTMLElement) => {
+        let md = "";
+        const nodes = el.childNodes;
+        nodes.forEach((node) => {
+            if (node.nodeType === 3) md += node.nodeValue;
+            else if (node.nodeType === 1) {
+                const tag = (node as HTMLElement).tagName;
+                const inner = toMarkdown(node as HTMLElement);
+                if (tag === "B" || tag === "STRONG") md += `**${inner}**`;
+                else if (tag === "I" || tag === "EM") md += `*${inner}*`;
+                else if (tag === "H1") md += `# ${inner}\n\n`;
+                else if (tag === "H2") md += `## ${inner}\n\n`;
+                else if (tag === "H3") md += `### ${inner}\n\n`;
+                else if (tag === "P" || tag === "DIV") md += `${inner}\n\n`;
+                else if (tag === "LI") md += `- ${inner}\n`;
+                else if (tag === "A") md += `[${inner}](${(node as HTMLAnchorElement).href})`;
+                else if (tag === "BR") md += "\n";
+                else md += inner;
+            }
+        });
+        return md;
+    };
+
+    editor?.addEventListener("input", () => {
+        if (!editor) return;
+        const md = toMarkdown(editor)
+            .replace(/\n{3,}/g, "\n\n")
+            .trim();
+        if (output) output.textContent = md;
+    });
+
+    copyBtn?.addEventListener("click", () => {
+        const text = output?.textContent || "";
+        navigator.clipboard.writeText(text).then(() => {
+            const original = copyBtn.textContent;
+            copyBtn.textContent = "¡Copiado!";
+            setTimeout(() => {
+                copyBtn.textContent = original;
+            }, 2000);
+        });
+    });
+</script>

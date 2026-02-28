@@ -38,71 +38,54 @@ import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
 import SuperCalculator from "../../components/utilidades/super-calculator/SuperCalculator.astro";
 import SuperCalculatorSEO from "../../components/utilidades/super-calculator/SuperCalculatorSEO.astro";
+
+const faqItems = [
+    {
+        question: "¿Cómo funciona esto?",
+        answer: "Explicación breve y clara que genera Schema JSON-LD automáticamente."
+    }
+];
 ---
 
 <LayoutUtility
-    title="Extended Title for SEO"
-    description="Short description"
+    title="Título Extendido para SEO"
+    description="Descripción corta y atractiva"
     image="/images/utilities/my-tool.webp"
     gradientFrom="from-color-100"
+    faqItems={faqItems}
 >
-    <!-- 1. Header Slot using Standard Component -->
+    <!-- 1. Header Slot -->
     <div slot="header">
         <UtilityHeader
-            titleHighlight="Highlight World"
-            titleBase="Base Word"
-            description="Punchy, 2-line description that sits under the title."
+            titleHighlight="Palabra"
+            titleBase="Destacada"
+            description="Descripción matadora de 2 líneas."
             gradientFrom="from-color-500"
             gradientTo="to-color-600"
-            reverse={false}
-            <!--
-            Optional:
-            swaps
-            order
-            of
-            highlight
-            base
-            --
-        >
-            />
-        </UtilityHeader>
+        />
+    </div>
 
-        <!-- 2. The Tool -->
-        <SuperCalculator />
+    <!-- 2. The Tool -->
+    <SuperCalculator />
 
-        <!-- 3. SEO Content Slot -->
-        <div slot="seo">
-            <SuperCalculatorSEO />
-        </div>
-    </div></LayoutUtility
->
+    <!-- 3. SEO Content Slot -->
+    <div slot="seo">
+        <SuperCalculatorSEO />
+    </div>
+</LayoutUtility>
 ```
 
 ### C. The Configuration (`src/data/utilities/`)
 
-You must register the new tool in the appropriate category file (e.g., `files.ts`, `finance.ts`, `tools.ts`).
-
-```typescript
-{
-    href: "/utilidades/super-calculator/",
-    iconBg: "mdi:calculator", // Use Iconify IDs
-    iconFg: "mdi:number",
-    title: "Super Calculator",
-    description: "Short, punchy description.",
-    color: "#COLOR_HEX"
-}
-```
+You must register the new tool in the appropriate category file. **Categorize correctly** (e.g., text tools in `files.ts`).
 
 ## 3. SEO & Content
 
-- **SEO Component**: Do not use Lorem Ipsum. Write valuable content. Explain "How to use", "Why this matters", or "The Math behind it".
-- **Content Volume**: The SEO component must contain at least **800 words** of high-quality, relevant text.
-- **Search Intent**: Use titles and text that people actually search for on Google. Research keywords and include common questions (H2, H3) that users ask about the topic.
-- **Meta Tags**: Ensure the title is click-worthy (e.g., "Calculadora de IVA Inverso" es mejor que "IVA").
-- **Bibliography & Sources**:
-    - **Standard Component**: You MUST use the `<Bibliography />` standard component in the `bibliography` slot of `LayoutUtility`.
-    - **Scientific Value**: Don't just link to Wikipedia. Use the one that you use. Prioritize high-value, scientific sources (Research papers, academic journals, official documentation from NIST, IEEE, etc.). (in your life and in your code please)
-    - **Traceability**: Explicitly show where the formulas, logic, or data used in the tool were extracted from. "Compartir es vivir".
+- **SEO Component**: Do not use Lorem Ipsum. Write valuable content.
+- **Premium Styling**: SEO components MUST have their own `.css`. Use high-end typography, styled lists, and proper spacing. **No manual FAQ lists** in the HTML if using `faqItems` prop.
+- **Content Volume**: At least **800 words** of high-quality text.
+- **Micro-interactions**: Use CSS transitions on list items and hover effects.
+- **Bibliography**: Use the `<Bibliography />` standard component.
 
 ## 4. Assets & Images
 

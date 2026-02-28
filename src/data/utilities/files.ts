@@ -37,5 +37,13 @@ export const filesSection: SectionData = {
             description: "Calcula firmas SHA-256 de archivos locales para verificar su integridad.",
             color: "#10b981",
         },
+        {
+            href: "/utilidades/texto-a-markdown/",
+            iconBg: "mdi:markdown",
+            iconFg: "mdi:format-text",
+            title: "Texto a Markdown",
+            description: "Convertidor inteligente de copypaste de Word o Web a código MD limpio y semántico.",
+            color: "#f59e0b",
+        },
     ],
 };

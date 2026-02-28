@@ -1,5 +1,4 @@
 ---
-/* src/components/utilidades/utm-generator/UtmGenerator.astro */
 import "./UtmGenerator.css";
 ---
 
@@ -60,10 +59,13 @@ import "./UtmGenerator.css";
     const copyBtn = document.getElementById("copy-utm");
 
     const updateUrl = () => {
-        const values = {};
+        const values: Record<string, string> = {};
         inputs.forEach((id) => {
-            values[id] = (document.getElementById(id) as HTMLInputElement).value.trim();
+            const el = document.getElementById(id) as HTMLInputElement;
+            values[id] = el ? el.value.trim() : "";
         });
+
+        if (!output) return;
 
         if (!values["utm-url"]) {
             output.textContent = "Introduce una URL válida";
@@ -92,13 +94,16 @@ import "./UtmGenerator.css";
     });
 
     copyBtn?.addEventListener("click", () => {
+        if (!output) return;
         const text = output.textContent || "";
         navigator.clipboard.writeText(text).then(() => {
-            const oldText = copyBtn.textContent;
-            copyBtn.textContent = "¡Copiado!";
-            setTimeout(() => {
-                copyBtn.textContent = oldText;
-            }, 2000);
+            if (copyBtn) {
+                const oldText = copyBtn.textContent;
+                copyBtn.textContent = "¡Copiado!";
+                setTimeout(() => {
+                    if (copyBtn) copyBtn.textContent = oldText;
+                }, 2000);
+            }
         });
     });
 
