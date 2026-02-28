@@ -23,10 +23,10 @@ MANDATORIO: Pasa las preguntas frecuentes a través de la propiedad faqItems del
 MANDATORIO: Pon `export const prerender = true;` siempre al inicio del frontmatter de la página de la utilidad, antes de cualquier import.
 Calidad Visual e Imágenes:
 Genera una imagen SEO con el prompt: 'Artist Ink and Watercolor style, vibrant ink splashes, concept art style, High Quality, 8k. [Descripción de la herramienta]. Vibrant colors. Spanish text: [TITULO]'.
-Convierte la imagen a 
-
-.webp
- usando sharp y guárdala en public/images/utilities/.
+Convierte la imagen a `.webp` usando el script genérico que tenemos preparado (no la conviertas creando scripts on-the-fly):
+```bash
+node scripts/convert-image-to-webp.mjs <ruta_imagen_original.png> public/images/utilities/<nombre-herramienta>.webp
+```
 Validación Técnica:
 Cero Comentarios: No incluyas comentarios de rutas ni notas en los archivos finales.
 TypeScript Estricto: Evita el tipo any y maneja posibles nulos en el DOM.
@@ -50,7 +50,7 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 
 ## 📷 Audiovisual y Diseño Creativo (`audiovisual.ts` / `creative.ts`)
 
-- [ ] **Compresor y Redimensionador de Imágenes Online:** Clásico de clásicos. Optimizar peso web sin servidor usando Web APIs (Canvas/Compresión).
+- [x] **Compresor y Redimensionador de Imágenes Online:** Clásico de clásicos. Optimizar peso web sin servidor usando Web APIs (Canvas/Compresión).
 - [ ] **Generador de Imágenes Placeholder:** Crea rápidamente imágenes grises con el texto del tamaño, para maquetadores.
 - [ ] **Extractor de Thumbnails de YouTube en HD:** Introduciendo un ID o Enlace de YouTube te saca la miniatura principal a máxima calidad (manipulación de cadena de URL).
 - [ ] **Convertidor de Imagen a SVG / Data URI / ASCII:** Convertidores de formato altamente valorados para perfiles técnicos.
