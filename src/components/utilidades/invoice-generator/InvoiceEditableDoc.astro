@@ -1,0 +1,218 @@
+---
+
+---
+
+<div class="invoice-document printable-a4" id="invoice-document">
+    <div class="inv-header">
+        <div class="inv-header-left">
+            <h1
+                class="inv-title editable"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Título"
+            >
+                FACTURA
+            </h1>
+            <div class="inv-meta">
+                <p>
+                    <strong>Nº:</strong>
+                    <span class="editable" contenteditable="true" spellcheck="false"
+                        >FAC-24-001</span
+                    >
+                </p>
+                <p>
+                    <strong>Fecha:</strong>
+                    <input type="date" id="inv-date-input" class="seamless-input date-picker" />
+                </p>
+            </div>
+        </div>
+        <div class="inv-header-right">
+            <div class="inv-branding">
+                <select
+                    id="inv-currency"
+                    class="seamless-input currency-picker ml-auto no-print"
+                    title="Seleccionar moneda"
+                >
+                    <option value="€">EUR (€)</option>
+                    <option value="$">USD ($)</option>
+                    <option value="£">GBP (£)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="inv-parties">
+        <div class="inv-from">
+            <h3>De:</h3>
+            <p class="font-bold editable" contenteditable="true" spellcheck="false">
+                Mi Empresa S.L.
+            </p>
+            <p
+                class="editable block"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="NIF / CIF"
+            >
+                B12345678
+            </p>
+            <p
+                class="editable block"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Dirección Postal"
+            >
+                Av. de la Innovación 45
+            </p>
+            <p
+                class="editable block"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Población, País"
+            >
+                28000 Madrid, España
+            </p>
+            <p
+                class="editable block mt-2 text-indigo-600 font-medium"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Email o Teléfono"
+            >
+                admin@miempresa.com
+            </p>
+        </div>
+        <div class="inv-to">
+            <h3>Facturar a:</h3>
+            <p
+                class="font-bold editable empty"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Nombre del Cliente"
+            >
+            </p>
+            <p
+                class="editable block empty"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="NIF / CIF"
+            >
+            </p>
+            <p
+                class="editable block empty"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Dirección Postal"
+            >
+            </p>
+            <p
+                class="editable block empty"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Población, País"
+            >
+            </p>
+            <p
+                class="editable block mt-2 empty text-indigo-600 font-medium"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Email de contacto"
+            >
+            </p>
+        </div>
+    </div>
+
+    <table class="inv-table">
+        <thead>
+            <tr>
+                <th class="text-left pl-0">Descripción del Servicio / Producto</th>
+                <th class="text-right whitespace-nowrap w-20">Cant.</th>
+                <th class="text-right whitespace-nowrap pr-0 w-32"
+                    >Precio (<span class="out-currency">€</span>)</th
+                >
+                <th class="text-right whitespace-nowrap pr-0 w-32">Importe</th>
+                <th class="no-print w-10"></th>
+            </tr>
+        </thead>
+        <tbody id="interactive-items-body">
+            
+        </tbody>
+    </table>
+
+    <div class="no-print flex justify-end mb-8 border-b-2 border-slate-100 pb-4">
+        <button
+            type="button"
+            id="btn-add-row"
+            class="text-indigo-600 hover:text-indigo-800 font-bold text-sm bg-indigo-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+        >
+            + Añadir Fila
+        </button>
+    </div>
+
+    <div class="inv-footer">
+        <div class="inv-notes">
+            <h3 class="editable" contenteditable="true" spellcheck="false">
+                Notas / Condiciones de Pago
+            </h3>
+            <div
+                class="editable block text-sm text-slate-600 whitespace-pre-wrap min-h-24 empty"
+                contenteditable="true"
+                spellcheck="false"
+                data-placeholder="Ej: El pago debe realizarse mediante transferencia bancaria al IBAN ES00 0000 0000 0000 en un plazo de 30 días..."
+            >
+            </div>
+        </div>
+
+        <div class="inv-totals">
+            <div class="tot-row">
+                <span class="text-slate-500">Subtotal:</span>
+                <span><span id="out-subtotal">0.00</span> <span class="out-currency">€</span></span>
+            </div>
+
+            <div
+                class="tot-row group cursor-text relative pb-2 pt-2 border-b border-dashed border-slate-200"
+                title="Haz clic para cambiar el porcentaje"
+            >
+                <span class="text-slate-500 flex items-center gap-1">
+                    IVA (<input
+                        type="number"
+                        id="tax-input"
+                        class="seamless-number text-right"
+                        style="width: 2.2ch"
+                        value="21"
+                        min="0"
+                        max="100"
+                    /> %):
+                </span>
+                <span><span id="out-tax-val">0.00</span> <span class="out-currency">€</span></span>
+            </div>
+
+            <div
+                class="tot-row group cursor-text relative pb-2 pt-2 border-b border-dashed border-slate-200"
+                title="Haz clic para cambiar el porcentaje"
+            >
+                <span class="text-slate-500 flex items-center gap-1">
+                    IRPF (<input
+                        type="number"
+                        id="ret-input"
+                        class="seamless-number text-right"
+                        style="width: 2.2ch"
+                        value="0"
+                        min="0"
+                        max="100"
+                    /> %):
+                </span>
+                <span class="text-rose-600"
+                    >-<span id="out-ret-val">0.00</span> <span class="out-currency">€</span></span
+                >
+            </div>
+
+            <div class="tot-row tot-final">
+                <span>Total Gral:</span>
+                <span class="text-indigo-600"
+                    ><span id="out-total">0.00</span> <span class="out-currency">€</span></span
+                >
+            </div>
+        </div>
+    </div>
+
+    <div class="inv-brand-stripe"></div>
+</div>

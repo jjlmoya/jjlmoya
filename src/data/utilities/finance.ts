@@ -62,5 +62,13 @@ export const financeSection: SectionData = {
             iconFg: "mdi:calculator-variant",
             color: "#10b981",
         },
+        {
+            title: "Generador de Facturas PDF",
+            description: "Crea y descarga facturas automáticamente calculando el IVA y retenciones.",
+            href: "/utilidades/generador-facturas-pdf/",
+            iconBg: "mdi:file-document-outline",
+            iconFg: "mdi:receipt-text",
+            color: "#4f46e5",
+        }
     ],
 };

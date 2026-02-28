@@ -1,0 +1,93 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import InvoiceGenerator from "../../components/utilidades/invoice-generator/InvoiceGenerator.astro";
+import InvoiceGeneratorSEO from "../../components/utilidades/invoice-generator/InvoiceGeneratorSEO.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const title = "Generador de Facturas en PDF Gratis";
+const description =
+    "Crea y descarga facturas profesionales en PDF directamente desde tu navegador. Plantilla interactiva, cálculo automático de IVA e IRPF y 100% privado.";
+const image = "/images/utilities/generador-facturas-pdf.webp";
+
+const faqItems = [
+    {
+        question: "¿Tengo que registrarme para crear facturas?",
+        answer: "No. Puedes generar todas las facturas que necesites al instante, sin cuentas ni registros.",
+    },
+    {
+        question: "¿Están seguros mis datos de facturación?",
+        answer: "Sí, totalmente. Todo el procesamiento se realiza en tu propio navegador web (Client-Side). Nosotros nunca recibimos ni guardamos los datos de tus clientes ni tus importes facturados en ningún servidor.",
+    },
+    {
+        question: "¿Cuesta dinero descargar el PDF?",
+        answer: "Es 100% gratuito. Tampoco añadiremos marcas de agua con nuestro logotipo en los documentos que envíes a tus clientes.",
+    },
+    {
+        question: "¿Cómo calculáis el IVA y el IRPF?",
+        answer: "Tú defines el porcentaje manualmente. Por ejemplo en España, puedes fijar un 21% de IVA y un 15% de IRPF y nuestras fórmulas sumarán el IVA al subtotal y restarán el IRPF automáticamente.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Introducir Emisor y Cliente",
+        text: "Completa la configuración con los NIF, Direcciones y tu nº correlativo de factura.",
+    },
+    {
+        name: "Añadir Líneas de Venta",
+        text: "Escribe tus productos o servicios, asigna su precio unitario, y el sistema multiplicará la cantidad.",
+    },
+    {
+        name: "Ajustar Impuestos",
+        text: "Selecciona qué porcentaje sumar y qué retención restar, dependiendo del país que exija tu facturación.",
+    },
+    {
+        name: "Imprimir a PDF",
+        text: "Haz click en el botón final y usa la función de guardar que te ofrece Chrome/Safari/Firefox.",
+    },
+];
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image={image}
+    gradientFrom="from-slate-100"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Facturas PDF"
+            titleBase="Generador de"
+            description="La forma más rápida, privada y limpia de crear una factura profesional. Sin registros, sin pagos extra y calculando tus retenciones automáticamente. Cárgalo y envíalo."
+            gradientFrom="from-indigo-600"
+            gradientTo="to-blue-600"
+            reverse={false}
+        />
+    </div>
+
+    <InvoiceGenerator />
+
+    <div slot="seo">
+        <InvoiceGeneratorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography
+            title="Bibliografía Oficial: Obligaciones de Facturación"
+            links={[
+                {
+                    name: "BOE: Real Decreto 1619/2012 (Reglamento de Obligaciones de Facturación)",
+                    url: "https://www.boe.es/buscar/act.php?id=BOE-A-2012-14696",
+                },
+                {
+                    name: "BOE: Ley 37/1992 del Impuesto sobre el Valor Añadido (LIVA)",
+                    url: "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28740",
+                },
+            ]}
+        />
+    </div>
+</LayoutUtility>

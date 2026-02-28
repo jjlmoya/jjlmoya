@@ -46,11 +46,11 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 
 - [x] **Enlace de Descarga Directa para Google Drive:** Convierte el link de "compartir" en un ID que descarga instantáneamente sin abrir el visor de Drive.
 - [x] **Generador de Enlaces para WhatsApp:** Formulario sencillo (Número + Mensaje) para conseguir el enlace corto `wa.me/...` .
-- [ ] **Convertidor de URL a Código QR (e Imagen a QR):** Generador rápido, seguro, limpio de publicidad, usando una librería en el cliente para pintar el SVG/Canvas.
+- [x] **Convertidor de URL a Código QR (e Imagen a QR):** Generador rápido, seguro, limpio de publicidad, usando una librería en el cliente para pintar el SVG/Canvas.
 
 ## 📋 Textos, Oficina y Productividad (`tools.ts`)
 
-- [ ] **Generador Gratis de Facturas en PDF:** Un mini constructor de documento financiero descargable a PDF en local usando `html2pdf.js` o similar.
+- [x] **Generador Gratis de Facturas en PDF:** Un mini constructor de documento financiero descargable a PDF en local usando API de impresion nativa.
 - [ ] **Generador de Enlaces y Contraseñas MD5 con Salt:** Herramienta simple de hashing usando Web Crypto API.
 - [ ] **Eliminador de Emojis / Espacios Dobles:** Micro utilidades de texto enfocadas a la de-saturación de textos.
 - [ ] **Separador de Texto (Split):** Corta listas largas o coma-separadas a renglones, un paso tedioso al manipular datos sucios.

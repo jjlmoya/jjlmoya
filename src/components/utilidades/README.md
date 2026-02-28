@@ -11,7 +11,7 @@ This guide outlines the standard workflow for adding a new tool to the Utilities
 - **Visual**: If a result can be visualized (charts, bars, counters), do it. Don't just show a number.
 - **Language**: All user-facing text must be in **Spanish**, code in English.
 - **No Emojis**: Emojis are strictly forbidden in the codebase and the web content.
-
+- **SOLID Principles**: Components **MUST** be under 100 lines of code. Split large files into smaller `.astro`, `.css` or `.ts` pieces (e.g. `UtilWrapper.astro`, `UtilControls.astro`, `UtilController.ts`).
 ## 2. File Structure
 
 For a hypothetical utility named `super-calculator`:
