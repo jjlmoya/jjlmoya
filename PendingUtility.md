@@ -20,6 +20,7 @@ Infraestructura de Sitio:
 Crea la página en src/pages/utilidades/[nombre-en-castellano].astro.
 Usa el componente LayoutUtility.
 MANDATORIO: Pasa las preguntas frecuentes a través de la propiedad faqItems del layout para generar el Schema JSON-LD automático. No crees listas de FAQ manuales en el HTML del SEO.
+MANDATORIO: Pon `export const prerender = true;` siempre al inicio del frontmatter de la página de la utilidad, antes de cualquier import.
 Calidad Visual e Imágenes:
 Genera una imagen SEO con el prompt: 'Artist Ink and Watercolor style, vibrant ink splashes, concept art style, High Quality, 8k. [Descripción de la herramienta]. Vibrant colors. Spanish text: [TITULO]'.
 Convierte la imagen a 
