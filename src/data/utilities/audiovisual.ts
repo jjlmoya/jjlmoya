@@ -79,8 +79,16 @@ export const audiovisualSection: SectionData = {
             iconFg: "mdi:circle-slice-4",
             title: "Simulador de Daltonismo",
             description:
-                "Visualiza tus imágenes como personas con diferentes tipos de deficiencia cromática (CVD).",
+                "Visualiza tus imagenes como personas con diferentes tipos de deficiencia cromatica (CVD).",
             color: "#3b82f6",
+        },
+        {
+            href: "/utilidades/compresor-imagenes/",
+            iconBg: "mdi:image-size-select-small",
+            iconFg: "mdi:file-image-outline",
+            title: "Compresor de Imágenes",
+            description: "Comprime, redimensiona y optimiza el peso de tus fotos sin servidor desde el navegador.",
+            color: "#10b981",
         },
     ],
 };
