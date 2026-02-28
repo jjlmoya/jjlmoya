@@ -6,6 +6,14 @@ export const devSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            href: "/utilidades/convertidor-svg-css/",
+            iconBg: "mdi:svg",
+            iconFg: "mdi:code-braces",
+            title: "Convertidor SVG a CSS",
+            description: "Transforma tus iconos vectoriales en código CSS optimizado (Background o Mask) para mejorar el rendimiento y la personalización de tu web.",
+            color: "#ec4899",
+        },
+        {
             href: "/utilidades/calculadora-aspect-ratio/",
             iconBg: "mdi:aspect-ratio",
             iconFg: "mdi:ruler-square",

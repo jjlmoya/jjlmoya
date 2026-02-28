@@ -1,0 +1,184 @@
+---
+import "./SvgToCssConverter.css";
+---
+
+<div class="stc-container">
+    <div class="stc-grid">
+        
+        <div class="stc-card">
+            <div class="stc-title-group">
+                <div class="stc-icon-box">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="m5 16s1 1 4 1 4-1 4-1"></path><path d="m11 20s1 1 4 1 4-1 4-1"
+                        ></path><path d="m17 4s1 1 4 1 4-1 4-1"></path><path
+                            d="m3 12s1 1 4 1 4-1 4-1"></path><path d="m9 8s1 1 4 1 4-1 4-1"
+                        ></path><circle cx="5" cy="16" r="1"></circle><circle cx="11" cy="20" r="1"
+                        ></circle><circle cx="17" cy="4" r="1"></circle><circle cx="3" cy="12" r="1"
+                        ></circle><circle cx="9" cy="8" r="1"></circle></svg
+                    >
+                </div>
+                <h2 class="stc-card-title">Pegar SVG</h2>
+            </div>
+
+            <span class="stc-area-label">Código Fuente SVG</span>
+            <textarea
+                id="stc-input"
+                class="stc-textarea"
+                placeholder='<svg xmlns="http://www.w3.org/2000/svg" ...'
+                >&lt;svg viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg"&gt;&lt;circle cx="12" cy="12" r="10"
+                stroke="currentColor" stroke-width="2"/&gt;&lt;path d="M12 8v8M8 12h8"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round"/&gt;&lt;/svg&gt;</textarea
+            >
+
+            <span class="stc-area-label">Vista Previa Original</span>
+            <div class="stc-preview-container">
+                <div class="stc-preview-bg"></div>
+                <div id="stc-preview-original" class="stc-preview-img"></div>
+            </div>
+        </div>
+
+        
+        <div class="stc-card">
+            <div class="stc-title-group">
+                <div class="stc-icon-box">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
+                            points="7 10 12 15 17 10"></polyline><line
+                            x1="12"
+                            x2="12"
+                            y1="3"
+                            y2="15"></line></svg
+                    >
+                </div>
+                <h2 class="stc-card-title">Resultado CSS</h2>
+            </div>
+
+            <div class="stc-output-tabs">
+                <button class="stc-tab-btn active" data-type="background">Background Image</button>
+                <button class="stc-tab-btn" data-type="mask">CSS Mask / Webkit</button>
+                <button class="stc-tab-btn" data-type="uri">Solo Data URI</button>
+            </div>
+
+            <div class="stc-result-box">
+                <button id="stc-copy" class="stc-copy-btn">Copiar</button>
+                <textarea id="stc-output" class="stc-textarea" readonly></textarea>
+            </div>
+
+            <span class="stc-area-label">Resultado Aplicado</span>
+            <div class="stc-preview-container">
+                <div class="stc-preview-bg"></div>
+                <div id="stc-preview-applied" style="width: 60px; height: 60px; z-index: 1;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById("stc-input") as HTMLTextAreaElement;
+    const output = document.getElementById("stc-output") as HTMLTextAreaElement;
+    const copyBtn = document.getElementById("stc-copy");
+    const previewOriginal = document.getElementById("stc-preview-original");
+    const previewApplied = document.getElementById("stc-preview-applied");
+    const tabBtns = document.querySelectorAll(".stc-tab-btn");
+
+    let currentType = "background";
+
+    const cleanSvg = (svg: string) => {
+        return svg
+            .trim()
+            .replace(/\r?\n|\r/g, "")
+            .replace(/>\s+</g, "><")
+            .replace(/\s{2,}/g, " ");
+    };
+
+    const encodeSvg = (svg: string) => {
+        return svg
+            .replace(/"/g, "'")
+            .replace(/%/g, "%25")
+            .replace(/#/g, "%23")
+            .replace(/{/g, "%7B")
+            .replace(/}/g, "%7D")
+            .replace(/</g, "%3C")
+            .replace(/>/g, "%3E");
+    };
+
+    const generateOutput = () => {
+        if (!input || !output || !previewOriginal || !previewApplied) return;
+
+        const raw = input.value;
+        const cleaned = cleanSvg(raw);
+        const encoded = encodeSvg(cleaned);
+        const dataUri = `data:image/svg+xml,${encoded}`;
+
+        
+        previewOriginal.innerHTML = cleaned;
+
+        
+        let finalCode = "";
+        if (currentType === "background") {
+            finalCode = `background-image: url("${dataUri}");`;
+            previewApplied.style.backgroundImage = `url("${dataUri}")`;
+            previewApplied.style.maskImage = "none";
+            previewApplied.style.webkitMaskImage = "none";
+            previewApplied.style.backgroundColor = "transparent";
+        } else if (currentType === "mask") {
+            finalCode = `mask-image: url("${dataUri}");\n-webkit-mask-image: url("${dataUri}");\nmask-repeat: no-repeat;\nmask-size: contain;\nbackground-color: currentColor;`;
+            previewApplied.style.backgroundImage = "none";
+            previewApplied.style.maskImage = `url("${dataUri}")`;
+            previewApplied.style.webkitMaskImage = `url("${dataUri}")`;
+            previewApplied.style.maskRepeat = "no-repeat";
+            previewApplied.style.maskSize = "contain";
+            previewApplied.style.webkitMaskRepeat = "no-repeat";
+            previewApplied.style.webkitMaskSize = "contain";
+            previewApplied.style.backgroundColor = "var(--stc-primary)";
+        } else {
+            finalCode = dataUri;
+            previewApplied.style.backgroundImage = `url("${dataUri}")`;
+        }
+
+        output.value = finalCode;
+    };
+
+    input?.addEventListener("input", generateOutput);
+
+    tabBtns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            tabBtns.forEach((b) => b.classList.remove("active"));
+            const target = e.currentTarget as HTMLButtonElement;
+            target.classList.add("active");
+            currentType = target.dataset.type || "background";
+            generateOutput();
+        });
+    });
+
+    copyBtn?.addEventListener("click", () => {
+        if (!output) return;
+        output.select();
+        document.execCommand("copy");
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "¡Copiado!";
+        setTimeout(() => {
+            copyBtn.textContent = originalText;
+        }, 2000);
+    });
+
+    
+    generateOutput();
+</script>
