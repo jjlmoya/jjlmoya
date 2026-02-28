@@ -14,7 +14,7 @@ Arquitectura 'Separadita':
 Crea una carpeta en src/components/utilidades/[NombreIngles]/.
 [NombreIngles].astro: Lógica pura client-side (sin comentarios de código).
 [NombreIngles].css: Estilos premium (glassmorphism, transiciones, ...).
-[NombreIngles]SEO.astro: Contenido SEO de 800+ palabras en español.
+[NombreIngles]SEO.astro: Contenido SEO de 800+ palabras en español. **MANDATORIO: El texto debe centrarse en posicionamiento orgánico en Google usando palabras y frases clave (ej: "descargar miniatura de youtube", "cómo sacar la portada", etc.) orientadas al usuario final. NO escribas un texto auto-justificativo sobre la arquitectura técnica, lo buena que es la web, que no tiene anuncios o lo "senior" que es.**
 [NombreIngles]SEO.css: Estilos premium para el SEO (tipografía Inter, cajas de código elegantes, sin texto 'tirado').
 Infraestructura de Sitio:
 Crea la página en src/pages/utilidades/[nombre-en-castellano].astro.
@@ -37,7 +37,7 @@ Finalización: Ejecuta npm run lint; npm run check; npm run test antes de consid
 # Utilidades Pendientes (Inspiradas en WebUtility.io)
 
 ## 📷 Audiovisual y Diseño Creativo (`audiovisual.ts` / `creative.ts`)
-- [ ] **Extractor de Thumbnails de YouTube en HD:** Introduciendo un ID o Enlace de YouTube te saca la miniatura principal a máxima calidad (manipulación de cadena de URL).
+- [x] **Extractor de Thumbnails de YouTube en HD:** Introduciendo un ID o Enlace de YouTube te saca la miniatura principal a máxima calidad (manipulación de cadena de URL).
 - [ ] **Convertidor de Imagen a SVG / Data URI / ASCII:** Convertidores de formato altamente valorados para perfiles técnicos.
 - [ ] **Creador Rápido de Collage de Fotos / Añadir Logo y Bordes:** Herramientas orientadas a usuarios promedio que necesitan retocar imágenes sin instalar programas, haciéndose todo en el navegador.
 

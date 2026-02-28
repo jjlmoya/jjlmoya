@@ -98,5 +98,13 @@ export const audiovisualSection: SectionData = {
             description: "Crea imágenes de prueba o bocetos con dimensiones y textos a medida al instante.",
             color: "#eab308",
         },
+        {
+            href: "/utilidades/extractor-miniaturas-youtube/",
+            iconBg: "mdi:youtube",
+            iconFg: "mdi:image-search",
+            title: "Extractor de Miniaturas",
+            description: "Descarga las portadas de videos de YouTube en Máxima Calidad usando solo la URL.",
+            color: "#ef4444",
+        },
     ],
 };
