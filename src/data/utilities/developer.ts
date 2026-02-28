@@ -110,12 +110,12 @@ export const devSection: SectionData = {
             color: "#8b5cf6",
         },
         {
-            href: "/utilidades/generador-utm/",
-            iconBg: "mdi:bullhorn",
-            iconFg: "mdi:link-variant",
-            title: "Generador de UTM",
+            href: "/utilidades/generador-hashes-seguridad/",
+            iconBg: "mdi:security",
+            iconFg: "mdi:lock-outline",
+            title: "Generador de Hashes",
             description:
-                "Crea y analiza tus enlaces de campaña para Google Analytics con parámetros UTM de forma profesional.",
+                "Calcula potentes sumas de comprobación MD5, SHA-256 y SHA-512 al vuelo. Privacidad total con procesamiento nativo de seguridad en tu navegador.",
             color: "#6366f1",
         },
     ],
