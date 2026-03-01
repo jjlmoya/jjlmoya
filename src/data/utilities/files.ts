@@ -56,13 +56,13 @@ export const filesSection: SectionData = {
             color: "#ff4500",
         },
         {
-            href: "/utilidades/enlace-descarga-directa-google-drive/",
-            iconBg: "mdi:google-drive",
-            iconFg: "mdi:download",
-            title: "Descarga Directa de Drive",
+            href: "/utilidades/eliminador-emojis-espacios-dobles/",
+            iconBg: "mdi:format-text-variant-outline",
+            iconFg: "mdi:broom",
+            title: "Limpiador de Emojis y Espacios",
             description:
-                "Convierte el link de compartir en un ID que descarga instantáneamente sin abrir el visor de Drive.",
-            color: "#34a853",
+                "Elimina emojis, dobles espacios y caracteres invisibles de tus textos al instante.",
+            color: "#6366f1",
         },
     ],
 };

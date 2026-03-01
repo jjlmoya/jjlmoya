@@ -1,0 +1,184 @@
+---
+import "./EmojiSpaceCleaner.css";
+---
+
+<div class="cleaner-container">
+    <div class="glass-card animate-in fade-in slide-in-from-bottom duration-700">
+        <div class="input-group">
+            <label for="input-text" class="label">Texto de Entrada</label>
+            <div class="textarea-wrapper">
+                <textarea
+                    id="input-text"
+                    placeholder="Pega aquí tu texto con emojis, espacios extra o caracteres invisibles..."
+                    spellcheck="false"></textarea>
+            </div>
+        </div>
+
+        <div class="controls-grid">
+            <label class="control-item">
+                <input type="checkbox" id="check-emojis" checked />
+                <span class="checkbox-custom"></span>
+                <span class="control-text">Eliminar Emojis</span>
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-spaces" checked />
+                <span class="checkbox-custom"></span>
+                <span class="control-text">Normalizar Espacios</span>
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-invisible" checked />
+                <span class="checkbox-custom"></span>
+                <span class="control-text">Limpiar Invisibles</span>
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-trim" checked />
+                <span class="checkbox-custom"></span>
+                <span class="control-text">Recortar Márgenes</span>
+            </label>
+            <label class="control-item">
+                <input type="checkbox" id="check-empty-lines" />
+                <span class="checkbox-custom"></span>
+                <span class="control-text">Eliminar Líneas Vacías</span>
+            </label>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span id="char-count" class="stat-value">0</span>
+                <span class="stat-label">Caracteres</span>
+            </div>
+            <div class="stat-item">
+                <span id="word-count" class="stat-value">0</span>
+                <span class="stat-label">Palabras</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card animate-in fade-in slide-in-from-bottom duration-700 delay-100">
+        <div class="output-group">
+            <label for="output-text" class="label">Texto Limpio</label>
+            <div class="textarea-wrapper">
+                <textarea
+                    id="output-text"
+                    readonly
+                    placeholder="El resultado aparecerá aquí automáticamente..."></textarea>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="btn-copy" class="btn btn-primary"> Copiar Texto Limpio </button>
+            <button id="btn-clear" class="btn btn-secondary"> Limpiar Todo </button>
+        </div>
+    </div>
+</div>
+
+<div id="copy-toast" class="copy-toast">¡Texto copiado al portapapeles!</div>
+
+<script>
+    const input = document.getElementById("input-text") as HTMLTextAreaElement | null;
+    const output = document.getElementById("output-text") as HTMLTextAreaElement | null;
+    const checkEmojis = document.getElementById("check-emojis") as HTMLInputElement | null;
+    const checkSpaces = document.getElementById("check-spaces") as HTMLInputElement | null;
+    const checkInvisible = document.getElementById("check-invisible") as HTMLInputElement | null;
+    const checkTrim = document.getElementById("check-trim") as HTMLInputElement | null;
+    const checkEmptyLines = document.getElementById("check-empty-lines") as HTMLInputElement | null;
+    const charCountSpan = document.getElementById("char-count");
+    const wordCountSpan = document.getElementById("word-count");
+    const btnCopy = document.getElementById("btn-copy");
+    const btnClear = document.getElementById("btn-clear");
+    const toast = document.getElementById("copy-toast");
+
+    const emojiRegex = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/gu;
+    const invisibleRegex =
+        /[\u0000-\u001F\u007F-\u009F\u2000-\u200F\u2028-\u202F\u205F-\u206F\u3000\uFEFF]/g;
+
+    function processText(): void {
+        if (!input || !output) return;
+
+        let text: string = input.value;
+
+        if (checkEmojis?.checked) {
+            text = text.replace(emojiRegex, "");
+        }
+
+        if (checkInvisible?.checked) {
+            text = text.replace(invisibleRegex, "");
+        }
+
+        if (checkSpaces?.checked) {
+            text = text.replace(/[ \t]+/g, " ");
+        }
+
+        if (checkTrim?.checked || checkEmptyLines?.checked) {
+            let lines: string[] = text.split("\n");
+
+            if (checkTrim?.checked) {
+                lines = lines.map((line) => line.trim());
+            }
+
+            if (checkEmptyLines?.checked) {
+                lines = lines.filter((line) => line.length > 0);
+            }
+
+            text = lines.join("\n");
+        }
+
+        if (checkSpaces?.checked) {
+            text = text.replace(/^[ ]+/gm, "");
+            text = text.replace(/[ ]+$/gm, "");
+            text = text.replace(/[ ]{2,}/g, " ");
+        }
+
+        output.value = text;
+        updateStats(text);
+    }
+
+    function updateStats(text: string): void {
+        if (!charCountSpan || !wordCountSpan) return;
+        charCountSpan.textContent = text.length.toString();
+        const words: number = text.trim() ? text.trim().split(/\s+/).length : 0;
+        wordCountSpan.textContent = words.toString();
+    }
+
+    function showToast(): void {
+        if (!toast) return;
+        toast.classList.add("visible");
+        setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    if (input) {
+        input.addEventListener("input", processText);
+    }
+
+    const controls: (HTMLInputElement | null)[] = [
+        checkEmojis,
+        checkSpaces,
+        checkInvisible,
+        checkTrim,
+        checkEmptyLines,
+    ];
+
+    controls.forEach((el) => {
+        el?.addEventListener("change", processText);
+    });
+
+    if (btnCopy) {
+        btnCopy.addEventListener("click", () => {
+            if (!output || !output.value) return;
+            navigator.clipboard
+                .writeText(output.value)
+                .then(showToast)
+                .catch(() => {});
+        });
+    }
+
+    if (btnClear) {
+        btnClear.addEventListener("click", () => {
+            if (input) {
+                input.value = "";
+                processText();
+                input.focus();
+            }
+        });
+    }
+</script>
