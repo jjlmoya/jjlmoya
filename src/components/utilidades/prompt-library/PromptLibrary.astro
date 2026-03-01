@@ -21,7 +21,14 @@ import PromptLibraryModal from "./PromptLibraryModal.astro";
     const cancelBtn = document.getElementById("pl-cancel-form") as HTMLButtonElement;
     const emptyAddBtn = document.getElementById("pl-empty-add") as HTMLButtonElement;
 
+    const confirmModal = document.getElementById("pl-confirm-modal") as HTMLDialogElement;
+    const cancelDeleteBtn = document.getElementById("pl-cancel-delete") as HTMLButtonElement;
+    const confirmDeleteBtn = document.getElementById("pl-confirm-delete") as HTMLButtonElement;
+
     let editId: string | null = null;
+    let deleteIdTarget: string | null = null;
+    let cardToDelete: HTMLElement | null = null;
+
     const searchIn = document.getElementById("pl-search") as HTMLInputElement;
     const grid = document.getElementById("pl-grid") as HTMLDivElement;
     const tpl = document.getElementById("pl-card-tpl") as HTMLTemplateElement;
@@ -109,6 +116,32 @@ import PromptLibraryModal from "./PromptLibraryModal.astro";
             updateTagsUI();
         }, 300);
     }
+
+    function closeConfirmModal() {
+        confirmModal?.classList.remove("pl-modal-open");
+        setTimeout(() => {
+            confirmModal?.close();
+            deleteIdTarget = null;
+            cardToDelete = null;
+        }, 300);
+    }
+
+    cancelDeleteBtn?.addEventListener("click", closeConfirmModal);
+
+    confirmDeleteBtn?.addEventListener("click", () => {
+        if (deleteIdTarget && cardToDelete) {
+            import("./PromptLibraryController").then((ctrl) => {
+                cardToDelete!.style.opacity = "0";
+                cardToDelete!.style.transform = "scale(0.95)";
+
+                setTimeout(() => {
+                    ctrl.deletePrompt(deleteIdTarget!);
+                    closeConfirmModal();
+                    renderPrompts();
+                }, 200);
+            });
+        }
+    });
 
     function highlightVariables(
         text: string,
@@ -238,12 +271,10 @@ import PromptLibraryModal from "./PromptLibraryModal.astro";
                 updateDisplay();
 
                 delBtn?.addEventListener("click", () => {
-                    card.style.opacity = "0";
-                    card.style.transform = "scale(0.95)";
-                    setTimeout(() => {
-                        ctrl.deletePrompt(item.id);
-                        renderPrompts();
-                    }, 200);
+                    deleteIdTarget = item.id;
+                    cardToDelete = card;
+                    confirmModal?.showModal();
+                    confirmModal?.classList.add("pl-modal-open");
                 });
 
                 starBtn?.addEventListener("click", () => {
