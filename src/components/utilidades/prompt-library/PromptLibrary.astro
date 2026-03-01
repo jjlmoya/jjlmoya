@@ -1,0 +1,354 @@
+---
+import "./PromptLibrary.css";
+import PromptLibraryHeader from "./PromptLibraryHeader.astro";
+import PromptLibraryGrid from "./PromptLibraryGrid.astro";
+import PromptLibraryModal from "./PromptLibraryModal.astro";
+---
+
+<div class="pl-wrapper">
+    <PromptLibraryHeader />
+    <PromptLibraryGrid />
+    <PromptLibraryModal />
+</div>
+
+<script>
+    import { loadPrompts, savePrompts, deletePrompt, addPrompt } from "./PromptLibraryController";
+    import { copyToClipboard } from "./PromptLibraryUtils";
+
+    const modal = document.getElementById("pl-modal") as HTMLDialogElement;
+    const openBtn = document.getElementById("pl-open-modal") as HTMLButtonElement;
+    const closeBtn = document.getElementById("pl-close-modal") as HTMLButtonElement;
+    const cancelBtn = document.getElementById("pl-cancel-form") as HTMLButtonElement;
+    const emptyAddBtn = document.getElementById("pl-empty-add") as HTMLButtonElement;
+
+    let editId: string | null = null;
+    const searchIn = document.getElementById("pl-search") as HTMLInputElement;
+    const grid = document.getElementById("pl-grid") as HTMLDivElement;
+    const tpl = document.getElementById("pl-card-tpl") as HTMLTemplateElement;
+    const emptyState = document.getElementById("pl-empty") as HTMLDivElement;
+
+    const form = document.getElementById("pl-form") as HTMLFormElement;
+    const titleIn = document.getElementById("pl-title") as HTMLInputElement;
+    const contentIn = document.getElementById("pl-content") as HTMLTextAreaElement;
+
+    const tagsWrapper = document.getElementById("pl-tags-wrapper") as HTMLDivElement;
+    const tagsList = document.getElementById("pl-tags-list") as HTMLDivElement;
+    const tagsInput = document.getElementById("pl-tags-input") as HTMLInputElement;
+    let currentTags: string[] = [];
+
+    function updateTagsUI() {
+        if (!tagsList) return;
+        tagsList.innerHTML = "";
+        currentTags.forEach((tag, index) => {
+            const span = document.createElement("span");
+            span.className = "pl-card-tag";
+            span.style.cursor = "pointer";
+            span.style.display = "inline-flex";
+            span.style.alignItems = "center";
+            span.style.gap = "0.25rem";
+
+            span.innerHTML = `${tag} <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
+            span.addEventListener("click", () => {
+                currentTags.splice(index, 1);
+                updateTagsUI();
+            });
+            tagsList.appendChild(span);
+        });
+    }
+
+    tagsWrapper?.addEventListener("click", () => {
+        tagsInput?.focus();
+    });
+
+    tagsInput?.addEventListener("keydown", (e) => {
+        if (e.key === " " || e.key === "Enter" || e.key === ",") {
+            e.preventDefault();
+            const val = tagsInput.value.trim().replace(/,/g, "");
+            if (val && !currentTags.includes(val)) {
+                currentTags.push(val);
+                updateTagsUI();
+            }
+            tagsInput.value = "";
+        } else if (e.key === "Backspace" && tagsInput.value === "") {
+            currentTags.pop();
+            updateTagsUI();
+        }
+    });
+
+    function openModal(itemToEdit: any = null) {
+        if (itemToEdit) {
+            editId = itemToEdit.id;
+            titleIn.value = itemToEdit.title;
+            contentIn.value = itemToEdit.content;
+            currentTags = [...itemToEdit.tags];
+            updateTagsUI();
+            const titleEl = document.querySelector(".pl-modal-title");
+            if (titleEl) titleEl.textContent = "Editar Prompt";
+        } else {
+            editId = null;
+            form?.reset();
+            currentTags = [];
+            updateTagsUI();
+            const titleEl = document.querySelector(".pl-modal-title");
+            if (titleEl) titleEl.textContent = "Crear Nuevo Prompt";
+        }
+
+        modal?.showModal();
+        modal?.classList.add("pl-modal-open");
+        titleIn?.focus();
+    }
+
+    function closeModal() {
+        modal?.classList.remove("pl-modal-open");
+        setTimeout(() => {
+            modal?.close();
+            editId = null;
+            form?.reset();
+            currentTags = [];
+            updateTagsUI();
+        }, 300);
+    }
+
+    function highlightVariables(
+        text: string,
+        varValues: Record<string, string>
+    ): { html: string; raw: string } {
+        const regex = /\[([^\]]+)\]/g;
+        let html = text;
+        let raw = text;
+
+        const vars = extractVariables(text);
+        vars.forEach((v) => {
+            const val = varValues[v] || `[${v}]`;
+            const replaceObjHtml = `<span class="pl-var-highlight${varValues[v] ? " filled" : ""}">${val}</span>`;
+
+            html = html.replace(new RegExp(`\\[${v}\\]`, "g"), replaceObjHtml);
+            raw = raw.replace(new RegExp(`\\[${v}\\]`, "g"), val);
+        });
+
+        return { html, raw };
+    }
+
+    function extractVariables(text: string): string[] {
+        const regex = /\[([^\]]+)\]/g;
+        const matches: string[] = [];
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            if (!matches.includes(match[1])) {
+                matches.push(match[1]);
+            }
+        }
+        return matches;
+    }
+
+    function renderPrompts() {
+        if (!grid || !tpl || !emptyState) return;
+
+        import("./PromptLibraryController").then((ctrl) => {
+            const items = ctrl.loadPrompts();
+            const term = searchIn?.value.toLowerCase().trim() || "";
+
+            const filtered = items.filter((item) => {
+                const matchesText =
+                    item.title.toLowerCase().includes(term) ||
+                    item.content.toLowerCase().includes(term);
+                const matchesTag = item.tags.some((t) => t.toLowerCase().includes(term));
+                return !term || matchesText || matchesTag;
+            });
+
+            if (items.length === 0) {
+                emptyState.classList.remove("pl-hidden");
+                grid.innerHTML = "";
+                return;
+            } else if (filtered.length === 0) {
+                emptyState.classList.add("pl-hidden");
+                grid.innerHTML =
+                    "<div class='pl-no-results'>No se encontraron prompts para esta búsqueda.</div>";
+                return;
+            }
+
+            emptyState.classList.add("pl-hidden");
+            grid.innerHTML = "";
+
+            const df = document.createDocumentFragment();
+            filtered.forEach((item) => {
+                const clone = tpl.content.cloneNode(true) as DocumentFragment;
+                const card = clone.querySelector(".pl-card") as HTMLElement;
+                const titleEl = clone.querySelector(".pl-card-title");
+                const contentEl = clone.querySelector(".pl-card-text") as HTMLElement;
+                const tagsCont = clone.querySelector(".pl-tags-container");
+                const varsCont = clone.querySelector(".pl-card-vars") as HTMLElement;
+
+                const delBtn = clone.querySelector(".pl-del-btn") as HTMLButtonElement;
+                const copyBtn = clone.querySelector(".pl-copy-btn") as HTMLButtonElement;
+                const editBtn = clone.querySelector(".pl-edit-btn") as HTMLButtonElement;
+                const starBtn = clone.querySelector(".pl-star-btn") as HTMLButtonElement;
+                const starIcon = clone.querySelector(".pl-star-icon") as HTMLElement;
+                const shareBtn = clone.querySelector(".pl-share-btn") as HTMLButtonElement;
+
+                if (titleEl) titleEl.textContent = item.title;
+
+                if (item.isStarred) {
+                    starIcon.classList.add("pl-starred");
+                    starIcon.setAttribute("fill", "currentColor");
+                }
+
+                if (tagsCont && item.tags.length > 0) {
+                    item.tags.forEach((tag) => {
+                        const s = document.createElement("span");
+                        s.className = "pl-card-tag";
+                        s.textContent = tag.trim();
+                        if (s.textContent) tagsCont.appendChild(s);
+                    });
+                } else if (tagsCont) {
+                    tagsCont.remove();
+                }
+
+                const vars = extractVariables(item.content);
+                const varInputs: Record<string, HTMLInputElement> = {};
+
+                const updateDisplay = () => {
+                    const vals: Record<string, string> = {};
+                    vars.forEach((v) => (vals[v] = varInputs[v]?.value.trim()));
+                    const { html, raw } = highlightVariables(item.content, vals);
+                    contentEl.innerHTML = html;
+                    return raw;
+                };
+
+                if (vars.length > 0 && varsCont) {
+                    const varsTitle = document.createElement("h5");
+                    varsTitle.className = "pl-card-vars-title";
+                    varsTitle.textContent = "Variables requeridas";
+                    varsCont.appendChild(varsTitle);
+
+                    vars.forEach((v) => {
+                        const input = document.createElement("input");
+                        input.type = "text";
+                        input.placeholder = v;
+                        input.className = "pl-var-input";
+                        input.addEventListener("input", updateDisplay);
+                        varsCont.appendChild(input);
+                        varInputs[v] = input;
+                    });
+                } else if (varsCont) {
+                    varsCont.remove();
+                }
+
+                updateDisplay();
+
+                delBtn?.addEventListener("click", () => {
+                    card.style.opacity = "0";
+                    card.style.transform = "scale(0.95)";
+                    setTimeout(() => {
+                        ctrl.deletePrompt(item.id);
+                        renderPrompts();
+                    }, 200);
+                });
+
+                starBtn?.addEventListener("click", () => {
+                    ctrl.updatePrompt(item.id, { isStarred: !item.isStarred });
+                    renderPrompts();
+                });
+
+                editBtn?.addEventListener("click", () => {
+                    openModal(item);
+                });
+
+                shareBtn?.addEventListener("click", () => {
+                    const url = new URL(window.location.href.split("?")[0]);
+                    url.searchParams.set("title", item.title);
+                    url.searchParams.set("content", item.content);
+                    if (item.tags && item.tags.length > 0) {
+                        url.searchParams.set("tags", item.tags.join(","));
+                    }
+                    copyToClipboard(url.toString(), shareBtn);
+                });
+
+                copyBtn?.addEventListener("click", () => {
+                    const finalContent = updateDisplay();
+                    copyToClipboard(finalContent, copyBtn);
+                });
+
+                df.appendChild(clone);
+            });
+
+            grid.appendChild(df);
+        });
+    }
+
+    openBtn?.addEventListener("click", () => openModal(null));
+    emptyAddBtn?.addEventListener("click", () => openModal(null));
+    closeBtn?.addEventListener("click", closeModal);
+    cancelBtn?.addEventListener("click", closeModal);
+
+    modal?.addEventListener("click", (e) => {
+        const dialogDimensions = modal.getBoundingClientRect();
+        if (
+            e.clientX < dialogDimensions.left ||
+            e.clientX > dialogDimensions.right ||
+            e.clientY < dialogDimensions.top ||
+            e.clientY > dialogDimensions.bottom
+        ) {
+            closeModal();
+        }
+    });
+
+    form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const leftover = tagsInput?.value.trim().replace(/,/g, "");
+        if (leftover && !currentTags.includes(leftover)) {
+            currentTags.push(leftover);
+        }
+
+        import("./PromptLibraryController").then((ctrl) => {
+            const promptData = {
+                title: titleIn.value,
+                content: contentIn.value,
+                tags: [...currentTags],
+            };
+
+            if (editId) {
+                ctrl.updatePrompt(editId, promptData);
+            } else {
+                ctrl.addPrompt(promptData);
+            }
+
+            renderPrompts();
+            closeModal();
+        });
+    });
+
+    searchIn?.addEventListener("input", () => {
+        requestAnimationFrame(renderPrompts);
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        renderPrompts();
+
+        const params = new URLSearchParams(window.location.search);
+        const sharedTitle = params.get("title");
+        const sharedContent = params.get("content");
+
+        if (sharedTitle || sharedContent) {
+            openModal(null);
+
+            titleIn.value = sharedTitle || "";
+            contentIn.value = sharedContent || "";
+
+            const sharedTags = params.get("tags");
+            if (sharedTags) {
+                currentTags = sharedTags
+                    .split(",")
+                    .map((t) => t.trim())
+                    .filter(Boolean);
+                updateTagsUI();
+            }
+
+            const cleanUrl = new URL(window.location.href);
+            cleanUrl.search = "";
+            window.history.replaceState({}, document.title, cleanUrl.toString());
+        }
+    });
+</script>

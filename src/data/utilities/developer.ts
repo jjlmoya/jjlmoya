@@ -118,5 +118,14 @@ export const devSection: SectionData = {
                 "Calcula potentes sumas de comprobación MD5, SHA-256 y SHA-512 al vuelo. Privacidad total con procesamiento nativo de seguridad en tu navegador.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/biblioteca-prompts/",
+            iconBg: "mdi:robot",
+            iconFg: "mdi:text-box-search",
+            title: "Biblioteca de Prompts",
+            description:
+                "Guarda, organiza y etiqueta tus instrucciones favoritas de inteligencia artificial en un solo lugar. 100% privado en tu navegador.",
+            color: "#a855f7",
+        },
     ],
 };
