@@ -118,5 +118,14 @@ export const audiovisualSection: SectionData = {
                 "Convierte imágenes a formato Data URI o Base64 para incrustar directo en tu HTML o CSS.",
             color: "#0ea5e9",
         },
+        {
+            href: "/utilidades/creador-collage-fotos/",
+            iconBg: "mdi:collage",
+            iconFg: "mdi:palette-outline",
+            title: "Creador de Collages",
+            description:
+                "Diseña collages profesionales con múltiples diseños, bordes personalizables y descarga en alta resolución.",
+            color: "#a855f7",
+        },
     ],
 };
