@@ -1,0 +1,355 @@
+---
+import "./ColorConverter.css";
+---
+
+<div class="color-converter-container">
+    <div class="glass-card left-panel animate-in fade-in slide-in-from-left duration-700">
+        <div class="input-grid">
+            <div class="input-group">
+                <div class="label-row">
+                    <label for="hex-input" class="label">HEX</label>
+                </div>
+                <div class="input-field-wrapper">
+                    <input type="text" id="hex-input" class="text-input" placeholder="#FFFFFF" />
+                    <button class="copy-btn" data-target="hex-input" title="Copiar HEX">
+                        <i class="mdi mdi-content-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="label-row">
+                    <label for="rgb-input" class="label">RGB</label>
+                </div>
+                <div class="input-field-wrapper">
+                    <input
+                        type="text"
+                        id="rgb-input"
+                        class="text-input"
+                        placeholder="rgb(255, 255, 255)"
+                    />
+                    <button class="copy-btn" data-target="rgb-input" title="Copiar RGB">
+                        <i class="mdi mdi-content-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="label-row">
+                    <label for="hsl-input" class="label">HSL</label>
+                </div>
+                <div class="input-field-wrapper">
+                    <input
+                        type="text"
+                        id="hsl-input"
+                        class="text-input"
+                        placeholder="hsl(0, 0%, 100%)"
+                    />
+                    <button class="copy-btn" data-target="hsl-input" title="Copiar HSL">
+                        <i class="mdi mdi-content-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-controls">
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span>Rojo</span>
+                    <span id="r-val">255</span>
+                </div>
+                <input type="range" id="r-slider" min="0" max="255" value="255" />
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span>Verde</span>
+                    <span id="g-val">255</span>
+                </div>
+                <input type="range" id="g-slider" min="0" max="255" value="255" />
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span>Azul</span>
+                    <span id="b-val">255</span>
+                </div>
+                <input type="range" id="b-slider" min="0" max="255" value="255" />
+            </div>
+        </div>
+
+        <div class="action-area">
+            <button id="btn-copy-all" class="btn btn-primary">
+                <i class="mdi mdi-content-copy"></i> Copiar Todos los Formatos
+            </button>
+        </div>
+    </div>
+
+    <div
+        class="glass-card right-panel animate-in fade-in slide-in-from-right duration-700 delay-100"
+    >
+        <div class="color-preview-section">
+            <label class="label">Vista Previa (Click para copiar HEX)</label>
+            <div
+                id="main-preview"
+                class="main-preview"
+                style="background-color: rgb(255, 255, 255); cursor: pointer;"
+                title="Click para copiar HEX"
+            >
+                <div class="color-info-overlay">
+                    <span id="preview-hex">#FFFFFF</span>
+                    <span id="preview-contrast">Contrast: 21.0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="harmony-section">
+            <label class="label">Armonías de Color</label>
+            <div class="harmony-grid">
+                <div class="harmony-item">
+                    <div id="comp-color" class="harmony-color"></div>
+                    <span class="harmony-label">Comp.</span>
+                </div>
+                <div class="harmony-item">
+                    <div id="ana1-color" class="harmony-color"></div>
+                    <span class="harmony-label">Ana 1</span>
+                </div>
+                <div class="harmony-item">
+                    <div id="ana2-color" class="harmony-color"></div>
+                    <span class="harmony-label">Ana 2</span>
+                </div>
+                <div class="harmony-item">
+                    <div id="tri1-color" class="harmony-color"></div>
+                    <span class="harmony-label">Tri 1</span>
+                </div>
+                <div class="harmony-item">
+                    <div id="tri2-color" class="harmony-color"></div>
+                    <span class="harmony-label">Tri 2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const hexInput = document.getElementById("hex-input") as HTMLInputElement;
+    const rgbInput = document.getElementById("rgb-input") as HTMLInputElement;
+    const hslInput = document.getElementById("hsl-input") as HTMLInputElement;
+
+    const rSlider = document.getElementById("r-slider") as HTMLInputElement;
+    const gSlider = document.getElementById("g-slider") as HTMLInputElement;
+    const bSlider = document.getElementById("b-slider") as HTMLInputElement;
+
+    const rVal = document.getElementById("r-val");
+    const gVal = document.getElementById("g-val");
+    const bVal = document.getElementById("b-val");
+
+    const mainPreview = document.getElementById("main-preview");
+    const previewHex = document.getElementById("preview-hex");
+    const previewContrast = document.getElementById("preview-contrast");
+
+    const harmonyColors = {
+        comp: document.getElementById("comp-color"),
+        ana1: document.getElementById("ana1-color"),
+        ana2: document.getElementById("ana2-color"),
+        tri1: document.getElementById("tri1-color"),
+        tri2: document.getElementById("tri2-color"),
+    };
+
+    const btnCopyAll = document.getElementById("btn-copy-all");
+
+    function rgbToHex(r: number, g: number, b: number): string {
+        return (
+            "#" +
+            [r, g, b]
+                .map((x) => {
+                    const hex = x.toString(16);
+                    return hex.length === 1 ? "0" + hex : hex;
+                })
+                .join("")
+                .toUpperCase()
+        );
+    }
+
+    function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result
+            ? {
+                  r: parseInt(result[1], 16),
+                  g: parseInt(result[2], 16),
+                  b: parseInt(result[3], 16),
+              }
+            : null;
+    }
+
+    function rgbToHsl(r: number, g: number, b: number): string {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        const max = Math.max(r, g, b),
+            min = Math.min(r, g, b);
+        let h = 0,
+            s;
+        const l = (max + min) / 2;
+
+        if (max === min) {
+            h = s = 0;
+        } else {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
+        }
+        return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+    }
+
+    function getLuminance(r: number, g: number, b: number): number {
+        const a = [r, g, b].map((v) => {
+            v /= 255;
+            return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        });
+        return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+    }
+
+    function updateAll(r: number, g: number, b: number): void {
+        const hex = rgbToHex(r, g, b);
+        const hsl = rgbToHsl(r, g, b);
+
+        if (hexInput) hexInput.value = hex;
+        if (rgbInput) rgbInput.value = `rgb(${r}, ${g}, ${b})`;
+        if (hslInput) hslInput.value = hsl;
+
+        if (rSlider) rSlider.value = r.toString();
+        if (gSlider) gSlider.value = g.toString();
+        if (bSlider) bSlider.value = b.toString();
+
+        if (rVal) rVal.textContent = r.toString();
+        if (gVal) gVal.textContent = g.toString();
+        if (bVal) bVal.textContent = b.toString();
+
+        if (mainPreview) mainPreview.style.backgroundColor = hex;
+        if (previewHex) previewHex.textContent = hex;
+
+        const lum = getLuminance(r, g, b);
+        const contrast = (lum + 0.05) / 0.05;
+        if (previewContrast) previewContrast.textContent = `Contrast: ${contrast.toFixed(1)}`;
+
+        updateHarmonies(r, g, b);
+    }
+
+    function updateHarmonies(r: number, g: number, b: number): void {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        const max = Math.max(r, g, b),
+            min = Math.min(r, g, b);
+        let h = 0,
+            s = 0;
+        const l: number = (max + min) / 2;
+
+        if (max === min) {
+            h = s = 0;
+        } else {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
+        }
+
+        const hDeg = h * 360;
+        const sPct = s * 100;
+        const lPct = l * 100;
+
+        const setHarm = (el: HTMLElement | null, deg: number) => {
+            if (el) {
+                const color = `hsl(${deg % 360}, ${sPct}%, ${lPct}%)`;
+                el.style.backgroundColor = color;
+                el.dataset.color = color;
+                el.style.cursor = "pointer";
+                el.title = "Click para copiar";
+            }
+        };
+
+        setHarm(harmonyColors.comp as HTMLElement, hDeg + 180);
+        setHarm(harmonyColors.ana1 as HTMLElement, hDeg + 30);
+        setHarm(harmonyColors.ana2 as HTMLElement, hDeg + 330);
+        setHarm(harmonyColors.tri1 as HTMLElement, hDeg + 120);
+        setHarm(harmonyColors.tri2 as HTMLElement, hDeg + 240);
+    }
+
+    rSlider?.addEventListener("input", () =>
+        updateAll(parseInt(rSlider.value), parseInt(gSlider.value), parseInt(bSlider.value))
+    );
+    gSlider?.addEventListener("input", () =>
+        updateAll(parseInt(rSlider.value), parseInt(gSlider.value), parseInt(bSlider.value))
+    );
+    bSlider?.addEventListener("input", () =>
+        updateAll(parseInt(rSlider.value), parseInt(gSlider.value), parseInt(bSlider.value))
+    );
+
+    hexInput?.addEventListener("input", () => {
+        const rgb = hexToRgb(hexInput.value);
+        if (rgb) updateAll(rgb.r, rgb.g, rgb.b);
+    });
+
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const targetId = (btn as HTMLElement).dataset.target;
+            if (!targetId) return;
+            const target = document.getElementById(targetId) as HTMLInputElement;
+            if (target) {
+                navigator.clipboard.writeText(target.value);
+                const icon = btn.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("mdi-content-copy");
+                    icon.classList.add("mdi-check");
+                    setTimeout(() => {
+                        icon.classList.remove("mdi-check");
+                        icon.classList.add("mdi-content-copy");
+                    }, 2000);
+                }
+            }
+        });
+    });
+
+    btnCopyAll?.addEventListener("click", () => {
+        const text = `HEX: ${hexInput.value}\nRGB: ${rgbInput.value}\nHSL: ${hslInput.value}`;
+        navigator.clipboard.writeText(text);
+        const originalText = btnCopyAll.innerHTML;
+        btnCopyAll.innerHTML = '<i class="mdi mdi-check"></i> ¡Copiado!';
+        setTimeout(() => {
+            btnCopyAll.innerHTML = originalText;
+        }, 2000);
+    });
+
+    mainPreview?.addEventListener("click", () => {
+        navigator.clipboard.writeText(hexInput.value);
+    });
+
+    Object.values(harmonyColors).forEach((el) => {
+        el?.addEventListener("click", () => {
+            const color = (el as HTMLElement).dataset.color;
+            if (color) navigator.clipboard.writeText(color);
+        });
+    });
+
+    updateAll(99, 102, 241);
+</script>

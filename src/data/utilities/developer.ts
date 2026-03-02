@@ -127,5 +127,14 @@ export const devSection: SectionData = {
                 "Guarda, organiza y etiqueta tus instrucciones favoritas de inteligencia artificial en un solo lugar. 100% privado en tu navegador.",
             color: "#a855f7",
         },
+        {
+            href: "/utilidades/conversor-color-rgb-hex-hsl/",
+            iconBg: "mdi:palette",
+            iconFg: "mdi:format-color-fill",
+            title: "Conversor RGB, HEX & HSL",
+            description:
+                "Transforma colores entre formatos web con precisión matemática. Genera armonías automáticas y analiza el contraste de accesibilidad WCAG.",
+            color: "#6366f1",
+        },
     ],
 };
