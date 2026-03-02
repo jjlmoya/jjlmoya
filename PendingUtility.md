@@ -3,11 +3,9 @@
 # Utilidades Pendientes (Inspiradas en WebUtility.io)
 
 ## 📋 Textos, Oficina y Productividad (`tools.ts`)
-
-- [ ] **Separador de Texto (Split):** Corta listas largas o coma-separadas a renglones, un paso tedioso al manipular datos sucios.
 - [ ] **Calculadora de Ancho de Píxel de un Texto:** Cálculo visual mediante Canvas de cuánto ancho ocupa una tipografía para truncar texto.
 
-## 🎲 Randomizers y Relax (Encajable en mini-adventures, juegos u otros)
+## 🎲 Relax
 
 - [ ] **Lanzadores de Dados (DnD / d20):** Ideal para una mini app web de juegos de rol de mesa.
 

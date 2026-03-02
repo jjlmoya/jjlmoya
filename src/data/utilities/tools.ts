@@ -56,5 +56,13 @@ export const toolsSection: SectionData = {
                 "Genera un link corto wa.me para que te hablen sin guardarte en la agenda.",
             color: "#22c55e",
         },
+        {
+            href: "/utilidades/calculadora-ancho-pixel-texto/",
+            iconBg: "mdi:format-text-wrapping-overflow",
+            iconFg: "mdi:ruler",
+            title: "Calculadora de Píxel de Texto",
+            description: "Calcula con precisión el ancho en píxeles de cualquier texto según su tipografía.",
+            color: "#06b6d4",
+        },
     ],
 };
