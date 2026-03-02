@@ -1,0 +1,118 @@
+---
+import "./DCFShareButton.css";
+---
+
+<button id="dcf-btn-share" class="btn-share">
+    <i class="mdi mdi-image-outline"></i> Compartir como imagen
+</button>
+
+<canvas id="dcf-share-canvas" class="hidden"></canvas>
+
+<script>
+    import type { DCFResult } from "./dcf-engine.ts";
+
+    let lastResult: DCFResult | null = null;
+
+    window.addEventListener("dcf:result", (e) => {
+        lastResult = (e as CustomEvent<DCFResult>).detail;
+    });
+
+    document.getElementById("dcf-btn-share")?.addEventListener("click", () => {
+        if (!lastResult) return;
+        drawAndDownload(lastResult);
+    });
+
+    function drawAndDownload(r: DCFResult) {
+        const canvas = document.getElementById("dcf-share-canvas") as HTMLCanvasElement;
+        const W = 900;
+        const H = 500;
+        canvas.width = W;
+        canvas.height = H;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const grad = ctx.createLinearGradient(0, 0, W, H);
+        grad.addColorStop(0, "#0f172a");
+        grad.addColorStop(1, "#064e3b");
+        ctx.fillStyle = grad;
+        ctx.roundRect(0, 0, W, H, 24);
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(255,255,255,0.03)";
+        ctx.beginPath();
+        ctx.arc(W - 80, 80, 220, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = r.rating.color;
+        ctx.font = "bold 140px system-ui";
+        ctx.textAlign = "left";
+        ctx.fillText(r.rating.label, 60, 200);
+
+        ctx.fillStyle = "rgba(255,255,255,0.9)";
+        ctx.font = "bold 26px system-ui";
+        ctx.fillText("Huella de Carbono Digital", 60, 240);
+
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.font = "18px system-ui";
+        const maxUrlWidth = W - 120;
+        let urlText = r.url;
+        if (ctx.measureText(urlText).width > maxUrlWidth) {
+            while (ctx.measureText(urlText + "…").width > maxUrlWidth && urlText.length > 0) {
+                urlText = urlText.slice(0, -1);
+            }
+            urlText += "…";
+        }
+        ctx.fillText(urlText, 60, 275);
+
+        ctx.fillStyle = "rgba(255,255,255,0.7)";
+        ctx.font = "16px system-ui";
+        ctx.fillText(r.rating.desc, 60, 310);
+
+        const stats: Array<[string, string]> = [
+            ["CO₂/visita", `${r.co2g.toFixed(3)} g`],
+            ["Peso", r.pageSize],
+            ["CO₂ anual (100k)", `${r.co2Year.toFixed(2)} kg`],
+            ["Equiv. árboles", `${r.trees}`],
+        ];
+
+        const pillW = 190;
+        const pillH = 70;
+        const pillY = 360;
+        const startX = 60;
+
+        stats.forEach(([label, value], i) => {
+            const x = startX + i * (pillW + 14);
+            ctx.fillStyle = "rgba(255,255,255,0.07)";
+            ctx.beginPath();
+            ctx.roundRect(x, pillY, pillW, pillH, 14);
+            ctx.fill();
+
+            ctx.fillStyle = r.rating.color;
+            ctx.font = "bold 22px system-ui";
+            ctx.textAlign = "left";
+            ctx.fillText(value, x + 14, pillY + 28);
+
+            ctx.fillStyle = "rgba(255,255,255,0.45)";
+            ctx.font = "13px system-ui";
+            ctx.fillText(label, x + 14, pillY + 52);
+        });
+
+        ctx.fillStyle = "rgba(255,255,255,0.55)";
+        ctx.font = "15px system-ui";
+        ctx.textAlign = "right";
+        ctx.fillText("jjlmoya.es", W - 40, H - 24);
+
+        canvas.toBlob(
+            (blob) => {
+                if (!blob) return;
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = "huella-carbono-digital.webp";
+                a.click();
+                URL.revokeObjectURL(a.href);
+            },
+            "image/webp",
+            0.92
+        );
+    }
+</script>

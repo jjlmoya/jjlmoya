@@ -1,0 +1,130 @@
+---
+import "./DCFInputPanel.css";
+---
+
+<div class="dcf-input-panel glass-card" id="dcf-input-panel">
+    <div id="dcf-state-default" class="panel-state">
+        <label for="dcf-url-input" class="input-label">URL a analizar</label>
+        <div class="input-group">
+            <input
+                type="url"
+                id="dcf-url-input"
+                placeholder="https://ejemplo.com"
+                class="premium-input"
+                autocomplete="off"
+                spellcheck="false"
+            />
+            <button id="dcf-btn-analyze" class="btn-analyze">
+                <i class="mdi mdi-leaf"></i>
+                <span>Analizar</span>
+            </button>
+        </div>
+        <p id="dcf-error-msg" class="error-msg hidden">URL no válida. Incluye https://</p>
+    </div>
+
+    <div id="dcf-state-loading" class="panel-state hidden">
+        <div class="loading-inner">
+            <div class="loading-spinner"></div>
+            <p id="dcf-loading-url" class="loading-url"></p>
+            <p class="loading-text">Estimando huella de carbono...</p>
+        </div>
+    </div>
+
+    <div id="dcf-state-done" class="panel-state hidden">
+        <p class="done-label">URL analizada</p>
+        <p id="dcf-done-url" class="done-url"></p>
+        <button id="dcf-btn-reset" class="btn-reset">
+            <i class="mdi mdi-refresh"></i> Analizar otra
+        </button>
+    </div>
+
+    <div id="dcf-manual-area" class="manual-area hidden">
+        <p class="manual-hint">
+            No se pudo acceder. Introduce el peso en KB desde DevTools &rarr; Red &rarr; columna
+            "Transferido":
+        </p>
+        <div class="input-group">
+            <input
+                type="number"
+                id="dcf-manual-kb"
+                placeholder="ej: 850"
+                class="premium-input"
+                min="1"
+            />
+            <button id="dcf-btn-manual" class="btn-analyze btn-manual">
+                <i class="mdi mdi-calculator"></i>
+                <span>Calcular</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { estimatePageSize, buildResult } from "./dcf-engine.ts";
+
+    const inputEl = document.getElementById("dcf-url-input") as HTMLInputElement;
+    const errorMsg = document.getElementById("dcf-error-msg") as HTMLElement;
+
+    function setState(state: "default" | "loading" | "done") {
+        ["default", "loading", "done"].forEach((s) => {
+            document.getElementById(`dcf-state-${s}`)?.classList.toggle("hidden", s !== state);
+        });
+    }
+
+    async function analyze(rawUrl: string) {
+        let url: URL;
+        try {
+            url = new URL(rawUrl);
+            if (!["http:", "https:"].includes(url.protocol)) throw new Error();
+        } catch {
+            errorMsg.classList.remove("hidden");
+            errorMsg.textContent = "URL no válida. Incluye https://";
+            return;
+        }
+
+        errorMsg.classList.add("hidden");
+        setState("loading");
+        (document.getElementById("dcf-loading-url") as HTMLElement).textContent = url.toString();
+        document.getElementById("dcf-manual-area")?.classList.add("hidden");
+
+        try {
+            const bytes = await estimatePageSize(url.toString());
+            const result = buildResult(url.toString(), bytes);
+            (document.getElementById("dcf-done-url") as HTMLElement).textContent = url.toString();
+            setState("done");
+            window.dispatchEvent(new CustomEvent("dcf:result", { detail: result }));
+        } catch {
+            setState("default");
+            document.getElementById("dcf-manual-area")?.classList.remove("hidden");
+            errorMsg.classList.remove("hidden");
+            errorMsg.textContent = "No se pudo acceder. Usa el modo manual.";
+        }
+    }
+
+    document.getElementById("dcf-btn-analyze")?.addEventListener("click", () => {
+        analyze(inputEl.value.trim());
+    });
+
+    inputEl.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") analyze(inputEl.value.trim());
+    });
+
+    document.getElementById("dcf-btn-reset")?.addEventListener("click", () => {
+        inputEl.value = "";
+        setState("default");
+        window.dispatchEvent(new CustomEvent("dcf:reset"));
+    });
+
+    document.getElementById("dcf-btn-manual")?.addEventListener("click", () => {
+        const kb = parseFloat((document.getElementById("dcf-manual-kb") as HTMLInputElement).value);
+        if (!kb || kb <= 0) return;
+        const url = inputEl.value.trim() || "URL manual";
+        (document.getElementById("dcf-done-url") as HTMLElement).textContent = url;
+        setState("done");
+        document.getElementById("dcf-manual-area")?.classList.add("hidden");
+        errorMsg.classList.add("hidden");
+        window.dispatchEvent(
+            new CustomEvent("dcf:result", { detail: buildResult(url, Math.round(kb * 1024)) })
+        );
+    });
+</script>
