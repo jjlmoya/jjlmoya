@@ -64,5 +64,13 @@ export const filesSection: SectionData = {
                 "Elimina emojis, dobles espacios y caracteres invisibles de tus textos al instante.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/separador-de-texto/",
+            iconBg: "mdi:format-list-bulleted-type",
+            iconFg: "mdi:content-cut",
+            title: "Separador de Texto",
+            description: "Divide listas, comas o delimitadores en líneas individuales. Organiza tus datos.",
+            color: "#8b5cf6",
+        },
     ],
 };

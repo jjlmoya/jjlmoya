@@ -1,0 +1,222 @@
+---
+import "./TextSplitter.css";
+---
+
+<div class="splitter-container">
+    <div class="glass-card animate-in fade-in slide-in-from-bottom duration-700">
+        <div class="input-group">
+            <label for="input-text" class="label">Texto a Separar</label>
+            <div class="textarea-wrapper">
+                <textarea
+                    id="input-text"
+                    placeholder="Pega aquí tu lista separada por comas, espacios o cualquier delimitador..."
+                    spellcheck="false"></textarea>
+            </div>
+        </div>
+
+        <div class="controls-grid">
+            <div class="control-group">
+                <span class="control-label">Delimitador</span>
+                <div class="delimiter-options">
+                    <label class="radio-item">
+                        <input type="radio" name="delimiter" value="comma" checked />
+                        <span class="radio-custom"></span>
+                        <span class="control-text">Coma (,)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="delimiter" value="semicolon" />
+                        <span class="radio-custom"></span>
+                        <span class="control-text">Punto y coma (;)</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="delimiter" value="space" />
+                        <span class="radio-custom"></span>
+                        <span class="control-text">Espacio</span>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="delimiter" value="custom" />
+                        <span class="radio-custom"></span>
+                        <span class="control-text">Personalizado</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="custom-delimiter-group" class="input-group hidden">
+                <label for="custom-delimiter" class="label">Delimitador personalizado</label>
+                <input
+                    type="text"
+                    id="custom-delimiter"
+                    placeholder="Ej: | o - "
+                    class="text-input"
+                />
+            </div>
+
+            <div class="options-grid">
+                <label class="control-item">
+                    <input type="checkbox" id="check-trim" checked />
+                    <span class="checkbox-custom"></span>
+                    <span class="control-text">Recortar espacios</span>
+                </label>
+                <label class="control-item">
+                    <input type="checkbox" id="check-unique" />
+                    <span class="checkbox-custom"></span>
+                    <span class="control-text">Eliminar duplicados</span>
+                </label>
+                <label class="control-item">
+                    <input type="checkbox" id="check-clean" checked />
+                    <span class="checkbox-custom"></span>
+                    <span class="control-text">Quitar vacíos</span>
+                </label>
+                <label class="control-item">
+                    <input type="checkbox" id="check-numbered" />
+                    <span class="checkbox-custom"></span>
+                    <span class="control-text">Numerar líneas</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span id="line-count" class="stat-value">0</span>
+                <span class="stat-label">Líneas resultantes</span>
+            </div>
+            <div class="stat-item">
+                <span id="char-count" class="stat-value">0</span>
+                <span class="stat-label">Caracteres</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card animate-in fade-in slide-in-from-bottom duration-700 delay-100">
+        <div class="output-group">
+            <label for="output-text" class="label">Resultado (un elemento por línea)</label>
+            <div class="textarea-wrapper">
+                <textarea id="output-text" readonly placeholder="El listado aparecerá aquí..."
+                ></textarea>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="btn-copy" class="btn btn-primary"> Copiar Lista </button>
+            <button id="btn-clear" class="btn btn-secondary"> Limpiar </button>
+        </div>
+    </div>
+</div>
+
+<div id="copy-toast" class="copy-toast">¡Copiado al portapapeles!</div>
+
+<script>
+    const input = document.getElementById("input-text") as HTMLTextAreaElement | null;
+    const output = document.getElementById("output-text") as HTMLTextAreaElement | null;
+    const delimiterRadios = document.querySelectorAll(
+        'input[name="delimiter"]'
+    ) as NodeListOf<HTMLInputElement>;
+    const customDelimGroup = document.getElementById("custom-delimiter-group");
+    const customDelimInput = document.getElementById("custom-delimiter") as HTMLInputElement | null;
+
+    const checkTrim = document.getElementById("check-trim") as HTMLInputElement | null;
+    const checkUnique = document.getElementById("check-unique") as HTMLInputElement | null;
+    const checkClean = document.getElementById("check-clean") as HTMLInputElement | null;
+    const checkNumbered = document.getElementById("check-numbered") as HTMLInputElement | null;
+
+    const lineCountSpan = document.getElementById("line-count");
+    const charCountSpan = document.getElementById("char-count");
+    const btnCopy = document.getElementById("btn-copy");
+    const btnClear = document.getElementById("btn-clear");
+    const toast = document.getElementById("copy-toast");
+
+    function getDelimiter(): string {
+        let selected = "comma";
+        delimiterRadios.forEach((r) => {
+            if (r.checked) selected = r.value;
+        });
+
+        if (selected === "custom" && customDelimInput) {
+            customDelimGroup?.classList.remove("hidden");
+            return customDelimInput.value || ",";
+        } else {
+            customDelimGroup?.classList.add("hidden");
+        }
+
+        switch (selected) {
+            case "semicolon":
+                return ";";
+            case "space":
+                return " ";
+            case "comma":
+            default:
+                return ",";
+        }
+    }
+
+    function processText(): void {
+        if (!input || !output) return;
+
+        const rawText: string = input.value;
+        if (!rawText.trim()) {
+            output.value = "";
+            updateStats("");
+            return;
+        }
+
+        const delimiter: string = getDelimiter();
+        let items: string[] = rawText.split(delimiter);
+
+        if (checkTrim?.checked) {
+            items = items.map((i) => i.trim());
+        }
+
+        if (checkClean?.checked) {
+            items = items.filter((i) => i.length > 0);
+        }
+
+        if (checkUnique?.checked) {
+            items = [...new Set(items)];
+        }
+
+        if (checkNumbered?.checked) {
+            items = items.map((i, idx) => `${idx + 1}. ${i}`);
+        }
+
+        const result: string = items.join("\n");
+        output.value = result;
+        updateStats(result);
+    }
+
+    function updateStats(text: string): void {
+        if (!lineCountSpan || !charCountSpan) return;
+        const lines: number = text.trim() ? text.split("\n").length : 0;
+        lineCountSpan.textContent = lines.toString();
+        charCountSpan.textContent = text.length.toString();
+    }
+
+    function showToast(): void {
+        if (!toast) return;
+        toast.classList.add("visible");
+        setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    input?.addEventListener("input", processText);
+    customDelimInput?.addEventListener("input", processText);
+    delimiterRadios.forEach((r) => r.addEventListener("change", processText));
+
+    [checkTrim, checkUnique, checkClean, checkNumbered].forEach((c) => {
+        c?.addEventListener("change", processText);
+    });
+
+    btnCopy?.addEventListener("click", () => {
+        if (!output || !output.value) return;
+        navigator.clipboard
+            .writeText(output.value)
+            .then(showToast)
+            .catch(() => {});
+    });
+
+    btnClear?.addEventListener("click", () => {
+        if (input) {
+            input.value = "";
+            processText();
+            input.focus();
+        }
+    });
+</script>
