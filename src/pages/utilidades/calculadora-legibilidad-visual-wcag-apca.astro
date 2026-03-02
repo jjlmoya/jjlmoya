@@ -1,0 +1,74 @@
+---
+export const prerender = true;
+
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import ReadabilityCalculator from "../../components/utilidades/ReadabilityCalculator/ReadabilityCalculator.astro";
+import ReadabilityCalculatorSEO from "../../components/utilidades/ReadabilityCalculator/ReadabilityCalculatorSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const faqItems = [
+    {
+        question: "¿Qué es APCA y por qué es diferente a WCAG 2.1?",
+        answer: "APCA es el Algoritmo de Contraste Perceptual Avanzado desarrollado para WCAG 3.0. A diferencia del antiguo ratio simple, APCA utiliza modelos matemáticos que imitan cómo el cerebro humano percibe el contraste, teniendo en cuenta la polaridad (fondo claro vs. oscuro) y el tamaño/grosor de las fuentes.",
+    },
+    {
+        question: "¿Qué significa el valor Lc?",
+        answer: "Lc (Lightness Contrast) es el valor de contraste que genera APCA. Un valor de 100 representa un contraste máximo ideal, mientras que valores inferiores a 60 empiezan a ser críticos para textos de lectura continua. Es una escala de magnitud absoluta de la percepción.",
+    },
+    {
+        question: "¿Cómo influye el grosor de la fuente en la legibilidad?",
+        answer: "Las fuentes delgadas (Thin/Light) requieren un contraste mucho mayor para ser legibles. APCA penaliza las fuentes de poco peso, indicando que un diseño que pasa WCAG con una fuente de 100 de grosor puede ser ilegible en la práctica.",
+    },
+    {
+        question: "¿Es esta calculadora privada?",
+        answer: "Sí, todos los cálculos se realizan localmente en tu navegador. Los colores y configuraciones que analices nunca se envían a ningún servidor, garantizando total privacidad en tus proyectos de diseño.",
+    },
+];
+---
+
+<LayoutUtility
+    title="Calculadora de Legibilidad Visual | WCAG 2.1 vs APCA 👁️"
+    description="Comprueba el contraste real de tus diseños con APCA (WCAG 3.0). Analiza cómo influye el grosor de la fuente y el tamaño en la lectura real. Pasa de simples ratios a legibilidad perceptual."
+    image="/images/utilities/calculadora-legibilidad-visual-wcag-apca.webp"
+    category="Desarrollo Web"
+    faqItems={faqItems}
+    gradientFrom="from-sky-600"
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Legibilidad"
+            titleBase="Calculadora de"
+            description="No te bases solo en números obsoletos. Analiza el contraste de tus interfaces con APCA, el nuevo estándar perceptual que entiende la tipografía y el color como los ojos humanos."
+            gradientFrom="from-sky-600"
+            gradientTo="to-blue-600"
+            reverse={true}
+        />
+    </div>
+
+    <ReadabilityCalculator />
+
+    <div slot="seo">
+        <ReadabilityCalculatorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography
+            title="Recursos sobre Contraste y APCA"
+            links={[
+                {
+                    name: "W3C: Draft de WCAG 3.0 (Silver)",
+                    url: "https://www.w3.org/WAI/standards-guidelines/wcag/wcag3-intro/",
+                },
+                {
+                    name: "Myndex: Guía de Referencia APCA",
+                    url: "https://apcaw3.myndex.com/",
+                },
+                {
+                    name: "MDN: Accesibilidad y Contraste de Color",
+                    url: "https://developer.mozilla.org/es/docs/Web/Accessibility/Understanding_WCAG/Perceivable/Color_contrast",
+                },
+            ]}
+        />
+    </div>
+</LayoutUtility>

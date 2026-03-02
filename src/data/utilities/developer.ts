@@ -136,5 +136,14 @@ export const devSection: SectionData = {
                 "Transforma colores entre formatos web con precisión matemática. Genera armonías automáticas y analiza el contraste de accesibilidad WCAG.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/calculadora-legibilidad-visual-wcag-apca/",
+            iconBg: "mdi:eye-check",
+            iconFg: "mdi:contrast-circle",
+            title: "Legibilidad Visual (WCAG vs APCA)",
+            description:
+                "Analiza el contraste real y la legibilidad según el grosor de fuente y colores. Compara WCAG 2.1 con el nuevo estándar perceptual APCA.",
+            color: "#0ea5e9",
+        },
     ],
 };
