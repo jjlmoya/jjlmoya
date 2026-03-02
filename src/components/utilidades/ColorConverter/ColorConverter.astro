@@ -8,18 +8,21 @@ import "./ColorConverter.css";
             <div class="input-group">
                 <div class="label-row">
                     <label for="hex-input" class="label">HEX</label>
+                    <button class="copy-badge" data-target="hex-input">
+                        <i class="mdi mdi-content-copy"></i> Copiar
+                    </button>
                 </div>
                 <div class="input-field-wrapper">
                     <input type="text" id="hex-input" class="text-input" placeholder="#FFFFFF" />
-                    <button class="copy-btn" data-target="hex-input" title="Copiar HEX">
-                        <i class="mdi mdi-content-copy"></i>
-                    </button>
                 </div>
             </div>
 
             <div class="input-group">
                 <div class="label-row">
                     <label for="rgb-input" class="label">RGB</label>
+                    <button class="copy-badge" data-target="rgb-input">
+                        <i class="mdi mdi-content-copy"></i> Copiar
+                    </button>
                 </div>
                 <div class="input-field-wrapper">
                     <input
@@ -28,15 +31,15 @@ import "./ColorConverter.css";
                         class="text-input"
                         placeholder="rgb(255, 255, 255)"
                     />
-                    <button class="copy-btn" data-target="rgb-input" title="Copiar RGB">
-                        <i class="mdi mdi-content-copy"></i>
-                    </button>
                 </div>
             </div>
 
             <div class="input-group">
                 <div class="label-row">
                     <label for="hsl-input" class="label">HSL</label>
+                    <button class="copy-badge" data-target="hsl-input">
+                        <i class="mdi mdi-content-copy"></i> Copiar
+                    </button>
                 </div>
                 <div class="input-field-wrapper">
                     <input
@@ -45,9 +48,6 @@ import "./ColorConverter.css";
                         class="text-input"
                         placeholder="hsl(0, 0%, 100%)"
                     />
-                    <button class="copy-btn" data-target="hsl-input" title="Copiar HSL">
-                        <i class="mdi mdi-content-copy"></i>
-                    </button>
                 </div>
             </div>
         </div>
@@ -74,12 +74,6 @@ import "./ColorConverter.css";
                 </div>
                 <input type="range" id="b-slider" min="0" max="255" value="255" />
             </div>
-        </div>
-
-        <div class="action-area">
-            <button id="btn-copy-all" class="btn btn-primary">
-                <i class="mdi mdi-content-copy"></i> Copiar Todos los Formatos
-            </button>
         </div>
     </div>
 
@@ -153,8 +147,6 @@ import "./ColorConverter.css";
         tri1: document.getElementById("tri1-color"),
         tri2: document.getElementById("tri2-color"),
     };
-
-    const btnCopyAll = document.getElementById("btn-copy-all");
 
     function rgbToHex(r: number, g: number, b: number): string {
         return (
@@ -310,34 +302,22 @@ import "./ColorConverter.css";
         if (rgb) updateAll(rgb.r, rgb.g, rgb.b);
     });
 
-    document.querySelectorAll(".copy-btn").forEach((btn) => {
+    document.querySelectorAll(".copy-badge").forEach((btn) => {
         btn.addEventListener("click", () => {
             const targetId = (btn as HTMLElement).dataset.target;
             if (!targetId) return;
             const target = document.getElementById(targetId) as HTMLInputElement;
             if (target) {
                 navigator.clipboard.writeText(target.value);
-                const icon = btn.querySelector("i");
-                if (icon) {
-                    icon.classList.remove("mdi-content-copy");
-                    icon.classList.add("mdi-check");
-                    setTimeout(() => {
-                        icon.classList.remove("mdi-check");
-                        icon.classList.add("mdi-content-copy");
-                    }, 2000);
-                }
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="mdi mdi-check"></i> Copiado';
+                btn.classList.add("copied");
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove("copied");
+                }, 2000);
             }
         });
-    });
-
-    btnCopyAll?.addEventListener("click", () => {
-        const text = `HEX: ${hexInput.value}\nRGB: ${rgbInput.value}\nHSL: ${hslInput.value}`;
-        navigator.clipboard.writeText(text);
-        const originalText = btnCopyAll.innerHTML;
-        btnCopyAll.innerHTML = '<i class="mdi mdi-check"></i> ¡Copiado!';
-        setTimeout(() => {
-            btnCopyAll.innerHTML = originalText;
-        }, 2000);
     });
 
     mainPreview?.addEventListener("click", () => {
