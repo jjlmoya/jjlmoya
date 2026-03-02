@@ -1,0 +1,208 @@
+---
+import "./UrlCleaner.css";
+---
+
+<div class="url-cleaner-container">
+    <div class="glass-card main-input-card animate-in fade-in slide-in-from-bottom duration-700">
+        <label for="url-input" class="input-label">Pega la URL con rastreadores</label>
+        <div class="input-group">
+            <input
+                type="url"
+                id="url-input"
+                placeholder="https://ejemplo.com/pagina?utm_source=twitter&fbclid=123..."
+                class="premium-input"
+            />
+            <button id="btn-clean" class="btn-primary">
+                <i class="mdi mdi-broom"></i> Limpiar
+            </button>
+        </div>
+    </div>
+
+    <div id="results-area" class="results-grid hidden">
+        <div class="glass-card result-card animate-in fade-in slide-in-from-left duration-500">
+            <div class="card-header">
+                <h2 class="card-title">URL Limpia</h2>
+                <button class="copy-badge" data-copy="cleaned-url">
+                    <i class="mdi mdi-content-copy"></i> Copiar
+                </button>
+            </div>
+            <div id="cleaned-url" class="cleaned-url-display"></div>
+        </div>
+
+        <div
+            class="glass-card tracking-info-card animate-in fade-in slide-in-from-right duration-500"
+        >
+            <h2 class="card-title">Rastreadores Eliminados</h2>
+            <div id="removed-list" class="removed-list"></div>
+        </div>
+    </div>
+
+    <div
+        class="glass-card stats-card animate-in fade-in slide-in-from-bottom duration-700 delay-200 hidden"
+        id="stats-card"
+    >
+        <div class="stat-item">
+            <span class="stat-value" id="count-removed">0</span>
+            <span class="stat-label">Parámetros eliminados</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="reduction-pct">0%</span>
+            <span class="stat-label">Reducción de longitud</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const urlInput = document.getElementById("url-input") as HTMLInputElement;
+    const btnClean = document.getElementById("btn-clean");
+    const resultsArea = document.getElementById("results-area");
+    const cleanedUrlEl = document.getElementById("cleaned-url");
+    const removedListEl = document.getElementById("removed-list");
+    const statsCard = document.getElementById("stats-card");
+    const countRemovedEl = document.getElementById("count-removed");
+    const reductionPctEl = document.getElementById("reduction-pct");
+
+    const TRACKING_PARAMS: Record<string, { label: string; desc: string }> = {
+        utm_source: {
+            label: "UTM Source",
+            desc: "Identifica la plataforma o red de origen (ej. Google, Newsletter).",
+        },
+        utm_medium: {
+            label: "UTM Medium",
+            desc: "Define el canal de marketing (ej. Email, CPC, Social).",
+        },
+        utm_campaign: {
+            label: "UTM Campaign",
+            desc: "Nombre específico de la campaña publicitaria.",
+        },
+        utm_term: { label: "UTM Term", desc: "Palabras clave usadas en anuncios de búsqueda." },
+        utm_content: {
+            label: "UTM Content",
+            desc: "Diferencia anuncios o enlaces que apuntan a la misma URL.",
+        },
+        fbclid: {
+            label: "Facebook Click ID",
+            desc: "Pin de rastreo que inyecta Facebook para medir conversiones.",
+        },
+        gclid: {
+            label: "Google Click ID",
+            desc: "ID único de Google Ads para el seguimiento de clics.",
+        },
+        dclid: {
+            label: "Display Click ID",
+            desc: "Similar al gclid, pero usado en anuncios de Display.",
+        },
+        msclkid: {
+            label: "Bing Click ID",
+            desc: "Identificador de clics inyectado por Microsoft Advertising.",
+        },
+        li_fat_id: {
+            label: "LinkedIn Insights",
+            desc: "Rastreador de conversiones de LinkedIn Ads.",
+        },
+        mc_cid: {
+            label: "Mailchimp Campaign ID",
+            desc: "Identificador interno de campañas de Mailchimp.",
+        },
+        mc_eid: {
+            label: "Mailchimp Email ID",
+            desc: "ID único de usuario para rastrear quién abrió el correo.",
+        },
+        _hsenc: {
+            label: "HubSpot Tracking",
+            desc: "Parámetro de personalización y rastreo de HubSpot.",
+        },
+        _hsmi: { label: "HubSpot Email", desc: "Rastrea la interacción con correos de HubSpot." },
+        ref: {
+            label: "Referencia",
+            desc: "Suele indicar el sitio o usuario que recomendó el enlace.",
+        },
+        affiliate: { label: "Afiliado", desc: "ID para atribuir ventas a un socio o afiliado." },
+    };
+
+    function cleanUrl() {
+        const rawUrl = urlInput.value.trim();
+        if (!rawUrl) return;
+
+        try {
+            const url = new URL(rawUrl);
+            const params = new URLSearchParams(url.search);
+            const removed: Array<{ key: string; value: string }> = [];
+
+            const keysToRemove: string[] = [];
+            params.forEach((value, key) => {
+                if (TRACKING_PARAMS[key] || key.startsWith("utm_") || key.includes("clid")) {
+                    removed.push({ key, value });
+                    keysToRemove.push(key);
+                }
+            });
+
+            keysToRemove.forEach((key) => params.delete(key));
+
+            url.search = params.toString();
+            const cleanedUrl = url.toString();
+
+            displayResults(cleanedUrl, removed, rawUrl.length, cleanedUrl.length);
+        } catch (e) {
+            alert("Por favor, introduce una URL válida.");
+        }
+    }
+
+    function displayResults(cleaned: string, removed: any[], oldLen: number, newLen: number) {
+        resultsArea?.classList.remove("hidden");
+        statsCard?.classList.remove("hidden");
+
+        cleanedUrlEl!.textContent = cleaned;
+        countRemovedEl!.textContent = removed.length.toString();
+
+        const reduction = oldLen > 0 ? Math.round(((oldLen - newLen) / oldLen) * 100) : 0;
+        reductionPctEl!.textContent = `${reduction}%`;
+
+        removedListEl!.innerHTML = "";
+        if (removed.length === 0) {
+            removedListEl!.innerHTML =
+                '<p class="no-tracking">No se detectaron rastreadores comunes.</p>';
+        } else {
+            removed.forEach((item) => {
+                const info = TRACKING_PARAMS[item.key] || {
+                    label: item.key,
+                    desc: "Parámetro de rastreo detectado por patrón.",
+                };
+                const div = document.createElement("div");
+                div.className = "removed-item";
+                div.innerHTML = `
+                    <div class="item-meta">
+                        <span class="item-key">${info.label}</span>
+                        <span class="item-val">${item.value}</span>
+                    </div>
+                    <p class="item-desc">${info.desc}</p>
+                `;
+                removedListEl!.appendChild(div);
+            });
+        }
+    }
+
+    btnClean?.addEventListener("click", cleanUrl);
+
+    document.addEventListener("click", (e) => {
+        const btn = (e.target as HTMLElement).closest(".copy-badge");
+        if (btn) {
+            const id = btn.getAttribute("data-copy");
+            const el = document.getElementById(id!);
+            if (el) {
+                navigator.clipboard.writeText(el.textContent || "");
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="mdi mdi-check"></i> Copiado';
+                btn.classList.add("copied");
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.classList.remove("copied");
+                }, 2000);
+            }
+        }
+    });
+
+    urlInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") cleanUrl();
+    });
+</script>

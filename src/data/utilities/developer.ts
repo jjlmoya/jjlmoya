@@ -145,5 +145,13 @@ export const devSection: SectionData = {
                 "Analiza el contraste real y la legibilidad según el grosor de fuente y colores. Compara WCAG 2.1 con el nuevo estándar perceptual APCA.",
             color: "#0ea5e9",
         },
+        {
+            href: "/utilidades/limpiador-tracking-url/",
+            iconBg: "mdi:broom",
+            iconFg: "mdi:link-variant-off",
+            title: "Limpiador de Tracking URL",
+            description: "Elimina UTMs, fbclid, gclid y otros rastreadores de tus enlaces.",
+            color: "#3b82f6",
+        },
     ],
 };
