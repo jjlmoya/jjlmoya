@@ -45,5 +45,13 @@ export const creativeSection: SectionData = {
             description: "Crea esquemas de pixel art y cuentas para Miyuki o Hama desde tus fotos.",
             color: "#db2777",
         },
+        {
+            href: "/utilidades/lanzador-dados/",
+            iconBg: "mdi:dice-multiple-outline",
+            iconFg: "mdi:dice-d20",
+            title: "Lanzador de Dados",
+            description: "Simulador de dados para DnD y juegos de mesa con modificadores.",
+            color: "#6366f1",
+        },
     ],
 };
