@@ -1,0 +1,78 @@
+---
+export const prerender = true;
+
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import SvgSanitizer from "../../components/utilidades/SvgSanitizer/SvgSanitizer.astro";
+import SvgSanitizerSEO from "../../components/utilidades/SvgSanitizer/SvgSanitizerSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const faqItems = [
+    {
+        question: "¿Puedo pegar el HTML completo de una página con SVG embebido?",
+        answer: "Sí. El saneador detecta el elemento SVG dentro del HTML y extrae solo ese bloque para procesarlo. También funciona si pegas directamente el fragmento SVG.",
+    },
+    {
+        question: "¿Se puede usar con SVGs de Illustrator?",
+        answer: "Sí. Illustrator exporta SVGs con declaraciones XML, metadatos y namespaces propios que el saneador elimina. El resultado es un SVG compatible con todos los navegadores modernos.",
+    },
+    {
+        question: "¿Qué diferencia hay entre limpiar y minificar?",
+        answer: "Limpiar elimina atributos y etiquetas innecesarios pero mantiene el formato con indentación para que puedas leer y editar el código. Minificar además colapsa todo en una sola línea para reducir el peso al máximo.",
+    },
+    {
+        question: "¿Al eliminar IDs puede romperse el SVG?",
+        answer: "Solo si algún elemento del SVG referencia otro por ID, por ejemplo a través de fill='url(#gradient)'. En ese caso desactiva la opción 'Eliminar IDs'. Por defecto está desactivada precisamente para evitar este problema.",
+    },
+    {
+        question: "¿Mi código SVG se envía a algún servidor?",
+        answer: "No. Todo el proceso ocurre en tu navegador usando las APIs nativas DOMParser y XMLSerializer. El código nunca abandona tu dispositivo.",
+    },
+];
+---
+
+<LayoutUtility
+    title="Saneador de SVG | Limpia SVGs de Figma, Illustrator e Inkscape"
+    description="Optimiza y limpia SVGs exportados desde Figma, Adobe Illustrator o Inkscape. Elimina metadatos, atributos innecesarios y grupos vacíos para obtener un SVG listo para producción."
+    image="/images/utilities/saneador-svg.webp"
+    category="Desarrollo Web"
+    faqItems={faqItems}
+    gradientFrom="from-violet-600"
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Saneador"
+            titleBase="de SVG"
+            description="Pega código SVG sucio exportado de Figma, Illustrator o Inkscape. Elimina metadatos, namespaces, atributos de editor y grupos vacíos para obtener un vector limpio y optimizado."
+            gradientFrom="from-violet-600"
+            gradientTo="to-purple-600"
+            reverse={false}
+        />
+    </div>
+
+    <SvgSanitizer />
+
+    <div slot="seo">
+        <SvgSanitizerSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography
+            title="Referencias"
+            links={[
+                {
+                    name: "SVG Specification — W3C",
+                    url: "https://www.w3.org/TR/SVG2/",
+                },
+                {
+                    name: "Figma SVG Export — Documentación oficial",
+                    url: "https://help.figma.com/hc/en-us/articles/360040028114-Export-from-Figma",
+                },
+                {
+                    name: "SVGO — SVG Optimizer (referencia open source)",
+                    url: "https://github.com/svg/svgo",
+                },
+            ]}
+        />
+    </div>
+</LayoutUtility>

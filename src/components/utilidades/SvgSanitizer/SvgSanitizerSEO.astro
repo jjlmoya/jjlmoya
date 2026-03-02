@@ -1,0 +1,113 @@
+---
+import "./SvgSanitizerSEO.css";
+---
+
+<header class="seo-header">
+    <h1 class="seo-title">Saneador de SVG: Limpia el Código de Figma e Illustrator al Instante</h1>
+    <p class="seo-subtitle">
+        Pega cualquier SVG exportado desde Figma, Adobe Illustrator o el inspector del navegador y
+        obtén un archivo vectorial limpio, optimizado y listo para producción.
+    </p>
+</header>
+
+<section class="seo-section">
+    <h2 class="section-title">¿Por qué los SVG exportados son tan sucios?</h2>
+    <p class="seo-text">
+        Cuando exportas un SVG desde <strong>Figma</strong>, recibes un archivo cargado de atributos
+        que solo tienen sentido dentro de la aplicación: <code>data-name</code>, <code
+            >xml:space</code
+        >, referencias a capas internas y metadatos de diseño que no son necesarios en la web. El
+        resultado es un SVG que puede pesar un 40-70% más de lo necesario.
+    </p>
+    <p class="seo-text">
+        La situación es aún peor con <strong>Inkscape</strong>, que añade sus propios espacios de
+        nombres (<code>inkscape:</code>, <code>sodipodi:</code>) con decenas de atributos de
+        edición. Un SVG de Illustrator puede incluir etiquetas <code>&lt;metadata&gt;</code>,
+        declaraciones XML y atributos de versión completamente irrelevantes para el renderizado en
+        el navegador.
+    </p>
+</section>
+
+<section class="seo-section">
+    <h2 class="section-title">Qué elimina el Saneador de SVG</h2>
+
+    <div class="features-grid">
+        <article class="feature-card">
+            <h3 class="feature-title">Metadatos de editor</h3>
+            <p class="feature-text">
+                Elimina las etiquetas <code>&lt;metadata&gt;</code>, <code>&lt;title&gt;</code> y
+                <code>&lt;desc&gt;</code> que Figma e Illustrator añaden automáticamente y que no aportan
+                nada al renderizado web.
+            </p>
+        </article>
+        <article class="feature-card">
+            <h3 class="feature-title">Namespaces de Inkscape</h3>
+            <p class="feature-text">
+                Borra todos los elementos con prefijo <code>inkscape:</code> y <code>sodipodi:</code
+                >, que solo sirven para que Inkscape recuerde el estado del editor y no tienen
+                efecto visual en ningún navegador.
+            </p>
+        </article>
+        <article class="feature-card">
+            <h3 class="feature-title">Atributos innecesarios</h3>
+            <p class="feature-text">
+                Suprime <code>xml:space</code>, <code>version</code>, <code>xmlns:*</code>
+                superfluos y los atributos <code>data-*</code> de Figma que inflan el tamaño sin añadir
+                funcionalidad.
+            </p>
+        </article>
+        <article class="feature-card">
+            <h3 class="feature-title">Grupos vacíos</h3>
+            <p class="feature-text">
+                Detecta y elimina todos los elementos <code>&lt;g&gt;</code> vacíos que los editores
+                dejan como artefactos de capas eliminadas o agrupaciones de diseño sin contenido.
+            </p>
+        </article>
+        <article class="feature-card">
+            <h3 class="feature-title">Declaraciones XML</h3>
+            <p class="feature-text">
+                Retira la declaración <code>&lt;?xml version="1.0"?&gt;</code> y el DOCTYPE, que son
+                restos de XML standalone innecesarios cuando el SVG se embebe directamente en HTML.
+            </p>
+        </article>
+        <article class="feature-card">
+            <h3 class="feature-title">Opciones de minificación</h3>
+            <p class="feature-text">
+                Además de limpiar, puedes minificar el resultado para obtener el SVG en una sola
+                línea, reduciendo aún más el peso para producción, o formatearlo con indentación
+                para poder editarlo después.
+            </p>
+        </article>
+    </div>
+</section>
+
+<section class="seo-section">
+    <h2 class="section-title">Cuándo usar un Saneador de SVG</h2>
+    <ul class="seo-list">
+        <li>
+            <strong>Al exportar iconos desde Figma:</strong> antes de integrarlos en tu sprite SVG o
+            en un componente de React/Vue.
+        </li>
+        <li>
+            <strong>Al preparar ilustraciones para la web:</strong> un SVG de 200 KB puede quedar en
+            60 KB solo eliminando metadatos.
+        </li>
+        <li>
+            <strong>Al añadir iconos a un proyecto open source:</strong> los revisores agradecen SVGs
+            limpios sin artefactos de editor.
+        </li>
+        <li>
+            <strong>Al copiar SVGs del inspector de Chrome:</strong> el inspector añade atributos de
+            estilo calculado que no deberían estar en el archivo fuente.
+        </li>
+    </ul>
+</section>
+
+<section class="seo-section">
+    <h2 class="section-title">Seguridad y privacidad</h2>
+    <p class="seo-text">
+        Todo el proceso ocurre en tu navegador usando el <code>DOMParser</code> nativo y
+        <code>XMLSerializer</code>. El código SVG que pegas nunca abandona tu dispositivo: no se
+        envía a ningún servidor ni se almacena en ninguna base de datos.
+    </p>
+</section>

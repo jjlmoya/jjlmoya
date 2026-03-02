@@ -146,6 +146,15 @@ export const devSection: SectionData = {
             color: "#0ea5e9",
         },
         {
+            href: "/utilidades/saneador-svg/",
+            iconBg: "mdi:svg",
+            iconFg: "mdi:auto-fix",
+            title: "Saneador de SVG",
+            description:
+                "Pega código SVG sucio de Figma o un inspector y obtén un SVG optimizado: sin metadatos, sin atributos de editor y con clases CSS limpias.",
+            color: "#8b5cf6",
+        },
+        {
             href: "/utilidades/limpiador-tracking-url/",
             iconBg: "mdi:broom",
             iconFg: "mdi:link-variant-off",
