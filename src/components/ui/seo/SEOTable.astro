@@ -1,0 +1,83 @@
+---
+interface Props {
+    headers: string[];
+}
+
+const { headers } = Astro.props;
+---
+
+<div class="seo-table-wrapper">
+    <table class="seo-table">
+        <thead>
+            <tr>
+                {headers.map((header) => <th>{header}</th>)}
+            </tr>
+        </thead>
+        <tbody>
+            <slot />
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .seo-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        margin: 2.5rem 0;
+        border-radius: 1.5rem;
+        border: 1px solid #e2e8f0;
+        background: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .seo-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.95rem;
+    }
+
+    .seo-table th {
+        background: #f8fafc;
+        padding: 1.25rem 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        border-bottom: 2px solid #e2e8f0;
+        white-space: nowrap;
+    }
+
+    .seo-table :global(td) {
+        padding: 1.25rem 1.5rem;
+        color: #475569;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+
+    .seo-table tr:last-child :global(td) {
+        border-bottom: none;
+    }
+
+    .seo-table tr:hover :global(td) {
+        background: #f8fafc;
+    }
+
+    :global(.dark) .seo-table-wrapper {
+        border-color: #1e293b;
+        background: #020617;
+    }
+
+    :global(.dark) .seo-table th {
+        background: #0f172a;
+        color: #f8fafc;
+        border-bottom-color: #1e293b;
+    }
+
+    :global(.dark) .seo-table :global(td) {
+        color: #94a3b8;
+        border-bottom-color: #0f172a;
+    }
+
+    :global(.dark) .seo-table tr:hover :global(td) {
+        background: #0f172a;
+    }
+</style>

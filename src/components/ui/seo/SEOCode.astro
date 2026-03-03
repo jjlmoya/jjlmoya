@@ -1,0 +1,65 @@
+---
+interface Props {
+    code?: string;
+}
+
+const { code } = Astro.props;
+---
+
+<div class="seo-code">
+    {
+        code ? (
+            <pre>
+                <code>{code}</code>
+            </pre>
+        ) : (
+            <slot />
+        )
+    }
+</div>
+
+<style>
+    .seo-code {
+        background: #0f172a;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        margin: 2rem 0;
+        font-size: 0.95rem;
+        color: #f8fafc;
+        word-break: break-all;
+        box-shadow:
+            0 10px 15px -3px rgba(0, 0, 0, 0.1),
+            0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #1e293b;
+        font-family:
+            ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+            monospace;
+        line-height: 1.6;
+    }
+
+    :global(.dark) .seo-code {
+        background: #020617;
+        border-color: #1e293b;
+    }
+
+    .seo-code :global(.highlight) {
+        color: #38bdf8;
+        font-weight: 600;
+    }
+
+    .seo-code :global(pre) {
+        margin: 0;
+        padding: 0;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .seo-code :global(code) {
+        background: transparent !important;
+        padding: 0;
+        color: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        white-space: pre-wrap;
+    }
+</style>

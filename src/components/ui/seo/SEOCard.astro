@@ -1,0 +1,107 @@
+---
+interface Props {
+    title?: string;
+    icon?: string;
+}
+
+import { Icon } from "astro-icon/components";
+
+const { title, icon } = Astro.props;
+---
+
+<article class="seo-card">
+    {
+        icon && (
+            <div class="icon-wrapper">
+                <Icon name={icon} class="card-icon" />
+            </div>
+        )
+    }
+    {title && <h3 class="card-title">{title}</h3>}
+    <div class="card-content">
+        <slot />
+    </div>
+</article>
+
+<style>
+    .seo-card {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 1.5rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    :global(.dark) .seo-card {
+        background: rgba(30, 41, 59, 0.5);
+        border-color: #334155;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .seo-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        border-color: #3b82f6;
+    }
+
+    .icon-wrapper {
+        width: 3rem;
+        height: 3rem;
+        background: #eff6ff;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-center: center;
+        margin-bottom: 1.5rem;
+        color: #3b82f6;
+    }
+
+    :global(.dark) .icon-wrapper {
+        background: rgba(59, 130, 246, 0.1);
+        color: #60a5fa;
+    }
+
+    .card-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin: auto;
+    }
+
+    .card-title {
+        margin: 0 0 1rem 0;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.4;
+    }
+
+    :global(.dark) .card-title {
+        color: #f8fafc;
+    }
+
+    .card-content {
+        font-size: 1rem;
+        color: #475569;
+        line-height: 1.6;
+    }
+
+    :global(.dark) .card-content {
+        color: #94a3b8;
+    }
+
+    .card-content :global(p) {
+        margin: 0;
+    }
+
+    .card-content :global(strong) {
+        color: #1e40af;
+    }
+
+    :global(.dark) .card-content :global(strong) {
+        color: #93c5fd;
+    }
+</style>

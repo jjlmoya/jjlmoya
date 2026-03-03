@@ -1,0 +1,49 @@
+---
+interface Props {
+    columns?: 1 | 2 | 3 | 4;
+}
+
+const { columns = 3 } = Astro.props;
+---
+
+<div class={`seo-grid grid-cols-${columns}`}>
+    <slot />
+</div>
+
+<style>
+    .seo-grid {
+        display: grid;
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .grid-cols-1 {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1024px) {
+        .seo-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .seo-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+    }
+</style>

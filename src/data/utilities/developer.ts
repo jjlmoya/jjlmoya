@@ -155,6 +155,14 @@ export const devSection: SectionData = {
             color: "#8b5cf6",
         },
         {
+            href: "/utilidades/generador-utm/",
+            iconBg: "mdi:link-plus",
+            iconFg: "mdi:chart-bar",
+            title: "Generador de UTM",
+            description: "Crea enlaces de seguimiento para tus campañas de marketing y mide el éxito de tu tráfico.",
+            color: "#6366f1",
+        },
+        {
             href: "/utilidades/limpiador-tracking-url/",
             iconBg: "mdi:broom",
             iconFg: "mdi:link-variant-off",
