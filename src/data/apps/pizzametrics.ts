@@ -10,7 +10,6 @@ export const pizzametrics: Application = {
         primary: "hsl(0, 71%, 50%)",
         primaryGradient: "hsl(0, 71%, 50%)",
         accent: "hsl(132, 29%, 31%)",
-        fontHeading: "'Playfair Display', serif",
         radiusMain: "12px",
         glowAccent: "none",
         headerTitleGradient: "hsl(0, 71%, 50%)",

@@ -1,0 +1,55 @@
+---
+export const prerender = true;
+
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import SslCertificateInspector from "../../components/utilidades/SslCertificateInspector/SslCertificateInspector.astro";
+import SslCertificateInspectorSEO from "../../components/utilidades/SslCertificateInspector/SslCertificateInspectorSEO.astro";
+
+interface FAQItem {
+    question: string;
+    answer: string;
+}
+
+const faqItems: FAQItem[] = [
+    {
+        question: "¿Es seguro analizar mi certificado SSL en esta web?",
+        answer: "Absolutamente. Esta utilidad funciona 100% client-side. Al arrastrar tu archivo .pem o .crt, el navegador lee los datos localmente y nunca los envía a ningún servidor. La privacidad es total.",
+    },
+    {
+        question: "¿Qué formatos de certificados son compatibles?",
+        answer: "La herramienta soporta los formatos más habituales: PEM (codificado en Base64 con cabeceras 'BEGIN CERTIFICATE') y DER (formato binario), que suelen tener extensiones .pem, .crt, .cer o .der.",
+    },
+    {
+        question: "¿Puedo ver la fecha de expiración de un archivo .crt?",
+        answer: "Sí, al cargar el archivo verás inmediatamente el apartado 'Estado de Validez' donde se indica la fecha exacta de vencimiento y si el certificado sigue siendo válido hoy.",
+    },
+    {
+        question: "¿Para qué sirve el emisor del certificado?",
+        answer: "El emisor (Issuer) indica qué Autoridad de Certificación (CA) ha validado la identidad del sitio. Es fundamental para saber si el certificado será reconocido por los navegadores comerciales.",
+    },
+    {
+        question: "¿Cómo se calculan las huellas digitales SHA-256?",
+        answer: "Se calculan aplicando un algoritmo hash directamente sobre el contenido binario del certificado. Sirven para verificar que el archivo no ha sido manipulado y coincide con el que espera el servidor.",
+    },
+];
+---
+
+<LayoutUtility
+    title="Inspector de Certificados SSL/TLS Online - Ver PEM y CRT"
+    description="Analiza archivos de certificados SSL (.pem, .crt, .der) localmente. Consulta fechas de expiración, emisores, sujetos y huellas digitales SHA-256 sin que tus datos salgan del navegador."
+    faqItems={faqItems}
+>
+    <UtilityHeader
+        slot="header"
+        titleHighlight="Inspector"
+        titleBase="de Certificados SSL"
+        description="Analiza archivos .pem y .crt localmente para extraer fechas, emisores y huellas digitales. Privacidad total: el certificado nunca sale de tu equipo."
+        gradientFrom="from-teal-500"
+        gradientTo="to-emerald-600"
+    />
+    <SslCertificateInspector />
+    <div slot="seo">
+        <SslCertificateInspectorSEO />
+    </div>
+</LayoutUtility>

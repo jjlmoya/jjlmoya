@@ -10,7 +10,6 @@ export const lexiCrash: Application = {
         primary: "#00D2FF",
         primaryGradient: "linear-gradient(135deg, #00D2FF 0%, #007AFF 100%)",
         accent: "#00EBFF",
-        fontHeading: "sans-serif",
         radiusMain: "1.5rem",
         glowAccent: "rgba(0, 210, 255, 0.4)",
         headerTitleGradient: "linear-gradient(180deg, #FFFFFF 0%, #00D2FF 100%)",

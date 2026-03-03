@@ -10,7 +10,6 @@ export const fastTask: Application = {
         primary: "#04D991",
         primaryGradient: "linear-gradient(135deg, #0d1318 0%, #04D991 100%)",
         accent: "#04D991",
-        fontHeading: "sans-serif",
         radiusMain: "1.5rem",
         glowAccent: "rgba(4, 217, 145, 0.4)",
         headerTitleGradient: "linear-gradient(180deg, #FFFFFF 0%, #04D991 100%)",

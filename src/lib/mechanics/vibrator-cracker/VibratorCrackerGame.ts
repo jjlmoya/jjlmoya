@@ -259,7 +259,7 @@ export class VibratorCrackerGame {
 
         if (this.system.isUnlocked) {
             this.ctx.fillStyle = "#4ade80";
-            this.ctx.font = "bold 30px sans-serif";
+            this.ctx.font = "bold 30px";
             this.ctx.fillText("UNLOCKED!", this.centerX, this.height - 50);
         } else {
             const found = this.system.currentNumberIndex;

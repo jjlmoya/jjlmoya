@@ -93,7 +93,6 @@ import "./TextPixelCalculator.css";
 
 <script>
     const input = document.getElementById("input-text") as HTMLTextAreaElement | null;
-    const fontFamily = document.getElementById("font-family") as HTMLInputElement | null;
     const fontSize = document.getElementById("font-size") as HTMLInputElement | null;
     const fontWeight = document.getElementById("font-weight") as HTMLSelectElement | null;
     const fontItalic = document.getElementById("font-italic") as HTMLInputElement | null;
@@ -109,12 +108,11 @@ import "./TextPixelCalculator.css";
         if (!input || !canvas) return;
 
         const text = input.value || "";
-        const family = fontFamily?.value || "sans-serif";
         const size = fontSize?.value || "16";
         const weight = fontWeight?.value || "400";
         const italic = fontItalic?.checked ? "italic " : "";
 
-        const fontStr = `${italic}${weight} ${size}px ${family}`;
+        const fontStr = `${italic}${weight} ${size}px`;
 
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
@@ -174,7 +172,7 @@ import "./TextPixelCalculator.css";
         setTimeout(() => toast.classList.remove("visible"), 2000);
     }
 
-    [input, fontFamily, fontSize, fontWeight, fontItalic].forEach((el) => {
+    [input, fontSize, fontWeight, fontItalic].forEach((el) => {
         el?.addEventListener("input", calculateWidth);
         el?.addEventListener("change", calculateWidth);
     });
@@ -192,7 +190,6 @@ import "./TextPixelCalculator.css";
 
     btnReset?.addEventListener("click", () => {
         if (input) input.value = "Hola Mundo";
-        if (fontFamily) fontFamily.value = "Inter, system-ui, sans-serif";
         if (fontSize) fontSize.value = "16";
         if (fontWeight) fontWeight.value = "400";
         if (fontItalic) fontItalic.checked = false;

@@ -10,7 +10,6 @@ export const colorbeat: Application = {
         primary: "hsl(160, 100%, 50%)",
         primaryGradient: "hsl(160, 100%, 50%)",
         accent: "hsl(280, 80%, 60%)",
-        fontHeading: "'Exo 2', sans-serif",
         radiusMain: "16px",
         glowAccent: "hsla(160, 100%, 50%, 0.4)",
         headerTitleGradient: "hsl(160, 100%, 50%)",

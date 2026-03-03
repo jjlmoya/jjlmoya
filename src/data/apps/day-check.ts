@@ -10,7 +10,6 @@ export const dayCheck: Application = {
         primary: "hsl(265, 80%, 65%)",
         primaryGradient: "hsl(265, 80%, 65%)",
         accent: "hsl(180, 70%, 50%)",
-        fontHeading: "'Outfit', sans-serif",
         radiusMain: "24px",
         glowAccent: "hsla(265, 80%, 65%, 0.4)",
         headerTitleGradient: "hsl(265, 80%, 65%)",

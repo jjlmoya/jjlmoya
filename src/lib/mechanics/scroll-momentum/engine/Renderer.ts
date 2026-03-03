@@ -446,7 +446,7 @@ export class Renderer {
         if (!message || timer <= 0) return;
         this.ctx.save();
         this.ctx.textAlign = "center";
-        this.ctx.font = "900 48px sans-serif";
+        this.ctx.font = "900 48px";
         this.ctx.fillStyle = "#fff";
         this.ctx.shadowColor = "rgba(0,0,0,0.5)";
         this.ctx.shadowBlur = 15;
@@ -463,14 +463,14 @@ export class Renderer {
         this.ctx.textAlign = "center";
 
         this.ctx.fillStyle = "#ef4444";
-        this.ctx.font = "900 80px sans-serif";
+        this.ctx.font = "900 80px";
         this.ctx.shadowColor = "#ef4444";
         this.ctx.shadowBlur = 25;
         this.ctx.fillText("SISTEMAS APAGADOS", 0, -20);
 
         this.ctx.shadowBlur = 0;
         this.ctx.fillStyle = "#94a3b8";
-        this.ctx.font = "24px sans-serif";
+        this.ctx.font = "24px";
         this.ctx.fillText("Usa el SCROLL para reiniciar propulsores", 0, 60);
         this.ctx.restore();
     }

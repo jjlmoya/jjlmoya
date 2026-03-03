@@ -10,7 +10,6 @@ export const monmons: Application = {
         primary: "hsl(102, 23%, 33%)",
         primaryGradient: "hsl(102, 23%, 33%)",
         accent: "hsl(81, 55%, 49%)",
-        fontHeading: "'Inter', sans-serif",
         radiusMain: "12px",
         glowAccent: "0 0 15px hsla(81, 55%, 49%, 0.5)",
         headerTitleGradient: "hsl(102, 23%, 33%)",

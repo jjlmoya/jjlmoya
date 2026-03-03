@@ -345,7 +345,7 @@ export class OneBulletGame {
         });
 
         this.ctx.fillStyle = "#ffffff";
-        this.ctx.font = "20px Inter, sans-serif";
+        this.ctx.font = "20px";
         this.ctx.fillText(`Score: ${this.score}`, 20, 40);
 
         if (this.gameOver) {
@@ -353,11 +353,11 @@ export class OneBulletGame {
             this.ctx.fillRect(0, 0, this.width, this.height);
 
             this.ctx.fillStyle = "#ffffff";
-            this.ctx.font = "40px Inter, sans-serif";
+            this.ctx.font = "40px";
             this.ctx.textAlign = "center";
             this.ctx.fillText("GAME OVER", this.width / 2, this.height / 2 - 20);
 
-            this.ctx.font = "20px Inter, sans-serif";
+            this.ctx.font = "20px";
             this.ctx.fillText("Click to Restart", this.width / 2, this.height / 2 + 30);
             this.ctx.textAlign = "left";
         }
@@ -375,5 +375,5 @@ export class OneBulletGame {
         requestAnimationFrame(this.loop);
     }
 
-    destroy() {}
+    destroy() { }
 }

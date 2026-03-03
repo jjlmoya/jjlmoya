@@ -10,7 +10,6 @@ export const digBot: Application = {
         primary: "#21C55D",
         primaryGradient: "linear-gradient(135deg, #22C55E 0%, #15803D 100%)",
         accent: "#FACC15",
-        fontHeading: "sans-serif",
         radiusMain: "1.5rem",
         glowAccent: "rgba(34, 197, 94, 0.4)",
         headerTitleGradient: "linear-gradient(180deg, #FFFFFF 0%, #22C55E 100%)",

@@ -59,7 +59,7 @@ export class SlingshotGame {
             },
             { passive: false }
         );
-        window.addEventListener("touchmove", () => {}, { passive: false });
+        window.addEventListener("touchmove", () => { }, { passive: false });
 
         window.addEventListener(
             "touchmove",
@@ -178,7 +178,7 @@ export class SlingshotGame {
         this.ctx.stroke();
 
         this.ctx.fillStyle = "#000000";
-        this.ctx.font = "900 20px Inter, sans-serif";
+        this.ctx.font = "900 20px";
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle";
 

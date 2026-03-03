@@ -10,7 +10,6 @@ export const missiopolis: Application = {
         primary: "#3b82f6",
         primaryGradient: "#3b82f6",
         accent: "#60a5fa",
-        fontHeading: "sans-serif",
         radiusMain: "12px",
         glowAccent: "none",
         headerTitleGradient: "#3b82f6",

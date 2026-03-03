@@ -26,7 +26,6 @@ export interface AppTheme {
     primary: string;
     primaryGradient: string;
     accent: string;
-    fontHeading: string;
     radiusMain: string;
     glowAccent: string;
     headerTitleGradient: string;

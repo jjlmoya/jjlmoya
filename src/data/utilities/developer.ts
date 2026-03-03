@@ -162,5 +162,14 @@ export const devSection: SectionData = {
             description: "Elimina UTMs, fbclid, gclid y otros rastreadores de tus enlaces.",
             color: "#3b82f6",
         },
+        {
+            href: "/utilidades/inspector-certificados-ssl/",
+            iconBg: "mdi:security-network",
+            iconFg: "mdi:certificate",
+            title: "Inspector de Certificados SSL",
+            description:
+                "Analiza archivos .pem y .crt localmente para extraer fechas, emisores y huellas digitales. Privacidad total: el certificado nunca sale de tu equipo.",
+            color: "#14b8a6",
+        },
     ],
 };

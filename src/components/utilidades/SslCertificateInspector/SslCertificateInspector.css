@@ -1,0 +1,215 @@
+.ssl-inspector {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+.ssl-inspector .drop-zone {
+    border: 2px dashed rgba(20, 184, 166, 0.3);
+    border-radius: 1.5rem;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+:where(.dark) .ssl-inspector .drop-zone {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.ssl-inspector .drop-zone:hover,
+.ssl-inspector .drop-zone.drag-active {
+    border-color: var(--theme-color, #14b8a6);
+    background: rgba(20, 184, 166, 0.05);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.ssl-inspector .drop-zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none;
+}
+
+.ssl-inspector .icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(20, 184, 166, 0.05));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: var(--theme-color, #14b8a6);
+    margin-bottom: 1rem;
+    box-shadow: 0 0 20px rgba(20, 184, 166, 0.2);
+}
+
+.ssl-inspector .drop-zone h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text, #1e293b);
+    margin: 0;
+}
+
+.ssl-inspector .drop-zone p {
+    color: var(--color-text-muted, #64748b);
+    margin: 0;
+}
+
+.ssl-inspector .file-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.ssl-inspector .results-grid {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.ssl-inspector .results-grid.visible {
+    display: grid;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ssl-inspector .cert-card {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+:where(.dark) .ssl-inspector .cert-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ssl-inspector .cert-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.ssl-inspector .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ssl-inspector .card-icon {
+    font-size: 1.25rem;
+    color: var(--theme-color, #14b8a6);
+}
+
+.ssl-inspector .card-header h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text, #1e293b);
+    opacity: 0.8;
+}
+
+.ssl-inspector .card-content {
+    overflow-wrap: break-word;
+}
+
+.ssl-inspector .data-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.ssl-inspector .data-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #475569);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.ssl-inspector .data-value {
+    font-size: 1rem;
+    color: var(--color-text, #0f172a);
+    line-height: 1.5;
+    word-break: break-all;
+}
+
+.ssl-inspector .status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.ssl-inspector .status-valid {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.ssl-inspector .status-expired {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.ssl-inspector .fingerprint {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--color-text, #1e293b);
+    word-break: break-all;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:where(.dark) .ssl-inspector .fingerprint {
+    background: rgba(0, 0, 0, 0.2);
+    color: #d4d4d8;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.ssl-inspector .error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    padding: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .ssl-inspector .drop-zone {
+        padding: 3rem 1.5rem;
+    }
+
+    .ssl-inspector .results-grid {
+        grid-template-columns: 1fr;
+    }
+}

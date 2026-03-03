@@ -10,7 +10,6 @@ export const fortuneCookie: Application = {
         primary: "#BF9F5A",
         primaryGradient: "linear-gradient(135deg, #BF9F5A 0%, #8C6E3D 100%)",
         accent: "#F2E5BD",
-        fontHeading: "serif",
         radiusMain: "2.5rem",
         glowAccent: "rgba(191, 159, 90, 0.4)",
         headerTitleGradient: "linear-gradient(180deg, #f3e5ab 0%, #bf9f5a 100%)",
