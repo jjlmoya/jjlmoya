@@ -41,5 +41,13 @@ export const alcoholSection: SectionData = {
                 "Visualiza y calcula el priming exacto para Stouts, IPAs y Lagers sin riesgo de explosión.",
             color: "#D97706",
         },
+        {
+            href: "/utilidades/calculadora-alcohol-resaca/",
+            iconBg: "mdi:glass-wine",
+            iconFg: "mdi:pill",
+            title: "Predictor de Resaca",
+            description: "Estima metabolismo del alcohol y planifica tu hidratación pre-sueño para evitar la resaca.",
+            color: "#a855f7",
+        },
     ],
 };

@@ -72,7 +72,7 @@ if (!category) {
 }
 
 const isWidget = Astro.url.searchParams.get("widget") === "true";
-const hasBanner = true;
+const hasBanner = !isWidget;
 ---
 
 <Layout title={title} description={description} image={image} fullWidth={true}>
@@ -98,7 +98,7 @@ const hasBanner = true;
         >
         </div>
 
-        {
+        {!isWidget && (
             appSlug || appLinks?.android || appLinks?.ios ? (
                 <div class="sticky top-[60px] z-40 transition-all duration-300 w-full">
                     <AppLinksBanner
@@ -112,7 +112,7 @@ const hasBanner = true;
                     <AppLinksBanner />
                 </div>
             )
-        }
+        )}
 
         <div
             class="max-w-6xl mx-auto px-4 sm:px-6 relative focus:outline-none pt-12 sm:pt-20 utility-main-wrapper"
