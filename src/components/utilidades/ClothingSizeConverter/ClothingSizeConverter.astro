@@ -103,40 +103,73 @@ import "./ClothingSizeConverter.css";
             </div>
         </div>
 
-        
+
+
         <div class="tab-content" id="by-measurements-tab">
-            <div class="measurements-guide">
-                <div class="guide-visual">
-                    <div class="body-diagram" id="body-diagram">
-                        <div class="measurement-point" id="chest-point">Pecho</div>
-                        <div class="measurement-point" id="waist-point">Cintura</div>
-                        <div class="measurement-point" id="hip-point">Cadera</div>
+            <div class="measurements-wrapper">
+                <div class="measurements-content">
+                    <div class="measurements-inputs-section">
+                        <h3 class="section-title" style="margin-bottom: 1.5rem;">Ingresa tus Medidas</h3>
+                        <div class="measurements-inputs">
+                            <div class="input-field">
+                                <label for="chest-input">
+                                    <i class="mdi mdi-tape-measure" style="color: #ef4444;"></i>
+                                    Pecho (cm)
+                                </label>
+                                <input type="number" id="chest-input" placeholder="Ej: 95" min="50" max="150" class="measurement-input" />
+                            </div>
+                            <div class="input-field">
+                                <label for="waist-input">
+                                    <i class="mdi mdi-tape-measure" style="color: #ef4444;"></i>
+                                    Cintura (cm)
+                                </label>
+                                <input type="number" id="waist-input" placeholder="Ej: 85" min="40" max="140" class="measurement-input" />
+                            </div>
+                            <div class="input-field">
+                                <label for="hip-input">
+                                    <i class="mdi mdi-tape-measure" style="color: #ef4444;"></i>
+                                    Cadera (cm)
+                                </label>
+                                <input type="number" id="hip-input" placeholder="Ej: 95" min="50" max="150" class="measurement-input" />
+                            </div>
+                            <button class="btn-recommend" id="recommend-btn">
+                                <i class="mdi mdi-lightbulb-on"></i>
+                                Recomendar Talla
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="measurement-tips">
+                        <h4 class="tips-title"><i class="mdi mdi-lightbulb-outline"></i> Tips</h4>
+                        <div class="tips-grid">
+                            <div class="tip-item">
+                                <i class="mdi mdi-shirt"></i>
+                                <span>Sobre la ropa</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="mdi mdi-arrow-expand-horizontal"></i>
+                                <span>Recta y paralela</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="mdi mdi-minus"></i>
+                                <span>Sin apretar</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="mdi mdi-moon-waning-crescent"></i>
+                                <span>Al final del día</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="measurements-inputs">
-                    <div class="input-field">
-                        <label for="chest-input">Pecho (cm)</label>
-                        <input type="number" id="chest-input" placeholder="Ej: 95" class="measurement-input" />
+                <div class="recommendation-box" id="recommendation-box" style="display: none;">
+                    <div class="recommendation-header">
+                        <i class="mdi mdi-check-circle"></i>
+                        <h4>Talla Recomendada</h4>
                     </div>
-                    <div class="input-field">
-                        <label for="waist-input">Cintura (cm)</label>
-                        <input type="number" id="waist-input" placeholder="Ej: 85" class="measurement-input" />
-                    </div>
-                    <div class="input-field">
-                        <label for="hip-input">Cadera (cm)</label>
-                        <input type="number" id="hip-input" placeholder="Ej: 95" class="measurement-input" />
-                    </div>
-                    <button class="btn-recommend" id="recommend-btn">
-                        <i class="mdi mdi-lightbulb-on"></i>
-                        Recomendar Talla
-                    </button>
+                    <p id="recommendation-text"></p>
+                    <div id="size-details" class="size-details"></div>
                 </div>
-            </div>
-
-            <div class="recommendation-box" id="recommendation-box" style="display: none;">
-                <h4>Talla Recomendada</h4>
-                <p id="recommendation-text"></p>
             </div>
         </div>
 
@@ -404,32 +437,126 @@ import "./ClothingSizeConverter.css";
         });
     }
 
-    
-    function recommendSize() {
-        const chest = parseFloat((document.getElementById("chest-input") as HTMLInputElement).value);
-        const waist = parseFloat((document.getElementById("waist-input") as HTMLInputElement).value);
-        const hip = parseFloat((document.getElementById("hip-input") as HTMLInputElement).value);
 
-        if (!chest || !waist || !hip) {
-            alert("Por favor completa todas las medidas");
+    function recommendSize() {
+        const chestInput = document.getElementById("chest-input") as HTMLInputElement;
+        const waistInput = document.getElementById("waist-input") as HTMLInputElement;
+        const hipInput = document.getElementById("hip-input") as HTMLInputElement;
+
+        const chest = chestInput.value ? parseFloat(chestInput.value) : null;
+        const waist = waistInput.value ? parseFloat(waistInput.value) : null;
+        const hip = hipInput.value ? parseFloat(hipInput.value) : null;
+
+        if (chest === null || waist === null || hip === null) {
+            if (recommendationBox && recommendationText) {
+                recommendationBox.style.display = "block";
+                recommendationText.innerHTML = '<span style="color: #dc2626;">❌ Por favor completa todas las medidas para obtener una recomendación</span>';
+            }
             return;
         }
 
         const data = DATA_MAP[currentCategory]?.[currentGender] || [];
-        let recommendation = "No encontrada";
-
-        
-        if (chest < 90) recommendation = data[0]?.EU || "XS";
-        else if (chest < 100) recommendation = data[1]?.EU || "S";
-        else if (chest < 110) recommendation = data[2]?.EU || "M";
-        else if (chest < 120) recommendation = data[3]?.EU || "L";
-        else recommendation = data[4]?.EU || "XL";
-
-        if (recommendationText) {
-            recommendationText.textContent = `Basado en tus medidas, te recomendamos la talla ${recommendation}`;
+        if (!data || data.length === 0) {
+            if (recommendationBox && recommendationText) {
+                recommendationBox.style.display = "block";
+                recommendationText.innerHTML = '<span style="color: #dc2626;">No hay datos disponibles para esta categoría</span>';
+            }
+            return;
         }
-        if (recommendationBox) {
+
+        // Estimate standard measurements based on common sizing
+        const measurementRanges: Record<string, Array<{size: string, chest: number, waist: number, hip: number}>> = {
+            camisetas: [
+                { size: "XS", chest: 84, waist: 76, hip: 84 },
+                { size: "S", chest: 92, waist: 84, hip: 92 },
+                { size: "M", chest: 100, waist: 92, hip: 100 },
+                { size: "L", chest: 108, waist: 100, hip: 108 },
+                { size: "XL", chest: 116, waist: 108, hip: 116 },
+                { size: "XXL", chest: 124, waist: 116, hip: 124 },
+            ],
+            pantalones: [
+                { size: "30", chest: 80, waist: 76, hip: 89 },
+                { size: "32", chest: 85, waist: 81, hip: 94 },
+                { size: "34", chest: 90, waist: 86, hip: 99 },
+                { size: "36", chest: 95, waist: 91, hip: 104 },
+                { size: "38", chest: 100, waist: 96, hip: 109 },
+                { size: "40", chest: 105, waist: 101, hip: 114 },
+            ],
+            vestidos: [
+                { size: "XS", chest: 80, waist: 72, hip: 88 },
+                { size: "S", chest: 88, waist: 80, hip: 96 },
+                { size: "M", chest: 96, waist: 88, hip: 104 },
+                { size: "L", chest: 104, waist: 96, hip: 112 },
+                { size: "XL", chest: 112, waist: 104, hip: 120 },
+            ],
+            chaquetas: [
+                { size: "XS", chest: 84, waist: 76, hip: 88 },
+                { size: "S", chest: 92, waist: 84, hip: 96 },
+                { size: "M", chest: 100, waist: 92, hip: 104 },
+                { size: "L", chest: 108, waist: 100, hip: 112 },
+                { size: "XL", chest: 116, waist: 108, hip: 120 },
+            ],
+        };
+
+        const ranges = measurementRanges[currentCategory] || [];
+
+        // Calculate the best match using all three measurements
+        let bestMatch = ranges[0];
+        let bestScore = Infinity;
+
+        ranges.forEach((range) => {
+            const chestDiff = Math.abs(chest - range.chest);
+            const waistDiff = Math.abs(waist - range.waist);
+            const hipDiff = Math.abs(hip - range.hip);
+            const score = chestDiff + waistDiff + hipDiff;
+
+            if (score < bestScore) {
+                bestScore = score;
+                bestMatch = range;
+            }
+        });
+
+        // Find the actual data for this size
+        const sizeData = data.find((item) => item.EU === bestMatch.size);
+
+        if (!sizeData) {
+            if (recommendationBox && recommendationText) {
+                recommendationBox.style.display = "block";
+                recommendationText.innerHTML = `<span>Basado en tus medidas: Pecho ${chest}cm, Cintura ${waist}cm, Cadera ${hip}cm</span>`;
+            }
+            return;
+        }
+
+        // Build detailed recommendation
+        if (recommendationBox && recommendationText) {
             recommendationBox.style.display = "block";
+
+            recommendationText.innerHTML = `
+                <span style="font-weight: 600; display: block; margin-bottom: 0.5rem;">
+                    Te recomendamos la talla: <span style="color: #10b981; font-size: 1.2em;">${bestMatch.size}</span>
+                </span>
+                <span style="font-size: 0.9em; opacity: 0.9;">Basado en tus medidas: Pecho ${chest}cm, Cintura ${waist}cm, Cadera ${hip}cm</span>
+            `;
+
+            const sizeDetailsEl = document.getElementById("size-details");
+            if (sizeDetailsEl) {
+                sizeDetailsEl.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(16, 185, 129, 0.3);">
+                        <div style="text-align: center;">
+                            <span style="font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">EU</span>
+                            <span style="font-weight: 700; color: #10b981;">${sizeData.EU}</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">US</span>
+                            <span style="font-weight: 700; color: #10b981;">${sizeData.US}</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">UK</span>
+                            <span style="font-weight: 700; color: #10b981;">${sizeData.UK}</span>
+                        </div>
+                    </div>
+                `;
+            }
         }
     }
 
