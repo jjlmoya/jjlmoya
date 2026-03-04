@@ -1,0 +1,216 @@
+---
+import "./SecurityTxtGenerator.css";
+---
+
+<div class="security-generator-container">
+    <div class="generator-sections">
+        <div class="section-group glass-card">
+            <div class="group-title">
+                <span class="mdi--security"></span>
+                Campos Básicos (REQUERIDOS)
+            </div>
+
+            <div class="input-field">
+                <label for="contact">
+                    <span class="mdi--email-outline"></span>
+                    Contacto (Email o URL)
+                </label>
+                <input
+                    type="text"
+                    id="contact"
+                    class="premium-input"
+                    placeholder="mailto:seguridad@ejemplo.com o https://ejemplo.com/contacto"
+                />
+                <div class="field-tip">
+                    Dirección a la que enviar los reportes de vulnerabilidades.
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label for="expires">
+                    <span class="mdi--calendar-clock"></span>
+                    Fecha de Expiración
+                </label>
+                <input type="date" id="expires" class="premium-input" required />
+                <div class="field-tip">No debe ser superior a un año en el futuro.</div>
+            </div>
+        </div>
+
+        <div class="section-group glass-card">
+            <div class="group-title">
+                <span class="mdi--plus-circle-outline"></span>
+                Campos Opcionales
+            </div>
+
+            <div class="input-field">
+                <label for="encryption">
+                    <span class="mdi--key-variant"></span>
+                    Clave Pública
+                </label>
+                <input
+                    type="text"
+                    id="encryption"
+                    class="premium-input"
+                    placeholder="https://ejemplo.com/pgp-key.txt"
+                />
+                <div class="field-tip">Enlace a tu llave PGP para reportes cifrados.</div>
+            </div>
+
+            <div class="input-field">
+                <label for="policy">
+                    <span class="mdi--file-document-outline"></span>
+                    Política de Seguridad
+                </label>
+                <input
+                    type="text"
+                    id="policy"
+                    class="premium-input"
+                    placeholder="https://ejemplo.com/seguridad/politica/"
+                />
+                <div class="field-tip">Página que detalla cómo manejar vulnerabilidades.</div>
+            </div>
+
+            <div class="input-field">
+                <label for="acknowledgments">
+                    <span class="mdi--trophy-outline"></span>
+                    Agradecimientos
+                </label>
+                <input
+                    type="text"
+                    id="acknowledgments"
+                    class="premium-input"
+                    placeholder="https://ejemplo.com/seguridad/hall-of-fame/"
+                />
+                <div class="field-tip">Página de agradecimiento a investigadores.</div>
+            </div>
+
+            <div class="input-field">
+                <label for="hiring">
+                    <span class="mdi--briefcase-outline"></span>
+                    Bolsa de Trabajo
+                </label>
+                <input
+                    type="text"
+                    id="hiring"
+                    class="premium-input"
+                    placeholder="https://ejemplo.com/jobs"
+                />
+                <div class="field-tip">Enlace a ofertas de empleo de seguridad.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="result-header">
+            <div class="result-title">Vista Previa (security.txt)</div>
+            <div class="actions">
+                <button id="btnCopy" class="btn-secondary">
+                    <span class="mdi--content-copy"></span>
+                    Copiar Código
+                </button>
+                <button id="btnDownload" class="btn-primary">
+                    <span class="mdi--download"></span>
+                    Descargar .txt
+                </button>
+            </div>
+        </div>
+
+        <div class="code-display" id="result-display">
+            <pre id="outputCode"># Generando archivo security.txt...</pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    const contactInput = document.getElementById("contact") as HTMLInputElement;
+    const expiresInput = document.getElementById("expires") as HTMLInputElement;
+    const encryptionInput = document.getElementById("encryption") as HTMLInputElement;
+    const policyInput = document.getElementById("policy") as HTMLInputElement;
+    const acknowledgmentsInput = document.getElementById("acknowledgments") as HTMLInputElement;
+    const hiringInput = document.getElementById("hiring") as HTMLInputElement;
+    const outputCode = document.getElementById("outputCode") as HTMLPreElement;
+    const btnCopy = document.getElementById("btnCopy") as HTMLButtonElement;
+    const btnDownload = document.getElementById("btnDownload") as HTMLButtonElement;
+
+    function initDefaultExpiry() {
+        const today = new Date();
+        const sixMonthsLater = new Date(today.setMonth(today.getMonth() + 6));
+        expiresInput.value = sixMonthsLater.toISOString().split("T")[0];
+    }
+
+    function generateText() {
+        let result = "";
+
+        if (contactInput.value) {
+            result += `Contact: ${contactInput.value}\n`;
+        } else {
+            result += `# Contact: (Requerido)\n`;
+        }
+
+        if (expiresInput.value) {
+            const expDate = new Date(expiresInput.value);
+            result += `Expires: ${expDate.toISOString()}\n`;
+        }
+
+        if (encryptionInput.value) {
+            result += `Encryption: ${encryptionInput.value}\n`;
+        }
+
+        if (policyInput.value) {
+            result += `Policy: ${policyInput.value}\n`;
+        }
+
+        if (acknowledgmentsInput.value) {
+            result += `Acknowledgments: ${acknowledgmentsInput.value}\n`;
+        }
+
+        if (hiringInput.value) {
+            result += `Hiring: ${hiringInput.value}\n`;
+        }
+
+        result += `\n# Generado con jjlmoya.es/utilidades/generador-security-txt/`;
+
+        outputCode.textContent = result;
+    }
+
+    function copyToClipboard() {
+        const text = outputCode.textContent || "";
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btnCopy.innerHTML;
+            btnCopy.innerHTML = '<span class="mdi--check"></span> ¡Copiado!';
+            setTimeout(() => {
+                btnCopy.innerHTML = originalText;
+            }, 2000);
+        });
+    }
+
+    function downloadFile() {
+        const text = outputCode.textContent || "";
+        const blob = new Blob([text], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "security.txt";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    initDefaultExpiry();
+
+    const inputs = [
+        contactInput,
+        expiresInput,
+        encryptionInput,
+        policyInput,
+        acknowledgmentsInput,
+        hiringInput,
+    ];
+    inputs.forEach((input) => {
+        input.addEventListener("input", generateText);
+    });
+
+    btnCopy.addEventListener("click", copyToClipboard);
+    btnDownload.addEventListener("click", downloadFile);
+
+    generateText();
+</script>

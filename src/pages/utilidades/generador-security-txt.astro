@@ -1,0 +1,46 @@
+---
+export const prerender = true;
+
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import SecurityTxtGenerator from "../../components/utilidades/SecurityTxtGenerator/SecurityTxtGenerator.astro";
+import SecurityTxtGeneratorSEO from "../../components/utilidades/SecurityTxtGenerator/SecurityTxtGeneratorSEO.astro";
+
+const faqItems = [
+    {
+        question: "¿Qué es el archivo security.txt?",
+        answer: "Es un estándar (RFC 9116) que permite a los sitios web definir cómo los investigadores de seguridad deben contactar con ellos para reportar vulnerabilidades de forma responsable.",
+    },
+    {
+        question: "¿Dónde se debe colocar el archivo security.txt?",
+        answer: "La ubicación estándar recomendada es en la carpeta /.well-known/ de tu dominio, resultando en la URL https://ejemplo.com/.well-known/security.txt.",
+    },
+    {
+        question: "¿Por qué es obligatoria la fecha de expiración?",
+        answer: "Para asegurar que la información de contacto no quede obsoleta. Si el archivo no tiene una fecha de expiración válida, los investigadores podrían no confiar en que los canales de comunicación sigan activos.",
+    },
+    {
+        question: "¿Qué campos son requeridos en un security.txt?",
+        answer: "Según el RFC 9116, los campos requeridos son 'Contact' (con una dirección de correo o URL) y 'Expires' (con una fecha futura en formato ISO 8601).",
+    },
+];
+---
+
+<LayoutUtility
+    title="Generador de Security.txt (RFC 9116)"
+    description="Crea tu archivo security.txt profesional para facilitar el reporte de vulnerabilidades y cumplir con los estándares internacionales de seguridad web."
+    image="/images/utilities/security-txt-generator.webp"
+    faqItems={faqItems}
+>
+    <UtilityHeader
+        slot="header"
+        titleHighlight="Security.txt"
+        titleBase="Generador de"
+        description="Estandariza el contacto con investigadores de seguridad siguiendo el RFC 9116 para proteger tu infraestructura digital."
+        gradientFrom="from-indigo-500"
+        gradientTo="to-blue-600"
+        reverse={true}
+    />
+    <SecurityTxtGenerator />
+    <SecurityTxtGeneratorSEO slot="seo" />
+</LayoutUtility>

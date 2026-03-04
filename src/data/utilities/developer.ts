@@ -179,5 +179,14 @@ export const devSection: SectionData = {
                 "Analiza archivos .pem y .crt localmente para extraer fechas, emisores y huellas digitales. Privacidad total: el certificado nunca sale de tu equipo.",
             color: "#14b8a6",
         },
+        {
+            href: "/utilidades/generador-security-txt/",
+            iconBg: "mdi:security",
+            iconFg: "mdi:text-box-outline",
+            title: "Generador de Security.txt",
+            description:
+                "Crea tu archivo security.txt según el estándar RFC 9116 para facilitar el contacto con investigadores de seguridad y proteger tu sitio web.",
+            color: "#6366f1",
+        },
     ],
 };
