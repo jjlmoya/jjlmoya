@@ -543,5 +543,21 @@ export const textileSection: SectionData = {
             description: "Guía técnica de mordentado y calculadora de WOF para teñido.",
             color: "#10b981",
         },
+        {
+            href: "/utilidades/conversor-tallas-zapatos/",
+            iconBg: "mdi:shoe-sneaker",
+            iconFg: "mdi:swap-horizontal",
+            title: "Tallas de Zapatos",
+            description: "Equivalencias internacionales de calzado para hombre y mujer (US, EU, UK, CM).",
+            color: "#3b82f6",
+        },
+        {
+            href: "/utilidades/conversor-tallas-ropa/",
+            iconBg: "mdi:tshirt-crew",
+            iconFg: "mdi:ruler",
+            title: "Tallas de Ropa",
+            description: "Conversor EU, US, UK, IT para camisetas, pantalones, vestidos y chaquetas. Con recomendador por medidas.",
+            color: "#a855f7",
+        },
     ],
 };

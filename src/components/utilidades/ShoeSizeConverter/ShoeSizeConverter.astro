@@ -1,0 +1,192 @@
+---
+import { Icon } from "astro-icon/components";
+import "./ShoeSizeConverter.css";
+---
+
+<div class="shoe-converter-container">
+    <div class="converter-card animate-in fade-in slide-in-from-bottom duration-700">
+        
+        <div class="gender-selector">
+            <button class="gender-btn active" data-gender="men" title="Calzado de Hombre">
+                <Icon name="mdi:gender-male" />
+            </button>
+            <button class="gender-btn" data-gender="women" title="Calzado de Mujer">
+                <Icon name="mdi:gender-female" />
+            </button>
+        </div>
+
+        
+        <div style="display: flex; gap: 1rem; flex-direction: column;">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <label
+                    style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em;"
+                    >Tu Sistema de Talla</label
+                >
+                <select
+                    id="origin-region"
+                    style="appearance: none; background-color: white; border: 1.5px solid #e2e8f0; border-radius: 1rem; padding: 0.875rem 1.25rem; font-size: 1rem; font-weight: 600; color: #1e293b; outline: none; cursor: pointer; transition: all 0.2s ease; background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%2394a3b8%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M19 9l-7 7-7-7%27%3E%3C/path%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.25rem; padding-right: 2.75rem;"
+                >
+                    <option value="EU">Europa (EU)</option>
+                    <option value="US">Estados Unidos (US)</option>
+                    <option value="UK">Reino Unido (UK)</option>
+                    <option value="CM">Mondopoint (CM)</option>
+                </select>
+            </div>
+
+            
+            <div class="size-grid-container">
+                <div class="grid-header">
+                    <h3>Selecciona tu Talla</h3>
+                    <p>Haz clic para ver las equivalencias internacionales</p>
+                </div>
+                <div class="size-grid" id="quick-grid">
+                    
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="results-container">
+            <div class="result-card">
+                <span class="result-label" id="label-1">EE. UU. (US)</span>
+                <span class="result-value" id="val-us">-</span>
+            </div>
+            <div class="result-card">
+                <span class="result-label" id="label-2">Reino Unido (UK)</span>
+                <span class="result-value" id="val-uk">-</span>
+            </div>
+            <div class="result-card">
+                <span class="result-label" id="label-3">Mondopoint</span>
+                <span class="result-value" id="val-cm">-</span>
+                <span class="result-unit" id="unit-cm">cm</span>
+            </div>
+        </div>
+
+        
+        <div class="info-banner">
+            <Icon name="mdi:information-outline" />
+            <p>
+                La talla <strong>CM</strong> representa la longitud física del pie. Es el método más
+                fiable para comprar zapatillas de marcas internacionales.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    interface SizeMapping {
+        EU: string;
+        US: string;
+        UK: string;
+        CM: string;
+    }
+
+    const DATA_MEN: SizeMapping[] = [
+        { EU: "39", US: "6.5", UK: "6", CM: "24.5" },
+        { EU: "40", US: "7.5", UK: "7", CM: "25.0" },
+        { EU: "40.5", US: "8", UK: "7.5", CM: "25.5" },
+        { EU: "41", US: "8.5", UK: "8", CM: "26.0" },
+        { EU: "42", US: "9", UK: "8.5", CM: "26.5" },
+        { EU: "42.5", US: "9.5", UK: "9", CM: "27.0" },
+        { EU: "43", US: "10", UK: "9.5", CM: "27.5" },
+        { EU: "44", US: "10.5", UK: "10", CM: "28.0" },
+        { EU: "44.5", US: "11", UK: "10.5", CM: "28.5" },
+        { EU: "45", US: "11.5", UK: "11", CM: "29.0" },
+        { EU: "46", US: "12", UK: "11.5", CM: "30.0" },
+    ];
+
+    const DATA_WOMEN: SizeMapping[] = [
+        { EU: "35", US: "5", UK: "3", CM: "22.0" },
+        { EU: "36", US: "6", UK: "4", CM: "22.5" },
+        { EU: "37", US: "6.5", UK: "4.5", CM: "23.5" },
+        { EU: "37.5", US: "7", UK: "5", CM: "23.8" },
+        { EU: "38", US: "7.5", UK: "5.5", CM: "24.0" },
+        { EU: "38.5", US: "8", UK: "6", CM: "24.5" },
+        { EU: "39", US: "8.5", UK: "6.5", CM: "25.0" },
+        { EU: "40", US: "9", UK: "7", CM: "25.5" },
+        { EU: "41", US: "10", UK: "8", CM: "26.5" },
+        { EU: "42", US: "11", UK: "9", CM: "27.0" },
+    ];
+
+    const DATA_MAP: Record<string, SizeMapping[]> = {
+        men: DATA_MEN,
+        women: DATA_WOMEN,
+    };
+
+    let currentGender = "men";
+    let currentOrigin = "EU";
+    let currentSize = "";
+
+    const quickGrid = document.getElementById("quick-grid");
+    const originRegion = document.getElementById("origin-region") as HTMLSelectElement | null;
+    const genderBtns = document.querySelectorAll(".gender-btn");
+    const valUS = document.getElementById("val-us");
+    const valUK = document.getElementById("val-uk");
+    const valCM = document.getElementById("val-cm");
+
+    function renderGrid() {
+        if (!quickGrid) return;
+        const data = DATA_MAP[currentGender];
+
+        quickGrid.innerHTML = "";
+        data.forEach((item) => {
+            const cell = document.createElement("div");
+            const cellValue = item[currentOrigin as keyof SizeMapping];
+            cell.className = `size-cell ${cellValue === currentSize ? "active" : ""}`;
+            cell.textContent = cellValue;
+            cell.addEventListener("click", () => {
+                currentSize = cellValue;
+                updateResults(item);
+                renderGrid();
+            });
+            quickGrid.appendChild(cell);
+        });
+
+        
+        if (!currentSize && data.length > 0) {
+            currentSize = data[0][currentOrigin as keyof SizeMapping];
+            updateResults(data[0]);
+            renderGrid();
+        }
+    }
+
+    function updateResults(mapping: SizeMapping) {
+        const regions = ["EU", "US", "UK", "CM"].filter((r) => r !== currentOrigin);
+        const labels: Record<string, string> = {
+            EU: "Europa (EU)",
+            US: "EE. UU. (US)",
+            UK: "Reino Unido (UK)",
+            CM: "Mondopoint (CM)",
+        };
+
+        [valUS, valUK, valCM].forEach((el, i) => {
+            const region = regions[i];
+            if (el && region) {
+                const key = region as keyof SizeMapping;
+                el.textContent = mapping[key];
+
+                const labelEl = document.getElementById(`label-${i + 1}`);
+                if (labelEl) labelEl.textContent = labels[region];
+            }
+        });
+    }
+
+    genderBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            genderBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentGender = (btn as HTMLElement).dataset.gender || "men";
+            currentSize = "";
+            renderGrid();
+        });
+    });
+
+    originRegion?.addEventListener("change", () => {
+        currentOrigin = originRegion.value;
+        currentSize = "";
+        renderGrid();
+    });
+
+    
+    renderGrid();
+</script>
