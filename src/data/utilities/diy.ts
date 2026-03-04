@@ -47,6 +47,14 @@ export const diySection: SectionData = {
             color: "#6366f1",
         },
         {
+            href: "/utilidades/calculadora-hormigon-mortero/",
+            iconBg: "mdi:mortar-pestle-plus",
+            iconFg: "mdi:calculator",
+            title: "Mezcla de Hormigón",
+            description: "Dosificación exacta: sacos de cemento, paladas de arena y litros de agua.",
+            color: "#22c55e",
+        },
+        {
             href: "/utilidades/optimizador-corte/",
             iconBg: "mdi:saw-blade",
             iconFg: "mdi:ruler-square",
