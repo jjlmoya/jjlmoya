@@ -69,6 +69,14 @@ export const financeSection: SectionData = {
             iconBg: "mdi:file-document-outline",
             iconFg: "mdi:receipt-text",
             color: "#4f46e5",
+        },
+        {
+            title: "Carta de Renuncia",
+            description: "No te compliques al irte. Genera tu carta de baja voluntaria profesional y PDF listo para firmar.",
+            href: "/utilidades/generador-carta-renuncia/",
+            iconBg: "mdi:file-document-edit-outline",
+            iconFg: "mdi:briefcase-off-outline",
+            color: "#6366f1",
         }
     ],
 };
