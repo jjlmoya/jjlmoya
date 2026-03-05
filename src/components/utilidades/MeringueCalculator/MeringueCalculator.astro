@@ -1,0 +1,154 @@
+---
+import { Icon } from "astro-icon/components";
+import "./MeringueCalculator.css";
+---
+
+<div class="meringue-calculator-container">
+    <div class="calc-card fade-in">
+        <div class="input-section">
+            <div class="input-group">
+                <label for="whites-input">Peso de las Claras</label>
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        id="whites-input"
+                        placeholder="Ej. 120"
+                        min="1"
+                        max="2000"
+                        value="120"
+                    />
+                    <span class="input-unit">g</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Tipo de Merengue</label>
+                <div class="type-selector" id="type-selector">
+                    <button class="type-btn active" data-type="french">Francés</button>
+                    <button class="type-btn" data-type="italian">Italiano</button>
+                    <button class="type-btn" data-type="swiss">Suizo</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-grid" id="main-results"></div>
+
+        <div class="time-section">
+            <h3
+                style="font-size: 1.125rem; font-weight: 800; color: #1e293b; margin-bottom: 1.5rem;"
+                class="dark:text-slate-100"
+            >
+                Tiempos Estimados (Batido a media/alta velocidad)
+            </h3>
+            <div class="time-grid" id="time-grid"></div>
+        </div>
+
+        <div class="pro-tip" id="pro-tip">
+            <Icon name="mdi:lightbulb-on" size={24} />
+            <p id="tip-text">
+                El merengue francés es el más común y fácil, ideal para hornear suspiros.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const whitesInput = document.getElementById("whites-input") as HTMLInputElement | null;
+    const typeSelector = document.getElementById("type-selector");
+    const resultsGrid = document.getElementById("main-results");
+    const timeGrid = document.getElementById("time-grid");
+    const tipText = document.getElementById("tip-text");
+
+    let currentType = "french";
+
+    const TIPS: Record<string, string> = {
+        french: "El merengue francés es el más común y fácil, ideal para hornear suspiros o añadir a masas aireadas. No es apto para comer en crudo.",
+        italian:
+            "El merengue italiano es el más estable. Se hace con almíbar caliente a 118°C. Es perfecto para decorar tartas y comer directamente.",
+        swiss: "El merengue suizo se calienta al baño maría hasta que el azúcar se disuelve. Es muy versátil y ideal para cremas de mantequilla (buttercream).",
+    };
+
+    const STAGES = [
+        { name: "Espumado", desc: "Burbujas grandes, como jabón.", timeIdx: 0 },
+        { name: "Pico Blando", desc: "La punta se dobla al levantar.", timeIdx: 1 },
+        { name: "Punto de Nieve", desc: "Pico firme y brillante.", timeIdx: 2 },
+    ];
+
+    function calculate() {
+        if (!whitesInput || !resultsGrid || !timeGrid || !tipText) return;
+
+        const weight = parseFloat(whitesInput.value) || 0;
+        resultsGrid.innerHTML = "";
+        timeGrid.innerHTML = "";
+
+        if (weight <= 0) {
+            resultsGrid.innerHTML =
+                '<p style="color: #ef4444; font-weight: 600;">Introduce un peso válido</p>';
+            return;
+        }
+
+        let mainResults = [];
+        let times = [];
+
+        if (currentType === "french") {
+            mainResults = [
+                { label: "Azúcar Blanquilla", val: weight, unit: "g" },
+                { label: "Azúcar Glas", val: weight, unit: "g" },
+            ];
+            times = ["1-2 min", "3-5 min", "7-9 min"];
+        } else if (currentType === "italian") {
+            mainResults = [
+                { label: "Azúcar para Almíbar", val: weight * 2, unit: "g" },
+                { label: "Agua", val: Math.round(weight * 0.6), unit: "ml" },
+            ];
+            times = ["2 min", "5 min", "10-12 min"];
+        } else {
+            mainResults = [
+                { label: "Azúcar Blanquilla", val: weight * 2, unit: "g" },
+                { label: "Temperatura Máx", val: 60, unit: "°C" },
+            ];
+            times = ["1-2 min", "4-6 min", "8-10 min"];
+        }
+
+        mainResults.forEach((res) => {
+            const item = document.createElement("div");
+            item.className = "result-item fade-in";
+            item.innerHTML = `
+                <span class="result-label">${res.label}</span>
+                <span class="result-value">${res.val}<span class="result-unit">${res.unit}</span></span>
+            `;
+            resultsGrid.appendChild(item);
+        });
+
+        STAGES.forEach((stage, i) => {
+            const row = document.createElement("div");
+            row.className = "time-row fade-in";
+            row.style.animationDelay = `${i * 0.1}s`;
+            row.innerHTML = `
+                <div class="time-info">
+                    <span class="time-stage">${stage.name}</span>
+                    <span class="time-desc">${stage.desc}</span>
+                </div>
+                <span class="time-val">${times[i]}</span>
+            `;
+            timeGrid.appendChild(row);
+        });
+
+        tipText.textContent = TIPS[currentType];
+    }
+
+    whitesInput?.addEventListener("input", calculate);
+
+    typeSelector?.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+        if (target.classList.contains("type-btn")) {
+            const btns = typeSelector.querySelectorAll(".type-btn");
+            btns.forEach((b) => b.classList.remove("active"));
+            target.classList.add("active");
+            currentType = target.dataset.type || "french";
+            calculate();
+        }
+    });
+
+    calculate();
+</script>

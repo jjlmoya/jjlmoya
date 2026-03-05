@@ -92,5 +92,13 @@ export const cookingSection: SectionData = {
                 "Analiza el grado de madurez y recibe consejos científicos de conservación según la temperatura.",
             color: "#fbbf24",
         },
+        {
+            href: "/utilidades/calculadora-punto-de-nieve-merengue/",
+            iconBg: "mdi:egg",
+            iconFg: "mdi:shaker",
+            title: "Calculadora de Merengue",
+            description: "Calcula el azúcar exacto según el peso de tus claras y el tipo de técnica.",
+            color: "#f472b6",
+        },
     ],
 };
