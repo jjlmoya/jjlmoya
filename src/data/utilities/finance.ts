@@ -77,6 +77,14 @@ export const financeSection: SectionData = {
             iconBg: "mdi:file-document-edit-outline",
             iconFg: "mdi:briefcase-off-outline",
             color: "#6366f1",
-        }
+        },
+        {
+            title: "Finiquito e Indemnización",
+            description: "Calcula tu liquidación laboral completa: vacaciones, pagas extra y compensación por despido.",
+            href: "/utilidades/calculadora-finiquito-indemnizacion/",
+            iconBg: "mdi:calculator-variant",
+            iconFg: "mdi:cash-fast",
+            color: "#10b981",
+        },
     ],
 };
