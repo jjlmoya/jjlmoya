@@ -1,0 +1,185 @@
+---
+import { Icon } from "astro-icon/components";
+import "./RentCalculator.css";
+---
+
+<div class="rent-calculator-container">
+    <div class="calc-main-card fade-in">
+        <div class="calc-layout">
+            <div class="inputs-section">
+                <div class="input-group">
+                    <label for="current-rent">Alquiler Actual</label>
+                    <div class="input-wrapper">
+                        <input
+                            type="number"
+                            id="current-rent"
+                            placeholder="Ej. 800"
+                            min="0"
+                            value="800"
+                            step="0.01"
+                        />
+                        <span class="input-unit">€/mes</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="increment-type">Modo Actualización</label>
+                    <div class="input-wrapper">
+                        <select id="increment-type">
+                            <option value="legal" selected>Tope Ley Vivienda (3%)</option>
+                            <option value="manual">Incremento Manual (%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="manual-input-container" class="input-group hidden">
+                    <label for="manual-percentage">Porcentaje Aplicado</label>
+                    <div class="input-wrapper">
+                        <input
+                            type="number"
+                            id="manual-percentage"
+                            placeholder="Ej. 2.5"
+                            step="0.1"
+                            value="3"
+                        />
+                        <span class="input-unit">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <div class="result-header">
+                    <span class="result-label">Nueva Renta Estimada</span>
+                    <div class="result-main-value" id="val-new-rent">824,00 €</div>
+                </div>
+
+                <div class="comparison-bar">
+                    <div class="bar-base">
+                        <div class="bar-fill" id="increase-bar-fill"></div>
+                    </div>
+                    <div class="bar-labels">
+                        <span id="label-old-rent">800 €</span>
+                        <span id="label-new-rent">824 €</span>
+                    </div>
+                </div>
+
+                <div class="summary-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Incremento Mensual</span>
+                        <span class="detail-value" id="val-monthly-increase">+24,00 €</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Sobrecoste Anual</span>
+                        <span class="detail-value highlight" id="val-yearly-increase"
+                            >+288,00 €</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-footer">
+            <div class="legal-badge">
+                <Icon name="mdi:shield-check" size={20} />
+                <span>Limitado al 3% según Ley 12/2023</span>
+            </div>
+
+            <button class="action-btn" id="copy-summary">
+                <Icon name="mdi:content-copy" size={18} />
+                <span>Copiar para el propietario</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const rentInput = document.getElementById("current-rent") as HTMLInputElement | null;
+    const typeSelect = document.getElementById("increment-type") as HTMLSelectElement | null;
+    const manualContainer = document.getElementById(
+        "manual-input-container"
+    ) as HTMLDivElement | null;
+    const manualInput = document.getElementById("manual-percentage") as HTMLInputElement | null;
+
+    const newRentDisplay = document.getElementById("val-new-rent");
+    const labelOldRent = document.getElementById("label-old-rent");
+    const labelNewRent = document.getElementById("label-new-rent");
+    const monthlyDisplay = document.getElementById("val-monthly-increase");
+    const yearlyDisplay = document.getElementById("val-yearly-increase");
+    const barFill = document.getElementById("increase-bar-fill");
+    const copyBtn = document.getElementById("copy-summary");
+
+    function formatCurrency(val: number): string {
+        return new Intl.NumberFormat("es-ES", {
+            style: "currency",
+            currency: "EUR",
+        }).format(val);
+    }
+
+    function calculate() {
+        if (!rentInput || !typeSelect || !manualInput) return;
+
+        const currentRent = parseFloat(rentInput.value) || 0;
+        let percentage = 3;
+
+        if (typeSelect.value === "legal") {
+            percentage = 3;
+            manualContainer?.classList.add("hidden");
+        } else {
+            manualContainer?.classList.remove("hidden");
+            percentage = parseFloat(manualInput.value) || 0;
+        }
+
+        const monthlyIncrease = currentRent * (percentage / 100);
+        const newRent = currentRent + monthlyIncrease;
+        const yearlyIncrease = monthlyIncrease * 12;
+
+        if (newRentDisplay) newRentDisplay.textContent = formatCurrency(newRent);
+        if (labelOldRent) labelOldRent.textContent = `${formatCurrency(currentRent)}`;
+        if (labelNewRent) labelNewRent.textContent = `${formatCurrency(newRent)}`;
+        if (monthlyDisplay) monthlyDisplay.textContent = `+${formatCurrency(monthlyIncrease)}`;
+        if (yearlyDisplay) yearlyDisplay.textContent = `+${formatCurrency(yearlyIncrease)}`;
+
+        if (barFill) {
+            const ratio = currentRent > 0 ? (currentRent / newRent) * 100 : 0;
+            barFill.style.width = `${ratio}%`;
+        }
+
+        newRentDisplay?.classList.add("animate-pulse");
+        setTimeout(() => newRentDisplay?.classList.remove("animate-pulse"), 500);
+    }
+
+    [rentInput, typeSelect, manualInput].forEach((el) => {
+        el?.addEventListener("input", calculate);
+        el?.addEventListener("change", calculate);
+    });
+
+    copyBtn?.addEventListener("click", () => {
+        const report = `
+ACTUALIZACIÓN DE RENTA DE ALQUILER
+----------------------------------
+Renta Anterior: ${formatCurrency(parseFloat(rentInput?.value || "0"))}
+Porcentaje aplicado: ${typeSelect?.value === "legal" ? "3% (Tope Legal)" : manualInput?.value + "%"}
+----------------------------------
+INCREMENTO MENSUAL: +${monthlyDisplay?.textContent?.replace("+", "")}
+NUEVA RENTA MENSUAL: ${newRentDisplay?.textContent}
+SOBRECOSTE ANUAL: ${yearlyDisplay?.textContent?.replace("+", "")}
+
+Calculado en jjlmoya.es
+        `.trim();
+
+        navigator.clipboard.writeText(report);
+
+        const btnText = copyBtn.querySelector("span");
+        if (btnText) {
+            const originalText = btnText.textContent;
+            btnText.textContent = "¡Copiado!";
+            copyBtn.classList.add("copied");
+            setTimeout(() => {
+                btnText.textContent = originalText;
+                copyBtn.classList.remove("copied");
+            }, 2000);
+        }
+    });
+
+    calculate();
+</script>

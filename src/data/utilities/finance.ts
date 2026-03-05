@@ -101,6 +101,14 @@ export const financeSection: SectionData = {
             iconBg: "mdi:bank-outline",
             iconFg: "mdi:cash-clock",
             color: "#0ea5e9",
+        },
+        {
+            title: "Subida Alquiler (IPC)",
+            description: "Calcula la actualización de tu renta con el límite del 3% de la Ley de Vivienda o el IPC real.",
+            href: "/utilidades/calculadora-subida-alquiler-ipc/",
+            iconBg: "mdi:home-city-outline",
+            iconFg: "mdi:trending-up",
+            color: "#10b981",
         }
     ],
 };
