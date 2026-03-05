@@ -37,5 +37,13 @@ export const homeSection: SectionData = {
             description: "Calcula la temperatura de condensación para evitar moho en casa.",
             color: "#a855f7",
         },
+        {
+            href: "/utilidades/comparador-consumo-gas-aerotermia-aire/",
+            iconBg: "mdi:home-lightning-bolt",
+            iconFg: "mdi:finance",
+            title: "Gas vs. Aerotermia",
+            description: "Compara el consumo anual y ahorro entre Gas, Aerotermia y Bomba de Calor.",
+            color: "#6366f1",
+        },
     ],
 };

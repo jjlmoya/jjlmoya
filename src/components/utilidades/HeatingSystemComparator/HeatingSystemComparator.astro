@@ -1,0 +1,198 @@
+---
+import { Icon } from "astro-icon/components";
+import "./HeatingSystemComparator.css";
+---
+
+<div class="energy-comparator-container">
+    <div class="main-card fade-in">
+        <div class="config-section">
+            <h3 class="section-title">1. Datos de tu vivienda</h3>
+            <div class="config-grid">
+                <div class="input-group">
+                    <label for="house-m2">Superficie Total</label>
+                    <p class="input-helper">Metros cuadrados de tu vivienda.</p>
+                    <div class="input-wrapper">
+                        <input type="number" id="house-m2" value="100" min="10" step="5" />
+                        <span class="input-unit">m²</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="insulation-level">Nivel de Aislamiento</label>
+                    <p class="input-helper">¿Cómo de bien retiene el calor tu casa?</p>
+                    <div class="input-wrapper">
+                        <select id="insulation-level">
+                            <option value="40">Excelente (Obra nueva / Passivhaus)</option>
+                            <option value="70" selected
+                                >Medio (Doble cristal / Aislamiento normal)</option
+                            >
+                            <option value="110">Pobre (Antigua / Sin aislamiento en paredes)</option
+                            >
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title">2. Coste de la energía</h3>
+            <p class="section-desc">
+                Busca en tu última factura el "Precio Término de Energía" o "Coste kWh".
+            </p>
+            <div class="config-grid">
+                <div class="input-group">
+                    <label for="price-gas">Coste del Gas</label>
+                    <p class="input-helper">Precio por cada kWh de gas consumido.</p>
+                    <div class="input-wrapper">
+                        <input type="number" id="price-gas" value="0.08" step="0.001" />
+                        <span class="input-unit">€/kWh</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="price-elec">Coste de la Electricidad</label>
+                    <p class="input-helper">Precio por cada kWh de luz consumido.</p>
+                    <div class="input-wrapper">
+                        <input type="number" id="price-elec" value="0.18" step="0.001" />
+                        <span class="input-unit">€/kWh</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comparison-header">
+            <h3 class="section-title">3. Comparativa de Consumo Anual</h3>
+            <p class="section-desc">Estimación basada en el rendimiento técnico de cada equipo.</p>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="system-card gas">
+                <div class="card-header">
+                    <div class="icon-box">
+                        <Icon name="mdi:fire" size={24} />
+                    </div>
+                    <span class="card-title">Caldera de Gas</span>
+                </div>
+                <div class="cost-display">
+                    <span class="cost-label">Gasto en Calefacción</span>
+                    <span class="annual-cost" id="gas-cost">0,00 €</span>
+                </div>
+                <div class="specs-list">
+                    <div class="spec-item">
+                        <span class="spec-label">Eficiencia (Rend.)</span>
+                        <span class="spec-value">95%</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fuente</span>
+                        <span class="spec-value">Gas Natural</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-card aero">
+                <div class="saving-badge badge-winner" id="aero-winner">Más Eficiente</div>
+                <div class="card-header">
+                    <div class="icon-box">
+                        <Icon name="mdi:leaf" size={24} />
+                    </div>
+                    <span class="card-title">Aerotermia</span>
+                </div>
+                <div class="cost-display">
+                    <span class="cost-label">Gasto en Calefacción</span>
+                    <span class="annual-cost" id="aero-cost">0,00 €</span>
+                </div>
+                <div class="specs-list">
+                    <div class="spec-item">
+                        <span class="spec-label">Eficiencia (COP)</span>
+                        <span class="spec-value">4.0 (400%)</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Energía</span>
+                        <span class="spec-value">Renovable + Luz</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="system-card air">
+                <div class="card-header">
+                    <div class="icon-box">
+                        <Icon name="mdi:air-conditioner" size={24} />
+                    </div>
+                    <span class="card-title">Bomba de Calor (Split)</span>
+                </div>
+                <div class="cost-display">
+                    <span class="cost-label">Gasto en Calefacción</span>
+                    <span class="annual-cost" id="air-cost">0,00 €</span>
+                </div>
+                <div class="specs-list">
+                    <div class="spec-item">
+                        <span class="spec-label">Eficiencia (SCOP)</span>
+                        <span class="spec-value">3.2 (320%)</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Instalación</span>
+                        <span class="spec-value">Aire-Aire</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const m2Input = document.getElementById("house-m2") as HTMLInputElement | null;
+    const insulationInput = document.getElementById("insulation-level") as HTMLSelectElement | null;
+    const gasPriceInput = document.getElementById("price-gas") as HTMLInputElement | null;
+    const elecPriceInput = document.getElementById("price-elec") as HTMLInputElement | null;
+
+    const gasCostDisplay = document.getElementById("gas-cost");
+    const aeroCostDisplay = document.getElementById("aero-cost");
+    const airCostDisplay = document.getElementById("air-cost");
+    const aeroWinner = document.getElementById("aero-winner");
+
+    function formatCurrency(val: number): string {
+        return new Intl.NumberFormat("es-ES", {
+            style: "currency",
+            currency: "EUR",
+        }).format(val);
+    }
+
+    function calculate() {
+        if (!m2Input || !gasPriceInput || !elecPriceInput || !insulationInput) return;
+
+        const m2 = parseFloat(m2Input.value) || 0;
+        const gasPrice = parseFloat(gasPriceInput.value) || 0;
+        const elecPrice = parseFloat(elecPriceInput.value) || 0;
+        const demandPerM2 = parseFloat(insulationInput.value) || 70;
+
+        const totalDemand = m2 * demandPerM2;
+
+        const efficiencyGas = 0.95;
+        const efficiencyAero = 4.0;
+        const efficiencyAir = 3.2;
+
+        const costGas = (totalDemand / efficiencyGas) * gasPrice;
+        const costAero = (totalDemand / efficiencyAero) * elecPrice;
+        const costAir = (totalDemand / efficiencyAir) * elecPrice;
+
+        if (gasCostDisplay) gasCostDisplay.textContent = formatCurrency(costGas);
+        if (aeroCostDisplay) aeroCostDisplay.textContent = formatCurrency(costAero);
+        if (airCostDisplay) airCostDisplay.textContent = formatCurrency(costAir);
+
+        if (costAero < costGas && costAero < costAir) {
+            aeroWinner?.classList.add("visible");
+        } else {
+            aeroWinner?.classList.remove("visible");
+        }
+
+        [gasCostDisplay, aeroCostDisplay, airCostDisplay].forEach((el) => {
+            el?.classList.add("animate-pulse");
+            setTimeout(() => el?.classList.remove("animate-pulse"), 500);
+        });
+    }
+
+    [m2Input, gasPriceInput, elecPriceInput, insulationInput].forEach((el) => {
+        el?.addEventListener("input", calculate);
+        el?.addEventListener("change", calculate);
+    });
+
+    calculate();
+</script>
