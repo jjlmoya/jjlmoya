@@ -86,5 +86,13 @@ export const financeSection: SectionData = {
             iconFg: "mdi:cash-fast",
             color: "#10b981",
         },
+        {
+            title: "Simulador Cuota Autónomos 2026",
+            description: "Calcula tu cuota mensual real basada en rendimientos netos con el nuevo sistema de tramos.",
+            href: "/utilidades/calculadora-cuota-autonomos-2026/",
+            iconBg: "mdi:account-tie",
+            iconFg: "mdi:calculator-variant",
+            color: "#10b981",
+        },
     ],
 };

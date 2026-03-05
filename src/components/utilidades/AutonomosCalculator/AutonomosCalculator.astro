@@ -1,0 +1,201 @@
+---
+import { Icon } from "astro-icon/components";
+import "./AutonomosCalculator.css";
+---
+
+<div class="autonomos-calculator-container">
+    <div class="calc-card fade-in">
+        <div class="input-grid">
+            <div class="input-group">
+                <label for="monthly-income">Ingresos Mensuales Brutos</label>
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        id="monthly-income"
+                        placeholder="Ej. 3000"
+                        min="0"
+                        value="3000"
+                    />
+                    <span class="input-unit">€</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="monthly-expenses">Gastos Mensuales Deducibles</label>
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        id="monthly-expenses"
+                        placeholder="Ej. 500"
+                        min="0"
+                        value="500"
+                    />
+                    <span class="input-unit">€</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="autonomo-type">Perfil de Autónomo</label>
+                <div class="input-wrapper">
+                    <select id="autonomo-type">
+                        <option value="standard">Autónomo Persona Física (7% deduc.)</option>
+                        <option value="societario">Autónomo Societario (3% deduc.)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="flat-rate">Tarifa Plana (Nuevo Alta)</label>
+                <div class="input-wrapper">
+                    <select id="flat-rate">
+                        <option value="no">No aplicada (Cuota Real)</option>
+                        <option value="yes">Sí, primer año (80€ mes)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="bracket-info" id="bracket-info">
+            <div class="bracket-title">
+                <span>Tu Tramo de Rendimientos Netos</span>
+                <span class="bracket-pill" id="bracket-label">Tramo 3</span>
+            </div>
+            <div class="slider-group">
+                <input type="range" id="income-slider" min="0" max="8000" step="50" value="3000" />
+                <p
+                    style="font-size: 0.875rem; color: #64748b; font-weight: 500; text-align: center;"
+                >
+                    Rendimiento Neto Mensual: <strong id="net-display">0 €</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="results-grid">
+            <div class="result-card highlight">
+                <span class="result-label">Cuota Seguridad Social</span>
+                <span class="result-value primary" id="val-cuota">0,00 €</span>
+                <span style="font-size: 0.65rem; color: #059669; font-weight: 700;"
+                    >PROYECCIÓN 2026 (MEI 0.9%)</span
+                >
+            </div>
+            <div class="result-card">
+                <span class="result-label">Base de Cotización</span>
+                <span class="result-value" id="val-base">0,00 €</span>
+            </div>
+            <div class="result-card">
+                <span class="result-label">Neto Real (Después de Cuota)</span>
+                <span class="result-value" id="val-net-after">0,00 €</span>
+            </div>
+        </div>
+
+        <div class="info-alert">
+            <Icon name="mdi:information-outline" size={24} />
+            <p>
+                <strong>Sistema RETA 2026:</strong> El cálculo incluye el rendimiento neto mensual con
+                la deducción de gastos genéricos (7% o 3%). La cuota mostrada incluye la cotización por
+                contingencias comunes, profesionales, cese de actividad, formación y el Mecanismo de
+                Equidad Intergeneracional (MEI) actualizado al 0.9% para 2026.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const incomeInput = document.getElementById("monthly-income") as HTMLInputElement | null;
+    const expenseInput = document.getElementById("monthly-expenses") as HTMLInputElement | null;
+    const typeSelect = document.getElementById("autonomo-type") as HTMLSelectElement | null;
+    const flatRateSelect = document.getElementById("flat-rate") as HTMLSelectElement | null;
+    const incomeSlider = document.getElementById("income-slider") as HTMLInputElement | null;
+
+    const cuotaDisplay = document.getElementById("val-cuota");
+    const baseDisplay = document.getElementById("val-base");
+    const netAfterDisplay = document.getElementById("val-net-after");
+    const netDisplay = document.getElementById("net-display");
+    const bracketLabel = document.getElementById("bracket-label");
+
+    const TRAMOS = [
+        { min: 0, max: 670, cuota: 200, label: "Tramo 1 (Reducido)" },
+        { min: 670, max: 900, cuota: 220, label: "Tramo 2 (Reducido)" },
+        { min: 900, max: 1166.7, cuota: 260, label: "Tramo 3 (Reducido)" },
+        { min: 1166.7, max: 1300, cuota: 291, label: "Tramo 1 (Base)" },
+        { min: 1300, max: 1500, cuota: 294, label: "Tramo 2 (Base)" },
+        { min: 1500, max: 1700, cuota: 294, label: "Tramo 3 (Base)" },
+        { min: 1700, max: 1850, cuota: 310, label: "Tramo 4 (Base)" },
+        { min: 1850, max: 2030, cuota: 315, label: "Tramo 5 (Base)" },
+        { min: 2030, max: 2330, cuota: 320, label: "Tramo 6 (Base)" },
+        { min: 2330, max: 2760, cuota: 330, label: "Tramo 7 (Base)" },
+        { min: 2760, max: 3190, cuota: 350, label: "Tramo 8 (Base)" },
+        { min: 3190, max: 3620, cuota: 370, label: "Tramo 9 (Base)" },
+        { min: 3620, max: 4050, cuota: 390, label: "Tramo 10 (Base)" },
+        { min: 4050, max: 6000, cuota: 445, label: "Tramo 11 (Base)" },
+        { min: 6000, max: 999999, cuota: 590, label: "Tramo 12 (Base)" },
+    ];
+
+    function formatCurrency(val: number): string {
+        return new Intl.NumberFormat("es-ES", {
+            style: "currency",
+            currency: "EUR",
+        }).format(val);
+    }
+
+    function calculate() {
+        if (!incomeInput || !expenseInput || !typeSelect || !flatRateSelect || !incomeSlider)
+            return;
+
+        const income = parseFloat(incomeInput.value) || 0;
+        const expenses = parseFloat(expenseInput.value) || 0;
+        const isSocietario = typeSelect.value === "societario";
+        const isFlatRate = flatRateSelect.value === "yes";
+
+        const marginProfit = income - expenses;
+        const genDeduction = isSocietario ? 0.03 : 0.07;
+        const rendimientoNeto = marginProfit * (1 - genDeduction);
+
+        if (incomeSlider) {
+            incomeSlider.value = Math.min(income, 8000).toString();
+        }
+
+        if (netDisplay) netDisplay.textContent = formatCurrency(Math.max(0, rendimientoNeto));
+
+        let cuota = 0;
+        let selectedTramo = TRAMOS[0];
+
+        if (isFlatRate) {
+            cuota = 80;
+            selectedTramo =
+                TRAMOS.find((t) => rendimientoNeto >= t.min && rendimientoNeto < t.max) ||
+                TRAMOS[0];
+        } else {
+            selectedTramo =
+                TRAMOS.find((t) => rendimientoNeto >= t.min && rendimientoNeto < t.max) ||
+                TRAMOS[TRAMOS.length - 1];
+            cuota = selectedTramo.cuota;
+
+            if (rendimientoNeto > 0) {
+                const meiExtra = selectedTramo.cuota * 0.01;
+                cuota += Math.round(meiExtra);
+            }
+        }
+
+        const baseCotizacion = cuota / 0.312;
+
+        if (cuotaDisplay) cuotaDisplay.textContent = formatCurrency(cuota);
+        if (baseDisplay) baseDisplay.textContent = formatCurrency(baseCotizacion);
+        if (netAfterDisplay)
+            netAfterDisplay.textContent = formatCurrency(Math.max(0, rendimientoNeto - cuota));
+        if (bracketLabel) bracketLabel.textContent = selectedTramo.label;
+    }
+
+    [incomeInput, expenseInput, typeSelect, flatRateSelect].forEach((el) => {
+        el?.addEventListener("input", calculate);
+    });
+
+    incomeSlider?.addEventListener("input", () => {
+        if (incomeInput && incomeSlider) {
+            incomeInput.value = incomeSlider.value;
+            calculate();
+        }
+    });
+
+    calculate();
+</script>
