@@ -1,0 +1,174 @@
+---
+import { Icon } from "astro-icon/components";
+import "./LateInterestCalculator.css";
+---
+
+<div class="late-interest-calculator-container">
+    <div class="calc-card fade-in">
+        <div class="input-grid">
+            <div class="input-group">
+                <label for="principal-amount">Importe Principal</label>
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        id="principal-amount"
+                        placeholder="Ej. 1000"
+                        min="0"
+                        value="1000"
+                        step="0.01"
+                    />
+                    <span class="input-unit">€</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="interest-type">Tipo de Interés</label>
+                <div class="input-wrapper">
+                    <select id="interest-type">
+                        <option value="legal">Interés Legal (3.25%)</option>
+                        <option value="demora" selected
+                            >Interés de Demora / Hacienda (4.0625%)</option
+                        >
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="start-date">Fecha de Inicio (Vencimiento)</label>
+                <div class="input-wrapper">
+                    <input type="date" id="start-date" value="2024-01-01" />
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="end-date">Fecha de Pago</label>
+                <div class="input-wrapper">
+                    <input type="date" id="end-date" value="2025-01-01" />
+                </div>
+            </div>
+        </div>
+
+        <div class="results-display" id="interest-results">
+            <div class="total-interest-box">
+                <span class="total-label">Intereses Acumulados</span>
+                <span class="total-value" id="val-total-interest">0,00 €</span>
+            </div>
+
+            <div class="breakdown-grid">
+                <div class="sub-result-card">
+                    <span class="sub-label">Días de Demora</span>
+                    <span class="sub-value" id="val-days">0 días</span>
+                </div>
+                <div class="sub-result-card">
+                    <span class="sub-label">Tipo Aplicado</span>
+                    <span class="sub-value" id="val-rate">0.00%</span>
+                </div>
+                <div class="sub-result-card">
+                    <span class="sub-label">Total a Pagar</span>
+                    <span class="sub-value" id="val-final-total">0,00 €</span>
+                </div>
+            </div>
+
+            <div class="info-banner">
+                <Icon name="mdi:alert-circle-outline" size={24} />
+                <p>
+                    <strong>Nota:</strong> Este cálculo utiliza los tipos vigentes en 2024-2026 (Legal:
+                    3.25%, Demora: 4.0625%). Si el periodo de demora abarca años anteriores con diferentes
+                    tipos, el cálculo real debería ser fraccionado por periodos.
+                </p>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button class="btn-primary" id="copy-report">
+                <Icon name="mdi:content-copy" size={20} />
+                Copiar Informe
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const principalInput = document.getElementById("principal-amount") as HTMLInputElement | null;
+    const typeSelect = document.getElementById("interest-type") as HTMLSelectElement | null;
+    const startInput = document.getElementById("start-date") as HTMLInputElement | null;
+    const endInput = document.getElementById("end-date") as HTMLInputElement | null;
+
+    const totalInterestDisplay = document.getElementById("val-total-interest");
+    const daysDisplay = document.getElementById("val-days");
+    const rateDisplay = document.getElementById("val-rate");
+    const finalTotalDisplay = document.getElementById("val-final-total");
+    const copyBtn = document.getElementById("copy-report");
+
+    const RATE_LEGAL = 3.25;
+    const RATE_DEMORA = 4.0625;
+
+    function formatCurrency(val: number): string {
+        return new Intl.NumberFormat("es-ES", {
+            style: "currency",
+            currency: "EUR",
+        }).format(val);
+    }
+
+    function calculate() {
+        if (!principalInput || !typeSelect || !startInput || !endInput) return;
+
+        const principal = parseFloat(principalInput.value) || 0;
+        const type = typeSelect.value;
+        const rate = type === "legal" ? RATE_LEGAL : RATE_DEMORA;
+
+        const start = new Date(startInput.value);
+        const end = new Date(endInput.value);
+
+        if (isNaN(start.getTime()) || isNaN(end.getTime()) || end < start) {
+            if (totalInterestDisplay) totalInterestDisplay.textContent = "0,00 €";
+            if (daysDisplay) daysDisplay.textContent = "0 días";
+            if (finalTotalDisplay) finalTotalDisplay.textContent = formatCurrency(principal);
+            return;
+        }
+
+        const diffTime = Math.abs(end.getTime() - start.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        const interest = (principal * diffDays * (rate / 100)) / 365;
+
+        if (totalInterestDisplay) totalInterestDisplay.textContent = formatCurrency(interest);
+        if (daysDisplay) daysDisplay.textContent = `${diffDays} días`;
+        if (rateDisplay) rateDisplay.textContent = `${rate}%`;
+        if (finalTotalDisplay) finalTotalDisplay.textContent = formatCurrency(principal + interest);
+
+        totalInterestDisplay?.classList.add("animate-pulse");
+        setTimeout(() => totalInterestDisplay?.classList.remove("animate-pulse"), 400);
+    }
+
+    [principalInput, typeSelect, startInput, endInput].forEach((el) => {
+        el?.addEventListener("input", calculate);
+        el?.addEventListener("change", calculate);
+    });
+
+    copyBtn?.addEventListener("click", () => {
+        const report = `
+INFORME DE CÁLCULO DE INTERESES
+--------------------------------
+Principal: ${formatCurrency(parseFloat(principalInput?.value || "0"))}
+Tipo: ${typeSelect?.options[typeSelect.selectedIndex].text}
+Periodo: ${startInput?.value} hasta ${endInput?.value}
+Días transcurridos: ${daysDisplay?.textContent}
+--------------------------------
+INTERESES DEVENGADOS: ${totalInterestDisplay?.textContent}
+TOTAL A LIQUIDAR: ${finalTotalDisplay?.textContent}
+
+Calculado en jjlmoya.es
+        `.trim();
+
+        navigator.clipboard.writeText(report);
+
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span style="color: #fff">¡Copiado!</span>';
+        setTimeout(() => {
+            copyBtn.innerHTML = originalHtml;
+        }, 2000);
+    });
+
+    calculate();
+</script>

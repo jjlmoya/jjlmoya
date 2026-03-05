@@ -94,5 +94,13 @@ export const financeSection: SectionData = {
             iconFg: "mdi:calculator-variant",
             color: "#10b981",
         },
+        {
+            title: "Intereses de Demora",
+            description: "No pagues de más. Calcula intereses legales y tributarios (Hacienda) actualizado para 2025/2026.",
+            href: "/utilidades/calculadora-intereses-demora/",
+            iconBg: "mdi:bank-outline",
+            iconFg: "mdi:cash-clock",
+            color: "#0ea5e9",
+        }
     ],
 };
