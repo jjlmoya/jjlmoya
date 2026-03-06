@@ -135,21 +135,5 @@ export const audiovisualSection: SectionData = {
             description: "Calcula el precio de tus publicaciones patrocinadas basado en seguidores, engagement y nicho.",
             color: "#3b82f6",
         },
-        {
-            href: "/utilidades/descargador-audio-youtube/",
-            iconBg: "mdi:youtube",
-            iconFg: "mdi:music-note",
-            title: "Descargador Audio YouTube",
-            description: "Convierte videos de YouTube en archivos MP3 de alta fidelidad al instante.",
-            color: "#ff0000",
-        },
-        {
-            href: "/utilidades/descargador-audio-instagram-reels/",
-            iconBg: "mdi:instagram",
-            iconFg: "mdi:music-note-outline",
-            title: "Descargador Audio Reels",
-            description: "Extrae el audio de los Reels de Instagram más virales en formato MP3.",
-            color: "#e1306c",
-        },
     ],
 };
