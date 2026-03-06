@@ -4,7 +4,7 @@ export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
 
-        const response = await fetch("https://cobalt-api.ayo.tf/", {
+        const response = await fetch("https://co.wuk.sh/api/json", {
             method: "POST",
             headers: {
                 "Accept": "application/json",

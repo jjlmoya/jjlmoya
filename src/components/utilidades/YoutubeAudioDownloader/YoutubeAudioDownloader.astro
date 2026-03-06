@@ -4,6 +4,44 @@ import "./YoutubeAudioDownloader.css";
 ---
 
 <section class="audio-downloader-dashboard animate-in">
+    <div id="legal-disclaimer" class="legal-disclaimer-overlay">
+        <div class="legal-disclaimer-modal">
+            <div class="disclaimer-header">
+                <Icon name="mdi:alert-circle" class="w-8 h-8" />
+                <h2>Aviso Legal Importante</h2>
+            </div>
+            <div class="disclaimer-content">
+                <h3>Términos de Servicio</h3>
+                <p>
+                    Esta herramienta permite descargar contenido de YouTube e Instagram. <strong>Al usar esta herramienta, aceptas que:</strong>
+                </p>
+                <ul>
+                    <li>Descargar contenido de YouTube e Instagram <strong>viola sus Términos de Servicio</strong></li>
+                    <li>Es <strong>tu responsabilidad</strong> cumplir con las leyes de copyright y derechos de autor de tu país</li>
+                    <li>Solo debes descargar contenido que <strong>tengas permiso para usar</strong> (contenido tuyo propio, Creative Commons, etc.)</li>
+                    <li>Nosotros <strong>no somos responsables</strong> del uso que hagas del contenido descargado</li>
+                    <li>Este servicio puede dejar de funcionar en cualquier momento</li>
+                </ul>
+
+                <h3>Recomendaciones</h3>
+                <ul>
+                    <li>Para música: usa YouTube Music, Spotify o plataformas oficiales</li>
+                    <li>Para videos: respeta el copyright del creador</li>
+                    <li>Si es contenido de terceros: pide permiso explícito</li>
+                </ul>
+            </div>
+            <div class="disclaimer-actions">
+                <label class="checkbox-group">
+                    <input type="checkbox" id="legal-accept-checkbox" />
+                    <span>Entiendo los riesgos y acepto la responsabilidad legal</span>
+                </label>
+                <button id="legal-accept-btn" class="accept-btn" disabled>
+                    Aceptar y Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="main-card">
         <div class="input-section">
             <div class="url-input-group">
@@ -91,6 +129,12 @@ import "./YoutubeAudioDownloader.css";
 <script>
     (() => {
         const API_URL = "/api/proxy/";
+        const LEGAL_STORAGE_KEY = "ytdl-legal-accepted";
+
+        // Legal disclaimer elements
+        const legalDisclaimer = document.getElementById("legal-disclaimer") as HTMLDivElement;
+        const legalAcceptCheckbox = document.getElementById("legal-accept-checkbox") as HTMLInputElement;
+        const legalAcceptBtn = document.getElementById("legal-accept-btn") as HTMLButtonElement;
 
         const urlInput = document.getElementById("audio-url-input") as HTMLInputElement;
         const pasteBtn = document.getElementById("paste-btn") as HTMLButtonElement;
@@ -124,9 +168,30 @@ import "./YoutubeAudioDownloader.css";
             !downloadLink ||
             !resetBtn ||
             !retryBtn ||
-            !resetErrorBtn
+            !resetErrorBtn ||
+            !legalDisclaimer ||
+            !legalAcceptCheckbox ||
+            !legalAcceptBtn
         )
             return;
+
+        // Check if user already accepted disclaimer
+        const hasAccepted = localStorage.getItem(LEGAL_STORAGE_KEY) === "true";
+        if (hasAccepted) {
+            legalDisclaimer.classList.add("hidden");
+        }
+
+        // Legal disclaimer handlers
+        legalAcceptCheckbox.addEventListener("change", () => {
+            legalAcceptBtn.disabled = !legalAcceptCheckbox.checked;
+        });
+
+        legalAcceptBtn.addEventListener("click", () => {
+            if (legalAcceptCheckbox.checked) {
+                localStorage.setItem(LEGAL_STORAGE_KEY, "true");
+                legalDisclaimer.classList.add("hidden");
+            }
+        });
 
         const qualityPills = document.querySelectorAll(".pill");
         let currentQuality = "max";
