@@ -1,0 +1,176 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface ProsConsItem {
+    pro: string;
+    con: string;
+}
+
+interface Props {
+    title?: string;
+    items: ProsConsItem[];
+    proTitle?: string;
+    conTitle?: string;
+}
+
+const { title, items, proTitle = "Ventajas", conTitle = "Desventajas" } = Astro.props;
+---
+
+<div class="seo-proscons-box">
+    {title && <h4 class="proscons-header-title">{title}</h4>}
+    <div class="proscons-grid">
+        <div class="pros-column">
+            <span class="column-title pro-text">
+                <Icon name="mdi:check-circle" class="title-icon" />
+                {proTitle}
+            </span>
+            <ul class="proscons-list">
+                {
+                    items.map((item) => (
+                        <li class="proscons-item">
+                            <Icon name="mdi:plus" class="item-icon pro-text" />
+                            <span>{item.pro}</span>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+        <div class="cons-column">
+            <span class="column-title con-text">
+                <Icon name="mdi:alert-circle" class="title-icon" />
+                {conTitle}
+            </span>
+            <ul class="proscons-list">
+                {
+                    items.map((item) => (
+                        <li class="proscons-item">
+                            <Icon name="mdi:minus" class="item-icon con-text" />
+                            <span>{item.con}</span>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    .seo-proscons-box {
+        margin: 3.5rem 0;
+        background: #ffffff;
+        border: 1px solid #eef2f6;
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    }
+
+    .proscons-header-title {
+        text-align: center;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 2.5rem;
+        letter-spacing: -0.01em;
+    }
+
+    .proscons-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        position: relative;
+    }
+
+    .proscons-grid::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: #eef2f6;
+        transform: translateX(-50%);
+    }
+
+    .column-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1.5rem;
+    }
+
+    .pro-text {
+        color: #10b981;
+    }
+    .con-text {
+        color: #f43f5e;
+    }
+
+    .title-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .proscons-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .proscons-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 0.95rem;
+        color: #475569;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .item-icon {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .seo-proscons-box {
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .proscons-header-title {
+            color: #f1f5f9;
+        }
+        .proscons-grid::after {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .proscons-item {
+            color: #cbd5e1;
+        }
+        .pro-text {
+            color: #34d399;
+        }
+        .con-text {
+            color: #fb7185;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .proscons-grid {
+            grid-template-columns: 1fr;
+        }
+        .proscons-grid::after {
+            display: none;
+        }
+        .proscons-box {
+            padding: 1.5rem;
+        }
+    }
+</style>

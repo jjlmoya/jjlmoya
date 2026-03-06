@@ -1,0 +1,173 @@
+---
+interface ComparativeItem {
+    title: string;
+    description: string;
+    icon?: string;
+    highlight?: boolean;
+    points?: string[];
+}
+
+interface Props {
+    items: ComparativeItem[];
+    columns?: 2 | 3;
+}
+
+const { items, columns = 2 } = Astro.props;
+import { Icon } from "astro-icon/components";
+---
+
+<div class={`seo-comparative grid-cols-${columns}`}>
+    {
+        items.map((item) => (
+            <div class={`comparative-card ${item.highlight ? "is-highlighted" : ""}`}>
+                {item.highlight && <div class="highlight-badge">Recomendado</div>}
+                <div class="card-header">
+                    {item.icon && <Icon name={item.icon} class="header-icon" />}
+                    <h4 class="card-title">{item.title}</h4>
+                </div>
+                <p class="card-desc">{item.description}</p>
+                {item.points && (
+                    <ul class="points-list">
+                        {item.points.map((point) => (
+                            <li class="point-item">
+                                <Icon name="mdi:check-circle-outline" class="point-icon" />
+                                <span>{point}</span>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        ))
+    }
+</div>
+
+<style>
+    .seo-comparative {
+        display: grid;
+        gap: 1.5rem;
+        margin: 2.5rem 0;
+    }
+
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .comparative-card {
+        position: relative;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+    }
+
+    .comparative-card.is-highlighted {
+        border-color: #6366f1;
+        box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15);
+        transform: scale(1.02);
+    }
+
+    .highlight-badge {
+        position: absolute;
+        top: -12px;
+        right: 24px;
+        background: #6366f1;
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 4px 12px;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 1rem;
+    }
+
+    .header-icon {
+        width: 24px;
+        height: 24px;
+        color: #6366f1;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0;
+    }
+
+    .card-desc {
+        font-size: 0.95rem;
+        color: #64748b;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+    }
+
+    .points-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .point-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.9rem;
+        color: #475569;
+        font-weight: 500;
+    }
+
+    .point-icon {
+        width: 18px;
+        height: 18px;
+        color: #10b981;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    @media (max-width: 768px) {
+        .grid-cols-2,
+        .grid-cols-3 {
+            grid-template-columns: 1fr;
+        }
+        .comparative-card.is-highlighted {
+            transform: none;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .comparative-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .card-title {
+            color: #f1f5f9;
+        }
+        .card-desc {
+            color: #94a3b8;
+        }
+        .point-item {
+            color: #cbd5e1;
+        }
+        .is-highlighted {
+            background: rgba(99, 102, 241, 0.05);
+        }
+    }
+</style>

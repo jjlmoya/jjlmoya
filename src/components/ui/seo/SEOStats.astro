@@ -1,0 +1,164 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface StatItem {
+    value: string;
+    label: string;
+    icon?: string;
+    trend?: {
+        value: string;
+        positive: boolean;
+    };
+}
+
+interface Props {
+    stats: StatItem[];
+    columns?: 2 | 3 | 4;
+}
+
+const { stats, columns = 3 } = Astro.props;
+---
+
+<div class={`seo-stats-grid cols-${columns}`}>
+    {
+        stats.map((stat) => (
+            <div class="stat-card">
+                <div class="stat-header">
+                    {stat.icon && <Icon name={stat.icon} class="stat-icon" />}
+                    {stat.trend && (
+                        <span
+                            class={`stat-trend ${stat.trend.positive ? "is-positive" : "is-negative"}`}
+                        >
+                            <Icon
+                                name={stat.trend.positive ? "mdi:trending-up" : "mdi:trending-down"}
+                            />
+                            {stat.trend.value}
+                        </span>
+                    )}
+                </div>
+                <div class="stat-main">
+                    <span class="stat-value">{stat.value}</span>
+                    <span class="stat-label">{stat.label}</span>
+                </div>
+            </div>
+        ))
+    }
+</div>
+
+<style>
+    .seo-stats-grid {
+        display: grid;
+        gap: 1.5rem;
+        margin: 2.5rem 0;
+    }
+
+    .cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border: 1px solid #eef2f6;
+        border-radius: 20px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.05);
+        border-color: #cbd5e1;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stat-icon {
+        width: 24px;
+        height: 24px;
+        color: #6366f1;
+    }
+
+    .stat-trend {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 100px;
+    }
+
+    .is-positive {
+        background: #f0fdf4;
+        color: #16a34a;
+    }
+    .is-negative {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .stat-main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-value {
+        font-size: 2.25rem;
+        font-weight: 900;
+        color: #0f172a;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .stat-card {
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .stat-value {
+            color: #f1f5f9;
+        }
+        .stat-label {
+            color: #94a3b8;
+        }
+        .is-positive {
+            background: rgba(22, 163, 74, 0.1);
+        }
+        .is-negative {
+            background: rgba(220, 38, 38, 0.1);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .seo-stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 480px) {
+        .seo-stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

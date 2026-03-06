@@ -1,17 +1,27 @@
 ---
+import { Icon } from "astro-icon/components";
+
 interface Props {
     items?: string[];
+    icon?: string;
 }
 
-const { items } = Astro.props;
+const { items, icon = "mdi:chevron-right" } = Astro.props;
 ---
 
-<ul class="seo-list">
+<ul class="seo-list-premium">
     {
         items ? (
             items.map((item) => (
-                <li>
-                    <Fragment set:html={item} />
+                <li class="list-card">
+                    <div class="marker-wrapper">
+                        <div class="marker-box">
+                            <Icon name={icon} class="marker-svg" />
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <Fragment set:html={item} />
+                    </div>
                 </li>
             ))
         ) : (
@@ -21,26 +31,122 @@ const { items } = Astro.props;
 </ul>
 
 <style>
-    .seo-list {
+    .seo-list-premium {
         list-style: none;
-        padding-left: 0;
-        margin-bottom: 2rem;
+        padding: 0;
+        margin: 3rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
-    .seo-list :global(li) {
-        position: relative;
-        padding-left: 1.5rem;
-        margin-bottom: 0.75rem;
-        line-height: 1.6;
+    .list-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        padding: 1.5rem 1.75rem;
+        background: #ffffff;
+        border: 1px solid #f1f5f9;
+        border-radius: 20px;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.02),
+            0 2px 4px -2px rgba(0, 0, 0, 0.02);
     }
 
-    .seo-list :global(li::before) {
-        content: "•";
-        color: #3b82f6;
-        position: absolute;
-        left: 0;
-        font-size: 1.5rem;
-        line-height: 1;
-        top: -2px;
+    .list-card:hover {
+        border-color: #cbd5e1;
+        transform: scale(1.01) translateX(8px);
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.05),
+            0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    }
+
+    .marker-wrapper {
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+
+    .marker-box {
+        width: 32px;
+        height: 32px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6366f1;
+        transition: all 0.3s ease;
+    }
+
+    .list-card:hover .marker-box {
+        background: #6366f1;
+        color: #ffffff;
+        transform: rotate(90deg);
+        border-color: #6366f1;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .marker-svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .card-content {
+        font-size: 1.05rem;
+        color: #475569;
+        line-height: 1.7;
+        font-weight: 500;
+    }
+
+    .card-content :global(strong) {
+        color: #0f172a;
+        font-weight: 800;
+        display: block;
+        margin-bottom: 4px;
+        font-size: 1.1rem;
+        letter-spacing: -0.01em;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .list-card {
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .list-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .marker-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #818cf8;
+        }
+        .list-card:hover .marker-box {
+            background: #6366f1;
+            color: #ffffff;
+            border-color: #6366f1;
+        }
+        .card-content {
+            color: #94a3b8;
+        }
+        .card-content :global(strong) {
+            color: #f1f5f9;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .list-card {
+            padding: 1.25rem;
+            gap: 1rem;
+        }
+        .list-card:hover {
+            transform: translateX(4px);
+        }
+        .marker-box {
+            width: 28px;
+            height: 28px;
+        }
     }
 </style>

@@ -127,5 +127,13 @@ export const audiovisualSection: SectionData = {
                 "Diseña collages profesionales con múltiples diseños, bordes personalizables y descarga en alta resolución.",
             color: "#a855f7",
         },
+        {
+            href: "/utilidades/calculadora-valor-cuenta-redes-sociales/",
+            iconBg: "mdi:currency-usd",
+            iconFg: "mdi:instagram",
+            title: "Calculadora Valor de Cuenta",
+            description: "Calcula el precio de tus publicaciones patrocinadas basado en seguidores, engagement y nicho.",
+            color: "#3b82f6",
+        },
     ],
 };
