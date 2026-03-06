@@ -4,13 +4,11 @@ export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
 
-        const response = await fetch("https://cobalt.tools/api/json", {
+        const response = await fetch("https://cobalt-api.ayo.tf/", {
             method: "POST",
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Origin": "https://cobalt.tools",
-                "Referer": "https://cobalt.tools/",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             },
             body: JSON.stringify(body)
