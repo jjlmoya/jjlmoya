@@ -103,6 +103,14 @@ export const financeSection: SectionData = {
             color: "#0ea5e9",
         },
         {
+            title: "Conversor IBAN a BIC",
+            description: "Valida cualquier cuenta y obtén el código SWIFT necesario para transferencias internacionales.",
+            href: "/utilidades/conversor-iban-bic-swift/",
+            iconBg: "mdi:bank-transfer",
+            iconFg: "mdi:bank-outline",
+            color: "#3b82f6",
+        },
+        {
             title: "Subida Alquiler (IPC)",
             description: "Calcula la actualización de tu renta con el límite del 3% de la Ley de Vivienda o el IPC real.",
             href: "/utilidades/calculadora-subida-alquiler-ipc/",

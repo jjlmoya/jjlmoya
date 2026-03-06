@@ -1,0 +1,222 @@
+---
+import { Icon } from "astro-icon/components";
+import "./IbanToBicConverter.css";
+---
+
+<div class="iban-converter-container">
+    <div class="converter-card">
+        <header class="converter-header">
+            <h3>Conversor IBAN a BIC / SWIFT</h3>
+            <p>Calcula el código BIC de cualquier cuenta bancaria española de forma instantánea.</p>
+        </header>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="iban-input">
+                    <Icon name="mdi:bank-outline" />
+                    Introduce tu IBAN
+                </label>
+                <div class="iban-input-wrapper">
+                    <input
+                        type="text"
+                        id="iban-input"
+                        placeholder="ES00 0000 0000 0000 0000 0000"
+                        autocomplete="off"
+                        maxlength="34"
+                    />
+                    <Icon name="mdi:credit-card-chip-outline" class="input-icon" />
+                </div>
+            </div>
+
+            <button id="btn-convert" class="btn-convert">
+                <Icon name="mdi:sync" />
+                Obtener Código BIC
+            </button>
+        </div>
+
+        <div id="results-area" class="results-section hidden">
+            <div class="result-card">
+                <span class="result-label">Código BIC / SWIFT</span>
+                <div class="result-value" id="res-bic">-</div>
+                <button class="btn-copy-result" data-copy="res-bic" title="Copiar BIC">
+                    <Icon name="mdi:content-copy" />
+                </button>
+            </div>
+
+            <div class="result-card">
+                <span class="result-label">País / Formato</span>
+                <div class="result-value" id="res-country">-</div>
+            </div>
+
+            <div class="bank-info" id="bank-info-box">
+                <div class="bank-logo-placeholder">
+                    <Icon name="mdi:bank-check" />
+                </div>
+                <div class="bank-details">
+                    <div class="bank-name-label">Entidad Bancaria</div>
+                    <div class="bank-name-value" id="res-bank-name">-</div>
+                </div>
+            </div>
+
+            <div id="iban-error" class="error-message hidden">
+                <Icon name="mdi:alert-circle" />
+                <span>El IBAN introducido no parece ser válido. Revisa los dígitos.</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const SPANISH_BANKS: Record<string, { name: string; bic: string }> = {
+        "0049": { name: "Banco Santander", bic: "BSCH ES MM XXX" },
+        "0182": { name: "BBVA (Banco Bilbao Vizcaya Argentaria)", bic: "BBVA ES MM XXX" },
+        "2100": { name: "CaixaBank", bic: "CAIX ES BB XXX" },
+        "0081": { name: "Banco Sabadell", bic: "BSAB ES BB XXX" },
+        "0128": { name: "Bankinter", bic: "BKNM ES MM XXX" },
+        "1465": { name: "ING Bank N.V., sucursal en España", bic: "INGD ES MM XXX" },
+        "2038": { name: "Bankia (absorbido por CaixaBank)", bic: "CAIX ES BB XXX" },
+        "0138": { name: "Abanca Corporación Bancaria", bic: "NCGA ES MM XXX" },
+        "2080": { name: "Abanca (Cajas Rurales)", bic: "NCGA ES MM XXX" },
+        "2103": { name: "Unicaja Banco", bic: "UNCA ES MM XXX" },
+        "2048": { name: "Liberbank (absorbido por Unicaja)", bic: "UNCA ES MM XXX" },
+        "2095": { name: "Kutxabank", bic: "KUTX ES BB XXX" },
+        "3058": { name: "Cajamar Caja Rural", bic: "CAJM ES MM XXX" },
+        "0239": { name: "EVO Banco (Grupo Bankinter)", bic: "EVOB ES MM XXX" },
+        "0019": { name: "Deutsche Bank SAE", bic: "DEUT ES MM XXX" },
+        "0075": { name: "Banco Popular (absorbido por Santander)", bic: "BSCH ES MM XXX" },
+        "0030": { name: "Banco de España", bic: "BESP ES MM XXX" },
+        "0216": { name: "Targobank", bic: "TARG ES MM XXX" },
+        "0240": { name: "Banco Caminos", bic: "CAMI ES MM XXX" },
+        "1491": { name: "Triodos Bank N.V. S.E.", bic: "TRID ES MM XXX" },
+        "3190": { name: "Caja Rural de Teruel", bic: "CRTE ES 22 XXX" },
+        "3183": { name: "Caja Rural de Navarra", bic: "CRNA ES MM XXX" },
+        "3017": { name: "Caja Rural de Soria", bic: "CRSO ES 22 XXX" },
+        "2085": { name: "Ibercaja Banco", bic: "CAJA ES MM XXX" },
+        "0061": { name: "Banca March", bic: "BAMR ES MM XXX" },
+        "0003": { name: "Banco de depósitos", bic: "BDEP ES MM XXX" },
+        "0198": { name: "Banco Cooperativo Español", bic: "BCES ES MM XXX" },
+        "0234": { name: "Banco de Sabadell (Bex)", bic: "BSAB ES BB XXX" },
+        "1544": { name: "Qonto S.A.", bic: "QNTO FR PP XXX" },
+        "1548": { name: "Revolut Bank UAB", bic: "REVO LT 22" },
+    };
+
+    function validateIBAN(iban: string): boolean {
+        const cleanIban = iban.toUpperCase().replace(/\s+/g, "");
+        if (!/^[A-Z]{2}[0-9]{2}[A-Z0-9]{4,30}$/.test(cleanIban)) return false;
+
+        const rearranged = cleanIban.slice(4) + cleanIban.slice(0, 4);
+        const numeric = rearranged
+            .split("")
+            .map((c) => {
+                const code = c.charCodeAt(0);
+                return code >= 65 && code <= 90 ? (code - 55).toString() : c;
+            })
+            .join("");
+
+        let remainder = 0;
+        for (let i = 0; i < numeric.length; i += 7) {
+            const chunk = remainder.toString() + numeric.substring(i, i + 7);
+            remainder = parseInt(chunk, 10) % 97;
+        }
+
+        return remainder === 1;
+    }
+
+    function getBICFromIBAN(iban: string) {
+        const cleanIban = iban.toUpperCase().replace(/\s+/g, "");
+        const country = cleanIban.slice(0, 2);
+
+        if (country === "ES") {
+            const bankCode = cleanIban.slice(4, 8);
+            return SPANISH_BANKS[bankCode] || null;
+        }
+
+        return null;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById("iban-input") as HTMLInputElement;
+        const btn = document.getElementById("btn-convert");
+        const resultsArea = document.getElementById("results-area");
+        const resBic = document.getElementById("res-bic");
+        const resCountry = document.getElementById("res-country");
+        const resBank = document.getElementById("res-bank-name");
+        const errorMsg = document.getElementById("iban-error");
+        const bankInfoBox = document.getElementById("bank-info-box");
+
+        input?.addEventListener("input", (e) => {
+            const value = (e.target as HTMLInputElement).value
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, "");
+            let formatted = "";
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) formatted += " ";
+                formatted += value[i];
+            }
+            (e.target as HTMLInputElement).value = formatted;
+        });
+        input?.addEventListener("input", () => {
+            errorMsg?.classList.add("hidden");
+            if (input.value.length === 0) {
+                resultsArea?.classList.add("hidden");
+            }
+        });
+
+        const handleCalculate = () => {
+            const val = input?.value || "";
+            if (val.length === 0) {
+                resultsArea?.classList.add("hidden");
+                return;
+            }
+
+            const isValid = validateIBAN(val);
+            resultsArea?.classList.remove("hidden");
+
+            if (!isValid) {
+                errorMsg?.classList.remove("hidden");
+                bankInfoBox?.classList.add("hidden");
+                resBic!.innerText = "-";
+                resCountry!.innerText = "Inválido";
+                resBank!.innerText = "IBAN No Válido";
+                return;
+            }
+
+            errorMsg?.classList.add("hidden");
+            bankInfoBox?.classList.remove("hidden");
+
+            const cleanIban = val.replace(/\s+/g, "");
+            const countryCode = cleanIban.slice(0, 2);
+            resCountry!.innerText = `${countryCode} (Formato OK)`;
+
+            const bankData = getBICFromIBAN(val);
+            if (bankData) {
+                resBic!.innerText = bankData.bic;
+                resBank!.innerText = bankData.name;
+            } else {
+                resBic!.innerText = "BIC Desconocido";
+                resBank!.innerText =
+                    countryCode !== "ES"
+                        ? "Banco fuera de España (Datos limitados)"
+                        : "Entidad no identificada";
+            }
+        };
+
+        btn?.addEventListener("click", handleCalculate);
+        input?.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") handleCalculate();
+        });
+        document.querySelectorAll(".btn-copy-result").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const targetId = btn.getAttribute("data-copy");
+                const text = document.getElementById(targetId!)?.innerText;
+                if (text && text !== "-") {
+                    navigator.clipboard.writeText(text);
+                    const originalIcon = btn.innerHTML;
+                    btn.innerHTML =
+                        '<svg style="width:1.2rem;height:1.2rem;color:#16a34a" viewbox="0 0 24 24"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg>';
+                    setTimeout(() => (btn.innerHTML = originalIcon), 2000);
+                }
+            });
+        });
+    });
+</script>
