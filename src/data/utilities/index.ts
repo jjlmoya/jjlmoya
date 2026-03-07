@@ -19,6 +19,7 @@ import { bikeSection } from "./bike";
 import { scienceSection } from "./science";
 import { audiovisualSection } from "./audiovisual";
 import { textileSection } from "./textiles";
+import { converterSection } from "./converters";
 
 export const sections: SectionData[] = [
     cookingSection,
@@ -39,6 +40,7 @@ export const sections: SectionData[] = [
     bikeSection,
     scienceSection,
     audiovisualSection,
+    converterSection,
 ];
 
 export type { SectionData, UtilityItem } from "./types";

@@ -1,0 +1,73 @@
+import type { SectionData } from "./types";
+
+export const converterSection: SectionData = {
+    title: "Convertidores de Imagen",
+    icon: "mdi:image-sync",
+    theme: "indigo",
+    utilities: [
+        {
+            href: "/utilidades/convertidor-png-a-jpg/",
+            iconBg: "mdi:file-image",
+            iconFg: "mdi:file-export",
+            title: "PNG a JPG",
+            description: "Convierte imágenes PNG a formato JPG rápidamente desde tu navegador.",
+            color: "#6366f1",
+        },
+        {
+            href: "/utilidades/convertidor-jpg-a-png/",
+            iconBg: "mdi:file-image",
+            iconFg: "mdi:file-export",
+            title: "JPG a PNG",
+            description: "Transforma tus fotos JPG a PNG manteniendo la máxima calidad.",
+            color: "#4f46e5",
+        },
+        {
+            href: "/utilidades/convertidor-webp-a-png/",
+            iconBg: "mdi:file-image",
+            iconFg: "mdi:file-export",
+            title: "WebP a PNG",
+            description: "Convierte archivos WebP modernos a formato PNG compatible con todo.",
+            color: "#4338ca",
+        },
+        {
+            href: "/utilidades/convertidor-webp-a-jpg/",
+            iconBg: "mdi:file-image",
+            iconFg: "mdi:file-export",
+            title: "WebP a JPG",
+            description: "Pasa tus imágenes WebP a JPG de forma sencilla y gratuita.",
+            color: "#3730a3",
+        },
+        {
+            href: "/utilidades/convertidor-png-a-webp/",
+            iconBg: "mdi:file-image",
+            iconFg: "mdi:file-export",
+            title: "PNG a WebP",
+            description: "Optimiza tus PNG convirtiéndolos al formato eficiente WebP.",
+            color: "#312e81",
+        },
+        {
+            href: "/utilidades/convertidor-jpg-a-webp/",
+            iconBg: "mdi:file-image",
+            iconFg: "mdi:file-export",
+            title: "JPG a WebP",
+            description: "Convierte tus fotos JPG a WebP para mejorar la velocidad de carga.",
+            color: "#1e1b4b",
+        },
+        {
+            href: "/utilidades/convertidor-svg-a-png/",
+            iconBg: "mdi:svg",
+            iconFg: "mdi:file-export",
+            title: "SVG a PNG",
+            description: "Rasteriza tus vectores SVG a imágenes PNG en alta resolución.",
+            color: "#6366f1",
+        },
+        {
+            href: "/utilidades/convertidor-svg-a-jpg/",
+            iconBg: "mdi:svg",
+            iconFg: "mdi:file-export",
+            title: "SVG a JPG",
+            description: "Convierte gráficos vectoriales SVG a formato JPG fácilmente.",
+            color: "#4f46e5",
+        },
+    ],
+};

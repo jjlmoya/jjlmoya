@@ -1,0 +1,226 @@
+---
+import { Icon } from "astro-icon/components";
+import "./ImageConverter.css";
+
+interface Props {
+    from: string;
+    to: string;
+}
+
+const { from, to } = Astro.props;
+
+const formatMap: Record<string, string> = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    webp: "image/webp",
+    svg: "image/svg+xml",
+};
+
+const targetFormat = formatMap[(to || "png").toLowerCase()] || "image/png";
+const acceptInput = (from || "jpg") === "svg" ? ".svg" : "image/*";
+---
+
+<div class="image-converter-dashboard animate-in">
+    <div
+        id="converter-drop-zone"
+        class="drop-zone"
+        data-from={from}
+        data-to={to}
+        data-target={targetFormat}
+    >
+        <div class="upload-icon">
+            <Icon name="mdi:image-sync" size={64} />
+        </div>
+        <div class="upload-text">
+            <span>Arrastra aquí tus archivos {(from || "jpg").toUpperCase()}</span>
+        </div>
+        <p class="upload-subtext">Para convertirlos a {(to || "png").toUpperCase()} al instante</p>
+        <button class="upload-btn">Seleccionar archivos</button>
+        <input type="file" id="converter-input" accept={acceptInput} multiple class="hidden" />
+    </div>
+
+    <div id="converter-list-container" class="converter-file-list hidden">
+        <div
+            class="list-summary"
+            style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; padding: 0 1rem;"
+        >
+            <h3 style="font-weight: 700;">Archivos procesados</h3>
+            <button
+                id="download-zip"
+                class="upload-btn hidden"
+                style="background:var(--brand-primary, #6366f1); padding: 0.5rem 1.25rem; font-size: 0.85rem;"
+            >
+                <Icon name="mdi:zip-box" /> Descargar Todo (.zip)
+            </button>
+        </div>
+        <div id="converter-items"></div>
+    </div>
+</div>
+
+<template id="converter-item-template">
+    <div class="converter-item">
+        <div class="item-preview">
+            <div class="thumb-box">
+                <img src="" alt="Thumbnail" />
+            </div>
+            <div class="item-info">
+                <span class="item-name"></span>
+                <span class="item-size"></span>
+            </div>
+        </div>
+        <div class="item-status">
+            <Icon name="mdi:arrow-right-thick" />
+        </div>
+        <div class="item-actions">
+            <span class="status-badge">Pendiente</span>
+            <a href="#" download class="dl-btn hidden" title="Descargar">
+                <Icon name="mdi:download" size={20} />
+            </a>
+            <span class="final-size" style="font-size: 0.85rem; font-weight: 600;"></span>
+        </div>
+    </div>
+</template>
+
+<script>
+    import {
+        generateId,
+        formatBytes,
+        processConversion,
+        processSvgToRaster,
+    } from "./logic/converter";
+    import JSZip from "jszip";
+
+    const dropZone = document.getElementById("converter-drop-zone");
+    const fileInput = document.getElementById("converter-input") as HTMLInputElement;
+    const container = document.getElementById("converter-list-container");
+    const itemsList = document.getElementById("converter-items");
+    const template = document.getElementById("converter-item-template") as HTMLTemplateElement;
+    const zipBtn = document.getElementById("download-zip") as HTMLButtonElement;
+
+    const fromExt = dropZone?.dataset.from || "";
+    const toExt = dropZone?.dataset.to || "";
+    const targetMime = dropZone?.dataset.target || "image/png";
+
+    const queue = new Map();
+
+    async function handleFiles(files: FileList | File[]) {
+        if (!files.length) return;
+        container?.classList.remove("hidden");
+
+        const newItems = [];
+        for (const file of files) {
+            const id = generateId();
+            const item = {
+                id,
+                file,
+                originalSize: file.size,
+                newSize: 0,
+                convertedDataUrl: "",
+                targetFormat: targetMime,
+                status: "processing",
+                originalWidth: 0,
+                originalHeight: 0,
+            };
+            queue.set(id, item);
+            newItems.push(item);
+        }
+
+        renderItems(newItems);
+
+        for (const item of newItems) {
+            if (fromExt === "svg") {
+                await processSvgToRaster(item as any, updateUI);
+            } else {
+                await processConversion(item as any, updateUI);
+            }
+        }
+
+        checkZipAvailability();
+    }
+
+    function renderItems(items: any[]) {
+        items.forEach((item) => {
+            const clone = template.content.cloneNode(true) as DocumentFragment;
+            const div = clone.querySelector(".converter-item") as HTMLElement;
+            div.dataset.id = item.id;
+
+            div.querySelector(".item-name")!.textContent = item.file.name;
+            div.querySelector(".item-size")!.textContent = formatBytes(item.originalSize);
+
+            itemsList?.prepend(div);
+        });
+    }
+
+    function updateUI(item: any, src: string) {
+        const div = itemsList?.querySelector(`[data-id="${item.id}"]`);
+        if (!div) return;
+
+        const img = div.querySelector(".thumb-box img") as HTMLImageElement;
+        img.src = src;
+
+        const badge = div.querySelector(".status-badge") as HTMLElement;
+        const dl = div.querySelector(".dl-btn") as HTMLAnchorElement;
+        const finalSize = div.querySelector(".final-size") as HTMLElement;
+
+        if (item.status === "completed") {
+            badge.textContent = (toExt || "png").toUpperCase();
+            badge.className = "status-badge completed";
+            dl.classList.remove("hidden");
+            dl.href = item.convertedDataUrl;
+
+            const base =
+                item.file.name.substring(0, item.file.name.lastIndexOf(".")) || item.file.name;
+            dl.download = `${base}.${toExt || "png"}`;
+
+            finalSize.textContent = formatBytes(item.newSize);
+        } else if (item.status === "error") {
+            badge.textContent = "Error";
+            badge.className = "status-badge error";
+        }
+    }
+
+    function checkZipAvailability() {
+        const completed = Array.from(queue.values()).filter((i) => i.status === "completed");
+        if (completed.length >= 2) {
+            zipBtn?.classList.remove("hidden");
+        }
+    }
+
+    dropZone?.addEventListener("click", () => fileInput?.click());
+    dropZone?.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+    });
+    dropZone?.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+    dropZone?.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        if (e.dataTransfer?.files) handleFiles(e.dataTransfer.files);
+    });
+    fileInput?.addEventListener("change", (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files) handleFiles(target.files);
+    });
+
+    zipBtn?.addEventListener("click", async () => {
+        const zip = new JSZip();
+        queue.forEach((item) => {
+            if (item.status === "completed") {
+                const base =
+                    item.file.name.substring(0, item.file.name.lastIndexOf(".")) || item.file.name;
+                const binary = atob(item.convertedDataUrl.split(",")[1]);
+                const array = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) array[i] = binary.charCodeAt(i);
+                zip.file(`${base}.${toExt || "png"}`, array);
+            }
+        });
+
+        const content = await zip.generateAsync({ type: "blob" });
+        const url = URL.createObjectURL(content);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `imagenes_${fromExt || "jpg"}_a_${toExt || "png"}.zip`;
+        a.click();
+    });
+</script>
