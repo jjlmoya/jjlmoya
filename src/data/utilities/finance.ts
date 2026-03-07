@@ -6,6 +6,14 @@ export const financeSection: SectionData = {
     theme: "emerald",
     utilities: [
         {
+            title: "Jubilación Anticipada",
+            description: "¿Cuándo puedes dejar de trabajar? Calcula tu edad legal y el recorte en tu pensión.",
+            href: "/utilidades/simulador-jubilacion-anticipada/",
+            iconBg: "mdi:island",
+            iconFg: "mdi:calculator-variant",
+            color: "#10b981",
+        },
+        {
             title: "Interés Compuesto",
             description: "La octava maravilla del mundo. Visualiza el poder de la reinversión.",
             href: "/utilidades/interes-compuesto/",
