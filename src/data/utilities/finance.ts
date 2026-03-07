@@ -117,6 +117,14 @@ export const financeSection: SectionData = {
             iconBg: "mdi:home-city-outline",
             iconFg: "mdi:trending-up",
             color: "#10b981",
+        },
+        {
+            title: "Tasas Judiciales",
+            description: "Calcula el importe del Modelo 696 para procesos civiles, contenciosos y sociales en España.",
+            href: "/utilidades/calculadora-tasas-judiciales/",
+            iconBg: "mdi:gavel",
+            iconFg: "mdi:calculator-variant",
+            color: "#3b82f6",
         }
     ],
 };
