@@ -5,6 +5,7 @@ interface ComparativeItem {
     icon?: string;
     highlight?: boolean;
     points?: string[];
+    pointIcon?: string;
 }
 
 interface Props {
@@ -30,7 +31,16 @@ import { Icon } from "astro-icon/components";
                     <ul class="points-list">
                         {item.points.map((point) => (
                             <li class="point-item">
-                                <Icon name="mdi:check-circle-outline" class="point-icon" />
+                                <Icon
+                                    name={item.pointIcon || "mdi:check-circle-outline"}
+                                    class={`point-icon ${
+                                        item.pointIcon?.includes("alert") ||
+                                        item.pointIcon?.includes("minus") ||
+                                        item.pointIcon?.includes("close")
+                                            ? "is-negative"
+                                            : ""
+                                    }`}
+                                />
                                 <span>{point}</span>
                             </li>
                         ))}
@@ -140,6 +150,10 @@ import { Icon } from "astro-icon/components";
         color: #10b981;
         flex-shrink: 0;
         margin-top: 2px;
+    }
+
+    .point-icon.is-negative {
+        color: #f43f5e;
     }
 
     @media (max-width: 768px) {

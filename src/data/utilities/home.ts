@@ -45,5 +45,13 @@ export const homeSection: SectionData = {
             description: "Compara el consumo anual y ahorro entre Gas, Aerotermia y Bomba de Calor.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/calculadora-ahorro-led/",
+            iconBg: "mdi:lightbulb-on",
+            iconFg: "mdi:cash-multiple",
+            title: "Calculadora Ahorro LED",
+            description: "¿Cuánto ahorras si cambias tus bombillas a LED? Calcula euros y kWh.",
+            color: "#f59e0b",
+        },
     ],
 };
