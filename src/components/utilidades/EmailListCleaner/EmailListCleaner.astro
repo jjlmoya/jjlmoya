@@ -1,0 +1,252 @@
+---
+import "./EmailListCleaner.css";
+---
+
+<div class="email-cleaner-container">
+    <div class="cleaner-card">
+        <div class="input-section">
+            <div class="label-header">
+                <label for="emailsInput">Lista de correos electrónicos</label>
+                <div id="inputCounter" class="counter-badge">0 registrados</div>
+            </div>
+            <div class="textarea-wrapper">
+                <textarea
+                    id="emailsInput"
+                    class="email-textarea"
+                    placeholder="Pega aquí tu lista de emails (separados por líneas, comas o espacios)..."
+                    spellcheck="false"></textarea>
+            </div>
+
+            <div class="controls-row">
+                <div class="main-actions">
+                    <button id="cleanBtn" class="btn btn-primary">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path d="M7 11V7a5 5 0 0 1 10 0v4"></path><rect
+                                x="3"
+                                y="11"
+                                width="18"
+                                height="11"
+                                rx="2"
+                                ry="2"></rect><path d="M12 15v3"></path></svg
+                        >
+                        Limpiar Lista
+                    </button>
+                    <button id="clearBtn" class="btn btn-secondary">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path d="M3 6h18"></path><path
+                                d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path
+                                d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg
+                        >
+                        Borrar Todo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span id="statOriginal" class="stat-value">0</span>
+                    <span class="stat-label">Originales</span>
+                </div>
+                <div class="stat-card">
+                    <span id="statRemoved" class="stat-value">0</span>
+                    <span class="stat-label">Eliminados</span>
+                </div>
+                <div class="stat-card">
+                    <span id="statFinal" class="stat-value">0</span>
+                    <span class="stat-label">Limpios</span>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <div class="label-header">
+                    <label for="emailsResult">Resultado Limpio</label>
+                    <div id="resultCounter" class="counter-badge">0</div>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea
+                        id="emailsResult"
+                        class="email-textarea result-textarea"
+                        readonly
+                        spellcheck="false"></textarea>
+                </div>
+            </div>
+
+            <div class="controls-row">
+                <div class="main-actions">
+                    <button id="copyBtn" class="btn btn-primary">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path
+                                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                            ></path></svg
+                        >
+                        Copiar Lista
+                    </button>
+                    <button id="downloadBtn" class="btn btn-secondary">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
+                                points="7 10 12 15 17 10"></polyline><line
+                                x1="12"
+                                y1="15"
+                                x2="12"
+                                y2="3"></line></svg
+                        >
+                        Descargar .txt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const emailsInput = document.getElementById("emailsInput") as HTMLTextAreaElement | null;
+    const cleanBtn = document.getElementById("cleanBtn") as HTMLButtonElement | null;
+    const clearBtn = document.getElementById("clearBtn") as HTMLButtonElement | null;
+    const resultsSection = document.getElementById("resultsSection") as HTMLDivElement | null;
+    const emailsResult = document.getElementById("emailsResult") as HTMLTextAreaElement | null;
+    const inputCounter = document.getElementById("inputCounter") as HTMLDivElement | null;
+    const resultCounter = document.getElementById("resultCounter") as HTMLDivElement | null;
+
+    const statOriginal = document.getElementById("statOriginal") as HTMLSpanElement | null;
+    const statRemoved = document.getElementById("statRemoved") as HTMLSpanElement | null;
+    const statFinal = document.getElementById("statFinal") as HTMLSpanElement | null;
+
+    const copyBtn = document.getElementById("copyBtn") as HTMLButtonElement | null;
+    const downloadBtn = document.getElementById("downloadBtn") as HTMLButtonElement | null;
+
+    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function updateInputCounter(): void {
+        if (!emailsInput || !inputCounter) return;
+        const text = emailsInput.value.trim();
+        if (!text) {
+            inputCounter.textContent = `0 registrados`;
+            return;
+        }
+
+        const rawEmails = text.split(/[\s,]+/).filter((e) => e !== "");
+        inputCounter.textContent = `${rawEmails.length.toLocaleString()} registrados`;
+    }
+
+    function cleanEmails(): void {
+        if (
+            !emailsInput ||
+            !emailsResult ||
+            !resultsSection ||
+            !statOriginal ||
+            !statRemoved ||
+            !statFinal ||
+            !resultCounter
+        )
+            return;
+
+        const rawText = emailsInput.value.trim();
+        if (!rawText) return;
+
+        const rawEmails = rawText.split(/[\s,]+/).filter((e) => e !== "");
+        const originalCount = rawEmails.length;
+
+        const validEmails = rawEmails.filter((email) => EMAIL_REGEX.test(email));
+        const uniqueEmails = Array.from(new Set(validEmails.map((email) => email.toLowerCase())));
+
+        const finalCount = uniqueEmails.length;
+        const removedCount = originalCount - finalCount;
+
+        emailsResult.value = uniqueEmails.join("\n");
+
+        statOriginal.textContent = originalCount.toLocaleString();
+        statRemoved.textContent = removedCount.toLocaleString();
+        statFinal.textContent = finalCount.toLocaleString();
+        resultCounter.textContent = finalCount.toLocaleString();
+
+        resultsSection.classList.add("active");
+        resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function clearAll(): void {
+        if (!emailsInput || !emailsResult || !resultsSection) return;
+        emailsInput.value = "";
+        emailsResult.value = "";
+        resultsSection.classList.remove("active");
+        updateInputCounter();
+    }
+
+    async function copyToClipboard(): Promise<void> {
+        if (!emailsResult || !copyBtn) return;
+
+        try {
+            await navigator.clipboard.writeText(emailsResult.value);
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                ¡Copiado!
+            `;
+            copyBtn.style.background = "#10b981";
+
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+                copyBtn.style.background = "";
+            }, 2000);
+        } catch (err) {
+            console.error("Error al copiar: ", err);
+        }
+    }
+
+    function downloadTxt(): void {
+        if (!emailsResult) return;
+
+        const blob = new Blob([emailsResult.value], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `emails-limpios-${new Date().toISOString().split("T")[0]}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    emailsInput?.addEventListener("input", updateInputCounter);
+    cleanBtn?.addEventListener("click", cleanEmails);
+    clearBtn?.addEventListener("click", clearAll);
+    copyBtn?.addEventListener("click", copyToClipboard);
+    downloadBtn?.addEventListener("click", downloadTxt);
+</script>

@@ -72,5 +72,13 @@ export const toolsSection: SectionData = {
             description: "Calcula con precisión el tiempo transcurrido en días, horas y minutos.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/limpiador-listas-emails/",
+            iconBg: "mdi:email-check-outline",
+            iconFg: "mdi:email-remove",
+            title: "Limpiador de Emails",
+            description: "Elimina duplicados, espacios y corrige formatos en tus listas de correos.",
+            color: "#6366f1",
+        },
     ],
 };
