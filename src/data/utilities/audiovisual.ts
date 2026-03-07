@@ -144,10 +144,10 @@ export const audiovisualSection: SectionData = {
             color: "#6366f1",
         },
         {
-            href: "/utilidades/probador-miniaturas-youtube/",
+            href: "/utilidades/previsualizador-miniaturas-youtube/",
             iconBg: "mdi:youtube",
             iconFg: "mdi:eye-check",
-            title: "Probador de Miniaturas",
+            title: "Previsualizador de Miniaturas",
             description: "Visualiza tus miniaturas en el feed de YouTube (Móvil vs Desktop) con modo oscuro y claro.",
             color: "#ef4444",
         },

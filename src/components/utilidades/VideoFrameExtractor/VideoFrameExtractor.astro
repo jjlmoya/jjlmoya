@@ -5,7 +5,6 @@ import "./VideoFrameExtractor.css";
 
 <div class="video-extractor-super-container">
     <div class="premium-card">
-        <!-- Step 1: Upload -->
         <div id="uploadBox" class="uploader-box">
             <div class="uploader-icon">
                 <Icon name="mdi:video-plus" />
@@ -22,7 +21,6 @@ import "./VideoFrameExtractor.css";
             </div>
         </div>
 
-        <!-- Step 2: Main Player & Controls -->
         <div id="playerArea" class="player-container hidden">
             <div class="video-wrapper">
                 <video id="mainVideo" preload="metadata"></video>
@@ -79,7 +77,6 @@ import "./VideoFrameExtractor.css";
                     </button>
                 </div>
 
-                <!-- Batch Extraction Panel -->
                 <div class="batch-panel">
                     <div class="batch-header">
                         <Icon name="mdi:auto-fix" />
@@ -108,7 +105,6 @@ import "./VideoFrameExtractor.css";
                 </div>
             </div>
 
-            <!-- Gallery Section -->
             <div class="gallery-minimal">
                 <div class="gallery-header">
                     <h4>Frames Capturados</h4>
@@ -134,7 +130,6 @@ import "./VideoFrameExtractor.css";
     </div>
 </div>
 
-<!-- Simple Lightbox -->
 <div id="lightbox" class="v-lightbox">
     <div class="v-lightbox-content">
         <span id="closeLightbox" class="v-close">&times;</span>
@@ -145,7 +140,7 @@ import "./VideoFrameExtractor.css";
                 class="btn-main btn-capture"
                 style="flex: none; padding: 0.8rem 1.5rem;"
                 href=""
-                download="frame.png"
+                download="frame.webp"
             >
                 <Icon name="mdi:download" />
                 Descargar Imagen HD
@@ -188,7 +183,7 @@ import "./VideoFrameExtractor.css";
     const downloadAllBtn = document.getElementById("downloadAllBtn") as HTMLButtonElement | null;
 
     let capturedFrames: { id: string; url: string; timestamp: number }[] = [];
-    const FRAME_RATE = 1 / 30; // Default fallback to 30fps
+    const FRAME_RATE = 1 / 30;
 
     if (videoInput && mainVideo && uploadBox && playerArea) {
         uploadBox.addEventListener("click", (e) => {
@@ -300,7 +295,7 @@ import "./VideoFrameExtractor.css";
 
         if (ctx) {
             ctx.drawImage(mainVideo, 0, 0, canvas.width, canvas.height);
-            const url = canvas.toDataURL("image/png", 1.0);
+            const url = canvas.toDataURL("image/webp", 1.0);
             const timestamp = mainVideo.currentTime;
             const id = Math.random().toString(36).substring(7);
 
@@ -335,7 +330,7 @@ import "./VideoFrameExtractor.css";
                     <button class="btn-del-mini" data-id="${frame.id}">&times;</button>
                     <div class="frame-footer">
                         <span class="frame-stamp">${convertToTime(frame.timestamp)}</span>
-                        <a href="${frame.url}" download="frame_${frame.timestamp.toFixed(2)}s.png" style="color: var(--brand-primary); cursor: pointer;" title="Descargar">
+                        <a href="${frame.url}" download="frame_${frame.timestamp.toFixed(2)}s.webp" style="color: var(--brand-primary); cursor: pointer;" title="Descargar">
                            <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" /></svg>
                         </a>
                     </div>
@@ -374,7 +369,7 @@ import "./VideoFrameExtractor.css";
             setTimeout(() => {
                 const link = document.createElement("a");
                 link.href = frame.url;
-                link.download = `frame_${index}_${frame.timestamp.toFixed(1)}s.png`;
+                link.download = `frame_${index}_${frame.timestamp.toFixed(1)}s.webp`;
                 link.click();
             }, index * 200);
         });

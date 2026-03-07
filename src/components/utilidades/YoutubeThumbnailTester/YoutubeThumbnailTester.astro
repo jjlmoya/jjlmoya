@@ -1,226 +1,186 @@
 ---
 import { Icon } from "astro-icon/components";
 import "./YoutubeThumbnailTester.css";
+
+const defaultImage = "/images/utilities/youtube-thumbnail-tester/default-thumb.webp";
+const defaultAvatar = "/images/utilities/youtube-thumbnail-tester/avatar.webp";
+const defaultTitle = "Descargas las aplicaciones de Gamebob Ahora";
+const defaultChannel = "GameBob";
 ---
 
 <div class="yt-tester-container">
     <div class="premium-card">
-        <!-- Upload State -->
-        <div id="uploadPanel" class="upload-section">
-            <div id="dropZone" class="drop-zone" role="button" aria-label="Subir miniatura">
-                <div class="drop-icon">
-                    <Icon name="mdi:image-plus" />
-                </div>
-                <div class="drop-text">
-                    <h3>Subir Miniatura</h3>
-                    <p>Arrastra tu diseño (1280x720 recomendado)</p>
-                </div>
-                <input type="file" id="thumbInput" accept="image/*" class="hidden" />
-            </div>
-            <p
-                style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;"
-            >
-                El archivo se procesa en tu navegador. Privacidad 100%.
-            </p>
-        </div>
+        <div class="main-layout">
+            <aside class="sidebar">
+                <div class="upload-group">
+                    <div
+                        id="dropThumb"
+                        class="drop-zone"
+                        role="button"
+                        aria-label="Añadir miniaturas"
+                    >
+                        <div class="drop-icon"><Icon name="mdi:image-multiple" /></div>
+                        <div class="drop-text">
+                            <h3>Feed</h3>
+                            <p>Añadir miniaturas</p>
+                        </div>
+                        <input
+                            type="file"
+                            id="thumbInput"
+                            accept="image/*"
+                            multiple
+                            class="hidden"
+                        />
+                    </div>
 
-        <!-- Dashboard State (Initially Hidden) -->
-        <div
-            id="dashboardPanel"
-            class="hidden"
-            style="display: flex; flex-direction: column; gap: 2rem;"
-        >
-            <!-- Context Customization -->
-            <div class="custom-settings">
-                <div class="settings-group">
-                    <label>Título del Vídeo</label>
-                    <input
-                        type="text"
-                        id="mockupTitle"
-                        value="Cómo hacer una miniatura profesional [Guía Definitiva]"
-                        placeholder="Escribe el título..."
-                    />
-                </div>
-                <div class="settings-group">
-                    <label>Nombre del Canal</label>
-                    <input
-                        type="text"
-                        id="mockupChannel"
-                        value="TecnoCreativos"
-                        placeholder="Nombre de tu canal..."
-                    />
-                </div>
-            </div>
-
-            <!-- Controls Row -->
-            <div class="tester-controls">
-                <button
-                    id="btnDesktop"
-                    class="control-btn active"
-                    data-view="desktop"
-                    title="Vista Ordenador"
-                >
-                    <Icon name="mdi:monitor" />
-                    <span>Desktop</span>
-                </button>
-                <button id="btnMobile" class="control-btn" data-view="mobile" title="Vista Móvil">
-                    <Icon name="mdi:cellphone" />
-                    <span>Mobile</span>
-                </button>
-                <div
-                    style="width: 1px; height: 18px; background: rgba(0,0,0,0.1); margin: 0 0.5rem;"
-                >
-                </div>
-                <button
-                    id="btnLight"
-                    class="control-btn active"
-                    data-theme="light"
-                    title="Tema Claro"
-                >
-                    <Icon name="mdi:white-balance-sunny" />
-                    <span>Lite</span>
-                </button>
-                <button id="btnDark" class="control-btn" data-theme="dark" title="Tema Oscuro">
-                    <Icon name="mdi:moon-waning-crescent" />
-                    <span>Dark</span>
-                </button>
-                <button id="btnSplit" class="control-btn" title="Comparar Modos">
-                    <Icon name="mdi:compare" />
-                    <span>Split</span>
-                </button>
-                <button
-                    id="btnReset"
-                    class="control-btn"
-                    title="Subir otro diseño"
-                    style="color: #ef4444;"
-                >
-                    <Icon name="mdi:refresh" />
-                </button>
-            </div>
-
-            <!-- Preview Display Area -->
-            <div id="previewLayout" class="preview-layout active">
-                <!-- Single Mockup Mode -->
-                <div id="singleView" class="yt-mockup light mockup-home">
-                    <div class="mockup-grid" id="mockupGrid">
-                        <!-- Content injected by JS -->
+                    <div
+                        id="dropAvatar"
+                        class="drop-zone"
+                        role="button"
+                        aria-label="Cambiar avatar"
+                    >
+                        <div class="drop-icon"><Icon name="mdi:account-circle" /></div>
+                        <div class="drop-text">
+                            <h3>Avatar</h3>
+                            <p>Logo del canal</p>
+                        </div>
+                        <input type="file" id="avatarInput" accept="image/*" class="hidden" />
                     </div>
                 </div>
 
-                <!-- Comparison / Split Mode -->
-                <div id="comparisonView" class="hidden">
-                    <div class="comparison-container">
-                        <div class="comparison-side yt-mockup light">
-                            <span class="comparison-label">MODO CLARO</span>
-                            <div
-                                id="comparisonLight"
-                                class="mockup-grid"
-                                style="grid-template-columns: 1fr; padding-top: 1.5rem;"
-                            >
-                            </div>
-                        </div>
-                        <div class="comparison-side yt-mockup dark">
-                            <span class="comparison-label">MODO OSCURO</span>
-                            <div
-                                id="comparisonDark"
-                                class="mockup-grid"
-                                style="grid-template-columns: 1fr; padding-top: 1.5rem;"
-                            >
-                            </div>
-                        </div>
+                <div id="galleryPreview" class="gallery-preview"></div>
+
+                <div class="custom-settings">
+                    <div class="settings-group">
+                        <label>Título común</label>
+                        <input
+                            type="text"
+                            id="mockupTitle"
+                            value={defaultTitle}
+                            placeholder="Título..."
+                        />
+                    </div>
+                    <div class="settings-group">
+                        <label>Nombre del Canal</label>
+                        <input
+                            type="text"
+                            id="mockupChannel"
+                            value={defaultChannel}
+                            placeholder="Canal..."
+                        />
                     </div>
                 </div>
-            </div>
+
+                <div class="tester-controls">
+                    <button id="btnDesktop" class="control-btn active" data-view="desktop">
+                        <Icon name="mdi:monitor" />
+                        <span>Escritorio</span>
+                    </button>
+                    <button id="btnMobile" class="control-btn" data-view="mobile">
+                        <Icon name="mdi:cellphone" />
+                        <span>Móvil</span>
+                    </button>
+                    <button
+                        id="btnReset"
+                        class="control-btn"
+                        style="grid-column: span 2; color: #ef4444; border-color: rgba(239, 68, 68, 0.2);"
+                    >
+                        <Icon name="mdi:delete-sweep" />
+                        <span>Limpiar Feed</span>
+                    </button>
+                </div>
+            </aside>
+
+            <main class="preview-area">
+                <div class="comparison-container" id="comparisonContainer">
+                    <div class="comparison-side yt-mockup light">
+                        <span class="comparison-label">MODO CLARO</span>
+                        <div id="comparisonLight" class="mockup-grid"></div>
+                    </div>
+                    <div class="comparison-side yt-mockup dark">
+                        <span class="comparison-label">MODO OSCURO</span>
+                        <div id="comparisonDark" class="mockup-grid"></div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 </div>
 
-<script>
-    const thumbInput = document.getElementById("thumbInput") as HTMLInputElement | null;
-    const dropZone = document.getElementById("dropZone") as HTMLElement | null;
-    const uploadPanel = document.getElementById("uploadPanel") as HTMLElement | null;
-    const dashboardPanel = document.getElementById("dashboardPanel") as HTMLElement | null;
-    const previewLayout = document.getElementById("previewLayout") as HTMLElement | null;
+<script define:vars={{ defaultImage, defaultAvatar }}>
+    const thumbInput = document.getElementById("thumbInput");
+    const avatarInput = document.getElementById("avatarInput");
+    const dropThumb = document.getElementById("dropThumb");
+    const dropAvatar = document.getElementById("dropAvatar");
+    const galleryPreview = document.getElementById("galleryPreview");
+    const comparisonLight = document.getElementById("comparisonLight");
+    const comparisonDark = document.getElementById("comparisonDark");
+    const comparisonContainer = document.getElementById("comparisonContainer");
+    const btnDesktop = document.getElementById("btnDesktop");
+    const btnMobile = document.getElementById("btnMobile");
+    const btnReset = document.getElementById("btnReset");
+    const mockupTitle = document.getElementById("mockupTitle");
+    const mockupChannel = document.getElementById("mockupChannel");
 
-    // Grids
-    const mockupGrid = document.getElementById("mockupGrid") as HTMLElement | null;
-    const singleView = document.getElementById("singleView") as HTMLElement | null;
-    const comparisonView = document.getElementById("comparisonView") as HTMLElement | null;
-    const comparisonLight = document.getElementById("comparisonLight") as HTMLElement | null;
-    const comparisonDark = document.getElementById("comparisonDark") as HTMLElement | null;
+    let thumbnailsList = [defaultImage];
+    let currentAvatar = defaultAvatar;
+    const state = { view: "desktop" };
 
-    // Controls
-    const btnDesktop = document.getElementById("btnDesktop") as HTMLButtonElement | null;
-    const btnMobile = document.getElementById("btnMobile") as HTMLButtonElement | null;
-    const btnLight = document.getElementById("btnLight") as HTMLButtonElement | null;
-    const btnDark = document.getElementById("btnDark") as HTMLButtonElement | null;
-    const btnSplit = document.getElementById("btnSplit") as HTMLButtonElement | null;
-    const btnReset = document.getElementById("btnReset") as HTMLButtonElement | null;
-
-    // Inputs
-    const mockupTitle = document.getElementById("mockupTitle") as HTMLInputElement | null;
-    const mockupChannel = document.getElementById("mockupChannel") as HTMLInputElement | null;
-
-    let currentImageUrl = "";
-    let state = {
-        view: "desktop",
-        theme: "light",
-        isSplit: false,
-    };
-
-    if (dropZone && thumbInput) {
-        dropZone.addEventListener("click", () => thumbInput.click());
-
-        dropZone.addEventListener("dragover", (e) => {
+    function setupDropzone(el, input, handler) {
+        if (!el || !input) return;
+        el.addEventListener("click", () => input.click());
+        el.addEventListener("dragover", (e) => {
             e.preventDefault();
-            dropZone.classList.add("hover");
+            el.classList.add("hover");
         });
-
-        dropZone.addEventListener("dragleave", () => {
-            dropZone.classList.remove("hover");
-        });
-
-        dropZone.addEventListener("drop", (e) => {
+        el.addEventListener("dragleave", () => el.classList.remove("hover"));
+        el.addEventListener("drop", (e) => {
             e.preventDefault();
-            dropZone.classList.remove("hover");
-            const file = e.dataTransfer?.files[0];
-            if (file) processFile(file);
+            el.classList.remove("hover");
+            const files = e.dataTransfer?.files;
+            if (files) handler(files);
         });
-
-        thumbInput.addEventListener("change", (e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (file) processFile(file);
+        input.addEventListener("change", (e) => {
+            const files = e.target.files;
+            if (files) handler(files);
         });
     }
 
-    function processFile(file: File) {
-        if (!file.type.startsWith("image/")) return;
-        currentImageUrl = URL.createObjectURL(file);
+    setupDropzone(dropThumb, thumbInput, (files) => {
+        for (const file of files) {
+            if (file.type.startsWith("image/")) {
+                thumbnailsList.push(URL.createObjectURL(file));
+            }
+        }
+        renderFeed();
+    });
 
-        uploadPanel?.classList.add("hidden");
-        dashboardPanel?.classList.remove("hidden");
-        render();
-    }
+    setupDropzone(dropAvatar, avatarInput, (files) => {
+        const file = files[0];
+        if (file && file.type.startsWith("image/")) {
+            currentAvatar = URL.createObjectURL(file);
+            renderFeed();
+        }
+    });
 
-    function createCard(idx: number) {
+    function createVideoMock(thumb, i) {
         const title = mockupTitle?.value || "Título del vídeo";
-        const channel = mockupChannel?.value || "Canal";
-        const viewsArr = [
-            "1.5M de visualizaciones",
-            "45k visualizaciones",
-            "9.2k visualizaciones",
-            "Hace 1 hora",
-        ];
-        const views = viewsArr[idx % viewsArr.length];
+        const channel = mockupChannel?.value || "GameBob";
+        const views = [
+            "1.2M de visualizaciones • hace 1 hora",
+            "Hace 45 minutos",
+            "250.000 visualizaciones • hace 1 día",
+            "3.1M de visualizaciones • hace 1 semana",
+        ][i % 4];
 
         return `
             <div class="yt-card">
                 <div class="yt-thumbnail-wrapper">
-                    <img src="${currentImageUrl}" alt="Thumbnail Test" />
-                    <div class="yt-duration">12:45</div>
+                    <img src="${thumb}" alt="Thumbnail" />
+                    <div class="yt-duration">10:45</div>
                 </div>
                 <div class="yt-info-row">
-                    <div class="yt-avatar"></div>
+                    <div class="yt-avatar"><img src="${currentAvatar}" alt="Avatar" /></div>
                     <div class="yt-text-meta">
                         <h4 class="yt-title" title="${title}">${title}</h4>
                         <p class="yt-channel">${channel}</p>
@@ -231,81 +191,57 @@ import "./YoutubeThumbnailTester.css";
         `;
     }
 
-    function render() {
-        if (!currentImageUrl) return;
+    function renderFeed() {
+        if (galleryPreview) {
+            galleryPreview.innerHTML = thumbnailsList
+                .map(
+                    (t, i) => `
+                <div class="gallery-item">
+                    <img src="${t}" alt="Miniatura" />
+                    <button class="btn-remove-thumb" data-idx="${i}">&times;</button>
+                </div>
+            `
+                )
+                .join("");
 
-        // Reset views
-        singleView?.classList.add("hidden");
-        comparisonView?.classList.add("hidden");
-
-        if (state.isSplit) {
-            comparisonView?.classList.remove("hidden");
-            if (comparisonLight) comparisonLight.innerHTML = createCard(0);
-            if (comparisonDark) comparisonDark.innerHTML = createCard(1);
-        } else {
-            singleView?.classList.remove("hidden");
-            singleView?.classList.remove("light", "dark", "mockup-home", "mockup-mobile");
-            singleView?.classList.add(state.theme);
-            singleView?.classList.add(state.view === "desktop" ? "mockup-home" : "mockup-mobile");
-
-            if (mockupGrid) {
-                const count = state.view === "desktop" ? 3 : 1;
-                let html = "";
-                for (let i = 0; i < count; i++) html += createCard(i);
-                mockupGrid.innerHTML = html;
-            }
+            galleryPreview.querySelectorAll(".btn-remove-thumb").forEach((btn) => {
+                btn.addEventListener("click", (e) => {
+                    const idx = parseInt(e.target.dataset.idx);
+                    thumbnailsList.splice(idx, 1);
+                    renderFeed();
+                });
+            });
         }
+
+        if (comparisonContainer) {
+            comparisonContainer.className = `comparison-container mockup-${state.view}`;
+        }
+
+        const html = thumbnailsList.map((t, i) => createVideoMock(t, i)).join("");
+        if (comparisonLight) comparisonLight.innerHTML = html;
+        if (comparisonDark) comparisonDark.innerHTML = html;
     }
 
-    // Event Listeners
     btnDesktop?.addEventListener("click", () => {
         state.view = "desktop";
         btnDesktop.classList.add("active");
         btnMobile?.classList.remove("active");
-        render();
+        renderFeed();
     });
 
     btnMobile?.addEventListener("click", () => {
         state.view = "mobile";
         btnMobile.classList.add("active");
         btnDesktop?.classList.remove("active");
-        render();
-    });
-
-    btnLight?.addEventListener("click", () => {
-        state.theme = "light";
-        state.isSplit = false;
-        btnLight.classList.add("active");
-        btnDark?.classList.remove("active");
-        btnSplit?.classList.remove("active");
-        render();
-    });
-
-    btnDark?.addEventListener("click", () => {
-        state.theme = "dark";
-        state.isSplit = false;
-        btnDark.classList.add("active");
-        btnLight?.classList.remove("active");
-        btnSplit?.classList.remove("active");
-        render();
-    });
-
-    btnSplit?.addEventListener("click", () => {
-        state.isSplit = true;
-        btnSplit.classList.add("active");
-        btnLight?.classList.remove("active");
-        btnDark?.classList.remove("active");
-        render();
+        renderFeed();
     });
 
     btnReset?.addEventListener("click", () => {
-        currentImageUrl = "";
-        uploadPanel?.classList.remove("hidden");
-        dashboardPanel?.classList.add("hidden");
-        if (thumbInput) thumbInput.value = "";
+        thumbnailsList = [];
+        renderFeed();
     });
 
-    [mockupTitle, mockupChannel].forEach((inp) => {
-        inp?.addEventListener("input", render);
-    });
+    [mockupTitle, mockupChannel].forEach((inp) => inp?.addEventListener("input", renderFeed));
+
+    renderFeed();
 </script>
