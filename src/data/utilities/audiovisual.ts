@@ -135,5 +135,13 @@ export const audiovisualSection: SectionData = {
             description: "Calcula el precio de tus publicaciones patrocinadas basado en seguidores, engagement y nicho.",
             color: "#3b82f6",
         },
+        {
+            href: "/utilidades/extractor-frames-video/",
+            iconBg: "mdi:video-vintage",
+            iconFg: "mdi:camera-plus",
+            title: "Extractor de Frames",
+            description: "Captura fotogramas en alta resolución de tus vídeos locales con precisión quirúrgica.",
+            color: "#6366f1",
+        },
     ],
 };
