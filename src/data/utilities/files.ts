@@ -72,5 +72,13 @@ export const filesSection: SectionData = {
             description: "Divide listas, comas o delimitadores en líneas individuales. Organiza tus datos.",
             color: "#8b5cf6",
         },
+        {
+            href: "/utilidades/conversor-json-a-excel-csv/",
+            iconBg: "mdi:file-code-outline",
+            iconFg: "mdi:microsoft-excel",
+            title: "Conversor JSON a Excel",
+            description: "Transforma datos JSON en hojas de cálculo planas (CSV) con aplanamiento automático.",
+            color: "#06b6d4",
+        },
     ],
 };

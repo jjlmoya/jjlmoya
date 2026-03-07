@@ -1,0 +1,112 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import JsonToExcelConverter from "../../components/utilidades/JsonToExcelConverter/JsonToExcelConverter.astro";
+import JsonToExcelConverterSEO from "../../components/utilidades/JsonToExcelConverter/JsonToExcelConverterSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const bibliographyLinks = [
+    {
+        name: "ECMA-404: The JSON Data Interchange Format",
+        url: "https://ecma-international.org/wp-content/uploads/ECMA-404_2nd_edition_december_2017.pdf",
+    },
+    {
+        name: "RFC 4180: Common Format and MIME Type for CSV",
+        url: "https://datatracker.ietf.org/doc/html/rfc4180",
+    },
+    {
+        name: "W3C: CSV on the Web (Standardization for Tabular Data)",
+        url: "https://www.w3.org/TR/tabular-data-model/",
+    },
+];
+
+const faqItems = [
+    {
+        question: "¿Es seguro subir mis datos JSON aquí?",
+        answer: "Esta herramienta es 100% segura y local. El procesamiento de tu JSON ocurre exclusivamente en la memoria de tu navegador (Client-Side). Tus datos nunca se envían a ningún servidor ni se almacenan en la nube.",
+    },
+    {
+        question: "¿Cómo maneja la herramienta los objetos anidados?",
+        answer: "Utilizamos una técnica de 'Flattening' o aplanamiento recursivo. Si tienes un objeto dentro de otro, el conversor creará columnas con nombres compuestos (ej: 'usuario.id', 'usuario.nombre'), permitiendo que toda la jerarquía de datos sea legible en Excel.",
+    },
+    {
+        question: "¿Hay un límite de tamaño para el archivo JSON?",
+        answer: "El límite depende de la memoria RAM de tu dispositivo, pero en general, archivos de hasta 10MB se procesan de forma fluida. Para archivos gigantísticos, recomendamos fragmentar la información.",
+    },
+    {
+        question: "¿Puedo importar un archivo desde mi ordenador?",
+        answer: "Sí, la herramienta soporta la función de arrastrar y soltar (Drag and Drop). Simplemente arrastra tu archivo .json a la zona punteada y el contenido se cargará automáticamente.",
+    },
+    {
+        question: "¿Cómo se manejan las fechas en la conversión?",
+        answer: "La herramienta respeta el formato original del JSON. Si el JSON tiene fechas en formato ISO (2026-03-07), aparecerán así en el Excel. Excel suele reconocer estas cadenas automáticamente y permite formatearlas como fechas con un solo clic.",
+    },
+    {
+        question: "¿El archivo descargado es compatible con Excel?",
+        answer: "Sí. Generamos un archivo CSV optimizado con un 'Byte Order Mark' (BOM) de UTF-8. Esto garantiza que al abrirlo en Microsoft Excel, Google Sheets o Numbers, todos los caracteres especiales (ñ, tildes) se visualicen correctamente sin necesidad de importar manualmente.",
+    },
+    {
+        question: "¿Por qué mi Excel muestra caracteres extraños?",
+        answer: "Si usas otro conversor mediocre, podrías ver símbolos raros. Nosotros incluimos el BOM de UTF-8 en el archivo CSV para que Excel detecte la codificación correcta desde el primer doble clic.",
+    },
+    {
+        question: "¿Puedo convertir un JSON con formato incorrecto?",
+        answer: "La herramienta detecta automáticamente si el JSON es válido. Si hay errores de sintaxis (como comas sobrantes o falta de llaves), el indicador de estado se pondrá en rojo y no permitirá la exportación hasta que se corrija.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Carga de Datos",
+        text: "Pega tu código JSON en el área de texto o arrastra un archivo .json directamente desde tu ordenador al área punteada.",
+    },
+    {
+        name: "Aplanamiento Automático",
+        text: "Marca la opción 'Aplanar Objetos' si tu JSON tiene estructuras anidadas y quieres verlas como columnas individuales en la hoja de cálculo.",
+    },
+    {
+        name: "Validación Visual",
+        text: "Observa la tabla de previsualización que aparecerá debajo. Te mostrará las primeras filas para confirmar que la conversión es correcta.",
+    },
+    {
+        name: "Descarga Final",
+        text: "Haz clic en 'Descargar Excel (CSV)' para obtener el archivo listo para usar o usa 'Copiar CSV' para pegarlo directamente en tu hoja de cálculo abierta.",
+    },
+];
+
+const title = "Conversor de JSON a Excel y CSV Online - 100% Local y Seguro";
+const description =
+    "Transforma archivos JSON complejos en hojas de cálculo de Excel o CSV de forma instantánea. Con aplanamiento automático de objetos y total privacidad local.";
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/conversor-json-a-excel-csv.webp"
+    gradientFrom="from-cyan-50"
+    gradientTo="to-sky-50"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="JSON"
+            titleBase="Conversor Excel"
+            description="Limpia, aplana y exporta tus datos estructurados a formatos tabulares legibles en segundos."
+            gradientFrom="from-sky-500"
+            gradientTo="to-indigo-600"
+            reverse={false}
+        />
+    </div>
+
+    <JsonToExcelConverter />
+
+    <div slot="seo">
+        <JsonToExcelConverterSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliographyLinks} title="Estándares de Intercambio de Datos" />
+    </div>
+</LayoutUtility>

@@ -1,0 +1,240 @@
+:root {
+    --data-deep: #0f172a;
+    --data-primary: #0ea5e9;
+    --data-secondary: #6366f1;
+    --data-accent: #22d3ee;
+    --data-surface: #ffffff;
+    --data-border: #e2e8f0;
+    --data-bg-mute: #f8fafc;
+    --data-text: #334155;
+}
+
+:global(.dark) {
+    --data-surface: #020617;
+    --data-bg-mute: #070a1a;
+    --data-border: #1e293b;
+    --data-text: #94a3b8;
+    --data-deep: #38bdf8;
+}
+
+.data-converter-console {
+    width: 100%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    background: var(--data-surface);
+    border: 1px solid var(--data-border);
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow:
+        0 20px 50px -12px rgba(6, 182, 212, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 1. In/Out Control Bar */
+.data-header {
+    padding: 1.5rem 2.5rem;
+    background: var(--data-bg-mute);
+    border-bottom: 1px solid var(--data-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.data-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--data-deep);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #94a3b8;
+}
+
+.status-dot.active {
+    background: var(--data-accent);
+    box-shadow: 0 0 8px var(--data-accent);
+}
+
+/* 2. Main Input Zone */
+.data-main-input {
+    padding: 2.5rem;
+    background: radial-gradient(circle at 0% 0%, rgba(6, 182, 212, 0.03) 0%, transparent 40%);
+}
+
+.drop-zone {
+    width: 100%;
+    min-height: 200px;
+    border: 2px dashed var(--data-border);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.drop-zone.dragover {
+    border-color: var(--data-primary);
+    background: rgba(6, 182, 212, 0.05);
+    transform: scale(1.01);
+}
+
+.zone-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.5;
+}
+
+.json-textarea {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: text;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    resize: none;
+    background: transparent;
+    border: none;
+    transition: opacity 0.3s ease;
+}
+
+.json-textarea:focus {
+    opacity: 1;
+    background: var(--data-surface);
+    outline: none;
+}
+
+/* 3. Preview Area */
+.data-preview-table {
+    padding: 0 2.5rem 2.5rem;
+    flex: 1;
+    overflow-x: auto;
+}
+
+.preview-grid-wrapper {
+    width: 100%;
+    border: 1px solid var(--data-border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--data-bg-mute);
+}
+
+.grid-preview {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    font-family: inherit;
+    color: var(--data-text);
+}
+
+.grid-preview th {
+    background: var(--data-border);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.grid-preview td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 4. Action Footer */
+.data-footer-actions {
+    padding: 2rem 2.5rem;
+    background: var(--data-bg-mute);
+    border-top: 1px solid var(--data-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.btn-data {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--data-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--data-secondary);
+    box-shadow: 0 8px 16px -4px rgba(6, 182, 212, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--data-border);
+    color: var(--data-deep);
+}
+
+.btn-outline:hover {
+    border-color: var(--data-primary);
+    background: white;
+}
+
+/* 5. Special Options: Flatten switch */
+.option-strip {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.checkbox-data {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.checkbox-data input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--data-primary);
+}
+
+@media (max-width: 700px) {
+    .data-footer-actions {
+        flex-direction: column;
+    }
+
+    .btn-data {
+        width: 100%;
+        justify-content: center;
+    }
+}
