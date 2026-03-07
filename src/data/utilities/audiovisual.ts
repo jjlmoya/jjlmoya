@@ -143,5 +143,13 @@ export const audiovisualSection: SectionData = {
             description: "Captura fotogramas en alta resolución de tus vídeos locales con precisión quirúrgica.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/probador-miniaturas-youtube/",
+            iconBg: "mdi:youtube",
+            iconFg: "mdi:eye-check",
+            title: "Probador de Miniaturas",
+            description: "Visualiza tus miniaturas en el feed de YouTube (Móvil vs Desktop) con modo oscuro y claro.",
+            color: "#ef4444",
+        },
     ],
 };
