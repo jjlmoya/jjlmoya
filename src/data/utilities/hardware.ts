@@ -26,8 +26,16 @@ export const hardwareSection: SectionData = {
             iconBg: "mdi:controller-classic",
             iconFg: "mdi:controller",
             title: "Test de Mando y Drift",
-            description: "Analiza joysticks, botones y vibración de tu Gamepad (Xbox/PS).",
+            description: "Analiza joysticks, botones y drift de tu Gamepad (Xbox/PS).",
             color: "#a855f7",
+        },
+        {
+            href: "/utilidades/probador-vibracion-mando/",
+            iconBg: "mdi:vibrate",
+            iconFg: "mdi:gamepad-variant",
+            title: "Probador de Vibración",
+            description: "Testea los motores hápticos (Dual-Rumble) de tu mando instantáneamente.",
+            color: "#f43f5e",
         },
         {
             href: "/utilidades/test-raton/",
