@@ -1,0 +1,92 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import DateDifferenceCalculator from "../../components/utilidades/DateDifferenceCalculator/DateDifferenceCalculator.astro";
+import DateDifferenceCalculatorSEO from "../../components/utilidades/DateDifferenceCalculator/DateDifferenceCalculatorSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const bibliographyLinks = [
+    {
+        name: "ISO 8601: Representación de fecha y hora",
+        url: "https://www.iso.org/iso-8601-date-and-time-format.html",
+    },
+    {
+        name: "W3C: Formatos de Fecha y Hora en la Web",
+        url: "https://www.w3.org/TR/NOTE-datetime",
+    },
+    {
+        name: "MDN Web Docs: Trabajando con fechas en JavaScript",
+        url: "https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    },
+];
+
+const faqItems = [
+    {
+        question: "¿Es gratuita esta calculadora de diferencia de fechas?",
+        answer: "Sí, es una herramienta 100% gratuita y accesible desde cualquier navegador sin necesidad de registro ni descargas de software pesado.",
+    },
+    {
+        question: "¿Cómo se calculan los años bisiestos en el tiempo total?",
+        answer: "Nuestra herramienta utiliza la cronología estándar de JavaScript (UTC), que maneja automáticamente los años bisiestos y la duración variable de cada mes para dar un resultado de días exacto.",
+    },
+    {
+        question: "¿Puedo calcular la diferencia entre horas y minutos también?",
+        answer: "Absolutamente. Los campos de entrada permiten seleccionar la hora exacta. El resultado te devolverá el desglose en días, horas, minutos y segundos acumulados.",
+    },
+    {
+        question: "¿Mis datos de fechas se envían a algún servidor?",
+        answer: "No. Todo el procesamiento se realiza localmente en tu navegador (Client-Side). Nosotros no almacenamos ni recibimos información sobre las fechas que calculas por motivos de privacidad.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Selección de Fecha Inicial",
+        text: "Introduce la fecha y hora de partida o usa el botón 'Hoy' para fijarla de forma instantánea.",
+    },
+    {
+        name: "Selección de Fecha Final",
+        text: "Define el momento de destino. Puedes usar el botón 'Ahora' para medir el tiempo transcurrido hasta este preciso instante.",
+    },
+    {
+        name: "Lectura de Resultados",
+        text: "Consulta el cuadro de resultados: verás los días, horas, minutos y segundos de diferencia, además de totales acumulados.",
+    },
+];
+
+const title = "Calculadora de Diferencia entre Fechas - Días, Horas y Minutos";
+const description =
+    "Calcula exactamente cuánto tiempo ha pasado entre dos fechas o cuánto falta para un evento. Resultados en días, horas y minutos de forma gratuita y segura.";
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/calculadora-diferencia-fechas.webp"
+    gradientFrom="from-indigo-50"
+    gradientTo="to-violet-100"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Diferencia"
+            titleBase="Fechas Exactas"
+            description="Mide con precisión cronométrica el tiempo transcurrido entre dos momentos. Ideal para planificación y gestión de plazos."
+            gradientFrom="from-indigo-600"
+            gradientTo="to-violet-700"
+            reverse={false}
+        />
+    </div>
+
+    <DateDifferenceCalculator />
+
+    <div slot="seo">
+        <DateDifferenceCalculatorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliographyLinks} title="Referencias sobre Medición de Tiempo" />
+    </div>
+</LayoutUtility>

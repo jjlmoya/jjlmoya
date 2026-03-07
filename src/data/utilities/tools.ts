@@ -64,5 +64,13 @@ export const toolsSection: SectionData = {
             description: "Calcula con precisión el ancho en píxeles de cualquier texto según su tipografía.",
             color: "#06b6d4",
         },
+        {
+            href: "/utilidades/calculadora-diferencia-fechas/",
+            iconBg: "mdi:calendar-clock",
+            iconFg: "mdi:clock-fast",
+            title: "Diferencia entre Fechas",
+            description: "Calcula con precisión el tiempo transcurrido en días, horas y minutos.",
+            color: "#6366f1",
+        },
     ],
 };
