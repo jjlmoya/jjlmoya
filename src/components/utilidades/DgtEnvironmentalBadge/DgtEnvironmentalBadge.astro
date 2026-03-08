@@ -1,0 +1,359 @@
+---
+import { Icon } from "astro-icon/components";
+import "./DgtEnvironmentalBadge.css";
+---
+
+<div class="dgt-simulator">
+    <div class="simulator-card glass-panel">
+        <form id="dgtForm" class="simulator-form" novalidate>
+            <div class="form-group">
+                <label class="form-label">1. Tipo de Vehículo</label>
+                <div class="options-grid cols-3" id="vehicleGrid">
+                    <button
+                        type="button"
+                        class="option-card card-vehicle"
+                        data-group="vehicleType"
+                        data-val="car"
+                    >
+                        <Icon name="mdi:car-side" class="option-icon" />
+                        <span>Turismo / Furgoneta</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-vehicle"
+                        data-group="vehicleType"
+                        data-val="moto"
+                    >
+                        <Icon name="mdi:motorbike" class="option-icon" />
+                        <span>Motocicleta</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-vehicle"
+                        data-group="vehicleType"
+                        data-val="heavy"
+                    >
+                        <Icon name="mdi:truck" class="option-icon" />
+                        <span>Camión / Autobús</span>
+                    </button>
+                </div>
+                <input type="hidden" id="vehicleType" required />
+                <div class="error-msg" id="err-vehicleType">Selecciona un tipo de vehículo</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">2. Energía o Combustible</label>
+                <div class="options-grid cols-3" id="fuelGrid">
+                    <button
+                        type="button"
+                        class="option-card card-fuel"
+                        data-group="fuelType"
+                        data-val="electric"
+                    >
+                        <Icon name="mdi:ev-station" class="option-icon" />
+                        <span>100% Eléctrico / Pila</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-fuel"
+                        data-group="fuelType"
+                        data-val="phev_high"
+                    >
+                        <Icon name="mdi:car-electric" class="option-icon" />
+                        <span>Híbrido Enchufable (&gt;40km)</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-fuel"
+                        data-group="fuelType"
+                        data-val="phev_low"
+                    >
+                        <Icon name="mdi:car-electric" class="option-icon" />
+                        <span>Híbrido Enchufable (&lt;40km)</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-fuel"
+                        data-group="fuelType"
+                        data-val="hybrid_gas"
+                    >
+                        <Icon name="mdi:gas-cylinder" class="option-icon" />
+                        <span>Híbrido (HEV) o Gas</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-fuel"
+                        data-group="fuelType"
+                        data-val="gasoline"
+                    >
+                        <Icon name="mdi:gas-station" class="option-icon" />
+                        <span>Gasolina</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-fuel"
+                        data-group="fuelType"
+                        data-val="diesel"
+                    >
+                        <Icon name="mdi:oil" class="option-icon" />
+                        <span>Diésel</span>
+                    </button>
+                </div>
+                <input type="hidden" id="fuelType" required />
+                <div class="error-msg" id="err-fuelType">Selecciona un tipo de energía</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">3. Normativa Euro o Época de Matriculación</label>
+                <div class="options-grid cols-4" id="yearGrid">
+                    <button
+                        type="button"
+                        class="option-card card-year"
+                        data-group="registrationYear"
+                        data-val="pre2000"
+                    >
+                        <Icon name="mdi:calendar-remove" class="option-icon" />
+                        <span>Antes de 2000</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-year"
+                        data-group="registrationYear"
+                        data-val="2000-2005"
+                    >
+                        <Icon name="mdi:calendar-range" class="option-icon" />
+                        <span>2000 - 2005</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-year"
+                        data-group="registrationYear"
+                        data-val="2006-2013"
+                    >
+                        <Icon name="mdi:calendar-star" class="option-icon" />
+                        <span>2006 - 2013</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="option-card card-year"
+                        data-group="registrationYear"
+                        data-val="post2014"
+                    >
+                        <Icon name="mdi:calendar-check" class="option-icon" />
+                        <span>2014 o posterior</span>
+                    </button>
+                </div>
+                <input type="hidden" id="registrationYear" required />
+                <div class="error-msg" id="err-registrationYear">
+                    Selecciona la época de matriculación
+                </div>
+                <span class="help-text">
+                    <Icon name="mdi:information" class="inline-icon" />
+                    Si tienes dudas, la normativa Euro de tu ficha técnica prevalece frente a la fecha
+                    de matriculación.
+                </span>
+            </div>
+
+            <button type="submit" class="simulator-btn">
+                Simular Etiqueta <Icon name="mdi:arrow-right" class="btn-icon" />
+            </button>
+        </form>
+
+        <div id="resultBox" class="result-box hidden">
+            <h3 class="result-title">Distintivo Asignado</h3>
+            <div id="badgeDisplay" class="badge-display"></div>
+            <p id="resultDescription" class="result-description"></p>
+            <p class="result-warning">
+                <Icon name="mdi:alert-circle-outline" class="inline-icon" />
+                Verifica siempre en la página web oficial de la DGT para confirmar tu matrícula, en caso
+                de particularidades o error administrativo.
+            </p>
+            <button id="resetBtn" type="button" class="simulator-btn simulator-btn--secondary">
+                <Icon name="mdi:refresh" class="btn-icon" /> Nueva Simulación
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("dgtForm") as HTMLFormElement | null;
+
+        const resultBox = document.getElementById("resultBox") as HTMLElement | null;
+        const badgeDisplay = document.getElementById("badgeDisplay") as HTMLElement | null;
+        const resultDescription = document.getElementById(
+            "resultDescription"
+        ) as HTMLElement | null;
+        const resetBtn = document.getElementById("resetBtn") as HTMLButtonElement | null;
+
+        if (!form || !resultBox || !badgeDisplay || !resultDescription) return;
+
+        const optionCards = form.querySelectorAll(".option-card");
+        optionCards.forEach((card) => {
+            card.addEventListener("click", () => {
+                const group = card.getAttribute("data-group");
+                const val = card.getAttribute("data-val");
+                if (!group || !val) return;
+
+                form.querySelectorAll(`.option-card[data-group="${group}"]`).forEach((c) => {
+                    c.classList.remove("selected");
+                });
+
+                card.classList.add("selected");
+
+                const hiddenInput = document.getElementById(group) as HTMLInputElement | null;
+                if (hiddenInput) {
+                    hiddenInput.value = val;
+                    showError(hiddenInput, false);
+                }
+            });
+        });
+
+        const BADGES = {
+            ZERO: {
+                label: "Etiqueta 0 Emisiones",
+                letter: "0",
+                subText: "EMISIONES",
+                cssClass: "dgt-replica-0",
+                desc: "Vehículos con máxima eficiencia. Disfrutan de acceso ilimitado a Zonas de Bajas Emisiones (ZBE) y amplias exenciones fiscales.",
+            },
+            ECO: {
+                label: "Etiqueta ECO",
+                letter: "ECO",
+                subText: "",
+                cssClass: "dgt-replica-ECO",
+                desc: "Vehículos de bajas emisiones como híbridos y a gas. Permite acceder a la mayoría de ZBE y tiene bonificaciones en aparcamiento SER.",
+            },
+            C: {
+                label: "Etiqueta C (Verde)",
+                letter: "C",
+                subText: "",
+                cssClass: "dgt-replica-C",
+                desc: "Vehículos de combustión interna recientes con normativa Euro alta. Acceso a ZBE sujeto a aparcar en párking en ciertas ciudades.",
+            },
+            B: {
+                label: "Etiqueta B (Amarilla)",
+                letter: "B",
+                subText: "",
+                cssClass: "dgt-replica-B",
+                desc: "Vehículos de combustión interna más antiguos. Presentan mayores restricciones de acceso y aparcamiento.",
+            },
+            A: {
+                label: "Sin Etiqueta (Tipo A)",
+                letter: "A",
+                subText: "Sin Distintivo",
+                cssClass: "dgt-replica-A",
+                desc: "Vehículos altamente contaminantes sin derecho a distintivo. Tienen prohibida la circulación o entrada en prácticamente todas las Zonas de Bajas Emisiones de gran tamaño.",
+            },
+        };
+
+        const calculateBadge = (vType: string, fType: string, year: string) => {
+            if (fType === "electric" || fType === "phev_high") return "ZERO";
+            if (fType === "phev_low" || fType === "hybrid_gas") return "ECO";
+
+            if (vType === "moto") {
+                if (year === "pre2000" || year === "2000-2005") return "B";
+                if (year === "post2014" || year === "2006-2013") return "C";
+                return "A";
+            }
+
+            if (fType === "gasoline") {
+                if (year === "pre2000") return "A";
+                if (year === "2000-2005") return "B";
+                if (year === "2006-2013" || year === "post2014") return "C";
+            }
+
+            if (fType === "diesel") {
+                if (year === "pre2000" || year === "2000-2005") return "A";
+                if (year === "2006-2013") return "B";
+                if (year === "post2014") return "C";
+            }
+
+            return "A";
+        };
+
+        const showError = (el: HTMLInputElement, show: boolean) => {
+            const err = document.getElementById(`err-${el.id}`);
+            if (err) err.style.opacity = show ? "1" : "0";
+
+            const groupCards = document.querySelectorAll(`.option-card[data-group="${el.id}"]`);
+            if (show) {
+                groupCards.forEach((c) => c.classList.add("error"));
+            } else {
+                groupCards.forEach((c) => c.classList.remove("error"));
+            }
+        };
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const vehicleType = document.getElementById("vehicleType") as HTMLInputElement;
+            const fuelType = document.getElementById("fuelType") as HTMLInputElement;
+            const registrationYear = document.getElementById(
+                "registrationYear"
+            ) as HTMLInputElement;
+
+            let valid = true;
+            if (!vehicleType.value) {
+                showError(vehicleType, true);
+                valid = false;
+            } else {
+                showError(vehicleType, false);
+            }
+            if (!fuelType.value) {
+                showError(fuelType, true);
+                valid = false;
+            } else {
+                showError(fuelType, false);
+            }
+            if (!registrationYear.value) {
+                showError(registrationYear, true);
+                valid = false;
+            } else {
+                showError(registrationYear, false);
+            }
+
+            if (!valid) return;
+
+            const badge = calculateBadge(vehicleType.value, fuelType.value, registrationYear.value);
+            const data = BADGES[badge as keyof typeof BADGES];
+
+            const cssTag =
+                data.cssClass !== "dgt-replica-A"
+                    ? `<div class="dgt-replica ${data.cssClass}">
+                    <span class="big-letter">${data.letter}</span>
+                    <span class="sub-text">${data.subText}</span>
+                </div>`
+                    : `<div class="dgt-replica-A">
+                    <span class="big-letter">NO</span>
+                    <span class="sub-text">DISPONE</span>
+                </div>`;
+
+            badgeDisplay.innerHTML = `
+                ${cssTag}
+                <h3>${data.label}</h3>
+            `;
+            resultDescription.innerText = data.desc;
+
+            form.classList.add("hidden");
+            resultBox.classList.remove("hidden");
+            resultBox.style.animation = "fadeIn 0.4s ease-out forwards";
+        });
+
+        if (resetBtn) {
+            resetBtn.addEventListener("click", () => {
+                form.reset();
+                form.querySelectorAll(".option-card").forEach((c) =>
+                    c.classList.remove("selected", "error")
+                );
+
+                const hiddenInputs = form.querySelectorAll("input[type='hidden']");
+                hiddenInputs.forEach((input: any) => (input.value = ""));
+
+                form.classList.remove("hidden");
+                resultBox.classList.add("hidden");
+                resultBox.style.animation = "none";
+            });
+        }
+    });
+</script>

@@ -80,5 +80,13 @@ export const toolsSection: SectionData = {
             description: "Elimina duplicados, espacios y corrige formatos en tus listas de correos.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/simulador-etiqueta-ambiental/",
+            iconBg: "mdi:car-electric",
+            iconFg: "mdi:leaf",
+            title: "Simulador de Etiqueta DGT",
+            description: "Averigua al instante qué distintivo ambiental le corresponde a tu coche o moto.",
+            color: "#16a34a",
+        },
     ],
 };
