@@ -1,0 +1,287 @@
+---
+import "./WeightedGradeCalculator.css";
+---
+
+<div class="weighted-calc-container view-fade-in">
+    <div class="calc-header">
+        <h2 class="calc-title">Asignaturas y Ponderaciones</h2>
+        <button id="add-subject" class="add-btn">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"
+                ></line></svg
+            >
+            Añadir Asignatura
+        </button>
+    </div>
+
+    <div id="subjects-list" class="subjects-list">
+        <div class="subject-row" data-id="1">
+            <div class="input-group">
+                <label class="input-label">Asignatura</label>
+                <input
+                    type="text"
+                    class="input-control subject-name"
+                    placeholder="Ej: Matemáticas II"
+                    value="Matemáticas II"
+                />
+            </div>
+            <div class="input-group">
+                <label class="input-label">Nota (0-10)</label>
+                <input
+                    type="number"
+                    class="input-control subject-grade"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    value="0"
+                />
+            </div>
+            <div class="input-group">
+                <label class="input-label">Peso (%)</label>
+                <input
+                    type="number"
+                    class="input-control subject-weight"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value="100"
+                />
+            </div>
+            <button class="remove-btn" title="Eliminar asignatura">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><polyline points="3 6 5 6 21 6"></polyline><path
+                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                    ></path></svg
+                >
+            </button>
+        </div>
+    </div>
+
+    <div class="results-panel">
+        <div class="result-label">Nota Final Ponderada</div>
+        <div id="final-grade" class="result-value">0.00</div>
+
+        <div class="weight-status-container">
+            <div class="weight-progress-bar">
+                <div id="weight-progress-fill" class="weight-progress-fill"></div>
+            </div>
+            <div id="weight-sum-warning" class="weight-warning" style="display: none;">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"
+                    ></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg
+                >
+                <span>Suma de pesos: <span id="current-weight-sum">0</span>%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    interface Subject {
+        name: string;
+        grade: number;
+        weight: number;
+        manual: boolean;
+    }
+
+    const STORAGE_KEY = "jjlmoya_weighted_grades";
+    const subjectsList = document.getElementById("subjects-list");
+    const addBtn = document.getElementById("add-subject");
+    const finalGradeEl = document.getElementById("final-grade");
+    const weightWarning = document.getElementById("weight-sum-warning");
+    const weightSumEl = document.getElementById("current-weight-sum");
+    const progressFill = document.getElementById("weight-progress-fill");
+
+    function saveState(): void {
+        if (!subjectsList) return;
+        const rows = subjectsList.querySelectorAll(".subject-row");
+        const subjects: Subject[] = Array.from(rows).map((row) => {
+            const nameEl = row.querySelector(".subject-name") as HTMLInputElement;
+            const gradeEl = row.querySelector(".subject-grade") as HTMLInputElement;
+            const weightEl = row.querySelector(".subject-weight") as HTMLInputElement;
+            return {
+                name: nameEl.value,
+                grade: parseFloat(gradeEl.value) || 0,
+                weight: parseFloat(weightEl.value) || 0,
+                manual: row.hasAttribute("data-manual"),
+            };
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(subjects));
+    }
+
+    function calculateGrade(): void {
+        if (!subjectsList || !finalGradeEl || !weightWarning || !weightSumEl || !progressFill)
+            return;
+
+        const rows = subjectsList.querySelectorAll(".subject-row");
+        let totalWeightedGrade = 0;
+        let totalWeight = 0;
+
+        rows.forEach((row) => {
+            const gradeInput = row.querySelector(".subject-grade") as HTMLInputElement | null;
+            const weightInput = row.querySelector(".subject-weight") as HTMLInputElement | null;
+
+            if (gradeInput && weightInput) {
+                const grade = parseFloat(gradeInput.value) || 0;
+                const weight = parseFloat(weightInput.value) || 0;
+
+                totalWeightedGrade += grade * (weight / 100);
+                totalWeight += weight;
+            }
+        });
+
+        finalGradeEl.textContent = totalWeightedGrade.toFixed(2);
+        weightSumEl.textContent = Math.round(totalWeight * 10) / 10 + "";
+
+        progressFill.style.width = `${Math.min(totalWeight, 100)}%`;
+
+        if (totalWeight > 100.1) {
+            weightWarning.style.display = "flex";
+            weightWarning.classList.add("error");
+            progressFill.classList.add("error");
+        } else if (Math.abs(totalWeight - 100) > 0.1 && totalWeight > 0) {
+            weightWarning.style.display = "flex";
+            weightWarning.classList.remove("error");
+            progressFill.classList.remove("error");
+            progressFill.classList.add("warning");
+        } else {
+            weightWarning.style.display = totalWeight === 0 ? "none" : "flex";
+            weightWarning.classList.remove("error");
+            progressFill.classList.remove("error", "warning");
+        }
+
+        saveState();
+    }
+
+    function autoAdjustWeights(): void {
+        if (!subjectsList) return;
+        const rows = subjectsList.querySelectorAll(".subject-row");
+        if (rows.length === 0) return;
+
+        const manualRows = Array.from(rows).filter((r) => r.hasAttribute("data-manual"));
+        const autoRows = Array.from(rows).filter((r) => !r.hasAttribute("data-manual"));
+
+        let manualWeightTotal = 0;
+        manualRows.forEach((row) => {
+            const input = row.querySelector(".subject-weight") as HTMLInputElement;
+            manualWeightTotal += parseFloat(input.value) || 0;
+        });
+
+        if (autoRows.length > 0) {
+            const remainingWeight = Math.max(0, 100 - manualWeightTotal);
+            const weightPerAuto = (remainingWeight / autoRows.length).toFixed(1);
+            autoRows.forEach((row) => {
+                const input = row.querySelector(".subject-weight") as HTMLInputElement;
+                input.value = weightPerAuto;
+            });
+        }
+        calculateGrade();
+    }
+
+    function addSubject(data?: Subject): void {
+        if (!subjectsList) return;
+
+        const row = document.createElement("div");
+        row.className = "subject-row";
+        if (data?.manual) row.setAttribute("data-manual", "true");
+
+        row.innerHTML = `
+            <div class="input-group">
+                <label class="input-label">Asignatura</label>
+                <input type="text" class="input-control subject-name" placeholder="Nueva Asignatura" value="${data?.name || ""}">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Nota (0-10)</label>
+                <input type="number" class="input-control subject-grade" min="0" max="10" step="0.1" value="${data?.grade || 0}">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Peso (%)</label>
+                <input type="number" class="input-control subject-weight" min="0" max="100" step="0.1" value="${data?.weight || 0}">
+            </div>
+            <button class="remove-btn" title="Eliminar asignatura">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+        `;
+
+        subjectsList.appendChild(row);
+
+        const weightInput = row.querySelector(".subject-weight") as HTMLInputElement;
+        weightInput.addEventListener("input", () => {
+            row.setAttribute("data-manual", "true");
+            calculateGrade();
+        });
+
+        row.querySelector(".subject-name")?.addEventListener("input", calculateGrade);
+        row.querySelector(".subject-grade")?.addEventListener("input", calculateGrade);
+
+        row.querySelector(".remove-btn")?.addEventListener("click", () => {
+            row.remove();
+            autoAdjustWeights();
+        });
+
+        if (!data) autoAdjustWeights();
+    }
+
+    function init(): void {
+        if (!subjectsList || !addBtn) return;
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            subjectsList.innerHTML = "";
+            const subjects: Subject[] = JSON.parse(saved);
+            if (subjects.length > 0) {
+                subjects.forEach((s) => addSubject(s));
+                calculateGrade();
+            } else {
+                addSubject();
+            }
+        } else {
+            const firstRow = subjectsList.querySelector(".subject-row");
+            if (firstRow) {
+                firstRow.querySelector(".subject-weight")?.addEventListener("input", (e) => {
+                    (e.target as HTMLElement)
+                        .closest(".subject-row")
+                        ?.setAttribute("data-manual", "true");
+                    calculateGrade();
+                });
+                firstRow.querySelector(".subject-name")?.addEventListener("input", calculateGrade);
+                firstRow.querySelector(".subject-grade")?.addEventListener("input", calculateGrade);
+                firstRow.querySelector(".remove-btn")?.addEventListener("click", () => {
+                    firstRow.remove();
+                    autoAdjustWeights();
+                });
+            }
+        }
+
+        addBtn.addEventListener("click", () => addSubject());
+    }
+
+    init();
+</script>
