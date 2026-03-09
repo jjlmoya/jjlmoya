@@ -6,6 +6,14 @@ export const cookingSection: SectionData = {
     theme: "orange",
     utilities: [
         {
+            href: "/utilidades/conversor-unidades-cocina-americana/",
+            iconBg: "mdi:scale-balance",
+            iconFg: "mdi:shaker",
+            title: "Conversor Cocina Americana",
+            description: "Convierte cups, tablespoons y Fahrenheit al milímetro para unas recetas exactas.",
+            color: "#ef4444",
+        },
+        {
             href: "/utilidades/pizza/",
             iconBg: "mdi:pizza",
             iconFg: "mdi:chef-hat",
