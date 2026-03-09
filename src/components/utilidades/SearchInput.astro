@@ -1,129 +1,204 @@
 ---
 import { Icon } from "astro-icon/components";
+import type { SectionData } from "../../data/utilities";
+import "./SearchInput.css";
+
+interface Props {
+    sections: SectionData[];
+}
+
+const { sections } = Astro.props;
+
+interface FlatUtility {
+    title: string;
+    description: string;
+    href: string;
+    icon: string;
+    theme: string;
+    category: string;
+}
+
+const flatUtilities: FlatUtility[] = sections.flatMap((section) =>
+    section.utilities.map((u) => ({
+        title: u.title,
+        description: u.description,
+        href: u.href,
+        icon: u.iconFg || "mdi:tools",
+        theme: section.theme,
+        category: section.title,
+    }))
+);
 ---
 
-<div class="relative w-full max-w-xl mx-auto mb-12 group">
-    <div
-        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors"
-    >
-        <Icon name="mdi:magnify" class="w-6 h-6" />
+<div class="search-container" id="search-container">
+    <div class="search-field-wrapper">
+        <input
+            type="text"
+            id="utility-search"
+            placeholder="Buscar..."
+            class="search-input"
+            autocomplete="off"
+        />
+        <div class="search-icon">
+            <Icon name="mdi:magnify" class="w-4 h-4" />
+        </div>
+        <div class="shortcut-hint">/</div>
     </div>
-    <input
-        type="text"
-        id="utility-search"
-        placeholder="Buscar utilidad..."
-        class="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl text-lg outline-none focus:border-indigo-500 dark:focus:border-indigo-500 transition-all shadow-sm hover:border-slate-300 dark:hover:border-slate-600 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-900 dark:text-white"
-        autocomplete="off"
-    />
-    <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
-        <div
-            class="w-8 h-8 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-900 text-slate-400 text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-            /
+
+    <div id="search-results" class="search-results">
+        <div id="results-list"></div>
+        <div id="no-results-view" class="request-tool-card" style="display: none;">
+            <p class="request-tool-text">Aún no he tenido tiempo para hacer esta herramienta</p>
+            <button id="request-tool-btn" class="request-tool-button">
+                <span class="btn-text">¿Te gustaría que la hiciera?</span>
+                <span class="btn-loading"><div class="spinner"></div></span>
+                <span class="btn-success"><Icon name="mdi:thumb-up" class="w-4 h-4" /></span>
+            </button>
+            <div id="request-status" class="request-status">
+                <span class="status-success">¡Oído cocina! Me pongo con ello.</span>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="no-results" class="hidden text-center py-12">
-    <div
-        class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4"
-    >
-        <Icon name="mdi:emoticon-sad-outline" class="w-8 h-8 text-slate-400" />
-    </div>
-    <h3 class="text-xl font-medium text-slate-900 dark:text-white mb-2">
-        No se encontraron resultados
-    </h3>
-    <p class="text-slate-500 dark:text-slate-400">
-        Intenta con otros términos o revisa la ortografía.
-    </p>
-</div>
+<script is:inline define:vars={{ flatUtilities }}>
+    const colorMap = {
+        emerald: "bg-emerald-100 dark:bg-emerald-800 text-emerald-600 dark:text-emerald-400",
+        orange: "bg-orange-100 dark:bg-orange-800 text-orange-600 dark:text-orange-400",
+        purple: "bg-purple-100 dark:bg-purple-800 text-purple-600 dark:text-purple-400",
+        blue: "bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-400",
+        pink: "bg-pink-100 dark:bg-pink-800 text-pink-600 dark:text-pink-400",
+        cyan: "bg-cyan-100 dark:bg-cyan-800 text-cyan-600 dark:text-cyan-400",
+        indigo: "bg-indigo-100 dark:bg-indigo-800 text-indigo-600 dark:text-indigo-400",
+        slate: "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400",
+        rose: "bg-rose-100 dark:bg-rose-800 text-rose-600 dark:text-rose-400",
+        amber: "bg-amber-100 dark:bg-amber-800 text-amber-600 dark:text-amber-400",
+        nature: "bg-lime-100 dark:bg-lime-800 text-lime-600 dark:text-lime-400",
+    };
 
-<script>
-    function normalizeText(text: string): string {
-        if (!text) return "";
+    function normalize(text) {
         return text
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .trim();
+            .toLowerCase();
     }
 
     function initSearch() {
-        const searchInput = document.getElementById("utility-search") as HTMLInputElement;
-        const sections = document.querySelectorAll("[data-utility-section]");
-        const noResults = document.getElementById("no-results");
+        const input = document.getElementById("utility-search");
+        const results = document.getElementById("search-results");
+        const resultsList = document.getElementById("results-list");
+        const noResults = document.getElementById("no-results-view");
+        const requestBtn = document.getElementById("request-tool-btn");
+        const status = document.getElementById("request-status");
 
-        if (!searchInput) return;
+        if (!input) return;
 
-        if (searchInput.getAttribute("data-search-initialized")) return;
-        searchInput.setAttribute("data-search-initialized", "true");
-
-        console.log(`Search initialized. Found ${sections.length} sections.`);
-
-        const handleKeydown = (e: KeyboardEvent) => {
-            if (e.key === "/" && document.activeElement !== searchInput) {
-                e.preventDefault();
-                searchInput.focus();
+        input.addEventListener("input", (e) => {
+            const query = normalize(e.target.value.trim());
+            if (!query) {
+                results.classList.remove("active");
+                return;
             }
-        };
 
-        document.addEventListener("keydown", handleKeydown);
+            const matches = flatUtilities
+                .filter(
+                    (u) =>
+                        normalize(u.title).includes(query) ||
+                        normalize(u.description).includes(query) ||
+                        normalize(u.category).includes(query)
+                )
+                .slice(0, 10);
 
-        searchInput.addEventListener("input", (e) => {
-            const rawValue = (e.target as HTMLInputElement).value;
-            const query = normalizeText(rawValue);
+            results.classList.add("active");
+            noResults.style.display = matches.length === 0 ? "block" : "none";
+            resultsList.innerHTML = matches
+                .map((m) => {
+                    const originalCard = document.querySelector(`a[href="${m.href}"]`);
+                    const originalIcon = originalCard
+                        ? originalCard.querySelector("svg.w-6")
+                        : null;
+                    const iconContent = originalIcon
+                        ? originalIcon.outerHTML
+                        : '<span class="text-xs">#</span>';
 
-            let hasResults = false;
+                    return `
+                    <a href="${m.href}" class="search-item">
+                        <div class="search-item-icon ${colorMap[m.theme] || ""}">
+                            ${iconContent}
+                        </div>
+                        <div>
+                            <div class="search-item-title">${m.title}</div>
+                            <div style="font-size: 0.7rem; color: #64748b;">${m.category}</div>
+                        </div>
+                    </a>
+                `;
+                })
+                .join("");
 
-            sections.forEach((section) => {
-                const sectionEl = section as HTMLElement;
-                const sectionTitle = normalizeText(
-                    section.getAttribute("data-section-title") || ""
-                );
-                const sectionMatches = sectionTitle.includes(query);
+            status.style.display = "none";
+            status.className = "request-status";
+            requestBtn.classList.remove("is-success");
+            requestBtn.disabled = false;
+        });
 
-                const sectionCards = section.querySelectorAll("[data-utility-card]");
-                let visibleCardsCount = 0;
+        document.addEventListener("click", (e) => {
+            if (!document.getElementById("search-container").contains(e.target)) {
+                results.classList.remove("active");
+            }
+        });
 
-                sectionCards.forEach((card) => {
-                    const title = normalizeText(card.getAttribute("data-title") || "");
-                    const description = normalizeText(card.getAttribute("data-description") || "");
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "/" && document.activeElement !== input) {
+                e.preventDefault();
+                input.focus();
+            }
+        });
 
-                    const isMatch =
-                        sectionMatches || title.includes(query) || description.includes(query);
-                    const el = card as HTMLElement;
+        requestBtn.addEventListener("click", async () => {
+            const query = input.value.trim();
+            if (!query) return;
 
-                    if (isMatch) {
-                        el.style.display = "";
-                        hasResults = true;
-                        visibleCardsCount++;
-                    } else {
-                        el.style.display = "none";
-                    }
-                });
+            requestBtn.classList.add("is-loading");
+            requestBtn.disabled = true;
 
-                if (visibleCardsCount === 0) {
-                    sectionEl.style.display = "none";
-                } else {
-                    sectionEl.style.display = "";
+            let userId = "Anónimo";
+            try {
+                const footprint = localStorage.getItem("jjlmoya_footprint_v5");
+                if (footprint) {
+                    const data = JSON.parse(footprint);
+                    if (data.id) userId = data.id;
                 }
-            });
+            } catch (e) {}
 
-            if (!hasResults && query.length > 0) {
-                noResults?.classList.remove("hidden");
-            } else {
-                noResults?.classList.add("hidden");
+            try {
+                await fetch(
+                    "https://script.google.com/macros/s/AKfycbySUhlqnbamZCYZjuCJlQD51jmuAnjX6q6jb8XSFo7CRAG3_M_Xb90MWqSB_2zb-OQc/exec",
+                    {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "text/plain" },
+                        body: JSON.stringify({
+                            type: "utility-request",
+                            query: query,
+                            ua: navigator.userAgent,
+                            id: userId,
+                            timestamp: new Date().toISOString(),
+                        }),
+                    }
+                );
+
+                requestBtn.classList.remove("is-loading");
+                requestBtn.classList.add("is-success");
+                status.style.display = "block";
+                status.className = "request-status success";
+            } catch (err) {
+                requestBtn.classList.remove("is-loading");
+                requestBtn.disabled = false;
+                alert("Uy, no he podido enviar la propuesta. ¡Inténtalo de nuevo!");
             }
         });
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initSearch);
-    } else {
-        initSearch();
-    }
-
-    document.addEventListener("astro:page-load", () => {
-        initSearch();
-    });
+    initSearch();
+    document.addEventListener("astro:page-load", initSearch);
 </script>

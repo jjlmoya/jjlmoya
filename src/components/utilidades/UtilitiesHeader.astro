@@ -1,0 +1,66 @@
+---
+import type { SectionData } from "../../data/utilities";
+import SearchInput from "./SearchInput.astro";
+import { Icon } from "astro-icon/components";
+import "./UtilitiesHeader.css";
+
+interface Props {
+    total: number;
+    sections: SectionData[];
+}
+
+const { total, sections } = Astro.props;
+---
+
+<header class="utilities-header" id="main-utilities-header">
+    <div class="utilities-header-container">
+        <div class="utilities-info" id="mobile-title-block">
+            <h1 class="utilities-title">
+                Utilidades ({total})
+                <span class="utilities-title-sub">Online gratuitas: Herramientas de precisión</span>
+            </h1>
+        </div>
+
+        <button class="mobile-btn-search" id="mobile-btn-search" aria-label="Abrir buscador">
+            <Icon name="mdi:magnify" class="w-6 h-6" />
+        </button>
+
+        <div class="utilities-search-wrapper" id="mobile-search-wrapper">
+            <div class="search-input-container">
+                <SearchInput sections={sections} />
+            </div>
+            <button class="mobile-btn-close" id="mobile-btn-close" aria-label="Cerrar buscador">
+                <Icon name="mdi:close" class="w-5 h-5" />
+            </button>
+        </div>
+    </div>
+</header>
+
+<script is:inline>
+    (function () {
+        function initMobileSearch() {
+            const header = document.getElementById("main-utilities-header");
+            const btnSearch = document.getElementById("mobile-btn-search");
+            const btnClose = document.getElementById("mobile-btn-close");
+            const input = document.getElementById("utility-search");
+
+            if (!header || !btnSearch || !btnClose || !input) return;
+
+            btnSearch.onclick = () => {
+                header.classList.add("is-search-active");
+                setTimeout(() => input.focus(), 50);
+            };
+
+            btnClose.onclick = () => {
+                header.classList.add("is-search-closing");
+                setTimeout(() => {
+                    header.classList.remove("is-search-active");
+                    header.classList.remove("is-search-closing");
+                }, 250);
+            };
+        }
+
+        initMobileSearch();
+        document.addEventListener("astro:page-load", initMobileSearch);
+    })();
+</script>

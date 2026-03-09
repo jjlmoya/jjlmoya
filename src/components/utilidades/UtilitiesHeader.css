@@ -1,0 +1,217 @@
+.utilities-header {
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    width: 100%;
+    padding: 1.25rem 0 0.5rem 0;
+    background-color: rgba(248, 250, 252, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 1rem;
+}
+
+:global(.dark) .utilities-header {
+    background-color: rgba(2, 6, 23, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.utilities-header-container {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.75rem;
+}
+
+.utilities-info {
+    flex-shrink: 0;
+    display: flex;
+}
+
+.utilities-title {
+    font-size: 1.125rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+}
+
+:global(.dark) .utilities-title {
+    color: #f8fafc;
+}
+
+.utilities-title-sub {
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: #64748b;
+    margin-top: 0.05rem;
+    display: block;
+    opacity: 0.8;
+}
+
+:global(.dark) .utilities-title-sub {
+    color: #94a3b8;
+}
+
+/* MOBILE SEARCH BUTTON */
+.mobile-btn-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+:global(.dark) .mobile-btn-search {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+.mobile-btn-search:active {
+    background: #e2e8f0;
+}
+
+:global(.dark) .mobile-btn-search:active {
+    background: #334155;
+}
+
+/* SEARCH WRAPPER */
+.utilities-search-wrapper {
+    display: none;
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-input-container {
+    flex: 1;
+    width: 100%;
+}
+
+.mobile-btn-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #64748b;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.mobile-btn-close:hover,
+.mobile-btn-close:active {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+:global(.dark) .mobile-btn-close {
+    color: #94a3b8;
+}
+
+:global(.dark) .mobile-btn-close:hover,
+:global(.dark) .mobile-btn-close:active {
+    background: #1e293b;
+    color: #f8fafc;
+}
+
+/* STATE: SEARCH ACTIVE (MOBILE) */
+.is-search-active .utilities-info,
+.is-search-active .mobile-btn-search {
+    display: none;
+}
+
+.is-search-active .utilities-search-wrapper {
+    display: flex;
+    animation: fadeInSearch 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.is-search-closing .utilities-search-wrapper {
+    display: flex !important;
+    animation: fadeOutSearch 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes fadeInSearch {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutSearch {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+
+/* DESKTOP RESPONSIVE */
+@media (min-width: 768px) {
+    .utilities-header {
+        padding: 1rem 0 0.75rem 0;
+    }
+
+    .utilities-header-container {
+        gap: 3rem;
+    }
+
+    .utilities-info {
+        display: flex !important;
+    }
+
+    .utilities-title {
+        font-size: 1.25rem;
+    }
+
+    .utilities-title-sub {
+        font-size: 0.55rem;
+        margin-top: 0.15rem;
+    }
+
+    .mobile-btn-search,
+    .mobile-btn-close {
+        display: none !important;
+    }
+
+    .utilities-search-wrapper {
+        display: flex !important;
+        flex: 1;
+        justify-content: flex-end;
+        max-width: 28rem;
+        padding-top: 0;
+        animation: none !important;
+    }
+
+    .search-input-container {
+        flex: none;
+        width: 100%;
+    }
+}
