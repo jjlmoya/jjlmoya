@@ -1,0 +1,15 @@
+export const content = {
+    title: "Calculadora de Propinas",
+    badge: "International Tip Tool",
+    billLabel: "Importe de la Factura",
+    countryLabel: "País / Costumbre Local",
+    tipLabel: "Porcentaje Propina",
+    splitLabel: "Dividir Cuenta",
+    summaryTip: "Propina Total",
+    summarySubtotal: "Subtotal",
+    summaryTotalPerson: "Total por Persona",
+    protocolTitle: "Protocolo",
+    placeholderAmount: "0.00",
+    placeholderFilter: "Buscar país...",
+    placeholderSelect: "Selecciona un país",
+};

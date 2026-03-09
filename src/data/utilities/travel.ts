@@ -13,5 +13,13 @@ export const travelSection: SectionData = {
             iconFg: "mdi:airplane",
             color: "#3b82f6",
         },
+        {
+            title: "Calculadora de Propinas",
+            description: "Guía de etiqueta y porcentajes de propina recomendados para más de 50 países.",
+            href: "/utilidades/calculadora-propinas-internacional/",
+            iconBg: "mdi:cash-multiple",
+            iconFg: "mdi:earth",
+            color: "#10b981",
+        },
     ],
 };
