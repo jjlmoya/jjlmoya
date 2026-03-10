@@ -21,5 +21,13 @@ export const travelSection: SectionData = {
             iconFg: "mdi:earth",
             color: "#10b981",
         },
+        {
+            title: "Generador de Checklist de Maleta",
+            description: "Checklist interactivo de equipaje basado en el destino, duración y motivos de viaje.",
+            href: "/utilidades/generador-checklist-maleta/",
+            iconBg: "mdi:clipboard-check",
+            iconFg: "mdi:bag-suitcase",
+            color: "#8b5cf6",
+        },
     ],
 };
