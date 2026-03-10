@@ -73,9 +73,7 @@ describe("Image Assets Integrity", () => {
 
         for (const file of files) {
             const ext = path.extname(file).toLowerCase();
-            const basename = path.basename(file);
-
-            if ([".webp", ".ico", ".png", ".jpg"].includes(ext) || basename === "SocialResizer.ts")
+            if ([".webp", ".ico", ".png", ".jpg"].includes(ext))
                 continue;
 
             const content = fs.readFileSync(file, "utf8");

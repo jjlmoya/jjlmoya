@@ -145,9 +145,13 @@ export class SocialResizer {
 
     public download() {
         if (!this.image) return;
+
+        const mime = "image/jpeg";
+        const ext = "jpg";
+
         const link = document.createElement("a");
-        link.download = `jjlmoya-${this.currentPreset.id}.jpg`;
-        link.href = this.canvas.toDataURL("image/jpeg", 0.9);
+        link.download = `jjlmoya-${this.currentPreset.id}.${ext}`;
+        link.href = this.canvas.toDataURL(mime, 0.9);
         link.click();
     }
 }
