@@ -33,5 +33,13 @@ export const natureSection: SectionData = {
             iconBg: "mdi:thermometer",
             iconFg: "mdi:grass",
         },
+        {
+            href: "/utilidades/calculadora-huella-carbono-digital/",
+            iconBg: "mdi:leaf",
+            iconFg: "mdi:monitor",
+            title: "Huella de Carbono Digital",
+            description: "Analiza el peso de una web y estima el CO2 generado por cada visita y el consumo energético del servidor.",
+            color: "#10b981",
+        },
     ],
 };

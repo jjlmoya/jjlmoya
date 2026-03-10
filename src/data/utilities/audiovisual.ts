@@ -57,14 +57,6 @@ export const audiovisualSection: SectionData = {
             color: "#6366f1",
         },
         {
-            href: "/utilidades/simulador-redes/",
-            iconBg: "mdi:layers-triple",
-            iconFg: "mdi:phone-rotate-portrait",
-            title: "Social Safe Zones",
-            description: "Simulador de interfaces para fotos y videos en TikTok, Reels y Shorts.",
-            color: "#f43f5e",
-        },
-        {
             href: "/utilidades/distancia-tv/",
             iconBg: "mdi:television",
             iconFg: "mdi:ruler",
@@ -72,15 +64,6 @@ export const audiovisualSection: SectionData = {
             description:
                 "Encuentra el punto óptimo de inmersión para tu Home Cinema según THX y SMPTE.",
             color: "#2563eb",
-        },
-        {
-            href: "/utilidades/simulador-daltonismo/",
-            iconBg: "mdi:eye-check-outline",
-            iconFg: "mdi:circle-slice-4",
-            title: "Simulador de Daltonismo",
-            description:
-                "Visualiza tus imagenes como personas con diferentes tipos de deficiencia cromatica (CVD).",
-            color: "#3b82f6",
         },
         {
             href: "/utilidades/compresor-imagenes/",
@@ -92,33 +75,6 @@ export const audiovisualSection: SectionData = {
             color: "#10b981",
         },
         {
-            href: "/utilidades/generador-imagenes-placeholder/",
-            iconBg: "mdi:image-outline",
-            iconFg: "mdi:pencil-ruler",
-            title: "Generador Placeholder",
-            description:
-                "Crea imágenes de prueba o bocetos con dimensiones y textos a medida al instante.",
-            color: "#eab308",
-        },
-        {
-            href: "/utilidades/extractor-miniaturas-youtube/",
-            iconBg: "mdi:youtube",
-            iconFg: "mdi:image-search",
-            title: "Extractor de Miniaturas",
-            description:
-                "Descarga las portadas de videos de YouTube en Máxima Calidad usando solo la URL.",
-            color: "#ef4444",
-        },
-        {
-            href: "/utilidades/convertidor-imagen-base64/",
-            iconBg: "mdi:file-image",
-            iconFg: "mdi:code-tags",
-            title: "Imagen a Base64",
-            description:
-                "Convierte imágenes a formato Data URI o Base64 para incrustar directo en tu HTML o CSS.",
-            color: "#0ea5e9",
-        },
-        {
             href: "/utilidades/creador-collage-fotos/",
             iconBg: "mdi:collage",
             iconFg: "mdi:palette-outline",
@@ -128,28 +84,12 @@ export const audiovisualSection: SectionData = {
             color: "#a855f7",
         },
         {
-            href: "/utilidades/calculadora-valor-cuenta-redes-sociales/",
-            iconBg: "mdi:currency-usd",
-            iconFg: "mdi:instagram",
-            title: "Calculadora Valor de Cuenta",
-            description: "Calcula el precio de tus publicaciones patrocinadas basado en seguidores, engagement y nicho.",
-            color: "#3b82f6",
-        },
-        {
             href: "/utilidades/extractor-frames-video/",
             iconBg: "mdi:video-vintage",
             iconFg: "mdi:camera-plus",
             title: "Extractor de Frames",
             description: "Captura fotogramas en alta resolución de tus vídeos locales con precisión quirúrgica.",
             color: "#6366f1",
-        },
-        {
-            href: "/utilidades/previsualizador-miniaturas-youtube/",
-            iconBg: "mdi:youtube",
-            iconFg: "mdi:eye-check",
-            title: "Previsualizador de Miniaturas",
-            description: "Visualiza tus miniaturas en el feed de YouTube (Móvil vs Desktop) con modo oscuro y claro.",
-            color: "#ef4444",
         },
     ],
 };

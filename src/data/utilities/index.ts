@@ -1,11 +1,13 @@
 import type { SectionData } from "./types";
 
 import { financeSection } from "./finance";
+import { workSection } from "./work";
 import { cookingSection } from "./cooking";
 import { homeSection } from "./home";
 import { filesSection } from "./files";
 import { musicSection } from "./music";
 import { healthSection } from "./health";
+import { sportsSection } from "./sports";
 import { devSection } from "./developer";
 import { toolsSection } from "./tools";
 import { streamingSection } from "./streaming";
@@ -18,6 +20,7 @@ import { diySection } from "./diy";
 import { bikeSection } from "./bike";
 import { scienceSection } from "./science";
 import { audiovisualSection } from "./audiovisual";
+import { socialSection } from "./social";
 import { textileSection } from "./textiles";
 import { converterSection } from "./converters";
 import { travelSection } from "./travel";
@@ -28,12 +31,15 @@ export const sections: SectionData[] = [
     cookingSection,
     homeSection,
     filesSection,
+    socialSection,
     musicSection,
     healthSection,
+    sportsSection,
     devSection,
     hardwareSection,
     toolsSection,
     financeSection,
+    workSection,
     natureSection,
     textileSection,
     streamingSection,

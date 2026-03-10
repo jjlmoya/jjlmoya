@@ -1,0 +1,74 @@
+import type { SectionData } from "./types";
+
+export const workSection: SectionData = {
+    title: "Autónomos y Trabajo",
+    icon: "mdi:briefcase",
+    theme: "blue",
+    utilities: [
+        {
+            title: "Simulador Sueldo Neto",
+            description:
+                "¿Cuánto llega a tu banco? Cálculo real de IRPF y Seguridad Social en España.",
+            href: "/utilidades/calculadora-sueldo-neto/",
+            iconBg: "mdi:bank-outline",
+            iconFg: "mdi:cash-multiple",
+            color: "#059669",
+        },
+        {
+            title: "Simulador Cuota Autónomos 2026",
+            description: "Calcula tu cuota mensual real basada en rendimientos netos con el nuevo sistema de tramos.",
+            href: "/utilidades/calculadora-cuota-autonomos-2026/",
+            iconBg: "mdi:account-tie",
+            iconFg: "mdi:calculator-variant",
+            color: "#10b981",
+        },
+        {
+            title: "Calculadora IVA Inverso",
+            description: "Desglosa el IVA de cualquier total. Imprescindible para autónomos.",
+            href: "/utilidades/calculadora-iva-inverso/",
+            iconBg: "mdi:receipt-text-outline",
+            iconFg: "mdi:percent-outline",
+            color: "#3b82f6",
+        },
+        {
+            title: "Generador de Facturas PDF",
+            description: "Crea y descarga facturas automáticamente calculando el IVA y retenciones.",
+            href: "/utilidades/generador-facturas-pdf/",
+            iconBg: "mdi:file-document-outline",
+            iconFg: "mdi:receipt-text",
+            color: "#4f46e5",
+        },
+        {
+            title: "Coste de Reunión",
+            description: "El tiempo es dinero. Visualiza el coste real en directo.",
+            href: "/utilidades/calculadora-coste-reunion/",
+            iconBg: "mdi:clock-fast",
+            iconFg: "mdi:cash-multiple",
+            color: "#16a34a",
+        },
+        {
+            title: "Finiquito e Indemnización",
+            description: "Calcula tu liquidación laboral completa: vacaciones, pagas extra y compensación por despido.",
+            href: "/utilidades/calculadora-finiquito-indemnizacion/",
+            iconBg: "mdi:calculator-variant",
+            iconFg: "mdi:cash-fast",
+            color: "#10b981",
+        },
+        {
+            title: "Carta de Renuncia",
+            description: "No te compliques al irte. Genera tu carta de baja voluntaria profesional y PDF listo para firmar.",
+            href: "/utilidades/generador-carta-renuncia/",
+            iconBg: "mdi:file-document-edit-outline",
+            iconFg: "mdi:briefcase-off-outline",
+            color: "#6366f1",
+        },
+        {
+            title: "Jubilación Anticipada",
+            description: "¿Cuándo puedes dejar de trabajar? Calcula tu edad legal y el recorte en tu pensión.",
+            href: "/utilidades/simulador-jubilacion-anticipada/",
+            iconBg: "mdi:island",
+            iconFg: "mdi:calculator-variant",
+            color: "#10b981",
+        },
+    ],
+};

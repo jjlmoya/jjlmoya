@@ -49,13 +49,5 @@ export const scienceSection: SectionData = {
             description: "Mide interferencias RF de tu cocina usando WiFi.",
             color: "#e11d48",
         },
-        {
-            href: "/utilidades/calculadora-huella-carbono-digital/",
-            iconBg: "mdi:leaf",
-            iconFg: "mdi:monitor",
-            title: "Huella de Carbono Digital",
-            description: "Analiza el peso de una web y estima el CO2 generado por cada visita y el consumo energético del servidor.",
-            color: "#10b981",
-        },
     ],
 };

@@ -6,14 +6,6 @@ export const financeSection: SectionData = {
     theme: "emerald",
     utilities: [
         {
-            title: "Jubilación Anticipada",
-            description: "¿Cuándo puedes dejar de trabajar? Calcula tu edad legal y el recorte en tu pensión.",
-            href: "/utilidades/simulador-jubilacion-anticipada/",
-            iconBg: "mdi:island",
-            iconFg: "mdi:calculator-variant",
-            color: "#10b981",
-        },
-        {
             title: "Interés Compuesto",
             description: "La octava maravilla del mundo. Visualiza el poder de la reinversión.",
             href: "/utilidades/interes-compuesto/",
@@ -38,69 +30,12 @@ export const financeSection: SectionData = {
             color: "#f59e0b",
         },
         {
-            title: "Simulador Sueldo Neto",
-            description:
-                "¿Cuánto llega a tu banco? Cálculo real de IRPF y Seguridad Social en España.",
-            href: "/utilidades/calculadora-sueldo-neto/",
-            iconBg: "mdi:bank-outline",
-            iconFg: "mdi:cash-multiple",
-            color: "#059669",
-        },
-        {
-            title: "Calculadora IVA Inverso",
-            description: "Desglosa el IVA de cualquier total. Imprescindible para autónomos.",
-            href: "/utilidades/calculadora-iva-inverso/",
-            iconBg: "mdi:receipt-text-outline",
-            iconFg: "mdi:percent-outline",
-            color: "#3b82f6",
-        },
-        {
-            title: "Coste de Reunión",
-            description: "El tiempo es dinero. Visualiza el coste real en directo.",
-            href: "/utilidades/calculadora-coste-reunion/",
-            iconBg: "mdi:clock-fast",
-            iconFg: "mdi:cash-multiple",
-            color: "#16a34a",
-        },
-        {
-            title: "Optimizador de Loterías",
-            description: "¿Realmente renta jugar? Analiza probabilidades y botes con ciencia.",
-            href: "/utilidades/optimizador-loterias/",
-            iconBg: "mdi:clover",
+            title: "Calculadora de Porcentajes",
+            description: "4 cálculos en 1: X% de Y, proporciones, diferencias porcentuales, sumas y restas automáticas.",
+            href: "/utilidades/calculadora-porcentajes/",
+            iconBg: "mdi:percent-circle-outline",
             iconFg: "mdi:calculator-variant",
-            color: "#10b981",
-        },
-        {
-            title: "Generador de Facturas PDF",
-            description: "Crea y descarga facturas automáticamente calculando el IVA y retenciones.",
-            href: "/utilidades/generador-facturas-pdf/",
-            iconBg: "mdi:file-document-outline",
-            iconFg: "mdi:receipt-text",
-            color: "#4f46e5",
-        },
-        {
-            title: "Carta de Renuncia",
-            description: "No te compliques al irte. Genera tu carta de baja voluntaria profesional y PDF listo para firmar.",
-            href: "/utilidades/generador-carta-renuncia/",
-            iconBg: "mdi:file-document-edit-outline",
-            iconFg: "mdi:briefcase-off-outline",
-            color: "#6366f1",
-        },
-        {
-            title: "Finiquito e Indemnización",
-            description: "Calcula tu liquidación laboral completa: vacaciones, pagas extra y compensación por despido.",
-            href: "/utilidades/calculadora-finiquito-indemnizacion/",
-            iconBg: "mdi:calculator-variant",
-            iconFg: "mdi:cash-fast",
-            color: "#10b981",
-        },
-        {
-            title: "Simulador Cuota Autónomos 2026",
-            description: "Calcula tu cuota mensual real basada en rendimientos netos con el nuevo sistema de tramos.",
-            href: "/utilidades/calculadora-cuota-autonomos-2026/",
-            iconBg: "mdi:account-tie",
-            iconFg: "mdi:calculator-variant",
-            color: "#10b981",
+            color: "#0ea5e9",
         },
         {
             title: "Intereses de Demora",
@@ -112,7 +47,7 @@ export const financeSection: SectionData = {
         },
         {
             title: "Conversor IBAN a BIC",
-            description: "Valida cualquier cuenta y obtén el código SWIFT necesario para transferencias internacionales.",
+            description: "Valida cualquier cuenta and obtén el código SWIFT necesario para transferencias internacionales.",
             href: "/utilidades/conversor-iban-bic-swift/",
             iconBg: "mdi:bank-transfer",
             iconFg: "mdi:bank-outline",
@@ -127,6 +62,14 @@ export const financeSection: SectionData = {
             color: "#10b981",
         },
         {
+            title: "Optimizador de Loterías",
+            description: "¿Realmente renta jugar? Analiza probabilidades y botes con ciencia.",
+            href: "/utilidades/optimizador-loterias/",
+            iconBg: "mdi:clover",
+            iconFg: "mdi:calculator-variant",
+            color: "#10b981",
+        },
+        {
             title: "Tasas Judiciales",
             description: "Calcula el importe del Modelo 696 para procesos civiles, contenciosos y sociales en España.",
             href: "/utilidades/calculadora-tasas-judiciales/",
@@ -134,14 +77,5 @@ export const financeSection: SectionData = {
             iconFg: "mdi:calculator-variant",
             color: "#3b82f6",
         },
-        {
-            title: "Calculadora de Porcentajes",
-            description: "4 cálculos en 1: X% de Y, proporciones, diferencias porcentuales, sumas y restas automáticas.",
-            href: "/utilidades/calculadora-porcentajes/",
-            iconBg: "mdi:percent-circle-outline",
-            iconFg: "mdi:calculator-variant",
-            color: "#0ea5e9",
-        }
     ],
-
 };

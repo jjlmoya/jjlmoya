@@ -88,5 +88,13 @@ export const toolsSection: SectionData = {
             description: "Averigua al instante qué distintivo ambiental le corresponde a tu coche o moto.",
             color: "#16a34a",
         },
+        {
+            href: "/utilidades/enlace-descarga-directa-google-drive/",
+            iconBg: "mdi:google-drive",
+            iconFg: "mdi:download",
+            title: "Link Directo Drive",
+            description: "Convierte enlaces de Drive en links de descarga directa instantáneos.",
+            color: "#34a853",
+        },
     ],
 };

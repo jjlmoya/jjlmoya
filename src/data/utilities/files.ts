@@ -47,15 +47,6 @@ export const filesSection: SectionData = {
             color: "#f59e0b",
         },
         {
-            href: "/utilidades/formateador-reddit/",
-            iconBg: "mdi:reddit",
-            iconFg: "mdi:format-text-rotation-none",
-            title: "Formateador para Reddit",
-            description:
-                "Limpia y adapta textos para Reddit y foros. Convierte saltos de linea y elimina formatos.",
-            color: "#ff4500",
-        },
-        {
             href: "/utilidades/eliminador-emojis-espacios-dobles/",
             iconBg: "mdi:format-text-variant-outline",
             iconFg: "mdi:broom",

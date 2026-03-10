@@ -29,5 +29,14 @@ export const travelSection: SectionData = {
             iconFg: "mdi:bag-suitcase",
             color: "#8b5cf6",
         },
+        {
+            href: "/utilidades/pronostico-mini-aventuras/",
+            iconBg: "mdi:compass",
+            iconFg: "mdi:map-marker-path",
+            title: "Mini Aventuras",
+            description:
+                "Generador aleatorio de retos diarios para romper la monotonía y explorar tu entorno.",
+            color: "#6366f1",
+        },
     ],
 };

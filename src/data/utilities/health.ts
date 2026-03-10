@@ -1,7 +1,7 @@
 import type { SectionData } from "./types";
 
 export const healthSection: SectionData = {
-    title: "Salud y Deporte",
+    title: "Salud",
     icon: "mdi:heart-pulse",
     theme: "cyan",
     utilities: [
@@ -14,29 +14,13 @@ export const healthSection: SectionData = {
             color: "#3b82f6",
         },
         {
-            href: "/utilidades/marcador/",
-            iconBg: "mdi:scoreboard-outline",
-            iconFg: "mdi:trophy-variant-outline",
-            title: "Marcador Deportivo",
-            description: "Contador gigante para pádel y ping-pong.",
-            color: "#f43f5e",
-        },
-        {
-            href: "/utilidades/torneo/",
-            iconBg: "mdi:sitemap",
-            iconFg: "mdi:trophy",
-            title: "Organizador de Torneos",
+            href: "/utilidades/simulador-daltonismo/",
+            iconBg: "mdi:eye-check-outline",
+            iconFg: "mdi:circle-slice-4",
+            title: "Simulador de Daltonismo",
             description:
-                "Crea cuadros de enfrentamientos y gestiona eliminatorias. Ideal para deportes y eSports.",
-            color: "#6366f1",
-        },
-        {
-            href: "/utilidades/test-reflejos/",
-            iconBg: "mdi:lightning-bolt",
-            iconFg: "mdi:timer-outline",
-            title: "Test de Reflejos",
-            description: "Mide tu velocidad de reacción en ms. Challenge de rangos.",
-            color: "#6366f1",
+                "Visualiza tus imagenes como personas con diferentes tipos de deficiencia cromatica (CVD).",
+            color: "#3b82f6",
         },
         {
             href: "/utilidades/alivio-tinnitus/",
@@ -90,13 +74,12 @@ export const healthSection: SectionData = {
             color: "#f97316",
         },
         {
-            href: "/utilidades/pronostico-mini-aventuras/",
-            iconBg: "mdi:compass",
-            iconFg: "mdi:map-marker-path",
-            title: "Mini Aventuras",
-            description:
-                "Generador aleatorio de retos diarios para romper la monotonía y explorar tu entorno.",
-            color: "#6366f1",
+            href: "/utilidades/calculadora-dias-fertiles/",
+            iconBg: "mdi:calendar-heart",
+            iconFg: "mdi:water-percent",
+            title: "Días Fértiles",
+            description: "Estimador de ciclos y ventana de fertilidad con calendario intuitivo.",
+            color: "#ec4899",
         },
     ],
 };

@@ -24,6 +24,15 @@ export const devSection: SectionData = {
             color: "#0ea5e9",
         },
         {
+            href: "/utilidades/generador-imagenes-placeholder/",
+            iconBg: "mdi:image-outline",
+            iconFg: "mdi:pencil-ruler",
+            title: "Generador Placeholder",
+            description:
+                "Crea imágenes de prueba o bocetos con dimensiones y textos a medida al instante.",
+            color: "#eab308",
+        },
+        {
             href: "/utilidades/codificador-decodificador-url/",
             iconBg: "mdi:link-variant",
             iconFg: "mdi:code-json",

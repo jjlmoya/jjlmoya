@@ -1,0 +1,127 @@
+---
+import { Icon } from "astro-icon/components";
+import "./FertileDaysEstimator.css";
+---
+
+<div class="fertile-days-container">
+    <div class="step-indicator">
+        <div class="step-item active" id="indicator-1">
+            <div class="step-number">1</div>
+            <span>Fecha de Inicio</span>
+        </div>
+        <div class="step-item" id="indicator-2">
+            <div class="step-number">2</div>
+            <span>Tu Calendario</span>
+        </div>
+    </div>
+
+    <div class="step-first-day" id="step-1">
+        <div class="step-header">
+            <h2>¿Cuándo empezó tu última regla?</h2>
+            <p>Selecciona el primer día de sangrado para comenzar el cálculo</p>
+        </div>
+
+        <div class="calendar-wrapper w-full max-w-xl shadow-xl border border-pink-100">
+            <div class="calendar-nav">
+                <h3 id="initial-month-year">Mes Año</h3>
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="initial-prev-month">
+                        <Icon name="mdi:chevron-left" />
+                    </button>
+                    <button class="nav-btn" id="initial-next-month">
+                        <Icon name="mdi:chevron-right" />
+                    </button>
+                </div>
+            </div>
+            <div class="calendar-grid" id="initial-calendar-grid"></div>
+        </div>
+
+        <div class="pulse-hint">Haz clic en un día del calendario para continuar</div>
+    </div>
+
+    <div class="layout-grid" id="step-2">
+        <aside class="controls-sidebar">
+            <div class="sidebar-header">
+                <h2>Tu Ciclo</h2>
+                <p>Personaliza los resultados</p>
+            </div>
+
+            <div class="input-card">
+                <label>
+                    <Icon name="mdi:calendar-edit" />
+                    Duración del Ciclo
+                </label>
+                <div class="range-control">
+                    <div class="range-value" id="cycle-value">28 <span>días</span></div>
+                    <input type="range" id="cycle-length" min="20" max="45" value="28" />
+                </div>
+            </div>
+
+            <div class="fertile-days-results">
+                <div class="result-stat ovulation">
+                    <Icon name="mdi:calendar-check" />
+                    <div class="stat-info">
+                        <span class="label">Próxima Ovulación</span>
+                        <span class="value" id="ovulation-date">-</span>
+                    </div>
+                </div>
+                <div class="result-stat fertile">
+                    <Icon name="mdi:heart-pulse" />
+                    <div class="stat-info">
+                        <span class="label">Ventana Fértil</span>
+                        <span class="value" id="fertile-range">-</span>
+                    </div>
+                </div>
+                <div class="result-stat period">
+                    <Icon name="mdi:water" />
+                    <div class="stat-info">
+                        <span class="label">Siguiente Periodo</span>
+                        <span class="value" id="next-period">-</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="calendar-wrapper" id="calendar-area">
+                <div class="calendar-nav">
+                    <h3 id="calendar-month-year">Mes Año</h3>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" id="prev-month">
+                            <Icon name="mdi:chevron-left" />
+                        </button>
+                        <button class="nav-btn" id="next-month">
+                            <Icon name="mdi:chevron-right" />
+                        </button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid" id="calendar-grid"></div>
+
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot selected"></div>
+                        <span>Tu selección</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot period"></div>
+                        <span>Periodo</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot fertile"></div>
+                        <span>Fértil</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot ovulation"></div>
+                        <span>Ovulación</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    import { initFertileDaysEstimator } from "./FertileDaysEstimator";
+    initFertileDaysEstimator();
+</script>
