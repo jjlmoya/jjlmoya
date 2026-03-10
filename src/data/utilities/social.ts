@@ -47,5 +47,13 @@ export const socialSection: SectionData = {
                 "Limpia y adapta textos para Reddit y foros. Convierte saltos de linea y elimina formatos.",
             color: "#ff4500",
         },
+        {
+            href: "/utilidades/redimensionador-imagenes-rrss/",
+            iconBg: "mdi:image-size-select-large",
+            iconFg: "mdi:share-variant",
+            title: "Redimensionador de Imágenes RRSS",
+            description: "Adapta tus fotos para Instagram, TikTok, YouTube y más con recorte inteligente.",
+            color: "#8b5cf6",
+        },
     ],
 };
