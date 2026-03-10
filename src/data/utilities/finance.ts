@@ -133,6 +133,15 @@ export const financeSection: SectionData = {
             iconBg: "mdi:gavel",
             iconFg: "mdi:calculator-variant",
             color: "#3b82f6",
+        },
+        {
+            title: "Calculadora de Porcentajes",
+            description: "4 cálculos en 1: X% de Y, proporciones, diferencias porcentuales, sumas y restas automáticas.",
+            href: "/utilidades/calculadora-porcentajes/",
+            iconBg: "mdi:percent-circle-outline",
+            iconFg: "mdi:calculator-variant",
+            color: "#0ea5e9",
         }
     ],
+
 };

@@ -1,0 +1,346 @@
+---
+import { Icon } from "astro-icon/components";
+import "./PercentageCalculator.css";
+---
+
+<div class="percentage-calculator-container">
+    <div class="calc-grid">
+        <div class="calc-card">
+            <div class="calc-header">
+                <div class="calc-icon-wrapper blue-icon">
+                    <Icon name="mdi:percent" />
+                </div>
+                <h3 class="calc-title">¿Cuánto es el X% de Y?</h3>
+            </div>
+            <div class="calc-body">
+                <div class="input-row">
+                    <span class="input-text">¿Cuánto es el</span>
+                    <input
+                        type="number"
+                        id="c1-x"
+                        class="number-input"
+                        placeholder="X"
+                        step="any"
+                    />
+                    <span class="input-text">% de</span>
+                    <input
+                        type="number"
+                        id="c1-y"
+                        class="number-input"
+                        placeholder="Y"
+                        step="any"
+                    />
+                    <span class="input-text">?</span>
+                </div>
+            </div>
+            <div class="calc-footer">
+                <div class="result-box">
+                    <span class="result-label">Resultado:</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="result-value" id="c1-res">0</span>
+                        <button
+                            class="copy-btn copy-action"
+                            data-target="c1-res"
+                            title="Copiar resultado"
+                        >
+                            <Icon name="mdi:content-copy" />
+                        </button>
+                    </div>
+                </div>
+                <span class="formula-hint">Fórmula: (X / 100) × Y</span>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <div class="calc-header">
+                <div class="calc-icon-wrapper green-icon">
+                    <Icon name="mdi:division" />
+                </div>
+                <h3 class="calc-title">¿Qué porcentaje es X de Y?</h3>
+            </div>
+            <div class="calc-body">
+                <div class="input-row">
+                    <span class="input-text">¿Qué porcentaje es</span>
+                    <input
+                        type="number"
+                        id="c2-x"
+                        class="number-input"
+                        placeholder="X"
+                        step="any"
+                    />
+                    <span class="input-text">de</span>
+                    <input
+                        type="number"
+                        id="c2-y"
+                        class="number-input"
+                        placeholder="Y"
+                        step="any"
+                    />
+                    <span class="input-text">?</span>
+                </div>
+            </div>
+            <div class="calc-footer">
+                <div class="result-box">
+                    <span class="result-label">Resultado:</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="result-value"><span id="c2-res">0</span>%</span>
+                        <button
+                            class="copy-btn copy-action"
+                            data-target="c2-res"
+                            title="Copiar resultado"
+                        >
+                            <Icon name="mdi:content-copy" />
+                        </button>
+                    </div>
+                </div>
+                <span class="formula-hint">Fórmula: (X / Y) × 100</span>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <div class="calc-header">
+                <div class="calc-icon-wrapper purple-icon">
+                    <Icon name="mdi:chart-line-variant" />
+                </div>
+                <h3 class="calc-title">Diferencia porcentual</h3>
+            </div>
+            <div class="calc-body">
+                <div class="input-row">
+                    <span class="input-text">Aumento/Disminución de</span>
+                    <input
+                        type="number"
+                        id="c3-x"
+                        class="number-input"
+                        placeholder="Valor 1"
+                        step="any"
+                    />
+                    <span class="input-text">a</span>
+                    <input
+                        type="number"
+                        id="c3-y"
+                        class="number-input"
+                        placeholder="Valor 2"
+                        step="any"
+                    />
+                </div>
+            </div>
+            <div class="calc-footer">
+                <div class="result-box">
+                    <span class="result-label">Diferencia:</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="result-value"><span id="c3-res">0</span>%</span>
+                        <button
+                            class="copy-btn copy-action"
+                            data-target="c3-res"
+                            title="Copiar resultado"
+                        >
+                            <Icon name="mdi:content-copy" />
+                        </button>
+                    </div>
+                </div>
+                <span class="formula-hint">Fórmula: ((Valor 2 - Valor 1) / |Valor 1|) × 100</span>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <div class="calc-header">
+                <div class="calc-icon-wrapper orange-icon">
+                    <Icon name="mdi:calculator" />
+                </div>
+                <h3 class="calc-title">Sumar o restar porcentaje</h3>
+            </div>
+            <div class="calc-body">
+                <div class="input-row">
+                    <span class="input-text">Al valor</span>
+                    <input
+                        type="number"
+                        id="c4-x"
+                        class="number-input"
+                        placeholder="Valor"
+                        step="any"
+                    />
+                    <span class="input-text">sumar/restar</span>
+                    <input
+                        type="number"
+                        id="c4-y"
+                        class="number-input"
+                        placeholder="%"
+                        step="any"
+                    />
+                    <span class="input-text">%</span>
+                </div>
+            </div>
+            <div class="calc-footer">
+                <div
+                    class="result-box"
+                    style="flex-direction: column; align-items: flex-start; gap: 1rem;"
+                >
+                    <div
+                        style="display:flex; justify-content:space-between; width: 100%; align-items: center;"
+                    >
+                        <span class="result-label">Suma (Valor + %):</span>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="result-value" id="c4-res-add">0</span>
+                            <button
+                                class="copy-btn copy-action"
+                                data-target="c4-res-add"
+                                title="Copiar resultado"
+                            >
+                                <Icon name="mdi:content-copy" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        style="display:flex; justify-content:space-between; width: 100%; align-items: center;"
+                    >
+                        <span class="result-label" style="color:#b91c1c;">Resta (Valor - %):</span>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="result-value" id="c4-res-sub" style="color:#ef4444;"
+                                >0</span
+                            >
+                            <button
+                                class="copy-btn copy-action"
+                                data-target="c4-res-sub"
+                                title="Copiar resultado"
+                            >
+                                <Icon name="mdi:content-copy" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <span class="formula-hint">Fórmula: Valor ± (Valor × (% / 100))</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function copyToClipboard(text: string) {
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+            }
+            if ((window as any).toast) {
+                (window as any).toast.show("¡Copiado al portapapeles!", "success");
+            }
+        } catch (err) {
+            console.warn("Error al copiar al portapapeles:", err);
+        }
+    }
+
+    function formatNumber(num: number): string {
+        if (isNaN(num) || !isFinite(num)) return "0";
+        if (Number.isInteger(num)) return num.toString();
+
+        let formatted = num.toFixed(4);
+        formatted = formatted.replace(/0+$/, "");
+        if (formatted.endsWith(".")) {
+            formatted = formatted.slice(0, -1);
+        }
+        return formatted;
+    }
+
+    const c1x = document.getElementById("c1-x") as HTMLInputElement | null;
+    const c1y = document.getElementById("c1-y") as HTMLInputElement | null;
+    const c1res = document.getElementById("c1-res");
+
+    function calc1() {
+        if (c1x && c1y && c1res) {
+            const x = parseFloat(c1x.value);
+            const y = parseFloat(c1y.value);
+            if (!isNaN(x) && !isNaN(y)) {
+                c1res.textContent = formatNumber((x / 100) * y);
+            } else {
+                c1res.textContent = "0";
+            }
+        }
+    }
+    if (c1x) c1x.addEventListener("input", calc1);
+    if (c1y) c1y.addEventListener("input", calc1);
+
+    const c2x = document.getElementById("c2-x") as HTMLInputElement | null;
+    const c2y = document.getElementById("c2-y") as HTMLInputElement | null;
+    const c2res = document.getElementById("c2-res");
+
+    function calc2() {
+        if (c2x && c2y && c2res) {
+            const x = parseFloat(c2x.value);
+            const y = parseFloat(c2y.value);
+            if (!isNaN(x) && !isNaN(y) && y !== 0) {
+                c2res.textContent = formatNumber((x / y) * 100);
+            } else {
+                c2res.textContent = "0";
+            }
+        }
+    }
+    if (c2x) c2x.addEventListener("input", calc2);
+    if (c2y) c2y.addEventListener("input", calc2);
+
+    const c3x = document.getElementById("c3-x") as HTMLInputElement | null;
+    const c3y = document.getElementById("c3-y") as HTMLInputElement | null;
+    const c3res = document.getElementById("c3-res");
+
+    function calc3() {
+        if (c3x && c3y && c3res) {
+            const x = parseFloat(c3x.value);
+            const y = parseFloat(c3y.value);
+            if (!isNaN(x) && !isNaN(y) && x !== 0) {
+                const diff = ((y - x) / Math.abs(x)) * 100;
+                let text = formatNumber(diff);
+                if (diff > 0) text = "+" + text;
+                c3res.textContent = text;
+            } else {
+                c3res.textContent = "0";
+            }
+        }
+    }
+    if (c3x) c3x.addEventListener("input", calc3);
+    if (c3y) c3y.addEventListener("input", calc3);
+
+    const c4x = document.getElementById("c4-x") as HTMLInputElement | null;
+    const c4y = document.getElementById("c4-y") as HTMLInputElement | null;
+    const c4resAdd = document.getElementById("c4-res-add");
+    const c4resSub = document.getElementById("c4-res-sub");
+
+    function calc4() {
+        if (c4x && c4y && c4resAdd && c4resSub) {
+            const val = parseFloat(c4x.value);
+            const perc = parseFloat(c4y.value);
+            if (!isNaN(val) && !isNaN(perc)) {
+                const amount = val * (perc / 100);
+                c4resAdd.textContent = formatNumber(val + amount);
+                c4resSub.textContent = formatNumber(val - amount);
+            } else {
+                c4resAdd.textContent = "0";
+                c4resSub.textContent = "0";
+            }
+        }
+    }
+    if (c4x) c4x.addEventListener("input", calc4);
+    if (c4y) c4y.addEventListener("input", calc4);
+
+    const copyBtns = document.querySelectorAll(".copy-action");
+    copyBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const targetId = btn.getAttribute("data-target");
+            if (targetId) {
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    copyToClipboard(targetEl.textContent || "");
+                }
+            }
+        });
+    });
+</script>
