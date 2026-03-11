@@ -81,5 +81,13 @@ export const healthSection: SectionData = {
             description: "Estimador de ciclos y ventana de fertilidad con calendario intuitivo.",
             color: "#ec4899",
         },
+        {
+            href: "/utilidades/sintonizador-ondas-binaurales-suenos-lucidos/",
+            iconBg: "mdi:sleep",
+            iconFg: "mdi:waves",
+            title: "Ondas Binaurales",
+            description: "Inducción de sueños lúcidos y meditación con frecuencias delta/theta.",
+            color: "#4b0082",
+        },
     ],
 };
