@@ -1,0 +1,270 @@
+---
+import "./DataTimeCalculator.css";
+---
+
+<div class="dtc-wrapper">
+    <div class="dtc-card">
+        <div class="dtc-header">
+            <div class="dtc-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <h2>Tiempo Perdido en Redes</h2>
+        </div>
+
+        <div class="dtc-input-section">
+            <label for="dtc-size">Peso de la web (MB)</label>
+            <div class="dtc-input-group">
+                <input
+                    type="number"
+                    id="dtc-size"
+                    class="dtc-input"
+                    value="3.5"
+                    min="0.1"
+                    max="100"
+                    step="0.1"
+                />
+                <span class="dtc-input-unit">MB</span>
+            </div>
+
+            <div class="dtc-presets-label">EJEMPLOS REALISTAS</div>
+            <div class="dtc-presets">
+                <button class="dtc-preset" data-value="2.8" data-label="Instagram">
+                    Instagram
+                </button>
+                <button class="dtc-preset" data-value="2.5" data-label="TikTok"> TikTok </button>
+                <button class="dtc-preset" data-value="3.2" data-label="YouTube"> YouTube </button>
+                <button class="dtc-preset" data-value="1.8" data-label="Twitter/X">
+                    Twitter/X
+                </button>
+                <button class="dtc-preset active" data-value="2.2" data-label="Netflix">
+                    Netflix
+                </button>
+                <button class="dtc-preset" data-value="3.5" data-label="Discord"> Discord </button>
+            </div>
+        </div>
+
+        <div class="dtc-speed-section">
+            <label>Velocidad de conexión</label>
+            <div class="dtc-speed-buttons">
+                <button class="dtc-speed-btn" data-speed="3g">
+                    <span class="dtc-speed-label">3G</span>
+                    <span class="dtc-speed-value">0.4 Mbps</span>
+                </button>
+                <button class="dtc-speed-btn active" data-speed="4g">
+                    <span class="dtc-speed-label">4G/LTE</span>
+                    <span class="dtc-speed-value">10 Mbps</span>
+                </button>
+                <button class="dtc-speed-btn" data-speed="5g">
+                    <span class="dtc-speed-label">5G</span>
+                    <span class="dtc-speed-value">100+ Mbps</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="dtc-multiplier-section">
+            <label for="dtc-times">¿Cuántas veces al día?</label>
+            <div class="dtc-multiplier-input">
+                <button class="dtc-times-btn" data-times="1">1x</button>
+                <button class="dtc-times-btn" data-times="10">10x</button>
+                <button class="dtc-times-btn active" data-times="50">50x</button>
+                <button class="dtc-times-btn" data-times="100">100x</button>
+                <button class="dtc-times-btn" data-times="200">200x</button>
+                <input
+                    type="number"
+                    id="dtc-times"
+                    class="dtc-times-input"
+                    value="50"
+                    min="1"
+                    max="10000"
+                />
+            </div>
+        </div>
+
+        <div class="dtc-results">
+            <div class="dtc-result-single">
+                <div class="dtc-result-label">Una carga</div>
+                <div class="dtc-result-time" id="dtc-single-time">1.4s</div>
+                <div class="dtc-result-life" id="dtc-single-life">0.0000006%</div>
+            </div>
+
+            <div class="dtc-divider"></div>
+
+            <div class="dtc-result-total">
+                <div class="dtc-result-label">
+                    Total diario (<span id="dtc-times-display">50</span>x)
+                </div>
+                <div class="dtc-result-time-total" id="dtc-total-time">1m 10s</div>
+                <div class="dtc-result-life-total" id="dtc-total-life">0.0000289%</div>
+            </div>
+        </div>
+
+        <div class="dtc-impact">
+            <div class="dtc-impact-card">
+                <div class="dtc-impact-number" id="dtc-year-hours">8,760 h</div>
+                <div class="dtc-impact-text">al año esperando</div>
+            </div>
+            <div class="dtc-impact-card">
+                <div class="dtc-impact-number" id="dtc-life-years">1.0 años</div>
+                <div class="dtc-impact-text">en tu vida útil</div>
+            </div>
+        </div>
+
+        <div class="dtc-message" id="dtc-message">
+            <strong>Has perdido aproximadamente 1 año completo de vida</strong> esperando a que cargue
+            Netflix
+        </div>
+    </div>
+</div>
+
+<script>
+    function initDataTimeCalculator() {
+        const sizeInput = document.getElementById("dtc-size") as HTMLInputElement | null;
+        const timesInput = document.getElementById("dtc-times") as HTMLInputElement | null;
+        const singleTimeEl = document.getElementById("dtc-single-time");
+        const singleLifeEl = document.getElementById("dtc-single-life");
+        const totalTimeEl = document.getElementById("dtc-total-time");
+        const totalLifeEl = document.getElementById("dtc-total-life");
+        const timesDisplayEl = document.getElementById("dtc-times-display");
+        const yearHoursEl = document.getElementById("dtc-year-hours");
+        const lifeYearsEl = document.getElementById("dtc-life-years");
+        const messageEl = document.getElementById("dtc-message");
+
+        let selectedSpeed: string = "4g";
+
+        const SPEEDS: Record<string, number> = {
+            "3g": 0.4,
+            "4g": 10,
+            "5g": 100,
+        };
+
+        const LIFE_EXPECTANCY_SECONDS = 2522880000;
+        const LIFE_EXPECTANCY_YEARS = 80;
+
+        const calculateLoadTime = (sizeMB: number, speedMbps: number): number => {
+            return (sizeMB * 8) / speedMbps;
+        };
+
+        const formatTime = (seconds: number): string => {
+            if (seconds < 1) return (seconds * 1000).toFixed(0) + "ms";
+            if (seconds < 60) return seconds.toFixed(1) + "s";
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            if (minutes < 60) return `${minutes}m ${secs}s`;
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours}h ${mins}m`;
+        };
+
+        const calculateLifePercent = (seconds: number): number => {
+            return (seconds / LIFE_EXPECTANCY_SECONDS) * 100;
+        };
+
+        const updateResults = () => {
+            if (!sizeInput || !timesInput) return;
+
+            const size = parseFloat(sizeInput.value) || 0;
+            const times = parseInt(timesInput.value) || 1;
+
+            const singleTime = calculateLoadTime(size, SPEEDS[selectedSpeed]);
+            const totalTime = singleTime * times;
+            const totalTimePerYear = totalTime * 365;
+
+            const singleLife = calculateLifePercent(singleTime);
+            const totalLife = calculateLifePercent(totalTime);
+
+            if (singleTimeEl) singleTimeEl.textContent = formatTime(singleTime);
+            if (singleLifeEl) singleLifeEl.textContent = singleLife.toFixed(7) + "%";
+            if (totalTimeEl) totalTimeEl.textContent = formatTime(totalTime);
+            if (totalLifeEl) totalLifeEl.textContent = totalLife.toFixed(7) + "%";
+            if (timesDisplayEl) timesDisplayEl.textContent = times.toString();
+
+            const yearHours = (totalTimePerYear / 3600).toFixed(0);
+            const lifeYears = (totalTimePerYear / LIFE_EXPECTANCY_SECONDS) * LIFE_EXPECTANCY_YEARS;
+
+            if (yearHoursEl)
+                yearHoursEl.textContent = parseInt(yearHours).toLocaleString("es-ES") + " h";
+            if (lifeYearsEl) lifeYearsEl.textContent = lifeYears.toFixed(2) + " años";
+
+            updateMessage(times, size);
+        };
+
+        const updateMessage = (times: number, size: number) => {
+            const appNames: Record<string, string> = {
+                "2.8": "Instagram",
+                "2.5": "TikTok",
+                "3.2": "YouTube",
+                "1.8": "Twitter/X",
+                "2.2": "Netflix",
+                "3.5": "Discord",
+            };
+
+            const appName = appNames[size.toFixed(1)] || "esta app";
+            const singleTime = calculateLoadTime(size, SPEEDS[selectedSpeed]);
+            const totalTime = singleTime * times;
+            const totalTimePerYear = totalTime * 365;
+            const lifeYears = (totalTimePerYear / LIFE_EXPECTANCY_SECONDS) * LIFE_EXPECTANCY_YEARS;
+
+            const message = `Has perdido aproximadamente ${lifeYears.toFixed(
+                2
+            )} años de vida esperando a que cargue ${appName}`;
+
+            if (messageEl) messageEl.innerHTML = `<strong>${message}</strong>`;
+        };
+
+        sizeInput?.addEventListener("input", updateResults);
+        timesInput?.addEventListener("input", updateResults);
+
+        const speedBtns = document.querySelectorAll(".dtc-speed-btn");
+        speedBtns.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                const speed = target.dataset.speed;
+                if (speed) {
+                    selectedSpeed = speed;
+                    speedBtns.forEach((b) => b.classList.remove("active"));
+                    target.classList.add("active");
+                    updateResults();
+                }
+            });
+        });
+
+        const presets = document.querySelectorAll(".dtc-preset");
+        presets.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                const value = target.dataset.value;
+                if (value && sizeInput) {
+                    sizeInput.value = value;
+                    presets.forEach((b) => b.classList.remove("active"));
+                    target.classList.add("active");
+                    updateResults();
+                }
+            });
+        });
+
+        const timesBtns = document.querySelectorAll(".dtc-times-btn");
+        timesBtns.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                const times = target.dataset.times;
+                if (times && timesInput) {
+                    timesInput.value = times;
+                    timesBtns.forEach((b) => b.classList.remove("active"));
+                    target.classList.add("active");
+                    updateResults();
+                }
+            });
+        });
+
+        updateResults();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initDataTimeCalculator);
+    } else {
+        initDataTimeCalculator();
+    }
+</script>

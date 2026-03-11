@@ -113,5 +113,21 @@ export const healthSection: SectionData = {
             description: "Test clínico para medir tu nivel de somnolencia diurna y calidad de descanso.",
             color: "#3b82f6",
         },
+        {
+            href: "/utilidades/calculadora-ubes/",
+            iconBg: "mdi:glass-wine",
+            iconFg: "mdi:calculator-variant-outline",
+            title: "Calculadora de Alcohol (UBE)",
+            description: "Calcula los gramos puros de alcohol y las Unidades de Bebida Estándar para medir el riesgo.",
+            color: "#8b5cf6",
+        },
+        {
+            href: "/utilidades/calculadora-descompresion-ocular/",
+            iconBg: "mdi:monitor-eye",
+            iconFg: "mdi:clock-fast",
+            title: "Descompresión Ocular",
+            description: "Calcula los minutos de descanso visual que necesitas según horas de pantalla con la regla 20-20-20.",
+            color: "#06b6d4",
+        },
     ],
 };

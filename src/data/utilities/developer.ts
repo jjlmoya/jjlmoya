@@ -197,5 +197,14 @@ export const devSection: SectionData = {
                 "Crea tu archivo security.txt según el estándar RFC 9116 para facilitar el contacto con investigadores de seguridad y proteger tu sitio web.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/calculadora-tiempo-datos/",
+            iconBg: "mdi:clock-time-four",
+            iconFg: "mdi:speedometer",
+            title: "Calculadora de Tiempo en Datos",
+            description:
+                "Descubre cuánto tiempo pierden tus usuarios esperando Instagram, YouTube, TikTok y otras apps. Visualiza el impacto real: horas, días, años de vida perdidos en cargas.",
+            color: "#2563EB",
+        },
     ],
 };
