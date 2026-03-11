@@ -1,0 +1,179 @@
+---
+import { Icon } from "astro-icon/components";
+import "./EpworthSleepinessScale.css";
+
+const situations = [
+  "Sentado y leyendo",
+  "Viendo la televisión",
+  "Sentado e inactivo en un lugar público",
+  "Como pasajero en un coche una hora seguida",
+  "Tumbado para descansar a media tarde",
+  "Sentado y hablando con alguien",
+  "Sentado después de una comida (sin alcohol)",
+  "En un coche parado unos minutos por el tráfico"
+];
+
+const options = [
+  { label: "Nunca me dormiría", value: 0 },
+  { label: "Poco probable", value: 1 },
+  { label: "Probabilidad moderada", value: 2 },
+  { label: "Alta probabilidad", value: 3 }
+];
+---
+
+<div class="ess-wrapper">
+  <div class="ess-container">
+    <div id="ess-quiz-state">
+      <div class="ess-progress-container">
+        <div class="ess-progress-bar">
+          <div id="ess-progress-fill" class="ess-progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="ess-questions-container">
+        {situations.map((text, idx) => (
+          <div class={`ess-question-card ${idx === 0 ? "active" : ""}`} data-step={idx}>
+            <div class="ess-question-header">
+              <span class="ess-question-number">Situación {idx + 1} de 8</span>
+              <h3 class="ess-question-text">{text}</h3>
+            </div>
+
+            <div class="ess-options-grid">
+              {options.map((opt) => (
+                <button class="ess-option-btn" data-value={opt.value}>
+                  <span class="option-title">{opt.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="ess-nav-controls">
+        <button id="ess-prev-btn" class="nav-btn" disabled>
+          <Icon name="mdi:arrow-left" /> Anterior
+        </button>
+        <div id="ess-step-indicator" style="font-weight: 700; opacity: 0.5;">
+          1 / 8
+        </div>
+      </div>
+    </div>
+
+    <div id="ess-results-view" class="ess-results-view">
+      <div class="results-score-circle">
+        <span id="ess-final-score" class="score-num">0</span>
+        <span class="score-total">de 24</span>
+      </div>
+      
+      <div id="ess-result-badge" class="result-badge">Normal</div>
+      <p id="ess-result-desc" class="result-desc"></p>
+      
+      <button id="ess-reset-btn" class="reset-btn">
+        Reiniciar Evaluación
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 0;
+  const scores: number[] = new Array(8).fill(-1);
+
+  const cards = document.querySelectorAll('.ess-question-card');
+  const progressFill = document.getElementById('ess-progress-fill');
+  const indicator = document.getElementById('ess-step-indicator');
+  const prevBtn = document.getElementById('ess-prev-btn') as HTMLButtonElement;
+  const quizState = document.getElementById('ess-quiz-state');
+  const resultsView = document.getElementById('ess-results-view');
+  
+  const finalScoreEl = document.getElementById('ess-final-score');
+  const resultBadgeEl = document.getElementById('ess-result-badge');
+  const resultDescEl = document.getElementById('ess-result-desc');
+  const resetBtn = document.getElementById('ess-reset-btn');
+
+  function updateUI() {
+    cards.forEach((card, idx) => {
+      card.classList.toggle('active', idx === currentStep);
+    });
+
+    const progress = ((currentStep) / 8) * 100;
+    if (progressFill) progressFill.style.width = `${progress}%`;
+    if (indicator) indicator.textContent = `${currentStep + 1} / 8`;
+    if (prevBtn) prevBtn.disabled = currentStep === 0;
+
+    const currentCard = cards[currentStep];
+    const optionBtns = currentCard.querySelectorAll('.ess-option-btn');
+    optionBtns.forEach(btn => {
+      const val = parseInt(btn.getAttribute('data-value') || '0');
+      btn.classList.toggle('selected', scores[currentStep] === val);
+    });
+  }
+
+  function handleOptionClick(value: number) {
+    scores[currentStep] = value;
+    
+    if (currentStep < 7) {
+      currentStep++;
+      setTimeout(updateUI, 200);
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    const total = scores.reduce((a, b) => a + b, 0);
+    
+    if (quizState) quizState.style.display = 'none';
+    if (resultsView) resultsView.style.display = 'block';
+    
+    if (finalScoreEl) finalScoreEl.textContent = total.toString();
+    
+    let badge = 'Normal';
+    let className = 'badge-normal';
+    let desc = 'Tu nivel de somnolencia durante el día es normal. No parece haber signos de trastornos respiratorios o del sueño.';
+
+    if (total > 15) {
+      badge = 'Grave';
+      className = 'badge-severe';
+      desc = 'Posees una somnolencia diurna excesiva y grave. Es altamente recomendable que consultes con un especialista del sueño lo antes posible.';
+    } else if (total > 12) {
+      badge = 'Moderada';
+      className = 'badge-mod';
+      desc = 'Tu nivel de somnolencia es significativo. Podría estar afectando a tu rendimiento diario y merece una revisión de tus hábitos.';
+    } else if (total > 10) {
+      badge = 'Leve';
+      className = 'badge-mild';
+      desc = 'Presentas una somnolencia diurna leve. Intenta mejorar tu higiene de sueño y observa si los síntomas persisten.';
+    }
+
+    if (resultBadgeEl) {
+      resultBadgeEl.textContent = badge;
+      resultBadgeEl.className = `result-badge ${className}`;
+    }
+    if (resultDescEl) resultDescEl.textContent = desc;
+  }
+
+  function reset() {
+    currentStep = 0;
+    scores.fill(-1);
+    if (quizState) quizState.style.display = 'block';
+    if (resultsView) resultsView.style.display = 'none';
+    updateUI();
+  }
+
+  document.querySelectorAll('.ess-option-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = parseInt(btn.getAttribute('data-value') || '0');
+      handleOptionClick(val);
+    });
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    if (currentStep > 0) {
+      currentStep--;
+      updateUI();
+    }
+  });
+
+  resetBtn?.addEventListener('click', reset);
+</script>

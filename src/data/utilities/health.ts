@@ -105,5 +105,13 @@ export const healthSection: SectionData = {
             description: "Juego de reflejos para expandir tu campo visual y mejorar la lectura rápida.",
             color: "#f59e0b",
         },
+        {
+            href: "/utilidades/test-escala-epworth/",
+            iconBg: "mdi:sleep",
+            iconFg: "mdi:clock-alert-outline",
+            title: "Escala Epworth",
+            description: "Test clínico para medir tu nivel de somnolencia diurna y calidad de descanso.",
+            color: "#3b82f6",
+        },
     ],
 };
