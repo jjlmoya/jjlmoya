@@ -1,0 +1,82 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import ImageConverter from "../../components/utilidades/ImageConverter/ImageConverter.astro";
+import BmpToPngSEO from "../../components/utilidades/ImageConverter/seo/BmpToPngSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Convertidor de BMP a PNG | Formato Sin Pérdida Local";
+const description =
+    "Pasa de un enorme y pesado BMP a un formato PNG estándar que conserva cada píxel sin perder tu calidad original ni privacidad. Herramienta 100% en el explorador.";
+
+const faqItems = [
+    {
+        question: "¿Cuál es la principal diferencia entre BMP y PNG?",
+        answer: "Tanto BMP como PNG son formatos 'sin pérdida', lo que significa que mantienen el 100% de la calidad de la foto o dibujo original. La diferencia abismal radica en la optimización: PNG entiende de algoritmos de compresión modernos para guardar la misma imagen ocupando 5 o 10 veces menos memoria en tu disco que las matrices gigantes de datos del BMP clásico.",
+    },
+    {
+        question: "¿Es la conversión realmente privada si uso tu web?",
+        answer: "Sí. Toda la red fotográfica, desde la subida a tu pantalla hasta el render en el lienzo Canvas y la decodificación a PNG, la hace tu ordenador. Absolutamente nadie, ni servidores nuestros ni externos, accede a tus archivos en tránsito local.",
+    },
+    {
+        question: "¿Por qué PNG sobre JPEG en este caso?",
+        answer: "Si tienes un archivo BMP, es porque la imagen tiene colores precisos (planos técnicos, renders de videojuegos, texturas o recortes). Pasar un BMP al estándar destructivo JPG ensuciaría tus colores netos. El PNG protege esa fidelidad intactamente.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Acopla tu Fotografía",
+        text: "Mueve tranquilamente los archivos de origen BMP a nuestra zona para soltar elementos web.",
+    },
+    {
+        name: "Traduce Sin Transmisión de Red",
+        text: "Percibe en apenas un segundo el procesado limpio y de matriz en paralelo hecho localmente por tu JS de HTML5.",
+    },
+    {
+        name: "Consigue PNGs Puros",
+        text: "Baja las réplicas en PNG individualmente desde tus cajas de listado de cola o mediante un paquete comprimido.",
+    },
+];
+
+const converterOptions = {
+    sourceFormat: "image/bmp",
+    targetFormat: "image/png",
+    sourceExt: "BMP",
+    from: "bmp",
+    to: "png",
+    dragText: "Arrastra archivos BMP...",
+    themeColor: "#f59e0b",
+    themeColorHover: "#d97706",
+    themeBg: "rgba(245, 158, 11, 0.05)",
+};
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/convertidor-generico-seo-illustration.webp"
+    gradientFrom="from-amber-100"
+    gradientTo="to-amber-200"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="a PNG"
+            titleBase="BMP"
+            description="La rampa más rápida y resguardada para cambiar tu mapa de bits pesado y arcaico a la portabilidad neta y sin pérdida del formato PNG."
+            gradientFrom="from-amber-500"
+            gradientTo="to-amber-600"
+            reverse={true}
+        />
+    </div>
+
+    <ImageConverter {...converterOptions} />
+
+    <div slot="seo">
+        <BmpToPngSEO />
+    </div>
+</LayoutUtility>

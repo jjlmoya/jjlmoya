@@ -1,0 +1,98 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import ImageConverter from "../../components/utilidades/ImageConverter/ImageConverter.astro";
+import AvifToJpgSEO from "../../components/utilidades/ImageConverter/seo/AvifToJpgSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Convertir AVIF a JPG Online - Sin Subir Fotos a Internet, 100% Privado";
+const description =
+    "Convierte imágenes en formato AVIF al clásico JPG directamente en tu navegador utilizando compresión local, rápido y de forma segura.";
+
+const faqItems = [
+    {
+        question: "¿Por qué convertir AVIF a JPG?",
+        answer: "El formato AVIF ofrece una compresión superior, pero no todos los programas, visores antiguos o foros web lo soportan. Convertirlo a JPG te asegura que la imagen podrá ser vista y usada en el 100% de los dispositivos del mundo.",
+    },
+    {
+        question: "¿Cómo protegemos tus imágenes AVIF?",
+        answer: "Tus fotos jamás salen de tu móvil o PC. Todo el proceso de dibujo y codificación a JPEG se ejecuta aislando la memoria en el entorno de Javascript de tu navegador, garantizando una privacidad que ninguna herramienta online puede ofrecer.",
+    },
+    {
+        question: "¿Perderé calidad al pasar de AVIF a JPG?",
+        answer: "Nuestra herramienta procesa los píxeles con una de las calidades estándar de Canvas (0.9 a 0.95), logrando que los cambios apenas sean perceptibles para la visión humana.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Arrastra archivos o haz clic",
+        text: "Mueve todas las fotografías AVIF que quieras convertir al cuadro de procesamiento delimitado.",
+    },
+    {
+        name: "Transformación Instantánea",
+        text: "Observa en menos de un segundo cómo se recodifica el AVIF a JPG eliminando posibles canales alfa por un fondo sólido.",
+    },
+    {
+        name: "Guarda o Descarga el ZIP",
+        text: "Baja tus nuevas imágenes JPG de manera individual o pulsando 'Descargar Todo' si procesaste en lote.",
+    },
+];
+
+const bibliography = [
+    {
+        name: "AV1 Image File Format (AVIF)",
+        url: "https://aomediacodec.github.io/av1-avif/",
+    },
+    {
+        name: "Información General del JPG",
+        url: "https://en.wikipedia.org/wiki/JPEG",
+    },
+];
+
+const converterOptions = {
+    sourceFormat: "image/avif",
+    targetFormat: "image/jpeg",
+    sourceExt: "AVIF",
+    from: "avif",
+    to: "jpg",
+    dragText: "Arrastra archivos AVIF...",
+    quality: 0.9,
+    themeColor: "#0ea5e9",
+    themeColorHover: "#0284c7",
+    themeBg: "rgba(14, 165, 233, 0.05)",
+};
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/convertidor-generico-seo-illustration.webp"
+    gradientFrom="from-sky-100"
+    gradientTo="to-sky-200"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="a JPG"
+            titleBase="AVIF"
+            description="La alternativa segura para cambiar de formato tus imágenes AVIF a JPG perdiendo apenas calidad y ganando la compatibilidad universal que necesitas."
+            gradientFrom="from-sky-500"
+            gradientTo="to-sky-600"
+            reverse={true}
+        />
+    </div>
+
+    <ImageConverter {...converterOptions} />
+
+    <div slot="seo">
+        <AvifToJpgSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliography} />
+    </div>
+</LayoutUtility>

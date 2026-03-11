@@ -1,0 +1,97 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import ImageConverter from "../../components/utilidades/ImageConverter/ImageConverter.astro";
+import AvifToPngSEO from "../../components/utilidades/ImageConverter/seo/AvifToPngSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Convertir AVIF a PNG Online - Rápido, local y 100% privado";
+const description =
+    "Convierte imágenes AVIF a formato PNG manteniendo la máxima calidad y las transparencias. Todo el proceso ocurre en tu navegador web sin enviar archivos.";
+
+const faqItems = [
+    {
+        question: "¿Por qué debería convertir AVIF a PNG?",
+        answer: "AVIF es genial para compresión, pero su compatibilidad todavía es limitada en navegadores antiguos, editores de imagen clásicos y plataformas empresariales. Al convertir de AVIF a PNG, te aseguras de que tu archivo mantendrá la transparencia (canal alfa) original y todas las aplicaciones podrán abrirlo al instante.",
+    },
+    {
+        question: "¿Se mantienen las transparencias del archivo AVIF original?",
+        answer: "Sí. A diferencia de otros formatos como JPG que eliminan el fondo transparente y lo reemplazan por blanco, al exportar a PNG nuestro convertidor mantiene intacto el canal alfa, protegiendo los bordes invisibles y recortes de tu imagen.",
+    },
+    {
+        question: "¿Es verdad que no suben mis imágenes a internet?",
+        answer: "Absolutamente cierto. Nuestro convertidor se ejecuta de manera 100% local en tu dispositivo utilizando el motor interno de JavaScript. No hay servidores intermediarios procesando las imágenes, lo cual garantiza tu privacidad total.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Añade tus archivos AVIF",
+        text: "Puedes arrastrarlos directamente al área delimitada o usar el botón para explorar las carpetas de tu equipo.",
+    },
+    {
+        name: "Procesamiento inmediato",
+        text: "Deja que el procesador HTML5 renderice la imagen; el formato cambiará a PNG de forma automática en microsegundos.",
+    },
+    {
+        name: "Hazte con tus PNGs",
+        text: "Descarga las imágenes convertidas una a una pulsando en sus botones laterales o baja un bloque completo mediante el botón ZIP.",
+    },
+];
+
+const bibliography = [
+    {
+        name: "Alliance for Open Media: Formato AVIF",
+        url: "https://aomediacodec.github.io/av1-avif/",
+    },
+    {
+        name: "W3C - Portable Network Graphics (PNG) Specification",
+        url: "https://www.w3.org/TR/png/",
+    },
+];
+
+const converterOptions = {
+    sourceFormat: "image/avif",
+    targetFormat: "image/png",
+    sourceExt: "AVIF",
+    from: "avif",
+    to: "png",
+    dragText: "Arrastra archivos AVIF...",
+    themeColor: "#8b5cf6",
+    themeColorHover: "#7c3aed",
+    themeBg: "rgba(139, 92, 246, 0.05)",
+};
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/convertidor-generico-seo-illustration.webp"
+    gradientFrom="from-violet-100"
+    gradientTo="to-violet-200"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="a PNG"
+            titleBase="AVIF"
+            description="La herramienta de última generación para lograr cambiar tus imágenes AVIF transparentes hacia archivos PNG sólidos y universales sin enviar ni un solo byte de información fuera de tu dispositivo."
+            gradientFrom="from-violet-500"
+            gradientTo="to-violet-600"
+            reverse={true}
+        />
+    </div>
+
+    <ImageConverter {...converterOptions} />
+
+    <div slot="seo">
+        <AvifToPngSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliography} />
+    </div>
+</LayoutUtility>

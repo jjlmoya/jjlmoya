@@ -1,0 +1,93 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import ImageConverter from "../../components/utilidades/ImageConverter/ImageConverter.astro";
+import GifToJpgSEO from "../../components/utilidades/ImageConverter/seo/GifToJpgSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Convertir GIF a JPG Online | Vuelve tus animaciones fotos estáticas";
+const description =
+    "Extrae el marco principal de tu archivo GIF y conviértelo a un formato clásico JPG ligero en tu propio navegador. Rápido, offline y conservando la nitidez.";
+
+const faqItems = [
+    {
+        question: "¿Qué ocurre con las animaciones cuando paso a JPG?",
+        answer: "El formato JPG es estrictamente estático, no soporta múltiples fotogramas. Nuestro convertidor se encarga de analizar el archivo GIF y extrae únicamente la primera imagen o fotograma que aparece en la secuencia, dándote entonces una fotografía fija tradicional.",
+    },
+    {
+        question: "¿Perderé algún efecto especial o fondo de color transparente?",
+        answer: "Sí, es el comportamiento natural del estándar JPG no albergar transparencias (canal alfa). Si tú subes un GIF con fondo libre, nosotros insertamos inteligentemente una capa sólida blanca subyacente de fondo para evitar fallos de lectura y colores corruptos, dejándote una imagen perfectamente lista para ofimática convencional.",
+    },
+    {
+        question: "¿Puedo extraer fotos JPG de un GIF sin que la web guarde mi contenido original?",
+        answer: "Absolutamente sí. El secreto reside en que la herramienta es una App Web (basada en el lienzo o Canvas del HTML5). Toda la decodificación del GIF a la trama visual inicial JPG la ejecuta el procesador o la placa madre de tú propio dispositivo físico. Desconectas el WiFi central e igual seguirá operando de milagro.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Arrastra Archivos Pesados Movibles",
+        text: "Sitúa o arrastra desde tu carpeta virtual ese GIF humorístico largo y engorroso hasta arrojarlo a nuestra caja azul.",
+    },
+    {
+        name: "Cálculo Limpio de Fotograma Primero",
+        text: "Siente o constata en fraccionarias de tiempo cómo se extirpa inteligentemente la animación creando el JPG blanco sólido sin contactar servidores lejanos.",
+    },
+    {
+        name: "Captúralos Empaquetados en Masa ZIP",
+        text: "Desembala por completo bajando a los botones o usando el Zip si requerías depurar un centenar largo de fotos meme.",
+    },
+];
+
+const bibliography = [
+    {
+        name: "Especificación Técnica Joint Photographic Experts Group",
+        url: "https://en.wikipedia.org/wiki/JPEG",
+    },
+];
+
+const converterOptions = {
+    sourceFormat: "image/gif",
+    targetFormat: "image/jpeg",
+    sourceExt: "GIF",
+    from: "gif",
+    to: "jpg",
+    dragText: "Arrastra animaciones GIF...",
+    themeColor: "#eab308",
+    themeColorHover: "#ca8a04",
+    themeBg: "rgba(234, 179, 8, 0.05)",
+};
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/convertidor-generico-seo-illustration.webp"
+    gradientFrom="from-yellow-100"
+    gradientTo="to-yellow-200"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="a JPG"
+            titleBase="Meme GIF"
+            description="La rampa más veloz y respetuosa por tu privacidad que recodifica el caótico archivo de fotogramas unidos y paraliza lo esencial entregándote la estampa tradicional en el extendido JPG sólido."
+            gradientFrom="from-yellow-500"
+            gradientTo="to-yellow-600"
+            reverse={true}
+        />
+    </div>
+
+    <ImageConverter {...converterOptions} />
+
+    <div slot="seo">
+        <GifToJpgSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliography} />
+    </div>
+</LayoutUtility>
