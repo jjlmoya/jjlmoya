@@ -97,5 +97,13 @@ export const healthSection: SectionData = {
             description: "Test clínico de Pelli-Robson para medir tu capacidad de detectar grises.",
             color: "#1e293b",
         },
+        {
+            href: "/utilidades/entrenador-vision-periferica/",
+            iconBg: "mdi:eye",
+            iconFg: "mdi:target-variant",
+            title: "Visión Periférica",
+            description: "Juego de reflejos para expandir tu campo visual y mejorar la lectura rápida.",
+            color: "#f59e0b",
+        },
     ],
 };

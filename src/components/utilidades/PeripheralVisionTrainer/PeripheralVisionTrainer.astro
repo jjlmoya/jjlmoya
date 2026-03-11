@@ -1,0 +1,240 @@
+---
+import { Icon } from "astro-icon/components";
+import "./PeripheralVisionTrainer.css";
+---
+
+<div class="periph-container">
+  <div class="periph-card" id="mainCard">
+    <button id="themeToggle" class="theme-toggle" title="Cambiar tema">
+      <Icon name="mdi:theme-light-dark" id="themeIcon" />
+    </button>
+
+    <div id="introView">
+      <h3 style="font-size: 3rem; font-weight: 950; color: var(--periph-text); margin-bottom: 1rem;">Visión Periférica</h3>
+      <p style="color: var(--periph-slate-400); max-width: 600px; margin: 0 auto; line-height: 1.8; font-size: 1.1rem;">
+        Entrena tu capacidad para procesar información fuera de tu foco directo. Ideal para lectura rápida y agilidad mental.
+      </p>
+
+      <div class="benefits-grid">
+        <div class="benefit-tile">
+          <div class="benefit-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--periph-primary);">
+            <Icon name="mdi:flash-outline" />
+          </div>
+          <span class="benefit-title">Velocidad</span>
+          <p class="benefit-desc">Reduce el tiempo de reacción ante estímulos inesperados.</p>
+        </div>
+        <div class="benefit-tile">
+          <div class="benefit-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--periph-success);">
+            <Icon name="mdi:book-open-variant" />
+          </div>
+          <span class="benefit-title">Lectura Rápida</span>
+          <p class="benefit-desc">Amplía tu campo visual para captar frases enteras.</p>
+        </div>
+        <div class="benefit-tile">
+          <div class="benefit-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--periph-accent);">
+            <Icon name="mdi:target-variant" />
+          </div>
+          <span class="benefit-title">Foco</span>
+          <p class="benefit-desc">Mejora la concentración manteniendo el centro fijo.</p>
+        </div>
+      </div>
+
+      <button id="startBtn" class="periph-btn">Comenzar Entrenamiento</button>
+    </div>
+
+    <div id="gameView" style="display: none; flex-direction: column; gap: 3rem;">
+      <div class="periph-hud">
+        <div class="hud-stat">
+          <span id="scoreVal" class="stat-val">0</span>
+          <span class="stat-lbl">Puntos</span>
+        </div>
+        <div class="hud-stat">
+          <span id="levelVal" class="stat-val">1</span>
+          <span class="stat-lbl">Nivel</span>
+        </div>
+        <div class="hud-stat">
+          <span id="timeVal" class="stat-val">60</span>
+          <span class="stat-lbl">Tiempo</span>
+        </div>
+      </div>
+
+      <div class="game-viewport" id="viewport">
+        <div class="focus-ring"></div>
+        <div class="center-anchor"></div>
+        <div id="target" class="periph-target" style="display: none;"></div>
+      </div>
+    </div>
+
+    <div id="resultView" style="display: none; flex-direction: column; gap: 2rem;">
+      <h3 style="font-size: 3.5rem; font-weight: 950; color: var(--periph-text);" id="rankBadge">EXPLORADOR</h3>
+      <div style="display: flex; justify-content: center; gap: 2rem;">
+        <div class="hud-stat">
+          <span id="finalScore" class="stat-val">0</span>
+          <span class="stat-lbl">Total</span>
+        </div>
+      </div>
+      <p id="rankText" style="color: var(--periph-slate-400); font-size: 1.2rem; max-width: 500px; margin: 0 auto;">
+        Sigue practicando para expandir tus límites de percepción.
+      </p>
+      <button id="restartBtn" class="periph-btn" style="margin-top: 2rem;">Reiniciar Protocolo</button>
+    </div>
+
+    <div class="disclaimer-peripheral">
+      <strong>MÉTODO:</strong> Mantén la mirada fija en el punto naranja central. Reacciona a las flechas usando el teclado sin desviar tus ojos del centro.
+    </div>
+  </div>
+</div>
+
+<script>
+  let score = 0;
+  let level = 1;
+  let timeLeft = 60;
+  let gameActive = false;
+  let currentKey = "";
+  let targetVisible = false;
+  let timerId: number | null = null;
+  let spawnId: number | null = null;
+
+  const card = document.getElementById("mainCard");
+  const themeToggle = document.getElementById("themeToggle");
+  const intro = document.getElementById("introView");
+  const game = document.getElementById("gameView");
+  const result = document.getElementById("resultView");
+  const target = document.getElementById("target");
+  const viewport = document.getElementById("viewport");
+
+  const scoreLabels = {
+    score: document.getElementById("scoreVal"),
+    level: document.getElementById("levelVal"),
+    time: document.getElementById("timeVal"),
+    final: document.getElementById("finalScore"),
+    rank: document.getElementById("rankBadge"),
+    text: document.getElementById("rankText")
+  };
+
+  themeToggle?.addEventListener("click", () => {
+    card?.classList.toggle("dark-mode");
+  });
+
+  function startGame() {
+    score = 0;
+    level = 1;
+    timeLeft = 60;
+    gameActive = true;
+    
+    if (intro) intro.style.display = "none";
+    if (result) result.style.display = "none";
+    if (game) game.style.display = "flex";
+    
+    updateHUD();
+    timerId = window.setInterval(tick, 1000);
+    nextSpawn();
+  }
+
+  function tick() {
+    timeLeft--;
+    if (scoreLabels.time) scoreLabels.time.textContent = timeLeft.toString();
+    if (timeLeft <= 0) endGame();
+  }
+
+  function nextSpawn() {
+    if (!gameActive) return;
+    const delay = Math.max(500, 2000 - (level * 150));
+    spawnId = window.setTimeout(spawn, delay);
+  }
+
+  function spawn() {
+    if (!gameActive || !target || !viewport) return;
+
+    const keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+    currentKey = keys[Math.floor(Math.random() * keys.length)];
+    
+    const rect = viewport.getBoundingClientRect();
+    const margin = 80;
+    let x = 0, y = 0;
+    let icon = "";
+
+    switch(currentKey) {
+      case "ArrowUp": x = Math.random() * (rect.width - 200) + 100; y = margin; icon = "↑"; break;
+      case "ArrowDown": x = Math.random() * (rect.width - 200) + 100; y = rect.height - margin; icon = "↓"; break;
+      case "ArrowLeft": x = margin; y = Math.random() * (rect.height - 200) + 100; icon = "←"; break;
+      case "ArrowRight": x = rect.width - margin; y = Math.random() * (rect.height - 200) + 100; icon = "→"; break;
+    }
+
+    target.style.left = `${x}px`;
+    target.style.top = `${y}px`;
+    target.textContent = icon;
+    target.style.display = "flex";
+    target.className = "periph-target";
+    targetVisible = true;
+
+    const visibilityTime = Math.max(400, 1500 - (level * 100));
+    window.setTimeout(() => {
+      if (targetVisible) {
+        target.style.display = "none";
+        targetVisible = false;
+        nextSpawn();
+      }
+    }, visibilityTime);
+  }
+
+  function handleKey(key: string) {
+    if (!gameActive || !targetVisible || !target) return;
+
+    if (key === currentKey) {
+      score += 10 * level;
+      if (score % 100 === 0) level++;
+      
+      target.classList.add("target-correct");
+      targetVisible = false;
+      setTimeout(() => { target.style.display = "none"; }, 200);
+      
+      updateHUD();
+      if (spawnId) clearTimeout(spawnId);
+      nextSpawn();
+    } else {
+      target.classList.add("target-wrong");
+      score = Math.max(0, score - 5);
+      updateHUD();
+    }
+  }
+
+  function updateHUD() {
+    if (scoreLabels.score) scoreLabels.score.textContent = score.toString();
+    if (scoreLabels.level) scoreLabels.level.textContent = level.toString();
+  }
+
+  function endGame() {
+    gameActive = false;
+    if (timerId) clearInterval(timerId);
+    if (spawnId) clearTimeout(spawnId);
+    
+    if (game) game.style.display = "none";
+    if (result) result.style.display = "flex";
+    
+    if (scoreLabels.final) scoreLabels.final.textContent = score.toString();
+    
+    if (scoreLabels.rank && scoreLabels.text) {
+      if (score > 1200) {
+        scoreLabels.rank.textContent = "VISIÓN FRACTAL";
+        scoreLabels.text.textContent = "Tu integración hemisférica es total. Posees una alerta situacional de élite.";
+      } else if (score > 600) {
+        scoreLabels.rank.textContent = "HALCÓN";
+        scoreLabels.text.textContent = "Excelente desempeño. Tu campo visual es significativamente superior a la media.";
+      } else {
+        scoreLabels.rank.textContent = "EXPLORADOR";
+        scoreLabels.text.textContent = "Buen inicio. Entrena a diario para expandir tu percepción lateral.";
+      }
+    }
+  }
+
+  document.getElementById("startBtn")?.addEventListener("click", startGame);
+  document.getElementById("restartBtn")?.addEventListener("click", startGame);
+
+  window.addEventListener("keydown", (e) => {
+    if (gameActive && ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+      e.preventDefault();
+      handleKey(e.key);
+    }
+  });
+</script>
