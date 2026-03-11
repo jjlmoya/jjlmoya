@@ -58,5 +58,13 @@ export const scienceSection: SectionData = {
             iconBg: "mdi:matrix",
             iconFg: "mdi:monitor-cellphone",
         },
+        {
+            href: "/utilidades/calculadora-renovacion-celular/",
+            iconBg: "mdi:atom",
+            iconFg: "mdi:dna",
+            title: "Renovación Celular",
+            description: "Calcula cuánto de ti es 'nuevo' mediante la tasa de recambio atómico.",
+            color: "#f43f5e",
+        },
     ],
 };

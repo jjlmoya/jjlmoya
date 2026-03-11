@@ -1,0 +1,146 @@
+---
+import "./AtomicReplacementCalculator.css";
+---
+
+<div class="atom-container">
+  <div class="atom-card">
+    <div class="input-section">
+      <div class="input-group">
+        <div class="input-label">Cronología Biológica</div>
+        <div class="age-display">
+          <span id="ageDisplay">25</span>
+          <span class="age-unit">años de evolución</span>
+        </div>
+        <input 
+          type="range" 
+          id="ageRange" 
+          min="1" 
+          max="105" 
+          step="1" 
+          value="25" 
+          aria-label="Edad"
+        />
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="main-stat">
+        <span class="main-stat-label">Tu materia es nueva en un</span>
+        <div class="main-stat-value">
+          <span id="newStatVal">93</span>
+          <span class="percent-sign">%</span>
+        </div>
+        <div style="margin-top: 1.5rem; font-size: 0.9rem; font-weight: 700; color: var(--atom-primary); letter-spacing: 2px; text-transform: uppercase;">
+          Renovación Atómica
+        </div>
+      </div>
+
+      <div class="tissue-list">
+        <div class="tissue-item">
+          <div class="tissue-header">
+            <span class="tissue-name">Epidermis y Sangre</span>
+            <span class="tissue-percentage" id="skinVal">100%</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-fill" id="skinBar" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="tissue-item">
+          <div class="tissue-header">
+            <span class="tissue-name">Remodelación Ósea</span>
+            <span class="tissue-percentage" id="boneVal">85%</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-fill" id="boneBar" style="width: 85%;"></div>
+          </div>
+        </div>
+
+        <div class="tissue-item">
+          <div class="tissue-header">
+            <span class="tissue-name">Matriz Orgánica</span>
+            <span class="tissue-percentage" id="organVal">60%</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-fill" id="organBar" style="width: 60%;"></div>
+          </div>
+        </div>
+
+        <div class="tissue-item">
+          <div class="tissue-header">
+            <span class="tissue-name">Células Perennes</span>
+            <span class="tissue-percentage" id="brainVal">12%</span>
+          </div>
+          <div class="bar-container">
+            <div class="bar-fill" id="brainBar" style="width: 12%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="disclaimer">
+      Los cálculos se basan en la vida media celular según estudios isotópicos. Mientras que la sangre y la piel se renuevan en semanas, las proteínas del cristalino y gran parte de tu corteza cerebral permanecen desde el desarrollo embrionario. Físicamente, eres una estructura dinámica en flujo constante.
+    </p>
+  </div>
+</div>
+
+<script>
+  const ageInput = document.getElementById('ageRange') as HTMLInputElement;
+  const ageDisplay = document.getElementById('ageDisplay');
+  const newStatVal = document.getElementById('newStatVal');
+  const skinVal = document.getElementById('skinVal');
+  const skinBar = document.getElementById('skinBar');
+  const boneVal = document.getElementById('boneVal');
+  const boneBar = document.getElementById('boneBar');
+  const organVal = document.getElementById('organVal');
+  const organBar = document.getElementById('organBar');
+  const brainVal = document.getElementById('brainVal');
+  const brainBar = document.getElementById('brainBar');
+
+  const TURNOVER = {
+    skin: 0.1, 
+    bone: 10,  
+    organ: 15, 
+    brain: 90 
+  };
+
+  const MASS_WEIGHTS = {
+    skin: 0.30,
+    bone: 0.35,
+    organ: 0.25,
+    brain: 0.10
+  };
+
+  function update() {
+    const age = parseInt(ageInput.value);
+    if (ageDisplay) ageDisplay.textContent = age.toString();
+
+    const getReplacement = (t: number, half: number) => {
+      const remaining = Math.exp(-Math.log(2) * t / half);
+      return (1 - remaining) * 100;
+    };
+
+    const pSkin = age < 0.2 ? (age * 100 / 0.2) : 100;
+    const pBone = getReplacement(age, TURNOVER.bone);
+    const pOrgan = getReplacement(age, TURNOVER.organ);
+    const pBrain = Math.min(15, (age * 15 / 80));
+
+    if (skinVal) skinVal.textContent = `${pSkin.toFixed(0)}%`;
+    if (skinBar) skinBar.style.width = `${pSkin}%`;
+    
+    if (boneVal) boneVal.textContent = `${pBone.toFixed(0)}%`;
+    if (boneBar) boneBar.style.width = `${pBone}%`;
+    
+    if (organVal) organVal.textContent = `${pOrgan.toFixed(0)}%`;
+    if (organBar) organBar.style.width = `${pOrgan}%`;
+    
+    if (brainVal) brainVal.textContent = `${pBrain.toFixed(0)}%`;
+    if (brainBar) brainBar.style.width = `${pBrain}%`;
+
+    const total = (pSkin * MASS_WEIGHTS.skin + pBone * MASS_WEIGHTS.bone + pOrgan * MASS_WEIGHTS.organ + pBrain * MASS_WEIGHTS.brain);
+    if (newStatVal) newStatVal.textContent = Math.round(total).toString();
+  }
+
+  ageInput?.addEventListener('input', update);
+  update();
+</script>
