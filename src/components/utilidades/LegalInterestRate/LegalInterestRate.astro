@@ -1,0 +1,117 @@
+---
+import './LegalInterestRate.css';
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="lir-wrapper">
+  <div class="lir-container">
+    <header class="lir-header">
+      <span class="lir-badge">Boletín Oficial del Estado 2026</span>
+      <h1 class="lir-title">Tipo de Interés Legal del Dinero</h1>
+      <p class="lir-subtitle">
+        El tipo de interés legal del dinero se mantiene en el <strong>3,25%</strong> para el ejercicio 2026, fijado por la Ley de Presupuestos Generales del Estado.
+      </p>
+    </header>
+
+    <div class="lir-main-rates">
+      <article class="rate-card">
+        <span class="rate-label">Interés Legal</span>
+        <span class="rate-value">3,25%</span>
+        <span class="rate-subtext">Vigente en 2026</span>
+      </article>
+
+      <article class="rate-card">
+        <span class="rate-label">Interés de Demora</span>
+        <span class="rate-value">4,06%</span>
+        <span class="rate-subtext">Tributario (Hacienda)</span>
+      </article>
+
+      <article class="rate-card">
+        <span class="rate-label">Operaciones Comerciales</span>
+        <span class="rate-value">10,15%</span>
+        <span class="rate-subtext">Primer Semestre 2026</span>
+      </article>
+    </div>
+
+    <section class="lir-calculator-section">
+      <h2 class="calculator-title">
+        <Icon name="mdi:calculator-variant" />
+        Calculadora Rápida de Interés (3,25%)
+      </h2>
+
+      <div class="calculator-grid">
+        <div class="input-group">
+          <label for="capital">Capital Pendiente</label>
+          <div class="input-container">
+            <input 
+              type="number" 
+              id="capital" 
+              placeholder="0.00" 
+              class="lir-input"
+              value="1000"
+            />
+            <span class="currency-suffix">€</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="days">Días de Demora</label>
+          <div class="input-container">
+            <input 
+              type="number" 
+              id="days" 
+              placeholder="365" 
+              class="lir-input"
+              value="365"
+            />
+            <span class="currency-suffix">Días</span>
+          </div>
+        </div>
+
+        <div class="lir-results-card">
+          <div class="result-item">
+            <span class="result-label">Intereses Generados</span>
+            <span class="result-amount" id="result-interest">32,50 €</span>
+          </div>
+          <div class="result-item result-total">
+            <span class="total-label">Total a Pagar</span>
+            <span class="total-amount" id="result-total">1.032,50 €</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lir-info-msg">
+        <div class="info-icon">
+          <Icon name="mdi:information-outline" />
+        </div>
+        <div class="info-content">
+          <p>Esta calculadora aplica la fórmula estándar de interés simple:</p>
+          <code class="info-formula">Interés = (Capital × Tipo × Días) / (365 × 100)</code>
+          <p>Se utiliza una base de <strong>365 días</strong> para el cálculo oficial según la normativa española vigente en 2026.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  const capitalInput = document.getElementById('capital') as HTMLInputElement;
+  const daysInput = document.getElementById('days') as HTMLInputElement;
+  const interestDisplay = document.getElementById('result-interest');
+  const totalDisplay = document.getElementById('result-total');
+
+  function calculate() {
+    const capital = parseFloat(capitalInput.value) || 0;
+    const days = parseFloat(daysInput.value) || 0;
+    const rate = 3.25;
+    
+    const interest = (capital * rate * days) / (365 * 100);
+    const total = capital + interest;
+
+    if (interestDisplay) interestDisplay.textContent = interest.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    if (totalDisplay) totalDisplay.textContent = total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  capitalInput?.addEventListener('input', calculate);
+  daysInput?.addEventListener('input', calculate);
+</script>

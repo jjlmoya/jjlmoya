@@ -77,5 +77,13 @@ export const financeSection: SectionData = {
             iconFg: "mdi:calculator-variant",
             color: "#3b82f6",
         },
+        {
+            title: "Interés Legal 2026",
+            description: "Consulta el tipo oficial (3,25%) y calcula intereses de demora civiles y tributarios para el ejercicio 2026.",
+            href: "/utilidades/interes-legal-dinero-2026/",
+            iconBg: "mdi:bank-outline",
+            iconFg: "mdi:scale-balance",
+            color: "#b8860b",
+        },
     ],
 };
