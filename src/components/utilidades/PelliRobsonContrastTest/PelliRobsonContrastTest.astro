@@ -1,0 +1,188 @@
+---
+import "./PelliRobsonContrastTest.css";
+---
+
+<div class="pelli-container">
+  <div class="pelli-game-card">
+
+    <div id="introView" class="view-panel">
+      <div class="score-circle">
+        <span class="stat-label">Sensibilidad</span>
+        <span class="score-title">Test</span>
+      </div>
+      <h3 style="font-size: 2.2rem; font-weight: 950; margin-bottom: 1rem;">¿Qué letra ves?</h3>
+      <p class="result-explanation">Escribe la letra que aparezca en pantalla. Cuanto más tenue sea, mayor será tu sensibilidad al contraste.</p>
+      <button id="startBtn" class="game-btn btn-pass" style="max-width:300px; margin: 2rem auto;">
+        Comenzar Desafío
+      </button>
+    </div>
+
+
+    <div id="testView" class="view-panel" style="display: none; flex-direction: column; gap: 3rem;">
+      <div class="game-hud">
+        <div class="stat-box">
+          <span class="stat-label">Nivel Actual</span>
+          <span id="letterCount" class="stat-number">1 / 16</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">LogCS Detectado</span>
+          <span id="liveScore" class="stat-number">0.00</span>
+        </div>
+      </div>
+
+      <div class="screen-wrapper">
+        <div id="optotype">D</div>
+      </div>
+
+      <div class="letter-input-container">
+        <input 
+          type="text" 
+          id="letterInput" 
+          class="letter-input" 
+          maxlength="1" 
+          placeholder="Escribe la letra..." 
+          autocomplete="off"
+          autofocus
+        />
+        <button id="failBtn" class="game-btn btn-fail" style="width: 100%; border: none; background: transparent; cursor: pointer;">
+          Ya no distingo ninguna letra
+        </button>
+      </div>
+    </div>
+
+
+    <div id="resultView" class="results-screen" style="display: none; flex-direction: column;">
+      <div class="score-circle">
+        <span class="stat-label">PUNTUACIÓN</span>
+        <span id="finalScore" class="score-title">2.10</span>
+      </div>
+      <h3 id="resultTitle" style="font-size: 3rem; font-weight: 950; margin-bottom: 1.5rem;">¡Impresionante!</h3>
+      <p id="resultText" class="result-explanation">Tu visión es excelente. Detectas cambios de contraste mínimos que el ojo promedio pasa por alto.</p>
+      <button id="restartBtn" class="game-btn btn-pass" style="max-width: 250px; margin: 3rem auto;">
+        Reiniciar Test
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const LETTERS = "CDHKNORSVZ";
+  const CS_STEPS = [0.00, 0.15, 0.30, 0.45, 0.60, 0.75, 0.90, 1.05, 1.20, 1.35, 1.50, 1.65, 1.80, 1.95, 2.10, 2.25];
+  
+  let currentStepIndex = 0;
+  let score = 0;
+  let currentTargetLetter = "";
+
+  const introView = document.getElementById("introView");
+  const testView = document.getElementById("testView");
+  const resultView = document.getElementById("resultView");
+  const optotype = document.getElementById("optotype");
+  const liveScore = document.getElementById("liveScore");
+  const letterCount = document.getElementById("letterCount");
+  const progressFill = document.getElementById("progressFill");
+  const letterInput = document.getElementById("letterInput") as HTMLInputElement;
+  const finalScore = document.getElementById("finalScore");
+  const resultTitle = document.getElementById("resultTitle");
+  const resultText = document.getElementById("resultText");
+
+  const startBtn = document.getElementById("startBtn");
+  const failBtn = document.getElementById("failBtn");
+  const restartBtn = document.getElementById("restartBtn");
+
+  function startTest() {
+    currentStepIndex = 0;
+    score = 0;
+    if (introView) introView.style.display = "none";
+    if (resultView) resultView.style.display = "none";
+    if (testView) testView.style.display = "flex";
+    
+    setTimeout(() => {
+      letterInput?.focus();
+    }, 100);
+    
+    updateOptotype();
+  }
+
+  function updateOptotype() {
+    if (!optotype || !liveScore || !letterCount || !progressFill || !letterInput) return;
+    
+    const logCS = CS_STEPS[currentStepIndex];
+    const opacity = Math.pow(10, -logCS);
+    
+    currentTargetLetter = LETTERS[Math.floor(Math.random() * LETTERS.length)];
+    
+    optotype.style.opacity = "0";
+    optotype.style.transform = "scale(0.9)";
+    
+    setTimeout(() => {
+      optotype.textContent = currentTargetLetter;
+      optotype.style.opacity = opacity.toString();
+      optotype.style.transform = "scale(1)";
+      
+      liveScore.textContent = logCS.toFixed(2);
+      letterCount.textContent = `${currentStepIndex + 1} / ${CS_STEPS.length}`;
+      progressFill.style.width = `${((currentStepIndex + 1) / CS_STEPS.length) * 100}%`;
+      
+      letterInput.value = "";
+      letterInput.className = "letter-input";
+    }, 150);
+  }
+
+  function validateInput() {
+    const inputVal = letterInput.value.trim().toUpperCase();
+    if (inputVal === "") return;
+
+    if (inputVal === currentTargetLetter) {
+      score = CS_STEPS[currentStepIndex];
+      currentStepIndex++;
+      
+      letterInput.classList.add("input-correct");
+      
+      if (currentStepIndex >= CS_STEPS.length) {
+        setTimeout(showResults, 400);
+      } else {
+        setTimeout(updateOptotype, 400);
+      }
+    } else {
+      letterInput.classList.add("input-error");
+      setTimeout(showResults, 600);
+    }
+  }
+
+  function showResults() {
+    if (testView) testView.style.display = "none";
+    if (resultView) resultView.style.display = "flex";
+    
+    if (finalScore) finalScore.textContent = score.toFixed(2);
+    
+    if (resultTitle && resultText) {
+      if (score >= 2.0) {
+        resultTitle.textContent = "¡Visión de Élite!";
+        resultText.textContent = "Tu sensibilidad al contraste es comparable a la de pilotos de caza. Detectas variaciones de tono imperceptibles para el 95% de la población.";
+      } else if (score >= 1.65) {
+        resultTitle.textContent = "Resultado Óptimo";
+        resultText.textContent = "Tu capacidad visual funcional es excelente. Estás en el rango ideal para todas las actividades diarias y conducción nocturna segura.";
+      } else if (score >= 1.20) {
+        resultTitle.textContent = "Sensibilidad Reducida";
+        resultText.textContent = "Se detecta una pérdida moderada de sensibilidad. Esto puede causar fatiga ocular al leer o inseguridad en condiciones de baja iluminación.";
+      } else {
+        resultTitle.textContent = "Déficit Significativo";
+        resultText.textContent = "Tu capacidad de contraste es baja. Te recomendamos realizar un examen oftalmológico para descartar anomalías estructurales o fatiga crónica.";
+      }
+    }
+  }
+
+  letterInput?.addEventListener("input", validateInput);
+  
+  startBtn?.addEventListener("click", startTest);
+  restartBtn?.addEventListener("click", startTest);
+  failBtn?.addEventListener("click", showResults);
+
+
+  window.addEventListener("click", () => {
+    if (testView?.style.display === "flex") letterInput?.focus();
+  });
+</script>

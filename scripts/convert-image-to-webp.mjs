@@ -26,6 +26,7 @@ async function convertImage() {
         await sharp(inputPath).webp({ quality: 90 }).toFile(outputPath);
 
         console.log(`Successfully converted. Saved to: ${outputPath}`);
+        console.log("--- CONVERSION_FINISHED ---");
     } catch (err) {
         console.error("Failed executing sharp:", err);
         process.exit(1);

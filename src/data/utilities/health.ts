@@ -89,5 +89,13 @@ export const healthSection: SectionData = {
             description: "Inducción de sueños lúcidos y meditación con frecuencias delta/theta.",
             color: "#4b0082",
         },
+        {
+            href: "/utilidades/test-sensibilidad-contraste-pelli-robson/",
+            iconBg: "mdi:eye-check",
+            iconFg: "mdi:contrast-box",
+            title: "Sensibilidad Contraste",
+            description: "Test clínico de Pelli-Robson para medir tu capacidad de detectar grises.",
+            color: "#1e293b",
+        },
     ],
 };
