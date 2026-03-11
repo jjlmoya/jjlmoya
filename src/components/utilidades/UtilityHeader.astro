@@ -5,6 +5,8 @@ interface Props {
     description: string;
     gradientFrom?: string;
     gradientTo?: string;
+    gradientFromColor?: string;
+    gradientToColor?: string;
     reverse?: boolean;
 }
 
@@ -14,6 +16,8 @@ const {
     description,
     gradientFrom = "from-emerald-500",
     gradientTo = "to-teal-600",
+    gradientFromColor,
+    gradientToColor,
     reverse = false,
 } = Astro.props;
 ---
@@ -25,7 +29,8 @@ const {
                 <>
                     <span class="text-slate-900 dark:text-white">{titleBase}</span>
                     <span
-                        class={`text-transparent bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo} pr-2`}
+                        class={gradientFromColor ? "pr-2" : `text-transparent bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo} pr-2`}
+                        style={gradientFromColor && gradientToColor ? `background: linear-gradient(to right, ${gradientFromColor}, ${gradientToColor}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;` : undefined}
                     >
                         {titleHighlight}
                     </span>
@@ -33,7 +38,8 @@ const {
             ) : (
                 <>
                     <span
-                        class={`text-transparent bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo}`}
+                        class={gradientFromColor ? "" : `text-transparent bg-clip-text bg-gradient-to-r ${gradientFrom} ${gradientTo}`}
+                        style={gradientFromColor && gradientToColor ? `background: linear-gradient(to right, ${gradientFromColor}, ${gradientToColor}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;` : undefined}
                     >
                         {titleHighlight}
                     </span>

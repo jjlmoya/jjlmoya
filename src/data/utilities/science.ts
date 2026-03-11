@@ -49,5 +49,14 @@ export const scienceSection: SectionData = {
             description: "Mide interferencias RF de tu cocina usando WiFi.",
             color: "#e11d48",
         },
+        {
+            title: "Probabilidad de Simulación",
+            description:
+                "¿Vivimos en una simulación? Estima las posibilidades según el argumento de Nick Bostrom.",
+            href: "/utilidades/calculadora-probabilidad-simulacion/",
+            color: "#00f2ff",
+            iconBg: "mdi:matrix",
+            iconFg: "mdi:monitor-cellphone",
+        },
     ],
 };
