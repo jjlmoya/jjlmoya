@@ -1,0 +1,274 @@
+---
+import { Icon } from "astro-icon/components";
+import "./ContentOptimizer.css";
+---
+
+<div class="optimizer-container">
+    <div class="optimizer-tabs">
+        <button class="tab-trigger active" data-tab="text">Análisis de Texto</button>
+        <button class="tab-trigger" data-tab="html">Análisis HTML Técnico</button>
+    </div>
+
+    <div class="optimizer-grid">
+        <div class="input-card animate-in fade-in slide-in-from-left duration-700">
+            <textarea 
+                id="contentInput" 
+                class="optimizer-textarea" 
+                placeholder="Escribe tu texto o pega tu código HTML aquí..."
+            ></textarea>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span id="charCount" class="stat-value">0</span>
+                    <span class="stat-label">Caracteres</span>
+                </div>
+                <div class="stat-box">
+                    <span id="wordCount" class="stat-value">0</span>
+                    <span class="stat-label">Palabras</span>
+                </div>
+                <div class="stat-box">
+                    <span id="readingTime" class="stat-value">0s</span>
+                    <span class="stat-label">Lectura</span>
+                </div>
+                <div class="stat-box">
+                    <span id="sentenceCount" class="stat-value">0</span>
+                    <span class="stat-label">Frases</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-panels animate-in fade-in slide-in-from-right duration-700 delay-200">
+            <div class="panel">
+                <h3 class="panel-title">
+                    <Icon name="mdi:shield-check-outline" size={20} />
+                    Checklist de Optimización
+                </h3>
+                <div id="seoChecklist" class="checklist">
+                    <div class="check-item">
+                        <div class="check-status error"><Icon name="mdi:close" /></div>
+                        <span>Contenido insuficiente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="densityPanel" class="panel">
+                <h3 class="panel-title">
+                    <Icon name="mdi:key-variant" size={20} />
+                    Densidad de Keywords
+                </h3>
+                <div id="keywordList" class="keyword-list">
+                    <div class="empty-state">No hay datos</div>
+                </div>
+            </div>
+
+            <div id="technicalPanel" class="panel" style="display: none;">
+                <h3 class="panel-title">
+                    <Icon name="mdi:xml" size={20} />
+                    Análisis Técnico HTML
+                </h3>
+                <div class="technical-seo-panel" id="techStats">
+                    <div class="tech-stat">
+                        <span class="tech-label">H1 Detectados</span>
+                        <span id="h1Count" class="tech-value">0</span>
+                    </div>
+                    <div class="tech-stat">
+                        <span class="tech-label">Enlaces (a)</span>
+                        <span id="linkCount" class="tech-value">0</span>
+                    </div>
+                    <div class="tech-stat">
+                        <span class="tech-label">Imágenes (img)</span>
+                        <span id="imgCount" class="tech-value">0</span>
+                    </div>
+                    <div class="tech-stat">
+                        <span class="tech-label">Alts faltantes</span>
+                        <span id="altMissingCount" class="tech-value">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const textarea = document.getElementById("contentInput") as HTMLTextAreaElement;
+    const charCountEl = document.getElementById("charCount");
+    const wordCountEl = document.getElementById("wordCount");
+    const readingTimeEl = document.getElementById("readingTime");
+    const sentenceCountEl = document.getElementById("sentenceCount");
+    const keywordListEl = document.getElementById("keywordList");
+    const seoChecklistEl = document.getElementById("seoChecklist");
+    const tabs = document.querySelectorAll(".tab-trigger");
+    const densityPanel = document.getElementById("densityPanel");
+    const technicalPanel = document.getElementById("technicalPanel");
+    
+    const h1CountEl = document.getElementById("h1Count");
+    const linkCountEl = document.getElementById("linkCount");
+    const imgCountEl = document.getElementById("imgCount");
+    const altMissingCountEl = document.getElementById("altMissingCount");
+
+    let activeTab = "text";
+
+    const ignoreList = new Set([
+        "el", "la", "los", "las", "un", "una", "unos", "unas", "y", "o", "u", "en", "de", "del", "por", "para", "con", "sin", "sobre", "que", "si", "no", "es", "son", "fue", "era", "esta", "esto", "estos", "estas", "a", "ante", "bajo", "cabe", "contra", "desde", "durante", "entre", "hacia", "hasta", "mediante", "segun", "so", "tras", "vía", "versus"
+    ]);
+
+    function analyzeText(rawText: string) {
+        let textToAnalyze = rawText;
+        
+        if (activeTab === "html") {
+            const parser = new DOMParser();
+            const sanitizedHtml = rawText.replace(/></g, "> <");
+            const doc = parser.parseFromString(sanitizedHtml, "text/html");
+            textToAnalyze = doc.body.textContent || "";
+            analyzeHTML(rawText);
+        }
+
+        const charCount = textToAnalyze.length;
+        const words = textToAnalyze.trim().split(/\s+/).filter(w => w.length > 0);
+        const wordCount = words.length;
+        const sentences = textToAnalyze.split(/[.!?]+/).filter(s => s.trim().length > 0);
+        const sentenceCount = sentences.length;
+
+        const avgWpm = 200;
+        const totalMinutes = wordCount / avgWpm;
+        const minutes = Math.floor(totalMinutes);
+        const seconds = Math.floor((totalMinutes - minutes) * 60);
+        const timeStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+
+        if (charCountEl) charCountEl.textContent = charCount.toLocaleString();
+        if (wordCountEl) wordCountEl.textContent = wordCount.toLocaleString();
+        if (readingTimeEl) readingTimeEl.textContent = timeStr;
+        if (sentenceCountEl) sentenceCountEl.textContent = sentenceCount.toString();
+
+        updateKeywords(words);
+        updateChecklist({ wordCount, sentenceCount, sentences, rawText });
+    }
+
+    function analyzeHTML(html: string) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        
+        const h1s = doc.querySelectorAll("h1");
+        const links = doc.querySelectorAll("a");
+        const imgs = doc.querySelectorAll("img");
+        const missingAlts = Array.from(imgs).filter(img => !img.getAttribute("alt") || img.getAttribute("alt")?.trim() === "").length;
+
+        if (h1CountEl) {
+            h1CountEl.textContent = h1s.length.toString();
+            h1CountEl.style.color = h1s.length === 1 ? "#10b981" : "#ef4444";
+        }
+        if (linkCountEl) linkCountEl.textContent = links.length.toString();
+        if (imgCountEl) imgCountEl.textContent = imgs.length.toString();
+        if (altMissingCountEl) {
+            altMissingCountEl.textContent = missingAlts.toString();
+            altMissingCountEl.style.color = missingAlts > 0 ? "#ef4444" : "#10b981";
+        }
+    }
+
+    function updateChecklist(data: { wordCount: number; sentenceCount: number; sentences: string[]; rawText: string }) {
+        if (!seoChecklistEl) return;
+        
+        const checks = [];
+        
+        if (data.wordCount < 300) {
+            checks.push({ icon: "mdi:close", status: "error", text: "Longitud insuficiente (< 300 pal.)" });
+        } else if (data.wordCount >= 900) {
+            checks.push({ icon: "mdi:check", status: "success", text: "Contenido pilar excelente (> 900 pal.)" });
+        } else {
+            checks.push({ icon: "mdi:check", status: "success", text: "Longitud buena para SEO" });
+        }
+
+        const longSentences = data.sentences.filter(s => s.trim().split(/\s+/).length > 20).length;
+        const longSentenceRatio = data.sentenceCount > 0 ? (longSentences / data.sentenceCount) * 100 : 0;
+        if (longSentenceRatio > 25) {
+            checks.push({ icon: "mdi:alert", status: "warning", text: "Demasiadas frases largas (> 25% del texto)" });
+        } else if (data.wordCount > 50) {
+            checks.push({ icon: "mdi:check", status: "success", text: "Legibilidad de frases óptima" });
+        }
+
+        const paragraphs = data.rawText.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+        const megaParagraphs = paragraphs.filter(p => p.trim().split(/\s+/).length > 150).length;
+        if (megaParagraphs > 0) {
+            checks.push({ icon: "mdi:close", status: "error", text: "Divide párrafos muy largos (> 150 pal.)" });
+        }
+
+        if (activeTab === "html") {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data.rawText, "text/html");
+            const h1s = doc.querySelectorAll("h1");
+            const h2s = doc.querySelectorAll("h2");
+            const title = doc.querySelector("title");
+            
+            if (h1s.length === 0) checks.push({ icon: "mdi:close", status: "error", text: "Falta etiqueta H1" });
+            else if (h1s.length > 1) checks.push({ icon: "mdi:alert", status: "warning", text: "Múltiples H1 detectados" });
+            
+            if (h2s.length === 0 && data.wordCount > 300) {
+                checks.push({ icon: "mdi:alert", status: "warning", text: "Faltan subencabezados (H2)" });
+            }
+            
+            if (!title) checks.push({ icon: "mdi:close", status: "error", text: "Falta etiqueta de título meta" });
+        }
+
+        seoChecklistEl.innerHTML = checks.map(c => `
+            <div class="check-item">
+                <div class="check-status ${c.status}"><Icon name="${c.icon}" /></div>
+                <span>${c.text}</span>
+            </div>
+        `).join("");
+    }
+
+    function updateKeywords(words: string[]) {
+        if (!keywordListEl) return;
+        const counts: Record<string, number> = {};
+        words.forEach(word => {
+            const normalized = word.toLowerCase().replace(/[.,!?;:()]/g, "");
+            if (normalized.length > 3 && !ignoreList.has(normalized)) {
+                counts[normalized] = (counts[normalized] || 0) + 1;
+            }
+        });
+
+        const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+        if (sorted.length === 0) {
+            keywordListEl.innerHTML = '<div class="empty-state">Introduciendo datos...</div>';
+            return;
+        }
+
+        keywordListEl.innerHTML = sorted.map(([name, count]) => {
+            const density = (count / words.length) * 100;
+            const densityColor = density > 3.5 ? "#ef4444" : density >= 0.8 ? "#10b981" : "#64748b";
+            return `
+                <div class="keyword-item">
+                    <span class="keyword-name">${name}</span>
+                    <span class="keyword-count" style="color: ${densityColor}">${density.toFixed(1)}% (${count})</span>
+                </div>
+            `;
+        }).join("");
+    }
+
+    textarea.addEventListener("input", () => analyzeText(textarea.value));
+    
+    textarea.addEventListener("paste", (e) => {
+        const pasteData = e.clipboardData?.getData("text");
+        if (pasteData && pasteData.trim().startsWith("<") && activeTab === "text") {
+            const htmlTab = document.querySelector('[data-tab="html"]') as HTMLElement;
+            if (htmlTab) htmlTab.click();
+        }
+    });
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            activeTab = (tab as HTMLElement).dataset.tab || "text";
+
+            if (activeTab === "html") {
+                if (densityPanel) densityPanel.style.display = "none";
+                if (technicalPanel) technicalPanel.style.display = "block";
+            } else {
+                if (densityPanel) densityPanel.style.display = "block";
+                if (technicalPanel) technicalPanel.style.display = "none";
+            }
+            analyzeText(textarea.value);
+        });
+    });
+</script>

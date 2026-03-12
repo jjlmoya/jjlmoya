@@ -96,5 +96,13 @@ export const toolsSection: SectionData = {
             description: "Convierte enlaces de Drive en links de descarga directa instantáneos.",
             color: "#34a853",
         },
+        {
+            href: "/utilidades/optimizador-contenido-seo/",
+            iconBg: "mdi:text-box-search",
+            iconFg: "mdi:chart-bar",
+            title: "Optimizador Contenido SEO",
+            description: "Analiza densidad de keywords, tiempos de lectura y límites para redes sociales al vuelo.",
+            color: "#8b5cf6",
+        },
     ],
 };
