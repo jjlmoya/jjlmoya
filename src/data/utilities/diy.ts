@@ -80,5 +80,13 @@ export const diySection: SectionData = {
             description: "Comprueba si tus muebles entran en el ascensor o por la puerta.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/calculadora-dilatacion-termica/",
+            iconBg: "mdi:thermometer-lines",
+            iconFg: "mdi:format-horizontal-align-right",
+            title: "Dilatación Térmica",
+            description: "Calcula cuánto crece una viga de acero, madera u hormigón según el cambio de temperatura.",
+            color: "#fb923c",
+        },
     ],
 };

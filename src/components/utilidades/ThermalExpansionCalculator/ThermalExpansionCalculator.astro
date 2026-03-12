@@ -1,0 +1,242 @@
+---
+import { Icon } from "astro-icon/components";
+import "./ThermalExpansionCalculator.css";
+---
+
+<div class="thermal-calculator-ui">
+    <div class="tech-mega-card">
+        <div class="card-grid">
+            <aside class="config-sidebar">
+                <div class="section-title">
+                    <Icon name="mdi:settings-helper" />
+                    <h2>Configuración</h2>
+                </div>
+
+                <div class="category-status-card">
+                    <Icon name="mdi:anvil" id="catIcon" />
+                    <span id="catLabel">Metalurgia</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="materialSelect">Material</label>
+                    <div class="custom-select-wrapper">
+                        <select id="materialSelect" class="custom-select-premium">
+                            <optgroup label="Metales">
+                                <option value="0.000012">Acero (12 ppm/°C)</option>
+                                <option value="0.000023">Aluminio (23 ppm/°C)</option>
+                                <option value="0.000017">Cobre (17 ppm/°C)</option>
+                                <option value="0.000011">Hierro (11 ppm/°C)</option>
+                            </optgroup>
+                            <optgroup label="Construcción">
+                                <option value="0.000012">Hormigón (12 ppm/°C)</option>
+                                <option value="0.000009">Ladrillo (9 ppm/°C)</option>
+                                <option value="0.000009">Vidrio (9 ppm/°C)</option>
+                            </optgroup>
+                            <optgroup label="Maderas">
+                                <option value="0.000005">Madera (Fibra) (5 ppm/°C)</option>
+                                <option value="0.000040">Madera (Transversal) (40 ppm/°C)</option>
+                                <option value="0.000030">PVC (30 ppm/°C)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="initialLength">Longitud Inicial (m)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="initialLength" value="5" step="0.1" min="0" />
+                        <span class="unit">MTS</span>
+                    </div>
+                </div>
+
+                <div class="temp-control-grid">
+                    <div class="input-group">
+                        <label for="tempStart">T. Inicial (°C)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="tempStart" value="20" step="1" />
+                            <span class="unit">°C</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="tempEnd">T. Máxima (°C)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="tempEnd" value="60" step="1" />
+                            <span class="unit">°C</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="delta-summary">
+                    <span class="delta-label">Diferencial Térmico (ΔT)</span>
+                    <span id="deltaValue" class="delta-value">40 °C</span>
+                </div>
+            </aside>
+
+            <main class="main-display">
+                <div class="section-title">
+                    <Icon name="mdi:chart-bell-curve-cumulative" />
+                    <h2>Simulación de Expansión</h2>
+                </div>
+
+                <div class="visualizer-stage" id="visualizerContainer">
+                    <div class="beam-stage">
+                        <div class="beam-base"></div>
+                        <div class="beam-expander" id="beamExpander">
+                            <div class="expansion-line"></div>
+                        </div>
+                        <div class="beam-marker start">0m</div>
+                        <div class="beam-marker end" id="maxMarker">5m</div>
+                    </div>
+                    
+                    <div class="expansion-indicators">
+                        <div class="indicator">
+                            <Icon name="mdi:arrow-expand-horizontal" />
+                            <span id="indicatorDelta">+0.00 mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-hero">
+                    <div class="mega-result gold">
+                        <span class="result-label">Crecimiento Total (ΔL)</span>
+                        <div class="result-value">
+                            <span class="number" id="deltaResult">2.40</span>
+                            <span class="unit">MM</span>
+                        </div>
+                    </div>
+                    <div class="mega-result glass">
+                        <span class="result-label">Longitud Final</span>
+                        <div class="result-value">
+                            <span class="number" id="finalLength">5.002</span>
+                            <span class="unit">M</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expert-reference-grid">
+                    <div class="ref-card">
+                        <Icon name="mdi:alert-octagon" />
+                        <div>
+                            <h4>Riesgo Pandeo</h4>
+                            <p id="riskLevel">Bajo</p>
+                        </div>
+                    </div>
+                    <div class="ref-card">
+                        <Icon name="mdi:bridge" />
+                        <div>
+                            <h4>Junta Mínima</h4>
+                            <p id="minJoint">3 mm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-card" id="materialTip">
+                    <Icon name="mdi:lightbulb-on" />
+                    <p id="tipText">Selecciona un material para ver datos técnicos curiosos.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script>
+    const materialSelect = document.getElementById('materialSelect') as HTMLSelectElement;
+    const initialLengthInput = document.getElementById('initialLength') as HTMLInputElement;
+    const tempStartInput = document.getElementById('tempStart') as HTMLInputElement;
+    const tempEndInput = document.getElementById('tempEnd') as HTMLInputElement;
+    
+    const deltaValue = document.getElementById('deltaValue');
+    const deltaResult = document.getElementById('deltaResult');
+    const finalLength = document.getElementById('finalLength');
+    const indicatorDelta = document.getElementById('indicatorDelta');
+    const beamExpander = document.getElementById('beamExpander');
+    const maxMarker = document.getElementById('maxMarker');
+    const riskLevel = document.getElementById('riskLevel');
+    const minJoint = document.getElementById('minJoint');
+    const tipText = document.getElementById('tipText');
+    const catIcon = document.getElementById('catIcon');
+    const catLabel = document.getElementById('catLabel');
+
+    const catData: Record<string, { icon: string, label: string }> = {
+        'Metales': { icon: 'mdi:anvil', label: 'Metalurgia' },
+        'Construcción': { icon: 'mdi:wall', label: 'Construcción' },
+        'Maderas': { icon: 'mdi:tree', label: 'Maderas y Polímeros' }
+    };
+
+    const materialTips: Record<string, string> = {
+        'Acero': 'El acero y el hormigón tienen coeficientes casi idénticos, permitiendo que el hormigón armado funcione sin agrietarse internamente.',
+        'Vidrio': 'El vidrio y el acero dilatan casi igual, lo cual es clave para el diseño de grandes fachadas acristaladas.',
+        'Hormigón': 'El coeficiente del hormigón es muy similar al del acero, razón por la cual las estructuras mixtas son tan estables.',
+        'Madera': 'La madera dilata poco por calor, pero mucho por humedad. En estructuras largas, la fibra longitudinal es muy estable.',
+        'PVC': 'El PVC tiene una expansión altísima. Requiere juntas tóricas o curvas "lira" para absorber el movimiento sin romperse.',
+        'Aluminio': 'El aluminio dilata casi el doble que el acero. En cerramientos metálicos, esto obliga a usar sellantes elásticos.'
+    };
+
+    function calculate() {
+        const L0 = parseFloat(initialLengthInput.value) || 0;
+        const alpha = parseFloat(materialSelect.value);
+        const T1 = parseFloat(tempStartInput.value) || 0;
+        const T2 = parseFloat(tempEndInput.value) || 0;
+        
+        const deltaT = T2 - T1;
+        const deltaL = L0 * alpha * deltaT;
+        const deltaLmm = deltaL * 1000;
+        const LF = L0 + deltaL;
+
+
+        if (deltaValue) deltaValue.textContent = `${deltaT} °C`;
+        if (deltaResult) deltaResult.textContent = deltaLmm.toFixed(2);
+        if (finalLength) finalLength.textContent = LF.toFixed(3);
+        if (indicatorDelta) indicatorDelta.textContent = `+${deltaLmm.toFixed(2)} mm`;
+        if (maxMarker) maxMarker.textContent = `${L0}m`;
+
+
+        const visualExpansion = Math.min(40, (deltaLmm / 10) * 10); 
+        if (beamExpander) {
+            beamExpander.style.width = `calc(100% + ${visualExpansion}px)`;
+        }
+
+
+        if (riskLevel) {
+            if (deltaLmm > 10) {
+                riskLevel.textContent = "Crítico";
+                riskLevel.parentElement?.parentElement?.classList.add('risk-high');
+            } else if (deltaLmm > 5) {
+                riskLevel.textContent = "Moderado";
+                riskLevel.parentElement?.parentElement?.classList.remove('risk-high');
+            } else {
+                riskLevel.textContent = "Bajo";
+                riskLevel.parentElement?.parentElement?.classList.remove('risk-high');
+            }
+        }
+
+        if (minJoint) {
+            minJoint.textContent = `${Math.ceil(deltaLmm * 1.5)} mm`;
+        }
+
+        if (tipText) {
+            const selectedText = materialSelect.options[materialSelect.selectedIndex].text;
+            const materialName = Object.keys(materialTips).find(k => selectedText.includes(k));
+            if (materialName && materialTips[materialName]) {
+                tipText.textContent = materialTips[materialName];
+            } else {
+                tipText.textContent = "Consulta el manual del fabricante para coeficientes exactos de aleaciones especiales.";
+            }
+        }
+
+        if (catIcon && catLabel) {
+            const optgroup = materialSelect.options[materialSelect.selectedIndex].parentElement as HTMLOptGroupElement;
+            const catName = optgroup.label;
+            if (catData[catName]) {
+                catIcon.setAttribute('name', catData[catName].icon);
+                catLabel.textContent = catData[catName].label;
+            }
+        }
+    }
+
+    [materialSelect, initialLengthInput, tempStartInput, tempEndInput].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    calculate();
+</script>
