@@ -129,5 +129,13 @@ export const healthSection: SectionData = {
             description: "Calcula los minutos de descanso visual que necesitas según horas de pantalla con la regla 20-20-20.",
             color: "#06b6d4",
         },
+        {
+            href: "/utilidades/distancia-lectura/",
+            iconBg: "mdi:ruler",
+            iconFg: "mdi:eye-check",
+            title: "Distancia de Lectura",
+            description: "Calcula a cuántos cm deben estar tus ojos de la pantalla según el tamaño de la fuente.",
+            color: "#3b82f6",
+        },
     ],
 };

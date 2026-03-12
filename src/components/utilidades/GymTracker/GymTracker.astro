@@ -72,6 +72,32 @@ import { defaultExercises } from "./gymExercises";
             </div>
         </div>
 
+        <div class="timer-section">
+            <div class="timer-display-container">
+                <div class="timer-main">
+                    <span id="timerDisplay">00:00</span>
+                    <div class="timer-controls">
+                        <button id="startTimerBtn" class="btn-timer-action" title="Empezar">
+                            <Icon name="mdi:play" />
+                        </button>
+                        <button id="resetTimerBtn" class="btn-timer-action" title="Reiniciar">
+                            <Icon name="mdi:refresh" />
+                        </button>
+                    </div>
+                </div>
+                <div class="timer-presets">
+                    <button class="preset-btn" data-seconds="60">60s</button>
+                    <button class="preset-btn" data-seconds="90">90s</button>
+                    <button class="preset-btn" data-seconds="120">120s</button>
+                    <div class="custom-timer-box">
+                        <input type="number" id="customTimerInput" placeholder="s" min="1" max="999" />
+                        <button id="setCustomTimerBtn" class="btn-small-icon">OK</button>
+                    </div>
+                </div>
+            </div>
+            <div id="timerProgress" class="timer-progress-bar"></div>
+        </div>
+
         <div class="dashboard-grid">
             <div class="chart-wrapper">
                 <div class="chart-container">
@@ -164,6 +190,18 @@ import { defaultExercises } from "./gymExercises";
     const emptyState = document.getElementById('emptyState');
     const chartPath = document.getElementById('chartPath') as unknown as SVGPathElement;
     const chartPoints = document.getElementById('chartPoints');
+    
+    const timerDisplay = document.getElementById('timerDisplay');
+    const startTimerBtn = document.getElementById('startTimerBtn');
+    const resetTimerBtn = document.getElementById('resetTimerBtn');
+    const customTimerInput = document.getElementById('customTimerInput') as HTMLInputElement;
+    const setCustomTimerBtn = document.getElementById('setCustomTimerBtn');
+    const timerProgress = document.getElementById('timerProgress');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    let timerInterval: number | null = null;
+    let timeLeft = 0;
+    let initialTime = 0;
 
     const STORAGE_KEY = 'jjlmoya-gym-tracker-data';
     const CUSTOM_EXERCISES_KEY = 'jjlmoya-gym-tracker-custom';
@@ -217,6 +255,26 @@ import { defaultExercises } from "./gymExercises";
         const history = getHistory();
         const exerciseId = exerciseSelect.value;
         const logs = history[exerciseId] || [];
+
+
+        Array.from(exerciseSelect.options).forEach(option => {
+            const id = option.value;
+            const exerciseLogs = history[id] || [];
+            const originalName = defaultExercises.find(ex => ex.id === id)?.name || 
+                               getCustomExercises().find(ex => ex.id === id)?.name || 
+                               id;
+            
+            if (exerciseLogs.length > 0) {
+                const lastWeight = exerciseLogs[exerciseLogs.length - 1].weight;
+                option.textContent = `★ ${originalName} (${lastWeight}kg)`;
+                option.style.color = "#a3e635";
+                option.style.fontWeight = "bold";
+            } else {
+                option.textContent = originalName;
+                option.style.color = "";
+                option.style.fontWeight = "";
+            }
+        });
 
         if (maxWeightEl) maxWeightEl.textContent = logs.length ? `${Math.max(...logs.map(l => l.weight))} kg` : '0 kg';
         if (lastWeightEl) lastWeightEl.textContent = logs.length ? `${logs[logs.length-1].weight} kg` : '0 kg';
@@ -382,6 +440,67 @@ import { defaultExercises } from "./gymExercises";
     });
 
     exerciseSelect?.addEventListener('change', updateUI);
+
+    function updateTimerDisplay() {
+        if (!timerDisplay) return;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        
+        if (timerProgress && initialTime > 0) {
+            const percentage = (timeLeft / initialTime) * 100;
+            timerProgress.style.width = `${percentage}%`;
+        }
+    }
+
+    function startTimer(seconds: number) {
+        if (timerInterval) clearInterval(timerInterval);
+        timeLeft = seconds;
+        initialTime = seconds;
+        updateTimerDisplay();
+        
+        timerInterval = window.setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                timeLeft = 0;
+                if (timerInterval) clearInterval(timerInterval);
+                timerInterval = null;
+                if (timerDisplay) timerDisplay.classList.remove('timer-active');
+            }
+            updateTimerDisplay();
+        }, 1000);
+        
+        if (timerDisplay) timerDisplay.classList.add('timer-active');
+    }
+
+    startTimerBtn?.addEventListener('click', () => {
+        if (timeLeft > 0 && !timerInterval) {
+            startTimer(timeLeft);
+        }
+    });
+
+    resetTimerBtn?.addEventListener('click', () => {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = null;
+        timeLeft = 0;
+        initialTime = 0;
+        if (timerDisplay) timerDisplay.classList.remove('timer-active');
+        updateTimerDisplay();
+    });
+
+    presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const seconds = parseInt((btn as HTMLElement).dataset.seconds || '0');
+            startTimer(seconds);
+        });
+    });
+
+    setCustomTimerBtn?.addEventListener('click', () => {
+        const seconds = parseInt(customTimerInput.value);
+        if (!isNaN(seconds) && seconds > 0) {
+            startTimer(seconds);
+        }
+    });
 
     getCustomExercises().forEach(ex => {
         addExerciseToSelect(ex.id, ex.name);

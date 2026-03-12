@@ -1,0 +1,125 @@
+---
+import { Icon } from "astro-icon/components";
+import "./ReadingDistanceCalculator.css";
+---
+
+<div class="reading-distance-container">
+    <div class="calc-card animate-in fade-in slide-in-from-bottom duration-700">
+        <div class="instruction-banner">
+            <Icon name="mdi:eye-refresh" />
+            <p><strong>El problema:</strong> Si tu letra es pequeña, te obligas a estar cerca. Si estás cerca, tus ojos sufren. <strong>Dinos qué tamaño usas y te diremos dónde deberías estar.</strong></p>
+        </div>
+
+        <div class="comparison-area">
+            <div class="preview-box">
+                <div class="preview-controls">
+                    <button id="decFont" class="btn-circle" title="Menos zoom">－</button>
+                    <div class="font-indicator">
+                        <small>ZOOM:</small>
+                        <span id="fontSizeDisplay">16</span>
+                    </div>
+                    <button id="incFont" class="btn-circle" title="Más zoom">＋</button>
+                </div>
+                
+                <div class="p-4 flex flex-col items-center justify-center min-h-[120px] bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 my-4 shadow-inner">
+                    <p id="textPreview" class="preview-text">
+                        Este texto representa tu pantalla
+                    </p>
+                </div>
+
+                <div class="slider-container">
+                    <input 
+                        type="range" 
+                        id="fontSizeSlider" 
+                        min="8" 
+                        max="60" 
+                        value="16" 
+                        step="1"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <div class="result-hub">
+            <div class="result-box-premium">
+                <span class="hub-label">Límite de Fatiga Visual</span>
+                <div class="hub-value">
+                    <span id="distanceValue">45</span>
+                    <small>cm</small>
+                </div>
+                <div class="hub-footer">A menos de esta distancia te dolerá la cabeza</div>
+            </div>
+            
+            <div class="status-indicator" id="statusIndicator">
+                <div class="indicator-icon">
+                    <Icon name="mdi:alert-circle-outline" />
+                </div>
+                <div>
+                    <p id="statusText">Calculando riesgo...</p>
+                    <small id="statusSubtext">Ajusta el zoom para ver resultados</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="explanation-cards animate-in fade-in slide-in-from-bottom duration-1000">
+        <div class="concept-card">
+            <h4><Icon name="mdi:variable" /> La relación</h4>
+            <p>Si tu letra es pequeña, la pantalla tiene que estar más cerca para que la leas. Si está a menos de <strong>40cm</strong>, tu músculo ocular se contrae al máximo y aparecen los dolores de cabeza.</p>
+        </div>
+        <div class="concept-card highlight">
+            <h4><Icon name="mdi:lightbulb-on" /> El truco</h4>
+            <p>Si la distancia recomendada es muy alta y no ves bien, <strong>¡no te acerques!</strong> Sube el zoom (Ctrl +) de tu pantalla para poder leer desde lejos sin forzar la vista.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const slider = document.getElementById('fontSizeSlider') as HTMLInputElement;
+    const incBtn = document.getElementById('incFont');
+    const decBtn = document.getElementById('decFont');
+    const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+    const textPreview = document.getElementById('textPreview');
+    const distanceValue = document.getElementById('distanceValue');
+    const statusText = document.getElementById('statusText');
+    const statusSubtext = document.getElementById('statusSubtext');
+
+    function update() {
+        if (!slider || !fontSizeDisplay || !textPreview || !distanceValue || !statusText || !statusSubtext) return;
+
+        const px = parseInt(slider.value);
+        fontSizeDisplay.textContent = px.toString();
+        textPreview.style.fontSize = `${px}px`;
+
+        const cm = Math.round(px * 2.8);
+        distanceValue.textContent = cm.toString();
+
+        if (px < 14) {
+            statusText.textContent = "¡Riesgo Alto!";
+            statusSubtext.textContent = "Letra minúscula. Estás forzando el enfoque.";
+            statusText.parentElement?.parentElement?.setAttribute('data-state', 'warning');
+        } else if (px > 24) {
+            statusText.textContent = "Zona Segura";
+            statusSubtext.textContent = "Puedes leer desde lejos sin esfuerzo.";
+            statusText.parentElement?.parentElement?.setAttribute('data-state', 'safe');
+        } else {
+            statusText.textContent = "Distancia Recomendada";
+            statusSubtext.textContent = "Mantén la pantalla a esta separación.";
+            statusText.parentElement?.parentElement?.setAttribute('data-state', 'ideal');
+        }
+    }
+
+    slider?.addEventListener('input', update);
+    
+    incBtn?.addEventListener('click', () => {
+        slider.value = (parseInt(slider.value) + 1).toString();
+        update();
+    });
+
+    decBtn?.addEventListener('click', () => {
+        slider.value = (parseInt(slider.value) - 1).toString();
+        update();
+    });
+    
+    update();
+</script>
