@@ -1,0 +1,885 @@
+---
+import { Icon } from "astro-icon/components";
+
+const analytes = [
+    {
+        id: "glucosa",
+        name: "Glucosa",
+        icon: "mdi:water-percent",
+        factor: 18.016,
+        unitMg: "mg/dL",
+        unitMmol: "mmol/L",
+        ranges: [
+            { max: 70, label: "Bajo", status: "low" },
+            { max: 100, label: "Normal", status: "normal" },
+            { max: 126, label: "Prediabetes", status: "border" },
+            { max: Infinity, label: "Diabetes", status: "high" },
+        ],
+    },
+    {
+        id: "colesterol-total",
+        name: "Colesterol Total",
+        icon: "mdi:heart-pulse",
+        factor: 38.67,
+        unitMg: "mg/dL",
+        unitMmol: "mmol/L",
+        ranges: [
+            { max: 200, label: "Deseable", status: "normal" },
+            { max: 240, label: "Límite", status: "border" },
+            { max: Infinity, label: "Alto", status: "high" },
+        ],
+    },
+    {
+        id: "hdl",
+        name: "Colesterol HDL",
+        icon: "mdi:shield-check",
+        factor: 38.67,
+        unitMg: "mg/dL",
+        unitMmol: "mmol/L",
+        ranges: [
+            { max: 40, label: "Riesgo", status: "high" },
+            { max: 60, label: "Aceptable", status: "border" },
+            { max: Infinity, label: "Excelente", status: "normal" },
+        ],
+    },
+    {
+        id: "ldl",
+        name: "Colesterol LDL",
+        icon: "mdi:alert-octagon",
+        factor: 38.67,
+        unitMg: "mg/dL",
+        unitMmol: "mmol/L",
+        ranges: [
+            { max: 100, label: "Óptimo", status: "normal" },
+            { max: 130, label: "Casi Óptimo", status: "normal" },
+            { max: 160, label: "Límite", status: "border" },
+            { max: 190, label: "Alto", status: "high" },
+            { max: Infinity, label: "Muy Alto", status: "high" },
+        ],
+    },
+    {
+        id: "trigliceridos",
+        name: "Triglicéridos",
+        icon: "mdi:chart-arc",
+        factor: 88.57,
+        unitMg: "mg/dL",
+        unitMmol: "mmol/L",
+        ranges: [
+            { max: 150, label: "Normal", status: "normal" },
+            { max: 200, label: "Límite", status: "border" },
+            { max: 500, label: "Alto", status: "high" },
+            { max: Infinity, label: "Muy Alto", status: "high" },
+        ],
+    },
+    {
+        id: "creatinina",
+        name: "Creatinina",
+        icon: "mdi:test-tube",
+        factor: 11.312,
+        unitMg: "mg/dL",
+        unitMmol: "mmol/L",
+        ranges: [
+            { max: 0.7, label: "Bajo", status: "low" },
+            { max: 1.3, label: "Normal", status: "normal" },
+            { max: Infinity, label: "Elevado", status: "high" },
+        ],
+    },
+    {
+        id: "urea",
+        name: "Urea",
+        icon: "mdi:flask-outline",
+        factor: 6.006,
+        unitMg: "mg/dL",
+        unitMmol: "mmol/L",
+        ranges: [
+            { max: 10, label: "Bajo", status: "low" },
+            { max: 50, label: "Normal", status: "normal" },
+            { max: Infinity, label: "Alto", status: "high" },
+        ],
+    },
+];
+---
+
+<div class="blood-app">
+    <div class="app-glass-container">
+        <header class="app-header">
+            <div class="header-content">
+                <Icon name="mdi:stethoscope" class="main-icon" />
+                <div class="header-text">
+                    <h1>Analítica Suite</h1>
+                    <p>Conversor de unidades clínicas profesional</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="app-body">
+            <section class="analyte-selector">
+                <h2 class="section-title">Seleccionar Analito</h2>
+                <div class="analyte-grid" id="analyte-grid">
+                    {
+                        analytes.map((analyte) => (
+                            <button
+                                class={`analyte-card ${analyte.id === "glucosa" ? "active" : ""}`}
+                                data-id={analyte.id}
+                                data-factor={analyte.factor}
+                                data-ranges={JSON.stringify(analyte.ranges)}
+                            >
+                                <div class="icon-wrapper">
+                                    <Icon name={analyte.icon} />
+                                </div>
+                                <span>{analyte.name}</span>
+                            </button>
+                        ))
+                    }
+                </div>
+            </section>
+
+            <section class="calculator-core">
+                <div class="conversion-panel">
+                    <div class="input-group" id="group-mg" style="order: 1">
+                        <label for="input-mg" id="label-mg">Masa (mg/dL)</label>
+                        <div class="input-wrapper">
+                            <input
+                                type="number"
+                                id="input-mg"
+                                placeholder="0.00"
+                                step="any"
+                                inputmode="decimal"
+                            />
+                            <span class="unit-tag">mg/dL</span>
+                        </div>
+                    </div>
+
+                    <button
+                        class="swap-action"
+                        id="swap-btn"
+                        aria-label="Cambiar dirección de conversión"
+                    >
+                        <Icon name="mdi:swap-horizontal" class="desktop-icon" />
+                        <Icon name="mdi:swap-vertical" class="mobile-icon" />
+                    </button>
+
+                    <div class="input-group" id="group-mmol" style="order: 3">
+                        <label for="input-mmol" id="label-mmol">Molar (mmol/L)</label>
+                        <div class="input-wrapper">
+                            <input
+                                type="number"
+                                id="input-mmol"
+                                placeholder="0.00"
+                                step="any"
+                                inputmode="decimal"
+                            />
+                            <span class="unit-tag">mmol/L</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visual-feedback">
+                    <div class="status-gauge">
+                        <div class="gauge-track">
+                            <div class="gauge-segment low"></div>
+                            <div class="gauge-segment normal"></div>
+                            <div class="gauge-segment border"></div>
+                            <div class="gauge-segment high"></div>
+                            <div class="gauge-marker" id="gauge-marker"></div>
+                        </div>
+                        <div class="status-labels">
+                            <span id="status-text">Analice un valor</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="history-section">
+                <div class="history-header">
+                    <h2 class="section-title">Mi Historial</h2>
+                    <button id="add-to-history" class="btn-secondary">
+                        <Icon name="mdi:plus" />
+                        Añadir a Tabla
+                    </button>
+                </div>
+                <div class="history-table-wrapper">
+                    <table id="history-table">
+                        <thead>
+                            <tr>
+                                <th>Analito</th>
+                                <th>Valor mg/dL</th>
+                                <th>Valor mmol/L</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body">
+                            <tr class="empty-row">
+                                <td colspan="5">No hay registros guardados</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="history-footer">
+                    <button id="download-history" class="btn-primary" disabled>
+                        <Icon name="mdi:download" />
+                        Descargar Resumen (Imagen)
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <footer class="app-disclaimer">
+            <div class="disclaimer-content">
+                <Icon name="mdi:information-outline" class="info-icon" />
+                <p>
+                    <strong>Aviso Médico:</strong> Esta herramienta es informativa y utiliza factores
+                    de conversión según la IFCC. No sustituye un diagnóstico profesional. Consulte siempre
+                    con su médico.
+                </p>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script>
+    import html2canvas from "html2canvas";
+
+    const analytes = document.querySelectorAll(".analyte-card");
+    const inputMg = document.getElementById("input-mg") as HTMLInputElement;
+    const inputMmol = document.getElementById("input-mmol") as HTMLInputElement;
+    const swapBtn = document.getElementById("swap-btn");
+    const gaugeMarker = document.getElementById("gauge-marker");
+    const statusText = document.getElementById("status-text") as HTMLElement;
+    const groupMg = document.getElementById("group-mg") as HTMLElement;
+    const groupMmol = document.getElementById("group-mmol") as HTMLElement;
+    const addToHistoryBtn = document.getElementById("add-to-history");
+    const historyBody = document.getElementById("history-body");
+    const downloadBtn = document.getElementById("download-history") as HTMLButtonElement;
+
+    let currentFactor = 18.016;
+    let currentRanges = JSON.parse(
+        document.querySelector(".analyte-card.active")?.getAttribute("data-ranges") || "[]"
+    );
+    let isMgToMmol = true;
+
+    function updateStatus(mg: number) {
+        if (!mg || isNaN(mg)) {
+            if (gaugeMarker) gaugeMarker.style.left = "0%";
+            if (statusText) {
+                statusText.innerText = "Analice un valor";
+                statusText.className = "";
+            }
+            return;
+        }
+
+        let status = "normal";
+        let label = "";
+        let percentage = 0;
+
+        for (let i = 0; i < currentRanges.length; i++) {
+            const range = currentRanges[i];
+            const prevMax = i > 0 ? currentRanges[i - 1].max : 0;
+
+            if (mg < range.max) {
+                status = range.status;
+                label = range.label;
+                const offset = (mg - prevMax) / (range.max - prevMax);
+                percentage = i * 25 + offset * 25;
+                break;
+            }
+
+            if (i === currentRanges.length - 1) {
+                status = range.status;
+                label = range.label;
+                percentage = 95;
+            }
+        }
+
+        if (gaugeMarker) gaugeMarker.style.left = `${Math.min(Math.max(percentage, 0), 100)}%`;
+        if (statusText) {
+            statusText.innerText = label;
+            statusText.className = `status-${status}`;
+        }
+    }
+
+    function convert() {
+        const valMg = parseFloat(inputMg.value);
+        const valMmol = parseFloat(inputMmol.value);
+
+        if (isMgToMmol) {
+            if (!isNaN(valMg)) {
+                const res = valMg / currentFactor;
+                inputMmol.value = res.toFixed(3);
+                updateStatus(valMg);
+            } else {
+                inputMmol.value = "";
+                updateStatus(0);
+            }
+        } else {
+            if (!isNaN(valMmol)) {
+                const res = valMmol * currentFactor;
+                inputMg.value = res.toFixed(3);
+                updateStatus(res);
+            } else {
+                inputMg.value = "";
+                updateStatus(0);
+            }
+        }
+    }
+
+    analytes.forEach((card) => {
+        card.addEventListener("click", () => {
+            analytes.forEach((c) => c.classList.remove("active"));
+            card.classList.add("active");
+            currentFactor = parseFloat(card.getAttribute("data-factor") || "1");
+            currentRanges = JSON.parse(card.getAttribute("data-ranges") || "[]");
+            convert();
+        });
+    });
+
+    inputMg?.addEventListener("input", () => {
+        if (isMgToMmol) convert();
+    });
+
+    inputMmol?.addEventListener("input", () => {
+        if (!isMgToMmol) convert();
+    });
+
+    swapBtn?.addEventListener("click", () => {
+        isMgToMmol = !isMgToMmol;
+        swapBtn.classList.toggle("swapped");
+
+        if (isMgToMmol) {
+            if (groupMg) groupMg.style.order = "1";
+            if (groupMmol) groupMmol.style.order = "3";
+        } else {
+            if (groupMg) groupMg.style.order = "3";
+            if (groupMmol) groupMmol.style.order = "1";
+        }
+        convert();
+    });
+
+    addToHistoryBtn?.addEventListener("click", () => {
+        const valMg = inputMg.value;
+        const valMmol = inputMmol.value;
+        const status = statusText?.innerText;
+        const statusClass = statusText?.className;
+        const substanceName = (document.querySelector(".analyte-card.active span") as HTMLElement)
+            ?.innerText;
+
+        if (!valMg || !valMmol || !substanceName || status === "Analice un valor") return;
+
+        const emptyRow = historyBody?.querySelector(".empty-row");
+        if (emptyRow) emptyRow.remove();
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+      <td>${substanceName}</td>
+      <td>${valMg}</td>
+      <td>${valMmol}</td>
+      <td><span class="${statusClass}">${status}</span></td>
+      <td><button class="delete-row">×</button></td>
+    `;
+
+        row.querySelector(".delete-row")?.addEventListener("click", () => {
+            row.remove();
+            if (historyBody?.children.length === 0) {
+                historyBody.innerHTML =
+                    '<tr class="empty-row"><td colspan="5">No hay registros guardados</td></tr>';
+                downloadBtn.disabled = true;
+            }
+        });
+
+        historyBody?.appendChild(row);
+        downloadBtn.disabled = false;
+    });
+
+    downloadBtn?.addEventListener('click', async () => {
+    const element = document.getElementById('history-table');
+    if (!element) return;
+    
+    const canvas = await html2canvas(element);
+    const dataUrl = canvas.toDataURL('image/webp');
+    const link = document.createElement('a');
+    link.download = 'mi_analitica_jjlmoya.webp';
+    link.href = dataUrl;
+    link.click();
+  });
+</script>
+
+<style>
+    :root {
+        --blood-primary: #1e293b;
+        --blood-accent: #3b82f6;
+        --blood-glass: rgba(255, 255, 255, 0.7);
+        --blood-glass-border: rgba(255, 255, 255, 0.4);
+        --blood-card-bg: #ffffff;
+        --blood-text: #0f172a;
+        --blood-text-muted: #64748b;
+        --blood-border: #e2e8f0;
+
+        --color-low: #64748b;
+        --color-normal: #10b981;
+        --color-border: #f59e0b;
+        --color-high: #ef4444;
+    }
+
+    [data-theme="dark"] {
+        --blood-primary: #f8fafc;
+        --blood-glass: rgba(15, 23, 42, 0.7);
+        --blood-glass-border: rgba(255, 255, 255, 0.1);
+        --blood-card-bg: #1e293b;
+        --blood-text: #f8fafc;
+        --blood-text-muted: #94a3b8;
+        --blood-border: #334155;
+    }
+
+    .blood-app {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .app-glass-container {
+        background: var(--blood-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--blood-glass-border);
+        border-radius: 2.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .app-header {
+        padding: 2.5rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.05));
+        border-bottom: 1px solid var(--blood-glass-border);
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .main-icon {
+        font-size: 3rem;
+        color: var(--blood-accent);
+    }
+
+    .header-text h1 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin: 0;
+        color: var(--blood-text);
+    }
+
+    .header-text p {
+        margin: 0.25rem 0 0;
+        color: var(--blood-text-muted);
+        font-size: 0.95rem;
+    }
+
+    .app-body {
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .section-title {
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--blood-text-muted);
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+
+    .analyte-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .analyte-card {
+        background: var(--blood-card-bg);
+        border: 1px solid var(--blood-border);
+        border-radius: 1.25rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--blood-text);
+        min-width: 0;
+    }
+
+    .analyte-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: var(--blood-accent);
+    }
+
+    .analyte-card.active {
+        background: var(--blood-accent);
+        color: white;
+        border-color: var(--blood-accent);
+    }
+
+    .icon-wrapper {
+        font-size: 1.5rem;
+    }
+
+    .analyte-card span {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        text-align: center;
+        word-break: break-word;
+    }
+
+    .conversion-panel {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 1rem;
+        background: var(--blood-card-bg);
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        border: 1px solid var(--blood-border);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+        .conversion-panel {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        min-width: 0;
+    }
+
+    .input-group label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--blood-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .input-wrapper input {
+        width: 100%;
+        background: var(--blood-border);
+        border: 3px solid transparent;
+        border-radius: 1rem;
+        padding: 1rem 4rem 1rem 1rem;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--blood-text);
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+        min-width: 0;
+    }
+
+    @media (max-width: 640px) {
+        .input-wrapper input {
+            font-size: 1.25rem;
+            padding-right: 3.5rem;
+        }
+    }
+
+    .input-wrapper input:focus {
+        outline: none;
+        background: var(--blood-card-bg);
+        border-color: var(--blood-accent);
+    }
+
+    .unit-tag {
+        position: absolute;
+        right: 1rem;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--blood-text-muted);
+        pointer-events: none;
+        background: var(--blood-card-bg);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--blood-border);
+    }
+
+    .swap-action {
+        background: var(--blood-border);
+        border: none;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--blood-text);
+        transition: all 0.3s ease;
+        font-size: 1.5rem;
+    }
+
+    .swap-action:hover {
+        background: var(--blood-accent);
+        color: white;
+        transform: rotate(180deg);
+    }
+
+    .swap-action.swapped {
+        background: var(--blood-accent);
+        color: white;
+    }
+
+    .mobile-icon {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .desktop-icon {
+            display: none;
+        }
+        .mobile-icon {
+            display: block;
+        }
+        .swap-action {
+            justify-self: center;
+        }
+    }
+
+    .visual-feedback {
+        margin-top: 2rem;
+    }
+
+    .status-gauge {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .gauge-track {
+        height: 14px;
+        background: var(--blood-border);
+        border-radius: 7px;
+        display: flex;
+        position: relative;
+        overflow: visible;
+    }
+
+    .gauge-segment {
+        height: 100%;
+        flex: 1;
+    }
+
+    .gauge-segment.low {
+        background: var(--color-low);
+        border-radius: 7px 0 0 14px;
+    }
+    .gauge-segment.normal {
+        background: var(--color-normal);
+    }
+    .gauge-segment.border {
+        background: var(--color-border);
+    }
+    .gauge-segment.high {
+        background: var(--color-high);
+        border-radius: 0 7px 7px 0;
+    }
+
+    .gauge-marker {
+        position: absolute;
+        top: -8px;
+        width: 30px;
+        height: 30px;
+        background: var(--blood-card-bg);
+        border: 5px solid var(--blood-accent);
+        border-radius: 50%;
+        transform: translateX(-50%);
+        transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 2;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .status-labels {
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.25rem;
+        min-height: 1.5rem;
+    }
+
+    .status-low {
+        color: var(--color-low);
+    }
+    .status-normal {
+        color: var(--color-normal);
+    }
+    .status-border {
+        color: var(--color-border);
+    }
+    .status-high {
+        color: var(--color-high);
+    }
+
+    .history-section {
+        background: var(--blood-card-bg);
+        border: 1px solid var(--blood-border);
+        border-radius: 1.5rem;
+        padding: 2rem;
+    }
+
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .history-table-wrapper {
+        overflow-x: auto;
+        margin-bottom: 2rem;
+        border-radius: 1rem;
+        border: 1px solid var(--blood-border);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        min-width: 600px;
+    }
+
+    th {
+        padding: 1.25rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--blood-text-muted);
+        background: rgba(0, 0, 0, 0.02);
+        border-bottom: 2px solid var(--blood-border);
+    }
+
+    td {
+        padding: 1.25rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-bottom: 1px solid var(--blood-border);
+        color: var(--blood-text);
+    }
+
+    .empty-row td {
+        text-align: center;
+        padding: 4rem;
+        color: var(--blood-text-muted);
+        font-style: italic;
+    }
+
+    .delete-row {
+        background: rgba(239, 68, 68, 0.1);
+        border: none;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem;
+        font-size: 1.25rem;
+        color: var(--color-high);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .delete-row:hover {
+        background: var(--color-high);
+        color: white;
+    }
+
+    .history-footer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1.75rem;
+        border-radius: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+        font-size: 0.9375rem;
+    }
+
+    .btn-primary {
+        background: var(--blood-accent);
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-primary:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+        background: var(--blood-border);
+        color: var(--blood-text-muted);
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    .btn-secondary {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--blood-accent);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(59, 130, 246, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .app-disclaimer {
+        padding: 1.75rem 2.5rem;
+        background: rgba(0, 0, 0, 0.03);
+        border-top: 1px solid var(--blood-glass-border);
+    }
+
+    .disclaimer-content {
+        display: flex;
+        gap: 1.25rem;
+        align-items: flex-start;
+        color: var(--blood-text-muted);
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+
+    .info-icon {
+        font-size: 1.5rem;
+        color: var(--blood-accent);
+        flex-shrink: 0;
+    }
+</style>
