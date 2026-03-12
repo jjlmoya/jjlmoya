@@ -2,31 +2,7 @@
 import { Icon } from "astro-icon/components";
 import "./GymTracker.css";
 
-const defaultExercises = [
-    // Empuje
-    { id: "bench-press", name: "Press de Banca", category: "Empuje" },
-    { id: "overhead-press", name: "Press Militar", category: "Empuje" },
-    { id: "push-press", name: "Push Press", category: "Empuje" },
-    { id: "incline-db-press", name: "Press Inclinado con Mancuernas", category: "Empuje" },
-    { id: "dips-triceps", name: "Fondos de Tríceps", category: "Empuje" },
-    { id: "triceps-extensions", name: "Extensiones de Tríceps en Polea", category: "Empuje" },
-
-    // Tracción
-    { id: "pull-up", name: "Dominadas", category: "Tracción" },
-    { id: "barbell-row", name: "Remo con Barra", category: "Tracción" },
-    { id: "lat-pulldown", name: "Jalón al Pecho", category: "Tracción" },
-    { id: "db-row", name: "Remo con Mancuerna", category: "Tracción" },
-    { id: "face-pulls", name: "Face Pulls", category: "Tracción" },
-    { id: "biceps-curl", name: "Curl de Bíceps con Barra", category: "Tracción" },
-
-    // Glúteo
-    { id: "hip-thrust", name: "Hip Thrust", category: "Glúteo" },
-    { id: "rdl", name: "Peso Muerto Rumano", category: "Glúteo" },
-    { id: "lunges", name: "Zancadas", category: "Glúteo" },
-    { id: "glute-kick", name: "Patada de Glúteo en Polea", category: "Glúteo" },
-    { id: "hip-abduction", name: "Abducción de Cadera en Máquina", category: "Glúteo" },
-    { id: "step-up", name: "Step Up", category: "Glúteo" }
-];
+import { defaultExercises } from "./gymExercises";
 ---
 
 <div class="gym-tracker-container">
@@ -161,6 +137,7 @@ const defaultExercises = [
 </div>
 
 <script>
+    import { defaultExercises } from "./gymExercises";
     interface LogEntry { date: string; weight: number; }
     type HistoryData = Record<string, LogEntry[]>;
     interface CustomExercise { id: string; name: string; }
@@ -185,7 +162,7 @@ const defaultExercises = [
     const maxWeightEl = document.getElementById('maxWeight');
     const lastWeightEl = document.getElementById('lastWeight');
     const emptyState = document.getElementById('emptyState');
-    const chartPath = document.getElementById('chartPath') as SVGPathElement;
+    const chartPath = document.getElementById('chartPath') as unknown as SVGPathElement;
     const chartPoints = document.getElementById('chartPoints');
 
     const STORAGE_KEY = 'jjlmoya-gym-tracker-data';
@@ -308,8 +285,8 @@ const defaultExercises = [
         const rows: string[] = ['Ejercicio,Fecha,Peso (kg)'];
 
         for (const [exerciseId, logs] of Object.entries(history)) {
-            const exercise = defaultExercises.find(ex => ex.id === exerciseId) ||
-                            getCustomExercises().find(ex => ex.id === exerciseId);
+            const exercise = defaultExercises.find((ex: any) => ex.id === exerciseId) ||
+                            getCustomExercises().find((ex: any) => ex.id === exerciseId);
             const exerciseName = exercise?.name || exerciseId;
 
             logs.forEach(log => {
@@ -406,7 +383,6 @@ const defaultExercises = [
 
     exerciseSelect?.addEventListener('change', updateUI);
 
-    // Cargar ejercicios personalizados al iniciar
     getCustomExercises().forEach(ex => {
         addExerciseToSelect(ex.id, ex.name);
     });
