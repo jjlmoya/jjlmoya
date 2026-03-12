@@ -1,0 +1,90 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import RpmMecanizado from "../../components/utilidades/RpmMecanizado/RpmMecanizado.astro";
+import RpmMecanizadoSEO from "../../components/utilidades/RpmMecanizado/RpmMecanizadoSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const faqItems = [
+    {
+        question: "¿Por qué se queman las brocas al taladrar?",
+        answer: "Principalmente por un exceso de revoluciones (RPM). Cuando la broca gira más rápido de lo que el material permite disipar el calor, la fricción eleva la temperatura por encima del límite del temple del acero, haciendo que el filo se ablande y deje de cortar.",
+    },
+    {
+        question: "¿Qué es la velocidad de corte (Vc)?",
+        answer: "Es la velocidad lineal en metros por minuto a la que el filo de la herramienta recorre la superficie del material. Cada material tiene una Vc recomendada que no depende del diámetro de la broca.",
+    },
+    {
+        question: "¿Cuándo debo usar una herramienta de Metal Duro (Widia)?",
+        answer: "Debes usar metal duro cuando necesites trabajar a velocidades mucho más altas, en producciones industriales o cuando el material a taladrar sea extremadamente duro. Para el bricolaje común, el HSS es suficiente y más resistente a roturas por flexión.",
+    },
+    {
+        question: "¿Es necesario usar lubricante siempre?",
+        answer: "En metales, casi siempre es recomendable. En aluminio evita que el material se pegue a la broca, y en aceros reduce el calor. En maderas y plásticos es mejor trabajar en seco con extracciones frecuentes de la broca.",
+    },
+    {
+        question: "¿Cómo calculo el avance si no tengo una fresadora CNC?",
+        answer: "En un taladro manual, el avance se siente por la presión. Debes ver que sale una viruta constante y limpia. Si sale polvo, estás presionando poco o las RPM son excesivas. Si la viruta es muy gruesa y el taladro sufre, estás presionando demasiado.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Selecciona el material",
+        text: "Indica qué material vas a taladrar o fresar (acero, aluminio, madera, etc.). Cada uno tiene una dureza y capacidad térmica distinta.",
+    },
+    {
+        name: "Introduce el diámetro",
+        text: "Escribe el diámetro exacto de tu broca o fresa en milímetros. Recuerda que a mayor diámetro, menor debe ser la velocidad de giro.",
+    },
+    {
+        name: "Elige el tipo de herramienta",
+        text: "Determina si tu broca es de acero rápido (HSS) o de metal duro (Carburo/Widia). Las de metal duro soportan mucha más velocidad.",
+    },
+    {
+        name: "Ajusta las RPM en tu máquina",
+        text: "Configura tu taladro o fresadora con el valor calculado. Si tu máquina tiene posiciones fijas, usa nuestra herramienta de 'Velocidad Cercana' para elegir la posición de polea más segura.",
+    },
+];
+
+const bibliographyLinks = [
+    {
+        name: "Sandvik Coromant: Cutting Speed and Feed Rate Formulae",
+        url: "https://www.sandvik.coromant.com/en-gb/knowledge/machining-formulas-definitions/general-turning-formulas-definitions",
+    },
+    {
+        name: "Máquinas. Cálculos de taller - A.L. Casillas",
+        url: "https://www.google.com/search?q=Casillas+Maquinas+Calculos+de+taller",
+    },
+];
+---
+
+<LayoutUtility
+    title="Calculadora de RPM Mecanizado y Taladro | Velocidad de Corte"
+    description="Calcula las revoluciones por minuto (RPM) ideales para tu taladro o fresadora según el material y diámetro de la broca. Evita quemar tus herramientas."
+    image="/images/utilities/calculadora-rpm.webp"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Mecanizado"
+            titleBase="Calculadora RPM"
+            description="Optimiza el corte de tus herramientas. Calcula las revoluciones ideales para evitar el sobrecalentamiento y alargar la vida de tus brocas y fresas."
+            gradientFrom="from-blue-500"
+            gradientTo="to-indigo-600"
+            reverse={true}
+        />
+    </div>
+
+    <RpmMecanizado />
+
+    <div slot="seo">
+        <RpmMecanizadoSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliographyLinks} />
+    </div>
+</LayoutUtility>

@@ -88,5 +88,13 @@ export const diySection: SectionData = {
             description: "Calcula cuánto crece una viga de acero, madera u hormigón según el cambio de temperatura.",
             color: "#fb923c",
         },
+        {
+            href: "/utilidades/calculadora-mecanizado-taladro/",
+            iconBg: "mdi:tools",
+            iconFg: "mdi:sync",
+            title: "RPM Mecanizado y Taladro",
+            description: "Evita quemar tus brocas. Calcula las revoluciones ideales según el material y diámetro.",
+            color: "#4fd1c5",
+        },
     ],
 };
