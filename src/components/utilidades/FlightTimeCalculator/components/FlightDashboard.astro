@@ -1,0 +1,145 @@
+---
+---
+
+<div class="dashboard-section">
+    <div class="main-result">
+        <div class="radial-container">
+            <svg viewBox="0 0 100 100" class="radial-svg">
+                <circle cx="50" cy="50" r="45" class="bg-circle"></circle>
+                <circle cx="50" cy="50" r="45" class="fg-circle" id="timeCircle"></circle>
+            </svg>
+            <div class="result-text">
+                <span id="timeMainDisplay" class="time-primary">0:00</span>
+                <span class="time-label">Vuelo Seguro</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="secondary-stats">
+        <div class="stat-box">
+            <span class="stat-label">Energía Total</span>
+            <span id="whDisplay" class="stat-value">0 Wh</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-label">Tiempo Teórico (0%)</span>
+            <span id="timeTotalDisplay" class="stat-value">0:00</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-label">Huella CO2</span>
+            <span id="co2Display" class="stat-value">0 g</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .radial-container {
+        position: relative;
+        width: 240px;
+        height: 240px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .radial-svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+    }
+
+    .bg-circle {
+        fill: none;
+        stroke: #f1f5f9;
+        stroke-width: 8;
+    }
+
+    :global(.dark) .bg-circle { stroke: #1e293b; }
+
+    .fg-circle {
+        fill: none;
+        stroke: #f97316;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-dasharray: 283;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .result-text {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .time-primary {
+        font-size: 4.5rem;
+        font-weight: 950;
+        color: #1e293b;
+        letter-spacing: -0.05em;
+        line-height: 1;
+    }
+
+    :global(.dark) .time-primary { color: #f8fafc; }
+
+    .time-label {
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .secondary-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        width: 100%;
+    }
+
+    .stat-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 1.25rem;
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        border-radius: 20px;
+    }
+
+    :global(.dark) .stat-box {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+        font-weight: 900;
+        color: #1e293b;
+    }
+
+    :global(.dark) .stat-value { color: #f1f5f9; }
+
+    @media (max-width: 600px) {
+        .secondary-stats { grid-template-columns: 1fr; }
+        .radial-container { width: 200px; height: 200px; }
+        .time-primary { font-size: 3.5rem; }
+    }
+</style>

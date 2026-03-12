@@ -25,6 +25,7 @@ import { textileSection } from "./textiles";
 import { converterSection } from "./converters";
 import { travelSection } from "./travel";
 import { educationSection } from "./education";
+import { dronesSection } from "./drones";
 
 
 export const sections: SectionData[] = [
@@ -52,6 +53,7 @@ export const sections: SectionData[] = [
     converterSection,
     travelSection,
     educationSection,
+    dronesSection,
 ];
 
 
