@@ -30,5 +30,13 @@ export const sportsSection: SectionData = {
             description: "Mide tu velocidad de reacción en ms. Challenge de rangos.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/seguimiento-entrenamiento-gym/",
+            iconBg: "mdi:weight-lifter",
+            iconFg: "mdi:chart-line",
+            title: "Seguimiento Gym",
+            description: "Registra tus pesos y visualiza gráficas de progreso por ejercicio.",
+            color: "#ef4444",
+        },
     ],
 };
