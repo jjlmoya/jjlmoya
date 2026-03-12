@@ -53,5 +53,13 @@ export const homeSection: SectionData = {
             description: "¿Cuánto ahorras si cambias tus bombillas a LED? Calcula euros y kWh.",
             color: "#f59e0b",
         },
+        {
+            href: "/utilidades/comparador-tarifas-luz/",
+            iconBg: "mdi:lightning-bolt",
+            iconFg: "mdi:compare",
+            title: "Mercado Libre vs Regulado",
+            description: "¿Qué tarifa de luz te conviene más? Compara PVPC vs Mercado Libre al instante.",
+            color: "#f59e0b",
+        },
     ],
 };

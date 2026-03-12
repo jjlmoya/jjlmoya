@@ -1,0 +1,141 @@
+---
+import TariffDataInput from "./components/TariffDataInput.astro";
+import TariffResultCards from "./components/TariffResultCards.astro";
+import TariffDashboard from "./components/TariffDashboard.astro";
+import TariffSimulator from "./components/TariffSimulator.astro";
+import "./ElectricityTariffComparator.css";
+---
+
+<div class="tariff-comparator">
+    <TariffDataInput />
+    <TariffResultCards />
+    <TariffDashboard />
+    <TariffSimulator />
+</div>
+
+<script>
+    import { Chart, registerables } from "chart.js";
+    Chart.register(...registerables);
+
+    const consumptionSlider = document.getElementById("consumptionSlider") as HTMLInputElement;
+    const powerSlider = document.getElementById("powerSlider") as HTMLInputElement;
+    const consumptionValue = document.getElementById("consumptionValue");
+    const powerValue = document.getElementById("powerValue");
+
+    const marketTotalEl = document.getElementById("marketTotal");
+    const marketPowerEl = document.getElementById("marketPowerPrice");
+    const marketEnergyEl = document.getElementById("marketEnergyPrice");
+    const marketBadge = document.getElementById("marketBadge");
+
+    const freeTotalEl = document.getElementById("freeTotal");
+    const freePowerEl = document.getElementById("freePowerPrice");
+    const freeEnergyEl = document.getElementById("freeEnergyPrice");
+    const freeBadge = document.getElementById("freeBadge");
+
+    const solarToggle = document.getElementById("solarToggle") as HTMLInputElement;
+    const shiftSlider = document.getElementById("shiftSlider") as HTMLInputElement;
+    const shiftVal = document.getElementById("shiftVal");
+    
+    const maxPowerEl = document.getElementById("maxPower");
+    const co2El = document.getElementById("co2Footprint");
+    const canvas = document.getElementById("consumptionChart") as HTMLCanvasElement;
+
+    const PRICES = {
+        market: { power: 32.50, energy: 0.145 },
+        free: { power: 38.00, energy: 0.165 }
+    };
+
+    let chart: Chart | null = null;
+
+    function initChart() {
+        if (!canvas) return;
+        chart = new Chart(canvas, {
+            type: "bar",
+            data: {
+                labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                datasets: [{
+                    label: "Consumo Mensual Estimado (kWh)",
+                    data: [],
+                    backgroundColor: "rgba(245, 158, 11, 0.5)",
+                    borderColor: "#f59e0b",
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    function calculate() {
+        let consumption = parseFloat(consumptionSlider.value);
+        const power = parseFloat(powerSlider.value);
+
+        if (solarToggle?.checked) consumption *= 0.7;
+        const shiftFactor = shiftSlider ? parseInt(shiftSlider.value) / 100 : 0;
+        
+        if (consumptionValue) consumptionValue.textContent = Math.round(consumption).toLocaleString();
+        if (powerValue) powerValue.textContent = power.toLocaleString();
+        if (shiftVal) shiftVal.textContent = `${shiftSlider.value}%`;
+
+        const marketPower = power * PRICES.market.power;
+        const marketEnergy = consumption * (PRICES.market.energy * (1 - shiftFactor * 0.2));
+        const marketTotal = marketPower + marketEnergy;
+
+        const freePower = power * PRICES.free.power;
+        const freeEnergy = consumption * PRICES.free.energy;
+        const freeTotal = freePower + freeEnergy;
+
+        if (marketTotalEl) marketTotalEl.textContent = `${Math.round(marketTotal)}€`;
+        if (marketPowerEl) marketPowerEl.textContent = `${marketPower.toFixed(2)}€`;
+        if (marketEnergyEl) marketEnergyEl.textContent = `${marketEnergy.toFixed(2)}€`;
+
+        if (freeTotalEl) freeTotalEl.textContent = `${Math.round(freeTotal)}€`;
+        if (freePowerEl) freePowerEl.textContent = `${freePower.toFixed(2)}€`;
+        if (freeEnergyEl) freeEnergyEl.textContent = `${freeEnergy.toFixed(2)}€`;
+
+        if (maxPowerEl) maxPowerEl.textContent = `${(power * 0.9).toFixed(1)} kW`;
+        if (co2El) co2El.textContent = `${Math.round(consumption * 0.19)} kg`;
+
+        updateBadges(marketTotal, freeTotal);
+        updateChartData(consumption);
+    }
+
+    function updateBadges(market: number, free: number) {
+        if (!marketBadge || !freeBadge) return;
+        if (market < free) {
+            marketBadge.className = "saving-badge better-option";
+            marketBadge.innerHTML = "🏆 Opción más barata";
+            freeBadge.className = "saving-badge worse-option";
+            freeBadge.innerHTML = `⚠️ +${Math.round(free - market)}€ / año`;
+        } else {
+            freeBadge.className = "saving-badge better-option";
+            freeBadge.innerHTML = "🏆 Opción más barata";
+            marketBadge.className = "saving-badge worse-option";
+            marketBadge.innerHTML = `⚠️ +${Math.round(market - free)}€ / año`;
+        }
+    }
+
+    function updateChartData(total: number) {
+        if (!chart) return;
+        const seasonalWeights = [1.2, 1.1, 0.9, 0.8, 0.7, 0.8, 1.3, 1.4, 0.9, 0.8, 1.0, 1.1];
+        const monthlyBase = total / 12;
+        chart.data.datasets[0].data = seasonalWeights.map(w => monthlyBase * w);
+        chart.update();
+    }
+
+    consumptionSlider.addEventListener("input", calculate);
+    powerSlider.addEventListener("input", calculate);
+    solarToggle?.addEventListener("change", calculate);
+    shiftSlider?.addEventListener("input", calculate);
+
+    initChart();
+    calculate();
+</script>
