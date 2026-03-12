@@ -21,5 +21,13 @@ export const dronesSection: SectionData = {
             description: "Pasa de Decimal a GMS (Grados, Minutos, Segundos) con mapa visual.",
             color: "#0ea5e9",
         },
+        {
+            href: "/utilidades/calculadora-longitud-antena/",
+            iconBg: "mdi:antenna",
+            iconFg: "mdi:ruler",
+            title: "Calculadora de Antena",
+            description: "Calcula la longitud exacta para dipolos y látigos de 1/2 y 1/4 de onda.",
+            color: "#f59e0b",
+        },
     ],
 };

@@ -1,0 +1,329 @@
+---
+import { Icon } from "astro-icon/components";
+import "./AntennaLengthCalculator.css";
+
+const presets = [
+    { label: "5.8 GHz (FPV)", val: 5800 },
+    { label: "2.4 GHz (Wi-Fi)", val: 2400 },
+    { label: "915 MHz (ELRS)", val: 915 },
+    { label: "868 MHz (LRS)", val: 868 },
+    { label: "433 MHz (UHF)", val: 433 },
+    { label: "169 MHz (M-Bus)", val: 169 },
+];
+
+const materials = [
+    { label: "Cobre desnudo (0.95)", vf: 0.95 },
+    { label: "Cable aislado / PVC (0.92)", vf: 0.92 },
+    { label: "Cobre sólido (0.97)", vf: 0.97 },
+    { label: "Cable Coaxial (0.66)", vf: 0.66 },
+];
+---
+
+<div class="antenna-calculator-ui">
+    <div class="tech-mega-card animate-in fade-in zoom-in duration-1000">
+        <div class="card-grid">
+            <aside class="config-sidebar">
+                <section>
+                    <div class="section-title">
+                        <Icon name="mdi:sine-wave" />
+                        <h2>Parámetros de Señal</h2>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="input-with-unit">
+                            <input type="number" id="freqInput" value="868" step="1" min="1" max="10000" />
+                            <span class="unit">MHz</span>
+                        </div>
+                        <input type="range" id="freqSlider" min="100" max="6000" value="868" step="1" class="custom-range" />
+                    </div>
+
+                    <div class="preset-grid mt-6">
+                        {presets.map(p => (
+                            <button class="preset-btn" data-val={p.val}>
+                                {p.label}
+                            </button>
+                        ))}
+                    </div>
+                </section>
+
+                <div class="divider"></div>
+
+                <section>
+                    <div class="section-title">
+                        <Icon name="mdi:antenna" />
+                        <h2>Tipo de Antena</h2>
+                    </div>
+                    <div class="type-selector">
+                        <label class="radio-card">
+                            <input type="radio" name="waveType" value="half" checked />
+                            <div class="radio-content">
+                                <Icon name="mdi:arrow-left-right" />
+                                <span>Dipolo (1/2 λ)</span>
+                            </div>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="waveType" value="quarter" />
+                            <div class="radio-content">
+                                <Icon name="mdi:arrow-up" />
+                                <span>Látigo (1/4 λ)</span>
+                            </div>
+                        </label>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="section-title">
+                        <Icon name="mdi:layers-triple" />
+                        <h2>Medio Conductor</h2>
+                    </div>
+                    <div class="input-group">
+                        <select id="vfInput" class="custom-select-premium">
+                            {materials.map(m => (
+                                <option value={m.vf}>{m.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                </section>
+            </aside>
+
+            <main class="main-display">
+                <div class="results-hero">
+                    <div class="mega-result gold">
+                        <span class="result-label">Longitud Total</span>
+                        <div class="result-value">
+                            <span class="number" id="totalLength">0</span>
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                    <div class="mega-result glass" id="branchCard">
+                        <span class="result-label">Longitud por Brazo</span>
+                        <div class="result-value">
+                            <span class="number" id="branchLength">0</span>
+                            <span class="unit">mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visualizer-stage">
+                    <svg id="antennaSvg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="wireGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        
+                        <g id="dipoleLayer">
+                            <line x1="205" y1="150" x2="350" y2="150" class="antenna-wire active" id="rightArm" />
+                            <line x1="195" y1="150" x2="50" y2="150" class="antenna-wire active" id="leftArm" />
+                            <circle cx="200" cy="150" r="4" class="feed-core" />
+                            <path d="M195,150 Q200,160 205,150" fill="none" stroke="#ef4444" stroke-width="2" class="feed-point-gap" />
+                            
+                            <line x1="50" y1="170" x2="50" y2="180" class="measuring-line" id="leftTick" />
+                            <line x1="350" y1="170" x2="350" y2="180" class="measuring-line" id="rightTick" />
+                            <line x1="50" y1="175" x2="350" y2="175" class="measuring-line" id="measureLine" />
+                        </g>
+
+                        <g id="whipLayer" style="display: none;">
+                            <line x1="200" y1="250" x2="200" y2="50" class="antenna-wire active" id="verticalWhip" />
+                            <rect x="100" y="250" width="200" height="6" rx="3" class="ground-plate" />
+                            <circle cx="200" cy="250" r="6" class="feed-core" />
+                            
+                            <line x1="220" y1="50" x2="230" y2="50" class="measuring-line" id="topTick" />
+                            <line x1="220" y1="250" x2="230" y2="250" class="measuring-line" id="bottomTick" />
+                            <line x1="225" y1="50" x2="225" y2="250" class="measuring-line" id="verticalMeasure" />
+                        </g>
+
+                        <text x="200" y="280" class="svg-label-text" id="svgInfoText" text-anchor="middle">Esquema Dinámico (mm)</text>
+                    </svg>
+                </div>
+
+                <div class="harmonics-container">
+                    <div class="section-title">
+                        <Icon name="mdi:chart-timeline-variant" />
+                        <h2>Puntos de Resonancia Secundarios</h2>
+                    </div>
+                    <div class="harmonics-list" id="harmonicsList">
+                    </div>
+                </div>
+
+                <div class="security-warning">
+                    <Icon name="mdi:alert-decagram" />
+                    <p><strong>Aviso Crítico:</strong> Una antena mal cortada genera un ROE (SWR) alto que puede sobrecalentar y destruir los finales de potencia de tu transmisor en segundos.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script>
+    const freqInput = document.getElementById('freqInput') as HTMLInputElement;
+    const freqSlider = document.getElementById('freqSlider') as HTMLInputElement;
+    const vfInput = document.getElementById('vfInput') as HTMLSelectElement;
+    const waveRadios = document.getElementsByName('waveType') as NodeListOf<HTMLInputElement>;
+    
+    const elements = {
+        total: document.getElementById('totalLength'),
+        branch: document.getElementById('branchLength'),
+        branchCard: document.getElementById('branchCard'),
+        dipoleLayer: document.getElementById('dipoleLayer'),
+        whipLayer: document.getElementById('whipLayer'),
+        harmonics: document.getElementById('harmonicsList'),
+        leftArm: document.getElementById('leftArm') as any,
+        rightArm: document.getElementById('rightArm') as any,
+        verticalWhip: document.getElementById('verticalWhip') as any,
+        measureLine: document.getElementById('measureLine') as any,
+        leftTick: document.getElementById('leftTick') as any,
+        rightTick: document.getElementById('rightTick') as any,
+        topTick: document.getElementById('topTick') as any,
+        bottomTick: document.getElementById('bottomTick') as any,
+        verticalMeasure: document.getElementById('verticalMeasure') as any
+    };
+
+    function calculate() {
+        const freq = parseFloat(freqInput.value);
+        const vf = parseFloat(vfInput.value);
+        let waveType = 'half';
+        
+        waveRadios.forEach(r => { if(r.checked) waveType = r.value; });
+
+        if (!freq || freq <= 0) return;
+
+        const lambda = 300000 / freq;
+        const totalPhysicalLambda = lambda * vf;
+        
+        let totalLen = 0;
+        let branchLen = 0;
+
+        if (waveType === 'half') {
+            totalLen = totalPhysicalLambda / 2;
+            branchLen = totalLen / 2;
+            elements.branchCard!.style.display = 'flex';
+            elements.dipoleLayer!.style.display = 'block';
+            elements.whipLayer!.style.display = 'none';
+            updateVisuals('half', branchLen);
+        } else {
+            totalLen = totalPhysicalLambda / 4;
+            branchLen = totalLen;
+            elements.branchCard!.style.display = 'none';
+            elements.dipoleLayer!.style.display = 'none';
+            elements.whipLayer!.style.display = 'block';
+            updateVisuals('quarter', totalLen);
+        }
+
+        if (elements.total) elements.total.textContent = Math.round(totalLen).toString();
+        if (elements.branch) elements.branch.textContent = Math.round(branchLen).toString();
+
+        updateHarmonics(freq);
+    }
+
+    function updateVisuals(type: string, len: number) {
+        const visualLen = Math.min(Math.max(len / 4, 30), 160);
+
+        if (type === 'half') {
+            const x1 = 200 - visualLen;
+            const x2 = 200 + visualLen;
+            elements.leftArm.setAttribute('x1', '195');
+            elements.leftArm.setAttribute('x2', x1.toString());
+            elements.rightArm.setAttribute('x1', '205');
+            elements.rightArm.setAttribute('x2', x2.toString());
+            
+            elements.measureLine.setAttribute('x1', x1.toString());
+            elements.measureLine.setAttribute('x2', x2.toString());
+            elements.leftTick.setAttribute('x1', x1.toString());
+            elements.leftTick.setAttribute('x2', x1.toString());
+            elements.rightTick.setAttribute('x1', x2.toString());
+            elements.rightTick.setAttribute('x2', x2.toString());
+        } else {
+            const y2 = 250 - visualLen;
+            elements.verticalWhip.setAttribute('y2', y2.toString());
+            elements.verticalMeasure.setAttribute('y1', y2.toString());
+            elements.topTick.setAttribute('y1', y2.toString());
+            elements.topTick.setAttribute('y2', y2.toString());
+        }
+    }
+
+    function updateHarmonics(baseFreq: number) {
+        if (!elements.harmonics) return;
+        
+        const orders = [
+            { label: '3ª Armónica', val: baseFreq * 3 },
+            { label: '5ª Armónica', val: baseFreq * 5 },
+            { label: '7ª Armónica', val: baseFreq * 7 }
+        ];
+
+        elements.harmonics.innerHTML = orders.map(o => `
+            <div class="harmonic-card animate-in fade-in slide-in-from-bottom-2">
+                <div class="h-header">
+                    <span class="h-order">${o.label}</span>
+                    <span class="h-badge">RESONANCIA</span>
+                </div>
+                <span class="h-freq">${Math.round(o.val)} MHz</span>
+            </div>
+        `).join('');
+    }
+
+    freqInput.addEventListener('input', () => {
+        freqSlider.value = freqInput.value;
+        calculate();
+    });
+
+    freqSlider.addEventListener('input', () => {
+        freqInput.value = freqSlider.value;
+        calculate();
+    });
+
+    vfInput.addEventListener('change', calculate);
+    waveRadios.forEach(r => r.addEventListener('change', calculate));
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const val = btn.getAttribute('data-val');
+            if (val) {
+                freqInput.value = val;
+                freqSlider.value = val;
+                calculate();
+            }
+        });
+    });
+
+    calculate();
+</script>
+
+<style>
+    .custom-select-premium {
+        width: 100%;
+        padding: 1rem;
+        background: white;
+        border: 2px solid rgba(0,0,0,0.05);
+        border-radius: 16px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    :global(.dark) .custom-select-premium {
+        background: rgba(0,0,0,0.2);
+        border-color: rgba(255,255,255,0.1);
+        color: white;
+    }
+
+    .custom-select-premium:focus {
+        border-color: var(--antenna-primary);
+        box-shadow: 0 5px 15px rgba(var(--antenna-primary-rgb), 0.1);
+    }
+
+    .svg-label-text {
+        font-size: 12px;
+        font-weight: 800;
+        fill: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    :global(.dark) .svg-label-text {
+        fill: #666;
+    }
+</style>
