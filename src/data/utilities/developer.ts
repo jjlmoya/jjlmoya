@@ -206,5 +206,13 @@ export const devSection: SectionData = {
                 "Descubre cuánto tiempo pierden tus usuarios esperando Instagram, YouTube, TikTok y otras apps. Visualiza el impacto real: horas, días, años de vida perdidos en cargas.",
             color: "#2563EB",
         },
+        {
+            href: "/utilidades/conversor-excel-csv-a-tabla-html/",
+            iconBg: "mdi:file-excel",
+            iconFg: "mdi:language-html5",
+            title: "Excel/CSV a Tabla HTML",
+            description: "Transforma tus hojas de cálculo y archivos CSV en tablas HTML semánticas y limpias para tu web.",
+            color: "#10b981",
+        },
     ],
 };
