@@ -96,5 +96,13 @@ export const diySection: SectionData = {
             description: "Evita quemar tus brocas. Calcula las revoluciones ideales según el material y diámetro.",
             color: "#4fd1c5",
         },
+        {
+            href: "/utilidades/calculadora-escaleras/",
+            iconBg: "mdi:stairs",
+            iconFg: "mdi:calculator",
+            title: "Calculadora de Escaleras",
+            description: "Cálculo preciso de peldaños (huella/contrahuella) según la ley de Blondel para obra.",
+            color: "#e67e22",
+        },
     ],
 };
