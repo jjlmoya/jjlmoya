@@ -1,0 +1,235 @@
+---
+import './HydrationCalculator.css';
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="hydration-calculator" id="hydration-app">
+    <div class="hydration-layout">
+        <aside class="hydration-controls">
+            <div class="control-card">
+                <h4><Icon name="mdi:weight-kilogram" /> Peso</h4>
+                <div class="mini-input">
+                    <span>Peso (kg)</span>
+                    <input type="number" id="weight" value="70" min="20" max="250" />
+                </div>
+            </div>
+
+            <div class="control-card">
+                <div class="header-with-action">
+                    <h4><Icon name="mdi:thermometer" /> Clima</h4>
+                    <button class="weather-btn-compact" id="get-weather" title="Usar Clima Local">
+                        <div class="loading-spinner"></div>
+                        <Icon name="mdi:map-marker" class="btn-icon" />
+                    </button>
+                </div>
+                <div class="input-row-grid">
+                    <div class="mini-input">
+                        <span>Temp °C</span>
+                        <input type="number" id="temp" value="22" min="-10" max="60" />
+                    </div>
+                    <div class="mini-input">
+                        <span>Hum %</span>
+                        <input type="number" id="humidity" value="50" min="0" max="100" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-card">
+                <h4><Icon name="mdi:run-fast" /> Actividad</h4>
+                <div class="intensity-grid">
+                    <button class="intensity-btn active" data-loss="0" data-level="Sedentario">Sedentario</button>
+                    <button class="intensity-btn" data-loss="500" data-level="Activo">Activo</button>
+                    <button class="intensity-btn" data-loss="1000" data-level="Atleta">Atleta</button>
+                </div>
+                <div class="mini-input" style="margin-top: 0.75rem;">
+                    <span>Duración (minutos)</span>
+                    <input type="number" id="duration" value="0" min="0" max="1440" />
+                </div>
+            </div>
+        </aside>
+
+        <section class="visual-area">
+            <div class="bottle-container">
+                <div class="bottle-fill" id="bottle-fill">
+                    <div class="wave"></div>
+                </div>
+            </div>
+            <div class="total-display">
+                <span class="total-value" id="total-liters">2.50</span>
+                <span class="total-unit">Litros recomendados</span>
+            </div>
+
+            <div class="alert-box" id="salt-alert">
+                <Icon name="mdi:alert-circle" />
+                <span>Atención: Se recomienda añadir electrolitos o sales por el alto volumen o calor extremo.</span>
+            </div>
+        </section>
+
+        <div class="results-footer">
+            <div class="result-stat">
+                <span class="stat-label">Reposición</span>
+                <span class="stat-value" id="refill-rate">250 ml / 20 min</span>
+                <p class="stat-help">Durante la actividad intensa.</p>
+            </div>
+            <div class="result-stat">
+                <span class="stat-label">Mezcla Ideal</span>
+                <span class="stat-value" id="liquid-mix">100% Agua Pura</span>
+                <p class="stat-help" id="mix-detail">Baja demanda de sales.</p>
+            </div>
+            <div class="result-stat">
+                <span class="stat-label">Control de Hidratación (Orina)</span>
+                <div class="urine-scale">
+                    <div class="urine-track">
+                        <div class="urine-color color-1"></div>
+                        <div class="urine-color color-2"></div>
+                        <div class="urine-color color-3"></div>
+                        <div class="urine-color color-4"></div>
+                        <div class="urine-color color-5"></div>
+                        <div class="urine-color color-6"></div>
+                        <div class="urine-color color-7"></div>
+                    </div>
+                    <div class="urine-indicator">
+                        <Icon name="mdi:check-circle" style="color: #22c55e;" />
+                        <Icon name="mdi:close-circle" style="color: #ef4444;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const state = {
+        weight: 70,
+        temp: 22,
+        humidity: 50,
+        intensityLoss: 0,
+        duration: 0
+    };
+
+    const ui = {
+        weight: document.getElementById('weight') as HTMLInputElement,
+        temp: document.getElementById('temp') as HTMLInputElement,
+        humidity: document.getElementById('humidity') as HTMLInputElement,
+        duration: document.getElementById('duration') as HTMLInputElement,
+        intensityBtns: document.querySelectorAll('.intensity-btn'),
+        totalLiters: document.getElementById('total-liters'),
+        bottleFill: document.getElementById('bottle-fill'),
+        saltAlert: document.getElementById('salt-alert'),
+        refillRate: document.getElementById('refill-rate'),
+        liquidMix: document.getElementById('liquid-mix'),
+        mixDetail: document.getElementById('mix-detail'),
+        weatherBtn: document.getElementById('get-weather')
+    };
+
+    function calculate() {
+        let base = state.weight * 35;
+        
+        if (state.temp > 30) {
+            const extraDegrees = state.temp - 30;
+            base *= (1 + extraDegrees * 0.1);
+        }
+
+        if (state.humidity > 60 && state.temp > 25) {
+            base *= 1.05;
+        }
+
+        const activityLoss = state.intensityLoss * (state.duration / 60);
+        const totalMl = base + activityLoss;
+        const totalLContent = totalMl / 1000;
+
+        if (ui.totalLiters) ui.totalLiters.textContent = totalLContent.toFixed(2);
+        
+        const fillPercent = Math.min(100, (totalLContent / 6) * 100);
+        if (ui.bottleFill) ui.bottleFill.style.height = `${fillPercent}%`;
+
+        let frequency = "250 ml / cada 2h";
+        if (totalLContent > 3.5) {
+            frequency = "250 ml / cada 45-60 min";
+        } else if (state.duration > 0) {
+            frequency = "250 ml / cada 20-30 min";
+        }
+
+        let mix = "100% Agua Pura";
+        let detail = "Baja demanda de sales.";
+        
+        if (totalLContent > 4 || state.temp > 38 || (state.intensityLoss >= 1000 && state.duration > 60)) {
+            mix = "Agua + Electrolitos";
+            detail = "Alta pérdida de sales.";
+        } else if (totalLContent > 3 || state.temp > 30) {
+            mix = "Agua + Pizca de sal";
+            detail = "Compensación mineral necesaria.";
+        }
+
+        if (ui.refillRate) ui.refillRate.textContent = frequency;
+        if (ui.liquidMix) ui.liquidMix.textContent = mix;
+        if (ui.mixDetail) ui.mixDetail.textContent = detail;
+        
+        if (ui.saltAlert) {
+            if (totalLContent > 3.5 || state.temp > 38) {
+                ui.saltAlert.classList.add('active');
+            } else {
+                ui.saltAlert.classList.remove('active');
+            }
+        }
+    }
+
+    ui.weight?.addEventListener('input', (e) => {
+        state.weight = parseFloat((e.target as HTMLInputElement).value) || 0;
+        calculate();
+    });
+
+    ui.temp?.addEventListener('input', (e) => {
+        state.temp = parseFloat((e.target as HTMLInputElement).value) || 0;
+        calculate();
+    });
+
+    ui.humidity?.addEventListener('input', (e) => {
+        state.humidity = parseFloat((e.target as HTMLInputElement).value) || 0;
+        calculate();
+    });
+
+    ui.duration?.addEventListener('input', (e) => {
+        state.duration = parseFloat((e.target as HTMLInputElement).value) || 0;
+        calculate();
+    });
+
+    ui.intensityBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            ui.intensityBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.intensityLoss = parseInt(btn.getAttribute('data-loss') || '0');
+            calculate();
+        });
+    });
+
+    ui.weatherBtn?.addEventListener('click', async () => {
+        ui.weatherBtn?.setAttribute('data-loading', 'true');
+        ui.weatherBtn?.setAttribute('disabled', 'true');
+
+        try {
+            const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+
+            const { latitude, longitude } = pos.coords;
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m`);
+            const data = await res.json();
+
+            if (data.current) {
+                state.temp = data.current.temperature_2m;
+                state.humidity = data.current.relative_humidity_2m;
+                if (ui.temp) ui.temp.value = state.temp.toString();
+                if (ui.humidity) ui.humidity.value = state.humidity.toString();
+                calculate();
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            ui.weatherBtn?.removeAttribute('data-loading');
+            ui.weatherBtn?.removeAttribute('disabled');
+        }
+    });
+
+    calculate();
+</script>

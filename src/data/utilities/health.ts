@@ -145,5 +145,13 @@ export const healthSection: SectionData = {
             description: "Calcula la distancia óptima entre tus ojos y la pantalla según el tamaño de la fuente para evitar fatiga.",
             color: "#3b82f6",
         },
+        {
+            href: "/utilidades/calculadora-hidratacion-clima/",
+            iconBg: "mdi:water",
+            iconFg: "mdi:weather-sunny",
+            title: "Hidratación Científica",
+            description: "Calcula tus necesidades exactas de agua según peso, clima y esfuerzo físico.",
+            color: "#0ea5e9",
+        },
     ],
 };
