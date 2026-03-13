@@ -104,5 +104,13 @@ export const diySection: SectionData = {
             description: "Cálculo preciso de peldaños (huella/contrahuella) según la ley de Blondel para obra.",
             color: "#e67e22",
         },
+        {
+            href: "/utilidades/afilado-maestro-brocas/",
+            iconBg: "mdi:wrench",
+            iconFg: "mdi:auto-fix",
+            title: "Afilado de Brocas",
+            description: "Galga digital y guía de ángulos para recuperar tus brocas viejas con precisión.",
+            color: "#38bdf8",
+        },
     ],
 };
