@@ -66,7 +66,7 @@ import { defaultExercises } from "./gymExercises";
                     Registrar Peso (KG)
                 </label>
                 <div class="logger-box">
-                    <input type="number" id="weightInput" placeholder="00.0" step="0.5" min="0" />
+                    <input type="number" id="weightInput" placeholder="00.0" step="0.5" min="0" inputmode="decimal" />
                     <button id="addLogBtn" class="btn-primary">Añadir</button>
                 </div>
             </div>
@@ -205,6 +205,7 @@ import { defaultExercises } from "./gymExercises";
 
     const STORAGE_KEY = 'jjlmoya-gym-tracker-data';
     const CUSTOM_EXERCISES_KEY = 'jjlmoya-gym-tracker-custom';
+    const TIMER_STORAGE_KEY = 'jjlmoya-gym-tracker-timer';
 
     function getHistory(): HistoryData {
         const data = localStorage.getItem(STORAGE_KEY);
@@ -251,6 +252,15 @@ import { defaultExercises } from "./gymExercises";
         updateUI();
     }
 
+    function deleteLog(exerciseId: string, index: number) {
+        const history = getHistory();
+        if (history[exerciseId]) {
+            history[exerciseId].splice(index, 1);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+            updateUI();
+        }
+    }
+
     function updateUI() {
         const history = getHistory();
         const exerciseId = exerciseSelect.value;
@@ -282,12 +292,29 @@ import { defaultExercises } from "./gymExercises";
 
         if (historyList) {
             historyList.innerHTML = '';
-            [...logs].reverse().slice(0, 3).forEach(log => {
+            
+            const reversedLogs = [...logs].reverse().slice(0, 5);
+            reversedLogs.forEach((log, rIndex) => {
+                const originalIndex = logs.length - 1 - rIndex;
                 const date = new Date(log.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
                 const item = document.createElement('div');
                 item.className = 'history-item';
-                item.innerHTML = `<span>${date}</span><span class="history-weight">${log.weight} kg</span>`;
+                item.innerHTML = `
+                    <span>${date}</span>
+                    <div style="display:flex; align-items:center; gap:0.6rem;">
+                        <span class="history-weight">${log.weight} kg</span>
+                        <button class="btn-delete-log" data-index="${originalIndex}" title="Borrar">✕</button>
+                    </div>
+                `;
                 historyList.appendChild(item);
+            });
+
+            
+            historyList.querySelectorAll('.btn-delete-log').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt((e.currentTarget as HTMLButtonElement).dataset.index || '0');
+                    deleteLog(exerciseSelect.value, index);
+                });
             });
         }
         drawChart(logs);
@@ -465,12 +492,40 @@ import { defaultExercises } from "./gymExercises";
                 timeLeft = 0;
                 if (timerInterval) clearInterval(timerInterval);
                 timerInterval = null;
+                localStorage.removeItem(TIMER_STORAGE_KEY);
                 if (timerDisplay) timerDisplay.classList.remove('timer-active');
+            } else {
+                saveTimerState();
             }
             updateTimerDisplay();
         }, 1000);
         
+        saveTimerState();
         if (timerDisplay) timerDisplay.classList.add('timer-active');
+    }
+
+    function saveTimerState() {
+        if (timerInterval && timeLeft > 0) {
+            const endTime = Date.now() + (timeLeft * 1000);
+            localStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify({ endTime, initialTime }));
+        } else {
+            localStorage.removeItem(TIMER_STORAGE_KEY);
+        }
+    }
+
+    function restoreTimerState() {
+        const data = localStorage.getItem(TIMER_STORAGE_KEY);
+        if (!data) return;
+        
+        const { endTime, initialTime: savedInitial } = JSON.parse(data);
+        const remaining = Math.round((endTime - Date.now()) / 1000);
+        
+        if (remaining > 0) {
+            initialTime = savedInitial;
+            startTimer(remaining);
+        } else {
+            localStorage.removeItem(TIMER_STORAGE_KEY);
+        }
     }
 
     startTimerBtn?.addEventListener('click', () => {
@@ -484,6 +539,7 @@ import { defaultExercises } from "./gymExercises";
         timerInterval = null;
         timeLeft = 0;
         initialTime = 0;
+        localStorage.removeItem(TIMER_STORAGE_KEY);
         if (timerDisplay) timerDisplay.classList.remove('timer-active');
         updateTimerDisplay();
     });
@@ -506,5 +562,6 @@ import { defaultExercises } from "./gymExercises";
         addExerciseToSelect(ex.id, ex.name);
     });
 
+    restoreTimerState();
     updateUI();
 </script>
