@@ -55,5 +55,13 @@ export const socialSection: SectionData = {
             description: "Adapta tus fotos para Instagram, TikTok, YouTube y más con recorte inteligente.",
             color: "#8b5cf6",
         },
+        {
+            href: "/utilidades/optimizador-fotos-tinder/",
+            iconBg: "mdi:fire",
+            iconFg: "mdi:image-edit-outline",
+            title: "Optimizador Tinder SEO",
+            description: "Ajusta tus fotos a la interfaz real de Tinder 2026. Control de encuadre, safe zones y exportación nativa.",
+            color: "#FE3C72",
+        },
     ],
 };
