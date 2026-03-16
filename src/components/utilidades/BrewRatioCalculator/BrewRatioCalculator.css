@@ -1,0 +1,753 @@
+.brew-hidden {
+    display: none !important;
+}
+
+.brew-mode-hint {
+    font-size: 0.65rem;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+.brew-label-icon {
+    display: flex;
+    align-items: center;
+}
+
+.brew-calculator {
+    --brew-bg: #fdf6ee;
+    --brew-surface: #fff9f2;
+    --brew-border: #e8d5bb;
+    --brew-primary: #6f3d1f;
+    --brew-accent: #b5651d;
+    --brew-accent-light: #d4845a;
+    --brew-muted: #9b7a5e;
+    --brew-text: #3d2008;
+    --brew-text-secondary: #7a5c42;
+    --brew-water: #3b82f6;
+    --brew-water-light: #eff6ff;
+    --brew-ice: #93c5fd;
+    --brew-result: #f0fdf4;
+    --brew-result-border: #bbf7d0;
+
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .brew-calculator {
+        --brew-bg: #1c1008;
+        --brew-surface: #251508;
+        --brew-border: #3d2a14;
+        --brew-primary: #d4845a;
+        --brew-accent: #e8a87c;
+        --brew-accent-light: #f0c09a;
+        --brew-muted: #a07858;
+        --brew-text: #f5e6d3;
+        --brew-text-secondary: #c4a882;
+        --brew-water: #60a5fa;
+        --brew-water-light: #0f1d35;
+        --brew-ice: #bfdbfe;
+        --brew-result: #0a1a10;
+        --brew-result-border: #14532d;
+    }
+}
+
+.brew-card {
+    background: var(--brew-surface);
+    border: 1.5px solid var(--brew-border);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(111, 61, 31, 0.08);
+}
+
+.brew-card-header {
+    height: 4px;
+    background: linear-gradient(90deg, var(--brew-primary), var(--brew-accent), var(--brew-accent-light));
+}
+
+.brew-card-body {
+    padding: 2rem;
+}
+
+@media (min-width: 768px) {
+    .brew-card-body {
+        padding: 2.5rem 3rem;
+    }
+}
+
+.brew-mode-switcher {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.brew-mode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.25rem 1rem;
+    border-radius: 1rem;
+    border: 2px solid var(--brew-border);
+    background: var(--brew-bg);
+    color: var(--brew-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.brew-mode-btn:hover {
+    border-color: var(--brew-accent);
+    color: var(--brew-accent);
+}
+
+.brew-mode-btn.active {
+    background: var(--brew-primary);
+    border-color: var(--brew-primary);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(111, 61, 31, 0.3);
+}
+
+.brew-mode-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+.brew-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 700px) {
+    .brew-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+    }
+}
+
+.brew-section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brew-muted);
+    margin-bottom: 0.75rem;
+}
+
+.brew-input-group {
+    position: relative;
+}
+
+.brew-input {
+    width: 100%;
+    background: var(--brew-bg);
+    border: 2px solid var(--brew-border);
+    border-radius: 0.875rem;
+    padding: 1rem 3.5rem 1rem 1.25rem;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--brew-text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.brew-input::-webkit-inner-spin-button,
+.brew-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.brew-input:focus {
+    border-color: var(--brew-accent);
+    box-shadow: 0 0 0 4px rgba(181, 101, 29, 0.12);
+}
+
+.brew-input-unit {
+    position: absolute;
+    right: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--brew-muted);
+    pointer-events: none;
+}
+
+.brew-intensity-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.brew-intensity-btn {
+    padding: 0.6rem 0.4rem;
+    border-radius: 0.75rem;
+    border: 2px solid var(--brew-border);
+    background: var(--brew-bg);
+    color: var(--brew-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1.3;
+}
+
+.brew-intensity-btn:hover {
+    border-color: var(--brew-accent);
+    color: var(--brew-accent);
+}
+
+.brew-intensity-btn .brew-ratio-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 900;
+    margin-bottom: 0.2rem;
+    color: var(--brew-text-secondary);
+}
+
+.brew-intensity-btn .brew-intensity-name {
+    display: block;
+    font-size: 0.6rem;
+    opacity: 0.7;
+}
+
+.brew-intensity-btn.active {
+    background: var(--brew-accent);
+    border-color: var(--brew-accent);
+    color: #fff;
+}
+
+.brew-intensity-btn.active .brew-ratio-label,
+.brew-intensity-btn.active .brew-intensity-name {
+    color: #fff;
+    opacity: 1;
+}
+
+.brew-custom-ratio {
+    display: none;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    background: var(--brew-bg);
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1.5px solid var(--brew-border);
+}
+
+.brew-custom-ratio.visible {
+    display: grid;
+}
+
+.brew-custom-input {
+    width: 100%;
+    text-align: center;
+    background: var(--brew-surface);
+    border: 1.5px solid var(--brew-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--brew-text);
+    outline: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.brew-custom-input::-webkit-inner-spin-button,
+.brew-custom-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.brew-custom-sep {
+    font-weight: 900;
+    color: var(--brew-muted);
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+.brew-custom-label {
+    display: block;
+    font-size: 0.6rem;
+    text-align: center;
+    color: var(--brew-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.15rem;
+}
+
+.brew-ice-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1rem;
+    border-radius: 0.875rem;
+    border: 2px solid var(--brew-border);
+    background: var(--brew-bg);
+    margin-top: 1rem;
+    gap: 0.75rem;
+}
+
+.brew-ice-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--brew-text-secondary);
+}
+
+.brew-toggle {
+    position: relative;
+    width: 2.75rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+}
+
+.brew-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.brew-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--brew-border);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.brew-toggle-slider::before {
+    content: "";
+    position: absolute;
+    width: 1.1rem;
+    height: 1.1rem;
+    left: 0.2rem;
+    top: 0.2rem;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.brew-toggle input:checked ~ .brew-toggle-slider {
+    background: var(--brew-ice);
+}
+
+.brew-toggle input:checked ~ .brew-toggle-slider::before {
+    transform: translateX(1.25rem);
+}
+
+.brew-results-panel {
+    background: var(--brew-bg);
+    border: 1.5px solid var(--brew-border);
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.brew-results-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1.5px solid var(--brew-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brew-results-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brew-muted);
+}
+
+.brew-ratio-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--brew-primary);
+    color: #fff;
+    padding: 0.2rem 0.75rem;
+    border-radius: 9999px;
+}
+
+.brew-result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1.5px solid var(--brew-border);
+    transition: background 0.15s;
+}
+
+.brew-result-item:last-child {
+    border-bottom: none;
+}
+
+.brew-result-item:hover {
+    background: var(--brew-surface);
+}
+
+.brew-result-left {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.brew-result-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.brew-icon-coffee {
+    background: rgba(111, 61, 31, 0.12);
+    color: var(--brew-primary);
+}
+
+.brew-icon-water {
+    background: var(--brew-water-light);
+    color: var(--brew-water);
+}
+
+.brew-icon-ice {
+    background: #eff6ff;
+    color: var(--brew-ice);
+}
+
+.brew-icon-cup {
+    background: rgba(181, 101, 29, 0.1);
+    color: var(--brew-accent);
+}
+
+.brew-result-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--brew-text);
+}
+
+.brew-result-sub {
+    font-size: 0.725rem;
+    color: var(--brew-muted);
+    margin-top: 0.1rem;
+}
+
+.brew-result-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--brew-text);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.brew-result-value span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--brew-muted);
+    margin-left: 0.2rem;
+}
+
+.brew-phases {
+    margin-top: 1.5rem;
+}
+
+.brew-phases-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brew-muted);
+    margin-bottom: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.brew-phase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.brew-phase-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    background: var(--brew-bg);
+    border-radius: 0.875rem;
+    border: 1.5px solid var(--brew-border);
+    padding: 0.875rem 1rem;
+}
+
+.brew-phase-number {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--brew-primary);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.brew-phase-text {
+    font-size: 0.85rem;
+    color: var(--brew-text-secondary);
+    line-height: 1.5;
+}
+
+.brew-phase-text strong {
+    color: var(--brew-text);
+    font-weight: 700;
+}
+
+.brew-cup-warning {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.875rem;
+    background: rgba(181, 101, 29, 0.08);
+    border: 1.5px solid rgba(181, 101, 29, 0.2);
+    font-size: 0.8rem;
+    color: var(--brew-accent);
+    font-weight: 600;
+    display: none;
+}
+
+.brew-cup-warning.visible {
+    display: block;
+}
+
+.brew-favorites-section {
+    margin-top: 2rem;
+    border-top: 1.5px solid var(--brew-border);
+    padding-top: 1.5rem;
+}
+
+.brew-fav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.brew-fav-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brew-muted);
+}
+
+.brew-save-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.875rem;
+    border: 1.5px solid var(--brew-accent);
+    background: transparent;
+    color: var(--brew-accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.brew-save-btn:hover {
+    background: var(--brew-accent);
+    color: #fff;
+}
+
+.brew-fav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.brew-fav-empty {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-size: 0.85rem;
+    color: var(--brew-muted);
+    border: 1.5px dashed var(--brew-border);
+    border-radius: 0.875rem;
+}
+
+.brew-fav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--brew-bg);
+    border: 1.5px solid var(--brew-border);
+    border-radius: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.brew-fav-item:hover {
+    border-color: var(--brew-accent);
+    background: var(--brew-surface);
+}
+
+.brew-fav-icon-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--brew-accent);
+    flex-shrink: 0;
+}
+
+.brew-fav-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.brew-fav-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--brew-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.brew-fav-meta {
+    font-size: 0.7rem;
+    color: var(--brew-muted);
+    margin-top: 0.1rem;
+}
+
+.brew-fav-delete {
+    background: none;
+    border: none;
+    color: var(--brew-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    transition: color 0.15s;
+    font-size: 0.85rem;
+}
+
+.brew-fav-delete:hover {
+    color: #ef4444;
+}
+
+.brew-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.brew-modal-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.brew-modal {
+    background: var(--brew-surface);
+    border: 1.5px solid var(--brew-border);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.brew-modal-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--brew-text);
+    margin-bottom: 1rem;
+}
+
+.brew-modal-input {
+    width: 100%;
+    background: var(--brew-bg);
+    border: 2px solid var(--brew-border);
+    border-radius: 0.75rem;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--brew-text);
+    outline: none;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+}
+
+.brew-modal-input:focus {
+    border-color: var(--brew-accent);
+}
+
+.brew-modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.brew-modal-cancel {
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.75rem;
+    border: 1.5px solid var(--brew-border);
+    background: transparent;
+    color: var(--brew-muted);
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.brew-modal-cancel:hover {
+    border-color: var(--brew-muted);
+    color: var(--brew-text);
+}
+
+.brew-modal-confirm {
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.75rem;
+    border: none;
+    background: var(--brew-primary);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.brew-modal-confirm:hover {
+    opacity: 0.9;
+}
