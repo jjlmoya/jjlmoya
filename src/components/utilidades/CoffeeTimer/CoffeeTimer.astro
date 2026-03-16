@@ -1,0 +1,332 @@
+---
+import "./CoffeeTimer.css";
+import { Icon } from "astro-icon/components";
+---
+
+<div class="coffee-timer">
+    <div class="timer-card">
+        <div class="timer-phase-indicator">
+            <div id="progressBar" class="timer-progress-bar"></div>
+        </div>
+
+        <div class="timer-display">
+            <div id="timeDisplay" class="timer-time">00:00</div>
+            <div id="phaseDisplay" class="timer-phase-name">Listo para empezar</div>
+        </div>
+
+        <div class="timer-target-display">
+            <div class="target-label">Agua Objetivo:</div>
+            <div class="target-value"><span id="targetWeightDisplay">300</span><span class="target-unit">g</span></div>
+        </div>
+
+        <div class="timer-instruction-box">
+            <div id="instructionText" class="instruction-text">Pulsa el botón gigante</div>
+            <div id="instructionHint" class="instruction-hint">Prepara tu V60 o Chemex</div>
+        </div>
+
+        <div class="timer-controls">
+            <button id="startBtn" class="main-start-btn">
+                <Icon name="mdi:play" />
+                <span>INICIAR EXTRACCIÓN</span>
+            </button>
+            
+            <div id="secondaryActions" class="secondary-controls">
+                <button id="pauseBtn" class="control-btn btn-pause">
+                    <Icon name="mdi:pause" id="pauseIcon" />
+                    <Icon name="mdi:play" id="playIcon" class="timer-hidden" />
+                    <span id="pauseText">PAUSAR</span>
+                </button>
+                <button id="resetBtn" class="control-btn btn-reset">
+                    <Icon name="mdi:refresh" />
+                    <span>REINICIAR</span>
+                </button>
+            </div>
+        </div>
+
+
+        <div id="summaryOverlay" class="summary-overlay">
+            <div class="summary-title">¡Extracción completa!</div>
+            <div id="summaryMessage" class="instruction-hint">Tu café está listo para servir.</div>
+            
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Tiempo Total</span>
+                    <span id="statTime" class="stat-value">02:45</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Agua Vertida</span>
+                    <span id="statWater" class="stat-value">300g</span>
+                </div>
+            </div>
+
+            <button id="closeSummaryBtn" class="close-summary-btn">NUEVO BREW</button>
+        </div>
+
+
+        <div class="timer-setup" id="setupSection">
+            <div class="setup-title">Configuración de receta</div>
+            <div class="setup-grid">
+                <div class="input-group">
+                    <label class="input-label">Agua Total (g)</label>
+                    <input type="number" id="inputWater" class="setup-input" value="300" min="50" step="10" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Agua Bloom (g)</label>
+                    <input type="number" id="inputBloomWater" class="setup-input" value="60" min="10" step="5" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Tiempo Bloom (s)</label>
+                    <input type="number" id="inputBloomTime" class="setup-input" value="30" min="10" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Tiempo Total (s)</label>
+                    <input type="number" id="inputTotalTime" class="setup-input" value="180" min="60" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    class CoffeeTimerEngine {
+        private startTime: number = 0;
+        private pausedTime: number = 0;
+        private animationId: number = 0;
+        private isRunning: boolean = false;
+        private isPaused: boolean = false;
+        
+        private waterTotal: number = 300;
+        private bloomWater: number = 60;
+        private bloomSeconds: number = 30;
+        private totalSeconds: number = 180;
+        
+        private soundContext: AudioContext | null = null;
+        private lastBeepSecond: number = -1;
+
+        private elements: {
+            time: HTMLElement;
+            phase: HTMLElement;
+            progress: HTMLElement;
+            instruction: HTMLElement;
+            hint: HTMLElement;
+            target: HTMLElement;
+            startBtn: HTMLElement;
+            secondary: HTMLElement;
+            pauseBtn: HTMLElement;
+            pauseText: HTMLElement;
+            pauseIcon: HTMLElement;
+            playIcon: HTMLElement;
+            summary: HTMLElement;
+            setup: HTMLElement;
+            statTime: HTMLElement;
+            statWater: HTMLElement;
+        };
+
+        constructor() {
+            this.elements = {
+                time: document.getElementById('timeDisplay')!,
+                phase: document.getElementById('phaseDisplay')!,
+                progress: document.getElementById('progressBar')!,
+                instruction: document.getElementById('instructionText')!,
+                hint: document.getElementById('instructionHint')!,
+                target: document.getElementById('targetWeightDisplay')!,
+                startBtn: document.getElementById('startBtn')!,
+                secondary: document.getElementById('secondaryActions')!,
+                pauseBtn: document.getElementById('pauseBtn')!,
+                pauseText: document.getElementById('pauseText')!,
+                pauseIcon: document.getElementById('pauseIcon')!,
+                playIcon: document.getElementById('playIcon')!,
+                summary: document.getElementById('summaryOverlay')!,
+                setup: document.getElementById('setupSection')!,
+                statTime: document.getElementById('statTime')!,
+                statWater: document.getElementById('statWater')!
+            };
+
+            this.initEvents();
+        }
+
+        private initEvents() {
+            this.elements.startBtn.addEventListener('click', () => this.start());
+            this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
+            document.getElementById('resetBtn')?.addEventListener('click', () => this.reset());
+            document.getElementById('closeSummaryBtn')?.addEventListener('click', () => this.closeSummary());
+
+
+            const inputs = ['inputWater', 'inputBloomWater', 'inputBloomTime', 'inputTotalTime'];
+            inputs.forEach(id => {
+                document.getElementById(id)?.addEventListener('input', (e) => this.handleConfigChange(id, (e.target as HTMLInputElement).value));
+            });
+        }
+
+        private handleConfigChange(id: string, value: string) {
+            const val = parseInt(value) || 0;
+            if (id === 'inputWater') {
+                this.waterTotal = val;
+                this.elements.target.textContent = val.toString();
+            }
+            if (id === 'inputBloomWater') this.bloomWater = val;
+            if (id === 'inputBloomTime') this.bloomSeconds = val;
+            if (id === 'inputTotalTime') this.totalSeconds = val;
+        }
+
+        private async beep() {
+            if (!this.soundContext) {
+                this.soundContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            }
+            
+            const osc = this.soundContext.createOscillator();
+            const gain = this.soundContext.createGain();
+            
+            osc.connect(gain);
+            gain.connect(this.soundContext.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, this.soundContext.currentTime);
+            
+            gain.gain.setValueAtTime(0, this.soundContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.1, this.soundContext.currentTime + 0.01);
+            gain.gain.linearRampToValueAtTime(0, this.soundContext.currentTime + 0.1);
+            
+            osc.start();
+            osc.stop(this.soundContext.currentTime + 0.1);
+        }
+
+        private notifyHaptic() {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(100);
+            }
+        }
+
+        private start() {
+            if (this.isRunning) return;
+            
+            this.isRunning = true;
+            this.isPaused = false;
+            this.startTime = performance.now();
+            this.pausedTime = 0;
+            
+            this.elements.startBtn.classList.add('timer-hidden');
+            this.elements.secondary.classList.add('visible');
+            this.elements.setup.classList.add('timer-hidden');
+            
+            this.tick();
+        }
+
+        private togglePause() {
+            if (!this.isRunning) return;
+            
+            this.isPaused = !this.isPaused;
+            this.elements.pauseBtn.classList.toggle('active', this.isPaused);
+            this.elements.pauseIcon.classList.toggle('timer-hidden', this.isPaused);
+            this.elements.playIcon.classList.toggle('timer-hidden', !this.isPaused);
+            this.elements.pauseText.textContent = this.isPaused ? 'REANUDAR' : 'PAUSAR';
+
+            if (this.isPaused) {
+                this.pausedTime = performance.now() - this.startTime;
+                cancelAnimationFrame(this.animationId);
+            } else {
+                this.startTime = performance.now() - this.pausedTime;
+                this.tick();
+            }
+        }
+
+        private reset() {
+            cancelAnimationFrame(this.animationId);
+            this.isRunning = false;
+            this.isPaused = false;
+            this.startTime = 0;
+            this.elements.time.textContent = '00:00';
+            this.elements.phase.textContent = 'Listo para empezar';
+            this.elements.progress.style.width = '0%';
+            this.elements.progress.className = 'timer-progress-bar';
+            
+            this.elements.startBtn.classList.remove('timer-hidden');
+            this.elements.secondary.classList.remove('visible');
+            this.elements.setup.classList.remove('timer-hidden');
+            this.elements.pauseBtn.classList.remove('active');
+            this.elements.instruction.textContent = 'Pulsa el botón gigante';
+            this.elements.hint.textContent = 'Prepara tu V60 o Chemex';
+        }
+
+        private tick = () => {
+            if (!this.isRunning || this.isPaused) return;
+
+            const now = performance.now();
+            const elapsed = (now - this.startTime) / 1000;
+            
+            this.updateUI(elapsed);
+
+            if (elapsed < this.totalSeconds) {
+                this.animationId = requestAnimationFrame(this.tick);
+            } else {
+                this.complete();
+            }
+        }
+
+        private updateUI(elapsed: number) {
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = Math.floor(elapsed % 60);
+            this.elements.time.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            const currentSecond = Math.floor(elapsed);
+            
+
+            if (elapsed <= this.bloomSeconds) {
+                this.elements.phase.textContent = 'Fase 1: Bloom';
+                this.elements.progress.className = 'timer-progress-bar bloom';
+                this.elements.progress.style.width = `${(elapsed / this.bloomSeconds) * 100}%`;
+                this.elements.instruction.textContent = `Vierte ${this.bloomWater}g de agua`;
+                this.elements.hint.textContent = 'Mueve suavemente para saturar';
+
+
+                if (currentSecond === this.bloomSeconds - 3 && this.lastBeepSecond !== currentSecond) {
+                    this.beep();
+                    this.notifyHaptic();
+                    this.lastBeepSecond = currentSecond;
+                }
+            } else if (elapsed <= this.totalSeconds * 0.7) {
+                this.elements.phase.textContent = 'Fase 2: Vertido';
+                this.elements.progress.className = 'timer-progress-bar pour';
+                const pourElapsed = elapsed - this.bloomSeconds;
+                const pourDuration = (this.totalSeconds * 0.7) - this.bloomSeconds;
+                this.elements.progress.style.width = `${(pourElapsed / pourDuration) * 100}%`;
+                this.elements.instruction.textContent = `Llega hasta los ${this.waterTotal}g`;
+                this.elements.hint.textContent = 'Vierte en círculos constantes';
+            } else {
+                this.elements.phase.textContent = 'Fase 3: Drenado';
+                this.elements.progress.className = 'timer-progress-bar drain';
+                const drainElapsed = elapsed - (this.totalSeconds * 0.7);
+                const drainDuration = this.totalSeconds - (this.totalSeconds * 0.7);
+                this.elements.progress.style.width = `${(drainElapsed / drainDuration) * 100}%`;
+                this.elements.instruction.textContent = 'Espera el drenado final';
+                this.elements.hint.textContent = 'Casi listo para disfrutar';
+            }
+        }
+
+        private complete() {
+            this.isRunning = false;
+            this.elements.statTime.textContent = this.elements.time.textContent;
+            this.elements.statWater.textContent = `${this.waterTotal}g`;
+            this.elements.summary.classList.add('visible');
+            this.beep();
+            this.beep();
+        }
+
+        private closeSummary() {
+            this.elements.summary.classList.remove('visible');
+            this.reset();
+        }
+    }
+
+
+    document.addEventListener('astro:page-load', () => {
+        new CoffeeTimerEngine();
+    });
+    
+
+    if (document.readyState === 'complete') {
+        new CoffeeTimerEngine();
+    } else {
+        window.addEventListener('load', () => new CoffeeTimerEngine());
+    }
+</script>
