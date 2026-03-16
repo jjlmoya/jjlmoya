@@ -23,5 +23,14 @@ export const coffeeSection: SectionData = {
                 "Temporizador con fases de vertido (bloom/pour) y avisos sonoros para baristas y amantes del cafe de filtro.",
             color: "#d97706",
         },
+        {
+            href: "/utilidades/calculadora-agua-cafe-sca/",
+            iconBg: "mdi:water-outline",
+            iconFg: "mdi:flask-outline",
+            title: "Calculadora de Agua SCA",
+            description:
+                "Calcula la mineralización ideal (Magnesio, Calcio, Bicarbonatos) para agua de café de especialidad según estándares SCA.",
+            color: "#2d5a27",
+        },
     ],
 };
