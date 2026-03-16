@@ -32,5 +32,14 @@ export const coffeeSection: SectionData = {
                 "Calcula la mineralización ideal (Magnesio, Calcio, Bicarbonatos) para agua de café de especialidad según estándares SCA.",
             color: "#2d5a27",
         },
+        {
+            href: "/utilidades/conversor-molienda-cafe/",
+            iconBg: "mdi:cog-transfer",
+            iconFg: "mdi:coffee-maker-outline",
+            title: "Conversor de Molienda",
+            description:
+                "Tabla comparativa para ajustar el punto de molienda (clics/niveles) entre diferentes métodos y molinos populares.",
+            color: "#d35400",
+        },
     ],
 };

@@ -1,0 +1,191 @@
+---
+import './GrindConverter.css';
+import { Icon } from 'astro-icon/components';
+import { GRIND_METHODS, GRINDERS } from './logic';
+import { TROUBLESHOOTING } from './data';
+---
+
+<div class="grind-converter">
+  <div class="premium-lab-wrapper">
+    <div class="lab-main">
+      <header class="interface-header">
+        <label class="control-label">PASO 1: SELECCIÓN DE EQUIPO</label>
+        <div style="margin-top: 1rem;">
+          <select id="grinder-select" class="custom-select">
+            {GRINDERS.map(g => (
+              <option value={g.id}>{g.brand} {g.name}</option>
+            ))}
+          </select>
+        </div>
+      </header>
+
+      <div class="method-selector">
+        <label class="control-label">PASO 2: MÉTODO DE EXTRACCIÓN</label>
+        <div class="tiles-grid" style="margin-top: 1.5rem;">
+          {GRIND_METHODS.map(m => (
+            <button class="method-tile" data-id={m.id}>
+              <Icon name={m.icon} />
+              <label>{m.name.split(' (')[0]}</label>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="precision-gauge">
+        <label class="control-label">MAPEO TÉCNICO DE PARTÍCULA (μm)</label>
+        <div class="gauge-track">
+          <div id="gauge-range" class="gauge-range"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.6rem; opacity: 0.6; font-weight: 800; color: #fff;">
+          <span>0μm</span>
+          <span>400μm</span>
+          <span>800μm</span>
+          <span>1200μm</span>
+          <span>1600μm</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar-dashboard">
+      <div class="result-header">
+        <h3 id="target-name">SELECCIONA</h3>
+        <p id="target-summary">MÉTRICA CIENTÍFICA</p>
+      </div>
+
+      <div class="digital-readout">
+        <span class="value-large" id="main-value">--</span>
+        <span class="unit-label" id="unit-label">UNIDADES</span>
+      </div>
+
+      <div class="stats-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="stat-node">
+          <span class="stat-label">REFERENCIA</span>
+          <span class="stat-value" id="texture-text" style="font-size: 0.8rem; font-weight: 800; color: var(--crema);">--</span>
+        </div>
+        <div class="stat-node">
+          <span class="stat-label">RANGO μm</span>
+          <span class="stat-value" id="size-text" style="font-size: 0.8rem; font-weight: 800; color: var(--crema);">--</span>
+        </div>
+      </div>
+
+      <div class="preview-section">
+        <label class="control-label" style="margin-bottom: 1rem; color: var(--crema);">DISTRIBUCIÓN REAL DE PARTICULAS</label>
+        <div class="texture-engine" id="particle-engine">
+        </div>
+      </div>
+
+      <p id="method-info-text" style="font-size: 0.8rem; color: #fff; opacity: 0.8; line-height: 1.6; border-top: 1px solid var(--glass-border); padding-top: 1.5rem;"></p>
+      
+      <div style="margin-top: auto; border-top: 1px solid var(--glass-border); padding-top: 1.5rem;">
+        <a href="mailto:juanjo1989@gmail.com?subject=Sugerencia de molino - jjlmoya.es" id="suggest-grinder" style="text-decoration: none; display: block; text-align: center; background: none; border: 1px solid var(--glass-border); color: var(--crema); font-size: 0.7rem; font-weight: 800; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 0.05em;">
+          ¿No está tu molino? Sugierelo
+        </a>
+      </div>
+    </aside>
+
+    <div class="advice-section">
+      {TROUBLESHOOTING.map(t => (
+        <div class="advice-card">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <div class="advice-icon-wrap" style="margin-bottom: 0;">
+              <Icon name={t.type === 'bitter' ? 'mdi:emoticon-confused-outline' : 'mdi:emoticon-sad-outline'} style={t.type === 'bitter' ? 'color: #e74c3c' : 'color: #f1c40f'} />
+            </div>
+            <h4 style="margin: 0;">{t.issue}</h4>
+          </div>
+          <p>{t.solution}</p>
+          <div class="tag-badge">{t.action}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  import { GRIND_METHODS, GRINDERS } from './logic';
+
+  const grinderSel = document.getElementById('grinder-select') as HTMLSelectElement;
+  const tiles = document.querySelectorAll('.method-tile');
+  const rangeIndicator = document.getElementById('gauge-range');
+  
+  const targetName = document.getElementById('target-name');
+  const mainVal = document.getElementById('main-value');
+  const unitVal = document.getElementById('unit-label');
+  const textureVal = document.getElementById('texture-text');
+  const sizeVal = document.getElementById('size-text');
+  const infoVal = document.getElementById('method-info-text');
+  const engine = document.getElementById('particle-engine');
+
+  let activeId = 'v60';
+
+  function refresh() {
+    const grinderId = grinderSel.value;
+    const grinder = GRINDERS.find(g => g.id === grinderId);
+    const method = GRIND_METHODS.find(m => m.id === activeId);
+
+    if (!method || !grinder) return;
+
+    if (targetName) targetName.innerText = method.name.toUpperCase();
+    if (mainVal) mainVal.innerText = grinder.ranges[method.id] || '--';
+    
+    if (unitVal) {
+      if (grinder.id === 'generic') {
+        unitVal.innerText = 'MICRAS (μm) OBJETIVO';
+      } else {
+        unitVal.innerText = (grinder.type === 'clicks' ? 'CLICS' : 'NIVEL') + ' RECOMENDADO';
+      }
+    }
+
+    if (textureVal) textureVal.innerText = method.reference.toUpperCase();
+    if (sizeVal) sizeVal.innerText = `${method.minMicras} - ${method.maxMicras} μm`;
+    if (infoVal) infoVal.innerText = method.description;
+
+    tiles.forEach(t => t.classList.toggle('active', t.getAttribute('data-id') === activeId));
+
+    const total = 1600;
+    const startPct = (method.minMicras / total) * 100;
+    const endPct = (method.maxMicras / total) * 100;
+    const widthPct = Math.max(3, endPct - startPct); 
+
+    if (rangeIndicator) {
+      rangeIndicator.style.left = `${startPct}%`;
+      rangeIndicator.style.width = `${widthPct}%`;
+      rangeIndicator.setAttribute('data-micras', `${method.minMicras}-${method.maxMicras}μm`);
+    }
+
+    if (engine) {
+      engine.innerHTML = '';
+      const density = 120;
+      const avgMicras = (method.minMicras + method.maxMicras) / 2;
+      
+      const baseSize = Math.max(2, (avgMicras / 1600) * 25);
+      const uniformity = grinder.uniformity;
+
+      for (let i = 0; i < density; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        
+        const spread = (1 - uniformity) * 2; 
+        const jitter = 1 + (Math.random() - 0.5) * spread;
+        const s = Math.max(1, baseSize * jitter);
+        
+        p.style.width = `${s}px`;
+        p.style.height = `${s}px`;
+        p.style.opacity = (Math.random() * 0.3 + 0.6).toString();
+        p.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        engine.appendChild(p);
+      }
+    }
+  }
+
+  grinderSel?.addEventListener('change', refresh);
+  tiles.forEach(t => t.addEventListener('click', () => {
+    const id = t.getAttribute('data-id');
+    if (id) {
+      activeId = id;
+      refresh();
+    }
+  }));
+
+  refresh();
+</script>
