@@ -19,6 +19,8 @@ import { creativeSection } from "./creative";
 import { diySection } from "./diy";
 import { bikeSection } from "./bike";
 import { scienceSection } from "./science";
+import { astronomySection } from "./astronomy";
+import { printing3dSection } from "./printing3d";
 import { audiovisualSection } from "./audiovisual";
 import { socialSection } from "./social";
 import { textileSection } from "./textiles";
@@ -49,6 +51,8 @@ export const sections: SectionData[] = [
     creativeSection,
     diySection,
     bikeSection,
+    astronomySection,
+    printing3dSection,
     scienceSection,
     audiovisualSection,
     converterSection,

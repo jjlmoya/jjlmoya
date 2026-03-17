@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const creativeSection: SectionData = {
     title: "Creatividad & Ocio",
+    slug: "creatividad-ocio",
     icon: "mdi:palette",
     theme: "pink",
     utilities: [

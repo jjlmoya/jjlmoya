@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const healthSection: SectionData = {
     title: "Salud",
+    slug: "salud",
     icon: "mdi:heart-pulse",
     theme: "cyan",
     utilities: [

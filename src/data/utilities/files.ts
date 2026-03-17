@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const filesSection: SectionData = {
     title: "Archivos y Texto",
+    slug: "archivos-y-texto",
     icon: "mdi:file-document-outline",
     theme: "blue",
     utilities: [

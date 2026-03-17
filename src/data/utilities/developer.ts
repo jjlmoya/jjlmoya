@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const devSection: SectionData = {
     title: "Desarrollo Web",
+    slug: "desarrollo-web",
     icon: "mdi:code-tags",
     theme: "indigo",
     utilities: [

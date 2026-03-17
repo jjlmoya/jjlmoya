@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const cookingSection: SectionData = {
     title: "Cocina",
+    slug: "cocina",
     icon: "mdi:chef-hat",
     theme: "orange",
     utilities: [

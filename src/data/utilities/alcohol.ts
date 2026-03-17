@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const alcoholSection: SectionData = {
     title: "Alcohol & Party",
+    slug: "alcohol",
     icon: "mdi:glass-mug-variant",
     theme: "purple",
     utilities: [
@@ -11,7 +12,7 @@ export const alcoholSection: SectionData = {
             iconFg: "mdi:fruit-citrus",
             title: "Simulador de Cócteles",
             description:
-                "Analiza la Ley del Sour y visualiza el equilibrio químico de tus mezclas.",
+                "Mixología Molecular. Analiza la Ley del Sour y el equilibrio químico de tus mezclas.",
             color: "#10b981",
         },
         {
@@ -20,7 +21,7 @@ export const alcoholSection: SectionData = {
             iconFg: "mdi:beer",
             title: "Enfriador de Bebidas",
             description:
-                "Termodinámica líquida. Calcula cuándo tu bebida estará en el punto exacto de congelación.",
+                "Termodinámica líquida. Evita que las botellas exploten en el congelador con cálculos térmicos precisos.",
             color: "#f59e0b",
         },
         {
@@ -46,7 +47,7 @@ export const alcoholSection: SectionData = {
             iconBg: "mdi:glass-wine",
             iconFg: "mdi:pill",
             title: "Predictor de Resaca",
-            description: "Estima metabolismo del alcohol y planifica tu hidratación pre-sueño para evitar la resaca.",
+            description: "Calculadora de metabolismo de alcohol e hidratación basada en la fórmula de Widmark.",
             color: "#a855f7",
         },
     ],

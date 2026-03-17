@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const musicSection: SectionData = {
     title: "Música",
+    slug: "musica",
     icon: "mdi:music",
     theme: "pink",
     utilities: [

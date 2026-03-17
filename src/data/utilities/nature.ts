@@ -2,8 +2,8 @@ import type { SectionData } from "./types";
 
 export const natureSection: SectionData = {
     title: "Naturaleza y Agricultura",
+    slug: "naturaleza",
     icon: "mdi:leaf",
-
     theme: "nature",
     utilities: [
         {

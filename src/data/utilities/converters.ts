@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const converterSection: SectionData = {
     title: "Convertidores de Imagen",
+    slug: "convertidores-imagen",
     icon: "mdi:image-sync",
     theme: "indigo",
     utilities: [

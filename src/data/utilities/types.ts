@@ -10,6 +10,7 @@ export interface UtilityItem {
 
 export interface SectionData {
     title: string;
+    slug: string;
     icon: string;
     theme:
     | "emerald"

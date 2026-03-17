@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const streamingSection: SectionData = {
     title: "Streaming y Directos",
+    slug: "streaming",
     icon: "mdi:broadcast",
     theme: "purple",
     utilities: [

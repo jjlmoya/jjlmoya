@@ -500,6 +500,7 @@ export const BURN_TEST_DATA: BurnTestResult[] = [
 
 export const textileSection: SectionData = {
     title: "Textiles",
+    slug: "textiles",
     icon: "mdi:texture",
     theme: "indigo",
     utilities: [

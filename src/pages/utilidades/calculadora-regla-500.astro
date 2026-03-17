@@ -1,0 +1,81 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import StarExposureCalculator from "../../components/utilidades/StarExposureCalculator/StarExposureCalculator.astro";
+import StarExposureCalculatorSEO from "../../components/utilidades/StarExposureCalculator/StarExposureCalculatorSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const bibliographyLinks = [
+    {
+        name: "Sociedad Astronómica de Francia: El Modelo NPF",
+        url: "https://es.wikipedia.org/wiki/Sociedad_Astron%C3%B3mica_de_Francia",
+    },
+    {
+        name: "PetaPixel: Why the 500 Rule is No Longer Enough",
+        url: "https://petapixel.com/2015/01/06/avoid-star-trails-following-500-rule/",
+    },
+    {
+        name: "Lonely Speck: Rule of 500 Calculator",
+        url: "https://www.lonelyspeck.com/advanced-astrophotography-shutter-time-calculator/",
+    },
+];
+
+const faqItems = [
+    {
+        question: "¿Qué pasa si supero el tiempo calculado?",
+        answer: "Si superas el tiempo máximo, las estrellas empezarán a alargarse en lugar de ser puntos nítidos. Si la exposición es muy larga, obtendrás 'star trails' (trazos), una técnica artística válida pero que requiere tiempos mucho mayores para ser estética.",
+    },
+    {
+        question: "¿Sirve esta calculadora para fotografía con seguimiento (star tracker)?",
+        answer: "No directamente para la toma del cielo, ya que el motor compensa la rotación. Sin embargo, es vital para calcular la toma del suelo (foreground) donde el tracker debe estar apagado, o para verificar rápidamente si el motor está fallando si notas trazas inesperadas.",
+    },
+    {
+        question: "¿Cómo encuentro la declinación y cómo me afecta?",
+        answer: "Puedes usar apps como Stellarium. Como regla de oro: cuanto mayor sea la declinación (mirando hacia los polos celestes), más tiempo de exposición puedes permitirte, ya que el arco que describen las estrellas es físicamente más pequeño en tu sensor.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Configura tu lente y cámara",
+        text: "Introduce la distancia focal de tu objetivo y selecciona el tipo de sensor de tu cámara para aplicar el factor de recorte correcto.",
+    },
+    {
+        name: "Elige el nivel de precisión",
+        text: "Usa el modo Clásico para una estimación rápida o el modo NPF si tienes un sensor moderno de alta resolución y buscas la máxima nitidez.",
+    },
+    {
+        name: "Usa la simulación visual",
+        text: "Desliza el control de exceso de tiempo para visualizar cuánta traza verías en tu foto final si ignores el cálculo.",
+    },
+];
+---
+
+<LayoutUtility
+    title="Calculadora Regla de los 500 y NPF"
+    description="Calcula el tiempo de exposición máximo para astrofotografía sin trazas de estrellas. Modo NPF de alta precisión para sensores modernos."
+    image="/images/utilities/calculadora-regla-500.webp"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Cielo Profundo"
+            titleBase="Exposición Total"
+            description="Domina el tiempo de exposición exacto. Algoritmos NPF y Regla de los 500 para capturar estrellas con nitidez absoluta y máxima luz."
+            gradientFromColor="#a855f7"
+            gradientToColor="#ec4899"
+        />
+    </div>
+
+    <StarExposureCalculator />
+
+    <div slot="seo">
+        <StarExposureCalculatorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliographyLinks} />
+    </div>
+</LayoutUtility>

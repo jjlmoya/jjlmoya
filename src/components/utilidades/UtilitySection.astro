@@ -5,6 +5,7 @@ import type { UtilityItem } from "../../data/utilities";
 
 interface Props {
     title: string;
+    slug: string;
     icon: string;
     theme:
         | "emerald"
@@ -21,7 +22,9 @@ interface Props {
     utilities: UtilityItem[];
 }
 
-const { title, icon, theme, utilities } = Astro.props;
+const { title, slug, icon, theme, utilities } = Astro.props;
+
+const categoryUrl = `/utilidades/categorias/${slug}/`;
 
 const colorMap = {
     emerald: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400",
@@ -39,14 +42,16 @@ const colorMap = {
 ---
 
 <section data-utility-section data-section-title={title}>
-    <h2
-        class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-6 flex items-center gap-3"
-    >
-        <span class={`p-2 rounded-xl ${colorMap[theme]}`}>
-            <Icon name={icon} class="w-6 h-6" />
-        </span>
-        {title}
-    </h2>
+    <a href={categoryUrl} class="group">
+        <h2
+            class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-6 flex items-center gap-3 transition-opacity group-hover:opacity-75"
+        >
+            <span class={`p-2 rounded-xl ${colorMap[theme]}`}>
+                <Icon name={icon} class="w-6 h-6" />
+            </span>
+            {title}
+        </h2>
+    </a>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {utilities.map((u) => <CardUtility {...u} />)}
     </div>

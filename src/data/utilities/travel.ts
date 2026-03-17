@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const travelSection: SectionData = {
     title: "Viajes y Aventura",
+    slug: "viajes",
     icon: "mdi:map-marker-path",
     theme: "blue",
     utilities: [

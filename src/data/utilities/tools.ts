@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const toolsSection: SectionData = {
     title: "Herramientas Prácticas",
+    slug: "herramientas",
     icon: "mdi:toolbox",
     theme: "slate",
     utilities: [

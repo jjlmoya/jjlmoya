@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const socialSection: SectionData = {
     title: "Redes Sociales",
+    slug: "redes-sociales",
     icon: "mdi:share-variant",
     theme: "pink",
     utilities: [

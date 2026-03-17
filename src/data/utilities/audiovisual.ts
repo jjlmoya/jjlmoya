@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const audiovisualSection: SectionData = {
     title: "Audiovisual y Fotografía",
+    slug: "audiovisual",
     icon: "mdi:camera-iris",
     theme: "purple",
     utilities: [

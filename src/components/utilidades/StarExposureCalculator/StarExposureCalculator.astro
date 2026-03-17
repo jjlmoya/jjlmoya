@@ -1,0 +1,237 @@
+---
+---
+<div class="star-calculator glass-panel">
+    <div class="calculator-grid">
+        <div class="control-panel">
+            <div class="mode-selector">
+                <span class="mode-label">Modo:</span>
+                <div class="toggle-group">
+                    <button id="mode-classic" class="toggle-btn active" data-mode="classic">Clásico (500)</button>
+                    <button id="mode-npf" class="toggle-btn" data-mode="npf">Preciso (NPF)</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Sensor (Factor de Recorte)</label>
+                <select id="sensor-type" class="select-input">
+                    <option value="1.0">Full Frame (x1.0)</option>
+                    <option value="1.5">APS-C Nikon/Sony/Fuji (x1.5)</option>
+                    <option value="1.6">APS-C Canon (x1.6)</option>
+                    <option value="2.0">Micro Cuatro Tercios (x2.0)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Distancia Focal (mm)</label>
+                <div class="stepper">
+                    <button class="step-btn" data-action="dec" data-target="focal">-</button>
+                    <input type="number" id="focal-length" value="14" min="1" max="1000" />
+                    <button class="step-btn" data-action="inc" data-target="focal">+</button>
+                </div>
+            </div>
+
+            <div id="npf-controls" class="hidden-controls">
+                <div class="control-group">
+                    <label>Apertura (f/stop)</label>
+                    <div class="stepper">
+                        <button class="step-btn" data-action="dec" data-target="aperture">-</button>
+                        <input type="number" id="aperture" value="2.8" step="0.1" min="0.5" max="32" />
+                        <button class="step-btn" data-action="inc" data-target="aperture">+</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Megapíxeles (MP)</label>
+                    <div class="stepper">
+                        <button class="step-btn" data-action="dec" data-target="megapixels">-</button>
+                        <input type="number" id="megapixels" value="24" min="1" max="150" />
+                        <button class="step-btn" data-action="inc" data-target="megapixels">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Declinación Celeste: <span id="declination-value">0</span>°</label>
+                <input type="range" id="declination" min="0" max="89" value="0" class="range-input" />
+                <div class="range-labels">
+                    <span>Ecuador</span>
+                    <span>Polo</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-panel">
+            <div class="display-main">
+                <div class="time-circle">
+                    <span id="result-time" class="time-value">35.7</span>
+                    <span class="unit">segundos</span>
+                </div>
+                <p id="result-text" class="explanation">Tiempo máximo para estellas puntuales.</p>
+            </div>
+
+            <div class="visualization">
+                <label>Simulación Visual (Zoom 200%)</label>
+                <div class="sim-container">
+                    <div class="sim-view">
+                        <div id="star-preview" class="star-point"></div>
+                        <div class="center-marker">+</div>
+                    </div>
+                    <div class="sim-labels">
+                        <span id="sim-info">Estrellas como puntos</span>
+                    </div>
+                </div>
+                <div class="sim-controls">
+                    <input type="range" id="sim-offset" min="1" max="5" step="0.1" value="1" class="range-input" />
+                    <span class="sim-range-label">Simular exceso de tiempo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    class StarCalculator {
+        mode = 'classic';
+        focalLengthInput: HTMLInputElement;
+        sensorSelect: HTMLSelectElement;
+        apertureInput: HTMLInputElement;
+        megapixelsInput: HTMLInputElement;
+        declinationInput: HTMLInputElement;
+        resultTimeDisplay: HTMLElement;
+        declinationValueDisplay: HTMLElement;
+        starPreview: HTMLElement;
+        simOffsetInput: HTMLInputElement;
+        npfControls: HTMLElement;
+        modeBtns: NodeListOf<HTMLButtonElement>;
+        stepBtns: NodeListOf<HTMLButtonElement>;
+
+        constructor() {
+            this.focalLengthInput = document.getElementById('focal-length') as HTMLInputElement;
+            this.sensorSelect = document.getElementById('sensor-type') as HTMLSelectElement;
+            this.apertureInput = document.getElementById('aperture') as HTMLInputElement;
+            this.megapixelsInput = document.getElementById('megapixels') as HTMLInputElement;
+            this.declinationInput = document.getElementById('declination') as HTMLInputElement;
+            this.resultTimeDisplay = document.getElementById('result-time') as HTMLElement;
+            this.declinationValueDisplay = document.getElementById('declination-value') as HTMLElement;
+            this.starPreview = document.getElementById('star-preview') as HTMLElement;
+            this.simOffsetInput = document.getElementById('sim-offset') as HTMLInputElement;
+            this.npfControls = document.getElementById('npf-controls') as HTMLElement;
+            this.modeBtns = document.querySelectorAll('.toggle-btn') as NodeListOf<HTMLButtonElement>;
+            this.stepBtns = document.querySelectorAll('.step-btn') as NodeListOf<HTMLButtonElement>;
+
+            this.init();
+        }
+
+        init() {
+            this.modeBtns.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    this.modeBtns.forEach((b) => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    this.mode = btn.dataset.mode || 'classic';
+                    if (this.npfControls) {
+                        this.npfControls.style.display = this.mode === 'npf' ? 'block' : 'none';
+                    }
+                    this.calculate();
+                });
+            });
+
+            this.stepBtns.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const action = btn.dataset.action;
+                    const targetId = btn.dataset.target;
+                    let input: HTMLInputElement | null = null;
+                    
+                    if (targetId === 'focal') input = this.focalLengthInput;
+                    if (targetId === 'aperture') input = this.apertureInput;
+                    if (targetId === 'megapixels') input = this.megapixelsInput;
+
+                    if (input) {
+                        let val = parseFloat(input.value);
+                        const step = parseFloat(input.step) || 1;
+                        if (action === 'inc') val += step;
+                        if (action === 'dec') val -= step;
+                        input.value = Math.max(parseFloat(input.min) || 0, val).toFixed(targetId === 'aperture' ? 1 : 0);
+                        this.calculate();
+                    }
+                });
+            });
+
+            [this.focalLengthInput, this.apertureInput, this.megapixelsInput].forEach(inp => {
+                if (inp) {
+                    inp.addEventListener('input', () => this.calculate());
+                }
+            });
+            if (this.sensorSelect) {
+                this.sensorSelect.addEventListener('change', () => this.calculate());
+            }
+            if (this.declinationInput) {
+                this.declinationInput.addEventListener('input', () => {
+                    if (this.declinationValueDisplay) {
+                        this.declinationValueDisplay.textContent = this.declinationInput.value;
+                    }
+                    this.calculate();
+                });
+            }
+
+            if (this.simOffsetInput) {
+                this.simOffsetInput.addEventListener('input', () => this.updateSimulation());
+            }
+
+            this.calculate();
+        }
+
+        calculate() {
+            if (!this.focalLengthInput || !this.sensorSelect || !this.declinationInput) return;
+
+            const focal = parseFloat(this.focalLengthInput.value) || 1;
+            const crop = parseFloat(this.sensorSelect.value) || 1;
+            const declination = (parseFloat(this.declinationInput.value) || 0) * (Math.PI / 180);
+            
+            let baseTime = 0;
+
+            if (this.mode === 'classic') {
+                baseTime = 500 / (focal * crop);
+            } else {
+                const aperture = parseFloat(this.apertureInput?.value || '2.8');
+                const mpx = parseFloat(this.megapixelsInput?.value || '24');
+                const sensorWidth = 36 / crop;
+                const megapixels = mpx * 1e6;
+                const pixelPitch = Math.sqrt((sensorWidth * sensorWidth) / (1.5 * megapixels)) * 1000;
+                baseTime = (35 * aperture + 30 * pixelPitch) / focal;
+            }
+
+            const resultTime = baseTime / Math.cos(declination);
+            
+            if (this.resultTimeDisplay) {
+                this.resultTimeDisplay.textContent = resultTime.toFixed(1);
+            }
+            this.updateSimulation();
+        }
+
+        updateSimulation() {
+            if (!this.simOffsetInput || !this.starPreview) return;
+            const excess = parseFloat(this.simOffsetInput.value);
+            const scale = 20; 
+            const trailLength = (excess - 1) * scale;
+            
+            if (excess > 1.1) {
+                this.starPreview.style.width = `${trailLength + 4}px`;
+                this.starPreview.style.borderRadius = '2px';
+                this.starPreview.classList.add('is-trail');
+                const info = document.getElementById('sim-info');
+                if (info) info.textContent = 'Trazo de estrella visible';
+            } else {
+                this.starPreview.style.width = '4px';
+                this.starPreview.style.borderRadius = '50%';
+                this.starPreview.classList.remove('is-trail');
+                const info = document.getElementById('sim-info');
+                if (info) info.textContent = 'Estrellas como puntos';
+            }
+        }
+    }
+
+    new StarCalculator();
+</script>
+
+<style>
+    @import "./StarExposureCalculator.css";
+</style>

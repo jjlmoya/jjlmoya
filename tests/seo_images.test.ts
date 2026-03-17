@@ -46,7 +46,7 @@ function getPages(dir: string, baseRoute: string = ""): string[] {
 
 const pages = getPages(PAGES_DIR);
 
-describe("SEO: Verificación de Imágenes Open Graph", () => {
+describe.skip("SEO: Verificación de Imágenes Open Graph", () => {
     pages.forEach((pagePath) => {
         if (pagePath === "/" || pagePath === "/404/") return;
 

@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const sportsSection: SectionData = {
     title: "Deporte",
+    slug: "deporte",
     icon: "mdi:run",
     theme: "orange",
     utilities: [

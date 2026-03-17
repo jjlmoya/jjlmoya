@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const dronesSection: SectionData = {
     title: "Radioaficionados y Drones",
+    slug: "drones",
     icon: "mdi:drone",
     theme: "orange",
     utilities: [

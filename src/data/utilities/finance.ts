@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const financeSection: SectionData = {
     title: "Finanzas",
+    slug: "finanzas",
     icon: "mdi:finance",
     theme: "emerald",
     utilities: [

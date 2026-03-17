@@ -1,0 +1,248 @@
+---
+---
+<div class="printing-cost glass-panel">
+    <div class="calculator-grid">
+        <div class="control-panel">
+            <div class="section-card">
+                <h3>Material</h3>
+                <div class="control-group">
+                    <label>Peso de la pieza (neto)</label>
+                    <div class="input-container">
+                        <input type="number" id="part-weight" value="150" min="1" />
+                        <span class="unit-tag">gramos</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Precio de la bobina (1kg)</label>
+                    <div class="input-container">
+                        <input type="number" id="spool-price" value="25" step="0.5" min="1" />
+                        <span class="unit-tag">€/kg</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Márgen de desperdicio: <span id="waste-display">5</span>%</label>
+                    <input type="range" id="waste-margin" min="0" max="30" value="5" class="range-control" />
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h3>Energía y Tiempo</h3>
+                <div class="control-group">
+                    <label>Tiempo de impresión</label>
+                    <div class="input-container">
+                        <input type="number" id="print-hours" value="10" min="0" />
+                        <span class="unit-tag">horas</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Consumo medio</label>
+                    <div class="input-container">
+                        <input type="number" id="power-watts" value="120" min="10" />
+                        <span class="unit-tag">vatios</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Tarifa eléctrica</label>
+                    <div class="input-container">
+                        <input type="number" id="kwh-price" value="0.18" step="0.01" min="0.01" />
+                        <span class="unit-tag">€/kWh</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h3>Amortización y Mano de Obra</h3>
+                <div class="control-group">
+                    <label>Coste máquina por hora</label>
+                    <div class="input-container">
+                        <input type="number" id="machine-cost-hour" value="0.10" step="0.05" min="0" />
+                        <span class="unit-tag">€/h</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Mano de obra (manual)</label>
+                    <div class="input-container">
+                        <input type="number" id="labor-cost-hour" value="15" step="1" min="0" />
+                        <span class="unit-tag">€/h</span>
+                    </div>
+                    <div class="input-container" style="margin-top: 0.5rem">
+                        <input type="number" id="labor-minutes" value="20" min="0" />
+                        <span class="unit-tag">minutos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-panel">
+            <div class="total-card">
+                <span class="total-label">Coste de Fabricación</span>
+                <div class="total-value">
+                    <span id="total-cost">0.00</span>€
+                </div>
+
+                <div class="suggested-price">
+                    <span class="suggested-label">Precio Sugerido (+<span id="margin-display">50</span>%)</span>
+                    <div class="suggested-value">
+                        <span id="suggested-price">0.00</span>€
+                    </div>
+                    <input type="range" id="profit-margin" min="0" max="300" value="50" class="range-control" />
+                </div>
+            </div>
+
+            <div class="breakdown-chart">
+                <h4 class="chart-title">Desglose de Costes</h4>
+                <div class="bars-container">
+                    <div class="bar-row">
+                        <div class="bar-label"><span>Plástico</span> <span id="perc-material">0%</span></div>
+                        <div class="bar-wrapper"><div id="bar-material" class="bar-fill bar-material"></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <div class="bar-label"><span>Electricidad</span> <span id="perc-energy">0%</span></div>
+                        <div class="bar-wrapper"><div id="bar-energy" class="bar-fill bar-energy"></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <div class="bar-label"><span>Máquina</span> <span id="perc-machine">0%</span></div>
+                        <div class="bar-wrapper"><div id="bar-machine" class="bar-fill bar-machine"></div></div>
+                    </div>
+                    <div class="bar-row">
+                        <div class="bar-label"><span>Mano de Obra</span> <span id="perc-labor">0%</span></div>
+                        <div class="bar-wrapper"><div id="bar-labor" class="bar-fill bar-labor"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                ¿Sabías que calentar la cama a 100°C para ABS puede duplicar el coste eléctrico frente al PLA? No olvides contar los fallos: si un 10% de tus piezas fallan, tu coste real es un 10% mayor.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    class PrintingCalculator {
+        inputs: {
+            weight: HTMLInputElement,
+            spoolPrice: HTMLInputElement,
+            waste: HTMLInputElement,
+            hours: HTMLInputElement,
+            watts: HTMLInputElement,
+            kwh: HTMLInputElement,
+            machine: HTMLInputElement,
+            laborRate: HTMLInputElement,
+            laborMin: HTMLInputElement,
+            margin: HTMLInputElement
+        };
+        displays: {
+            total: HTMLElement,
+            suggested: HTMLElement,
+            wasteVal: HTMLElement,
+            marginVal: HTMLElement,
+            pMat: HTMLElement,
+            pEng: HTMLElement,
+            pMac: HTMLElement,
+            pLab: HTMLElement
+        };
+        bars: {
+            mat: HTMLElement,
+            eng: HTMLElement,
+            mac: HTMLElement,
+            lab: HTMLElement
+        };
+
+        constructor() {
+            this.inputs = {
+                weight: document.getElementById('part-weight') as HTMLInputElement,
+                spoolPrice: document.getElementById('spool-price') as HTMLInputElement,
+                waste: document.getElementById('waste-margin') as HTMLInputElement,
+                hours: document.getElementById('print-hours') as HTMLInputElement,
+                watts: document.getElementById('power-watts') as HTMLInputElement,
+                kwh: document.getElementById('kwh-price') as HTMLInputElement,
+                machine: document.getElementById('machine-cost-hour') as HTMLInputElement,
+                laborRate: document.getElementById('labor-cost-hour') as HTMLInputElement,
+                laborMin: document.getElementById('labor-minutes') as HTMLInputElement,
+                margin: document.getElementById('profit-margin') as HTMLInputElement
+            };
+
+            this.displays = {
+                total: document.getElementById('total-cost') as HTMLElement,
+                suggested: document.getElementById('suggested-price') as HTMLElement,
+                wasteVal: document.getElementById('waste-display') as HTMLElement,
+                marginVal: document.getElementById('margin-display') as HTMLElement,
+                pMat: document.getElementById('perc-material') as HTMLElement,
+                pEng: document.getElementById('perc-energy') as HTMLElement,
+                pMac: document.getElementById('perc-machine') as HTMLElement,
+                pLab: document.getElementById('perc-labor') as HTMLElement
+            };
+
+            this.bars = {
+                mat: document.getElementById('bar-material') as HTMLElement,
+                eng: document.getElementById('bar-energy') as HTMLElement,
+                mac: document.getElementById('bar-machine') as HTMLElement,
+                lab: document.getElementById('bar-labor') as HTMLElement
+            };
+
+            this.init();
+        }
+
+        init() {
+            Object.values(this.inputs).forEach(input => {
+                input.addEventListener('input', () => this.calculate());
+            });
+            this.calculate();
+        }
+
+        calculate() {
+            const weight = parseFloat(this.inputs.weight.value) || 0;
+            const spoolPrice = parseFloat(this.inputs.spoolPrice.value) || 0;
+            const waste = parseFloat(this.inputs.waste.value) / 100;
+            const hours = parseFloat(this.inputs.hours.value) || 0;
+            const watts = parseFloat(this.inputs.watts.value) || 0;
+            const kwh = parseFloat(this.inputs.kwh.value) || 0;
+            const machineRate = parseFloat(this.inputs.machine.value) || 0;
+            const laborRate = parseFloat(this.inputs.laborRate.value) || 0;
+            const laborMin = parseFloat(this.inputs.laborMin.value) || 0;
+            const margin = parseFloat(this.inputs.margin.value) / 100;
+
+            this.displays.wasteVal.textContent = (waste * 100).toString();
+            this.displays.marginVal.textContent = (margin * 100).toString();
+
+            const cMaterial = (weight / 1000) * spoolPrice * (1 + waste);
+            const cEnergy = (watts / 1000) * hours * kwh;
+            const cMachine = machineRate * hours;
+            const cLabor = (laborMin / 60) * laborRate;
+
+            const total = cMaterial + cEnergy + cMachine + cLabor;
+            const suggested = total * (1 + margin);
+
+            this.displays.total.textContent = total.toFixed(2);
+            this.displays.suggested.textContent = suggested.toFixed(2);
+
+            this.updateChart(cMaterial, cEnergy, cMachine, cLabor, total);
+        }
+
+        updateChart(mat: number, eng: number, mac: number, lab: number, total: number) {
+            if (total === 0) return;
+
+            const pMat = (mat / total) * 100;
+            const pEng = (eng / total) * 100;
+            const pMac = (mac / total) * 100;
+            const pLab = (lab / total) * 100;
+
+            this.displays.pMat.textContent = `${pMat.toFixed(0)}%`;
+            this.displays.pEng.textContent = `${pEng.toFixed(0)}%`;
+            this.displays.pMac.textContent = `${pMac.toFixed(0)}%`;
+            this.displays.pLab.textContent = `${pLab.toFixed(0)}%`;
+
+            this.bars.mat.style.width = `${pMat}%`;
+            this.bars.eng.style.width = `${pEng}%`;
+            this.bars.mac.style.width = `${pMac}%`;
+            this.bars.lab.style.width = `${pLab}%`;
+        }
+    }
+
+    new PrintingCalculator();
+</script>
+
+<style>
+    @import "./PrintingCost3D.css";
+</style>

@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const educationSection: SectionData = {
     title: "Educación y Estudiantes",
+    slug: "educacion",
     icon: "mdi:school",
     theme: "indigo",
     utilities: [

@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const homeSection: SectionData = {
     title: "Hogar",
+    slug: "hogar",
     icon: "mdi:home",
     theme: "purple",
     utilities: [

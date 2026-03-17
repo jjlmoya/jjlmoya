@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const coffeeSection: SectionData = {
     title: "Para los mas cafeteros",
+    slug: "cafe",
     icon: "mdi:coffee",
     theme: "amber",
     utilities: [

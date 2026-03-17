@@ -1,0 +1,28 @@
+---
+import type { SectionData } from "../../../data/utilities/types";
+
+interface Props {
+    section: SectionData;
+    baseUrl?: string;
+}
+
+const { section, baseUrl = "https://www.jjlmoya.es" } = Astro.props;
+
+const categorySchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": section.title,
+    "url": `${baseUrl}/utilidades/categorias/${section.slug}/`,
+    "hasPart": section.utilities.map((u) => ({
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": u.title,
+        "description": u.description,
+        "url": `${baseUrl}${u.href}`,
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Any"
+    }))
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(categorySchema)} />

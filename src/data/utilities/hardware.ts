@@ -2,6 +2,7 @@ import type { SectionData } from "./index";
 
 export const hardwareSection: SectionData = {
     title: "Hardware y Periféricos",
+    slug: "hardware",
     icon: "mdi:cpu-64-bit",
     theme: "blue",
     utilities: [

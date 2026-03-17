@@ -2,6 +2,7 @@ import type { SectionData } from "./types";
 
 export const workSection: SectionData = {
     title: "Autónomos y Trabajo",
+    slug: "trabajo",
     icon: "mdi:briefcase",
     theme: "blue",
     utilities: [
