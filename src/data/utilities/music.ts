@@ -22,5 +22,13 @@ export const musicSection: SectionData = {
             description: "Calcula tiempos rítmicos para delays y reverbs. Sincroniza tu mezcla profesional.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/calculadora-distancia-fase/",
+            iconBg: "mdi:microphone-outline",
+            iconFg: "mdi:waveform",
+            title: "Distancia de Fase",
+            description: "Alinea tus micrófonos con precisión de muestras y compensa el retraso acústico.",
+            color: "#ff4d00",
+        },
     ],
 };

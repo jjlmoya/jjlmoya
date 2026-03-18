@@ -20,14 +20,23 @@ const {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const fullTitle = title;
 const imageURL = new URL(image, Astro.url);
+
+const isUtility = Astro.url.pathname.startsWith("/utilidades/") &&
+                  !Astro.url.pathname.startsWith("/utilidades/categorias/");
+const slug = isUtility ? Astro.url.pathname.replace(/^\/utilidades\//, "").replace(/\/$/, "") : null;
+const manifestUrl = isUtility && slug ? `/utilidades/${slug}/manifest.json` : "/manifest.json";
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/png" href="/brand-final-48.webp?v=2" />
 <link rel="apple-touch-icon" href="/apple-touch-icon-brand.webp?v=2" />
-<meta name="apple-mobile-web-app-title" content="jjlmoya" />
-<link rel="manifest" href="/manifest.json" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content={isUtility ? title : "jjlmoya"} />
+<meta name="apple-mobile-web-app-start-url" content={isUtility ? Astro.url.pathname : "/"} />
+<link rel="manifest" href={manifestUrl} />
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content="#0f172a" />
 <meta name="author" content="jjlmoya" />

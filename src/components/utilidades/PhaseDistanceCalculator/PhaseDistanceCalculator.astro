@@ -1,0 +1,327 @@
+---
+import './PhaseDistanceCalculator.css';
+---
+
+<div class="phase-calc" id="phase-calc">
+    <div class="phase-calc__header">
+        <div class="phase-calc__field">
+            <label class="phase-calc__label" for="temp">Temperatura (°C) / Sonido</label>
+            <div class="phase-calc__input-group">
+                <input type="number" id="temp" class="phase-calc__input" value="20" step="1" min="-20" max="50">
+                <button id="v-manual-toggle" class="phase-calc__preset-btn">Auto</button>
+            </div>
+        </div>
+        <div class="phase-calc__field">
+            <label class="phase-calc__label" for="samplerate">Freq. Muestreo (kHz)</label>
+            <select id="samplerate" class="phase-calc__select">
+                <option value="44100">44.1 kHz</option>
+                <option value="48000" selected>48 kHz</option>
+                <option value="88200">88.2 kHz</option>
+                <option value="96000">96 kHz</option>
+                <option value="192000">192 kHz</option>
+            </select>
+        </div>
+        <div class="phase-calc__field">
+            <label class="phase-calc__label" for="unit">Sistema de Unidades</label>
+            <select id="unit" class="phase-calc__select">
+                <option value="metric">Métrico (m/cm)</option>
+                <option value="imperial">Imperial (ft/in)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="phase-calc__header">
+        <div class="phase-calc__field">
+            <label class="phase-calc__label" for="distA">Distancia Micrófono A</label>
+            <div class="phase-calc__input-group">
+                <input type="number" id="distA" class="phase-calc__input" value="0.5" step="0.01">
+                <div class="phase-calc__fine-tune">
+                    <button class="phase-calc__tune-btn" data-input="distA" data-dir="1">+</button>
+                    <button class="phase-calc__tune-btn" data-input="distA" data-dir="-1">-</button>
+                </div>
+                <span class="phase-calc__unit-label" id="unitA">m</span>
+            </div>
+        </div>
+        <div class="phase-calc__field">
+            <label class="phase-calc__label" for="distB">Distancia Micrófono B</label>
+            <div class="phase-calc__input-group">
+                <input type="number" id="distB" class="phase-calc__input" value="1.2" step="0.01">
+                <div class="phase-calc__fine-tune">
+                    <button class="phase-calc__tune-btn" data-input="distB" data-dir="1">+</button>
+                    <button class="phase-calc__tune-btn" data-input="distB" data-dir="-1">-</button>
+                </div>
+                <span class="phase-calc__unit-label" id="unitB">m</span>
+            </div>
+        </div>
+        <div class="phase-calc__field">
+            <label class="phase-calc__label">Preajustes Rápidos</label>
+            <div class="phase-calc__presets">
+                <button class="phase-calc__preset-btn" data-a="0.05" data-b="0.05">Coincidente (XY)</button>
+                <button class="phase-calc__preset-btn" data-a="0.10" data-b="0.15">Caja</button>
+                <button class="phase-calc__preset-btn" data-a="0.30" data-b="1.00">Ambiencia</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-calc__action-group">
+        <button id="phase-invert" class="phase-calc__toggle">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6V18A6,6 0 0,1 6,12A6,6 0 0,1 12,6Z" />
+            </svg>
+            Invertir Fase (Φ)
+        </button>
+        <div class="phase-calc__slider-container">
+            <label class="phase-calc__label">Ganancia Relativa Mic B: <span id="rel-gain-val">100%</span></label>
+            <input type="range" id="rel-gain" class="phase-calc__slider" min="0" max="100" value="100">
+        </div>
+        <button id="copy-samples" class="phase-calc__copy-btn">
+            Copiar Samples
+        </button>
+    </div>
+
+    <div class="phase-calc__results">
+        <div class="phase-calc__result-card">
+            <span class="phase-calc__result-label">Retraso Necesario</span>
+            <span class="phase-calc__result-value" id="delay-ms">0.00</span>
+            <span class="phase-calc__result-unit">milisegundos (ms)</span>
+        </div>
+        <div class="phase-calc__result-card">
+            <span class="phase-calc__result-label">Compensación</span>
+            <span class="phase-calc__result-value phase-calc__result-value--cyan" id="delay-samples">0</span>
+            <span class="phase-calc__result-unit">Samples (Muestras)</span>
+        </div>
+        <div class="phase-calc__result-card phase-calc__result-card--accent">
+            <span class="phase-calc__result-label">Estado de Fase</span>
+            <div id="phase-status" class="phase-calc__phase-indicator">Cargando...</div>
+            <span class="phase-calc__result-unit" id="phase-desc">Calculando interferencia...</span>
+        </div>
+    </div>
+
+    <div class="phase-calc__visualizer">
+        <div id="phase-warning" class="phase-calc__phase-indicator phase-calc__phase-indicator--warning" style="display: none;">
+            ⚠️ POSIBLE CANCELACIÓN CRÍTICA
+        </div>
+        <canvas id="comb-filter-canvas" class="phase-calc__canvas"></canvas>
+    </div>
+
+    <div class="phase-calc__details">
+        <div class="phase-calc__status-item">
+            <span class="phase-calc__status-label">Velocidad del Sonido</span>
+            <div class="phase-calc__status-value" id="v-sound">343.2 m/s</div>
+        </div>
+        <div class="phase-calc__status-item">
+            <span class="phase-calc__status-label">Diferencia de Distancia</span>
+            <div class="phase-calc__status-value" id="diff-dist">0.70 m</div>
+        </div>
+        <div class="phase-calc__status-item">
+            <span class="phase-calc__status-label">Primeros Nulos (Nulls)</span>
+            <div class="phase-calc__status-value" id="null-freq">--- Hz</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const el = {
+        temp: document.getElementById('temp') as HTMLInputElement,
+        vToggle: document.getElementById('v-manual-toggle') as HTMLButtonElement,
+        samplerate: document.getElementById('samplerate') as HTMLSelectElement,
+        unit: document.getElementById('unit') as HTMLSelectElement,
+        distA: document.getElementById('distA') as HTMLInputElement,
+        distB: document.getElementById('distB') as HTMLInputElement,
+        unitA: document.getElementById('unitA'),
+        unitB: document.getElementById('unitB'),
+        delayMs: document.getElementById('delay-ms'),
+        delaySamples: document.getElementById('delay-samples'),
+        phaseStatus: document.getElementById('phase-status'),
+        phaseDesc: document.getElementById('phase-desc'),
+        vSound: document.getElementById('v-sound'),
+        diffDist: document.getElementById('diff-dist'),
+        nullFreq: document.getElementById('null-freq'),
+        canvas: document.getElementById('comb-filter-canvas') as HTMLCanvasElement,
+        warning: document.getElementById('phase-warning'),
+        presets: document.querySelectorAll('.phase-calc__preset-btn[data-a]'),
+        tuneBtns: document.querySelectorAll('.phase-calc__tune-btn'),
+        phaseInvert: document.getElementById('phase-invert') as HTMLButtonElement,
+        relGain: document.getElementById('rel-gain') as HTMLInputElement,
+        relGainVal: document.getElementById('rel-gain-val'),
+        copyBtn: document.getElementById('copy-samples') as HTMLButtonElement
+    };
+
+    const ctx = el.canvas.getContext('2d');
+    let isInverted = false;
+    let isManualV = false;
+    let manualV = 343;
+
+    function calculate() {
+        const temp = parseFloat(el.temp.value);
+        const sr = parseInt(el.samplerate.value);
+        const unit = el.unit.value;
+        const gain = parseInt(el.relGain.value) / 100;
+        let dA = parseFloat(el.distA.value);
+        let dB = parseFloat(el.distB.value);
+
+        const v = isManualV ? manualV : 331.3 + (0.606 * temp);
+        
+        if (unit === 'imperial') {
+            dA = dA * 0.3048;
+            dB = dB * 0.3048;
+            el.unitA!.textContent = 'ft';
+            el.unitB!.textContent = 'ft';
+        } else {
+            el.unitA!.textContent = 'm';
+            el.unitB!.textContent = 'm';
+        }
+
+        const deltaD = Math.abs(dA - dB);
+        const deltaT = deltaD / v;
+        const samples = deltaT * sr;
+
+        el.delayMs!.textContent = (deltaT * 1000).toFixed(3);
+        el.delaySamples!.textContent = Math.round(samples).toString();
+        el.vSound!.textContent = `${v.toFixed(1)} m/s`;
+        el.relGainVal!.textContent = `${Math.round(gain * 100)}%`;
+        
+        if (unit === 'imperial') {
+            el.diffDist!.textContent = `${(deltaD / 0.3048).toFixed(3)} ft`;
+        } else {
+            el.diffDist!.textContent = `${deltaD.toFixed(3)} m`;
+        }
+
+        const f1 = deltaT > 0 ? (isInverted ? 1/deltaT : 1 / (2 * deltaT)) : 0;
+        el.nullFreq!.textContent = f1 === 0 ? 'Ninguno' : `${Math.round(f1)} Hz`;
+
+        updateStatus(deltaT);
+        drawCombFilter(deltaT, gain);
+    }
+
+    function updateStatus(dt: number) {
+        if (dt === 0 && !isInverted) {
+            el.phaseStatus!.className = 'phase-calc__phase-indicator phase-calc__phase-indicator--ok';
+            el.phaseStatus!.textContent = 'EN FASE';
+            el.phaseDesc!.textContent = 'Señales perfectamente alineadas.';
+            el.warning!.style.display = 'none';
+            return;
+        }
+
+        const f_null = isInverted ? 1/dt : 1 / (2 * dt);
+        
+        if (f_null < 500 && dt > 0) {
+            el.phaseStatus!.className = 'phase-calc__phase-indicator phase-calc__phase-indicator--warning';
+            el.phaseStatus!.textContent = 'CANCELACIÓN CRÍTICA';
+            el.phaseDesc!.textContent = 'Filtrado de peine notable en graves/medios.';
+            el.warning!.style.display = 'flex';
+        } else {
+            el.phaseStatus!.className = 'phase-calc__phase-indicator phase-calc__phase-indicator--ok';
+            el.phaseStatus!.textContent = 'FUERA DE EJE';
+            el.phaseDesc!.textContent = 'Desfase ligero. Textura modificada.';
+            el.warning!.style.display = 'none';
+        }
+    }
+
+    function drawCombFilter(dt: number, gain: number) {
+        if (!ctx) return;
+        const dw = el.canvas.offsetWidth;
+        const dh = el.canvas.offsetHeight;
+        if (el.canvas.width !== dw * devicePixelRatio) {
+            el.canvas.width = dw * devicePixelRatio;
+            el.canvas.height = dh * devicePixelRatio;
+        }
+        ctx.resetTransform();
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        ctx.clearRect(0, 0, dw, dh);
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 10; i++) {
+            const x = (dw / 10) * i;
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, dh);
+        }
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.strokeStyle = '#ff4d00';
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+
+        const phaseOffset = isInverted ? Math.PI : 0;
+
+        for (let x = 0; x <= dw; x++) {
+            const logX = x / dw;
+            const freq = Math.pow(10, logX * 3 + 1.301);
+            const val = Math.sqrt(1 + gain*gain + 2*gain * Math.cos(2 * Math.PI * freq * dt + phaseOffset));
+            const y = dh - (val/2 * (dh - 40) + 20);
+            
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = '#00f2ff';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('20Hz', 5, dh - 5);
+        ctx.textAlign = 'right';
+        ctx.fillText('20kHz', dw - 5, dh - 5);
+        ctx.textAlign = 'center';
+        ctx.fillText('RESPUESTA EN FRECUENCIA (H) - COMB FILTERING', dw / 2, 15);
+    }
+
+    el.temp.addEventListener('input', calculate);
+    el.samplerate.addEventListener('change', calculate);
+    el.unit.addEventListener('change', calculate);
+    el.distA.addEventListener('input', calculate);
+    el.distB.addEventListener('input', calculate);
+    el.relGain.addEventListener('input', calculate);
+
+    el.phaseInvert.addEventListener('click', () => {
+        isInverted = !isInverted;
+        el.phaseInvert.classList.toggle('phase-calc__toggle--active', isInverted);
+        calculate();
+    });
+
+    el.vToggle.addEventListener('click', () => {
+        isManualV = !isManualV;
+        if (isManualV) {
+            const val = prompt('Velocidad del Sonido (m/s):', '343');
+            if (val) manualV = parseFloat(val);
+            el.vToggle.textContent = `${manualV} m/s`;
+            el.vToggle.style.backgroundColor = '#ff4d00';
+        } else {
+            el.vToggle.textContent = 'Auto';
+            el.vToggle.style.backgroundColor = '#111';
+        }
+        calculate();
+    });
+
+    el.tuneBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const b = btn as HTMLButtonElement;
+            const input = document.getElementById(b.dataset.input!) as HTMLInputElement;
+            const step = el.unit.value === 'metric' ? 0.001 : 0.01;
+            input.value = (parseFloat(input.value) + (parseFloat(b.dataset.dir!) * step)).toFixed(3);
+            calculate();
+        });
+    });
+
+    el.copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(el.delaySamples!.textContent || '0');
+        const original = el.copyBtn.textContent;
+        el.copyBtn.textContent = '¡Copiado!';
+        setTimeout(() => el.copyBtn.textContent = original, 2000);
+    });
+
+    el.presets.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const b = btn as HTMLButtonElement;
+            el.distA.value = b.dataset.a!;
+            el.distB.value = b.dataset.b!;
+            calculate();
+        });
+    });
+
+    window.addEventListener('resize', calculate);
+    calculate();
+</script>

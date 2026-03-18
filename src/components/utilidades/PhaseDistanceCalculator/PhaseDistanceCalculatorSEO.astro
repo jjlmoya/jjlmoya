@@ -1,0 +1,123 @@
+---
+import SEOArticle from "../../ui/seo/SEOArticle.astro";
+import SEOTitle from "../../ui/seo/SEOTitle.astro";
+import SEOList from "../../ui/seo/SEOList.astro";
+import SEOTip from "../../ui/seo/SEOTip.astro";
+import SEOCode from "../../ui/seo/SEOCode.astro";
+import SEOCard from "../../ui/seo/SEOCard.astro";
+import SEOGrid from "../../ui/seo/SEOGrid.astro";
+import SEOStats from "../../ui/seo/SEOStats.astro";
+import SEOTable from "../../ui/seo/SEOTable.astro";
+import SEOProsCons from "../../ui/seo/SEOProsCons.astro";
+---
+
+<SEOArticle>
+    <SEOTitle title="¿Qué es la cancelación de fase y por qué arruina tus mezclas?" />
+    <p>
+        En el mundo de la ingeniería de audio, la fase es uno de los conceptos más críticos y, paradójicamente, uno de los más ignorados por los principiantes. Cuando grabas una fuente de sonido, como una batería o un amplificador de guitarra, con dos o más micrófonos situados a diferentes distancias, las ondas sonoras no llegan a las cápsulas al mismo tiempo. Esta diferencia de tiempo, por minúscula que sea, provoca un fenómeno conocido como desfase.
+    </p>
+
+    <SEOTitle title="El fenómeno del Filtrado de Peine (Comb Filtering)" level={2} />
+    <p>
+        Cuando dos señales idénticas se combinan con un ligero retraso entre ellas, se crean una serie de valles y picos en la respuesta de frecuencia. Al observar esto en un analizador de espectro, verás un patrón que se asemeja a los dientes de un peine, de ahí su nombre. Este efecto altera el timbre natural del instrumento de forma destructiva.
+    </p>
+
+    <SEOGrid>
+        <SEOCard title="Impacto en Graves" icon="mdi:waveform">
+            <p>La cancelación de fase suele ser más devastadora en las frecuencias bajas, donde el cuerpo del sonido desaparece por completo.</p>
+        </SEOCard>
+        <SEOCard title="Textura Metálica" icon="mdi:blur">
+            <p>El filtrado de peine añade una coloración artificial que suena 'hueca' o excesivamente procesada.</p>
+        </SEOCard>
+    </SEOGrid>
+
+    <SEOTitle title="La influencia de la temperatura en el cálculo" level={2} />
+    <p>
+        Muchos técnicos de sonido olvidan que el aire es un medio físico y su densidad cambia con la temperatura. La velocidad del sonido no es una constante inmutable; a 20°C viaja aproximadamente a 343 metros por segundo.
+    </p>
+    <SEOCode code="v = 331.3 + (0.606 * T)" ariaLabel="Fórmula de la velocidad del sonido según la temperatura" />
+
+    <SEOTip title="Compensación Quirúrgica">
+        <p>
+            Unos pocos grados de diferencia pueden desplazar los puntos de cancelación varios hercios. Usar nuestra calculadora con la temperatura real de tu estudio garantiza una alineación perfecta en el DAW.
+        </p>
+    </SEOTip>
+
+    <SEOTitle title="Escenarios críticos de grabación" level={2} />
+    <SEOList items={[
+        "Caja de batería (Snare Top & Bottom): Alinea temporalmente ambos parches para maximizar el punch.",
+        "Overheads y Close-miking: Retrasa los micros cercanos para que coincidan con la fase de los ambientales.",
+        "Guitarras con múltiples micros: Mezcla un dinámico y un cinta sin perder los medios-graves.",
+        "Bajos por DI y Micro: Sincroniza la señal directa con la del amplificador para un sonido masivo."
+    ]} />
+
+    <SEOTitle title="Alineación Física vs. Procesamiento Digital" level={2} />
+    <p>
+        Aunque nuestra utilidad te da los valores para corregir la fase en tu DAW tras la grabación, siempre recomendamos intentar la mejor alineación física posible en el estudio. Mover un micrófono unos milímetros puede ser más efectivo que cualquier procesamiento digital. Sin embargo, en situaciones de directo o cuando ya tienes las pistas grabadas, el cálculo de las muestras de compensación es tu mejor aliado.
+    </p>
+
+    <SEOStats stats={[
+        { label: "Velocidad @ 20°C", value: "343.2 m/s" },
+        { label: "Milisegundos/cm", value: "0.029 ms" },
+        { label: "Samples @ 48kHz", value: "1.4 per cm" }
+    ]} />
+
+    <SEOTitle title="Tabla de referencia: Distancia vs. Primer Nulo" level={2} />
+    <p>
+        Para que te hagas una idea rápida, aquí tienes una tabla de cómo pequeñas diferencias de distancia provocan nulos profundos en diferentes regiones del espectro audible (calculado a 20°C):
+    </p>
+
+    <SEOTable headers={["Diferencia (cm)", "Retraso (ms)", "1er Nulo (Hz)", "Afecta a..."]}>
+        <tr>
+            <td>1 cm</td>
+            <td>0.029</td>
+            <td>17160</td>
+            <td><strong>Extremo agudo</strong></td>
+        </tr>
+        <tr>
+            <td>5 cm</td>
+            <td>0.146</td>
+            <td>3432</td>
+            <td><strong>Medios-agudos</strong> (Brillo)</td>
+        </tr>
+        <tr>
+            <td>10 cm</td>
+            <td>0.291</td>
+            <td>1716</td>
+            <td><strong>Medios</strong> (Presencia)</td>
+        </tr>
+        <tr>
+            <td>30 cm</td>
+            <td>0.874</td>
+            <td>572</td>
+            <td><strong>Medios-graves</strong> (Cuerpo)</td>
+        </tr>
+        <tr>
+            <td>1 metro</td>
+            <td>2.914</td>
+            <td>172</td>
+            <td><strong>Graves</strong> (Fundamental)</td>
+        </tr>
+    </SEOTable>
+
+    <SEOTitle title="Ventajas y desventajas de los métodos de corrección" level={2} />
+    <SEOProsCons 
+        items={[
+            { pro: "Alineación física: Menor degradación de la señal original.", con: "Alineación física: Difícil de ajustar con exactitud micrométrica." },
+            { pro: "Corrección digital: Precisión absoluta a nivel de muestra.", con: "Corrección digital: Puede crear pre-echo si se aplica mal." },
+            { pro: "Inversión de polaridad: Solución instantánea para cancelaciones de 180°.", con: "Inversión de polaridad: No corrige desfases intermedios." },
+            { pro: "Compensación temporal: Recupera el impacto y el punch perdido.", con: "Compensación temporal: Requiere medir con precisión cada micro." }
+        ]}
+    />
+
+    <SEOTip title="¿Cómo detectar problemas de fase de oído?">
+        <p>
+            Pulsa el botón de "Invertir Fase" ($\Phi$). Si al activarlo el sonido gana cuerpo y graves, significa que tus micrófonos estaban fuera de fase. Si el sonido "desaparece" o se vuelve más delgado, estaban correctamente alineados.
+        </p>
+    </SEOTip>
+
+    <SEOTitle title="Compatibilidad Mono y Percepción Estéreo" level={2} />
+    <p>
+        En las grabaciones estéreo, la relación de fase define la estabilidad de la imagen sonora. Si hay inconsistencias graves, el sonido podría desaparecer por completo si la mezcla se reproduce en un sistema mono. Verificar la compatibilidad mono es esencial, y nuestra calculadora te ayuda a predecir qué frecuencias sufrirán más cuando los canales se sumen.
+    </p>
+</SEOArticle>
