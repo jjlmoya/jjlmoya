@@ -14,5 +14,13 @@ export const printing3dSection: SectionData = {
             description: "Calcula el precio real de tus piezas incluyendo material, energía y amortización.",
             color: "#f97316",
         },
+        {
+            href: "/utilidades/calculadora-contraccion-impresion-3d/",
+            iconBg: "mdi:cube-scan",
+            iconFg: "mdi:printer-3d-nozzle",
+            title: "Contracción (Shrinkage)",
+            description: "Ajusta la escala de tus diseños para compensar la pérdida de volumen por enfriamiento.",
+            color: "#0ea5e9",
+        },
     ],
 };

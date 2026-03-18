@@ -1,0 +1,230 @@
+---
+import "./ShrinkageCalculator.css";
+---
+
+<div class="shrinkage-container">
+  <div class="tabs">
+    <div class="tab active" data-tab="presets">Ajustes por Material</div>
+    <div class="tab" data-tab="calibration">Calibración Manual</div>
+  </div>
+
+  <div class="shrinkage-grid">
+    <div class="control-panel">
+      <div id="presets-section">
+        <div class="input-group">
+          <label>Material Predeterminado</label>
+          <div class="material-selector" id="material-selector">
+            <button class="material-btn" data-shrink="1.4" data-mat="ABS">ABS</button>
+            <button class="material-btn" data-shrink="0.7" data-mat="ASA">ASA</button>
+            <button class="material-btn" data-shrink="1.6" data-mat="Nylon">Nylon</button>
+            <button class="material-btn" data-shrink="0.3" data-mat="PETG">PETG</button>
+            <button class="material-btn" data-shrink="0.2" data-mat="PLA">PLA</button>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin-top: 1.5rem;">
+          <label>
+            Contracción Estimada
+            <span class="unit">%</span>
+          </label>
+          <input type="number" id="shrink-input" value="1.4" step="0.1" min="0" max="10" />
+        </div>
+      </div>
+
+      <div id="calibration-section" style="display: none;">
+        <div class="input-group">
+          <label>Medida en Diseño (Slicer)</label>
+          <div class="input-wrapper">
+            <input type="number" id="design-size" value="100" step="0.1" />
+            <span class="unit">mm</span>
+          </div>
+        </div>
+        <div class="input-group" style="margin-top: 1rem;">
+          <label>Medida Pieza Impresa (Real)</label>
+          <div class="input-wrapper">
+            <input type="number" id="real-size" value="98.6" step="0.1" />
+            <span class="unit">mm</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Compensación por Ejes</label>
+        <div class="axes-grid">
+          <div class="input-group">
+            <label>X/Y</label>
+            <input type="number" id="axis-xy" value="100" step="0.01" readonly />
+          </div>
+          <div class="input-group">
+            <label>Z</label>
+            <input type="number" id="axis-z" value="100.1" step="0.01" />
+          </div>
+        </div>
+        <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;">
+          * El eje Z suele contraerse menos debido a la adhesión entre capas.
+        </p>
+      </div>
+
+      <div class="recommendations" id="recommendations">
+        <div class="recommendation-header">
+           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M11 15h2v2h-2zm0-8h2v6h-2zm1-5C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2"/></svg>
+           Recomendación Técnica
+        </div>
+        <p id="recommendation-text">Para ABS, se recomienda una temperatura de cámara de al menos 40°C para minimizar el warping.</p>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <div class="visualization">
+        <div class="cube-container">
+          <div class="cube-target">
+            <div class="face-target front"></div>
+            <div class="face-target back"></div>
+            <div class="face-target right"></div>
+            <div class="face-target left"></div>
+            <div class="face-target top"></div>
+            <div class="face-target bottom"></div>
+          </div>
+          <div class="cube" id="cube-preview">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-card">
+        <div class="result-label">PORCENTAJE DE ESCALA (SLICER)</div>
+        <div class="result-main" id="result-percent">101.42%</div>
+        <div class="result-label">FACTOR MULTIPLICADOR</div>
+        <div class="result-main" style="font-size: 1.5rem;" id="result-factor">1.0142</div>
+      </div>
+
+      <button class="copy-btn" id="copy-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M19 21h-9c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h9c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2M10 7v12h9V7zm-4 7H4V3c0-1.1.9-2 2-2h7v2H6z"/></svg>
+        Copiar Porcentaje
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const presetsSection = document.getElementById('presets-section');
+  const calibrationSection = document.getElementById('calibration-section');
+  const shrinkInput = document.getElementById('shrink-input') as HTMLInputElement;
+  const designSizeInput = document.getElementById('design-size') as HTMLInputElement;
+  const realSizeInput = document.getElementById('real-size') as HTMLInputElement;
+  const axisXYInput = document.getElementById('axis-xy') as HTMLInputElement;
+  const axisZInput = document.getElementById('axis-z') as HTMLInputElement;
+  const resultPercent = document.getElementById('result-percent');
+  const resultFactor = document.getElementById('result-factor');
+  const cubePreview = document.getElementById('cube-preview');
+  const copyBtn = document.getElementById('copy-btn');
+  const materialBtns = document.querySelectorAll('.material-btn');
+  const recommendationText = document.getElementById('recommendation-text');
+
+  let currentMode = 'presets';
+
+  const recommendations = {
+    'ABS': 'Se recomienda una temperatura de cámara de al menos 40°C para minimizar el warping adicional al shrinkage.',
+    'ASA': 'Excelente resistencia UV. Reduce el enfriamiento de capa para mejorar la adhesión estructural.',
+    'Nylon': 'Material muy higroscópico. Secar a 80°C durante 6-8h antes de imprimir para evitar burbujas.',
+    'PETG': 'Menor contracción. Usa un multiplicador de flujo del 95-98% si tienes sobrextrusión en piezas densas.',
+    'PLA': 'Contracción mínima. Asegura un buen flujo de aire (ventilador de capa al 100%) para detalles finos.'
+  };
+
+  function updateResults() {
+    let shrinkagePercent = 0;
+
+    if (currentMode === 'presets') {
+      shrinkagePercent = parseFloat(shrinkInput.value) || 0;
+    } else {
+      const design = parseFloat(designSizeInput.value) || 100;
+      const real = parseFloat(realSizeInput.value) || 100;
+      shrinkagePercent = ((design / real) - 1) * 100;
+      shrinkInput.value = shrinkagePercent.toFixed(2);
+    }
+
+    const s = shrinkagePercent / 100;
+    const factor = 1 / (1 - s);
+    const scalingXY = factor * 100;
+
+    axisXYInput.value = scalingXY.toFixed(2);
+    
+    if (resultPercent) resultPercent.textContent = `${scalingXY.toFixed(2)}%`;
+    if (resultFactor) resultFactor.textContent = factor.toFixed(4);
+
+    const scaleXY = (1 - s);
+    const zFactor = parseFloat(axisZInput.value) / 100;
+    const scaleZ = 1 / zFactor;
+
+    if (cubePreview) {
+      cubePreview.style.transform = `scale3d(${scaleXY}, ${scaleZ}, ${scaleXY})`;
+    }
+  }
+
+  shrinkInput.addEventListener('input', () => {
+    const val = parseFloat(shrinkInput.value) || 0;
+    const factor = 1 / (1 - (val/100));
+    const zVal = 100 + ((factor * 100) - 100) * 0.7;
+    axisZInput.value = zVal.toFixed(2);
+    updateResults();
+  });
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentMode = tab.getAttribute('data-tab') || 'presets';
+      
+      if (currentMode === 'presets') {
+        presetsSection!.style.display = 'block';
+        calibrationSection!.style.display = 'none';
+      } else {
+        presetsSection!.style.display = 'none';
+        calibrationSection!.style.display = 'block';
+      }
+      updateResults();
+    });
+  });
+
+  materialBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      materialBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const val = btn.getAttribute('data-shrink');
+      const mat = btn.getAttribute('data-mat');
+      if (val) {
+        shrinkInput.value = val;
+        const s = parseFloat(val) / 100;
+        const factor = 1 / (1 - s);
+        const zVal = 100 + ((factor * 100) - 100) * 0.7;
+        axisZInput.value = zVal.toFixed(2);
+      }
+      if (mat && recommendationText) {
+        recommendationText.textContent = recommendations[mat as keyof typeof recommendations] || '';
+      }
+      updateResults();
+    });
+  });
+
+  [shrinkInput, designSizeInput, realSizeInput, axisZInput].forEach(input => {
+    input.addEventListener('input', updateResults);
+  });
+
+  copyBtn?.addEventListener('click', () => {
+    const text = resultPercent?.textContent || '';
+    navigator.clipboard.writeText(text);
+    const originalContent = copyBtn.innerHTML;
+    copyBtn.innerHTML = '¡Copiado!';
+    setTimeout(() => {
+      copyBtn.innerHTML = originalContent;
+    }, 2000);
+  });
+
+  updateResults();
+</script>
