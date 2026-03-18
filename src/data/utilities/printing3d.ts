@@ -22,5 +22,13 @@ export const printing3dSection: SectionData = {
             description: "Ajusta la escala de tus diseños para compensar la pérdida de volumen por enfriamiento.",
             color: "#0ea5e9",
         },
+        {
+            href: "/utilidades/calculadora-caudal-volumetrico-impresion-3d/",
+            iconBg: "mdi:speedometer",
+            iconFg: "mdi:printer-3d-nozzle",
+            title: "Caudal Volumétrico",
+            description: "Calcula el limite de velocidad real de tu impresora basándose en el flujo máximo de tu hotend.",
+            color: "#ef4444",
+        },
     ],
 };

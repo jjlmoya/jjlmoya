@@ -84,7 +84,7 @@ describe("SEO: Verificación de Imágenes Open Graph", () => {
             const ogImage = ogImageMatch![1].toLowerCase();
             const twitterImage = twitterImageMatch![1].toLowerCase();
 
-            // Verify file exists in public/
+
             const publicPath = path.join(process.cwd(), "public");
             const imageRelativePath = ogImage.startsWith("/") ? ogImage : ogImage.replace(/^https?:\/\/[^\/]+/, "");
             const imageFilePath = path.join(publicPath, imageRelativePath);

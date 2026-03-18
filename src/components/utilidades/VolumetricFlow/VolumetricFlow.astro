@@ -1,0 +1,333 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="volumetric-flow" id="main-tool">
+    <header class="tool-header">
+        <h2>Calculadora de Caudal 3D</h2>
+        <div class="toggle-simple active" id="auto-link">
+            <span>AJUSTE AUTO 120%</span>
+            <div class="toggle-box"><div class="toggle-knob"></div></div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="subsection">
+                <div class="subsection-title"><Icon name="mdi:settings" /> CONFIGURACIÓN</div>
+                
+                <div class="control-item">
+                    <div class="control-label-row">
+                        <label>BOQUILLA</label>
+                        <span class="control-value" id="nozzle-v">0.40 mm</span>
+                    </div>
+                    <input type="range" class="flat-range" id="nozzle-in" min="0.1" max="1.2" step="0.05" value="0.4" />
+                </div>
+
+                <div class="control-item">
+                    <div class="control-label-row">
+                        <label>ANCHO LÍNEA</label>
+                        <span class="control-value" id="width-v">0.48 mm</span>
+                    </div>
+                    <input type="range" class="flat-range" id="width-in" min="0.1" max="1.8" step="0.01" value="0.48" disabled />
+                </div>
+
+                <div class="control-item">
+                    <div class="control-label-row">
+                        <label>ALTURA CAPA</label>
+                        <span class="control-value" id="layer-v">0.20 mm</span>
+                    </div>
+                    <input type="range" class="flat-range" id="layer-in" min="0.05" max="1.0" step="0.01" value="0.2" />
+                </div>
+
+                <div class="control-item">
+                    <div class="control-label-row">
+                        <label>VELOCIDAD</label>
+                        <span class="control-value" id="speed-v">60 mm/s</span>
+                    </div>
+                    <input type="range" class="flat-range" id="speed-in" min="10" max="600" step="5" value="60" />
+                </div>
+
+                <div class="control-item">
+                    <div class="control-label-row">
+                        <label>TEMPERATURA</label>
+                        <span class="control-value" id="temp-v">210 °C</span>
+                    </div>
+                    <input type="range" class="flat-range" id="temp-in" min="180" max="320" step="5" value="210" />
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title"><Icon name="mdi:flask" /> MATERIAL</div>
+                <div class="material-grid" id="mat-chips">
+                    <button class="chip-select active" data-mod="1.0" data-name="PLA">PLA</button>
+                    <button class="chip-select" data-mod="0.85" data-name="PETG">PETG</button>
+                    <button class="chip-select" data-mod="0.95" data-name="ABS">ABS/ASA</button>
+                    <button class="chip-select" data-mod="0.70" data-name="TPU">TPU/FLEX</button>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <div class="subsection-title">
+                    <Icon name="mdi:hot-tub" /> LÍMITE HOTEND
+                    <span class="tooltip-trigger" data-tooltip="Capacidad base de fundido del hardware sin considerar material ni temperatura."><Icon name="mdi:information-outline" /></span>
+                </div>
+                <div class="preset-list">
+                    <button class="flat-button active" data-flow="10" data-tooltip="Estándar MK8/V6. Zona de fundido corta.">Ender-3 (10)</button>
+                    <button class="flat-button" data-flow="22" data-tooltip="Hotend cerámico de alta velocidad.">Bambu (22)</button>
+                    <button class="flat-button" data-flow="35" data-tooltip="Zona de fundido extra larga de 21mm.">Volcano (35)</button>
+                    <button class="flat-button" data-flow="50" data-tooltip="Extrusores custom de altísimo rendimiento.">HF Pro (50)</button>
+                </div>
+                <div class="control-item" style="margin-top: 1.5rem;">
+                    <div class="control-label-row">
+                        <label>LÍMITE BASE</label>
+                        <span class="control-value" id="limit-v">10.0 mm³/s</span>
+                    </div>
+                    <input type="range" class="flat-range" id="limit-in" min="1" max="100" step="0.5" value="10" />
+                </div>
+            </div>
+
+            <div class="reset-row">
+                <button class="btn-outline" id="reset-btn">Restablecer valores</button>
+            </div>
+        </aside>
+
+        <div class="content-area">
+            <div class="hero-display" id="flow-panel">
+                <div class="hero-label">CAUDAL VOLUMÉTRICO REAL</div>
+                <div class="hero-value" id="val-flow">5.76</div>
+                <div class="hero-unit">MM³/S</div>
+                <div class="limit-indicator">
+                    <div class="limit-fill" id="fill-flow"></div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box" id="speed-panel">
+                    <div class="stat-label-box">VELOCIDAD MÁXIMA</div>
+                    <div class="stat-value-box" id="val-max-s">125 mm/s</div>
+                </div>
+                <div class="stat-box" id="status-panel">
+                    <div class="stat-label-box">ESTADO</div>
+                    <div class="stat-value-box" id="val-status">SEGURO</div>
+                </div>
+            </div>
+
+            <div class="subsection" style="margin-bottom: 0;">
+                <div class="subsection-title"><Icon name="mdi:chart-areaspline" /> RENDIMIENTO ESTRATIFICADO</div>
+                <div class="chart-area-flat" id="chart-area">
+                    <svg viewBox="0 0 400 200" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible;" id="svg-c">
+                        <line x1="0" y1="40" x2="400" y2="40" stroke="var(--border)" stroke-width="1" />
+                        <line x1="0" y1="80" x2="400" y2="80" stroke="var(--border)" stroke-width="1" />
+                        <line x1="0" y1="120" x2="400" y2="120" stroke="var(--border)" stroke-width="1" />
+                        <line x1="0" y1="160" x2="400" y2="160" stroke="var(--border)" stroke-width="1" />
+                        
+                        <line x1="80" y1="0" x2="80" y2="200" stroke="var(--border)" stroke-width="1" />
+                        <line x1="160" y1="0" x2="160" y2="200" stroke="var(--border)" stroke-width="1" />
+                        <line x1="240" y1="0" x2="240" y2="200" stroke="var(--border)" stroke-width="1" />
+                        <line x1="320" y1="0" x2="320" y2="200" stroke="var(--border)" stroke-width="1" />
+
+                        <path id="svg-p" fill="hsla(195, 100%, 50%, 0.1)" stroke="var(--secondary)" stroke-width="3" d="" />
+                        <circle id="svg-m-c" r="7" fill="var(--text)" stroke="var(--success)" stroke-width="3" cx="0" cy="0" />
+
+                        <text x="0" y="215" class="axis-label" id="label-x-start">0.05</text>
+                        <text x="380" y="215" class="axis-label" id="label-x-end">1.00</text>
+                        <text x="-35" y="10" class="axis-label" style="text-anchor: end;">600</text>
+                        <text x="-35" y="200" class="axis-label" style="text-anchor: end;">0</text>
+                    </svg>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); padding-top: 1.5rem; font-weight: 700;">
+                    <span>ALTURA CAPA (MM)</span>
+                    <span>LÍMITE VELOCIDAD (MM/S)</span>
+                    <span>GAMA SEGURA</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="copy-action" id="copy-v">
+        <Icon name="mdi:content-copy" />
+        COPIAR LÍMITE EFECTIVO
+    </button>
+</div>
+
+<script>
+    class AdvancedFlowAgent {
+        nI: HTMLInputElement; wI: HTMLInputElement; lI: HTMLInputElement; sI: HTMLInputElement; limI: HTMLInputElement; tI: HTMLInputElement;
+        nv: HTMLElement; wv: HTMLElement; lv: HTMLElement; sv: HTMLElement; limv: HTMLElement; tv: HTMLElement;
+        fV: HTMLElement; sV: HTMLElement; stV: HTMLElement; fiF: HTMLElement;
+        sP: SVGPathElement; sMC: SVGCircleElement;
+        fP: HTMLElement; sPn: HTMLElement; stPn: HTMLElement;
+
+        isAuto = true;
+        matMod = 1.0;
+        
+        constructor() {
+            this.nI = document.getElementById('nozzle-in') as HTMLInputElement;
+            this.wI = document.getElementById('width-in') as HTMLInputElement;
+            this.lI = document.getElementById('layer-in') as HTMLInputElement;
+            this.sI = document.getElementById('speed-in') as HTMLInputElement;
+            this.limI = document.getElementById('limit-in') as HTMLInputElement;
+            this.tI = document.getElementById('temp-in') as HTMLInputElement;
+
+            this.nv = document.getElementById('nozzle-v')!;
+            this.wv = document.getElementById('width-v')!;
+            this.lv = document.getElementById('layer-v')!;
+            this.sv = document.getElementById('speed-v')!;
+            this.limv = document.getElementById('limit-v')!;
+            this.tv = document.getElementById('temp-v')!;
+
+            this.fV = document.getElementById('val-flow')!;
+            this.sV = document.getElementById('val-max-s')!;
+            this.stV = document.getElementById('val-status')!;
+            this.fiF = document.getElementById('fill-flow')!;
+            
+            this.sP = document.getElementById('svg-p') as unknown as SVGPathElement;
+            this.sMC = document.getElementById('svg-m-c') as unknown as SVGCircleElement;
+            this.fP = document.getElementById('flow-panel')!;
+            this.sPn = document.getElementById('speed-panel')!;
+            this.stPn = document.getElementById('status-panel')!;
+
+            this.init();
+        }
+
+        init() {
+            const upd = () => this.run();
+            const inputs = [this.nI, this.wI, this.lI, this.sI, this.limI, this.tI];
+            inputs.forEach(i => i.addEventListener('input', upd));
+
+            document.getElementById('auto-link')?.addEventListener('click', (e) => {
+                const el = e.currentTarget as HTMLElement;
+                this.isAuto = !this.isAuto;
+                el.classList.toggle('active', this.isAuto);
+                this.wI.disabled = this.isAuto;
+                this.run();
+            });
+
+            document.querySelectorAll('.chip-select').forEach(c => {
+                c.addEventListener('click', () => {
+                    document.querySelectorAll('.chip-select').forEach(x => x.classList.remove('active'));
+                    c.classList.add('active');
+                    this.matMod = parseFloat(c.getAttribute('data-mod')!);
+                    this.run();
+                });
+            });
+
+            document.querySelectorAll('.flat-button').forEach(b => {
+                b.addEventListener('click', () => {
+                    document.querySelectorAll('.flat-button').forEach(x => x.classList.remove('active'));
+                    b.classList.add('active');
+                    this.limI.value = b.getAttribute('data-flow')!;
+                    this.run();
+                });
+            });
+
+            document.getElementById('reset-btn')?.addEventListener('click', () => {
+                this.nI.value = "0.4";
+                this.lI.value = "0.2";
+                this.sI.value = "60";
+                this.tI.value = "210";
+                if (!this.isAuto) document.getElementById('auto-link')?.click();
+                this.run();
+            });
+
+            document.getElementById('copy-v')?.addEventListener('click', () => {
+                const base = parseFloat(this.limI.value);
+                const temp = parseInt(this.tI.value);
+                const tMod = 1 + (temp - 210) * 0.005;
+                const eff = (base * this.matMod * tMod).toFixed(2);
+                navigator.clipboard.writeText(eff);
+                const btn = document.getElementById('copy-v')!;
+                const old = btn.innerHTML;
+                btn.textContent = 'VALOR COPIADO';
+                setTimeout(() => btn.innerHTML = old, 1500);
+            });
+
+            this.run();
+        }
+
+        run() {
+            const n = parseFloat(this.nI.value);
+            const l = parseFloat(this.lI.value);
+            const s = parseFloat(this.sI.value);
+            const lim = parseFloat(this.limI.value);
+            const temp = parseInt(this.tI.value);
+
+            if (this.isAuto) this.wI.value = (n * 1.2).toFixed(2);
+            const w = parseFloat(this.wI.value);
+
+            const tMod = 1 + (temp - 210) * 0.005;
+            const effLimit = lim * this.matMod * tMod;
+            const flow = w * l * s;
+            const maxS = effLimit / (w * l);
+            const perc = (flow / effLimit) * 100;
+
+            this.nv.textContent = `${n.toFixed(2)} mm`;
+            this.wv.textContent = `${w.toFixed(2)} mm`;
+            this.lv.textContent = `${l.toFixed(2)} mm`;
+            this.sv.textContent = `${Math.round(s)} mm/s`;
+            this.limv.textContent = `${lim.toFixed(1)} mm³/s`;
+            this.tv.textContent = `${temp} °C`;
+
+            this.fV.textContent = flow.toFixed(2);
+            this.sV.textContent = `${Math.round(maxS)} mm/s`;
+            this.fiF.style.width = `${Math.min(perc, 100)}%`;
+
+            const isOver = perc > 100;
+            this.updateAlerts(isOver, perc);
+            this.draw(w, effLimit, l, s, n);
+        }
+
+        updateAlerts(isOver: boolean, perc: number) {
+            const status = this.stV;
+            const panels = [this.fP, this.sPn, this.stPn];
+            
+            panels.forEach(p => p.classList.toggle('danger-state', isOver));
+            status.classList.toggle('danger-text', isOver);
+
+            if (isOver) {
+                status.textContent = 'ALERTA: FALLO';
+                this.fiF.style.background = '#ff4400';
+            } else if (perc > 80) {
+                status.textContent = 'LÍMITE CRÍTICO';
+                status.style.color = '#ffcc00';
+                this.fiF.style.background = '#ffcc00';
+            } else {
+                status.textContent = 'SEGURO';
+                status.style.color = '#00ffcc';
+                this.fiF.style.background = '#00ffcc';
+            }
+        }
+
+        draw(w: number, limit: number, curL: number, curS: number, n: number) {
+            const xMax = Math.max(1.0, n * 1.5);
+            document.getElementById('label-x-end')!.textContent = xMax.toFixed(2);
+
+            let d = "M 0 200";
+            for (let i = 0; i <= 40; i++) {
+                const h = 0.05 + (i / 40) * (xMax - 0.05);
+                const mS = Math.min(limit / (w * h), 600);
+                const x = (i / 40) * 400;
+                const y = 200 - (mS / 600) * 200;
+                d += ` L ${x} ${y}`;
+            }
+            d += ` L 400 200 Z`;
+            this.sP.setAttribute('d', d);
+
+            const mX = ((curL - 0.05) / (xMax - 0.05)) * 400;
+            const mY = 200 - (Math.min(curS, 600) / 600) * 200;
+            this.sMC.setAttribute('cx', mX.toString());
+            this.sMC.setAttribute('cy', mY.toString());
+
+            const maxSAtL = limit / (w * curL);
+            this.sMC.setAttribute('stroke', curS > maxSAtL ? '#ff4400' : '#00ffcc');
+            this.sP.setAttribute('fill', curS > maxSAtL ? 'rgba(255, 68, 0, 0.1)' : 'rgba(0, 212, 255, 0.1)');
+        }
+    }
+
+    new AdvancedFlowAgent();
+</script>
+
+<style>
+    @import "./VolumetricFlow.css";
+</style>
