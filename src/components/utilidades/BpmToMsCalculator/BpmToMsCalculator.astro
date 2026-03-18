@@ -1,0 +1,247 @@
+---
+import './BpmToMsCalculator.css';
+---
+
+<div class="bpm-calc" id="bpm-calculator">
+    <header class="bpm-calc__header">
+        <div class="bpm-calc__field">
+            <label for="bpm-input" class="bpm-calc__label">TEMPO (BPM)</label>
+            <div class="bpm-calc__input-wrapper">
+                <input 
+                    type="number" 
+                    id="bpm-input" 
+                    class="bpm-calc__input-main" 
+                    value="120" 
+                    min="30" 
+                    max="999" 
+                    step="0.1"
+                    aria-label="Introducir BPM"
+                />
+            </div>
+        </div>
+
+        <button id="tap-tempo-btn" class="bpm-calc__tap-btn" title="Haz clic rítmicamente">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z" />
+            </svg>
+            TAP TEMPO
+        </button>
+    </header>
+
+    <div class="bpm-calc__sections" id="results-sections">
+        <section class="bpm-calc__card">
+            <h2 class="bpm-calc__card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 10-6 6"/><path d="m16 10-4 4"/><path d="m12 10-2 2"/><path d="M7 21a2.82 2.82 0 0 1-4-4l14-14a2.82 2.82 0 0 1 4 4z"/></svg>
+                Tiempos de Delay
+            </h2>
+            <div class="bpm-calc__table-wrapper">
+                <table class="bpm-calc__table">
+                    <thead>
+                        <tr>
+                            <th class="bpm-calc__th">Nota</th>
+                            <th class="bpm-calc__th">ms</th>
+                            <th class="bpm-calc__th">Hz</th>
+                            <th class="bpm-calc__th"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="simple-notes-body" class="bpm-calc__tbody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bpm-calc__card">
+            <h2 class="bpm-calc__card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg>
+                Notas con Puntillo
+            </h2>
+            <div class="bpm-calc__table-wrapper">
+                <table class="bpm-calc__table">
+                    <thead>
+                        <tr>
+                            <th class="bpm-calc__th">Nota</th>
+                            <th class="bpm-calc__th">ms</th>
+                            <th class="bpm-calc__th">Hz</th>
+                            <th class="bpm-calc__th"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="dotted-notes-body" class="bpm-calc__tbody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bpm-calc__card">
+            <h2 class="bpm-calc__card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13V5c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v8"/><path d="M3 21h18"/><path d="M7 11v10"/><path d="M11 11v10"/><path d="M15 11v10"/><path d="M19 11v10"/></svg>
+                Tresillos de Nota
+            </h2>
+            <div class="bpm-calc__table-wrapper">
+                <table class="bpm-calc__table">
+                    <thead>
+                        <tr>
+                            <th class="bpm-calc__th">Nota</th>
+                            <th class="bpm-calc__th">ms</th>
+                            <th class="bpm-calc__th">Hz</th>
+                            <th class="bpm-calc__th"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="triplet-notes-body" class="bpm-calc__tbody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bpm-calc__card bpm-calc__extra-section">
+            <h2 class="bpm-calc__card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V6"/><path d="M18.5 18a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 12H3"/><path d="M16 6H3"/><path d="M12 18H3"/></svg>
+                Diseño de Reverb (Pre-delay)
+            </h2>
+            <p class="bpm-calc__info">
+                El <strong>Pre-delay</strong> separa el ataque original de la cola de reverb para ganar claridad.
+            </p>
+            <div class="bpm-calc__pre-delay-grid" id="pre-delay-container">
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    const bpmInput = document.getElementById('bpm-input') as HTMLInputElement | null;
+    const tapTempoBtn = document.getElementById('tap-tempo-btn') as HTMLButtonElement | null;
+    const simpleNotesBody = document.getElementById('simple-notes-body');
+    const dottedNotesBody = document.getElementById('dotted-notes-body');
+    const tripletNotesBody = document.getElementById('triplet-notes-body');
+    const preDelayContainer = document.getElementById('pre-delay-container');
+
+    let tapTimes: number[] = [];
+
+    interface Subdivision {
+        name: string;
+        factor: number;
+    }
+
+    const NOTE_SUBDIVISIONS: Subdivision[] = [
+        { name: 'Redonda (1/1)', factor: 4 },
+        { name: 'Blanca (1/2)', factor: 2 },
+        { name: 'Negra (1/4)', factor: 1 },
+        { name: 'Corchea (1/8)', factor: 0.5 },
+        { name: 'Semicorchea (1/16)', factor: 0.25 },
+        { name: 'Fusa (1/32)', factor: 0.125 },
+        { name: 'Semifusa (1/64)', factor: 0.0625 }
+    ];
+
+    const PRE_DELAY_SUBDIVISIONS: Subdivision[] = [
+        { name: '1/64', factor: 0.0625 },
+        { name: '1/128', factor: 0.03125 },
+        { name: '1/256', factor: 0.015625 }
+    ];
+
+    function calculateValues() {
+        if (!bpmInput) return;
+        let bpm = parseFloat(bpmInput.value);
+        if (isNaN(bpm) || bpm < 1) bpm = 120;
+        if (bpm > 999) bpm = 999; 
+        
+        const baseMs = 60000 / bpm;
+
+        if (simpleNotesBody) updateTable(simpleNotesBody, NOTE_SUBDIVISIONS, baseMs, 1);
+        if (dottedNotesBody) updateTable(dottedNotesBody, NOTE_SUBDIVISIONS, baseMs, 1.5);
+        if (tripletNotesBody) updateTable(tripletNotesBody, NOTE_SUBDIVISIONS, baseMs, 2/3);
+        if (preDelayContainer) updatePreDelay(baseMs);
+    }
+
+    function createRow(name: string, ms: number, hz: number) {
+        const tr = document.createElement('tr');
+        tr.className = 'bpm-calc__row';
+        tr.innerHTML = `
+            <td class="bpm-calc__td bpm-calc__note-name">${name}</td>
+            <td class="bpm-calc__td bpm-calc__ms-value">${ms.toFixed(2)}</td>
+            <td class="bpm-calc__td bpm-calc__hz-value">${hz.toFixed(2)}</td>
+            <td class="bpm-calc__td">
+                <button class="bpm-calc__copy" data-value="${ms.toFixed(2)}" aria-label="Copiar milisegundos" data-copy-feedback="¡Copiado!">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            </td>
+        `;
+        return tr;
+    }
+
+    function updateTable(tbody: HTMLElement, subdivisions: Subdivision[], baseMs: number, modifier: number) {
+        tbody.innerHTML = '';
+        subdivisions.forEach(sub => {
+            const ms = baseMs * sub.factor * modifier;
+            const hz = 1000 / ms;
+            tbody.appendChild(createRow(sub.name, ms, hz));
+        });
+    }
+
+    function updatePreDelay(baseMs: number) {
+        if (!preDelayContainer) return;
+        preDelayContainer.innerHTML = '';
+        PRE_DELAY_SUBDIVISIONS.forEach(sub => {
+            const ms = baseMs * sub.factor;
+            const div = document.createElement('div');
+            div.className = 'bpm-calc__pre-delay-card';
+            div.innerHTML = `
+                <div class="bpm-calc__pre-delay-info">
+                    <span class="bpm-calc__pre-delay-type">${sub.name} Nota</span>
+                    <span class="bpm-calc__pre-delay-ms">${ms.toFixed(2)}</span>
+                </div>
+                <button class="bpm-calc__copy" data-value="${ms.toFixed(2)}" aria-label="Copiar pre-delay" data-copy-feedback="¡Copiado!">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            `;
+            preDelayContainer.appendChild(div);
+        });
+    }
+
+    function handleTap() {
+        if (!bpmInput || !tapTempoBtn) return;
+        const now = Date.now();
+        tapTimes.push(now);
+        
+        if (tapTimes.length > 5) {
+            tapTimes.shift();
+        }
+
+        if (tapTimes.length > 1) {
+            const diffs: number[] = [];
+            for (let i = 1; i < tapTimes.length; i++) {
+                diffs.push(tapTimes[i] - tapTimes[i - 1]);
+            }
+            const avgDiff = diffs.reduce((a, b) => a + b) / diffs.length;
+            const bpm = 60000 / avgDiff;
+            bpmInput.value = bpm.toFixed(1);
+            calculateValues();
+        }
+
+        tapTempoBtn.classList.add('bpm-calc__tap-btn--active');
+        setTimeout(() => tapTempoBtn?.classList.remove('bpm-calc__tap-btn--active'), 100);
+    }
+
+    bpmInput?.addEventListener('input', calculateValues);
+    tapTempoBtn?.addEventListener('click', handleTap);
+
+    document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const btn = target.closest('.bpm-calc__copy');
+        if (btn) {
+            const val = btn.getAttribute('data-value');
+            if (val) {
+                navigator.clipboard.writeText(val).then(() => {
+                    btn.classList.add('bpm-calc__copy--success');
+                    setTimeout(() => btn.classList.remove('bpm-calc__copy--success'), 2000);
+                });
+            }
+        }
+    });
+
+    setInterval(() => {
+        if (tapTimes.length > 0 && Date.now() - tapTimes[tapTimes.length - 1] > 3000) {
+            tapTimes = [];
+        }
+    }, 1000);
+
+    calculateValues();
+</script>
