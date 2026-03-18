@@ -46,7 +46,7 @@ function getPages(dir: string, baseRoute: string = ""): string[] {
 
 const pages = getPages(PAGES_DIR);
 
-describe.skip("SEO: Verificación de Imágenes Open Graph", () => {
+describe("SEO: Verificación de Imágenes Open Graph", () => {
     pages.forEach((pagePath) => {
         if (pagePath === "/" || pagePath === "/404/") return;
 
@@ -83,6 +83,16 @@ describe.skip("SEO: Verificación de Imágenes Open Graph", () => {
 
             const ogImage = ogImageMatch![1].toLowerCase();
             const twitterImage = twitterImageMatch![1].toLowerCase();
+
+            // Verify file exists in public/
+            const publicPath = path.join(process.cwd(), "public");
+            const imageRelativePath = ogImage.startsWith("/") ? ogImage : ogImage.replace(/^https?:\/\/[^\/]+/, "");
+            const imageFilePath = path.join(publicPath, imageRelativePath);
+            
+            expect(
+                fs.existsSync(imageFilePath),
+                `FALLO CRÍTICO: El archivo de imagen "${ogImage}" referenciado en "${pagePath}" NO EXISTE en el disco (Ruta: ${imageFilePath})`
+            ).toBe(true);
 
             FORBIDDEN_IMAGES.forEach((forbidden) => {
                 const isForbiddenOG = ogImage.endsWith(forbidden.toLowerCase());
