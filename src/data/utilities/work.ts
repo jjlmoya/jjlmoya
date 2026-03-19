@@ -7,6 +7,14 @@ export const workSection: SectionData = {
     theme: "blue",
     utilities: [
         {
+            title: "Calculadora IRPF 2026",
+            description: "Simulador de sueldo neto mensual y anual actualizado con la normativa fiscal española de 2026.",
+            href: "/utilidades/calculadora-irpf-2026/",
+            iconBg: "mdi:calculator-variant-outline",
+            iconFg: "mdi:cash-multiple",
+            color: "#4f46e5",
+        },
+        {
             title: "Simulador Sueldo Neto",
             description:
                 "¿Cuánto llega a tu banco? Cálculo real de IRPF y Seguridad Social en España.",
