@@ -10,23 +10,29 @@ import './FrequencyNoteConverter.css';
     </div>
 
     <div class="fnc__calibration-bar">
-        <span class="fnc__cal-label">Referencia A4</span>
-        <div class="fnc__cal-presets">
-            <button class="fnc__cal-preset fnc__cal-preset--active" data-ref="440">440 Hz</button>
-            <button class="fnc__cal-preset" data-ref="432">432 Hz</button>
-            <button class="fnc__cal-preset" data-ref="444">444 Hz</button>
+        <div class="fnc__cal-main">
+            <span class="fnc__cal-label">Referencia A4</span>
+            <div class="fnc__cal-presets">
+                <button class="fnc__cal-preset fnc__cal-preset--active" data-ref="440">440 Hz</button>
+                <button class="fnc__cal-preset" data-ref="432">432 Hz</button>
+                <button class="fnc__cal-preset" data-ref="444">444 Hz</button>
+            </div>
+            <input
+                type="number"
+                id="ref-input"
+                class="fnc__cal-custom"
+                value="440"
+                min="400"
+                max="480"
+                step="0.5"
+                aria-label="Frecuencia de referencia A4 personalizada"
+            />
+            <span class="fnc__cal-unit">Hz</span>
         </div>
-        <input
-            type="number"
-            id="ref-input"
-            class="fnc__cal-custom"
-            value="440"
-            min="400"
-            max="480"
-            step="0.5"
-            aria-label="Frecuencia de referencia A4 personalizada"
-        />
-        <span class="fnc__cal-unit">Hz</span>
+        <p class="fnc__cal-info">
+            <strong>440 Hz</strong> es el estándar internacional. 
+            <strong>432 Hz</strong> se usa a menudo en música de meditación y solfeggio.
+        </p>
     </div>
 
     <div class="fnc__main-panel" id="panel-hz-to-note">
@@ -102,9 +108,17 @@ import './FrequencyNoteConverter.css';
 
     <div class="fnc__main-panel fnc__main-panel--hidden" id="panel-note-to-hz">
         <div class="fnc__note-selector">
+            <label class="fnc__select-label" for="note-text-input">NOMBRE DE LA NOTA (Ej: La4, A4, C#3)</label>
+            <input 
+                type="text" 
+                id="note-text-input" 
+                class="fnc__text-input" 
+                placeholder="Escribe la nota..." 
+                aria-label="Introducir nombre de nota"
+            />
             <div class="fnc__note-dropdowns">
                 <div class="fnc__select-group">
-                    <label class="fnc__select-label" for="note-select">NOTA</label>
+                    <label class="fnc__select-label" for="note-select">ESTABLECER NOTA</label>
                     <select id="note-select" class="fnc__select" aria-label="Seleccionar nota">
                         <option value="0">Do (C)</option>
                         <option value="1">Do# / Reb</option>
@@ -121,7 +135,7 @@ import './FrequencyNoteConverter.css';
                     </select>
                 </div>
                 <div class="fnc__select-group">
-                    <label class="fnc__select-label" for="octave-select">OCTAVA</label>
+                    <label class="fnc__select-label" for="octave-select">ESTABLECER OCTAVA</label>
                     <select id="octave-select" class="fnc__select" aria-label="Seleccionar octava">
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -356,13 +370,19 @@ import './FrequencyNoteConverter.css';
         addToHistory(hz.toFixed(2), noteName);
     }
 
-    function updateNoteToHz(): void {
+    function updateNoteToHz(fromInput = false): void {
         const noteSelect = document.getElementById('note-select') as HTMLSelectElement | null;
         const octaveSelect = document.getElementById('octave-select') as HTMLSelectElement | null;
-        if (!noteSelect || !octaveSelect) return;
+        const noteTextInput = document.getElementById('note-text-input') as HTMLInputElement | null;
+        if (!noteSelect || !octaveSelect || !noteTextInput) return;
 
         const noteIndex = parseInt(noteSelect.value);
         const octave = parseInt(octaveSelect.value);
+
+        if (!fromInput) {
+            noteTextInput.value = NOTE_NAMES_ES[noteIndex] + octave;
+        }
+
         const midi = noteIndexAndOctaveToMidi(noteIndex, octave);
         const hz = midiToHz(midi);
 
@@ -379,6 +399,43 @@ import './FrequencyNoteConverter.css';
         if (harmUp) harmUp.textContent = `${(hz * 2).toFixed(2)} Hz`;
 
         updatePianoHighlight(noteIndex);
+    }
+
+    function parseNoteInput(input: string): { noteIndex: number; octave: number } | null {
+        const clean = input.trim().toUpperCase();
+        if (!clean) return null;
+
+        const match = clean.match(/^([A-G]|DO|RE|MI|FA|SOL|LA|SI)(#|B|SHARP|FLAT)?(\d)?$/i);
+        if (!match) return null;
+
+        let noteStr = match[1];
+        const modifier = match[2];
+        const octaveStr = match[3];
+
+        let noteIndex = -1;
+        const enNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const esNotes = ['DO', 'DO#', 'RE', 'RE#', 'MI', 'FA', 'FA#', 'SOL', 'SOL#', 'LA', 'LA#', 'SI'];
+
+        // Map English
+        noteIndex = enNotes.indexOf(noteStr);
+        if (noteIndex === -1) {
+            // Map Spanish
+            noteIndex = esNotes.indexOf(noteStr);
+        }
+
+        if (noteIndex === -1) return null;
+
+        // Apply modifier
+        if (modifier) {
+            if (modifier === '#' || modifier.toUpperCase() === 'SHARP') {
+                noteIndex = (noteIndex + 1) % 12;
+            } else if (modifier.toUpperCase() === 'B' || modifier.toUpperCase() === 'FLAT') {
+                noteIndex = (noteIndex - 1 + 12) % 12;
+            }
+        }
+
+        const octave = octaveStr ? parseInt(octaveStr) : 4;
+        return { noteIndex, octave };
     }
 
     function switchMode(mode: 'hz' | 'note'): void {
@@ -491,8 +548,22 @@ import './FrequencyNoteConverter.css';
         document.getElementById('btn-hz-to-note')?.addEventListener('click', () => switchMode('hz'));
         document.getElementById('btn-note-to-hz')?.addEventListener('click', () => switchMode('note'));
 
-        document.getElementById('note-select')?.addEventListener('change', updateNoteToHz);
-        document.getElementById('octave-select')?.addEventListener('change', updateNoteToHz);
+        document.getElementById('note-select')?.addEventListener('change', () => updateNoteToHz());
+        document.getElementById('octave-select')?.addEventListener('change', () => updateNoteToHz());
+
+        document.getElementById('note-text-input')?.addEventListener('input', (e) => {
+            const val = (e.target as HTMLInputElement).value;
+            const parsed = parseNoteInput(val);
+            if (parsed) {
+                const noteSelect = document.getElementById('note-select') as HTMLSelectElement;
+                const octaveSelect = document.getElementById('octave-select') as HTMLSelectElement;
+                if (noteSelect && octaveSelect) {
+                    noteSelect.value = String(parsed.noteIndex);
+                    octaveSelect.value = String(parsed.octave);
+                    updateNoteToHz(true);
+                }
+            }
+        });
 
         document.getElementById('play-btn-hz')?.addEventListener('click', () => {
             const hzInput = document.getElementById('hz-input') as HTMLInputElement | null;
