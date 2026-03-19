@@ -408,7 +408,7 @@ import './FrequencyNoteConverter.css';
         const match = clean.match(/^([A-G]|DO|RE|MI|FA|SOL|LA|SI)(#|B|SHARP|FLAT)?(\d)?$/i);
         if (!match) return null;
 
-        let noteStr = match[1];
+        const noteStr = match[1];
         const modifier = match[2];
         const octaveStr = match[3];
 
@@ -416,16 +416,13 @@ import './FrequencyNoteConverter.css';
         const enNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         const esNotes = ['DO', 'DO#', 'RE', 'RE#', 'MI', 'FA', 'FA#', 'SOL', 'SOL#', 'LA', 'LA#', 'SI'];
 
-        // Map English
         noteIndex = enNotes.indexOf(noteStr);
         if (noteIndex === -1) {
-            // Map Spanish
             noteIndex = esNotes.indexOf(noteStr);
         }
 
         if (noteIndex === -1) return null;
 
-        // Apply modifier
         if (modifier) {
             if (modifier === '#' || modifier.toUpperCase() === 'SHARP') {
                 noteIndex = (noteIndex + 1) % 12;
