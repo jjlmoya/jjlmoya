@@ -71,5 +71,13 @@ export const workSection: SectionData = {
             iconFg: "mdi:calculator-variant",
             color: "#10b981",
         },
+        {
+            title: "Verificador NIE/NIF/CIF",
+            description: "Comprueba instantáneamente si un número de identificación fiscal español es válido.",
+            href: "/utilidades/verificador-nie-nif/",
+            iconBg: "mdi:card-account-details-outline",
+            iconFg: "mdi:check-decagram-outline",
+            color: "#3b82f6",
+        },
     ],
 };

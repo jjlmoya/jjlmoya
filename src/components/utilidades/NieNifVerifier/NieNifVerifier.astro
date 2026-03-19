@@ -1,0 +1,107 @@
+---
+import "./NieNifVerifier.css";
+---
+
+<div class="nie-nif-container">
+    <div class="verifier-card">
+        <div class="verifier-wrapper" id="verifier-wrapper">
+            <label for="identifier-input" class="label-hint">Introducir identificación española</label>
+            
+            <input 
+                type="text" 
+                id="identifier-input" 
+                class="input-box" 
+                placeholder="45938210Y" 
+                maxlength="11"
+                autocomplete="off"
+            />
+
+            <div id="status-info" class="status-info">
+                <span id="st-title" class="status-title">---</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    class IdentifierValidator {
+        static validateNIF(nif: string): boolean {
+            const letters = "TRWAGMYFPDXBNJZSQVHLCKE";
+            const regex = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/;
+            const upperNif = nif.toUpperCase().replace(/[\s-]/g, '');
+            if(!regex.test(upperNif)) return false;
+            const dni = parseInt(upperNif.slice(0, 8), 10);
+            return letters[dni % 23] === upperNif.charAt(8);
+        }
+
+        static validateNIE(nie: string): boolean {
+            const letters = "TRWAGMYFPDXBNJZSQVHLCKE";
+            const regex = /^[XYZ][0-9]{7}[TRWAGMYFPDXBNJZSQVHLCKE]$/;
+            const upperNie = nie.toUpperCase().replace(/[\s-]/g, '');
+            if(!regex.test(upperNie)) return false;
+            const nieNum = upperNie.replace('X', '0').replace('Y', '1').replace('Z', '2');
+            const num = parseInt(nieNum.slice(0, 8), 10);
+            return letters[num % 23] === upperNie.charAt(8);
+        }
+
+        static validateCIF(cif: string): boolean {
+            const regex = /^[ABCDEFGHJNPQRSUVW][0-9]{7}[0-9A-J]$/;
+            const upperCif = cif.toUpperCase().replace(/[\s-]/g, '');
+            if(!regex.test(upperCif)) return false;
+            const digits = upperCif.slice(1, 8);
+            const control = upperCif.charAt(8);
+            let sumPairs = 0, sumOdds = 0;
+            for(let i = 0; i < digits.length; i++) {
+                const digit = parseInt(digits[i]);
+                if(i % 2 === 0) {
+                    let double = digit * 2;
+                    if(double > 9) double = Math.floor(double / 10) + (double % 10);
+                    sumOdds += double;
+                } else { sumPairs += digit; }
+            }
+            const total = sumPairs + sumOdds;
+            const lastDigit = (10 - (total % 10)) % 10;
+            const controlLetters = "JABCDEFGHI";
+            return /[0-9]/.test(control) ? parseInt(control) === lastDigit : control === controlLetters[lastDigit];
+        }
+
+        static check(value: string): { valid: boolean, type: string, message: string } {
+            const clean = value.trim().toUpperCase().replace(/[\s-]/g, '');
+            if(!clean) return { valid: false, type: '...', message: 'No hay datos' };
+            if(/^[0-9]/.test(clean)) {
+                if(this.validateNIF(clean)) return { valid: true, type: 'NIF / DNI', message: 'Válido' };
+                if(clean.length >= 9) return { valid: false, type: 'NIF / DNI', message: 'Dígito de control incorrecto' };
+            }
+            if(/^[XYZ]/.test(clean)) {
+                if(this.validateNIE(clean)) return { valid: true, type: 'NIE', message: 'NIE Válido' };
+                if(clean.length >= 9) return { valid: false, type: 'NIE', message: 'Control erróneo' };
+            }
+            if(/^[ABCDEFGHJNPQRSUVW]/.test(clean)) {
+                if(this.validateCIF(clean)) return { valid: true, type: 'CIF', message: 'CIF Válido' };
+                if(clean.length >= 9) return { valid: false, type: 'CIF', message: 'Combinación incorrecta' };
+            }
+            return { valid: false, type: '...', message: 'Incompleto' };
+        }
+    }
+
+    const input = document.getElementById('identifier-input') as HTMLInputElement;
+    const wrapper = document.getElementById('verifier-wrapper');
+    const info = document.getElementById('status-info');
+    const title = document.getElementById('st-title');
+
+    input?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        const res = IdentifierValidator.check(val);
+
+        if(val.length >= 3) {
+            info?.classList.add('visible');
+            wrapper?.classList.toggle('valid', res.valid);
+            wrapper?.classList.toggle('invalid', !res.valid);
+            if(title) title.textContent = res.valid ? `✓ ${res.type} Válido` : `✕ ${res.message}`;
+        } else {
+            info?.classList.remove('visible');
+            wrapper?.classList.remove('valid', 'invalid');
+        }
+    });
+
+</script>

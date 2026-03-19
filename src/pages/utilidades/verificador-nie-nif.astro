@@ -1,0 +1,99 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import NieNifVerifier from "../../components/utilidades/NieNifVerifier/NieNifVerifier.astro";
+import NieNifVerifierSEO from "../../components/utilidades/NieNifVerifier/NieNifVerifierSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Verificador de NIE/NIF/CIF Online | Validador de Identificadores Fiscales";
+const description = "Herramienta gratuita para verificar la validez de NIF (DNI españoles), NIE (extranjeros) y CIF (empresas). Comprueba el dígito de control y formato oficial.";
+
+const faqItems = [
+    {
+        question: "¿Es seguro introducir mi NIF o NIE en esta herramienta?",
+        answer: "Sí, es totalmente seguro. La validación se realiza íntegramente en tu navegador mediante código JavaScript. Tus datos nunca se envían a ningún servidor ni se almacenan en ninguna base de datos.",
+    },
+    {
+        question: "¿Qué diferencia hay entre el NIF y el CIF?",
+        answer: "El NIF (Número de Identificación Fiscal) es el término actual para todos. Sin embargo, popularmente se sigue llamando CIF (Código de Identificación Fiscal) al NIF de las personas jurídicas (empresas y entidades).",
+    },
+    {
+        question: "¿Cómo puedo saber si un NIF es válido si no tengo la letra?",
+        answer: "Puedes introducir los 8 números en nuestro verificador y observar si la letra que habías pensado coincide. El algoritmo calcula la letra exacta que corresponde a esos números dividiendo por 23.",
+    },
+    {
+        question: "¿Esta herramienta sirve para los NIE que empiezan por Y o Z?",
+        answer: "Sí, nuestro verificador soporta todos los formatos de NIE: los antiguos que empiezan por X y los nuevos que comienzan por Y o Z, aplicando la conversión numérica oficial.",
+    },
+    {
+        question: "¿Valida si el número existe realmente en Hacienda?",
+        answer: "No. Esta herramienta realiza una validación algorítmica y matemática. Confirma que el número tiene una estructura legal y un dígito de control correcto, pero no consulta el censo real de la Agencia Tributaria.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Localiza el identificador",
+        text: "Busca en el documento (DNI, Tarjeta de Residencia o Tarjeta de identificación fiscal) el código alfanumérico.",
+    },
+    {
+        name: "Introduce el código",
+        text: "Escribe el NIF, NIE o CIF en el campo de texto superior. No te preocupes por el orden de los caracteres.",
+    },
+    {
+        name: "Comprueba el resultado",
+        text: "La herramienta analizará instantáneamente si la estructura es válida y si la letra de control coincide con el número.",
+    },
+    {
+        name: "Copia el resultado",
+        text: "Si el código es válido, puedes copiarlo directamente para pegarlo en tu factura, contrato o formulario administrativo.",
+    },
+];
+
+const bibliography = [
+    {
+        name: "Agencia Tributaria: NIF de personas físicas y jurídicas",
+        url: "https://sede.agenciatributaria.gob.es/Sede/procedimiento-recaudatorio-gestor/nif.html",
+    },
+    {
+        name: "Ministerio del Interior: Estructura del DNI y NIE",
+        url: "https://www.dnielectronico.es/PortalDNIe/PRF1_9._2.html?punto=5.2",
+    },
+    {
+        name: "BOE: Reglamento General de la gestión tributaria",
+        url: "https://www.boe.es/buscar/act.php?id=BOE-A-2007-14406",
+    },
+];
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    image="/images/utilities/verificador-nie-nif.webp"
+    gradientFrom="from-slate-100"
+    gradientTo="to-blue-200"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Verificador"
+            titleBase="de NIE / NIF"
+            description="Valida instantáneamente cualquier identificación fiscal española (DNI, NIE o CIF) de forma segura y privada."
+            gradientFrom="from-blue-600"
+            gradientTo="to-slate-700"
+        />
+    </div>
+
+    <NieNifVerifier />
+
+    <div slot="seo">
+        <NieNifVerifierSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliography} />
+    </div>
+</LayoutUtility>
