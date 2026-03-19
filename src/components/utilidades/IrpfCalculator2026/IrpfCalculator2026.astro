@@ -62,7 +62,7 @@ import "./IrpfCalculator2026.css";
         </div>
 
         <div class="results-section">
-            <div class="section-title">
+            <div class="section-title results-title">
                 <span>Cálculo Transparente 2026</span>
             </div>
 
@@ -79,9 +79,9 @@ import "./IrpfCalculator2026.css";
                     <span class="breakdown-label">Gastos Deducibles (Art. 20)</span>
                     <span id="b-deduct-fmt" class="breakdown-value negative">---</span>
                 </div>
-                <div class="breakdown-item" style="border-top: 1px solid #e2e8f0; margin-top: 0.5rem; padding-top: 0.5rem;">
-                    <span class="breakdown-label" style="font-weight: 800; color: #10b981;">SALARIO NETO ESTIMADO</span>
-                    <span id="b-neto-fmt" class="breakdown-value" style="color: #10b981; font-size: 1.2rem;">---</span>
+                <div class="breakdown-item net-highlight">
+                    <span class="breakdown-label net-label">SALARIO NETO ANUAL</span>
+                    <span id="b-neto-fmt" class="breakdown-value net-value">---</span>
                 </div>
             </div>
 
@@ -91,13 +91,15 @@ import "./IrpfCalculator2026.css";
                 <div id="p-anual" class="protagonista-sub">---</div>
             </div>
 
-            <div class="breakdown-item" style="padding-top: 1rem; border-top: 1px dashed #e2e8f0;">
-                <span class="breakdown-label">Mensual Disponible</span>
-                <span id="res-mensual-euro" style="font-size: 1.25rem; font-weight: 900; color: #1e293b;" class="dark:text-white">---</span>
-            </div>
-
-            <div id="m-marginal" class="marginal-tag">
-                Tipo Marginal: -- %
+            <div class="breakdown-card">
+                <div class="breakdown-item monthly-highlight">
+                    <span class="breakdown-label">Neto Mensual Disponible</span>
+                    <span id="res-mensual-euro" class="breakdown-value monthly-value">---</span>
+                </div>
+                <div class="breakdown-item marginal-highlight">
+                    <span class="breakdown-label">Tipo Marginal Aplicado</span>
+                    <span id="m-marginal" class="breakdown-value marginal-label-red">-- %</span>
+                </div>
             </div>
 
             <div class="info-alert">
@@ -210,12 +212,12 @@ import "./IrpfCalculator2026.css";
         if(UI.bSs) UI.bSs.textContent = `- ${fC(res.ssAnual)} (6,47%)`;
         if(UI.bDeduct) UI.bDeduct.textContent = `- ${fC(res.totalDeducible)}`;
         if(UI.bIrpf) UI.bIrpf.textContent = `- ${fC(res.totalTax)} ${fP(res.irpfPerc)}`;
-        if(UI.bNeto) UI.bNeto.textContent = `${fC(res.netAnual)} ${fP(res.netPerc)}`;
+        if(UI.bNeto) UI.bNeto.textContent = fC(res.netAnual);
         
         if(UI.pPerc) UI.pPerc.textContent = res.irpfPerc.toFixed(2).replace('.', ',') + ' %';
         if(UI.pAnual) UI.pAnual.textContent = fC(res.totalTax) + ' / año';
         if(UI.resM) UI.resM.textContent = fC(res.netMensual);
-        if(UI.marg) UI.marg.textContent = `Tipo Marginal: ${res.marginal.toFixed(1)} %`;
+        if(UI.marg) UI.marg.textContent = `${res.marginal.toFixed(1)} %`;
     }
 
     IDs.forEach(id => {
