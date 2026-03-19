@@ -1,0 +1,114 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import FrequencyNoteConverter from "../../components/utilidades/FrequencyNoteConverter/FrequencyNoteConverter.astro";
+import FrequencyNoteConverterSEO from "../../components/utilidades/FrequencyNoteConverter/FrequencyNoteConverterSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+const faqItems = [
+    {
+        question: "¿Cómo sé a qué nota corresponde una frecuencia de 440 Hz?",
+        answer: "440 Hz corresponde exactamente al La4 (A4), la nota de referencia universal para la afinación. Es el La por encima del Do central del piano. Esta frecuencia es el estándar ISO 16 desde 1939 y se usa para afinar instrumentos orquestales en todo el mundo.",
+    },
+    {
+        question: "¿Qué significa que una nota esté '15 cents por encima'?",
+        answer: "Un cent es la centésima parte de un semitono. Estar 15 cents por encima de una nota significa que la frecuencia introducida es ligeramente más aguda que la nota exacta del temperamento igual. En un sintetizador o sampler, deberías aplicar -15 cents de fine-tune para corregirla.",
+    },
+    {
+        question: "¿Por qué hay opciones de referencia 432 Hz y 444 Hz además de 440 Hz?",
+        answer: "Diferentes contextos musicales usan distintas referencias de afinación. 432 Hz es popular en ciertas comunidades de producción por preferencias sonoras subjetivas. 444 Hz es un valor común en grabaciones de música antigua renacentista. Algunas orquestas europeas afinan entre 441-444 Hz para un sonido más brillante.",
+    },
+    {
+        question: "¿Para qué sirve el piano interactivo de la herramienta?",
+        answer: "El piano interactivo permite identificar visualmente la nota en el teclado y también introducir frecuencias tocando teclas directamente. Al pulsar una tecla, obtienes su frecuencia exacta y puedes escuchar un tono sinusoidal puro para compararlo con tu instrumento real.",
+    },
+    {
+        question: "¿Cómo uso los armónicos que muestra la calculadora?",
+        answer: "Los armónicos (octava inferior y superior) te permiten saber las frecuencias directamente relacionadas con tu nota. Son útiles para evitar conflictos entre capas de un sintetizador, configurar filtros resonantes en la nota correcta o mapear samples de batería en las octavas adecuadas del sampler.",
+    },
+    {
+        question: "¿Por qué el modo de escucha genera un tono sinusoidal en lugar del sonido real?",
+        answer: "El tono sinusoidal es una onda pura que contiene únicamente la frecuencia fundamental sin armónicos añadidos. Esto permite una comparación limpia con el instrumento real, sin que colores tímbricos interfieran en el juicio de la afinación. Es la misma señal que genera un afinador de aguja electrónico.",
+    },
+    {
+        question: "¿Cómo calcular la frecuencia de una nota musical?",
+        answer: "La frecuencia se calcula mediante una fórmula logarítmica basada en el temperamento igual. Partiendo de la referencia La4 (440 Hz), cada semitono superior se obtiene multiplicando por la raíz doceava de dos (~1.05946), y cada octava equivale a doblar la frecuencia. Nuestra herramienta realiza este cálculo complejo al instante para cualquier nota.",
+    },
+    {
+        question: "¿Qué nota es la frecuencia 440 Hz?",
+        answer: "La frecuencia de 440 Hz es exactamente la nota La4 (A4 en cifrado americano). Es la nota de referencia estándar utilizada por la mayoría de las orquestas y músicos contemporáneos para afinar sus instrumentos desde mediados del siglo XX.",
+    },
+    {
+        question: "¿Diferencias entre la afinación a 440Hz y 432Hz?",
+        answer: "440 Hz es el estándar internacional (ISO 16). 432 Hz es una afinación alternativa que algunos músicos prefieren por considerarla más natural o relajante, utilizándose frecuentemente en música para meditación, aunque no existe evidencia científica de beneficios biológicos claros comparada con 440 Hz.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Escribe la frecuencia",
+        text: "Introduce la frecuencia en hercios en el campo de entrada principal. El teclado numérico se abre automáticamente en móviles para facilitar la escritura con decimales.",
+    },
+    {
+        name: "Lee el resultado",
+        text: "El nombre de la nota aparece de inmediato en el panel central con su octava científica (ej: La4, Do3). Debajo verás la frecuencia exacta de esa nota en el temperamento igual.",
+    },
+    {
+        name: "Consulta el medidor de cents",
+        text: "El indicador visual tipo afinador te muestra si tu frecuencia está por encima, por debajo o exactamente en la nota. El valor en cents indica cuánto debes ajustar el fine-tune de tu instrumento o plugin.",
+    },
+    {
+        name: "Usa los armónicos para afinar capas",
+        text: "Consulta las frecuencias de la octava inferior y superior para configurar osciladores adicionales, filtros resonantes o capas de percusión sin conflictos entre frecuencias.",
+    },
+    {
+        name: "Escucha el tono de referencia",
+        text: "Pulsa el botón de reproducción para generar un tono sinusoidal puro en la frecuencia introducida y afinar tu instrumento real de oído.",
+    },
+];
+
+const bibliographyLinks = [
+    {
+        name: "ISO 16:1975 - Acoustics - Standard tuning frequency",
+        url: "https://www.iso.org/standard/3601.html",
+    },
+    {
+        name: "The Physics of Sound - Musical Acoustics (MIT)",
+        url: "https://musictech.mit.edu/musical-acoustics-synthesis-and-audio-effects/",
+    },
+];
+
+const titleHighlight = "Frecuencia";
+const titleBase = "a Nota Musical";
+const description =
+    "Convierte hercios a notas musicales al instante. Identifica la nota exacta de cualquier frecuencia, mide la desviación en cents, escucha el tono puro y afina sintetizadores, samplers y osciladores con precisión.";
+---
+
+<LayoutUtility
+    title={`${titleHighlight} ${titleBase}`}
+    description={description}
+    image="/images/utilities/conversor-frecuencia-nota-musical.webp"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight={titleHighlight}
+            titleBase={titleBase}
+            description={description}
+            gradientFromColor="#c026d3"
+            gradientToColor="#06b6d4"
+        />
+    </div>
+
+    <FrequencyNoteConverter />
+
+    <div slot="seo">
+        <FrequencyNoteConverterSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliographyLinks} />
+    </div>
+</LayoutUtility>

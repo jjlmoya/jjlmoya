@@ -1,0 +1,650 @@
+---
+import './FrequencyNoteConverter.css';
+---
+
+<div class="fnc" id="frequency-note-converter">
+
+    <div class="fnc__mode-switcher" id="mode-switcher" role="group" aria-label="Modo de conversión">
+        <button class="fnc__mode-btn fnc__mode-btn--active" id="btn-hz-to-note" data-mode="hz">Hz a Nota</button>
+        <button class="fnc__mode-btn" id="btn-note-to-hz" data-mode="note">Nota a Hz</button>
+    </div>
+
+    <div class="fnc__calibration-bar">
+        <div class="fnc__cal-main">
+            <span class="fnc__cal-label">Referencia A4</span>
+            <div class="fnc__cal-presets">
+                <button class="fnc__cal-preset fnc__cal-preset--active" data-ref="440">440 Hz</button>
+                <button class="fnc__cal-preset" data-ref="432">432 Hz</button>
+                <button class="fnc__cal-preset" data-ref="444">444 Hz</button>
+            </div>
+            <input
+                type="number"
+                id="ref-input"
+                class="fnc__cal-custom"
+                value="440"
+                min="400"
+                max="480"
+                step="0.5"
+                aria-label="Frecuencia de referencia A4 personalizada"
+            />
+            <span class="fnc__cal-unit">Hz</span>
+        </div>
+        <p class="fnc__cal-info">
+            <strong>440 Hz</strong> es el estándar internacional. 
+            <strong>432 Hz</strong> se usa a menudo en música de meditación y solfeggio.
+        </p>
+    </div>
+
+    <div class="fnc__main-panel" id="panel-hz-to-note">
+        <div class="fnc__input-zone">
+            <label for="hz-input" class="fnc__input-label">FRECUENCIA</label>
+            <div class="fnc__input-row">
+                <input
+                    type="number"
+                    id="hz-input"
+                    class="fnc__big-input"
+                    value="440"
+                    min="16"
+                    max="20000"
+                    step="0.01"
+                    inputmode="decimal"
+                    aria-label="Introduce la frecuencia en hercios"
+                />
+                <span class="fnc__big-unit">Hz</span>
+                <button class="fnc__play-btn" id="play-btn-hz" aria-label="Escuchar tono" title="Escuchar tono puro">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="fnc__result-hero" id="note-result-hero" aria-live="polite">
+            <div class="fnc__note-name" id="hz-result-note">La4</div>
+            <div class="fnc__note-freq" id="hz-result-exact">440.00 Hz exactos</div>
+            <button class="fnc__copy-hero" id="copy-note-name" data-value="La4" aria-label="Copiar nombre de nota">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                Copiar nota
+            </button>
+        </div>
+
+        <div class="fnc__tuner" aria-label="Medidor de afinación en cents">
+            <div class="fnc__tuner-track">
+                <div class="fnc__tuner-center-mark"></div>
+                <div class="fnc__tuner-needle" id="tuner-needle"></div>
+            </div>
+            <div class="fnc__tuner-labels">
+                <span>-50</span>
+                <span>-25</span>
+                <span class="fnc__tuner-label-center">0</span>
+                <span>+25</span>
+                <span>+50</span>
+            </div>
+            <div class="fnc__cents-value" id="cents-display">0.0 cents</div>
+        </div>
+
+        <div class="fnc__harmonics">
+            <div class="fnc__harmonic-card" id="harmonic-down">
+                <span class="fnc__harmonic-label">Octava inferior</span>
+                <span class="fnc__harmonic-value" id="harmonic-down-val">220.00 Hz</span>
+                <button class="fnc__copy-small" data-copy-target="harmonic-down-val" aria-label="Copiar octava inferior">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            </div>
+            <div class="fnc__harmonic-card fnc__harmonic-card--main" id="harmonic-main">
+                <span class="fnc__harmonic-label">Frecuencia introducida</span>
+                <span class="fnc__harmonic-value" id="harmonic-main-val">440.00 Hz</span>
+                <button class="fnc__copy-small" data-copy-target="harmonic-main-val" aria-label="Copiar frecuencia">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            </div>
+            <div class="fnc__harmonic-card" id="harmonic-up">
+                <span class="fnc__harmonic-label">Octava superior</span>
+                <span class="fnc__harmonic-value" id="harmonic-up-val">880.00 Hz</span>
+                <button class="fnc__copy-small" data-copy-target="harmonic-up-val" aria-label="Copiar octava superior">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fnc__main-panel fnc__main-panel--hidden" id="panel-note-to-hz">
+        <div class="fnc__note-selector">
+            <label class="fnc__select-label" for="note-text-input">NOMBRE DE LA NOTA (Ej: La4, A4, C#3)</label>
+            <input 
+                type="text" 
+                id="note-text-input" 
+                class="fnc__text-input" 
+                placeholder="Escribe la nota..." 
+                aria-label="Introducir nombre de nota"
+            />
+            <div class="fnc__note-dropdowns">
+                <div class="fnc__select-group">
+                    <label class="fnc__select-label" for="note-select">ESTABLECER NOTA</label>
+                    <select id="note-select" class="fnc__select" aria-label="Seleccionar nota">
+                        <option value="0">Do (C)</option>
+                        <option value="1">Do# / Reb</option>
+                        <option value="2">Re (D)</option>
+                        <option value="3">Re# / Mib</option>
+                        <option value="4">Mi (E)</option>
+                        <option value="5">Fa (F)</option>
+                        <option value="6">Fa# / Solb</option>
+                        <option value="7">Sol (G)</option>
+                        <option value="8">Sol# / Lab</option>
+                        <option value="9">La (A)</option>
+                        <option value="10">La# / Sib</option>
+                        <option value="11">Si (B)</option>
+                    </select>
+                </div>
+                <div class="fnc__select-group">
+                    <label class="fnc__select-label" for="octave-select">ESTABLECER OCTAVA</label>
+                    <select id="octave-select" class="fnc__select" aria-label="Seleccionar octava">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4" selected>4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="fnc__result-hero" aria-live="polite">
+            <div class="fnc__note-name" id="note-result-hz">440.00</div>
+            <div class="fnc__note-freq">Hz</div>
+            <button class="fnc__copy-hero" id="copy-hz-value" aria-label="Copiar frecuencia en Hz">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                Copiar Hz
+            </button>
+        </div>
+
+        <div class="fnc__harmonics">
+            <div class="fnc__harmonic-card">
+                <span class="fnc__harmonic-label">Octava inferior</span>
+                <span class="fnc__harmonic-value" id="n2h-harmonic-down">220.00 Hz</span>
+                <button class="fnc__copy-small" data-copy-target="n2h-harmonic-down" aria-label="Copiar octava inferior">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            </div>
+            <div class="fnc__harmonic-card fnc__harmonic-card--main">
+                <span class="fnc__harmonic-label">Nota seleccionada</span>
+                <span class="fnc__harmonic-value" id="n2h-harmonic-main">440.00 Hz</span>
+                <button class="fnc__copy-small" data-copy-target="n2h-harmonic-main" aria-label="Copiar frecuencia">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            </div>
+            <div class="fnc__harmonic-card">
+                <span class="fnc__harmonic-label">Octava superior</span>
+                <span class="fnc__harmonic-value" id="n2h-harmonic-up">880.00 Hz</span>
+                <button class="fnc__copy-small" data-copy-target="n2h-harmonic-up" aria-label="Copiar octava superior">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="fnc__play-row">
+            <button class="fnc__play-full-btn" id="play-btn-note" aria-label="Escuchar la nota seleccionada">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Escuchar nota
+            </button>
+        </div>
+    </div>
+
+    <div class="fnc__piano-section">
+        <div class="fnc__piano-label">Piano interactivo — toca una tecla para ver su frecuencia</div>
+        <div class="fnc__piano" id="piano" role="group" aria-label="Teclado de piano interactivo"></div>
+    </div>
+
+    <div class="fnc__history-section" id="history-section" aria-label="Historial de conversiones">
+        <div class="fnc__history-header">
+            <span class="fnc__history-title">Historial</span>
+            <button class="fnc__history-clear" id="clear-history" aria-label="Limpiar historial">Limpiar</button>
+        </div>
+        <ul class="fnc__history-list" id="history-list" role="list"></ul>
+        <div class="fnc__history-empty" id="history-empty">Sin conversiones recientes</div>
+    </div>
+</div>
+
+<script>
+    const NOTE_NAMES_ES = ['Do', 'Do#', 'Re', 'Re#', 'Mi', 'Fa', 'Fa#', 'Sol', 'Sol#', 'La', 'La#', 'Si'];
+    const NOTE_NAMES_EN = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+    let audioCtx: AudioContext | null = null;
+    let activeOscillator: OscillatorNode | null = null;
+    let activeGain: GainNode | null = null;
+    const isPlaying = false;
+    let currentMode: 'hz' | 'note' = 'hz';
+    let referenceA4 = 440;
+    let history: Array<{ hz: string; note: string }> = [];
+
+    function getAudioContext(): AudioContext {
+        if (!audioCtx) {
+            audioCtx = new AudioContext();
+        }
+        return audioCtx;
+    }
+
+    function playTone(frequency: number): void {
+        const ctx = getAudioContext();
+        if (activeOscillator) {
+            activeOscillator.stop();
+            activeOscillator = null;
+        }
+        activeGain = ctx.createGain();
+        activeGain.gain.setValueAtTime(0, ctx.currentTime);
+        activeGain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 0.01);
+        activeGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2);
+        activeGain.connect(ctx.destination);
+        activeOscillator = ctx.createOscillator();
+        activeOscillator.type = 'sine';
+        activeOscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+        activeOscillator.connect(activeGain);
+        activeOscillator.start(ctx.currentTime);
+        activeOscillator.stop(ctx.currentTime + 2);
+    }
+
+    function hzToMidi(hz: number): number {
+        return 12 * Math.log2(hz / referenceA4) + 69;
+    }
+
+    function midiToHz(midi: number): number {
+        return referenceA4 * Math.pow(2, (midi - 69) / 12);
+    }
+
+    function midiToNoteName(midi: number): string {
+        const noteIndex = ((Math.round(midi) % 12) + 12) % 12;
+        const octave = Math.floor(Math.round(midi) / 12) - 1;
+        return NOTE_NAMES_ES[noteIndex] + octave;
+    }
+
+    function getCents(hz: number): number {
+        const midi = hzToMidi(hz);
+        const roundedMidi = Math.round(midi);
+        return (midi - roundedMidi) * 100;
+    }
+
+    function noteIndexAndOctaveToMidi(noteIndex: number, octave: number): number {
+        return (octave + 1) * 12 + noteIndex;
+    }
+
+    function updateTuner(cents: number): void {
+        const needle = document.getElementById('tuner-needle');
+        const display = document.getElementById('cents-display');
+        if (!needle || !display) return;
+        const pct = Math.max(-50, Math.min(50, cents));
+        const left = 50 + (pct / 50) * 47;
+        needle.style.left = `${left}%`;
+        const absCents = Math.abs(cents);
+        if (absCents < 5) {
+            needle.classList.remove('fnc__tuner-needle--sharp', 'fnc__tuner-needle--flat');
+            needle.classList.add('fnc__tuner-needle--perfect');
+        } else if (cents > 0) {
+            needle.classList.remove('fnc__tuner-needle--perfect', 'fnc__tuner-needle--flat');
+            needle.classList.add('fnc__tuner-needle--sharp');
+        } else {
+            needle.classList.remove('fnc__tuner-needle--perfect', 'fnc__tuner-needle--sharp');
+            needle.classList.add('fnc__tuner-needle--flat');
+        }
+        let label = '';
+        if (absCents < 5) {
+            label = 'Afinado';
+        } else if (cents > 0) {
+            label = `+${cents.toFixed(1)} cents (sostenido)`;
+        } else {
+            label = `${cents.toFixed(1)} cents (bemol)`;
+        }
+        display.textContent = label;
+    }
+
+    function addToHistory(hz: string, note: string): void {
+        const exists = history.find(h => h.hz === hz);
+        if (exists) return;
+        history.unshift({ hz, note });
+        if (history.length > 5) history.pop();
+        renderHistory();
+    }
+
+    function renderHistory(): void {
+        const list = document.getElementById('history-list');
+        const empty = document.getElementById('history-empty');
+        if (!list || !empty) return;
+        if (history.length === 0) {
+            list.innerHTML = '';
+            empty.style.display = 'block';
+            return;
+        }
+        empty.style.display = 'none';
+        list.innerHTML = history.map(h => `
+            <li class="fnc__history-item" role="listitem">
+                <button class="fnc__history-recall" data-hz="${h.hz}" aria-label="Cargar ${h.hz} Hz">
+                    <span class="fnc__history-hz">${h.hz} Hz</span>
+                    <span class="fnc__history-note">${h.note}</span>
+                </button>
+            </li>
+        `).join('');
+        list.querySelectorAll('.fnc__history-recall').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const hz = btn.getAttribute('data-hz');
+                if (!hz) return;
+                const hzInput = document.getElementById('hz-input') as HTMLInputElement;
+                if (hzInput) {
+                    hzInput.value = hz;
+                    updateHzToNote();
+                }
+                if (currentMode !== 'hz') switchMode('hz');
+            });
+        });
+    }
+
+    function updateHzToNote(): void {
+        const hzInput = document.getElementById('hz-input') as HTMLInputElement | null;
+        if (!hzInput) return;
+        let hz = parseFloat(hzInput.value);
+        if (isNaN(hz) || hz <= 0) hz = 440;
+        hz = Math.max(16, Math.min(20000, hz));
+
+        const midi = hzToMidi(hz);
+        const roundedMidi = Math.round(midi);
+        const cents = (midi - roundedMidi) * 100;
+        const noteName = midiToNoteName(midi);
+        const exactHz = midiToHz(roundedMidi);
+
+        const noteDisplay = document.getElementById('hz-result-note');
+        const freqDisplay = document.getElementById('hz-result-exact');
+        const copyBtn = document.getElementById('copy-note-name');
+        const harmDownVal = document.getElementById('harmonic-down-val');
+        const harmMainVal = document.getElementById('harmonic-main-val');
+        const harmUpVal = document.getElementById('harmonic-up-val');
+
+        if (noteDisplay) noteDisplay.textContent = noteName;
+        if (freqDisplay) freqDisplay.textContent = `${exactHz.toFixed(2)} Hz exactos`;
+        if (copyBtn) copyBtn.setAttribute('data-value', noteName);
+        if (harmDownVal) harmDownVal.textContent = `${(hz / 2).toFixed(2)} Hz`;
+        if (harmMainVal) harmMainVal.textContent = `${hz.toFixed(2)} Hz`;
+        if (harmUpVal) harmUpVal.textContent = `${(hz * 2).toFixed(2)} Hz`;
+
+        updateTuner(cents);
+        updatePianoHighlight(((roundedMidi % 12) + 12) % 12);
+        addToHistory(hz.toFixed(2), noteName);
+    }
+
+    function updateNoteToHz(fromInput = false): void {
+        const noteSelect = document.getElementById('note-select') as HTMLSelectElement | null;
+        const octaveSelect = document.getElementById('octave-select') as HTMLSelectElement | null;
+        const noteTextInput = document.getElementById('note-text-input') as HTMLInputElement | null;
+        if (!noteSelect || !octaveSelect || !noteTextInput) return;
+
+        const noteIndex = parseInt(noteSelect.value);
+        const octave = parseInt(octaveSelect.value);
+
+        if (!fromInput) {
+            noteTextInput.value = NOTE_NAMES_ES[noteIndex] + octave;
+        }
+
+        const midi = noteIndexAndOctaveToMidi(noteIndex, octave);
+        const hz = midiToHz(midi);
+
+        const hzDisplay = document.getElementById('note-result-hz');
+        const copyBtn = document.getElementById('copy-hz-value');
+        const harmDown = document.getElementById('n2h-harmonic-down');
+        const harmMain = document.getElementById('n2h-harmonic-main');
+        const harmUp = document.getElementById('n2h-harmonic-up');
+
+        if (hzDisplay) hzDisplay.textContent = hz.toFixed(2);
+        if (copyBtn) copyBtn.setAttribute('data-value', hz.toFixed(2));
+        if (harmDown) harmDown.textContent = `${(hz / 2).toFixed(2)} Hz`;
+        if (harmMain) harmMain.textContent = `${hz.toFixed(2)} Hz`;
+        if (harmUp) harmUp.textContent = `${(hz * 2).toFixed(2)} Hz`;
+
+        updatePianoHighlight(noteIndex);
+    }
+
+    function parseNoteInput(input: string): { noteIndex: number; octave: number } | null {
+        const clean = input.trim().toUpperCase();
+        if (!clean) return null;
+
+        const match = clean.match(/^([A-G]|DO|RE|MI|FA|SOL|LA|SI)(#|B|SHARP|FLAT)?(\d)?$/i);
+        if (!match) return null;
+
+        const noteStr = match[1];
+        const modifier = match[2];
+        const octaveStr = match[3];
+
+        let noteIndex = -1;
+        const enNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const esNotes = ['DO', 'DO#', 'RE', 'RE#', 'MI', 'FA', 'FA#', 'SOL', 'SOL#', 'LA', 'LA#', 'SI'];
+
+        noteIndex = enNotes.indexOf(noteStr);
+        if (noteIndex === -1) {
+            noteIndex = esNotes.indexOf(noteStr);
+        }
+
+        if (noteIndex === -1) return null;
+
+        if (modifier) {
+            if (modifier === '#' || modifier.toUpperCase() === 'SHARP') {
+                noteIndex = (noteIndex + 1) % 12;
+            } else if (modifier.toUpperCase() === 'B' || modifier.toUpperCase() === 'FLAT') {
+                noteIndex = (noteIndex - 1 + 12) % 12;
+            }
+        }
+
+        const octave = octaveStr ? parseInt(octaveStr) : 4;
+        return { noteIndex, octave };
+    }
+
+    function switchMode(mode: 'hz' | 'note'): void {
+        currentMode = mode;
+        const panelHz = document.getElementById('panel-hz-to-note');
+        const panelNote = document.getElementById('panel-note-to-hz');
+        const btnHz = document.getElementById('btn-hz-to-note');
+        const btnNote = document.getElementById('btn-note-to-hz');
+        if (!panelHz || !panelNote || !btnHz || !btnNote) return;
+        if (mode === 'hz') {
+            panelHz.classList.remove('fnc__main-panel--hidden');
+            panelNote.classList.add('fnc__main-panel--hidden');
+            btnHz.classList.add('fnc__mode-btn--active');
+            btnNote.classList.remove('fnc__mode-btn--active');
+        } else {
+            panelNote.classList.remove('fnc__main-panel--hidden');
+            panelHz.classList.add('fnc__main-panel--hidden');
+            btnNote.classList.add('fnc__mode-btn--active');
+            btnHz.classList.remove('fnc__mode-btn--active');
+        }
+    }
+
+    function buildPiano(): void {
+        const piano = document.getElementById('piano');
+        if (!piano) return;
+        piano.innerHTML = '';
+        const whitePattern = [0, 2, 4, 5, 7, 9, 11];
+        const blackPattern = [1, 3, -1, 6, 8, 10, -1];
+
+        for (let oct = 3; oct <= 5; oct++) {
+            const octaveWrap = document.createElement('div');
+            octaveWrap.className = 'fnc__piano-octave';
+            octaveWrap.setAttribute('data-octave', String(oct));
+
+            whitePattern.forEach((noteIdx, pos) => {
+                const wKey = document.createElement('button');
+                wKey.className = 'fnc__key fnc__key--white';
+                wKey.setAttribute('data-note', String(noteIdx));
+                wKey.setAttribute('data-octave', String(oct));
+                wKey.setAttribute('aria-label', `${NOTE_NAMES_ES[noteIdx]}${oct}`);
+                const label = document.createElement('span');
+                label.className = 'fnc__key-label';
+                label.textContent = NOTE_NAMES_ES[noteIdx].replace('#', '');
+                wKey.appendChild(label);
+
+                const bIdx = blackPattern[pos];
+                if (bIdx !== -1) {
+                    const bKey = document.createElement('button');
+                    bKey.className = 'fnc__key fnc__key--black';
+                    bKey.setAttribute('data-note', String(bIdx));
+                    bKey.setAttribute('data-octave', String(oct));
+                    bKey.setAttribute('aria-label', `${NOTE_NAMES_ES[bIdx]}${oct}`);
+                    wKey.appendChild(bKey);
+                }
+
+                octaveWrap.appendChild(wKey);
+            });
+
+            const octLabel = document.createElement('div');
+            octLabel.className = 'fnc__piano-octave-label';
+            octLabel.textContent = `Oct ${oct}`;
+            octaveWrap.appendChild(octLabel);
+
+            piano.appendChild(octaveWrap);
+        }
+
+        piano.addEventListener('click', (e) => {
+            const target = (e.target as HTMLElement).closest('[data-note]') as HTMLElement | null;
+            if (!target) return;
+            const noteIdx = parseInt(target.getAttribute('data-note') ?? '0');
+            const oct = parseInt(target.getAttribute('data-octave') ?? '4');
+            const midi = noteIndexAndOctaveToMidi(noteIdx, oct);
+            const hz = midiToHz(midi);
+            playTone(hz);
+
+            const hzInput = document.getElementById('hz-input') as HTMLInputElement;
+            if (hzInput) {
+                hzInput.value = hz.toFixed(2);
+                updateHzToNote();
+            }
+            if (currentMode !== 'hz') switchMode('hz');
+        });
+    }
+
+    function updatePianoHighlight(noteIndex: number): void {
+        document.querySelectorAll('.fnc__key--active').forEach(k => k.classList.remove('fnc__key--active'));
+        document.querySelectorAll(`[data-note="${noteIndex}"]`).forEach(k => k.classList.add('fnc__key--active'));
+    }
+
+    function copyText(text: string, btn: HTMLElement): void {
+        const originalHTML = btn.innerHTML;
+        navigator.clipboard.writeText(text).then(() => {
+            btn.classList.add('fnc__copy-small--done');
+            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+            setTimeout(() => {
+                btn.classList.remove('fnc__copy-small--done');
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        buildPiano();
+        updateHzToNote();
+        updateNoteToHz();
+        renderHistory();
+
+        document.getElementById('hz-input')?.addEventListener('input', updateHzToNote);
+
+        document.getElementById('btn-hz-to-note')?.addEventListener('click', () => switchMode('hz'));
+        document.getElementById('btn-note-to-hz')?.addEventListener('click', () => switchMode('note'));
+
+        document.getElementById('note-select')?.addEventListener('change', () => updateNoteToHz());
+        document.getElementById('octave-select')?.addEventListener('change', () => updateNoteToHz());
+
+        document.getElementById('note-text-input')?.addEventListener('input', (e) => {
+            const val = (e.target as HTMLInputElement).value;
+            const parsed = parseNoteInput(val);
+            if (parsed) {
+                const noteSelect = document.getElementById('note-select') as HTMLSelectElement;
+                const octaveSelect = document.getElementById('octave-select') as HTMLSelectElement;
+                if (noteSelect && octaveSelect) {
+                    noteSelect.value = String(parsed.noteIndex);
+                    octaveSelect.value = String(parsed.octave);
+                    updateNoteToHz(true);
+                }
+            }
+        });
+
+        document.getElementById('play-btn-hz')?.addEventListener('click', () => {
+            const hzInput = document.getElementById('hz-input') as HTMLInputElement | null;
+            if (!hzInput) return;
+            const hz = parseFloat(hzInput.value);
+            if (!isNaN(hz) && hz > 0) playTone(hz);
+        });
+
+        document.getElementById('play-btn-note')?.addEventListener('click', () => {
+            const noteSelect = document.getElementById('note-select') as HTMLSelectElement | null;
+            const octaveSelect = document.getElementById('octave-select') as HTMLSelectElement | null;
+            if (!noteSelect || !octaveSelect) return;
+            const noteIndex = parseInt(noteSelect.value);
+            const octave = parseInt(octaveSelect.value);
+            const midi = noteIndexAndOctaveToMidi(noteIndex, octave);
+            const hz = midiToHz(midi);
+            playTone(hz);
+        });
+
+        document.getElementById('ref-input')?.addEventListener('input', (e) => {
+            const val = parseFloat((e.target as HTMLInputElement).value);
+            if (!isNaN(val) && val > 300 && val < 600) {
+                referenceA4 = val;
+                document.querySelectorAll('.fnc__cal-preset').forEach(p => p.classList.remove('fnc__cal-preset--active'));
+                if (currentMode === 'hz') updateHzToNote();
+                else updateNoteToHz();
+            }
+        });
+
+        document.querySelectorAll('.fnc__cal-preset').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const ref = parseFloat(btn.getAttribute('data-ref') ?? '440');
+                referenceA4 = ref;
+                const refInput = document.getElementById('ref-input') as HTMLInputElement | null;
+                if (refInput) refInput.value = String(ref);
+                document.querySelectorAll('.fnc__cal-preset').forEach(p => p.classList.remove('fnc__cal-preset--active'));
+                btn.classList.add('fnc__cal-preset--active');
+                if (currentMode === 'hz') updateHzToNote();
+                else updateNoteToHz();
+            });
+        });
+
+        document.getElementById('copy-note-name')?.addEventListener('click', (e) => {
+            const btn = e.currentTarget as HTMLElement;
+            const originalHTML = btn.innerHTML;
+            const val = btn.getAttribute('data-value') ?? '';
+            navigator.clipboard.writeText(val).then(() => {
+                btn.classList.add('fnc__copy-hero--done');
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> ¡Copiado!`;
+                setTimeout(() => {
+                    btn.classList.remove('fnc__copy-hero--done');
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            });
+        });
+
+        document.getElementById('copy-hz-value')?.addEventListener('click', (e) => {
+            const btn = e.currentTarget as HTMLElement;
+            const originalHTML = btn.innerHTML;
+            const val = btn.getAttribute('data-value') ?? '';
+            navigator.clipboard.writeText(val).then(() => {
+                btn.classList.add('fnc__copy-hero--done');
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> ¡Copiado!`;
+                setTimeout(() => {
+                    btn.classList.remove('fnc__copy-hero--done');
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            const btn = (e.target as HTMLElement).closest('.fnc__copy-small') as HTMLElement | null;
+            if (!btn) return;
+            const targetId = btn.getAttribute('data-copy-target');
+            if (!targetId) return;
+            const el = document.getElementById(targetId);
+            if (!el) return;
+            const text = el.textContent?.replace(' Hz', '').trim() ?? '';
+            copyText(text, btn);
+        });
+
+        document.getElementById('clear-history')?.addEventListener('click', () => {
+            history = [];
+            renderHistory();
+        });
+    });
+</script>

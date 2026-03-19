@@ -30,5 +30,13 @@ export const musicSection: SectionData = {
             description: "Alinea tus micrófonos con precisión de muestras y compensa el retraso acústico.",
             color: "#ff4d00",
         },
+        {
+            href: "/utilidades/conversor-frecuencia-nota-musical/",
+            iconBg: "mdi:piano",
+            iconFg: "mdi:music-note",
+            title: "Frecuencia a Nota Musical",
+            description: "Convierte Hz a notas musicales al instante. Mide cents de desafinación y afina sintetizadores y samples con precisión.",
+            color: "#c026d3",
+        },
     ],
 };
