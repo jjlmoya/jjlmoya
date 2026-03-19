@@ -1,0 +1,327 @@
+---
+import './AudioStorageCalculator.css';
+---
+
+<div class="asc" id="audio-storage-calculator">
+
+    <div class="asc__config-grid">
+        <div class="asc__card asc__card--accent" id="input-config">
+            <span class="asc__label">Configuración del Audio</span>
+            <div class="asc__presets">
+                <button class="asc__preset-btn" data-hz="44100" data-bits="16" data-channels="2" title="Calidad CD (44.1kHz / 16-bit)">CD</button>
+                <button class="asc__preset-btn asc__preset-btn--active" data-hz="48000" data-bits="24" data-channels="2" title="Producción Video (48kHz / 24-bit)">Radio/Video</button>
+                <button class="asc__preset-btn" data-hz="96000" data-bits="24" data-channels="2" title="Estudio Pro (96kHz / 24-bit)">Estudio Pro</button>
+                <button class="asc__preset-btn" data-hz="48000" data-bits="32" data-channels="1" title="Podcast Master (48kHz / 32-bit float)">Podcast</button>
+            </div>
+            
+            <div class="asc__field">
+                <label class="asc__label" for="hz-select">Frecuencia de Muestreo (kHz)</label>
+                <select id="hz-select" class="asc__select" aria-label="Seleccionar frecuencia de muestreo">
+                    <option value="44100">44.1 kHz (CD)</option>
+                    <option value="48000" selected>48 kHz (Estándar Video)</option>
+                    <option value="88200">88.2 kHz</option>
+                    <option value="96000">96 kHz (Alta Resolución)</option>
+                    <option value="192000">192 kHz (Ultra HD)</option>
+                </select>
+            </div>
+
+            <div class="asc__field">
+                <label class="asc__label" for="bits-select">Profundidad de Bits</label>
+                <select id="bits-select" class="asc__select" aria-label="Seleccionar profundidad de bits">
+                    <option value="16">16-bit (CD / Estándar)</option>
+                    <option value="24" selected>24-bit (Productores / Cine)</option>
+                    <option value="32">32-bit (Punto Flotante)</option>
+                </select>
+            </div>
+
+            <div class="asc__field">
+                <label class="asc__label" for="channels-select">Canales</label>
+                <select id="channels-select" class="asc__select" aria-label="Seleccionar canales de audio">
+                    <option value="1">Mono (1 canal)</option>
+                    <option value="2" selected>Estéreo (2 canales)</option>
+                    <option value="6">5.1 Surround (6 canales)</option>
+                    <option value="8">7.1 Surround (8 canales)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="asc__card" id="input-time">
+            <span class="asc__label" id="time-input-label">Duración de la Grabación</span>
+            <div class="asc__time-inputs" id="duration-inputs">
+                <div class="asc__time-box">
+                    <label class="asc__label" for="time-h">Horas</label>
+                    <input type="number" id="time-h" class="asc__input" value="1" min="0" placeholder="00" />
+                </div>
+                <div class="asc__time-box">
+                    <label class="asc__label" for="time-m">Minutos</label>
+                    <input type="number" id="time-m" class="asc__input" value="0" min="0" max="59" placeholder="00" />
+                </div>
+                <div class="asc__time-box">
+                    <label class="asc__label" for="time-s">Segundos</label>
+                    <input type="number" id="time-s" class="asc__input" value="0" min="0" max="59" placeholder="00" />
+                </div>
+            </div>
+
+            <div class="asc__field asc__field--hidden" id="space-box" style="display:none;">
+                <label class="asc__label" for="space-input">Capacidad Disponible (en GB)</label>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input type="number" id="space-input" class="asc__input" value="1" min="0.01" step="0.1" aria-label="Capacidad disponible en GB" />
+                    <span class="asc__label">GB</span>
+                </div>
+            </div>
+
+            <div class="asc__card-divider"></div>
+
+            <div class="asc__mode-toggle" id="toggle-mode">
+                <div class="asc__toggle-pill"></div>
+                <span class="asc__toggle-text" id="toggle-text">Quiero calcular cuánto podré grabar según mi espacio libre</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="asc__results">
+        <div class="asc__hero">
+            <div class="asc__main-result" id="result-primary">0.00 MB</div>
+            <div class="asc__secondary-result" id="result-secondary">Espacio para grabar: 0h 00m 00s</div>
+        </div>
+
+        <div class="asc__card">
+            <span class="asc__label">Comparativa de Formatos y Almacenamiento</span>
+            <div class="asc__comparison">
+                <table class="asc__table">
+                    <thead>
+                        <tr>
+                            <th>Formato</th>
+                            <th>Calidad</th>
+                            <th>Tamaño Estimado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="asc__format-tag">WAV / AIFF</span></td>
+                            <td>Sin Compressión (Lossless)</td>
+                            <td id="comp-wav">-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="asc__format-tag">FLAC</span></td>
+                            <td>Compresión sin pérdida</td>
+                            <td id="comp-flac">-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="asc__format-tag">MP3 (320kbps)</span></td>
+                            <td>Alta Calidad (Lossy)</td>
+                            <td id="comp-mp3-320">-</td>
+                        </tr>
+                        <tr>
+                            <td><span class="asc__format-tag">MP3 (128kbps)</span></td>
+                            <td>Calidad Estándar / Voz</td>
+                            <td id="comp-mp3-128">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="asc__capacity" id="device-bars">
+            <span class="asc__label">Porcentaje ocupado en dispositivos comunes</span>
+            <div class="asc__bars">
+                <div class="asc__bar-item">
+                    <div class="asc__bar-label"><span>Tarjeta SD 32GB</span> <span id="bar-pct-32">0%</span></div>
+                    <div class="asc__bar-track"><div class="asc__bar-fill" id="bar-fill-32"></div></div>
+                </div>
+                <div class="asc__bar-item">
+                    <div class="asc__bar-label"><span>Almacenamiento 128GB</span> <span id="bar-pct-128">0%</span></div>
+                    <div class="asc__bar-track"><div class="asc__bar-fill" id="bar-fill-128"></div></div>
+                </div>
+                <div class="asc__bar-item">
+                    <div class="asc__bar-label"><span>Disco Duro 1TB</span> <span id="bar-pct-1024">0%</span></div>
+                    <div class="asc__bar-track"><div class="asc__bar-fill" id="bar-fill-1024"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="asc__actions">
+            <button class="asc__copy-btn" id="copy-summary" aria-label="Copiar resumen del cálculo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span id="copy-btn-text">Copiar Resumen</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let calculationMode = 'space';
+
+    function formatSize(bytes: number): string {
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+        return (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+    }
+
+    function formatTime(seconds: number): string {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+        return `${h}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+    }
+
+    function calculate() {
+        const hz = parseInt((document.getElementById('hz-select') as HTMLSelectElement).value);
+        const bits = parseInt((document.getElementById('bits-select') as HTMLSelectElement).value);
+        const channels = parseInt((document.getElementById('channels-select') as HTMLSelectElement).value);
+
+        const resPrimary = document.getElementById('result-primary');
+        const resSecondary = document.getElementById('result-secondary');
+        if (!resPrimary || !resSecondary) return;
+
+        const bytesPerSecond = (hz * bits * channels) / 8;
+
+        if (calculationMode === 'space') {
+            const h = parseInt((document.getElementById('time-h') as HTMLInputElement).value) || 0;
+            const m = parseInt((document.getElementById('time-m') as HTMLInputElement).value) || 0;
+            const s = parseInt((document.getElementById('time-s') as HTMLInputElement).value) || 0;
+            const totalSeconds = (h * 3600) + (m * 60) + s;
+
+            const totalBytes = bytesPerSecond * totalSeconds;
+            
+            resPrimary.textContent = formatSize(totalBytes);
+            resSecondary.textContent = `Duración configurada: ${formatTime(totalSeconds)}`;
+
+            updateComparison(totalBytes);
+            updateBars(totalBytes);
+        } else {
+            const availableGb = parseFloat((document.getElementById('space-input') as HTMLInputElement).value) || 0;
+            const availableBytes = availableGb * 1024 * 1024 * 1024;
+            
+            const totalSeconds = availableBytes / bytesPerSecond;
+            
+            resPrimary.textContent = formatTime(totalSeconds);
+            resSecondary.textContent = `Grabación posible con ${availableGb} GB configurados`;
+
+            updateComparison(availableBytes);
+            updateBars(availableBytes);
+        }
+    }
+
+    function updateComparison(wavBytes: number) {
+        document.getElementById('comp-wav')!.textContent = formatSize(wavBytes);
+        document.getElementById('comp-flac')!.textContent = formatSize(wavBytes * 0.55) + " (est.)";
+        
+        const hz = parseInt((document.getElementById('hz-select') as HTMLSelectElement).value);
+        const bits = parseInt((document.getElementById('bits-select') as HTMLSelectElement).value);
+        const channels = parseInt((document.getElementById('channels-select') as HTMLSelectElement).value);
+        const bytesPerSecond = (hz * bits * channels) / 8;
+        const totalSecs = wavBytes / bytesPerSecond;
+
+        const mp3_320 = (320000 / 8) * totalSecs;
+        const mp3_128 = (128000 / 8) * totalSecs;
+
+        document.getElementById('comp-mp3-320')!.textContent = formatSize(mp3_320);
+        document.getElementById('comp-mp3-128')!.textContent = formatSize(mp3_128);
+    }
+
+    function updateBars(totalBytes: number) {
+        const devices = [
+            { id: '32', cap: 32 * 1024 * 1024 * 1024 },
+            { id: '128', cap: 128 * 1024 * 1024 * 1024 },
+            { id: '1024', cap: 1024 * 1024 * 1024 * 1024 }
+        ];
+
+        devices.forEach(dev => {
+            const pct = Math.min(100, (totalBytes / dev.cap) * 100);
+            const fill = document.getElementById(`bar-fill-${dev.id}`);
+            const text = document.getElementById(`bar-pct-${dev.id}`);
+            if (fill && text) {
+                fill.style.width = `${pct}%`;
+                text.textContent = `${pct.toFixed(pct < 1 ? 2 : 1)}%`;
+                
+                fill.classList.remove('asc__bar-fill--warning', 'asc__bar-fill--danger');
+                if (pct > 90) fill.classList.add('asc__bar-fill--danger');
+                else if (pct > 70) fill.classList.add('asc__bar-fill--warning');
+            }
+        });
+    }
+
+    function setupEventListeners() {
+        const inputs = [
+            'hz-select', 'bits-select', 'channels-select', 
+            'time-h', 'time-m', 'time-s', 'space-input'
+        ];
+
+        inputs.forEach(id => {
+            document.getElementById(id)?.addEventListener('input', calculate);
+        });
+
+        document.querySelectorAll('.asc__preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.asc__preset-btn').forEach(p => p.classList.remove('asc__preset-btn--active'));
+                btn.classList.add('asc__preset-btn--active');
+
+                (document.getElementById('hz-select') as HTMLSelectElement).value = btn.getAttribute('data-hz')!;
+                (document.getElementById('bits-select') as HTMLSelectElement).value = btn.getAttribute('data-bits')!;
+                (document.getElementById('channels-select') as HTMLSelectElement).value = btn.getAttribute('data-channels')!;
+                calculate();
+            });
+        });
+
+        const toggle = document.getElementById('toggle-mode');
+        toggle?.addEventListener('click', () => {
+            calculationMode = calculationMode === 'space' ? 'time' : 'space';
+            toggle.classList.toggle('asc__mode-toggle--active');
+            
+            const timeBox = document.getElementById('duration-inputs');
+            const spaceBox = document.getElementById('space-box');
+            const timeLabel = document.getElementById('time-input-label');
+            const toggleText = document.getElementById('toggle-text');
+
+            if (calculationMode === 'space') {
+                timeBox!.style.display = 'grid';
+                spaceBox!.style.display = 'none';
+                timeLabel!.textContent = 'Duración de la Grabación';
+                toggleText!.textContent = 'Quiero calcular cuánto podré grabar según mi espacio libre';
+            } else {
+                timeBox!.style.display = 'none';
+                spaceBox!.style.display = 'block';
+                timeLabel!.textContent = 'Espacio Disponible';
+                toggleText!.textContent = 'Volver al cálculo por duración';
+            }
+            calculate();
+        });
+
+        document.getElementById('copy-summary')?.addEventListener('click', (e) => {
+            const btn = e.currentTarget as HTMLElement;
+            const hz = (document.getElementById('hz-select') as HTMLSelectElement).options[(document.getElementById('hz-select') as HTMLSelectElement).selectedIndex].text.split(' ')[0];
+            const bits = (document.getElementById('bits-select') as HTMLSelectElement).value;
+            const channels = (document.getElementById('channels-select') as HTMLSelectElement).options[(document.getElementById('channels-select') as HTMLSelectElement).selectedIndex].text.split(' ')[0];
+            
+            const primary = document.getElementById('result-primary')?.textContent;
+            
+            let text = "";
+            if (calculationMode === 'space') {
+                const h = (document.getElementById('time-h') as HTMLInputElement).value;
+                const m = (document.getElementById('time-m') as HTMLInputElement).value;
+                const t = `${h}h ${m}m`;
+                text = `La grabación de ${t} a ${bits}-bit/${hz} en modo ${channels} ocupará aproximadamente ${primary}.`;
+            } else {
+                const space = (document.getElementById('space-input') as HTMLInputElement).value;
+                text = `Con ${space} GB disponibles, puedes grabar hasta ${primary} de audio a ${bits}-bit/${hz} ${channels}.`;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btnText = document.getElementById('copy-btn-text');
+                const originalText = btnText!.textContent;
+                btn.classList.add('asc__copy-btn--done');
+                btnText!.textContent = "¡Resumen Copiado!";
+                setTimeout(() => {
+                    btn.classList.remove('asc__copy-btn--done');
+                    btnText!.textContent = originalText;
+                }, 2000);
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupEventListeners();
+        calculate();
+    });
+</script>

@@ -1,0 +1,89 @@
+---
+import SEOArticle from "../../ui/seo/SEOArticle.astro";
+import SEOTitle from "../../ui/seo/SEOTitle.astro";
+import SEOCard from "../../ui/seo/SEOCard.astro";
+import SEOGrid from "../../ui/seo/SEOGrid.astro";
+import SEOCode from "../../ui/seo/SEOCode.astro";
+import SEOSummary from "../../ui/seo/SEOSummary.astro";
+import SEOTable from "../../ui/seo/SEOTable.astro";
+import SEOList from "../../ui/seo/SEOList.astro";
+
+const summaryItems = [
+    "<strong>WAV a MP3</strong>: Calcula el peso de archivos con y sin compresión.",
+    "<strong>Resolución de Audio</strong>: Ajusta frecuencia (kHz) y bits (16/24/32).",
+    "<strong>Inversión de cálculo</strong>: ¿Cuánto puedo grabar con el espacio que me queda?",
+    "<strong>Formatos Profesionales</strong>: Estimación para FLAC y masterización en 192kHz."
+];
+---
+
+<SEOSummary title="Calculadora de Capacidad para Sonido Digital" items={summaryItems} />
+
+<SEOArticle>
+    <SEOTitle title="¿Cómo se calcula el tamaño de una grabación de audio?" />
+    <p>
+        El tamaño de un archivo de audio digital sin compresión (como WAV o AIFF) depende de tres factores técnicos 
+        fundamentales que determinan la cantidad de datos que se capturan por segundo:
+    </p>
+    <ul>
+        <li><strong>Frecuencia de Muestreo (Sample Rate):</strong> Cuántas veces por segundo se "mide" la onda sonora (ej. 44.1 kHz o 48 kHz).</li>
+        <li><strong>Profundidad de Bits (Bit Depth):</strong> La resolución de cada medida. A más bits, mayor rango dinámico y menor ruido de cuantificación.</li>
+        <li><strong>Canales:</strong> Si la grabación es Mono (1), Estéreo (2) o Multicanal (Surround).</li>
+    </ul>
+    <p>
+        La fórmula matemática estándar es lo que los técnicos denominan <strong>Bitrate</strong>. Multiplicando este resultado por la 
+        duración total en segundos, obtenemos el tamaño total del archivo en bruto.
+    </p>
+
+    <SEOGrid>
+        <SEOCard title="Calidad CD" icon="mdi:album">
+            <p>16-bit / 44.1 kHz. Ocupa aproximadamente 10.1 MB por minuto en estéreo. Es el estándar histórico de la industria discográfica.</p>
+        </SEOCard>
+        <SEOCard title="Grabación Pro" icon="mdi:microphone-variant">
+            <p>24-bit / 48 kHz. El estándar para video y cine. Ocupa unos 16.5 MB por minuto. Mayor margen para la mezcla.</p>
+        </SEOCard>
+        <SEOCard title="Alta Resolución" icon="mdi:high-definition">
+            <p>24-bit / 96 kHz. Utilizado en masterización. Dobla el tamaño de la grabación estándar hasta los 33 MB por minuto.</p>
+        </SEOCard>
+    </SEOGrid>
+
+    <SEOTitle title="WAV vs FLAC vs MP3: El impacto en el disco" level={2} />
+    <p>
+        No todos los archivos de audio ocupan lo mismo. Dependiendo de si usamos compresión y de qué tipo sea, 
+        el espacio necesario varía drásticamente:
+    </p>
+    <ul>
+        <li><strong>WAV / AIFF:</strong> Formatos "contenedores" sin compresión. Preservan cada bit de la grabación original pero son los más pesados.</li>
+        <li><strong>FLAC:</strong> Compresión sin pérdida (Lossless). Reduce el tamaño original entre un 40% y 60% sin sacrificar ni un ápice de calidad.</li>
+        <li><strong>MP3 / AAC:</strong> Compresión con pérdida (Lossy). Eliminan frecuencias imperceptibles. Un MP3 a 320 kbps ocupa aproximadamente un 22% del WAV original.</li>
+    </ul>
+
+    <SEOTable headers={["Calidad", "Frecuencia", "Bits", "MB por Minuto (Estéreo)"]}>
+        <tr><td>Llamada Telefónica</td><td>8 kHz</td><td>8-bit</td><td>0.94 MB</td></tr>
+        <tr><td>Radio FM</td><td>32 kHz</td><td>16-bit</td><td>7.32 MB</td></tr>
+        <tr><td>CD Original</td><td>44.1 kHz</td><td>16-bit</td><td>10.09 MB</td></tr>
+        <tr><td>Estudio Video</td><td>48 kHz</td><td>24-bit</td><td>16.48 MB</td></tr>
+        <tr><td>Alta Fidelidad</td><td>96 kHz</td><td>24-bit</td><td>32.96 MB</td></tr>
+    </SEOTable>
+
+    <SEOTitle title="Fórmula de cálculo para técnicos" level={2} />
+    <p>Si necesitas realizar el cálculo manualmente o implementarlo en tu propio software, esta es la lógica que sigue nuestra calculadora:</p>
+    <SEOCode ariaLabel="Lógica de cálculo de almacenamiento de audio">
+        const sampleRate = 48000;
+        const bitDepth = 24;
+        const channels = 2;
+        const seconds = 3600;
+
+        const bitsPerSecond = sampleRate * bitDepth * channels;
+        const totalBytes = (bitsPerSecond * seconds) / 8;
+    </SEOCode>
+
+    <SEOTitle title="Casos de uso para esta herramienta" level={2} />
+    <SEOList items={[
+        "Podcasting: Evita quedarte sin espacio en tu grabadora portátil durante una entrevista larga.",
+        "Estudio de Música: Calcula cuántos GB de espacio libre necesitas antes de abrir una sesión de 40 pistas a 96kHz.",
+        "Ingeniería de Sonido Digital: Verifica que el bitrate de transferencia sea compatible con tu hardware.",
+        "Post-producción de Cine: Estima el peso de las tomas multicanal 5.1 para el envío de archivos por red.",
+        "Archivística: Determina la capacidad necesaria para digitalizar una colección de cintas analógicas en calidad Master."
+    ]} />
+
+</SEOArticle>

@@ -38,5 +38,13 @@ export const musicSection: SectionData = {
             description: "Convierte Hz a notas musicales al instante. Mide cents de desafinación y afina sintetizadores y samples con precisión.",
             color: "#c026d3",
         },
+        {
+            href: "/utilidades/calculadora-almacenamiento-audio-digital/",
+            iconBg: "mdi:harddisk",
+            iconFg: "mdi:volume-high",
+            title: "Almacenamiento de Audio Digital",
+            description: "Estima cuánto espacio ocupará una grabación según kHz, bits y duración. Gestiona tu espacio en disco con precisión profesional.",
+            color: "#818cf8",
+        },
     ],
 };
