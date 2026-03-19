@@ -86,5 +86,13 @@ export const financeSection: SectionData = {
             iconFg: "mdi:scale-balance",
             color: "#b8860b",
         },
+        {
+            title: "Calculadora FIRE (4%)",
+            description: "Calcula el capital necesario para vivir de las rentas con el movimiento FIRE y la regla del 4%.",
+            href: "/utilidades/calculadora-regla-4-por-ciento-fire/",
+            iconBg: "mdi:finance",
+            iconFg: "mdi:fire",
+            color: "#10b981",
+        },
     ],
 };
