@@ -9,7 +9,7 @@ export const workSection: SectionData = {
         {
             title: "Calculadora IRPF 2026",
             description: "Simulador de sueldo neto mensual y anual actualizado con la normativa fiscal española de 2026.",
-            href: "/utilidades/calculadora-irpf-2026/",
+            href: "/utilidades/calculadora-irpf/",
             iconBg: "mdi:calculator-variant-outline",
             iconFg: "mdi:cash-multiple",
             color: "#4f46e5",
