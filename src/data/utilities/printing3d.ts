@@ -30,5 +30,13 @@ export const printing3dSection: SectionData = {
             description: "Calcula el limite de velocidad real de tu impresora basándose en el flujo máximo de tu hotend.",
             color: "#ef4444",
         },
+        {
+            href: "/utilidades/calculadora-tiempo-curado-resina-uv/",
+            iconBg: "mdi:brightness-5",
+            iconFg: "mdi:printer-3d",
+            title: "Tiempo de Curado UV",
+            description: "Calcula el tiempo óptimo de post-procesado basado en potencia y tipo de resina.",
+            color: "#8b5cf6",
+        },
     ],
 };

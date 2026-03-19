@@ -1,0 +1,170 @@
+---
+import SEOArticle from "../../ui/seo/SEOArticle.astro";
+import SEOTitle from "../../ui/seo/SEOTitle.astro";
+import SEOCard from "../../ui/seo/SEOCard.astro";
+import SEOGrid from "../../ui/seo/SEOGrid.astro";
+import SEOSummary from "../../ui/seo/SEOSummary.astro";
+import SEOTip from "../../ui/seo/SEOTip.astro";
+import SEOList from "../../ui/seo/SEOList.astro";
+import SEOTable from "../../ui/seo/SEOTable.astro";
+import SEOGlossary from "../../ui/seo/SEOGlossary.astro";
+
+const summaryItems = [
+    "<strong>Potencia Variable</strong>: Ajuste automático según los vatios (W) de cada lámpara UV del mercado.",
+    "<strong>Tipos de Resina</strong>: Diferenciación entre resinas estándar, transparentes, flex y de ingeniería.",
+    "<strong>Ley del Inverso del Cuadrado</strong>: Cálculo de intensidad basado en distancia física real.",
+    "<strong>Post-procesado Maestro</strong>: Guía integral de lavado, sacado y curado final profesional."
+];
+
+const curingTableHeaders = ["Fabricante", "Gama de Resina", "Potencia (W)", "Tiempo Recomendado"];
+const troubleshootingHeaders = ["Síntoma / Problema", "Causa Probable", "Solución Recomendada"];
+
+const glossaryItems = [
+    {
+        term: "Fotoiniciadores",
+        definition: "Sustancias químicas que absorben energía luminosa (fotones) para iniciar la reacción de polimerización, transformando el líquido en sólido."
+    },
+    {
+        term: "Longitud de Onda (nm)",
+        definition: "La 'frecuencia' de la luz expresada en nanómetros. El estándar en impresión 3D es 405nm, aunque existen resinas industriales de 385nm."
+    },
+    {
+        term: "Dosis de Exposición",
+        definition: "Energía total entregada por los LEDs a la superficie de la pieza, medida por la integración de intensidad y tiempo (mJ/cm²)."
+    },
+    {
+        term: "Inhibición por Oxígeno",
+        definition: "Fenómeno donde el oxígeno retarda el curado superficial, dejando la pieza pegajosa tras minutos de exposición UV intensa."
+    },
+    {
+        term: "Post-procesado Térmico",
+        definition: "Tratamiento con calor controlado para resinas de ingeniería que necesitan completar su reticulado molecular interno."
+    }
+];
+---
+
+<SEOSummary 
+    title="Manual Definitivo: Post-procesado y Curado de Impresiones 3D de Resina" 
+    items={summaryItems} 
+/>
+
+<SEOArticle>
+    <SEOTitle title="¿Qué es el Curado de Resina UV y por qué es Imprescindible?" />
+    <p>
+        El curado UV es el paso final que da sentido a todo el trabajo realizado por tu impresora 3D. Cuando una pieza de resina (SLA, DLP o LCD) termina de imprimirse, se encuentra en lo que los técnicos llamamos <strong>'estado verde' (Green State)</strong>. Esto significa que, aunque la pieza tiene su forma final, sus cadenas moleculares no están completamente entrelazadas.
+    </p>
+    <p>
+        Sin el post-curado secundario, la pieza es estructuralmente débil, pegajosa al tacto y altamente tóxica debido a la presencia de monómeros libres. El curado final no solo estabiliza el material, sino que es el que otorga a la pieza sus propiedades mecánicas declaradas por el fabricante: su dureza Shore final, su resistencia a la tracción y su estabilidad térmica.
+    </p>
+
+    <SEOTitle title="La Ciencia: La Ley de la Inversa del Cuadrado" level={2} />
+    <p>
+        Uno de los errores más comunes de los usuarios es pensar que si acercan la lámpara UV a la mitad de distancia, la luz llega con el doble de fuerza. Esto es físicamente falso. Según la <strong>Ley de la Inversa del Cuadrado</strong>, la intensidad de la luz disminuye en proporción al cuadrado de la distancia.
+    </p>
+    <blockquote>
+        <em>"Si doblas la distancia de los LEDs a la pieza (de 5cm a 10cm), la intensidad de la radiación UV cae a una cuarta parte (1/4)."</em>
+    </blockquote>
+    <p>
+        Nuestra calculadora de intensidad UV integra esta fórmula para compensar automáticamente los vatios efectivos que realmente inciden sobre tu impresión, evitando que quemes la superficie por exceso de calor o que la pieza quede infra-curada por estar demasiado alejada.
+    </p>
+
+    <SEOTitle title="Wavelength Power: 365nm vs 405nm" level={2} />
+    <p>
+        No toda la luz UV es igual. Las resinas de impresión 3D contienen <strong>fotoiniciadores</strong> calibrados específicamente para el espectro de los <strong>405 nanómetros</strong>. El uso de lámparas UV de 365nm (comunes en secadores de uñas antiguos) puede resultar en una polimerización incompleta. 
+    </p>
+    <p>
+        Incluso si los LEDs son potentes, si la longitud de onda no coincide con la ventana de reactividad de la resina, la energía rebotará o se perderá en forma de calor, sin activar las cadenas cruzadas del polímero.
+    </p>
+
+    <SEOTitle title="Tabla A: Tiempos de Curado por Marca y Material" level={2} />
+    <SEOTable headers={curingTableHeaders}>
+        <tr>
+            <td><strong>Anycubic / Elegoo</strong></td>
+            <td>Resina Estándar / Lavable</td>
+            <td>25W - 40W</td>
+            <td>2 - 5 min</td>
+        </tr>
+        <tr>
+            <td><strong>Siraya Tech</strong></td>
+            <td>Blu / Fast / Sculpt (Ingeniería)</td>
+            <td>40W - 60W</td>
+            <td>5 - 12 min</td>
+        </tr>
+        <tr>
+            <td><strong>Formlabs</strong></td>
+            <td>Grey / Clear / Tough 2000</td>
+            <td>Station 80W</td>
+            <td>15 - 60 min</td>
+        </tr>
+        <tr>
+            <td><strong>Resinas Flexibles</strong></td>
+            <td>TPU-Like / Flex</td>
+            <td>40W - 50W</td>
+            <td>8 - 15 min</td>
+        </tr>
+        <tr>
+            <td><strong>Resinas Castable</strong></td>
+            <td>Cera para joyería fina</td>
+            <td>60W+</td>
+            <td>15 - 30 min</td>
+        </tr>
+    </SEOTable>
+
+    <SEOTitle title="Tabla B: Troubleshooting del Post-procesado" level={2} />
+    <SEOTable headers={troubleshootingHeaders}>
+        <tr>
+            <td><strong>Superficie pegajosa</strong></td>
+            <td>Falta de intensidad o inhibición por oxígeno</td>
+            <td>Sumergir en un recipiente con agua durante el curado</td>
+        </tr>
+        <tr>
+            <td><strong>Manchas blancas lechosas</strong></td>
+            <td>Curado con restos de alcohol IPA húmedo</td>
+            <td>Secar al 100% con aire comprimido antes de curar</td>
+        </tr>
+        <tr>
+            <td><strong>Pieza quebradiza</strong></td>
+            <td>Sobre-curado (Over-curing) extremo</td>
+            <td>Reducir los minutos en la calculadora</td>
+        </tr>
+        <tr>
+            <td><strong>Grietas internas</strong></td>
+            <td>Curado demasiado rápido y agresivo</td>
+            <td>Aumentar la distancia LEDs-Pieza y tiempo</td>
+        </tr>
+        <tr>
+            <td><strong>Cambio de color (Amarilleo)</strong></td>
+            <td>Exceso de temperatura o UV-A agresivo</td>
+            <td>Usar el factor de 'Transparente' en la utilidad</td>
+        </tr>
+    </SEOTable>
+
+    <SEOTitle title="Glosario Técnico de Polimerización Digital" level={2} />
+    <SEOGlossary items={glossaryItems} />
+
+    <SEOTitle title="Checklist Maestro: El Ciclo de Vida de una Pieza Perfecta" level={2} />
+    <SEOGrid>
+        <SEOCard title="Lavado IPA 99%" icon="mdi:flask">
+            <p>Retira la resina líquida residual. Dos baños: uno sucio para lo grueso y uno limpio para el acabado final.</p>
+        </SEOCard>
+        <SEOCard title="Secado Total" icon="mdi:air-filter">
+            <p><strong>Paso Crítico</strong>. Si queda un solo rastro de alcohol, la luz UV lo horneará dejando manchas blancas permanentes.</p>
+        </SEOCard>
+        <SEOCard title="Retirada de Soportes" icon="mdi:content-cut">
+            <p>Es más fácil y deja menos marcas si se hace antes del curado final, cuando la pieza aún es elástica.</p>
+        </SEOCard>
+    </SEOGrid>
+
+    <SEOList icon="mdi:check-circle" items={[
+        "<strong>Protección de Nitrilo</strong> El látex no bloquea la irritación de la resina líquida.",
+        "<strong>Curado Uniforme</strong> Usa una base rotatoria o espejos para que la luz impacte el 100% de la superficie.",
+        "<strong>Seguridad Ocular UV</strong> Usa gafas con filtro UV-400 para evitar fatiga visual y daños en la córnea.",
+        "<strong>Enfriado Progresivo</strong> Deja reposar la pieza 10 minutos tras el ciclo antes de manipularla bajo estrés."
+    ]} />
+
+    <SEOTip title="¿Por qué curar en agua (Water Curing)?">
+        <p>
+            El oxígeno del aire es un inhibidor natural de la polimerización. Al curar tus piezas sumergidas en un frasco de vidrio lleno de agua, bloqueas el oxígeno. Resultado: Piezas <strong>zero pegajosas</strong>, con acabado mate perfecto y curado interno más homogéneo para joyería o ingeniería.
+        </p>
+    </SEOTip>
+</SEOArticle>
