@@ -8,11 +8,19 @@ export const workSection: SectionData = {
     utilities: [
         {
             title: "Calculadora IRPF 2026",
-            description: "Simulador de sueldo neto mensual y anual actualizado con la normativa fiscal española de 2026.",
-            href: "/utilidades/calculadora-irpf/",
+            description: "Simulador avanzado de sueldo neto mensual y anual actualizado con la normativa fiscal de 2026.",
+            href: "/utilidades/calculadora-irpf-2026/",
             iconBg: "mdi:calculator-variant-outline",
             iconFg: "mdi:cash-multiple",
             color: "#4f46e5",
+        },
+        {
+            title: "Simulador IRPF 2025",
+            description: "Calcula tu retención de IRPF y sueldo neto para el ejercicio fiscal 2025.",
+            href: "/utilidades/calculadora-irpf/",
+            iconBg: "mdi:calculator-variant-outline",
+            iconFg: "mdi:cash",
+            color: "#6366f1",
         },
         {
             title: "Simulador Sueldo Neto",
