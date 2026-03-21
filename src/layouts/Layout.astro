@@ -47,33 +47,36 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
 
         <script>
             import { handleGlobalShare } from "../utils/share";
+            import { stampApi } from "../lib/api";
 
             document.addEventListener("DOMContentLoaded", () => {
                 document.removeEventListener("click", handleGlobalShare);
                 document.addEventListener("click", handleGlobalShare);
             });
 
-            (function registerFootprint() {
-                if (navigator.userAgent.includes("vercel")) {
-                    return;
-                }
+            (function init() {
+                if (navigator.userAgent.includes("vercel")) return;
 
                 const STORAGE_KEY = "jjlmoya_footprint_v5";
                 const APPS_SCRIPT_URL =
                     "https://script.google.com/macros/s/AKfycbwCYuz1UvpKD60u8L9B6WIewL8tEHdPP4pTnXN5GcNAXd3XPh4bvJw0n86mLEBMrRE3Yg/exec";
-
                 const SYNC_THRESHOLDS = [1, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000];
 
-                let storedData: any = {};
+                let storedData: Record<string, unknown> = {};
                 try {
                     const raw = localStorage.getItem(STORAGE_KEY);
                     if (raw) storedData = JSON.parse(raw);
-                } catch (e) {
-                    console.error("Error parsing footprint data", e);
-                }
+                } catch (_) {}
 
-                const visits = (storedData.visits || 0) + 1;
+                const visitId: string =
+                    (storedData.id as string) ||
+                    `SR-${Math.random().toString(36).substring(7).toUpperCase()}`;
 
+                stampApi
+                    .pageView({ page: window.location.pathname, visitId })
+                    .catch(() => {});
+
+                const visits = ((storedData.visits as number) || 0) + 1;
                 const shouldSync = SYNC_THRESHOLDS.includes(visits);
 
                 function generateColor(str: string) {
@@ -92,30 +95,23 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
                     screen: `${window.screen.width}x${window.screen.height}`,
                     lang: navigator.language,
                     path: window.location.pathname,
-                    id:
-                        storedData.id ||
-                        `SR-${Math.random().toString(36).substring(7).toUpperCase()}`,
+                    id: visitId,
                     color:
-                        storedData.color ||
+                        (storedData.color as string) ||
                         generateColor(
                             navigator.userAgent + window.screen.width + Date.now() + Math.random()
                         ),
-                    visits: visits,
+                    visits,
                     lastVisit: new Date().toISOString(),
                 };
 
                 localStorage.setItem(
                     STORAGE_KEY,
-                    JSON.stringify({
-                        ...storedData,
-                        ...baseData,
-                        registered: true,
-                    })
+                    JSON.stringify({ ...storedData, ...baseData, registered: true })
                 );
 
                 if (shouldSync) {
                     console.log(`👣 Sincronizando huella digital (Visita #${visits})...`);
-
                     fetch(APPS_SCRIPT_URL, {
                         method: "POST",
                         mode: "no-cors",
