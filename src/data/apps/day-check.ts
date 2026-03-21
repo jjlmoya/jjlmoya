@@ -50,7 +50,7 @@ export const dayCheck: Application = {
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.daycheck.utility",
-        appStore: "",
+        appStore: "https://apps.apple.com/es/app/day-check-contador-de-d%C3%ADas/id6758218778",
     },
     benefits: [
         {
@@ -107,10 +107,10 @@ export const dayCheck: Application = {
         },
     ],
     videos: ["7yrHoCccCiw", "BH3hQ2VlPDc"],
-    bannerText: "El tiempo, hecho arte. Tu contador de días favorito, ahora en versión App nativa.",
+    bannerText: "¡Day Check ya disponible en App Store y Google Play!",
     hasDetailPage: true,
     roadmap: {
-        statusLabel: "Lanzado en Google Play",
+        statusLabel: "Disponible en Google Play y App Store",
         statusType: "released",
         progress: 100,
         tasks: [
@@ -118,6 +118,7 @@ export const dayCheck: Application = {
             { name: "Sistema de Categorías", status: "done" },
             { name: "Diseño Glassmorphism", status: "done" },
             { name: "Publicación en Google Play", status: "done" },
+            { name: "Publicación en App Store", status: "done" },
         ],
     },
 };

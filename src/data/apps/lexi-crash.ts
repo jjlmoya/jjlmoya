@@ -54,7 +54,7 @@ export const lexiCrash: Application = {
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.lexicrash",
-        appStore: "",
+        appStore: "https://apps.apple.com/es/app/lexicrash/id6758558703",
     },
     benefits: [
         {
@@ -95,22 +95,22 @@ export const lexiCrash: Application = {
     highlights: [
         { label: "Jugadores", value: "+10k" },
         { label: "Palabras", value: "+1M" },
-        { label: "Rating", value: "4.8" },
+        { label: "Rating", value: "5.0" },
     ],
     videos: [],
-    bannerText: "¡LexiCrash ya disponible en Google Play!",
+    bannerText: "¡LexiCrash ya disponible en App Store y Google Play!",
     hasDetailPage: true,
     roadmap: {
-        statusLabel: "Disponible en Google Play",
+        statusLabel: "Disponible en Google Play y App Store",
         statusType: "released",
-        progress: 98,
+        progress: 100,
         tasks: [
             { name: "Desarrollo Core", status: "done" },
             { name: "Modos de Juego (Crash, Relax, Daily)", status: "done" },
             { name: "Sistema de Retos", status: "done" },
             { name: "Pulido y UI/UX", status: "done" },
             { name: "Publicación en Stores (Android)", status: "done" },
-            { name: "Publicación en Stores (iOS)", status: "active" },
+            { name: "Publicación en Stores (iOS)", status: "done" },
         ],
     },
 };

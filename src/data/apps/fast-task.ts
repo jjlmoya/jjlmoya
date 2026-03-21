@@ -57,7 +57,7 @@ export const fastTask: Application = {
     },
     stores: {
         googlePlay: "https://play.google.com/store/apps/details?id=com.gamebob.fasttask",
-        appStore: "",
+        appStore: "https://apps.apple.com/es/app/fasttask-escribe-olvida-paz/id6759599830",
     },
     price: "4,95€",
     benefits: [
@@ -102,10 +102,10 @@ export const fastTask: Application = {
         { label: "Offline", value: "First" },
     ],
     videos: [],
-    bannerText: "Fast Task: Disponible pronto en todas las plataformas.",
+    bannerText: "¡Fast Task ya disponible en App Store y Google Play!",
     hasDetailPage: true,
     roadmap: {
-        statusLabel: "Lanzamiento Inminente",
+        statusLabel: "Disponible en Google Play y App Store",
         statusType: "released",
         progress: 100,
         tasks: [
@@ -115,6 +115,7 @@ export const fastTask: Application = {
             { name: "Integración Linear", status: "done" },
             { name: "Pulido Final UI", status: "done" },
             { name: "Lanzamiento en Beta", status: "done" },
+            { name: "Publicación en Stores", status: "done" },
         ],
     },
 };
