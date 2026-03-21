@@ -31,14 +31,7 @@ export const healthSection: SectionData = {
             description: "Terapia de muesca y ruidos de colores para calmar el zumbido.",
             color: "#2dd4bf",
         },
-        {
-            href: "/utilidades/calculadora-edad-mascotas/",
-            iconBg: "mdi:paw",
-            iconFg: "mdi:clock-time-eight-outline",
-            title: "Calculadora Edad Mascotas",
-            description: "Traduce años de perro y gato a años humanos con ciencia.",
-            color: "#f59e0b",
-        },
+
         {
             href: "/utilidades/visualizador-respiracion/",
             iconBg: "mdi:wind-power",

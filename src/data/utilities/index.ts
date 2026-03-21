@@ -30,6 +30,7 @@ import { educationSection } from "./education";
 import { dronesSection } from "./drones";
 import { coffeeSection } from "./coffee";
 import { gamesSection } from "./games";
+import { petsSection } from "./pets";
 
 
 export const sections: SectionData[] = [
@@ -62,6 +63,7 @@ export const sections: SectionData[] = [
     dronesSection,
     coffeeSection,
     gamesSection,
+    petsSection,
 ];
 
 
