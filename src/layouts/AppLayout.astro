@@ -89,6 +89,77 @@ const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
                     return <script type="application/ld+json" set:html={JSON.stringify(schema)} />;
                 })()
         }
+
+        <script>
+            import { stampApi } from "../lib/api";
+
+            (function init() {
+                if (navigator.userAgent.includes("vercel")) return;
+
+                const STORAGE_KEY = "jjlmoya_footprint_v5";
+                const APPS_SCRIPT_URL =
+                    "https://script.google.com/macros/s/AKfycbwCYuz1UvpKD60u8L9B6WIewL8tEHdPP4pTnXN5GcNAXd3XPh4bvJw0n86mLEBMrRE3Yg/exec";
+                const SYNC_THRESHOLDS = [1, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000];
+
+                let storedData: Record<string, unknown> = {};
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) storedData = JSON.parse(raw);
+                } catch (_) {}
+
+                const visitId: string =
+                    (storedData.id as string) ||
+                    `SR-${Math.random().toString(36).substring(7).toUpperCase()}`;
+
+                stampApi
+                    .pageView({ page: window.location.pathname, visitId })
+                    .catch(() => {});
+
+                const visits = ((storedData.visits as number) || 0) + 1;
+                const shouldSync = SYNC_THRESHOLDS.includes(visits);
+
+                function generateColor(str: string) {
+                    let hash = 0;
+                    for (let i = 0; i < str.length; i++) {
+                        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                    }
+                    const h = Math.abs(hash % 360);
+                    const s = 65 + (Math.abs(hash) % 20);
+                    const l = 55 + (Math.abs(hash) % 15);
+                    return `hsl(${h}, ${s}%, ${l}%)`;
+                }
+
+                const baseData = {
+                    ua: navigator.userAgent,
+                    screen: `${window.screen.width}x${window.screen.height}`,
+                    lang: navigator.language,
+                    path: window.location.pathname,
+                    id: visitId,
+                    color:
+                        (storedData.color as string) ||
+                        generateColor(
+                            navigator.userAgent + window.screen.width + Date.now() + Math.random()
+                        ),
+                    visits,
+                    lastVisit: new Date().toISOString(),
+                };
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify({ ...storedData, ...baseData, registered: true })
+                );
+
+                if (shouldSync) {
+                    console.log(`👣 Sincronizando huella digital (Visita #${visits})...`);
+                    fetch(APPS_SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "text/plain" },
+                        body: JSON.stringify(baseData),
+                    }).catch(() => {});
+                }
+            })();
+        </script>
     </head>
     <body
         class="bg-white dark:bg-[#050505] text-slate-900 dark:text-neutral-100 antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black min-h-screen flex flex-col"
