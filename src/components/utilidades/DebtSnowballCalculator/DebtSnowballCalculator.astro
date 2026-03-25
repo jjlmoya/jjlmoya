@@ -1,0 +1,512 @@
+---
+import { Icon } from "astro-icon/components";
+import "./DebtSnowballCalculator.css";
+---
+
+<div class="snowball-calculator fade-in" id="debt-calc-container">
+    <div class="snow-main-card">
+        
+        <aside class="snow-sidebar">
+            <h2 class="snow-title text-emerald-600">
+                <Icon name="mdi:finance" size={36} />
+                <span>Libertad total</span>
+            </h2>
+
+            <div class="snow-input-group">
+                <label class="snow-label" for="extra-budget">PRESUPUESTO EXTRA MENSUAL</label>
+                <div class="snow-input-wrapper">
+                    <input type="number" id="extra-budget" class="snow-input" value="100" min="0" step="50" />
+                    <span class="snow-input-unit">€</span>
+                </div>
+                <p class="text-[0.6rem] uppercase tracking-tighter font-bold opacity-40 mt-2">
+                    Dinero adicional sobre los pagos mínimos.
+                </p>
+            </div>
+
+            <div class="snow-method-tabs" id="method-switcher">
+                <button class="snow-tab active" data-method="snowball">BOLA DE NIEVE</button>
+                <button class="snow-tab" data-method="avalanche">AVALANCHA</button>
+            </div>
+
+            <div class="snow-adder-card">
+                <span class="snow-section-label">AÑADIR NUEVA DEUDA</span>
+                <div class="space-y-4">
+                    <div class="snow-input-group mb-0">
+                        <input type="text" id="debt-name" class="snow-input" placeholder="Nombre (Ej: Visa)" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="snow-input-group mb-0">
+                            <label class="snow-label" for="debt-balance">CUÁNTO DEBES</label>
+                            <div class="snow-input-wrapper">
+                                <input type="number" id="debt-balance" class="snow-input" placeholder="0" min="0" />
+                                <span class="snow-input-unit">€</span>
+                            </div>
+                        </div>
+                        <div class="snow-input-group mb-0">
+                            <label class="snow-label" for="debt-min-payment">PAGO MÍNIMO</label>
+                            <div class="snow-input-wrapper">
+                                <input type="number" id="debt-min-payment" class="snow-input" placeholder="0" min="0" />
+                                <span class="snow-input-unit">€/mes</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="snow-input-group">
+                        <label class="snow-label" for="debt-rate">TIPO DE INTERÉS</label>
+                        <div class="snow-input-wrapper">
+                            <input type="number" id="debt-rate" class="snow-input" value="15" step="0.1" />
+                            <span class="snow-input-unit">% ANUAL</span>
+                        </div>
+                    </div>
+                    <p class="text-[0.6rem] leading-relaxed opacity-40 font-bold uppercase tracking-tight">
+                        Introduce el saldo total pendiente y la cuota obligatoria que pagas cada mes.
+                    </p>
+                    <button id="add-debt-btn" class="snow-btn btn-add">
+                        <Icon name="mdi:plus-thick" size={18} />
+                        <span>AÑADIR AL PLAN</span>
+                    </button>
+                </div>
+            </div>
+
+            <button id="clear-data" class="mt-8 text-[0.65rem] font-black uppercase tracking-widest text-rose-500/50 hover:text-rose-500 transition-colors flex items-center gap-2">
+                <Icon name="mdi:delete-sweep" size={14} />
+                <span>Borrar configuración</span>
+            </button>
+        </aside>
+
+        
+        <main class="snow-content">
+            <div id="no-debts-msg" class="empty-view">
+                <div class="icon-blob">
+                    <Icon name="mdi:bank-off-outline" size={48} />
+                </div>
+                <h3 class="text-2xl font-black uppercase tracking-tighter mb-2">Comienza tu plan</h3>
+                <p class="max-w-xs mx-auto text-sm opacity-50">Tus deudas no son para siempre. Añade tus deudas para visualizar el camino a la libertad financiera.</p>
+            </div>
+
+            <div id="results-content" class="hidden">
+                <div class="snow-inventory-area mb-8">
+                    <span class="snow-section-label">Inventario de Deudas</span>
+                    <div class="debt-mini-table">
+                        <div class="dm-row dm-header">
+                            <span>Deuda</span>
+                            <span>Saldo</span>
+                            <span>Mínimo</span>
+                            <span>Int.</span>
+                            <span></span>
+                        </div>
+                        <div id="debt-items-list" class="debt-list-container"></div>
+                    </div>
+                </div>
+
+                <div class="snow-results-hero">
+                    <div class="hero-main">
+                        <span class="hero-label">FECHA DE LIBERTAD FINANCIERA</span>
+                        <div class="hero-value" id="summary-date">ENERO 2026</div>
+                    </div>
+                    <div class="hero-badge">
+                        <Icon name="mdi:check-decagram" size={20} />
+                        <span id="active-method-label">MÉTODO BOLA DE NIEVE</span>
+                    </div>
+                </div>
+
+                <div class="snow-grid-stats">
+                    <div class="stat-box">
+                        <div class="stat-value text-emerald-500" id="stat-months">--</div>
+                        <div class="stat-label">MESES RESTANTES</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value text-rose-500" id="stat-interest">--</div>
+                        <div class="stat-label">INTERESES TOTALES</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value text-blue-500" id="stat-total-paid">--</div>
+                        <div class="stat-label">PAGO TOTAL FINAL</div>
+                    </div>
+                    <div class="stat-box highlight-stat">
+                        <div class="stat-value text-sky-500" id="stat-extra-saved">--</div>
+                        <div class="stat-label">AHORRO INTERESES</div>
+                    </div>
+                </div>
+
+
+                <div class="mt-8 snow-action-plan">
+                    <div class="flex items-center justify-between mb-8">
+                        <h4 class="text-xs font-black uppercase tracking-widest opacity-40">Tu Estrategia Paso a Paso</h4>
+                        <div class="text-[0.6rem] font-bold text-blue-500 bg-blue-500/10 px-3 py-1 rounded-full uppercase">Cada paso muestra tu pago total cuando llegue su turno</div>
+                    </div>
+                    <div id="action-plan-list" class="snow-action-list">
+                        
+                    </div>
+                </div>
+
+                <div class="mt-16 snow-table-container">
+                    <div class="flex items-center justify-between mb-8">
+                        <h4 class="text-xs font-black uppercase tracking-widest opacity-40">Amortización Detallada</h4>
+                        <button id="export-csv" class="text-[0.65rem] font-black uppercase border-b-2 border-emerald-500/30 hover:border-emerald-500 transition-all">Exportar .CSV</button>
+                    </div>
+                    <div class="snow-table-overlay">
+                        <div class="snow-table-scroll">
+                            <table id="projection-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Saldo Inicial</th>
+                                        <th>Interés</th>
+                                        <th>Amortizado</th>
+                                        <th>Total Mes</th>
+                                        <th>Restante</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    import { format, addMonths } from 'date-fns';
+    import { es } from 'date-fns/locale';
+
+    interface Debt {
+        id: string;
+        name: string;
+        balance: number;
+        minPayment: number;
+        rate: number;
+    }
+
+    class SnowballEngine {
+        private debts: Debt[] = [];
+        private extra: number = 100;
+        private method: 'snowball' | 'avalanche' = 'snowball';
+
+        constructor() {
+            this.load();
+            this.bind();
+            this.render();
+        }
+
+        private bind() {
+            const get = (id: string) => document.getElementById(id);
+            
+            get('add-debt-btn')?.addEventListener('click', () => this.add());
+
+            const extraInput = get('extra-budget') as HTMLInputElement;
+            extraInput?.addEventListener('input', (e) => {
+                const val = parseFloat((e.target as HTMLInputElement).value);
+                this.extra = isNaN(val) ? 0 : val;
+                this.save();
+            });
+
+            document.querySelectorAll('.snow-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.snow-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    this.method = (tab as HTMLElement).dataset.method as 'snowball' | 'avalanche' || 'snowball';
+                    this.render();
+                });
+            });
+
+            get('clear-data')?.addEventListener('click', () => {
+                if (confirm('¿Vaciar plan?')) { this.debts = []; this.save(); }
+            });
+
+            get('export-csv')?.addEventListener('click', () => this.export());
+        }
+
+        private load() {
+            try {
+                const d = localStorage.getItem('snow_debts_v2');
+                if (d) this.debts = JSON.parse(d);
+                const e = localStorage.getItem('snow_extra_v2');
+                if (e) {
+                    this.extra = parseFloat(e);
+                    const input = document.getElementById('extra-budget') as HTMLInputElement;
+                    if (input) input.value = e;
+                }
+            } catch(e) {
+                this.debts = [];
+            }
+        }
+
+        private save() {
+            localStorage.setItem('snow_debts_v2', JSON.stringify(this.debts));
+            localStorage.setItem('snow_extra_v2', this.extra.toString());
+            this.render();
+        }
+
+        private add() {
+            const nameEl = document.getElementById('debt-name') as HTMLInputElement;
+            const balEl = document.getElementById('debt-balance') as HTMLInputElement;
+            const minEl = document.getElementById('debt-min-payment') as HTMLInputElement;
+            const rateEl = document.getElementById('debt-rate') as HTMLInputElement;
+
+            if (!balEl || !minEl) return;
+
+            const b = parseFloat(balEl.value);
+            const m = parseFloat(minEl.value);
+            const name = nameEl?.value || `Deuda ${this.debts.length + 1}`;
+            const rate = parseFloat(rateEl?.value) || 0;
+
+            if (b > 0 && m > 0) {
+                this.debts.push({
+                    id: Math.random().toString(36).substring(2, 11),
+                    name,
+                    balance: b,
+                    minPayment: m,
+                    rate
+                });
+                if (balEl) balEl.value = '';
+                if (minEl) minEl.value = '';
+                if (nameEl) nameEl.value = '';
+                this.save();
+            } else {
+                alert('Indica saldo total y pago mínimo');
+            }
+        }
+
+        private simulate(m: 'snowball' | 'avalanche') {
+            if (this.debts.length === 0) return null;
+            
+            
+            const current = JSON.parse(JSON.stringify(this.debts)).map((d: any) => ({
+            ...d,
+            balance: parseFloat(d.balance),
+            minPayment: parseFloat(d.minPayment),
+            rate: parseFloat(d.rate)
+        }));
+            
+            if (m === 'snowball') {
+                current.sort((a: any, b: any) => a.balance - b.balance);
+            } else {
+                current.sort((a: any, b: any) => b.rate - a.rate);
+            }
+
+            
+            const initialTotalCommitment = this.debts.reduce((s, d) => s + d.minPayment, 0) + this.extra;
+
+            const proj = [];
+            let mo = 0, totalI = 0, totalP = 0;
+            let isGrowing = false;
+
+            while (current.some((d: any) => d.balance > 0.01) && mo < 600) {
+                let monthI = 0;
+                const monthP = 0;
+                const iniB = current.reduce((s: number, d: any) => s + d.balance, 0);
+                
+                
+                current.forEach((d: any) => {
+                    if (d.balance <= 0) return;
+                    const i = d.balance * ((d.rate / 100) / 12);
+                    d.balance += i;
+                    monthI += i;
+                });
+
+                
+                let paidThisMonth = 0;
+                current.forEach((d: any) => {
+                    if (d.balance <= 0) return;
+                    const p = Math.min(d.balance, d.minPayment);
+                    d.balance -= p;
+                    paidThisMonth += p;
+                });
+
+                
+                const availableExtra = initialTotalCommitment - paidThisMonth;
+                if (availableExtra > 0) {
+                    
+                    const target = current.find((d: any) => d.balance > 0.01);
+                    if (target) {
+                        const extraPay = Math.min(target.balance, availableExtra);
+                        target.balance -= extraPay;
+                        paidThisMonth += extraPay;
+                    }
+                }
+
+                const finB = current.reduce((s: number, d: any) => s + d.balance, 0);
+                
+                
+                if (finB >= iniB && mo > 1 && iniB > 0) {
+                    isGrowing = true;
+                    
+                    if (mo > 24) break;
+                }
+
+                totalI += monthI;
+                totalP += paidThisMonth;
+                
+                proj.push({ 
+                    mo: mo + 1, 
+                    iniB, 
+                    int: monthI, 
+                    princ: paidThisMonth - monthI, 
+                    total: paidThisMonth, 
+                    finB: Math.max(0, finB) 
+                });
+                mo++;
+            }
+
+            return { proj, mo, totalI, totalP, isGrowing };
+        }
+
+        private simulateNoExtra() {
+            if (!this.debts.length) return null;
+            const current = JSON.parse(JSON.stringify(this.debts));
+            let mo = 0, totalI = 0;
+            while (current.some((d: any) => d.balance > 0.01) && mo < 480) {
+                const iniB = current.reduce((s: number, d: any) => s + d.balance, 0);
+                current.forEach((d: any) => {
+                    if (d.balance <= 0) return;
+                    const i = d.balance * ((d.rate / 100) / 12);
+                    d.balance += i; totalI += i;
+                    const p = Math.min(d.balance, d.minPayment);
+                    d.balance -= p;
+                });
+                const finB = current.reduce((s: number, d: any) => s + d.balance, 0);
+                if (finB > iniB && mo > 24) break;
+                mo++;
+            }
+            return { totalI };
+        }
+
+        private render() {
+            const snow = this.simulate('snowball');
+            const aval = this.simulate('avalanche');
+            const res = this.method === 'snowball' ? snow : aval;
+
+            const noMsg = document.getElementById('no-debts-msg');
+            const results = document.getElementById('results-content');
+            
+            if (!res || !snow || !aval) {
+                noMsg?.classList.remove('hidden');
+                results?.classList.add('hidden');
+                return;
+            }
+
+            noMsg?.classList.add('hidden');
+            results?.classList.remove('hidden');
+
+            const fC = (v: number) => Math.round(v).toLocaleString() + ' €';
+            
+            const dateEl = document.getElementById('summary-date');
+            if (dateEl) {
+                if (res.isGrowing) {
+                    dateEl.textContent = "DEUDA INFINITA";
+                    dateEl.classList.add('text-rose-500');
+                } else {
+                    dateEl.textContent = format(addMonths(new Date(), res.mo), 'MMMM yyyy', { locale: es }).toUpperCase();
+                    dateEl.classList.remove('text-rose-500');
+                }
+            }
+            
+            const methEl = document.getElementById('active-method-label');
+            if (methEl) methEl.textContent = `MÉTODO ${this.method.toUpperCase()}`;
+
+            const update = (id: string, val: string) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            update('stat-months', res.mo.toString());
+            update('stat-interest', fC(res.totalI));
+            update('stat-total-paid', fC(res.totalP));
+
+            const baseSim = this.simulateNoExtra();
+            const saved = baseSim ? baseSim.totalI - res.totalI : 0;
+            update('stat-extra-saved', fC(Math.max(0, saved)));
+
+            
+            const planList = document.getElementById('action-plan-list');
+            if (planList) {
+                const ordered = [...this.debts].sort((a,b) => this.method === 'snowball' ? a.balance - b.balance : b.rate - a.rate);
+                let cumulativeExtra = this.extra;
+                planList.innerHTML = ordered.map((d, index) => {
+                    const totalForThis = d.minPayment + cumulativeExtra;
+                    cumulativeExtra += d.minPayment;
+                    const stepLabel = index === 0 ? 'PRIORIDAD MÁXIMA' : `PASO ${index + 1} · TRAS LIQUIDAR ANTERIOR`;
+                    return `
+                        <div class="snow-plan-item ${index === 0 ? 'active-step' : 'pending-step'}">
+                            <div class="step-marker">${index + 1}</div>
+                            <div class="step-body">
+                                <span class="step-label">${stepLabel}</span>
+                                <div class="step-debt-name">${d.name}</div>
+                            </div>
+                            <div class="step-amount">
+                                <span>Pago mensual</span>
+                                <strong>${fC(totalForThis)}</strong>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const list = document.getElementById('debt-items-list');
+            if (list) {
+                list.innerHTML = '';
+                this.debts.forEach(d => {
+                    const row = document.createElement('div');
+                    row.className = 'dm-row';
+                    row.innerHTML = `
+                        <span class="dm-name">${d.name}</span>
+                        <span>${fC(d.balance)}</span>
+                        <span>${fC(d.minPayment)}</span>
+                        <span>${d.rate}%</span>
+                        <div class="flex justify-end pr-2">
+                            <button class="dm-remove" title="Eliminar">✕</button>
+                        </div>
+                    `;
+                    row.querySelector('.dm-remove')?.addEventListener('click', () => {
+                        this.debts = this.debts.filter(item => item.id !== d.id);
+                        this.save();
+                    });
+                    list.appendChild(row);
+                });
+            }
+
+            const tbody = document.querySelector('#projection-table tbody');
+            if (tbody) {
+                tbody.innerHTML = res.proj.map(p => `
+                    <tr>
+                        <td>${format(addMonths(new Date(), p.mo), 'MMM yy', { locale: es }).toUpperCase()}</td>
+                        <td>${fC(p.iniB)}</td>
+                        <td>${fC(p.int)}</td>
+                        <td>${fC(p.princ)}</td>
+                        <td>${fC(p.total)}</td>
+                        <td class="${p.finB < 1 ? 'text-emerald-500 font-black' : 'opacity-60'}">${p.finB < 1 ? 'LIBRE' : fC(p.finB)}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        private export() {
+            const res = this.simulate(this.method);
+            if (!res) return;
+            let csv = "\uFEFFFecha,Saldo Inicial,Interes,Amortizacion,Pago Total,Saldo Final\n";
+            res.proj.forEach(p => {
+                const d = format(addMonths(new Date(), p.mo), 'MM/yyyy');
+                csv += `${d},${p.iniB.toFixed(2)},${p.int.toFixed(2)},${p.princ.toFixed(2)},${p.total.toFixed(2)},${p.finB.toFixed(2)}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `plan_deuda_${this.method}.csv`;
+            link.click();
+        }
+    }
+
+    const start = () => {
+        const container = document.getElementById('debt-calc-container');
+        if (container && !container.dataset.initialized) {
+            container.dataset.initialized = 'true';
+            new SnowballEngine();
+        }
+    };
+
+    document.addEventListener('astro:page-load', start);
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start);
+</script>

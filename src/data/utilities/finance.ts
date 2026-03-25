@@ -94,5 +94,13 @@ export const financeSection: SectionData = {
             iconFg: "mdi:fire",
             color: "#10b981",
         },
+        {
+            title: "Calculadora de Deuda",
+            description: "Libérate de deudas con el método Bola de Nieve. Plan psicológico paso a paso.",
+            href: "/utilidades/bola-nieve-deuda/",
+            iconBg: "mdi:bank-minus",
+            iconFg: "mdi:snowflake-alert",
+            color: "#2ecc71",
+        },
     ],
 };
