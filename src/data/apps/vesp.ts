@@ -2,7 +2,7 @@ import type { Application } from "../../types/apps";
 
 export const vesp: Application = {
     slug: "vesp",
-    title: "VESP",
+    title: "VESP: Equilibrador de Cócteles",
     subtitle: "Mixología: Balance y Recetas",
     category: "Food & Drink / Professional Tools",
     isGame: false,
@@ -24,11 +24,11 @@ export const vesp: Application = {
         shadowPrimary: "0 10px 25px -5px rgba(218, 165, 32, 0.3)",
         shadowCard: "0 12px 40px rgba(0, 0, 0, 0.6)",
     },
-    tagline: "Equilibra. Mezcla. Brilla. Bartending.",
+    tagline: "Mixología: Balance y Recetas",
     description:
-        "Equilibrador de Cócteles no es un recetario más. Es tu herramienta de precisión para asegurar que cada trago sea idéntico al anterior mediante cálculos de ABV, Brix y Acidez.",
+        "Calculadora de balance, ABV, Brix y recetas clásicas de coctelería profesional.",
     philosophy:
-        "La ciencia del cóctel perfecto en tu bolsillo. Una herramienta técnica para bartenders que mejora la consistencia de tu despacho de por vida.",
+        "Eleva la consistencia de tu barra con VESP: Equilibrador de Cócteles, la herramienta técnica definitiva para bartenders y aficionados a la mixología que buscan la perfección científica en cada copa.",
     concept: {
         label: "Precisión en la Barra",
         main: "TÉCNICA DE,",
