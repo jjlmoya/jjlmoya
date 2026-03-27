@@ -7,9 +7,11 @@ import { missiopolis } from "./missiopolis";
 import { lexiCrash } from "./lexi-crash";
 import { digBot } from "./dig-bot";
 import { fastTask } from "./fast-task";
+import { vesp } from "./vesp";
 import type { Application } from "../../types/apps";
 
 export const apps: Application[] = [
+    vesp,
     fastTask,
     dayCheck,
     digBot,
