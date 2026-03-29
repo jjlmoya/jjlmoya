@@ -17,6 +17,7 @@ export default defineConfig({
         plugins: [tailwindcss()],
         optimizeDeps: {
             exclude: ["date-fns"],
+            include: ["jspdf", "html2canvas"],
         },
     },
     trailingSlash: "always",

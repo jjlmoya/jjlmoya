@@ -29,6 +29,14 @@ export const nauticalSection: SectionData = {
             title: "Conversor de Unidades Náuticas",
             description: "Convierte distancias, velocidades, profundidades y presiones atmosféricas con precisión.",
             color: "#0077be",
+        },
+        {
+            href: "/utilidades/calculadora-superficie-velica/",
+            iconBg: "mdi:sailing",
+            iconFg: "mdi:gauge",
+            title: "Calculadora de Superficie Vélica",
+            description: "Mide el rendimiento de tu barco calculando el ratio SA/D a partir de medidas técnicas.",
+            color: "#0055a4",
         }
     ],
 };
