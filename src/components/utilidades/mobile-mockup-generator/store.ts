@@ -53,7 +53,7 @@ export class Store {
 
                 this.images = (data.images || []).map((img: any) => {
                     if (!img.variants) {
-                        const variantId = Math.random().toString(36).substr(2, 9);
+                        const variantId = Math.random().toString(36).slice(2, 11);
                         return {
                             id: img.id,
                             variants: [

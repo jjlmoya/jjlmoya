@@ -1,5 +1,4 @@
 import type { Vector2 } from "./Types";
-import { MAX_DRAG_DISTANCE } from "./Constants";
 
 export class InputManager {
     private canvas: HTMLCanvasElement;
@@ -84,7 +83,7 @@ export class InputManager {
         this.onDragMove(pos);
     }
 
-    private handleMouseUp(e: MouseEvent) {
+    private handleMouseUp(_e: MouseEvent) {
         if (!this.isDragging) return;
         this.isDragging = false;
         this.onDragEnd(this.dragStart, this.dragCurrent);
@@ -107,7 +106,7 @@ export class InputManager {
         this.onDragMove(pos);
     }
 
-    private handleTouchEnd(e: TouchEvent) {
+    private handleTouchEnd(_e: TouchEvent) {
         if (!this.isDragging) return;
         this.isDragging = false;
 

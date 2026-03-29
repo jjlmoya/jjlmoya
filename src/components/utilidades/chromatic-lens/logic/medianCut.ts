@@ -17,13 +17,9 @@ function rgbToHex(r: number, g: number, b: number): string {
     );
 }
 
-function colorDistSq(c1: RGB, c2: RGB): number {
-    return (c1[0] - c2[0]) ** 2 + (c1[1] - c2[1]) ** 2 + (c1[2] - c2[2]) ** 2;
-}
-
 export function extractPalette(
     imageData: Uint8ClampedArray,
-    pixelCount: number,
+    _pixelCount: number,
     colorCount: number = 5
 ): ColorSwatch[] {
     const pixels: RGB[] = [];

@@ -1,4 +1,4 @@
-import type { Browser, Page } from "puppeteer";
+import type { Browser } from "puppeteer";
 import fs from "fs";
 import path from "path";
 import sharp from "sharp";

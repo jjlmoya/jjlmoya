@@ -261,7 +261,7 @@ const internalReports = [
     <AuditInspector />
 </Layout>
 
-<script define:vars={{ storedViews }}>
+<script is:inline define:vars={{ storedViews }}>
     const APPS_SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbzKush6FWrPSw4U5QGWsdbUAePGSDuMgmG-TCoZsA0nLTYkBAFaRksZ8MuPGoOCAUG29Q/exec";
 
@@ -286,14 +286,14 @@ const internalReports = [
             let color = "#";
             for (let i = 0; i < 3; i++) {
                 const value = (hash >> (i * 8)) & 0xff;
-                color += ("00" + value.toString(16)).substr(-2);
+                color += ("00" + value.toString(16)).slice(-2);
             }
             return color;
         }
 
         const platform = navigator.userAgent;
         const myColor = stringToColor(platform + navigator.language);
-        const myId = "SR-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+        const myId = "SR-" + Math.random().toString(36).slice(2, 7).toUpperCase();
 
         let localData = JSON.parse(localStorage.getItem("jjlmoya_footprint_v5") || "{}");
         if (!localData.id) {

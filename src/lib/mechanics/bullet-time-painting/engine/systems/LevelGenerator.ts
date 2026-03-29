@@ -1,4 +1,4 @@
-import type { Obstacle, Vector2D } from "../Types";
+import type { Obstacle } from "../Types";
 import { CANVAS_WIDTH, CANVAS_HEIGHT, STAGE_PADDING } from "../Constants";
 
 export class LevelGenerator {

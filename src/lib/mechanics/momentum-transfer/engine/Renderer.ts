@@ -5,7 +5,6 @@ import {
     BG_COLOR,
     OBS_WALL_COLOR,
     OBS_SPIKE_COLOR,
-    OBS_VOID_COLOR,
 } from "./Constants";
 
 export class Renderer {

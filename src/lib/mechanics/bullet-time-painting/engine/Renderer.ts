@@ -1,5 +1,5 @@
 import type { Entity, GameState, Vector2D, Obstacle } from "./Types";
-import { COLORS, CANVAS_WIDTH, CANVAS_HEIGHT, MAX_ENERGY, STAGE_PADDING } from "./Constants";
+import { COLORS, CANVAS_WIDTH, CANVAS_HEIGHT, STAGE_PADDING } from "./Constants";
 
 export class Renderer {
     private ctx: CanvasRenderingContext2D;

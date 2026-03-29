@@ -1,6 +1,6 @@
 
 export function md5(string: string) {
-    function k(n: number, s: number, t: number) {
+    function k(n: number, s: number, _t: number) {
         return (n << s) | (n >>> (32 - s));
     }
 

@@ -170,11 +170,11 @@ export class App {
                 if (original) {
                     const copy: MockupImage = {
                         ...original,
-                        id: Math.random().toString(36).substr(2, 9),
+                        id: Math.random().toString(36).slice(2, 11),
                         settings: { ...original.settings },
                         variants: original.variants.map((v) => ({
                             ...v,
-                            id: Math.random().toString(36).substr(2, 9),
+                            id: Math.random().toString(36).slice(2, 11),
                         })),
                     };
                     this.store.images.splice(originalIndex + 1, 0, copy);
@@ -295,7 +295,7 @@ export class App {
                     if (existingLangs.includes(newLang)) newLang = `V${img.variants.length + 1}`;
 
                     const newVariant: MockupVariant = {
-                        id: Math.random().toString(36).substr(2, 9),
+                        id: Math.random().toString(36).slice(2, 11),
                         language: newLang,
                         dataUrl: dataUrl,
                     };
@@ -322,9 +322,9 @@ export class App {
 
         for (const file of Array.from(files)) {
             const dataUrl = await this.readFile(file);
-            const variantId = Math.random().toString(36).substr(2, 9);
+            const variantId = Math.random().toString(36).slice(2, 11);
             this.store.images.push({
-                id: Math.random().toString(36).substr(2, 9),
+                id: Math.random().toString(36).slice(2, 11),
                 variants: [
                     {
                         id: variantId,
@@ -369,9 +369,9 @@ export class App {
                     variant.dataUrl = dataUrl;
                 }
             } else {
-                const variantId = Math.random().toString(36).substr(2, 9);
+                const variantId = Math.random().toString(36).slice(2, 11);
                 this.store.images.push({
-                    id: Math.random().toString(36).substr(2, 9),
+                    id: Math.random().toString(36).slice(2, 11),
                     variants: [
                         {
                             id: variantId,
@@ -472,7 +472,7 @@ export class App {
     renderGrid() {
         this.previewGrid.innerHTML = this.store.images
             .map((img) => {
-                const activeVariant =
+                const _activeVariant =
                     img.variants.find((v) => v.id === img.activeVariantId) || img.variants[0];
                 return `
             <div class="glass-card rounded-[2.5rem] p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-6 relative group/card">

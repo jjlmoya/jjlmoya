@@ -251,7 +251,7 @@ export class UIManager {
         setTimeout(() => pop.remove(), 1500);
     }
 
-    showBuildingDetails(gx, gy, data) {
+    showBuildingDetails(_gx, _gy, data) {
         const b = this.engine.getBusiness(data.bizId);
         if (!b) return;
 
