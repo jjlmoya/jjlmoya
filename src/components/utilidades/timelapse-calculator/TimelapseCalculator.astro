@@ -287,7 +287,6 @@ import { Icon } from "astro-icon/components";
 
     class Simulator {
         private isPlaying: boolean = false;
-        private _animationId: number = 0;
         private readonly DURATION_MS = 5000;
 
         constructor(private ui: CalculatorUI) {
@@ -312,20 +311,20 @@ import { Icon } from "astro-icon/components";
                 this.ui.updateSimulation(progress, videoDurationSecs, realDurationSecs);
 
                 if (progress < 1) {
-                    this._animationId = requestAnimationFrame(step);
+                    requestAnimationFrame(step);
                 } else {
                     this.isPlaying = false;
                     setTimeout(() => this.ui.resetSimulation(), 1000);
                 }
             };
 
-            this._animationId = requestAnimationFrame(step);
+            requestAnimationFrame(step);
         }
     }
 
     document.addEventListener("DOMContentLoaded", () => {
         const ui = new CalculatorUI();
-        const _sim = new Simulator(ui);
+        new Simulator(ui);
 
         const recalculate = () => {
             const inputs = ui.getInputs();

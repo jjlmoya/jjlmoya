@@ -209,12 +209,10 @@ import './FrequencyNoteConverter.css';
 
 <script>
     const NOTE_NAMES_ES = ['Do', 'Do#', 'Re', 'Re#', 'Mi', 'Fa', 'Fa#', 'Sol', 'Sol#', 'La', 'La#', 'Si'];
-    const _NOTE_NAMES_EN = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
     let audioCtx: AudioContext | null = null;
     let activeOscillator: OscillatorNode | null = null;
     let activeGain: GainNode | null = null;
-    const isPlaying = false;
     let currentMode: 'hz' | 'note' = 'hz';
     let referenceA4 = 440;
     let history: Array<{ hz: string; note: string }> = [];
@@ -257,12 +255,6 @@ import './FrequencyNoteConverter.css';
         const noteIndex = ((Math.round(midi) % 12) + 12) % 12;
         const octave = Math.floor(Math.round(midi) / 12) - 1;
         return NOTE_NAMES_ES[noteIndex] + octave;
-    }
-
-    function getCents(hz: number): number {
-        const midi = hzToMidi(hz);
-        const roundedMidi = Math.round(midi);
-        return (midi - roundedMidi) * 100;
     }
 
     function noteIndexAndOctaveToMidi(noteIndex: number, octave: number): number {

@@ -4,7 +4,6 @@ export function initFertileDaysEstimator() {
     const viewDate = new Date();
     viewDate.setDate(1);
 
-    const container = document.querySelector(".fertile-days-container");
     const step1El = document.getElementById("step-1");
     const step2El = document.getElementById("step-2");
     const indicator1 = document.getElementById("indicator-1");

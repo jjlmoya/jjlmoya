@@ -1,8 +1,6 @@
 class Simulation3s {
     private timerElement: HTMLElement | null;
-    private progressBar: HTMLElement | null;
     private steps: NodeListOf<HTMLElement>;
-    private isMobileLine: boolean = false;
     private isRunning: boolean = false;
     private startTime: number = 0;
     private readonly duration: number = 3000;
@@ -12,13 +10,7 @@ class Simulation3s {
 
     constructor() {
         this.timerElement = document.getElementById("sim-timer");
-        this.progressBar = document.getElementById("sim-progress");
         this.steps = document.querySelectorAll(".sim-step");
-
-        this.isMobileLine = window.innerWidth <= 768;
-        window.addEventListener("resize", () => {
-            this.isMobileLine = window.innerWidth <= 768;
-        });
 
         this.observer = new IntersectionObserver(
             (entries) => {

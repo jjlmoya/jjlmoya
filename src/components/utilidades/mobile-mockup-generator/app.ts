@@ -472,8 +472,6 @@ export class App {
     renderGrid() {
         this.previewGrid.innerHTML = this.store.images
             .map((img) => {
-                const _activeVariant =
-                    img.variants.find((v) => v.id === img.activeVariantId) || img.variants[0];
                 return `
             <div class="glass-card rounded-[2.5rem] p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-6 relative group/card">
                 <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover/card:opacity-100 transition-opacity z-10">
