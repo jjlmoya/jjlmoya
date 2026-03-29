@@ -50,7 +50,9 @@ export const vesp: Application = {
             "/assets/apps/vesp/settings-mockup.webp",
         ],
     },
-    stores: {},
+    stores: {
+        appStore: "https://apps.apple.com/es/app/vesp-equilibrador-de-c%C3%B3cteles/id6761222386",
+    },
     price: "Gratis",
     benefits: [
         {
@@ -93,13 +95,14 @@ export const vesp: Application = {
         { label: "Price", value: "Gratis" },
     ],
     roadmap: {
-        statusLabel: "Próximamente",
-        statusType: "developing",
-        progress: 95,
+        statusLabel: "Disponible",
+        statusType: "released",
+        progress: 100,
         tasks: [
             { name: "Cálculo técnico", status: "done" },
             { name: "Motor Dilución", status: "done" },
-            { name: "Publicación", status: "active" },
+            { name: "Publicación", status: "done" },
         ],
     },
+    hasDetailPage: true,
 };

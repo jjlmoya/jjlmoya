@@ -12,6 +12,8 @@ import { devSection } from "./developer";
 import { toolsSection } from "./tools";
 import { streamingSection } from "./streaming";
 import { hardwareSection } from "./hardware";
+import { nauticalSection } from "./nautical";
+
 
 import { natureSection } from "./nature";
 import { alcoholSection } from "./alcohol";
@@ -64,7 +66,9 @@ export const sections: SectionData[] = [
     coffeeSection,
     gamesSection,
     petsSection,
+    nauticalSection,
 ];
+
 
 
 export type { SectionData, UtilityItem } from "./types";
