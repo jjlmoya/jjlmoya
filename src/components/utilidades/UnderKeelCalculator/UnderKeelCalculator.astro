@@ -1,0 +1,234 @@
+---
+import './UnderKeelCalculator.css';
+---
+
+<section id="under-keel-calculator" class="under-keel-calculator">
+    <div class="main-card">
+        <div class="calc-sidebar">
+            <div class="sidebar-header">
+                <h3>Vaso de Bajo</h3>
+            </div>
+            
+            <div class="input-set">
+                <div class="input-block">
+                    <label>Calado del Barco</label>
+                    <div class="unit-input">
+                        <input type="number" id="boat-draft" value="2.0" step="0.1" />
+                        <span>m</span>
+                    </div>
+                </div>
+
+                <div class="input-block">
+                    <label>Sonda de la Carta</label>
+                    <div class="unit-input">
+                        <input type="number" id="chart-depth" value="1.5" step="0.1" />
+                        <span>m</span>
+                    </div>
+                </div>
+
+                <div class="input-block">
+                    <label>Resguardo Seguridad</label>
+                    <div class="unit-input">
+                        <input type="number" id="safety-margin" value="0.5" step="0.1" />
+                        <span>m</span>
+                    </div>
+                </div>
+
+                <div class="hr-white"></div>
+
+                <div class="input-block">
+                    <label>Pleamar</label>
+                    <div class="row">
+                        <input type="time" id="pass-high-tide-time" value="12:00" />
+                        <input type="number" id="pass-high-tide-height" value="3.5" step="0.1" class="mini-num" />
+                    </div>
+                </div>
+
+                <div class="input-block">
+                    <label>Bajamar</label>
+                    <div class="row">
+                        <input type="time" id="pass-low-tide-time" value="06:00" />
+                        <input type="number" id="pass-low-tide-height" value="0.5" step="0.1" class="mini-num" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-content">
+            <div class="top-row">
+                <div class="result-display">
+                    <span class="label">Ventana de Paso</span>
+                    <div class="time-range">
+                        <span id="pass-start">--:--</span>
+                        <div class="arrow-sep">
+                            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12,4L10.59,5.41L16.17,11H4V13H16.17L10.59,18.59L12,20L20,12L12,4Z"/></svg>
+                        </div>
+                        <span id="pass-end">--:--</span>
+                    </div>
+                    <span id="pass-status" class="status-indicator">Calculando...</span>
+                </div>
+                
+                <div class="data-group">
+                    <div class="stat-pill">
+                        <span>Necesario:</span>
+                        <strong id="needed-depth">--</strong>
+                    </div>
+                    <div class="stat-pill">
+                        <span>Marea Req.</span>
+                        <strong id="needed-tide">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="visual-container">
+                <div class="ocean-frame">
+                    <div class="surface-line"></div>
+                    <div class="ship-silhouette" id="viz-boat">
+                        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                            <path fill="currentColor" d="M10,20 L90,20 L80,35 L20,35 Z" />
+                        </svg>
+                    </div>
+                    <div class="water-volume" id="viz-water"></div>
+                    <div class="sand-bottom">
+                        <span>FONDO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    class UnderKeelCalculator {
+        private inputs: HTMLInputElement[];
+        private draftIn: HTMLInputElement;
+        private depthIn: HTMLInputElement;
+        private marginIn: HTMLInputElement;
+        private highTimeIn: HTMLInputElement;
+        private highHeightIn: HTMLInputElement;
+        private lowTimeIn: HTMLInputElement;
+        private lowHeightIn: HTMLInputElement;
+
+        private statusInd: HTMLElement;
+        private startSpan: HTMLElement;
+        private endSpan: HTMLElement;
+        private neededD: HTMLElement;
+        private neededT: HTMLElement;
+        private vizWater: HTMLElement;
+        private vizBoat: HTMLElement;
+
+        constructor() {
+            this.draftIn = document.getElementById('boat-draft') as HTMLInputElement;
+            this.depthIn = document.getElementById('chart-depth') as HTMLInputElement;
+            this.marginIn = document.getElementById('safety-margin') as HTMLInputElement;
+            this.highTimeIn = document.getElementById('pass-high-tide-time') as HTMLInputElement;
+            this.highHeightIn = document.getElementById('pass-high-tide-height') as HTMLInputElement;
+            this.lowTimeIn = document.getElementById('pass-low-tide-time') as HTMLInputElement;
+            this.lowHeightIn = document.getElementById('pass-low-tide-height') as HTMLInputElement;
+
+            this.statusInd = document.getElementById('pass-status') as HTMLElement;
+            this.startSpan = document.getElementById('pass-start') as HTMLElement;
+            this.endSpan = document.getElementById('pass-end') as HTMLElement;
+            this.neededD = document.getElementById('needed-depth') as HTMLElement;
+            this.neededT = document.getElementById('needed-tide') as HTMLElement;
+            this.vizWater = document.getElementById('viz-water') as HTMLElement;
+            this.vizBoat = document.getElementById('viz-boat') as HTMLElement;
+
+            this.inputs = [this.draftIn, this.depthIn, this.marginIn, this.highTimeIn, this.highHeightIn, this.lowTimeIn, this.lowHeightIn];
+            this.init();
+        }
+
+        private init() {
+            this.inputs.forEach(i => i.addEventListener('input', () => this.calculate()));
+            this.calculate();
+        }
+
+        private tToM(s: string) {
+            const [h, m] = s.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        private mToT(m: number) {
+            let mins = Math.round(m) % 1440;
+            if (mins < 0) mins += 1440;
+            return `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+        }
+
+        private calculate() {
+            const dr = parseFloat(this.draftIn.value);
+            const sd = parseFloat(this.depthIn.value);
+            const mg = parseFloat(this.marginIn.value);
+            const hH = parseFloat(this.highHeightIn.value);
+            const hL = parseFloat(this.lowHeightIn.value);
+            const tH = this.tToM(this.highTimeIn.value);
+            const tL = this.tToM(this.lowTimeIn.value);
+
+            if (isNaN(dr) || isNaN(sd) || isNaN(mg) || isNaN(hH)) return;
+
+            const needed = dr + mg;
+            const tideReq = Math.max(0, needed - sd);
+            this.neededD.textContent = `${needed.toFixed(1)}m`;
+            this.neededT.textContent = `${tideReq.toFixed(1)}m`;
+
+            const dur = Math.abs(tH - tL);
+            const amp = Math.abs(hH - hL);
+            const flooding = tH > tL;
+            const sT = flooding ? tL : tH;
+
+            if (tideReq > hH) {
+                this.update('Nunca hay calado', '--:--', '--:--', 'danger');
+            } else if (tideReq <= hL) {
+                this.update('Paso libre todo el ciclo', this.mToT(sT), this.mToT(sT + dur), 'success');
+            } else {
+                const sH = flooding ? hL : hH;
+                const mult = flooding ? 1 : -1;
+                const targetInt = (tideReq - sH) / (mult * amp);
+                const tOff = this.findT(targetInt, dur);
+                const pT = sT + tOff;
+
+                if (flooding) {
+                    this.update('Desde las:', this.mToT(pT), this.mToT(tH + (tH - pT)), 'warning');
+                } else {
+                    this.update('Hasta las:', this.mToT(tH - (pT - tH)), this.mToT(pT), 'warning');
+                }
+            }
+
+            this.updateViz(needed, sd, hH);
+        }
+
+        private findT(target: number, dur: number) {
+            const doz = [1/12, 2/12, 3/12, 3/12, 2/12, 1/12];
+            const step = dur / 6;
+            let cum = 0;
+            for (let i = 0; i < 6; i++) {
+                if (cum + doz[i] >= target) return (i + (target - cum) / doz[i]) * step;
+                cum += doz[i];
+            }
+            return dur;
+        }
+
+        private update(txt: string, s: string, e: string, cls: string) {
+            this.statusInd.textContent = txt;
+            this.statusInd.className = `status-indicator ${cls}`;
+            this.startSpan.textContent = s;
+            this.endSpan.textContent = e;
+        }
+
+        private updateViz(needed: number, sd: number, hH: number) {
+            const dr = parseFloat(this.draftIn.value);
+            const totalWater = sd + hH;
+            const maxVal = Math.max(needed, totalWater, 5) + 2;
+            
+            const floorPct = 15;
+            const waterHeightPct = floorPct + (totalWater / maxVal) * (100 - floorPct);
+            let boatKeelPct = floorPct + ((totalWater - dr) / maxVal) * (100 - floorPct);
+            
+            boatKeelPct = Math.max(floorPct, Math.min(95, boatKeelPct));
+            
+            this.vizWater.style.height = `${waterHeightPct}%`;
+            this.vizBoat.style.bottom = `${boatKeelPct}%`;
+        }
+    }
+
+    new UnderKeelCalculator();
+</script>

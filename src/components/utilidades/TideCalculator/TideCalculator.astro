@@ -1,0 +1,296 @@
+---
+import './TideCalculator.css';
+---
+
+<section id="tide-calculator" class="tide-calculator">
+    <div class="main-card">
+        <div class="calc-sidebar">
+            <div class="sidebar-header">
+                <h3>Parametros</h3>
+                <button id="invert-btn" title="Invertir ciclo">
+                    <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M18 18V22H16V18H13L17 14L21 18H18M8 6V2H10V6H13L9 10L5 6H8M3 15V13H5V15H3M3 11V9H5V11H3M3 7V5H5V7H3M19 11V9H21V11H19M19 15V13H21V15H19M19 19V17H21V19H19M3 19V17H5V19H3Z"/></svg>
+                </button>
+            </div>
+            
+            <div class="input-set">
+                <div class="input-block">
+                    <label>Pleamar</label>
+                    <div class="row">
+                        <input type="time" id="high-tide-time" value="12:00" />
+                        <div class="unit-input">
+                            <input type="number" id="high-tide-height" value="3.5" step="0.1" />
+                            <span>m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-block">
+                    <label>Bajamar</label>
+                    <div class="row">
+                        <input type="time" id="low-tide-time" value="06:00" />
+                        <div class="unit-input">
+                            <input type="number" id="low-tide-height" value="0.5" step="0.1" />
+                            <span>m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-block featured">
+                    <label>Hora de consulta</label>
+                    <input type="time" id="target-time" value="09:00" class="large-time" />
+                </div>
+            </div>
+        </div>
+
+        <div class="calc-content">
+            <div class="top-row">
+                <div class="result-display">
+                    <span class="label">Altura Estimada</span>
+                    <div class="value-box">
+                        <span id="target-value">--</span>
+                        <small>metros</small>
+                    </div>
+                    <span id="tide-status" class="status-indicator">--</span>
+                </div>
+                <div class="summary-info">
+                    <div class="stat">
+                        <span class="s-label">Amplitud</span>
+                        <span id="amplitude-val">--</span>
+                    </div>
+                    <div class="stat">
+                        <span class="s-label">Duracion</span>
+                        <span id="duration-val">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-area">
+                <canvas id="tide-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <h4>Desglose por Dozavos</h4>
+        <div class="table-wrapper">
+            <table id="twelfths-table">
+                <thead>
+                    <tr>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                        <th>%</th>
+                        <th>Altura</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { Chart, registerables } from 'chart.js';
+    Chart.register(...registerables);
+
+    class TideCalculator {
+        private inputs: HTMLInputElement[];
+        private highTime: HTMLInputElement;
+        private highHeight: HTMLInputElement;
+        private lowTime: HTMLInputElement;
+        private lowHeight: HTMLInputElement;
+        private targetTime: HTMLInputElement;
+        private invertBtn: HTMLElement;
+        
+        private displayValue: HTMLElement;
+        private displayStatus: HTMLElement;
+        private displayAmp: HTMLElement;
+        private displayDur: HTMLElement;
+        private tableBody: HTMLElement;
+        
+        private chart: any;
+
+        constructor() {
+            this.highTime = document.getElementById('high-tide-time') as HTMLInputElement;
+            this.highHeight = document.getElementById('high-tide-height') as HTMLInputElement;
+            this.lowTime = document.getElementById('low-tide-time') as HTMLInputElement;
+            this.lowHeight = document.getElementById('low-tide-height') as HTMLInputElement;
+            this.targetTime = document.getElementById('target-time') as HTMLInputElement;
+            this.invertBtn = document.getElementById('invert-btn') as HTMLElement;
+            
+            this.displayValue = document.getElementById('target-value') as HTMLElement;
+            this.displayStatus = document.getElementById('tide-status') as HTMLElement;
+            this.displayAmp = document.getElementById('amplitude-val') as HTMLElement;
+            this.displayDur = document.getElementById('duration-val') as HTMLElement;
+            this.tableBody = document.querySelector('#twelfths-table tbody') as HTMLElement;
+
+            this.inputs = [this.highTime, this.highHeight, this.lowTime, this.lowHeight, this.targetTime];
+            this.init();
+        }
+
+        private init() {
+            this.inputs.forEach(i => i.addEventListener('input', () => this.calculate()));
+            this.invertBtn.addEventListener('click', () => this.invert());
+            this.initChart();
+            this.calculate();
+        }
+
+        private invert() {
+            const hT = this.highTime.value;
+            const hH = this.highHeight.value;
+            this.highTime.value = this.lowTime.value;
+            this.highHeight.value = this.lowHeight.value;
+            this.lowTime.value = hT;
+            this.lowHeight.value = hH;
+            this.calculate();
+        }
+
+        private timeToMins(s: string) {
+            const [h, m] = s.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        private minsToTime(m: number) {
+            let mins = Math.round(m) % 1440;
+            if (mins < 0) mins += 1440;
+            return `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+        }
+
+        private calculate() {
+            const tH = this.timeToMins(this.highTime.value);
+            const hH = parseFloat(this.highHeight.value);
+            const tL = this.timeToMins(this.lowTime.value);
+            const hL = parseFloat(this.lowHeight.value);
+            const tT = this.timeToMins(this.targetTime.value);
+
+            if (isNaN(hH) || isNaN(hL)) return;
+
+            const isFlooding = tH > tL;
+            const dur = Math.abs(tH - tL);
+            const amp = Math.abs(hH - hL);
+            const sH = isFlooding ? hL : hH;
+            const sT = isFlooding ? tL : tH;
+            const mult = isFlooding ? 1 : -1;
+
+            this.displayAmp.textContent = `${amp.toFixed(2)} m`;
+            this.displayDur.textContent = `${Math.floor(dur / 60)}h ${dur % 60}m`;
+
+            const results = this.generateCycle(sT, dur, amp, sH, mult);
+            this.updateUI(results, tT, sT, dur, amp, sH, mult);
+        }
+
+        private generateCycle(sT: number, dur: number, amp: number, sH: number, mult: number) {
+            const step = dur / 6;
+            const doz = [1/12, 2/12, 3/12, 3/12, 2/12, 1/12];
+            let curH = sH;
+            const pts = [{ t: sT, h: sH, p: '0%' }];
+            let cum = 0;
+            for (let i = 0; i < 6; i++) {
+                cum += doz[i];
+                curH = sH + (cum * amp * mult);
+                pts.push({ t: sT + (step * (i + 1)), h: curH, p: `${Math.round(cum * 100)}%` });
+            }
+            return pts;
+        }
+
+        private updateUI(pts: any[], tT: number, sT: number, dur: number, amp: number, sH: number, mult: number) {
+            const rel = tT - sT;
+            if (rel >= 0 && rel <= dur) {
+                const step = dur / 6;
+                const idx = Math.floor(rel / step);
+                const doz = [1/12, 2/12, 3/12, 3/12, 2/12, 1/12];
+                let cum = 0;
+                for (let i = 0; i < idx; i++) cum += doz[i];
+                const rem = (rel % step) / step;
+                const curD = idx < 6 ? doz[idx] : 0;
+                const interp = cum + (curD * rem);
+                const h = sH + (interp * amp * mult);
+                this.displayValue.textContent = h.toFixed(2);
+                this.displayStatus.textContent = mult > 0 ? 'Subiendo' : 'Bajando';
+                this.displayStatus.className = `status-indicator ${mult > 0 ? 'up' : 'down'}`;
+            } else {
+                this.displayValue.textContent = '--';
+                this.displayStatus.textContent = 'Fuera de rango';
+                this.displayStatus.className = 'status-indicator';
+            }
+
+            this.tableBody.innerHTML = pts.map((p, i) => `
+                <tr>
+                    <td>${this.minsToTime(p.t)}</td>
+                    <td>${i === 0 ? 'Inicio' : (i === 6 ? 'Final' : '---')}</td>
+                    <td>${p.p}</td>
+                    <td>${p.h.toFixed(2)}m</td>
+                </tr>
+            `).join('');
+
+            this.updateChart(pts, tT, sT, dur, amp, sH, mult);
+        }
+
+        private initChart() {
+            const ctx = document.getElementById('tide-chart') as HTMLCanvasElement;
+            this.chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        borderColor: '#0074B7',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: (context) => {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+                            if (!chartArea) return undefined;
+                            const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                            gradient.addColorStop(0, 'rgba(0, 116, 183, 0.2)');
+                            gradient.addColorStop(1, 'rgba(0, 116, 183, 0)');
+                            return gradient;
+                        }
+                    }, {
+                        data: [],
+                        pointRadius: 6,
+                        pointBackgroundColor: '#FF6B35',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        showLine: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: true, grid: { color: 'rgba(0,0,0,0.05)' } }
+                    }
+                }
+            });
+        }
+
+        private updateChart(pts: any[], tT: number, sT: number, dur: number, amp: number, sH: number, mult: number) {
+            const labels = pts.map(p => this.minsToTime(p.t));
+            const data = pts.map(p => p.h);
+            this.chart.data.labels = labels;
+            this.chart.data.datasets[0].data = data;
+
+            const rel = tT - sT;
+            if (rel >= 0 && rel <= dur) {
+                const step = dur / 6;
+                const idx = Math.floor(rel / step);
+                const doz = [1/12, 2/12, 3/12, 3/12, 2/12, 1/12];
+                let cum = 0;
+                for (let i = 0; i < idx; i++) cum += doz[i];
+                const rem = (rel % step) / step;
+                const curD = idx < 6 ? doz[idx] : 0;
+                const h = sH + ((cum + curD * rem) * amp * mult);
+                this.chart.data.datasets[1].data = [{ x: labels[Math.round(rel/step)], y: h }];
+            } else {
+                this.chart.data.datasets[1].data = [];
+            }
+            this.chart.update();
+        }
+    }
+
+    new TideCalculator();
+</script>
