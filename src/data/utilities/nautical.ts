@@ -37,6 +37,14 @@ export const nauticalSection: SectionData = {
             title: "Calculadora de Superficie Vélica",
             description: "Mide el rendimiento de tu barco calculando el ratio SA/D a partir de medidas técnicas.",
             color: "#0055a4",
+        },
+        {
+            href: "/utilidades/conversor-velocidad-nautica/",
+            iconBg: "mdi:speedometer",
+            iconFg: "mdi:weather-windy",
+            title: "Conversor de Velocidad Náutica",
+            description: "Traduce entre nudos, km/h y m/s. Incluye la escala de viento Beaufort con descripción del mar.",
+            color: "#004F98",
         }
     ],
 };
