@@ -21,6 +21,14 @@ export const nauticalSection: SectionData = {
             title: "Calculador de Paso de Bajo",
             description: "Determina si tienes agua suficiente para pasar por un punto crítico según tu calado.",
             color: "#003B73",
+        },
+        {
+            href: "/utilidades/conversor-unidades-nauticas/",
+            iconBg: "mdi:speedometer",
+            iconFg: "mdi:compass-outline",
+            title: "Conversor de Unidades Náuticas",
+            description: "Convierte distancias, velocidades, profundidades y presiones atmosféricas con precisión.",
+            color: "#0077be",
         }
     ],
 };
