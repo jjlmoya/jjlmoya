@@ -45,6 +45,14 @@ export const nauticalSection: SectionData = {
             title: "Conversor de Velocidad Náutica",
             description: "Traduce entre nudos, km/h y m/s. Incluye la escala de viento Beaufort con descripción del mar.",
             color: "#004F98",
+        },
+        {
+            href: "/utilidades/calculadora-autonomia-nautica/",
+            iconBg: "mdi:gas-station",
+            iconFg: "mdi:gauge",
+            title: "Calculadora de Autonomía Náutica",
+            description: "Calcula cuántas millas y horas puedes navegar con el combustible actual de tu depósito.",
+            color: "#e01e37",
         }
     ],
 };

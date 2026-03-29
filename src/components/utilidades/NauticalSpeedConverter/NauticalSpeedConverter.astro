@@ -119,6 +119,23 @@ const beaufortData = [
     mph: 1.15078
   };
 
+  const STORAGE_KEY = 'jjlmoya-nautical-speed';
+
+  function save(kn) {
+    localStorage.setItem(STORAGE_KEY, kn);
+  }
+
+  function load() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const kn = parseFloat(saved) || 0;
+      inputKn.value = kn;
+      updateAllExcept('val-kn', kn);
+    } else {
+      updateAllExcept('val-kn', 0);
+    }
+  }
+
   function updateAllExcept(sourceId, baseKn) {
     if (sourceId !== 'val-kn') inputKn.value = baseKn.toFixed(1);
     if (sourceId !== 'val-kmh') inputKmh.value = (baseKn * FACTORS.kmh).toFixed(1);
@@ -126,6 +143,7 @@ const beaufortData = [
     if (sourceId !== 'val-mph') inputMph.value = (baseKn * FACTORS.mph).toFixed(1);
 
     updateBeaufort(baseKn);
+    save(baseKn);
   }
 
   function updateBeaufort(kn) {
@@ -173,5 +191,5 @@ const beaufortData = [
     });
   });
 
-  updateAllExcept('val-kn', 0);
+  load();
 </script>

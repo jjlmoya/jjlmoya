@@ -1,0 +1,145 @@
+---
+import "./NauticalEnduranceCalculator.css";
+import EnduranceInputs from "./EnduranceInputs.astro";
+import EnduranceDisplay from "./EnduranceDisplay.astro";
+import EnduranceStats from "./EnduranceStats.astro";
+import EnduranceInverter from "./EnduranceInverter.astro";
+---
+
+<div id="nautical-endurance-calculator-root" class="nautical-endurance-calculator">
+  <div class="main-container">
+    <EnduranceInputs />
+
+    <div class="dashboard-panel">
+      <EnduranceDisplay />
+      <EnduranceStats />
+      <EnduranceInverter />
+
+      <div class="warning-bar">
+        <iconify-icon icon="mdi:alert-outline" style="font-size: 1.1rem; color: #f43f5e;"></iconify-icon>
+        <span>Recordatorio: Una reserva del 20% es el mínimo absoluto recomendado por seguridad náutica.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  const iT1 = document.getElementById('t1');
+  const iT2 = document.getElementById('t2');
+  const iFuel = document.getElementById('f-current');
+  const iCons = document.getElementById('f-cons');
+  const iSpeed = document.getElementById('v-cruiser');
+  const iState = document.getElementById('sea-s');
+  const iRes = document.getElementById('f-res');
+  const iPrice = document.getElementById('f-price');
+  const iInvDist = document.getElementById('inv-dist');
+
+  const oDist = document.getElementById('out-dist');
+  const oPerf = document.getElementById('out-perf');
+  const oHours = document.getElementById('out-hours');
+  const oSafe = document.getElementById('out-safe');
+  const oCost = document.getElementById('out-cost');
+  const oInvRes = document.getElementById('inv-res');
+  const cCard = document.getElementById('cost-card');
+  const fill = document.getElementById('g-fill');
+  const mark = document.getElementById('g-mark');
+  const perc = document.getElementById('g-perc');
+
+  const STORAGE_KEY = 'jjlmoya-nautical-endurance';
+
+  function save() {
+    const data = {
+      t1: iT1.value,
+      t2: iT2.value,
+      fuel: iFuel.value,
+      cons: iCons.value,
+      speed: iSpeed.value,
+      state: iState.value,
+      res: iRes.value,
+      price: iPrice.value,
+      inv: iInvDist.value
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function load() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    try {
+      const data = JSON.parse(saved);
+      if (data.t1) iT1.value = data.t1;
+      if (data.t2) iT2.value = data.t2;
+      if (data.fuel) iFuel.value = data.fuel;
+      if (data.cons) iCons.value = data.cons;
+      if (data.speed) iSpeed.value = data.speed;
+      if (data.state) iState.value = data.state;
+      if (data.res) iRes.value = data.res;
+      if (data.price) iPrice.value = data.price;
+      if (data.inv) iInvDist.value = data.inv;
+    } catch (e) {}
+  }
+
+  function calculate() {
+    const c1 = parseFloat(iT1.value) || 0;
+    const c2 = parseFloat(iT2.value) || 0;
+    const tCap = c1 + c2;
+    const fuel = parseFloat(iFuel.value) || 0;
+    const baseC = parseFloat(iCons.value) || 0;
+    const speed = parseFloat(iSpeed.value) || 0;
+    const factor = parseFloat(iState.value) || 1;
+    const res = parseFloat(iRes.value) || 0;
+    const price = parseFloat(iPrice.value) || 0;
+    const invDist = parseFloat(iInvDist.value) || 0;
+
+    const lpmn = (baseC * factor) / (speed || 1);
+    const rCons = baseC * factor;
+
+    if (rCons > 0 && speed > 0) {
+      const hTotal = fuel / rCons;
+      const sFuel = fuel * (1 - (res / 100));
+      const sHours = Math.max(0, sFuel / rCons);
+      const dMax = hTotal * speed;
+      const dSafe = sHours * speed;
+
+      oHours.innerHTML = `${hTotal.toFixed(1)} <small>h</small>`;
+      oDist.textContent = dMax.toFixed(1);
+      oPerf.innerHTML = `${lpmn.toFixed(2)} <small>L/MN</small>`;
+      oSafe.innerHTML = `${dSafe.toFixed(1)} <small>MN</small>`;
+
+      const fP = tCap > 0 ? (fuel / tCap) * 100 : 0;
+      fill.style.width = `${Math.min(100, fP)}%`;
+      perc.textContent = `${Math.round(fP)}% FUEL`;
+      mark.style.left = `${res}%`;
+
+      if (invDist > 0) {
+          const lNeeded = (invDist * lpmn) / (1 - (res / 100));
+          oInvRes.innerHTML = `${Math.ceil(lNeeded)} <small>L</small>`;
+      } else {
+          oInvRes.innerHTML = `0 <small>L</small>`;
+      }
+    } else {
+      oHours.innerHTML = '0.0 <small>h</small>';
+      oDist.textContent = '0.0';
+      oPerf.innerHTML = '0.00 <small>L/MN</small>';
+      oSafe.innerHTML = '0.0 <small>MN</small>';
+      oInvRes.innerHTML = `0 <small>L</small>`;
+      fill.style.width = '0%';
+      perc.textContent = '0% FUEL';
+    }
+
+    if (price > 0 && fuel > 0) {
+        cCard.classList.remove('hidden');
+        oCost.innerHTML = `${(fuel * price).toFixed(2)} <small>€</small>`;
+    } else {
+        cCard.classList.add('hidden');
+    }
+    save();
+  }
+
+  [iT1, iT2, iFuel, iCons, iSpeed, iState, iRes, iPrice, iInvDist].forEach(el => {
+    el.addEventListener('input', calculate);
+  });
+
+  load();
+  calculate();
+</script>
