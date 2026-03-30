@@ -16,7 +16,12 @@ import "./ConfidenceInterval.css";
 
         <div id="rawFields" class="input-group">
             <label for="rawData">Pegar Datos (CSV/Excel)</label>
-            <textarea id="rawData" placeholder="Ej: 10.5, 12.2, 9.8..."></textarea>
+            <div class="textarea-wrapper">
+                <textarea id="rawData" placeholder="Ej: 10.5, 12.2, 9.8..."></textarea>
+                <button id="clearRawBtn" class="textarea-clear-btn" title="Limpiar datos">
+                    <Icon name="mdi:trash-can-outline" size={14} />
+                </button>
+            </div>
         </div>
 
         <div id="statsFields" style="display: none; flex-direction: column; gap: 1.5rem;">
@@ -37,9 +42,9 @@ import "./ConfidenceInterval.css";
         <div class="input-group">
             <label for="confInp">Nivel de Confianza (%)</label>
             <select id="confInp">
-                <option value="0.90">90% ($Z^* = 1.645$)</option>
-                <option value="0.95" selected>95% ($Z^* = 1.96$)</option>
-                <option value="0.99">99% ($Z^* = 2.576$)</option>
+                <option value="0.90">90% — Z* = 1.645</option>
+                <option value="0.95" selected>95% — Z* = 1.960</option>
+                <option value="0.99">99% — Z* = 2.576</option>
                 <option value="custom">Personalizado...</option>
             </select>
         </div>
@@ -47,6 +52,12 @@ import "./ConfidenceInterval.css";
         <div class="input-group" id="customConfGroup" style="display: none;">
             <label for="customConf">Confianza Personalizada (0-100)</label>
             <input type="number" id="customConf" value="95" step="any" min="0.01" max="99.99" />
+        </div>
+
+        <div class="input-group">
+            <label for="targetMargin">¿Cuántos datos necesito? — Margen objetivo (E)</label>
+            <input type="number" id="targetMargin" placeholder="Ej: 2.5" step="any" min="0.0001" />
+            <div id="nRequired" class="n-badge">Introduce E para calcular n mínimo</div>
         </div>
 
         <div style="margin-top: auto; padding-top: 1rem; border-top: 1px dashed rgba(16, 185, 129, 0.1); font-size: 0.7rem; color: #94a3b8; display: flex; align-items: center; gap: 0.5rem; line-height: 1.4;">
@@ -80,6 +91,12 @@ import "./ConfidenceInterval.css";
             Introduce datos para generar el intervalo...
         </div>
 
+        <div id="simpleExplanation" class="simple-explanation" style="display: none;"></div>
+
+        <button id="toggleSimpleBtn" class="simple-toggle-btn" style="display: none;">
+            <Icon name="mdi:lightbulb-outline" size={14} /> <span id="toggleSimpleLbl">Ver explicación simple</span>
+        </button>
+
         <footer class="action-row">
             <div class="stats-info" style="display: flex; gap: 1.5rem; font-size: 0.8rem; font-weight: 700; color: #64748b;">
                 <div id="calcMean">Media: 0</div>
@@ -111,6 +128,9 @@ import "./ConfidenceInterval.css";
     const errorOverlay = document.getElementById('errorOverlay');
     const copyBtn = document.getElementById('copyBtn');
     const clearBtn = document.getElementById('clearBtn');
+    const clearRawBtn = document.getElementById('clearRawBtn');
+    const targetMarginInp = document.getElementById('targetMargin') as HTMLInputElement;
+    const toggleSimpleBtn = document.getElementById('toggleSimpleBtn');
 
     const ui = {
         interval: document.getElementById('intervalVal'),
@@ -122,8 +142,16 @@ import "./ConfidenceInterval.css";
         zSub: document.getElementById('zValSub'),
         customGroup: document.getElementById('customConfGroup'),
         rawFields: document.getElementById('rawFields'),
-        statsFields: document.getElementById('statsFields')
+        statsFields: document.getElementById('statsFields'),
+        simpleExpl: document.getElementById('simpleExplanation'),
+        nRequired: document.getElementById('nRequired'),
     };
+
+    let simpleVisible = false;
+    let lastConf = 0.95;
+    let lastZCrit = 1.96;
+    let lastStd = 15;
+    let lastLow = 0, lastHigh = 0;
 
     let currentMode = 'raw';
     const LS_KEY = 'jjlmoya_confidence_interval';
@@ -229,7 +257,17 @@ import "./ConfidenceInterval.css";
         ui.calcStd!.textContent = `Desv: ${s.toFixed(2)}`;
         ui.calcN!.textContent = `n: ${n}`;
 
-        ui.interp!.textContent = `Tenemos una confianza del ${(conf * 100).toFixed(0)}% de que el valor real de la poblaci\u00f3n est\u00e1 entre ${(m - marginError).toFixed(3)} y ${(m + marginError).toFixed(3)}.`;
+        const pct = (conf * 100).toFixed(0);
+        const low = (m - marginError).toFixed(3), high = (m + marginError).toFixed(3);
+        ui.interp!.textContent = `Tenemos una confianza del ${pct}% de que el valor real de la población está entre ${low} y ${high}.`;
+
+        lastConf = conf; lastZCrit = zCrit; lastStd = s;
+        lastLow = m - marginError; lastHigh = m + marginError;
+
+        const simpleText = `Si repitiéramos este estudio 100 veces, en ${pct} de ellas el valor real de la población estaría dentro del intervalo [${low}, ${high}].`;
+        ui.simpleExpl!.textContent = simpleText;
+        toggleSimpleBtn!.style.display = 'flex';
+        updateNRequired();
 
         drawGauss(m, s, n, zCrit);
         
@@ -243,6 +281,28 @@ import "./ConfidenceInterval.css";
             customConf: customConfInp.value
         }));
     };
+
+    const updateNRequired = () => {
+        const E = parseFloat(targetMarginInp.value);
+        if (!isNaN(E) && E > 0 && lastStd > 0) {
+            const n = Math.ceil(Math.pow((lastZCrit * lastStd) / E, 2));
+            ui.nRequired!.textContent = `n mínimo necesario: ${n.toLocaleString()} datos`;
+            ui.nRequired!.classList.add('n-badge--active');
+        } else {
+            ui.nRequired!.textContent = 'Introduce E para calcular n mínimo';
+            ui.nRequired!.classList.remove('n-badge--active');
+        }
+    };
+
+    clearRawBtn?.addEventListener('click', () => { rawInp.value = ''; update(); });
+
+    toggleSimpleBtn?.addEventListener('click', () => {
+        simpleVisible = !simpleVisible;
+        ui.simpleExpl!.style.display = simpleVisible ? 'block' : 'none';
+        document.getElementById('toggleSimpleLbl')!.textContent = simpleVisible ? 'Ocultar explicación' : 'Ver explicación simple';
+    });
+
+    targetMarginInp.addEventListener('input', updateNRequired);
 
     const load = () => {
         const saved = localStorage.getItem(LS_KEY);

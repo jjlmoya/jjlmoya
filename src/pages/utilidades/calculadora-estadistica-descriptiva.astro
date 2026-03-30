@@ -1,0 +1,100 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import DescriptiveStatistics from "../../components/utilidades/DescriptiveStatistics/DescriptiveStatistics.astro";
+import DescriptiveStatisticsSEO from "../../components/utilidades/DescriptiveStatistics/DescriptiveStatisticsSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Calculadora de Estadística Descriptiva y Diagrama de Caja Online";
+const description = "Calcula la media, mediana, moda, desviación típica, varianza y cuartiles de una lista de datos. Genera un boxplot (diagrama de caja) dinámico.";
+
+const faqs = [
+    {
+        question: "¿Qué es la estadística descriptiva?",
+        answer: "Es la rama de la estadística que se encarga de resumir y describir la información de un conjunto de datos mediante indicadores numéricos como la media, la mediana o la desviación típica."
+    },
+    {
+        question: "¿Por qué hay dos desviaciones típicas diferentes?",
+        answer: "La desviación muestral (s) se usa cuando tus datos son una muestra de un grupo mayor (divide por n-1). La poblacional (\u03c3) se usa cuando tienes los datos de todo el grupo objetivo (divide por n)."
+    },
+    {
+        question: "¿Cómo uso el diagrama de caja o boxplot?",
+        answer: "El boxplot te permite ver de forma gráfica la dispersión y simetría de tus datos. El rectángulo central contiene el 50% de los datos (entre Q1 y Q3) y la línea interior es la mediana."
+    },
+    {
+        question: "¿Qué es el coeficiente de variación?",
+        answer: "Es un porcentaje que nos indica si la variabilidad de los datos es grande en relación con su media. Si el CV es mayor al 30%, se considera que los datos son muy heterogéneos."
+    },
+    {
+        question: "¿Puedo pegar datos directamente desde Excel?",
+        answer: "Sí, nuestra calculadora filtra automáticamente comas, espacios y saltos de línea, permitiéndote copiar y pegar columnas o filas enteras desde cualquier hoja de cálculo."
+    }
+];
+
+const howTo = [
+    {
+        name: "Prepara tus Datos",
+        text: "Copia una lista de números desde Excel, Word o un archivo CSV."
+    },
+    {
+        name: "Introduce los Valores",
+        text: "Pega el contenido en el área de texto de la barra lateral."
+    },
+    {
+        name: "Elige el Tipo de Cálculo",
+        text: "Selecciona 'Muestral' o 'Poblacional' según el origen de tus datos."
+    },
+    {
+        name: "Analiza el Boxplot",
+        text: "Revisa visualmente la dispersión de los datos en el gráfico generado dinámicamente."
+    },
+    {
+        name: "Copia tus Resultados",
+        text: "Usa el botón de copiar para llevarte todos los estadísticos descriptivos a tu informe."
+    }
+];
+
+const references = [
+    {
+        name: "Descriptive Statistics - Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Descriptive_statistics"
+    },
+    {
+        name: "Box plot - Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Box_plot"
+    },
+    {
+        name: "Medidas de Dispersión - Khan Academy",
+        url: "https://es.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-sample/a/population-and-sample-standard-deviation-review"
+    }
+];
+---
+
+<LayoutUtility
+    title={title}
+    description={description}
+    faqItems={faqs}
+    howToSteps={howTo}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Estadística" 
+            titleBase=" Descriptiva"
+            description={description}
+            gradientFromColor="#6366f1"
+            gradientToColor="#4f46e5"
+        />
+    </div>
+
+    <DescriptiveStatistics />
+
+    <div slot="seo">
+        <DescriptiveStatisticsSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={references} />
+    </div>
+</LayoutUtility>

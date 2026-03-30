@@ -15,6 +15,14 @@ export const statisticsSection: SectionData = {
             color: "#6366f1",
         },
         {
+            title: "Calculadora de Estadística Descriptiva",
+            description: "Calcula al instante la media, mediana, moda, desviación típica y varianza de una lista masiva de datos.",
+            href: "/utilidades/calculadora-estadistica-descriptiva/",
+            iconBg: "mdi:chart-bar",
+            iconFg: "mdi:sigma",
+            color: "#6366f1",
+        },
+        {
             title: "Calculadora de Distribución Normal",
             description: "Calcula probabilidades, cuantiles y puntuaciones Z de la campana de Gauss con visualización dinámica.",
             href: "/utilidades/calculadora-distribucion-normal/",
