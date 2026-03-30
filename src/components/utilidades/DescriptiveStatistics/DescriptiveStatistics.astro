@@ -156,10 +156,17 @@ import "./DescriptiveStatistics.css";
         const dpr = window.devicePixelRatio || 1;
         const cw = canvas.offsetWidth;
         const ch = canvas.offsetHeight;
-        canvas.width = Math.floor(cw * dpr);
-        canvas.height = Math.floor(ch * dpr);
-        ctx.scale(dpr, dpr);
+        canvas.width = Math.round(cw * dpr);
+        canvas.height = Math.round(ch * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, cw, ch);
+
+        const iqr = q3 - q1;
+        const lowerFence = q1 - 1.5 * iqr;
+        const upperFence = q3 + 1.5 * iqr;
+        const outliers = data.filter(v => v < lowerFence || v > upperFence);
+        const whiskerLow = data.find(v => v >= lowerFence) ?? min;
+        const whiskerHigh = [...data].reverse().find(v => v <= upperFence) ?? max;
 
         const isMobile = cw < 480;
         const fs = isMobile ? 10 : 12;
@@ -190,14 +197,14 @@ import "./DescriptiveStatistics.css";
         ctx.beginPath(); ctx.moveTo(padL, padT + plotH + 8); ctx.lineTo(padL + plotW, padT + plotH + 8); ctx.stroke();
 
         ctx.strokeStyle = 'rgba(99,102,241,0.5)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
-        ctx.beginPath(); ctx.moveTo(toX(min), cy); ctx.lineTo(toX(q1), cy); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(toX(q3), cy); ctx.lineTo(toX(max), cy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(toX(whiskerLow), cy); ctx.lineTo(toX(q1), cy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(toX(q3), cy); ctx.lineTo(toX(whiskerHigh), cy); ctx.stroke();
         ctx.setLineDash([]);
 
         const capH = boxH * 0.35;
-        [[min, '#6366f1'], [max, '#6366f1']].forEach(([v, color]) => {
-            ctx.strokeStyle = color as string; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(toX(v as number), cy - capH); ctx.lineTo(toX(v as number), cy + capH); ctx.stroke();
+        [whiskerLow, whiskerHigh].forEach(v => {
+            ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(toX(v), cy - capH); ctx.lineTo(toX(v), cy + capH); ctx.stroke();
         });
 
         const grad = ctx.createLinearGradient(0, cy - boxH / 2, 0, cy + boxH / 2);
@@ -217,24 +224,31 @@ import "./DescriptiveStatistics.css";
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.arc(toX(mean), cy, isMobile ? 4 : 5, 0, Math.PI * 2); ctx.stroke();
 
+        outliers.forEach(v => {
+            const ox = toX(v);
+            const or = isMobile ? 4 : 5;
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+            ctx.fillStyle = 'rgba(245,158,11,0.15)';
+            ctx.beginPath(); ctx.arc(ox, cy, or, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        });
+
         ctx.font = `bold ${fs}px sans-serif`;
         const lbY = cy + boxH / 2 + (isMobile ? 14 : 18);
         const lbY2 = cy + boxH / 2 + (isMobile ? 26 : 34);
-
-        const q1x = toX(q1), q2x = toX(q2), q3x = toX(q3), minx = toX(min), maxx = toX(max);
+        const wlx = toX(whiskerLow), whx = toX(whiskerHigh);
+        const q1x = toX(q1), q3x = toX(q3);
         const minDist = fs * 4.5;
 
         ctx.fillStyle = '#64748b'; ctx.textAlign = 'center';
-        ctx.fillText(fmt(min), minx, Math.abs(minx - q1x) < minDist ? lbY2 : lbY);
-        ctx.fillText(fmt(max), maxx, Math.abs(maxx - q3x) < minDist ? lbY2 : lbY);
+        if (whiskerLow !== q1) ctx.fillText(fmt(whiskerLow), wlx, Math.abs(wlx - q1x) < minDist ? lbY2 : lbY);
+        if (whiskerHigh !== q3) ctx.fillText(fmt(whiskerHigh), whx, Math.abs(whx - q3x) < minDist ? lbY2 : lbY);
 
         ctx.fillStyle = '#6366f1';
-        ctx.fillText(`Q1 ${fmt(q1)}`, q1x, Math.abs(q1x - minx) < minDist ? lbY2 : lbY);
-        ctx.fillText(`Q3 ${fmt(q3)}`, q3x, Math.abs(q3x - maxx) < minDist ? lbY2 : lbY);
+        ctx.fillText(`Q1 ${fmt(q1)}`, q1x, lbY);
+        ctx.fillText(`Q3 ${fmt(q3)}`, q3x, lbY);
 
         ctx.fillStyle = '#4338ca';
-        const medAbove = cy - boxH / 2 - (isMobile ? 8 : 12);
-        ctx.fillText(`Med ${fmt(q2)}`, q2x, medAbove);
+        ctx.fillText(`Med ${fmt(q2)}`, toX(q2), cy - boxH / 2 - (isMobile ? 8 : 12));
 
         if (!isMobile) {
             ctx.font = `11px sans-serif`; ctx.textAlign = 'left';
@@ -243,8 +257,15 @@ import "./DescriptiveStatistics.css";
             ctx.fillStyle = '#94a3b8'; ctx.fillText('Media', padL + 18, legendY + 4);
             ctx.fillStyle = '#4338ca'; ctx.fillRect(padL + 70, legendY - 2, 16, 3);
             ctx.fillStyle = '#94a3b8'; ctx.fillText('Mediana', padL + 92, legendY + 4);
+            if (outliers.length > 0) {
+                ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.arc(padL + 178, legendY, 4, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#94a3b8'; ctx.fillText(`Outlier (×${outliers.length})`, padL + 188, legendY + 4);
+            }
         }
     };
+
+    let lastStats: { n: number; mean: number; median: number; mode: string; sum: number; std: number; variance: number; range: number; cv: number; min: number; max: number; q1: number; q3: number; iqr: number; outliers: number[] } | null = null;
 
     const update = () => {
         const rawText = dataInp.value;
@@ -304,6 +325,9 @@ import "./DescriptiveStatistics.css";
         interp += `El 50% central de los valores se encuentra entre ${q1.toFixed(2)} y ${q3.toFixed(2)} (IQR: ${iqr.toFixed(2)}).`;
         document.getElementById('interpretation')!.textContent = interp;
 
+        const outliers = sorted.filter(v => v < q1 - 1.5 * iqr || v > q3 + 1.5 * iqr);
+        lastStats = { n, mean, median: q2, mode: modeStr, sum, std, variance, range, cv: isFinite(cv) ? cv : 0, min, max, q1, q3, iqr, outliers };
+
         drawBoxplot(sorted, q1, q2, q3, min, max);
 
         localStorage.setItem(LS_KEY, JSON.stringify({ data: rawText, mode: currentMode }));
@@ -338,11 +362,82 @@ Calculado en jjlmoya.es`;
         setTimeout(() => document.getElementById('copyBtn')!.innerHTML = icon, 1200);
     });
 
-    document.getElementById('downloadBtn')?.addEventListener('click', () => {
-        const link = document.createElement('a');
-        link.download = 'boxplot-estadistica.webp';
-        link.href = canvas.toDataURL('image/webp');
-        link.click();
+    document.getElementById('downloadBtn')?.addEventListener('click', async () => {
+        if (!lastStats) return;
+        const { default: jsPDF } = await import('jspdf');
+        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const s = lastStats;
+        const date = new Date().toLocaleDateString('es-ES');
+        const W = 210, margin = 18;
+
+        doc.setFillColor(99, 102, 241);
+        doc.rect(0, 0, W, 28, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(16); doc.setFont('helvetica', 'bold');
+        doc.text('Informe de Estadística Descriptiva', margin, 12);
+        doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+        doc.text(`jjlmoya.es · Generado el ${date} · n = ${s.n} datos`, margin, 21);
+
+        doc.setTextColor(30, 41, 59);
+        let y = 38;
+        const col = (W - margin * 2) / 3;
+
+        const sections: [string, [string, string][]][] = [
+            ['Tendencia Central', [['Media', s.mean.toFixed(3)], ['Mediana', s.median.toFixed(3)], ['Moda', s.mode], ['Suma', s.sum.toLocaleString()]]],
+            ['Dispersión', [['Desv. Típica', s.std.toFixed(3)], ['Varianza', s.variance.toFixed(3)], ['Rango', s.range.toFixed(3)], ['Coef. Var.', s.cv.toFixed(2) + '%']]],
+            ['Posición (Cuartiles)', [['Mínimo', s.min.toFixed(3)], ['Q1', s.q1.toFixed(3)], ['Q3', s.q3.toFixed(3)], ['Máximo', s.max.toFixed(3)]]],
+        ];
+
+        sections.forEach(([title, rows], i) => {
+            const x = margin + i * col;
+            doc.setFillColor(238, 240, 255);
+            doc.roundedRect(x, y, col - 4, 8, 2, 2, 'F');
+            doc.setFontSize(8); doc.setFont('helvetica', 'bold');
+            doc.setTextColor(99, 102, 241);
+            doc.text(title.toUpperCase(), x + 3, y + 5.5);
+            doc.setTextColor(30, 41, 59);
+            rows.forEach(([label, val], j) => {
+                const ry = y + 12 + j * 9;
+                doc.setFontSize(7); doc.setFont('helvetica', 'normal');
+                doc.setTextColor(100, 116, 139);
+                doc.text(label, x + 3, ry);
+                doc.setFontSize(10); doc.setFont('helvetica', 'bold');
+                doc.setTextColor(30, 41, 59);
+                doc.text(val, x + 3, ry + 5.5);
+            });
+        });
+
+        y += 52;
+
+        if (s.iqr > 0) {
+            doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+            doc.setTextColor(100, 116, 139);
+            const outlierTxt = s.outliers.length > 0
+                ? `Outliers detectados (×${s.outliers.length}): ${s.outliers.map(v => v.toFixed(2)).join(', ')}`
+                : 'Sin outliers detectados (regla 1.5×IQR)';
+            doc.setTextColor(s.outliers.length > 0 ? 180 : 5, s.outliers.length > 0 ? 120 : 150, s.outliers.length > 0 ? 0 : 80);
+            doc.text(`IQR: ${s.iqr.toFixed(3)} · ${outlierTxt}`, margin, y);
+            y += 8;
+        }
+
+        doc.setFontSize(10); doc.setFont('helvetica', 'bold');
+        doc.setTextColor(30, 41, 59);
+        doc.text('Diagrama de Caja (Boxplot)', margin, y + 4);
+        y += 10;
+
+        const imgData = canvas.toDataURL('image/png');
+        const imgW = W - margin * 2;
+        const imgH = imgW * (canvas.height / canvas.width);
+        doc.addImage(imgData, 'PNG', margin, y, imgW, imgH);
+
+        const pageH = 297;
+        doc.setDrawColor(226, 232, 240);
+        doc.line(margin, pageH - 14, W - margin, pageH - 14);
+        doc.setFontSize(7.5); doc.setFont('helvetica', 'normal');
+        doc.setTextColor(148, 163, 184);
+        doc.text('Generado gratuitamente en jjlmoya.es · Herramientas estadísticas privadas y seguras', W / 2, pageH - 8, { align: 'center' });
+
+        doc.save(`estadistica-descriptiva-n${s.n}.pdf`);
     });
 
     const saved = localStorage.getItem(LS_KEY);
