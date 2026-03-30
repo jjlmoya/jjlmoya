@@ -13,6 +13,8 @@ import { toolsSection } from "./tools";
 import { streamingSection } from "./streaming";
 import { hardwareSection } from "./hardware";
 import { nauticalSection } from "./nautical";
+import { statisticsSection } from "./statistics";
+
 
 
 import { natureSection } from "./nature";
@@ -67,7 +69,9 @@ export const sections: SectionData[] = [
     gamesSection,
     petsSection,
     nauticalSection,
+    statisticsSection,
 ];
+
 
 
 
