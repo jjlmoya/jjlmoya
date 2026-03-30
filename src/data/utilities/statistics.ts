@@ -7,6 +7,14 @@ export const statisticsSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            title: "Calculadora Chi-Cuadrado de Independencia",
+            description: "Determina si existe una relación estadística o dependencia entre dos variables categóricas. Calcula el P-Valor y la V de Cramer.",
+            href: "/utilidades/calculadora-chi-cuadrado-independencia/",
+            iconBg: "mdi:table",
+            iconFg: "mdi:link",
+            color: "#f59e0b",
+        },
+        {
             title: "Calculadora de Contraste de Hipótesis (A/B Test)",
             description: "Compara dos grupos (A y B) para determinar si existe una diferencia estadísticamente significativa entre sus conversiones o medias.",
             href: "/utilidades/calculadora-contraste-hipotesis-ab-test/",
