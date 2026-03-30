@@ -22,5 +22,13 @@ export const statisticsSection: SectionData = {
             iconFg: "mdi:sigma",
             color: "#8b5cf6",
         },
+        {
+            title: "Calculadora de Intervalo de Confianza",
+            description: "Calcula el intervalo estimado de una población con su margen de error y niveles de confianza de hasta el 99.9%.",
+            href: "/utilidades/calculadora-intervalo-confianza/",
+            iconBg: "mdi:chart-bell-curve",
+            iconFg: "mdi:percent",
+            color: "#10b981",
+        },
     ],
 };
