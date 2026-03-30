@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import { apps } from "../data/apps/index";
 
 interface Props {
@@ -47,7 +47,7 @@ const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
             rel="stylesheet"
         />
 
-        <ViewTransitions />
+        <ClientRouter />
 
         {
             currentSlug &&
@@ -85,7 +85,7 @@ const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
                         image: `${site}${app.media.icon}`,
                     };
 
-                    return <script type="application/ld+json" set:html={JSON.stringify(schema)} />;
+                    return <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />;
                 })()
         }
 

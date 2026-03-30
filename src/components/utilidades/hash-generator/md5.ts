@@ -25,12 +25,12 @@ export function md5(string: string) {
     }
 
     const x: number[] = [];
-    const str = unescape(encodeURIComponent(string));
-    for (let i = 0; i < str.length; i++) {
-        x[i >> 2] |= str.charCodeAt(i) << ((i % 4) * 8);
+    const bytes = Array.from(new TextEncoder().encode(string));
+    for (let i = 0; i < bytes.length; i++) {
+        x[i >> 2] |= bytes[i] << ((i % 4) * 8);
     }
-    x[str.length >> 2] |= 0x80 << ((str.length % 4) * 8);
-    x[(((str.length + 8) >> 6) << 4) + 14] = str.length * 8;
+    x[bytes.length >> 2] |= 0x80 << ((bytes.length % 4) * 8);
+    x[(((bytes.length + 8) >> 6) << 4) + 14] = bytes.length * 8;
 
     let a = 1732584193;
     let b = -271733879;

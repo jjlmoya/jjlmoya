@@ -132,17 +132,17 @@ import "./SvgToCssConverter.css";
             finalCode = `background-image: url("${dataUri}");`;
             previewApplied.style.backgroundImage = `url("${dataUri}")`;
             previewApplied.style.maskImage = "none";
-            previewApplied.style.webkitMaskImage = "none";
+            (previewApplied.style as any).webkitMaskImage = "none";
             previewApplied.style.backgroundColor = "transparent";
         } else if (currentType === "mask") {
             finalCode = `mask-image: url("${dataUri}");\n-webkit-mask-image: url("${dataUri}");\nmask-repeat: no-repeat;\nmask-size: contain;\nbackground-color: currentColor;`;
             previewApplied.style.backgroundImage = "none";
             previewApplied.style.maskImage = `url("${dataUri}")`;
-            previewApplied.style.webkitMaskImage = `url("${dataUri}")`;
+            (previewApplied.style as any).webkitMaskImage = `url("${dataUri}")`;
             previewApplied.style.maskRepeat = "no-repeat";
             previewApplied.style.maskSize = "contain";
-            previewApplied.style.webkitMaskRepeat = "no-repeat";
-            previewApplied.style.webkitMaskSize = "contain";
+            (previewApplied.style as any).webkitMaskRepeat = "no-repeat";
+            (previewApplied.style as any).webkitMaskSize = "contain";
             previewApplied.style.backgroundColor = "var(--stc-primary)";
         } else {
             finalCode = dataUri;
@@ -164,10 +164,9 @@ import "./SvgToCssConverter.css";
         });
     });
 
-    copyBtn?.addEventListener("click", () => {
+    copyBtn?.addEventListener("click", async () => {
         if (!output) return;
-        output.select();
-        document.execCommand("copy");
+        await navigator.clipboard.writeText(output.value);
         const originalText = copyBtn.textContent;
         copyBtn.textContent = "¡Copiado!";
         setTimeout(() => {

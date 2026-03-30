@@ -207,7 +207,11 @@ const { craterRadius, thermalRadius, shockwaveRadius } = Astro.props;
         }).addTo(map);
 
         const maxRadius = Math.max(shockwaveRadius, 50000);
-        const bounds = L.circle([impactLat, impactLng], maxRadius * 1.1).getBounds();
+        const radiusDeg = (maxRadius * 1.1) / 111320;
+        const bounds = L.latLngBounds(
+            [impactLat - radiusDeg, impactLng - radiusDeg],
+            [impactLat + radiusDeg, impactLng + radiusDeg]
+        );
         map.fitBounds(bounds);
     }
 

@@ -112,6 +112,7 @@ const airlines = [
             airlines.map((airline) => (
                 <div
                     data-airline={airline.name}
+                    data-airline-json={JSON.stringify(airline)}
                     class="airline-card"
                     onclick={`window.openDetail('${airline.name}')`}
                 >
@@ -159,7 +160,7 @@ const airlines = [
     </div>
 </div>
 
-<script is:inline define:vars={{ airlines }}>
+<script>
     const searchInput = document.getElementById("airline-search");
     const resultsContainer = document.getElementById("results-container");
     const noResults = document.getElementById("no-results");
@@ -169,11 +170,11 @@ const airlines = [
 
     if (searchInput) {
         searchInput.addEventListener("input", (e) => {
-            const value = e.target.value.toLowerCase();
+            const value = (e.target as HTMLInputElement).value.toLowerCase();
             let found = 0;
-            const cards = document.querySelectorAll(".airline-card");
+            const cards = document.querySelectorAll<HTMLElement>(".airline-card");
             cards.forEach((card) => {
-                const name = card.getAttribute("data-airline").toLowerCase();
+                const name = (card.getAttribute("data-airline") ?? "").toLowerCase();
                 if (name.includes(value)) {
                     card.style.display = "block";
                     found++;
@@ -192,9 +193,11 @@ const airlines = [
         });
     }
 
-    window.openDetail = (name) => {
-        const airline = airlines.find((a) => a.name === name);
-        if (!airline || !modalContent || !detailOverlay) return;
+    (window as unknown as { openDetail: (name: string) => void }).openDetail = (name: string) => {
+        const el = document.querySelector(`[data-airline="${name}"]`);
+        if (!el || !modalContent || !detailOverlay) return;
+        const airline = JSON.parse(el.getAttribute("data-airline-json") || "{}");
+        if (!airline.name) return;
 
         modalContent.innerHTML = `
             <h2 class="modal-title">${airline.name}</h2>
