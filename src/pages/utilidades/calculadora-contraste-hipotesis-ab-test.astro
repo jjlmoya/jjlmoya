@@ -1,0 +1,85 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import ABTestCalculator from "../../components/utilidades/ABTestCalculator/ABTestCalculator.astro";
+import ABTestCalculatorSEO from "../../components/utilidades/ABTestCalculator/ABTestCalculatorSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Calculadora de Contraste de Hipótesis (A/B Test) Online";
+const description =
+    "Compara dos grupos (A y B) para determinar si existe una diferencia estadísticamente significativa entre sus conversiones o medias. Calcula el P-Valor al instante.";
+
+const faqs = [
+    {
+        question: "¿Qué significa el P-Valor?",
+        answer: "El P-Valor te dice la probabilidad de que la diferencia de rendimiento entre el Grupo A y el Grupo B sea simple casualidad. Si el P-Valor es menor al nivel de significancia (usualmente 0.05), significa que con un 95% de confianza la diferencia estructural existe, ¡la variante es un éxito real!",
+    },
+    {
+        question: "¿Qué es el Nivel de Significancia (Alfa o α)?",
+        answer: "Es tu nivel de exigencia para el test. Un Alfa de 0.05 requiere estar un 95% seguro de que el Grupo B es distinto al A para darlo por válido. Un Alfa de 0.01 requiere mucha más exigencia (99%). La convención académica e industrial es usar 0.05 por defecto.",
+    },
+    {
+        question: "¿Cuál es la diferencia entre el test de proporciones y el de medias?",
+        answer: "El test de proporciones mide variables dicotómicas de éxito o fracaso: clics, aperturas de email, conversiones (gente que compra vs gente que no). El test de medias compara el comportamiento cuantitativo acumulado: gasto promedio en carrito de compras de las personas o días de recuperación clínicos de un paciente.",
+    },
+    {
+        question: "¿Y si mi muestra es menor a 30 sujetos?",
+        answer: "La aproximación por distribución normal a la desviación comienza a ser menos precisa con muestras tan pequeñas (teorema del límite central). Para una decisión clínica recomendamos usar técnicas más conservadoras de probabilidad exacta o T de Student ajustada.",
+    },
+];
+
+const howTo = [
+    {
+        name: "Selecciona el Objetivo Numérico",
+        text: "En el panel de configuración, define si quieres medir tasas de Conversión (proporciones simples) o promedios generales como importes (Medias).",
+    },
+    {
+        name: "Introduce los Datos de Control (Grupo A)",
+        text: "Rellena los casos enviados/expuestos y cuántos éxitos han tenido (o su media).",
+    },
+    {
+        name: "Introduce los Datos Experimentales (Grupo B)",
+        text: "Sube los números de la nueva iniciativa o variante que estás midiendo.",
+    },
+    {
+        name: "Anota el Veredicto Estadístico",
+        text: "Baja la vista a nuestro Juez de Significación y copia la justificación generada sobre si la mejora real (Lift) rechaza la asunción al azar.",
+    },
+];
+
+const references = [
+    {
+        name: "Statistical hypothesis testing - Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Statistical_hypothesis_testing",
+    },
+    {
+        name: "A/B Testing Calculator - Optimizely",
+        url: "https://www.optimizely.com/sample-size-calculator/",
+    },
+];
+---
+
+<LayoutUtility title={title} description={description} faqItems={faqs} howToSteps={howTo}>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Contraste de Hipótesis (A/B)"
+            titleBase="Calculadora de"
+            description={description}
+            gradientFromColor="#f43f5e"
+            gradientToColor="#fb7185"
+            reverse={true}
+        />
+    </div>
+
+    <ABTestCalculator />
+
+    <div slot="seo">
+        <ABTestCalculatorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={references} />
+    </div>
+</LayoutUtility>

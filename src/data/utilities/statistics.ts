@@ -7,6 +7,14 @@ export const statisticsSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            title: "Calculadora de Contraste de Hipótesis (A/B Test)",
+            description: "Compara dos grupos (A y B) para determinar si existe una diferencia estadísticamente significativa entre sus conversiones o medias.",
+            href: "/utilidades/calculadora-contraste-hipotesis-ab-test/",
+            iconBg: "mdi:scale-balance",
+            iconFg: "mdi:percent",
+            color: "#f43f5e",
+        },
+        {
             title: "Calculadora de Tamaño de Muestra",
             description: "Calcula el número exacto de personas necesarias para tu estudio, con población finita/infinita y gráfico de sensibilidad.",
             href: "/utilidades/calculadora-tamano-muestra/",
