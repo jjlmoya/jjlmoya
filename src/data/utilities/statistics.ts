@@ -7,6 +7,14 @@ export const statisticsSection: SectionData = {
     theme: "indigo",
     utilities: [
         {
+            title: "Calculadora de Tamaño de Muestra",
+            description: "Calcula el número exacto de personas necesarias para tu estudio, con población finita/infinita y gráfico de sensibilidad.",
+            href: "/utilidades/calculadora-tamano-muestra/",
+            iconBg: "mdi:account-group",
+            iconFg: "mdi:sigma",
+            color: "#0ea5e9",
+        },
+        {
             title: "Calculadora de Correlación de Pearson",
             description: "Calcula el coeficiente r de Pearson, r² y la recta de regresión a partir de pares de datos.",
             href: "/utilidades/calculadora-correlacion-pearson/",

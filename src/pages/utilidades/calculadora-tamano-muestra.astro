@@ -1,0 +1,85 @@
+---
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import SampleSizeCalculator from "../../components/utilidades/SampleSizeCalculator/SampleSizeCalculator.astro";
+import SampleSizeCalculatorSEO from "../../components/utilidades/SampleSizeCalculator/SampleSizeCalculatorSEO.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+
+export const prerender = true;
+
+const title = "Calculadora de Tamaño de Muestra Online (Sample Size)";
+const description =
+    "Calcula el número exacto de personas necesarias para tu estudio. Incluye opciones para población finita o infinita, niveles de confianza y margen de error ajustables.";
+
+const faqs = [
+    {
+        question: "¿Qué es el tamaño de la población?",
+        answer: "Es el número total de personas que conforman el grupo que quieres estudiar o encuestar. Si es menor a 100.000, suele considerarse población finita. Si no tienes este dato o es inabarcable, marca la opción de población infinita.",
+    },
+    {
+        question: "¿Qué nivel de confianza debo elegir?",
+        answer: "El 95% es el estándar más utilizado en investigaciones científicas, tesis (TFG/TFM) y estudios de mercado. Solo cambia este valor si tu profesor, tutor o cliente te exige una precisión diferente (por ejemplo, 99%).",
+    },
+    {
+        question: "¿Por qué el programa me pide un margen de error?",
+        answer: "Ninguna muestra es perfecta. El margen de error define la cantidad de imprecisión que estás dispuesto a aceptar. Lo más habitual es usar un 5%.",
+    },
+    {
+        question: "¿Qué proporción esperada (p) debo poner si no sé nada sobre la población?",
+        answer: "Deja el valor por defecto: 50%. En estadística, esto representa el 'peor escenario posible' porque maximiza la varianza p(1-p), lo que asegura que tu tamaño de muestra no se quede corto bajo ninguna circunstancia.",
+    },
+];
+
+const howTo = [
+    {
+        name: "Define tu Población",
+        text: "Indica si conoces el número total del grupo a estudiar (Finita) o si prefieres un cálculo conservador para grupos muy grandes/desconocidos (Infinita).",
+    },
+    {
+        name: "Ajusta tu Nivel de Confianza",
+        text: "Selecciona 95% (recomendado), o introduce un valor personalizado en el menú desplegable.",
+    },
+    {
+        name: "Fija el Margen de Error",
+        text: "Especifica la tolerancia al error. Recuerda que bajarlo del 5% al 2% multiplica drásticamente el número de encuestas que deberás realizar.",
+    },
+    {
+        name: "Copia el Resultado",
+        text: "Mira el panel central y copia directamente el Texto de Justificación autogenerado para añadirlo a tu Tesis o informe.",
+    },
+];
+
+const references = [
+    {
+        name: "Sample size determination - Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Sample_size_determination",
+    },
+    {
+        name: "Cálculo del tamaño de la muestra - PubMed",
+        url: "https://pubmed.ncbi.nlm.nih.gov/30526013/",
+    },
+];
+---
+
+<LayoutUtility title={title} description={description} faqItems={faqs} howToSteps={howTo}>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Calculadora"
+            titleBase="de Tamaño de Muestra"
+            description={description}
+            gradientFromColor="#0ea5e9"
+            gradientToColor="#10b981"
+            reverse={false}
+        />
+    </div>
+
+    <SampleSizeCalculator />
+
+    <div slot="seo">
+        <SampleSizeCalculatorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={references} />
+    </div>
+</LayoutUtility>
