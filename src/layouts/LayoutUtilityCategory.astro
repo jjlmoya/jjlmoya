@@ -49,10 +49,7 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
                     aria-label="Buscar herramientas"
                 />
                 <div class="search-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
+                    <Icon name="mdi:magnify" />
                 </div>
             </div>
         </div>
@@ -81,6 +78,19 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
             }
         </div>
 
+        <div id="no-results-state" class="search-no-results-card hidden">
+            <div class="no-results-icon">
+                <Icon name="mdi:database-search-outline" />
+            </div>
+            <div class="no-results-content">
+                <h3 class="no-results-title">Sin resultados para "<span id="search-term-display"></span>"</h3>
+                <p class="no-results-text">No hemos encontrado herramientas que coincidan en esta categoría. Intenta con otro término.</p>
+                <button class="no-results-btn" id="clear-search-btn">
+                    Ver todas las herramientas
+                </button>
+            </div>
+        </div>
+
         <div class="seo-content">
             <slot name="seo" />
         </div>
@@ -89,14 +99,13 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
 
 <script>
     function initializeSearch(): void {
-        const searchInputElement = document.getElementById("utility-search");
-        const gridElement = document.querySelector(".utilities-grid");
-
-        if (!searchInputElement || !gridElement) return;
-
-        const searchInput = searchInputElement as HTMLInputElement;
-        const grid = gridElement as HTMLElement;
+        const searchInput = document.getElementById("utility-search") as HTMLInputElement;
         const cards = document.querySelectorAll(".utility-card") as NodeListOf<HTMLElement>;
+        const noResultsState = document.getElementById("no-results-state");
+        const searchTermDisplay = document.getElementById("search-term-display");
+        const clearBtn = document.getElementById("clear-search-btn");
+
+        if (!searchInput) return;
 
         function filterCards(): void {
             const searchTerm = searchInput.value.toLowerCase().trim();
@@ -105,13 +114,9 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
             cards.forEach((card) => {
                 const title = card.querySelector(".card-title")?.textContent?.toLowerCase() || "";
                 const description = card.querySelector(".card-description")?.textContent?.toLowerCase() || "";
-
                 const matches = title.includes(searchTerm) || description.includes(searchTerm) || searchTerm === "";
 
-                if (matches && searchTerm !== "") {
-                    card.classList.remove("hidden");
-                    visibleCount++;
-                } else if (searchTerm === "") {
+                if (matches) {
                     card.classList.remove("hidden");
                     visibleCount++;
                 } else {
@@ -119,27 +124,28 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
                 }
             });
 
-            let noResults = document.querySelector(".search-no-results");
             if (visibleCount === 0 && searchTerm !== "") {
-                if (!noResults) {
-                    noResults = document.createElement("div");
-                    noResults.className = "search-no-results";
-                    noResults.innerHTML = `
-                        <div class="search-no-results-title">No encontramos herramientas</div>
-                        <p>Intenta con otro término de búsqueda.</p>
-                    `;
-                    grid.after(noResults);
+                if (noResultsState) {
+                    noResultsState.classList.remove("hidden");
+                    if (searchTermDisplay) searchTermDisplay.textContent = searchTerm;
                 }
-            } else if (noResults) {
-                noResults.remove();
+            } else if (noResultsState) {
+                noResultsState.classList.add("hidden");
             }
         }
 
         searchInput.addEventListener("input", filterCards);
-        searchInput.addEventListener("change", filterCards);
+        
+        if (clearBtn) {
+            clearBtn.addEventListener("click", () => {
+                searchInput.value = "";
+                filterCards();
+            });
+        }
     }
 
     document.addEventListener("DOMContentLoaded", initializeSearch);
+    document.addEventListener("astro:page-load", initializeSearch);
 </script>
 
 <style define:vars={{ categoryColor }}>
@@ -151,7 +157,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         z-index: 1;
     }
 
-    
     .breadcrumb {
         display: flex;
         align-items: center;
@@ -181,7 +186,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         font-weight: 500;
     }
 
-    
     .category-header {
         text-align: center;
         margin-bottom: 4rem;
@@ -204,7 +208,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         font-weight: 400;
     }
 
-    
     .search-container {
         position: relative;
         max-width: 500px;
@@ -242,7 +245,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         pointer-events: none;
     }
 
-    
     .utilities-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -250,7 +252,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         margin-bottom: 2rem;
     }
 
-    
     .utility-card {
         display: flex;
         flex-direction: column;
@@ -289,7 +290,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         transform: scaleX(1);
     }
 
-    
     .card-icons {
         position: relative;
         height: 60px;
@@ -324,10 +324,8 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         font-size: 1.3rem;
     }
 
-    
     .card-content {
         flex: 1;
-        padding-left: 0;
     }
 
     .card-title {
@@ -344,7 +342,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         line-height: 1.5;
     }
 
-    
     .card-arrow {
         display: flex;
         align-items: center;
@@ -356,7 +353,6 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         color: var(--card-color);
         margin-top: 0.5rem;
         transition: all 0.2s ease;
-        font-size: 1.2rem;
     }
 
     .utility-card:hover .card-arrow {
@@ -365,7 +361,85 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
         transform: translateX(4px);
     }
 
-    
+    .utility-card.hidden {
+        display: none;
+    }
+
+    .search-no-results-card {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        margin: 2rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        animation: cardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes cardIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .no-results-icon {
+        width: 64px;
+        height: 64px;
+        background: #f8fafc;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+        color: var(--categoryColor);
+        border: 1px solid #f1f5f9;
+    }
+
+    .no-results-icon :global(svg) {
+        width: 32px;
+        height: 32px;
+    }
+
+    .no-results-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 0.75rem;
+        color: #1e293b;
+        letter-spacing: -0.02em;
+    }
+
+    .no-results-text {
+        font-size: 1.05rem;
+        color: #64748b;
+        max-width: 450px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+    }
+
+    .no-results-btn {
+        background: #1e293b;
+        color: white;
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .no-results-btn:hover {
+        background: var(--categoryColor);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-no-results-card.hidden {
+        display: none;
+    }
+
     @media (prefers-color-scheme: dark) {
         .category-wrapper {
             background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.3) 100%);
@@ -403,35 +477,14 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
 
         .card-arrow {
             background: #334155;
-            color: var(--card-color);
+            color: var(--categoryColor);
         }
 
         .utility-card:hover .card-arrow {
             background: var(--card-color);
             color: #1e293b;
         }
-    }
 
-    
-    .utility-card.hidden {
-        display: none;
-    }
-
-    .search-no-results {
-        text-align: center;
-        padding: 3rem 1rem;
-        color: #64748b;
-    }
-
-    .search-no-results-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #1e293b;
-    }
-
-    
-    @media (prefers-color-scheme: dark) {
         .search-input {
             background: #1e293b;
             border-color: #334155;
@@ -451,16 +504,38 @@ const { title, description, image, utilities, theme: _theme = "indigo", category
             color: #475569;
         }
 
-        .search-no-results-title {
+        .search-no-results-card {
+            background: #1e293b;
+            border-color: #334155;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .no-results-icon {
+            background: #0f172a;
+            border-color: #1e293b;
+        }
+
+        .no-results-title {
             color: #f1f5f9;
         }
 
-        .search-no-results {
+        .no-results-text {
             color: #cbd5e1;
+        }
+
+        .no-results-btn {
+            background: #0f172a;
+            color: #f1f5f9;
+            border: 1px solid #334155;
+        }
+
+        .no-results-btn:hover {
+            background: var(--categoryColor);
+            border-color: var(--categoryColor);
+            color: #0f172a;
         }
     }
 
-    
     @media (max-width: 768px) {
         .category-wrapper {
             padding: 2rem 1rem;
