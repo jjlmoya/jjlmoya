@@ -1,0 +1,372 @@
+---
+import { Icon } from "astro-icon/components";
+import "./NormalDistribution.css";
+---
+
+<div class="normal-card" id="normalApp">
+    <aside class="normal-sidebar">
+        <header class="sidebar-heading">
+            <Icon name="mdi:sigma" /> Parámetros
+        </header>
+
+        <div class="input-field">
+            <label for="mean">Media (&mu;)</label>
+            <input type="number" id="mean" value="0" step="any" />
+        </div>
+
+        <div class="input-field">
+            <label for="stdDev">Desv. Típica (&sigma;)</label>
+            <input type="number" id="stdDev" value="1" step="any" min="0.0001" />
+        </div>
+
+        <div class="mode-switch" id="modeSwitch">
+            <button class="mode-btn active" data-mode="x">Valor X</button>
+            <button class="mode-btn" data-mode="z">Punt. Z</button>
+            <button class="mode-btn" data-mode="inv">Inverso</button>
+        </div>
+
+        <div class="input-field" id="mainInputGroup">
+            <label id="inputLabel" for="mainInput">Valor X</label>
+            <input type="number" id="mainInput" value="0" step="any" />
+        </div>
+
+        <div class="input-field" id="rangeInputGroup" style="display: none;">
+            <label for="rangeEnd">Hasta (Valor b)</label>
+            <input type="number" id="rangeEnd" value="1" step="any" />
+        </div>
+
+        <div class="input-field">
+            <label for="probType">Tipo de Probabilidad</label>
+            <select id="probType" class="selector-premium">
+                <option value="below">P(X &lt; x) Cola Izquierda</option>
+                <option value="above">P(X &gt; x) Cola Derecha</option>
+                <option value="between">P(a &lt; X &lt; b) Intervalo</option>
+            </select>
+        </div>
+
+        <button
+            id="standardizeBtn"
+            class="mode-btn"
+            style="margin-top: 1rem; background: rgba(99, 102, 241, 0.08); color: #4f46e5; border: 1px solid rgba(99, 102, 241, 0.2); height: 44px; font-weight: 900;"
+        >
+            NORMAL ESTÁNDAR (0, 1)
+        </button>
+
+        <div
+            style="margin-top: auto; padding-top: 1.5rem; border-top: 1px dashed rgba(99, 102, 241, 0.1); font-size: 0.7rem; color: #94a3b8; display: flex; align-items: center; gap: 0.5rem; line-height: 1.4;"
+        >
+            <Icon name="mdi:shield-check-outline" size={16} />
+            <span
+                >Privacidad total. Los datos se procesan localmente sin salir de tu navegador.</span
+            >
+        </div>
+    </aside>
+
+    <main class="normal-main">
+        <header class="results-header-grid">
+            <div class="result-item">
+                <span class="result-top-label">Resultado (P)</span>
+                <span id="probValue" class="result-main-value">-</span>
+                <span
+                    id="pLabelSub"
+                    style="font-size: 0.8rem; font-weight: 800; color: #94a3b8; margin-top: 0.5rem;"
+                    >Cálculo de probabilidad</span
+                >
+            </div>
+            <div class="result-item">
+                <span class="result-top-label">Puntuación Z</span>
+                <span
+                    id="zScoreValue"
+                    class="result-main-value"
+                    style="background: linear-gradient(135deg, #4f46e5, #4338ca); -webkit-background-clip: text; background-clip: text;"
+                    >-</span
+                >
+                <span
+                    id="zLabelSub"
+                    style="font-size: 0.8rem; font-weight: 800; color: #94a3b8; margin-top: 0.5rem;"
+                    >Unidades de desviación</span
+                >
+            </div>
+        </header>
+
+        <div class="curve-visual-box">
+            <canvas id="normalCurve"></canvas>
+            <div
+                id="errorOverlay"
+                style="position: absolute; inset: 0; background: rgba(255,255,255,0.9); display: none; align-items: center; justify-content: center; z-index: 10; border-radius: 2rem;"
+            >
+                <p
+                    style="color: #ef4444; font-weight: 900; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;"
+                >
+                    Error: &sigma; debe ser mayor que cero
+                </p>
+            </div>
+        </div>
+
+        <footer class="footer-actions">
+            <div id="interpretation" class="interp-box">
+                Introduce datos para ver el análisis estadístico detallado...
+            </div>
+            <div class="round-btn-group">
+                <button id="copyResults" class="round-btn" title="Copiar resultados">
+                    <Icon name="mdi:content-copy" />
+                </button>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<script>
+    const meanInp = document.getElementById("mean") as HTMLInputElement;
+    const stdDevInp = document.getElementById("stdDev") as HTMLInputElement;
+    const mainInp = document.getElementById("mainInput") as HTMLInputElement;
+    const rangeEndInp = document.getElementById("rangeEnd") as HTMLInputElement;
+    const probTypeSel = document.getElementById("probType") as HTMLSelectElement;
+    const modeSwitch = document.getElementById("modeSwitch");
+    const standardizeBtn = document.getElementById("standardizeBtn");
+    const copyBtn = document.getElementById("copyResults");
+    const canvas = document.getElementById("normalCurve") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+    const errorOverlay = document.getElementById("errorOverlay");
+
+    const ui = {
+        prob: document.getElementById("probValue"),
+        z: document.getElementById("zScoreValue"),
+        inter: document.getElementById("interpretation"),
+        inputLabel: document.getElementById("inputLabel"),
+        rangeGroup: document.getElementById("rangeInputGroup"),
+        pSub: document.getElementById("pLabelSub"),
+    };
+
+    let currentMode = "x";
+
+    const erf = (x: number): number => {
+        const a1 = 0.254829592,
+            a2 = -0.284496736,
+            a3 = 1.421413741,
+            a4 = -1.453152027,
+            a5 = 1.061405429,
+            p = 0.3275911;
+        const s = x < 0 ? -1 : 1;
+        x = Math.abs(x);
+        const t = 1.0 / (1.0 + p * x);
+        const y = 1.0 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+        return s * y;
+    };
+
+    const cdf = (x: number, m: number, s: number): number =>
+        0.5 * (1 + erf((x - m) / (s * Math.sqrt(2))));
+
+    const invPhi = (p: number): number => {
+        const p_prime = p < 0.5 ? p : 1 - p;
+        const t = Math.sqrt(-2 * Math.log(p_prime));
+        const z =
+            t -
+            (2.515517 + 0.802853 * t + 0.010328 * t * t) /
+                (1 + 1.432788 * t + 0.189269 * t * t + 0.001308 * t * t * t);
+        return p < 0.5 ? -z : z;
+    };
+
+    const draw = (m: number, s: number, v1: number, v2: number | null, type: string) => {
+        if (!ctx || !canvas) return;
+        const parent = canvas.parentElement!;
+        const dpr = window.devicePixelRatio || 1;
+        const rect = parent.getBoundingClientRect();
+
+        if (
+            canvas.width !== Math.floor(rect.width * dpr) ||
+            canvas.height !== Math.floor(rect.height * dpr)
+        ) {
+            canvas.width = Math.floor(rect.width * dpr);
+            canvas.height = Math.floor(rect.height * dpr);
+        }
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        const w = rect.width,
+            h = rect.height,
+            pad = 50,
+            bottomPad = 60;
+        ctx.clearRect(0, 0, w, h);
+
+        const xMin = m - 4.5 * s,
+            xMax = m + 4.5 * s;
+        const mapX = (x: number) => pad + ((x - xMin) * (w - 2 * pad)) / (xMax - xMin);
+        const pdf = (x: number) =>
+            (1 / (s * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - m) / s, 2));
+        const maxPdf = pdf(m);
+        const mapY = (y: number) => h - bottomPad - (y * (h - bottomPad - 20)) / maxPdf;
+
+        ctx.fillStyle = "rgba(99, 102, 241, 0.15)";
+        ctx.beginPath();
+        const drawPoints = [];
+        const step = (xMax - xMin) / 150;
+
+        for (let x = xMin; x <= xMax; x += step) drawPoints.push(x);
+        drawPoints.push(v1);
+        if (v2 !== null) drawPoints.push(v2);
+        drawPoints.sort((a, b) => a - b);
+
+        const shadePoints = drawPoints.filter((x) => {
+            if (x < xMin || x > xMax) return false;
+            if (type === "below") return x <= v1;
+            if (type === "above") return x >= v1;
+            if (type === "between" && v2 !== null)
+                return x >= Math.min(v1, v2) && x <= Math.max(v1, v2);
+            return false;
+        });
+
+        if (shadePoints.length > 0) {
+            ctx.moveTo(mapX(shadePoints[0]), mapY(0));
+            shadePoints.forEach((x) => ctx.lineTo(mapX(x), mapY(pdf(x))));
+            ctx.lineTo(mapX(shadePoints[shadePoints.length - 1]), mapY(0));
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        ctx.strokeStyle = "#6366f1";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        for (let x = xMin; x <= xMax; x += step) ctx.lineTo(mapX(x), mapY(pdf(x)));
+        ctx.stroke();
+
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(pad, h - bottomPad);
+        ctx.lineTo(w - pad, h - bottomPad);
+        ctx.stroke();
+
+        const drawMark = (v: number, label: string, color: string, offset = 18) => {
+            if (v < xMin || v > xMax) return;
+            const xPos = mapX(v);
+            const yPos = mapY(pdf(v));
+
+            ctx.strokeStyle = color;
+            ctx.setLineDash([5, 4]);
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(xPos, h - bottomPad);
+            ctx.lineTo(xPos, yPos);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = color;
+            ctx.font = "bold 0.7rem sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(label, xPos, h - bottomPad + offset);
+            ctx.fillText(v.toFixed(2), xPos, h - bottomPad + offset + 12);
+        };
+
+        const dist = Math.abs(mapX(v1) - mapX(m));
+        if (dist > 30) drawMark(m, "Media (\u03bc)", "#94a3b8");
+        else drawMark(m, "Media y Val. x", "#6366f1");
+
+        if (dist > 30) drawMark(v1, type === "between" ? "Valor a" : "Valor x", "#6366f1");
+        if (type === "between" && v2 !== null) drawMark(v2, "Valor b", "#ec4899", 38);
+    };
+
+    const update = () => {
+        const m = parseFloat(meanInp.value) || 0;
+        const s = parseFloat(stdDevInp.value);
+
+        if (s <= 0 || isNaN(s)) {
+            errorOverlay!.style.display = "flex";
+            stdDevInp.style.borderColor = "#ef4444";
+            stdDevInp.style.boxShadow = "0 0 0 4px rgba(239, 68, 68, 0.1)";
+            return;
+        }
+        errorOverlay!.style.display = "none";
+        stdDevInp.style.borderColor = "";
+        stdDevInp.style.boxShadow = "";
+
+        const type = probTypeSel.value;
+        let v1 = parseFloat(mainInp.value) || 0;
+        const v2 = parseFloat(rangeEndInp.value) || 0;
+        let p = 0,
+            z = 0;
+
+        if (currentMode === "inv") {
+            const prob = Math.max(0.0001, Math.min(0.9999, v1));
+            z = invPhi(prob);
+            const xVal = m + z * s;
+            ui.prob!.textContent = xVal.toFixed(4);
+            ui.pSub!.textContent = "Puntaje X resultante";
+            ui.z!.textContent = z.toFixed(3);
+            ui.inter!.textContent = `Para una probabilidad acumulada de ${prob}, el valor X es ${xVal.toFixed(4)} (Z = ${z.toFixed(3)}).`;
+            draw(m, s, xVal, null, "below");
+            return;
+        }
+
+        if (currentMode === "z") {
+            z = v1;
+            v1 = m + z * s;
+        } else z = (v1 - m) / s;
+
+        if (type === "below") p = cdf(v1, m, s);
+        else if (type === "above") p = 1 - cdf(v1, m, s);
+        else p = Math.abs(cdf(v2, m, s) - cdf(v1, m, s));
+
+        ui.prob!.textContent = p < 0.0001 ? "0.0000" : p.toFixed(4);
+        ui.pSub!.textContent = (p * 100).toFixed(2) + "% del total";
+        ui.z!.textContent = z.toFixed(3);
+        const muStr = String.fromCharCode(956);
+        const sigmaStr = String.fromCharCode(963);
+        ui.inter!.textContent =
+            p < 0.0001
+                ? `La probabilidad es pr\u00e1cticamente nula en el rango seleccionado (${muStr}=${m}, ${sigmaStr}=${s}).`
+                : `El ${(p * 100).toFixed(2)}% del \u00e1rea bajo la curva queda seleccionada (${muStr}=${m}, ${sigmaStr}=${s}).`;
+        draw(m, s, v1, type === "between" ? v2 : null, type);
+    };
+
+    modeSwitch?.addEventListener("click", (e) => {
+        const btn = (e.target as HTMLElement).closest(".mode-btn");
+        if (!btn) return;
+        modeSwitch.querySelectorAll(".mode-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentMode = (btn as HTMLElement).dataset.mode!;
+        ui.rangeGroup!.style.display =
+            currentMode !== "inv" && probTypeSel.value === "between" ? "flex" : "none";
+        if (currentMode === "inv") {
+            ui.inputLabel!.textContent = "Probabilidad (p)";
+            mainInp.value = "0.95";
+        } else if (currentMode === "z") {
+            ui.inputLabel!.textContent = "Puntaje Z";
+            mainInp.value = "1";
+        } else {
+            ui.inputLabel!.textContent = "Valor X";
+            mainInp.value = (parseFloat(meanInp.value) + parseFloat(stdDevInp.value)).toString();
+        }
+        update();
+    });
+
+    [meanInp, stdDevInp, mainInp, rangeEndInp, probTypeSel].forEach((e) =>
+        e.addEventListener("input", update)
+    );
+
+    probTypeSel.addEventListener("change", () => {
+        ui.rangeGroup!.style.display =
+            currentMode !== "inv" && probTypeSel.value === "between" ? "flex" : "none";
+        update();
+    });
+
+    standardizeBtn?.addEventListener("click", () => {
+        meanInp.value = "0";
+        stdDevInp.value = "1";
+        update();
+    });
+    copyBtn?.addEventListener("click", () => {
+        const str = `P: ${ui.prob?.textContent}, Z: ${ui.z?.textContent}. \u03bc=${meanInp.value}, \u03c3=${stdDevInp.value}. jjlmoya.es`;
+        navigator.clipboard.writeText(str);
+        const icon = copyBtn.innerHTML;
+        copyBtn.innerHTML = "Ok!";
+        setTimeout(() => (copyBtn.innerHTML = icon), 1500);
+    });
+
+    let resizeTimer: any;
+    window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(update, 100);
+    });
+    update();
+</script>

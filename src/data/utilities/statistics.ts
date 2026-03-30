@@ -14,5 +14,13 @@ export const statisticsSection: SectionData = {
             iconFg: "mdi:calculator",
             color: "#6366f1",
         },
+        {
+            title: "Calculadora de Distribución Normal",
+            description: "Calcula probabilidades, cuantiles y puntuaciones Z de la campana de Gauss con visualización dinámica.",
+            href: "/utilidades/calculadora-distribucion-normal/",
+            iconBg: "mdi:chart-bell-curve-cumulative",
+            iconFg: "mdi:sigma",
+            color: "#8b5cf6",
+        },
     ],
 };
