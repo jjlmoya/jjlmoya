@@ -1,7 +1,5 @@
 ---
 import "./KnittingGaugeCalculator.css";
-
-interface Props {}
 ---
 
 <div class="knitting-gauge-card" id="knitting-gauge-app">
@@ -111,7 +109,7 @@ interface Props {}
           <div class="sv" id="res-total-rows">150</div>
       </div>
       <div class="metric-item">
-          <span class="sl">Factor Escala <i class="info-icon" data-tooltip="Relación de tamaño entre tu tejido y el patrón. Un valor positivo indica que tu tejido es más denso.">info</i></span>
+          <span class="sl">Factor Escala <i class="info-icon" data-tooltip="Relación de tamaño entre tu tejido y el patrón. Un valor negativo indica que tu tejido es más denso.">info</i></span>
           <div class="sv" id="res-scale-factor">+10%</div>
       </div>
       <div class="metric-item">
@@ -130,14 +128,14 @@ interface Props {}
 </div>
 
 <script>
-    const inputIds = [
+    const inputIdsList = [
         'pattern-sts', 'pattern-rows', 'my-sts', 'my-rows', 
         'target-sts', 'target-rows', 'pattern-multiples', 
         'gauge-unit', 'my-needle', 'sample-weight'
     ] as const;
-    type InputId = typeof inputIds[number];
+    type InputIdType = typeof inputIdsList[number];
     
-    const elements: Record<InputId, HTMLInputElement | HTMLSelectElement | null> = {
+    const elementsRef: Record<InputIdType, HTMLInputElement | HTMLSelectElement | null> = {
         'pattern-sts': document.getElementById('pattern-sts') as HTMLInputElement,
         'pattern-rows': document.getElementById('pattern-rows') as HTMLInputElement,
         'my-sts': document.getElementById('my-sts') as HTMLInputElement,
@@ -150,7 +148,7 @@ interface Props {}
         'sample-weight': document.getElementById('sample-weight') as HTMLInputElement,
     };
     
-    const results = {
+    const resultsRef = {
         totalSts: document.getElementById('res-total-sts'),
         totalRows: document.getElementById('res-total-rows'),
         scaleFactor: document.getElementById('res-scale-factor'),
@@ -163,183 +161,183 @@ interface Props {}
         yarnResult: document.getElementById('yarn-result')
     };
 
-    let lastUnit = '10';
+    let previousUnit = '10';
 
-    function handleUnitChange() {
-        const newUnit = elements['gauge-unit']?.value || '10';
-        if (newUnit === lastUnit) return;
+    function handleUnitConversion() {
+        const currentUnitSelect = elementsRef['gauge-unit']?.value || '10';
+        if (currentUnitSelect === previousUnit) return;
         
-        const ratio = parseFloat(newUnit) / parseFloat(lastUnit);
+        const unitScaleRatio = parseFloat(currentUnitSelect) / parseFloat(previousUnit);
         
-        ['pattern-sts', 'pattern-rows', 'my-sts', 'my-rows'].forEach((id: any) => {
-            const el = elements[id as InputId] as HTMLInputElement;
-            if (el && el.value) {
-                el.value = (parseFloat(el.value) * ratio).toFixed(1);
+        ['pattern-sts', 'pattern-rows', 'my-sts', 'my-rows'].forEach((idVal: any) => {
+            const domEl = elementsRef[idVal as InputIdType] as HTMLInputElement;
+            if (domEl && domEl.value) {
+                domEl.value = (parseFloat(domEl.value) * unitScaleRatio).toFixed(1);
             }
         });
         
-        lastUnit = newUnit;
-        calculate();
+        previousUnit = currentUnitSelect;
+        calculateGauge();
     }
 
-    function parseMultiples(input: string): { base: number, offset: number } {
-        if (!input) return { base: 0, offset: 0 };
-        const match = input.replace(/\s+/g, '').match(/(\d+)(?:\+(\d+))?/);
-        if (!match) return { base: 0, offset: 0 };
+    function parseStitchMultiples(strIn: string): { bP: number, oP: number } {
+        if (!strIn) return { bP: 0, oP: 0 };
+        const matchDigits = strIn.replace(/\s+/g, '').match(/(\d+)(?:\+(\d+))?/);
+        if (!matchDigits) return { bP: 0, oP: 0 };
         return {
-            base: parseInt(match[1]) || 0,
-            offset: parseInt(match[2]) || 0
+            bP: parseInt(matchDigits[1]) || 0,
+            oP: parseInt(matchDigits[2]) || 0
         };
     }
 
-    function calculate() {
-        const pSts = parseFloat(elements['pattern-sts']?.value || '20');
-        const pRows = parseFloat(elements['pattern-rows']?.value || '28');
-        const mSts = parseFloat(elements['my-sts']?.value || '20');
-        const mRows = parseFloat(elements['my-rows']?.value || '28');
-        const targetSts = parseFloat(elements['target-sts']?.value || '100');
-        const targetRows = parseFloat(elements['target-rows']?.value || '140');
-        const weight = parseFloat(elements['sample-weight']?.value || '');
-        const currentNeedle = parseFloat(elements['my-needle']?.value || '4.0');
+    function calculateGauge() {
+        const pStsVal = parseFloat(elementsRef['pattern-sts']?.value || '20');
+        const pRowsVal = parseFloat(elementsRef['pattern-rows']?.value || '28');
+        const mStsVal = parseFloat(elementsRef['my-sts']?.value || '20');
+        const mRowsVal = parseFloat(elementsRef['my-rows']?.value || '28');
+        const targetStsVal = parseFloat(elementsRef['target-sts']?.value || '100');
+        const targetRowsVal = parseFloat(elementsRef['target-rows']?.value || '140');
+        const weightVal = parseFloat(elementsRef['sample-weight']?.value || '');
+        const currentNeedleVal = parseFloat(elementsRef['my-needle']?.value || '4.0');
 
-        if (!pSts || !mSts) return;
+        if (!pStsVal || !mStsVal) return;
 
-        const stsFactor = mSts / pSts;
-        const rowFactor = mRows / pRows;
+        const stsScaleRatio = mStsVal / pStsVal;
+        const rowScaleRatio = mRowsVal / pRowsVal;
         
-        const calculatedSts = targetSts * stsFactor;
-        let roundedSts = Math.round(calculatedSts);
+        const calculatedTotalSts = targetStsVal * stsScaleRatio;
+        let finalRoundedSts = Math.round(calculatedTotalSts);
         
-        const multObj = parseMultiples(elements['pattern-multiples']?.value || '');
-        if (multObj.base > 0) {
-            const x = roundedSts;
-            const b = multObj.base;
-            const o = multObj.offset;
+        const patternObj = parseStitchMultiples(elementsRef['pattern-multiples']?.value || '');
+        if (patternObj.bP > 0) {
+            const initialX = finalRoundedSts;
+            const baseVal = patternObj.bP;
+            const offsetVal = patternObj.oP;
             
-            const lowerPossible = Math.floor((x - o) / b) * b + o;
-            const upperPossible = Math.ceil((x - o) / b) * b + o;
+            const lowTarget = Math.floor((initialX - offsetVal) / baseVal) * baseVal + offsetVal;
+            const highTarget = Math.ceil((initialX - offsetVal) / baseVal) * baseVal + offsetVal;
             
-            const finalSts = Math.abs(x - lowerPossible) < Math.abs(x - upperPossible) ? lowerPossible : upperPossible;
+            const optimalSts = Math.abs(initialX - lowTarget) < Math.abs(initialX - highTarget) ? lowTarget : highTarget;
             
-            if (results.multiplesNote) {
-                const multLabel = o > 0 ? `${b}+${o}` : `${b}`;
-                results.multiplesNote.textContent = `Ajustado de ${roundedSts} puntos (Múlt. ${multLabel})`;
-                results.multiplesNote.style.display = 'block';
+            if (resultsRef.multiplesNote) {
+                const multiLabelStr = offsetVal > 0 ? `${baseVal}+${offsetVal}` : `${baseVal}`;
+                resultsRef.multiplesNote.textContent = `Ajustado de ${finalRoundedSts} puntos (Múlt. ${multiLabelStr})`;
+                resultsRef.multiplesNote.style.display = 'block';
             }
-            roundedSts = finalSts;
-        } else if (results.multiplesNote) {
-            results.multiplesNote.style.display = 'none';
+            finalRoundedSts = optimalSts;
+        } else if (resultsRef.multiplesNote) {
+            resultsRef.multiplesNote.style.display = 'none';
         }
 
-        if (results.totalSts) results.totalSts.textContent = roundedSts.toString();
+        if (resultsRef.totalSts) resultsRef.totalSts.textContent = finalRoundedSts.toString();
 
-        if (results.totalRows) {
-            const calculatedRowsTotal = Math.round(targetRows * rowFactor);
-            results.totalRows.textContent = calculatedRowsTotal.toString();
+        if (resultsRef.totalRows) {
+            const finalRoundedRows = Math.round(targetRowsVal * rowScaleRatio);
+            resultsRef.totalRows.textContent = finalRoundedRows.toString();
         }
 
-        const scaleDiffPercent = (pSts / mSts - 1) * 100;
-        if (results.scaleFactor) {
-            results.scaleFactor.textContent = `${scaleDiffPercent >= 0 ? '+' : ''}${scaleDiffPercent.toFixed(1)}%`;
+        const exactScaleDiff = (pStsVal / mStsVal - 1) * 100;
+        if (resultsRef.scaleFactor) {
+            resultsRef.scaleFactor.textContent = `${exactScaleDiff >= 0 ? '+' : ''}${exactScaleDiff.toFixed(1)}%`;
         }
 
-        if (results.sizeSuggestion) {
-            if (Math.abs(scaleDiffPercent) < 2) {
-                results.sizeSuggestion.textContent = "Ideal";
-                results.sizeSuggestion.style.color = "#10b981";
-            } else if (scaleDiffPercent > 0) {
-                const needleStep = Math.ceil(scaleDiffPercent / 5) * 0.25;
-                results.sizeSuggestion.innerHTML = `Baja Aguja<br><small style="opacity: 0.7; font-weight: 400">Usa aguja ${Math.max(2, currentNeedle - needleStep)}mm o talla inferior.</small>`;
-                results.sizeSuggestion.style.color = "#B06161";
+        if (resultsRef.sizeSuggestion) {
+            if (Math.abs(exactScaleDiff) < 2) {
+                resultsRef.sizeSuggestion.textContent = "Ideal";
+                resultsRef.sizeSuggestion.style.color = "#10b981";
+            } else if (exactScaleDiff > 0) {
+                const nStep = Math.ceil(exactScaleDiff / 5) * 0.25;
+                resultsRef.sizeSuggestion.innerHTML = `Baja Aguja<br><small style="opacity: 0.7; font-weight: 400">Usa aguja ${Math.max(2, currentNeedleVal - nStep)}mm o talla inferior.</small>`;
+                resultsRef.sizeSuggestion.style.color = "#B06161";
             } else {
-                const needleStep = Math.ceil(Math.abs(scaleDiffPercent) / 5) * 0.25;
-                results.sizeSuggestion.innerHTML = `Sube Aguja<br><small style="opacity: 0.7; font-weight: 400">Usa aguja ${currentNeedle + needleStep}mm o talla superior.</small>`;
-                results.sizeSuggestion.style.color = "#ef4444";
+                const nStep = Math.ceil(Math.abs(exactScaleDiff) / 5) * 0.25;
+                resultsRef.sizeSuggestion.innerHTML = `Sube Aguja<br><small style="opacity: 0.7; font-weight: 400">Usa aguja ${currentNeedleVal + nStep}mm o talla superior.</small>`;
+                resultsRef.sizeSuggestion.style.color = "#ef4444";
             }
         }
 
-        if (results.visualSwatch) {
-            const swatchScale = Math.min(Math.max(pSts / mSts, 0.5), 1.3);
-            results.visualSwatch.style.transform = `scale(${swatchScale})`;
-            const baseDensityVal = 12;
-            const newDensityVal = baseDensityVal * stsFactor;
-            results.visualSwatch.style.backgroundSize = `${newDensityVal}px ${newDensityVal}px`;
+        if (resultsRef.visualSwatch) {
+            const visualScaleVal = Math.min(Math.max(pStsVal / mStsVal, 0.5), 1.3);
+            resultsRef.visualSwatch.style.transform = `scale(${visualScaleVal})`;
+            const densityConstant = 12;
+            const updatedDensity = densityConstant * stsScaleRatio;
+            resultsRef.visualSwatch.style.backgroundSize = `${updatedDensity}px ${updatedDensity}px`;
         }
 
-        if (weight > 0 && results.yarnBox && results.yarnResult) {
-            results.yarnBox.style.display = 'block';
-            const totalProjectUnits = (targetSts / pSts) * (targetRows / pRows);
-            const totalGrams = weight * totalProjectUnits;
-            results.yarnResult.innerHTML = `Lana estimada: <strong>${Math.ceil(totalGrams)}g</strong> <small>(+${Math.ceil(totalGrams * 0.1)}g de seguridad)</small>`;
-        } else if (results.yarnBox) {
-            results.yarnBox.style.display = 'none';
+        if (weightVal > 0 && resultsRef.yarnBox && resultsRef.yarnResult) {
+            resultsRef.yarnBox.style.display = 'block';
+            const totalProjectScale = (targetStsVal / pStsVal) * (targetRowsVal / pRowsVal);
+            const totalEstimatedGrams = weightVal * totalProjectScale;
+            resultsRef.yarnResult.innerHTML = `Lana estimada: <strong>${Math.ceil(totalEstimatedGrams)}g</strong> <small>(+${Math.ceil(totalEstimatedGrams * 0.1)}g de seguridad)</small>`;
+        } else if (resultsRef.yarnBox) {
+            resultsRef.yarnBox.style.display = 'none';
         }
 
-        if (results.dangerInfo) {
-            if (Math.abs(scaleDiffPercent) > 25) {
-                results.dangerInfo.style.display = 'block';
-                results.dangerInfo.textContent = "Diferencia extrema (>25%). La caída y estructura de la prenda se verán alteradas.";
+        if (resultsRef.dangerInfo) {
+            if (Math.abs(exactScaleDiff) > 25) {
+                resultsRef.dangerInfo.style.display = 'block';
+                resultsRef.dangerInfo.textContent = "Diferencia extrema (>25%). La caída y estructura de la prenda se verán alteradas.";
             } else {
-                results.dangerInfo.style.display = 'none';
+                resultsRef.dangerInfo.style.display = 'none';
             }
         }
 
-        updateQueryParams();
+        updateAppUrl();
     }
 
-    function updateQueryParams() {
-        const params = new URLSearchParams();
-        inputIds.forEach(id => {
-            const val = elements[id]?.value;
-            if (val) params.set(id, val);
+    function updateAppUrl() {
+        const urlParamsObj = new URLSearchParams();
+        inputIdsList.forEach(idKey => {
+            const curVal = elementsRef[idKey]?.value;
+            if (curVal) urlParamsObj.set(idKey, curVal);
         });
-        const newUrl = `${window.location.pathname}?${params.toString()}`;
-        window.history.replaceState({}, '', newUrl);
+        const nextUrl = `${window.location.pathname}?${urlParamsObj.toString()}`;
+        window.history.replaceState({}, '', nextUrl);
     }
 
-    document.querySelectorAll('.stepper-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const target = e.currentTarget as HTMLButtonElement;
-            const inputIdRef = target.getAttribute('data-for') as InputId;
-            const stepVal = parseFloat(target.getAttribute('data-step') || '1');
-            const elRef = elements[inputIdRef] as HTMLInputElement;
-            if (elRef) {
-                elRef.value = (parseFloat(elRef.value || '0') + stepVal).toString();
-                calculate();
+    document.querySelectorAll('.stepper-btn').forEach(btnDom => {
+        btnDom.addEventListener('click', (ev) => {
+            const domTarget = ev.currentTarget as HTMLButtonElement;
+            const domId = domTarget.getAttribute('data-for') as InputIdType;
+            const deltaStep = parseFloat(domTarget.getAttribute('data-step') || '1');
+            const inputReference = elementsRef[domId] as HTMLInputElement;
+            if (inputReference) {
+                inputReference.value = (parseFloat(inputReference.value || '0') + deltaStep).toString();
+                calculateGauge();
             }
         });
     });
 
-    elements['gauge-unit']?.addEventListener('change', handleUnitChange);
+    elementsRef['gauge-unit']?.addEventListener('change', handleUnitConversion);
 
-    inputIds.forEach(id => {
-        elements[id]?.addEventListener('input', calculate);
+    inputIdsList.forEach(idField => {
+        elementsRef[idField]?.addEventListener('input', calculateGauge);
     });
 
     document.getElementById('btn-clear')?.addEventListener('click', () => {
-        inputIds.forEach(id => {
-            if (id === 'gauge-unit') return;
-            const el = elements[id];
-            if (el) el.value = (el.id.includes('sts') || el.id.includes('rows')) ? '20' : '';
+        inputIdsList.forEach(idElem => {
+            if (idElem === 'gauge-unit') return;
+            const elementDom = elementsRef[idElem];
+            if (elementDom) elementDom.value = (elementDom.id.includes('sts') || elementDom.id.includes('rows')) ? '20' : '';
         });
-        calculate();
+        calculateGauge();
     });
 
     document.getElementById('btn-share')?.addEventListener('click', () => {
         navigator.clipboard.writeText(window.location.href);
-        const btnRef = document.getElementById('btn-share');
-        if (btnRef) {
-            const originalVal = btnRef.textContent;
-            btnRef.textContent = '¡Copiado!';
-            setTimeout(() => { if (btnRef) btnRef.textContent = originalVal; }, 2000);
+        const buttonRef = document.getElementById('btn-share');
+        if (buttonRef) {
+            const txtOrig = buttonRef.textContent;
+            buttonRef.textContent = '¡Copiado!';
+            setTimeout(() => { if (buttonRef) buttonRef.textContent = txtOrig; }, 2000);
         }
     });
 
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.forEach((value, key) => {
-        const el = elements[key as InputId];
-        if (el) el.value = value;
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.forEach((qVal, qKey) => {
+        const qEl = elementsRef[qKey as InputIdType];
+        if (qEl) qEl.value = qVal;
     });
 
-    calculate();
+    calculateGauge();
 </script>

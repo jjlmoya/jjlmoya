@@ -568,5 +568,13 @@ export const textileSection: SectionData = {
             description: "Recalcula puntos y vueltas de cualquier patrón de punto o ganchillo según tu tensión real.",
             color: "#B06161",
         },
+        {
+            href: "/utilidades/calculadora-tela-proyecto/",
+            iconBg: "mdi:content-cut",
+            iconFg: "mdi:tape-measure",
+            title: "Calculadora de Consumo de Tela",
+            description: "Calcula los metros de tela necesarios para confeccionar una prenda según el tipo de proyecto, talla y ancho.",
+            color: "#4F46E5",
+        },
     ],
 };
