@@ -1,0 +1,325 @@
+---
+---
+
+<div class="growth-card animate-in fade-in duration-800" id="growth-card-root">
+    <div class="card-main">
+        <div class="card-left">
+            <span class="section-marker">Datos de la Medición</span>
+
+            <div class="input-group">
+                <label class="input-label">Sexo del bebé</label>
+                <div class="sex-selector" id="sex-root">
+                    <button class="sex-btn" data-sex="boy">Niño</button>
+                    <button class="sex-btn active" data-sex="girl">Niña</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="unit-nav">
+                    <button class="unit-tab active" data-unit="months">Solo meses</button>
+                    <button class="unit-tab" data-unit="years">Años + meses</button>
+                </div>
+                <div class="stepper-box">
+                    <button class="btn-step" data-action="dec" data-target="age-slider">-</button>
+                    <div class="val-view">
+                        <span class="val-big" id="age-val">12</span>
+                        <span class="val-sub" id="age-unit">meses</span>
+                    </div>
+                    <button class="btn-step" data-action="inc" data-target="age-slider">+</button>
+                </div>
+                <div style="padding: 0 11px;">
+                    <input type="range" id="age-slider" min="0" max="60" step="1" value="12" class="slider-line" />
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label class="input-label">Peso (kg)</label>
+                    <input type="number" id="weight-in" value="9.0" step="0.1" class="num-input" />
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Talla (cm)</label>
+                    <input type="number" id="height-in" value="74" step="1" class="num-input" />
+                </div>
+            </div>
+
+            <div class="history-actions">
+                <button id="btn-save" class="btn-secondary">Añadir a mi historial</button>
+                <button id="btn-clear" class="btn-clear">Limpiar datos</button>
+            </div>
+        </div>
+
+        <div class="card-right">
+            <span class="section-marker">Dashboard de Crecimiento</span>
+
+            <div class="res-grid">
+                <div class="res-item" data-type="weight">
+                    <span class="res-title">Peso</span>
+                    <span class="percent-val" id="p-weight">--</span>
+                    <span class="res-desc" id="p-weight-desc">Calculando...</span>
+                </div>
+                <div class="res-item" data-type="height">
+                    <span class="res-title">Talla</span>
+                    <span class="percent-val" id="p-height">--</span>
+                    <span class="res-desc" id="p-height-desc">Calculando...</span>
+                </div>
+                <div class="res-item" data-type="bmi">
+                    <span class="res-title">IMC</span>
+                    <span class="percent-val" id="p-bmi">--</span>
+                    <span class="res-desc" id="p-bmi-desc">Calculando...</span>
+                </div>
+            </div>
+
+            <div id="alert-box" class="hidden alert-msg"></div>
+
+            <div class="chart-box">
+                <canvas id="growthChart"></canvas>
+            </div>
+
+            <div class="disclaimer-mini">
+              Los percentiles son solo una herramienta estadística. Un crecimiento sano es aquel que sigue su propia curva, independientemente del número.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    import { boys, girls, interpolateLMS } from './lmsData';
+    import Chart from 'chart.js/auto';
+
+    const config = {
+        sex: 'girl',
+        age: 12,
+        ageUnit: 'months',
+        weight: 9.0,
+        height: 74,
+        history: [] as any[]
+    };
+
+    let chart: any = null;
+
+    const DOM = {
+        root: document.getElementById('growth-card-root'),
+        sexBtns: document.querySelectorAll('.sex-btn'),
+        ageSlider: document.getElementById('age-slider') as HTMLInputElement,
+        ageVal: document.getElementById('age-val'),
+        ageUnitLabel: document.getElementById('age-unit'),
+        weightIn: document.getElementById('weight-in') as HTMLInputElement,
+        heightIn: document.getElementById('height-in') as HTMLInputElement,
+        unitTabs: document.querySelectorAll('.unit-tab'),
+        steppers: document.querySelectorAll('.btn-step'),
+        pWeight: document.getElementById('p-weight'),
+        pHeight: document.getElementById('p-height'),
+        pBmi: document.getElementById('p-bmi'),
+        pWeightDesc: document.getElementById('p-weight-desc'),
+        pHeightDesc: document.getElementById('p-height-desc'),
+        pBmiDesc: document.getElementById('p-bmi-desc'),
+        alertBox: document.getElementById('alert-box'),
+        btnSave: document.getElementById('btn-save'),
+        btnClear: document.getElementById('btn-clear'),
+        canvas: document.getElementById('growthChart') as HTMLCanvasElement
+    };
+
+    function erf(x: number) {
+        const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429;
+        const p = 0.3275911;
+        const sign = x < 0 ? -1 : 1;
+        x = Math.abs(x);
+        const t = 1 / (1 + p * x);
+        const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+        return sign * y;
+    }
+
+    function zToPercentile(z: number) {
+        return 0.5 * (1 + erf(z / Math.sqrt(2))) * 100;
+    }
+
+    function calculatePercentile(val: number, lms: {L: number, M: number, S: number}) {
+        const { L, M, S } = lms;
+        if (L === 0) return zToPercentile(Math.log(val / M) / S);
+        const z = (Math.pow(val / M, L) - 1) / (L * S);
+        return zToPercentile(z);
+    }
+
+    function getDesc(p: number) {
+        if (p < 3) return "Rango bajo";
+        if (p < 15) return "Habitual bajo";
+        if (p < 85) return "Normalidad";
+        if (p < 97) return "Habitual alto";
+        return "Rango alto";
+    }
+
+    function initChart() {
+        if (!DOM.canvas) return;
+        chart = new Chart(DOM.canvas, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 61}, (_, i) => i),
+                datasets: []
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { title: { display: true, text: 'Meses' } },
+                    y: { title: { display: true, text: 'Valor' } }
+                },
+                elements: { point: { radius: 0 } },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    function updateChart() {
+        if (!chart) return;
+        const dataSet = config.sex === 'boy' ? boys : girls;
+        const curves = [3, 15, 50, 85, 97];
+        const mainColor = config.sex === 'boy' ? '#0ea5e9' : '#0d9488';
+        
+        const datasets = curves.map(c => {
+            const z = (c === 50) ? 0 : (c === 3) ? -1.88 : (c === 15) ? -1.04 : (c === 85) ? 1.04 : 1.88;
+            return {
+                label: `P${c}`,
+                data: Array.from({length: 61}, (_, m) => {
+                    const lms = interpolateLMS(m, dataSet.weight);
+                    if (lms.L === 0) return lms.M * Math.exp(lms.S * z);
+                    return lms.M * Math.pow(1 + lms.L * lms.S * z, 1 / lms.L);
+                }),
+                borderColor: c === 50 ? mainColor : '#cbd5e1',
+                borderWidth: c === 50 ? 2 : 1,
+                fill: false,
+                tension: 0.1
+            };
+        });
+
+        datasets.push({
+            label: 'Actual',
+            data: config.history.length > 0 ? config.history.map((h: any) => ({x: h.age, y: h.weight})) : [{x: config.age, y: config.weight}],
+            borderColor: '#f43f5e',
+            backgroundColor: '#f43f5e',
+            borderWidth: 0,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            showLine: true,
+            type: 'scatter'
+        } as any);
+
+        chart.data.datasets = datasets;
+        chart.update();
+    }
+
+    function update() {
+        const dataSet = config.sex === 'boy' ? boys : girls;
+        const lmsW = interpolateLMS(config.age, dataSet.weight);
+        const lmsH = interpolateLMS(config.age, dataSet.height);
+        const lmsB = interpolateLMS(config.age, dataSet.bmi);
+
+        const pW = calculatePercentile(config.weight, lmsW);
+        const pH = calculatePercentile(config.height, lmsH);
+        
+        const bmi = config.weight / Math.pow(config.height / 100, 2);
+        const pB = calculatePercentile(bmi, lmsB);
+
+        if (DOM.pWeight) DOM.pWeight.textContent = `P${Math.round(pW)}`;
+        if (DOM.pHeight) DOM.pHeight.textContent = `P${Math.round(pH)}`;
+        if (DOM.pBmi) DOM.pBmi.textContent = `P${Math.round(pB)}`;
+
+        if (DOM.pWeightDesc) DOM.pWeightDesc.textContent = getDesc(pW);
+        if (DOM.pHeightDesc) DOM.pHeightDesc.textContent = getDesc(pH);
+        if (DOM.pBmiDesc) DOM.pBmiDesc.textContent = getDesc(pB);
+
+        if (DOM.alertBox) {
+            if (pW < 3 || pW > 97 || pH < 3 || pH > 97) {
+                DOM.alertBox.innerHTML = `⚠️ Valor fuera de los rangos P3-P97 habituales. Recuerda que un percentil bajo no implica enfermedad si la curva es constante. Consulta a tu pediatra para un seguimiento profesional.`;
+                DOM.alertBox.classList.remove('hidden');
+            } else {
+                DOM.alertBox.classList.add('hidden');
+            }
+        }
+
+        if (DOM.ageVal) {
+            if (config.ageUnit === 'years') {
+                const y = Math.floor(config.age / 12);
+                const m = config.age % 12;
+                DOM.ageVal.textContent = `${y} años, ${m} meses`;
+            } else {
+                DOM.ageVal.textContent = config.age.toString();
+            }
+        }
+
+        if (DOM.root) {
+            DOM.root.classList.toggle('boy-theme', config.sex === 'boy');
+        }
+        
+        updateChart();
+    }
+
+    function loadHistory() {
+        const saved = localStorage.getItem('growth_history');
+        if (saved) config.history = JSON.parse(saved);
+        update();
+    }
+
+    DOM.ageSlider?.addEventListener('input', (e: any) => {
+        config.age = parseInt(e.target.value);
+        update();
+    });
+
+    DOM.weightIn?.addEventListener('input', (e: any) => {
+        config.weight = parseFloat(e.target.value) || 0;
+        update();
+    });
+
+    DOM.heightIn?.addEventListener('input', (e: any) => {
+        config.height = parseFloat(e.target.value) || 0;
+        update();
+    });
+
+    DOM.sexBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            DOM.sexBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            config.sex = (btn as HTMLElement).dataset.sex as any;
+            update();
+        });
+    });
+
+    DOM.unitTabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            DOM.unitTabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            config.ageUnit = (btn as HTMLElement).dataset.unit as any;
+            update();
+        });
+    });
+
+    DOM.steppers.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const action = (btn as HTMLElement).dataset.action;
+            const step = action === 'inc' ? 1 : -1;
+            config.age = Math.max(0, Math.min(60, config.age + step));
+            if (DOM.ageSlider) DOM.ageSlider.value = config.age.toString();
+            update();
+        });
+    });
+
+    DOM.btnSave?.addEventListener('click', () => {
+        config.history.push({age: config.age, weight: config.weight, height: config.height});
+        if (config.history.length > 5) config.history.shift();
+        localStorage.setItem('growth_history', JSON.stringify(config.history));
+        update();
+    });
+
+    DOM.btnClear?.addEventListener('click', () => {
+        config.history = [];
+        localStorage.removeItem('growth_history');
+        update();
+    });
+
+    initChart();
+    loadHistory();
+</script>
+
+<style>
+    @import "./BabyPercentileCalculator.css";
+</style>

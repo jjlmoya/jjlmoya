@@ -38,5 +38,13 @@ export const babiesSection: SectionData = {
             description: "Guía personalizada de tomas y frecuencia de alimentación según el peso y edad de tu bebé.",
             color: "#f43f5e",
         },
+        {
+            href: "/utilidades/percentil-peso-talla-bebe/",
+            iconBg: "mdi:chart-line",
+            iconFg: "mdi:baby",
+            title: "Percentiles Bebé",
+            description: "Calcula el percentil de peso, talla e IMC con las tablas oficiales de la OMS.",
+            color: "#0d9488",
+        },
     ],
 };

@@ -1,0 +1,90 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import Bibliography from "../../components/utilidades/Bibliography.astro";
+import BabyPercentileCalculator from "../../components/utilidades/BabyPercentile/BabyPercentileCalculator.astro";
+import BabyPercentileCalculatorSEO from "../../components/utilidades/BabyPercentile/BabyPercentileCalculatorSEO.astro";
+
+const titleHighlight = "Percentiles de Bebé";
+const titleBase = "Calculadora OMS (0-5 años)";
+const description =
+    "Calcula el percentil de peso, talla e IMC de tu hijo según las tablas oficiales de la OMS. Gráfica visual y seguimiento de crecimiento 100% offline.";
+
+const faqItems = [
+    {
+        question: "¿Qué percentil es el normal para mi bebé?",
+        answer: "Cualquier percentil entre el 3 y el 97 se considera dentro de la 'normalidad estadística' si el niño está sano, activo y sigue su propia línea de crecimiento sin caídas bruscas.",
+    },
+    {
+        question: "¿Es mejor estar en el percentil 50?",
+        answer: "No. El percentil 50 es solo el valor medio aritmético. Un niño en el percentil 10 puede estar tan sano como uno en el 90; lo importante es la armonía entre peso y talla.",
+    },
+    {
+        question: "¿Por qué los datos solo llegan hasta los 5 años?",
+        answer: "Nuestra herramienta utiliza los estándares de la OMS MGRS (Multicentre Growth Reference Study) optimizados para los primeros 60 meses de vida, cuando el crecimiento es más crítico.",
+    },
+    {
+        question: "¿Puedo guardar los datos de mi hijo?",
+        answer: "Sí. Los datos se guardan de forma privada en el almacenamiento local de tu navegador (LocalStorage). Nadie más tiene acceso a ellos y no se envían a ningún servidor.",
+    },
+];
+
+const howToSteps = [
+    {
+        name: "Selecciona sexo y edad",
+        text: "Los parámetros de crecimiento varían significativamente entre niños y niñas, y cada mes de vida es crucial.",
+    },
+    {
+        name: "Introduce peso y talla",
+        text: "Usa básculas digitales y medidores rígidos para que el percentil final sea exacto.",
+    },
+    {
+        name: "Revisa la gráfica visual",
+        text: "Observa dónde se sitúa el punto de tu bebé respecto a las curvas P3, P50 y P97.",
+    },
+    {
+        name: "Guarda en el historial",
+        text: "Añade mediciones periódicas para ver si la curva de tu hijo es ascendente y armónica.",
+    },
+];
+
+const bibliographyLinks = [
+    {
+        name: "OMS - Child Growth Standards (LMS Tables)",
+        url: "https://www.who.int/toolkits/child-growth-standards/standards",
+    },
+    {
+        name: "AEP - Interpretación de las gráficas de crecimiento",
+        url: "https://www.aeped.es/enfamilia/salud-en-familia/graficas-crecimiento-percentiles",
+    },
+];
+---
+
+<LayoutUtility
+    title={`${titleHighlight}: ${titleBase}`}
+    description={description}
+    image="/images/utilities/percentil-peso-talla-bebe.webp"
+    faqItems={faqItems}
+    howToSteps={howToSteps}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight={titleHighlight}
+            titleBase={titleBase}
+            description={description}
+            gradientFromColor="#0d9488"
+            gradientToColor="#059669"
+        />
+    </div>
+
+    <BabyPercentileCalculator />
+
+    <div slot="seo">
+        <BabyPercentileCalculatorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <Bibliography links={bibliographyLinks} />
+    </div>
+</LayoutUtility>
