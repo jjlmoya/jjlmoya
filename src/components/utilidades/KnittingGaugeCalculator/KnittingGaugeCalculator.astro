@@ -1,0 +1,345 @@
+---
+import "./KnittingGaugeCalculator.css";
+
+interface Props {}
+---
+
+<div class="knitting-gauge-card" id="knitting-gauge-app">
+  <aside class="gauge-sidebar">
+    <div class="config-section">
+      <h3>Tensión Original</h3>
+      <div class="input-grid">
+        <div class="gauge-field">
+          <label>Puntos <span class="label-sub">(Ancho)</span></label>
+          <div class="stepper-container">
+            <button class="stepper-btn" data-step="-0.5" data-for="pattern-sts">−</button>
+            <input type="number" id="pattern-sts" class="gauge-input" value="20" step="0.5" />
+            <button class="stepper-btn" data-step="0.5" data-for="pattern-sts">+</button>
+          </div>
+        </div>
+        <div class="gauge-field">
+          <label>Vueltas <span class="label-sub">(Largo)</span></label>
+          <div class="stepper-container">
+            <button class="stepper-btn" data-step="-0.5" data-for="pattern-rows">−</button>
+            <input type="number" id="pattern-rows" class="gauge-input" value="28" step="0.5" />
+            <button class="stepper-btn" data-step="0.5" data-for="pattern-rows">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="gauge-field">
+        <label>Unidad de Medida</label>
+        <select id="gauge-unit" class="gauge-select">
+          <option value="10">10 x 10 cm (Estándar EU)</option>
+          <option value="10.16">4 x 4 pulgadas (Estándar US)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <h3>Tu Muestra Actual</h3>
+      <div class="input-grid">
+        <div class="gauge-field">
+          <label>Puntos <span class="label-sub">(Ancho)</span></label>
+          <div class="stepper-container">
+            <button class="stepper-btn" data-step="-0.5" data-for="my-sts">−</button>
+            <input type="number" id="my-sts" class="gauge-input" value="22" step="0.5" />
+            <button class="stepper-btn" data-step="0.5" data-for="my-sts">+</button>
+          </div>
+        </div>
+        <div class="gauge-field">
+          <label>Vueltas <span class="label-sub">(Largo)</span></label>
+          <div class="stepper-container">
+            <button class="stepper-btn" data-step="-0.5" data-for="my-rows">−</button>
+            <input type="number" id="my-rows" class="gauge-input" value="30" step="0.5" />
+            <button class="stepper-btn" data-step="0.5" data-for="my-rows">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="input-grid">
+        <div class="gauge-field">
+          <label>Aguja (mm)</label>
+          <input type="number" id="my-needle" class="gauge-input" value="4.0" step="0.25" style="border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: rgba(255,255,255,0.6);" />
+        </div>
+        <div class="gauge-field">
+            <label>Peso (g) <span class="label-sub">opcional</span></label>
+            <input type="number" id="sample-weight" class="gauge-input" placeholder="Ej: 5" style="border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: rgba(255,255,255,0.6);" />
+        </div>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <h3>Estructura del Proyecto</h3>
+      <div class="input-grid">
+        <div class="gauge-field">
+          <label>Puntos Patrón</label>
+          <input type="number" id="target-sts" class="gauge-input" value="100" style="border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: rgba(255,255,255,0.6);" />
+        </div>
+        <div class="gauge-field">
+          <label>Vueltas Patrón</label>
+          <input type="number" id="target-rows" class="gauge-input" value="140" style="border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: rgba(255,255,255,0.6);" />
+        </div>
+      </div>
+      <div class="gauge-field">
+        <label>Múltiplos <span class="label-sub">Ej: 10 + 2</span></label>
+        <input type="text" id="pattern-multiples" class="gauge-input" placeholder="Múltiplo + Borde" style="border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: rgba(255,255,255,0.6);" />
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button id="btn-clear" class="ui-btn ui-btn-secondary">Limpiar</button>
+      <button id="btn-share" class="ui-btn ui-btn-primary">Compartir</button>
+    </div>
+  </aside>
+
+  <main class="gauge-main">
+    <div class="top-display">
+      <div class="visualizer-container">
+        <div id="gauge-visual-swatch" class="knit-swatch"></div>
+      </div>
+      
+      <div class="main-stat">
+        <h2>Puntos sugeridos a montar</h2>
+        <div class="val" id="res-total-sts">110</div>
+        <div class="val-detail" id="res-multiples-note"></div>
+        <div id="res-danger-info" class="alert-card err"></div>
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-item">
+          <span class="sl">Nuevas Vueltas <i class="info-icon" data-tooltip="Número de vueltas necesarias para igualar el largo del patrón original con tu tensión actual.">info</i></span>
+          <div class="sv" id="res-total-rows">150</div>
+      </div>
+      <div class="metric-item">
+          <span class="sl">Factor Escala <i class="info-icon" data-tooltip="Relación de tamaño entre tu tejido y el patrón. Un valor positivo indica que tu tejido es más denso.">info</i></span>
+          <div class="sv" id="res-scale-factor">+10%</div>
+      </div>
+      <div class="metric-item">
+          <span class="sl">Sugerencia <i class="info-icon" data-tooltip="Recomendación técnica para ajustar tu tensión sin tener que recalcular cada punto del patrón.">info</i></span>
+          <div class="sv" id="res-size-suggestion" style="font-size: 1rem; line-height: 1.2;">Sube Talla</div>
+      </div>
+    </div>
+
+    <div id="yarn-estimate-box" class="yarn-calc-extra">
+      <p style="margin: 0; font-weight: 700; color: var(--gauge-primary);">Estimación de Lana para el Proyecto</p>
+      <p style="margin: 0.5rem 0 0 0;" id="yarn-result">Gramos estimados: <strong>--</strong></p>
+    </div>
+
+    <div id="res-multiples-info" class="alert-card warn"></div>
+  </main>
+</div>
+
+<script>
+    const inputIds = [
+        'pattern-sts', 'pattern-rows', 'my-sts', 'my-rows', 
+        'target-sts', 'target-rows', 'pattern-multiples', 
+        'gauge-unit', 'my-needle', 'sample-weight'
+    ] as const;
+    type InputId = typeof inputIds[number];
+    
+    const elements: Record<InputId, HTMLInputElement | HTMLSelectElement | null> = {
+        'pattern-sts': document.getElementById('pattern-sts') as HTMLInputElement,
+        'pattern-rows': document.getElementById('pattern-rows') as HTMLInputElement,
+        'my-sts': document.getElementById('my-sts') as HTMLInputElement,
+        'my-rows': document.getElementById('my-rows') as HTMLInputElement,
+        'target-sts': document.getElementById('target-sts') as HTMLInputElement,
+        'target-rows': document.getElementById('target-rows') as HTMLInputElement,
+        'pattern-multiples': document.getElementById('pattern-multiples') as HTMLInputElement,
+        'gauge-unit': document.getElementById('gauge-unit') as HTMLSelectElement,
+        'my-needle': document.getElementById('my-needle') as HTMLInputElement,
+        'sample-weight': document.getElementById('sample-weight') as HTMLInputElement,
+    };
+    
+    const results = {
+        totalSts: document.getElementById('res-total-sts'),
+        totalRows: document.getElementById('res-total-rows'),
+        scaleFactor: document.getElementById('res-scale-factor'),
+        sizeSuggestion: document.getElementById('res-size-suggestion'),
+        multiplesInfo: document.getElementById('res-multiples-info'),
+        multiplesNote: document.getElementById('res-multiples-note'),
+        dangerInfo: document.getElementById('res-danger-info'),
+        visualSwatch: document.getElementById('gauge-visual-swatch'),
+        yarnBox: document.getElementById('yarn-estimate-box'),
+        yarnResult: document.getElementById('yarn-result')
+    };
+
+    let lastUnit = '10';
+
+    function handleUnitChange() {
+        const newUnit = elements['gauge-unit']?.value || '10';
+        if (newUnit === lastUnit) return;
+        
+        const ratio = parseFloat(newUnit) / parseFloat(lastUnit);
+        
+        ['pattern-sts', 'pattern-rows', 'my-sts', 'my-rows'].forEach((id: any) => {
+            const el = elements[id as InputId] as HTMLInputElement;
+            if (el && el.value) {
+                el.value = (parseFloat(el.value) * ratio).toFixed(1);
+            }
+        });
+        
+        lastUnit = newUnit;
+        calculate();
+    }
+
+    function parseMultiples(input: string): { base: number, offset: number } {
+        if (!input) return { base: 0, offset: 0 };
+        const match = input.replace(/\s+/g, '').match(/(\d+)(?:\+(\d+))?/);
+        if (!match) return { base: 0, offset: 0 };
+        return {
+            base: parseInt(match[1]) || 0,
+            offset: parseInt(match[2]) || 0
+        };
+    }
+
+    function calculate() {
+        const pSts = parseFloat(elements['pattern-sts']?.value || '20');
+        const pRows = parseFloat(elements['pattern-rows']?.value || '28');
+        const mSts = parseFloat(elements['my-sts']?.value || '20');
+        const mRows = parseFloat(elements['my-rows']?.value || '28');
+        const targetSts = parseFloat(elements['target-sts']?.value || '100');
+        const targetRows = parseFloat(elements['target-rows']?.value || '140');
+        const weight = parseFloat(elements['sample-weight']?.value || '');
+        const currentNeedle = parseFloat(elements['my-needle']?.value || '4.0');
+
+        if (!pSts || !mSts) return;
+
+        const stsFactor = mSts / pSts;
+        const rowFactor = mRows / pRows;
+        
+        const calculatedSts = targetSts * stsFactor;
+        let roundedSts = Math.round(calculatedSts);
+        
+        const multObj = parseMultiples(elements['pattern-multiples']?.value || '');
+        if (multObj.base > 0) {
+            const x = roundedSts;
+            const b = multObj.base;
+            const o = multObj.offset;
+            
+            const lowerPossible = Math.floor((x - o) / b) * b + o;
+            const upperPossible = Math.ceil((x - o) / b) * b + o;
+            
+            const finalSts = Math.abs(x - lowerPossible) < Math.abs(x - upperPossible) ? lowerPossible : upperPossible;
+            
+            if (results.multiplesNote) {
+                const multLabel = o > 0 ? `${b}+${o}` : `${b}`;
+                results.multiplesNote.textContent = `Ajustado de ${roundedSts} puntos (Múlt. ${multLabel})`;
+                results.multiplesNote.style.display = 'block';
+            }
+            roundedSts = finalSts;
+        } else if (results.multiplesNote) {
+            results.multiplesNote.style.display = 'none';
+        }
+
+        if (results.totalSts) results.totalSts.textContent = roundedSts.toString();
+
+        if (results.totalRows) {
+            const calculatedRowsTotal = Math.round(targetRows * rowFactor);
+            results.totalRows.textContent = calculatedRowsTotal.toString();
+        }
+
+        const scaleDiffPercent = (pSts / mSts - 1) * 100;
+        if (results.scaleFactor) {
+            results.scaleFactor.textContent = `${scaleDiffPercent >= 0 ? '+' : ''}${scaleDiffPercent.toFixed(1)}%`;
+        }
+
+        if (results.sizeSuggestion) {
+            if (Math.abs(scaleDiffPercent) < 2) {
+                results.sizeSuggestion.textContent = "Ideal";
+                results.sizeSuggestion.style.color = "#10b981";
+            } else if (scaleDiffPercent > 0) {
+                const needleStep = Math.ceil(scaleDiffPercent / 5) * 0.25;
+                results.sizeSuggestion.innerHTML = `Baja Aguja<br><small style="opacity: 0.7; font-weight: 400">Usa aguja ${Math.max(2, currentNeedle - needleStep)}mm o talla inferior.</small>`;
+                results.sizeSuggestion.style.color = "#B06161";
+            } else {
+                const needleStep = Math.ceil(Math.abs(scaleDiffPercent) / 5) * 0.25;
+                results.sizeSuggestion.innerHTML = `Sube Aguja<br><small style="opacity: 0.7; font-weight: 400">Usa aguja ${currentNeedle + needleStep}mm o talla superior.</small>`;
+                results.sizeSuggestion.style.color = "#ef4444";
+            }
+        }
+
+        if (results.visualSwatch) {
+            const swatchScale = Math.min(Math.max(pSts / mSts, 0.5), 1.3);
+            results.visualSwatch.style.transform = `scale(${swatchScale})`;
+            const baseDensityVal = 12;
+            const newDensityVal = baseDensityVal * stsFactor;
+            results.visualSwatch.style.backgroundSize = `${newDensityVal}px ${newDensityVal}px`;
+        }
+
+        if (weight > 0 && results.yarnBox && results.yarnResult) {
+            results.yarnBox.style.display = 'block';
+            const totalProjectUnits = (targetSts / pSts) * (targetRows / pRows);
+            const totalGrams = weight * totalProjectUnits;
+            results.yarnResult.innerHTML = `Lana estimada: <strong>${Math.ceil(totalGrams)}g</strong> <small>(+${Math.ceil(totalGrams * 0.1)}g de seguridad)</small>`;
+        } else if (results.yarnBox) {
+            results.yarnBox.style.display = 'none';
+        }
+
+        if (results.dangerInfo) {
+            if (Math.abs(scaleDiffPercent) > 25) {
+                results.dangerInfo.style.display = 'block';
+                results.dangerInfo.textContent = "Diferencia extrema (>25%). La caída y estructura de la prenda se verán alteradas.";
+            } else {
+                results.dangerInfo.style.display = 'none';
+            }
+        }
+
+        updateQueryParams();
+    }
+
+    function updateQueryParams() {
+        const params = new URLSearchParams();
+        inputIds.forEach(id => {
+            const val = elements[id]?.value;
+            if (val) params.set(id, val);
+        });
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        window.history.replaceState({}, '', newUrl);
+    }
+
+    document.querySelectorAll('.stepper-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const target = e.currentTarget as HTMLButtonElement;
+            const inputIdRef = target.getAttribute('data-for') as InputId;
+            const stepVal = parseFloat(target.getAttribute('data-step') || '1');
+            const elRef = elements[inputIdRef] as HTMLInputElement;
+            if (elRef) {
+                elRef.value = (parseFloat(elRef.value || '0') + stepVal).toString();
+                calculate();
+            }
+        });
+    });
+
+    elements['gauge-unit']?.addEventListener('change', handleUnitChange);
+
+    inputIds.forEach(id => {
+        elements[id]?.addEventListener('input', calculate);
+    });
+
+    document.getElementById('btn-clear')?.addEventListener('click', () => {
+        inputIds.forEach(id => {
+            if (id === 'gauge-unit') return;
+            const el = elements[id];
+            if (el) el.value = (el.id.includes('sts') || el.id.includes('rows')) ? '20' : '';
+        });
+        calculate();
+    });
+
+    document.getElementById('btn-share')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href);
+        const btnRef = document.getElementById('btn-share');
+        if (btnRef) {
+            const originalVal = btnRef.textContent;
+            btnRef.textContent = '¡Copiado!';
+            setTimeout(() => { if (btnRef) btnRef.textContent = originalVal; }, 2000);
+        }
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.forEach((value, key) => {
+        const el = elements[key as InputId];
+        if (el) el.value = value;
+    });
+
+    calculate();
+</script>

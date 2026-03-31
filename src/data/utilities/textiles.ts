@@ -560,5 +560,13 @@ export const textileSection: SectionData = {
             description: "Conversor EU, US, UK, IT para camisetas, pantalones, vestidos y chaquetas. Con recomendador por medidas.",
             color: "#a855f7",
         },
+        {
+            href: "/utilidades/calculadora-gauge-tension-punto/",
+            iconBg: "mdi:ruler-square",
+            iconFg: "mdi:needle",
+            title: "Calculadora de Gauge y Tensión",
+            description: "Recalcula puntos y vueltas de cualquier patrón de punto o ganchillo según tu tensión real.",
+            color: "#B06161",
+        },
     ],
 };
