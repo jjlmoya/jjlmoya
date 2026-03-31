@@ -46,5 +46,13 @@ export const musicSection: SectionData = {
             description: "Estima cuánto espacio ocupará una grabación según kHz, bits y duración. Gestiona tu espacio en disco con precisión profesional.",
             color: "#818cf8",
         },
+        {
+            href: "/utilidades/equivalencia-notas-musicales/",
+            iconBg: "mdi:piano",
+            iconFg: "mdi:translate",
+            title: "Equivalencia de Notas",
+            description: "Traductor instantáneo de notas musicales. Compara sistemas Latino, Americano y Germánico con piano interactivo.",
+            color: "#8b5cf6",
+        },
     ],
 };

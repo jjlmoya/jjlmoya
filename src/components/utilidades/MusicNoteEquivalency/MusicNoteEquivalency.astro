@@ -1,0 +1,334 @@
+---
+import "./MusicNoteEquivalency.css";
+---
+
+<div class="music-note-card" id="note-converter">
+    <header class="converter-header">
+        <h2 id="current-note-display">Selecciona una nota en el piano</h2>
+        <div class="octave-selector">
+            <span class="octave-label">Octava Científica (C4 = Do3):</span>
+            <div class="octave-buttons" id="octave-btns">
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((o) => (
+                    <button class={`octave-btn ${o === 4 ? "active" : ""}`} data-octave={o}>
+                        {o}
+                    </button>
+                ))}
+            </div>
+        </div>
+    </header>
+
+    <div class="piano-container">
+        <div class="piano" id="piano-keyboard">
+            {[3, 4].map((oct) => (
+                <div class="octave-group" data-octave={oct}>
+                    <div class="key white" data-note="0" data-octave={oct}><span>C</span></div>
+                    <div class="key black" data-note="1" data-octave={oct}><span>C#</span></div>
+                    <div class="key white" data-note="2" data-octave={oct}><span>D</span></div>
+                    <div class="key black" data-note="3" data-octave={oct}><span>D#</span></div>
+                    <div class="key white" data-note="4" data-octave={oct}><span>E</span></div>
+                    <div class="key white" data-note="5" data-octave={oct}><span>F</span></div>
+                    <div class="key black" data-note="6" data-octave={oct}><span>F#</span></div>
+                    <div class="key white" data-note="7" data-octave={oct}><span>G</span></div>
+                    <div class="key black" data-note="8" data-octave={oct}><span>G#</span></div>
+                    <div class="key white" data-note="9" data-octave={oct}><span>A</span></div>
+                    <div class="key black" data-note="10" data-octave={oct}><span>A#</span></div>
+                    <div class="key white" data-note="11" data-octave={oct}><span>B</span></div>
+                </div>
+            ))}
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="card-title">Sistemas de Nomenclatura</div>
+            <div class="system-row">
+                <span class="system-label">Latino (Solfège)</span>
+                <span class="system-value" id="val-latino">-</span>
+            </div>
+            <div class="system-row">
+                <span class="system-label">Anglosajón (Moderno)</span>
+                <span class="system-value" id="val-anglo">-</span>
+            </div>
+            <div class="system-row">
+                <span class="system-label">Germánico (Alemán)</span>
+                <span class="system-value" id="val-german">-</span>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="card-title">Notación Científica</div>
+            <div class="system-row">
+                <span class="system-label">Internacional (ANSI)</span>
+                <span class="system-value val-highlight" id="val-ansi">-</span>
+            </div>
+            <div class="system-row">
+                <span class="system-label">Franco-Belga</span>
+                <span class="system-value" id="val-franco">-</span>
+            </div>
+            <div class="system-row">
+                <span class="system-label">Enarmonía Útil</span>
+                <span class="system-value" id="val-enharmonic">-</span>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="card-title">Datos Técnicos y Ondas</div>
+            <div class="visualizer-container">
+                <canvas id="note-visualizer"></canvas>
+            </div>
+            <div class="frequency-display">
+                <span class="freq-val" id="val-frequency">0.00</span>
+                <span class="hz-unit">Hz</span>
+            </div>
+            <div class="actions">
+                <button class="btn-action btn-play" id="play-note">
+                    Escuchar Tono
+                </button>
+                <button class="btn-action btn-copy" id="copy-note">
+                    Copiar Info
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    interface Note {
+        index: number;
+        lat: string;
+        ang: string;
+        ger: string;
+        enhLat: string;
+        enhAng: string;
+    }
+
+    const NOTE_DATA: Note[] = [
+        { index: 0, lat: "Do", ang: "C", ger: "C", enhLat: "", enhAng: "" },
+        { index: 1, lat: "Do#", ang: "C#", ger: "C#", enhLat: "Reb", enhAng: "Db" },
+        { index: 2, lat: "Re", ang: "D", ger: "D", enhLat: "", enhAng: "" },
+        { index: 3, lat: "Re#", ang: "D#", ger: "D#", enhLat: "Mib", enhAng: "Eb" },
+        { index: 4, lat: "Mi", ang: "E", ger: "E", enhLat: "", enhAng: "" },
+        { index: 5, lat: "Fa", ang: "F", ger: "F", enhLat: "", enhAng: "" },
+        { index: 6, lat: "Fa#", ang: "F#", ger: "F#", enhLat: "Solb", enhAng: "Gb" },
+        { index: 7, lat: "Sol", ang: "G", ger: "G", enhLat: "", enhAng: "" },
+        { index: 8, lat: "Sol#", ang: "G#", ger: "G#", enhLat: "Lab", enhAng: "Ab" },
+        { index: 9, lat: "La", ang: "A", ger: "A", enhLat: "", enhAng: "" },
+        { index: 10, lat: "La#", ang: "A#", ger: "B", enhLat: "Sib", enhAng: "Bb" },
+        { index: 11, lat: "Si", ang: "B", ger: "H", enhLat: "", enhAng: "" }
+    ];
+
+    let currentNote = 9;
+    let currentOctave = 4;
+    let audioCtx: AudioContext | null = null;
+    let analyser: AnalyserNode | null = null;
+    let dataArray: Uint8Array | null = null;
+    let animationId: number | null = null;
+
+    const els = {
+        piano: document.getElementById('piano-keyboard') as HTMLElement,
+        octaveBtns: document.getElementById('octave-btns') as HTMLElement,
+        title: document.getElementById('current-note-display') as HTMLElement,
+        valLatino: document.getElementById('val-latino') as HTMLElement,
+        valAnglo: document.getElementById('val-anglo') as HTMLElement,
+        valGerman: document.getElementById('val-german') as HTMLElement,
+        valAnsi: document.getElementById('val-ansi') as HTMLElement,
+        valFranco: document.getElementById('val-franco') as HTMLElement,
+        valEnharmonic: document.getElementById('val-enharmonic') as HTMLElement,
+        valFrequency: document.getElementById('val-frequency') as HTMLElement,
+        btnPlay: document.getElementById('play-note') as HTMLElement,
+        btnCopy: document.getElementById('copy-note') as HTMLElement,
+        canvas: document.getElementById('note-visualizer') as HTMLCanvasElement
+    };
+
+    function calculateFrequency(noteIndex: number, octave: number) {
+        const n = (octave * 12 + noteIndex) - (4 * 12 + 9);
+        return 440 * Math.pow(2, n / 12);
+    }
+
+    function updateURL() {
+        const noteName = NOTE_DATA[currentNote].ang + currentOctave;
+        const url = new URL(window.location.href);
+        url.searchParams.set('nota', noteName);
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    function updateUI() {
+        const data = NOTE_DATA[currentNote];
+        const freq = calculateFrequency(currentNote, currentOctave);
+
+        if (els.title) els.title.textContent = `${data.lat} ${currentOctave} / ${data.ang}${currentOctave}`;
+        if (els.valLatino) els.valLatino.textContent = data.lat;
+        if (els.valAnglo) els.valAnglo.textContent = data.ang;
+        if (els.valGerman) els.valGerman.textContent = data.ger;
+        if (els.valAnsi) els.valAnsi.textContent = `${data.ang}${currentOctave}`;
+        if (els.valFranco) els.valFranco.textContent = `Do${currentOctave - 1} (${data.lat})`;
+        
+        if (els.valEnharmonic) {
+            els.valEnharmonic.textContent = data.enhLat ? `${data.enhLat} / ${data.enhAng}` : "N/A";
+        }
+        
+        if (els.valFrequency) els.valFrequency.textContent = freq.toFixed(2);
+
+        document.querySelectorAll<HTMLElement>('.key').forEach(k => {
+            const kn = parseInt(k.dataset.note || "0");
+            const ko = parseInt(k.dataset.octave || "0");
+            k.classList.toggle('active', kn === currentNote && ko === currentOctave);
+        });
+
+        document.querySelectorAll<HTMLElement>('.octave-btn').forEach(b => {
+          b.classList.toggle('active', parseInt(b.dataset.octave || "0") === currentOctave);
+        });
+
+        updateURL();
+    }
+
+    function initAudio() {
+        if (!audioCtx) {
+            // @ts-expect-error
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 2048;
+            analyser.connect(audioCtx.destination);
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            drawVisualizer();
+        }
+    }
+
+    function playNote(noteIndex: number, octave: number, duration: number = 0.5) {
+        initAudio();
+        if (!audioCtx || !analyser) return;
+
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        const freq = calculateFrequency(noteIndex, octave);
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(analyser);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + duration);
+    }
+
+    function drawVisualizer() {
+        if (!els.canvas || !analyser || !dataArray) return;
+        const ctx = els.canvas.getContext('2d');
+        if (!ctx) return;
+
+        const width = els.canvas.width = els.canvas.clientWidth;
+        const height = els.canvas.height = 100;
+
+        if (animationId) cancelAnimationFrame(animationId);
+        animationId = requestAnimationFrame(drawVisualizer);
+        // @ts-expect-error
+        analyser.getByteTimeDomainData(dataArray);
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#8b5cf6';
+        ctx.beginPath();
+
+        const sliceWidth = width * 1.0 / analyser.frequencyBinCount;
+        let x = 0;
+
+        for (let i = 0; i < analyser.frequencyBinCount; i++) {
+            const v = dataArray[i] / 128.0;
+            const y = v * height / 2;
+
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+
+            x += sliceWidth;
+        }
+
+        ctx.lineTo(width, height / 2);
+        ctx.stroke();
+    }
+
+    if (els.piano) {
+        els.piano.addEventListener('mousedown', (e) => {
+            const target = e.target as HTMLElement;
+            const key = target.closest('.key') as HTMLElement;
+            if (key) {
+                currentNote = parseInt(key.dataset.note || "0");
+                currentOctave = parseInt(key.dataset.octave || "4");
+                updateUI();
+                playNote(currentNote, currentOctave, 1);
+            }
+        });
+        
+        els.piano.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touches = e.changedTouches;
+            for (let i = 0; i < touches.length; i++) {
+                const element = document.elementFromPoint(touches[i].clientX, touches[i].clientY);
+                const key = element?.closest('.key') as HTMLElement;
+                if (key) {
+                    const n = parseInt(key.dataset.note || "0");
+                    const o = parseInt(key.dataset.octave || "4");
+                    currentNote = n;
+                    currentOctave = o;
+                    updateUI();
+                    playNote(n, o, 1);
+                }
+            }
+        }, { passive: false });
+    }
+
+    if (els.octaveBtns) {
+        els.octaveBtns.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const btn = target.closest('.octave-btn') as HTMLElement;
+            if (btn) {
+                currentOctave = parseInt(btn.dataset.octave || "4");
+                updateUI();
+            }
+        });
+    }
+
+    if (els.btnPlay) {
+        els.btnPlay.addEventListener('click', () => {
+            playNote(currentNote, currentOctave, 1.5);
+        });
+    }
+    
+    if (els.btnCopy) {
+      els.btnCopy.addEventListener('click', () => {
+        const data = NOTE_DATA[currentNote];
+        const text = `Nota: ${data.lat} (${data.ang})\nSistema Alemán: ${data.ger}\nFrecuencia: ${els.valFrequency?.textContent} Hz\nOctava Científica: ${els.valAnsi?.textContent}\nURL: ${window.location.href}`;
+        navigator.clipboard.writeText(text);
+        
+        if (els.btnCopy) {
+            const originalText = els.btnCopy.textContent;
+            els.btnCopy.textContent = "¡Copiado!";
+            setTimeout(() => {
+                if (els.btnCopy) els.btnCopy.textContent = originalText;
+            }, 2000);
+        }
+      });
+    }
+
+    // Init from URL
+    const params = new URLSearchParams(window.location.search);
+    const notaParam = params.get('nota');
+    if (notaParam) {
+        const match = notaParam.match(/^([A-G]#?)([0-8])$/i);
+        if (match) {
+            const angName = match[1].toUpperCase();
+            const oct = parseInt(match[2]);
+            const noteIndex = NOTE_DATA.findIndex(n => n.ang === angName);
+            if (noteIndex !== -1) {
+                currentNote = noteIndex;
+                currentOctave = oct;
+            }
+        }
+    }
+
+    updateUI();
+</script>
