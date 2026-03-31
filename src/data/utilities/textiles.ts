@@ -592,5 +592,13 @@ export const textileSection: SectionData = {
             description: "Equivalencias entre milímetros (mm), US y UK para agujas de punto y ganchillo con recomendación de hilo.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/calculadora-lana-tejido/",
+            iconBg: "mdi:comma-circle",
+            iconFg: "mdi:counter",
+            title: "Calculadora de Lana",
+            description: "Calcula con precisión métrica la cantidad de hilo (metros y ovillos) necesaria para cualquier proyecto de punto o ganchillo.",
+            color: "#10b981",
+        },
     ],
 };
