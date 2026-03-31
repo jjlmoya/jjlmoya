@@ -576,5 +576,13 @@ export const textileSection: SectionData = {
             description: "Calcula los metros de tela necesarios para confeccionar una prenda según el tipo de proyecto, talla y ancho.",
             color: "#4F46E5",
         },
+        {
+            href: "/utilidades/escalador-patron-costura/",
+            iconBg: "mdi:human-female",
+            iconFg: "mdi:checkerboard",
+            title: "Escalador de Patrones",
+            description: "Ajusta las medidas de un patrón de costura a tu cuerpo real manteniendo las proporciones y la holgura.",
+            color: "#8b5cf6",
+        },
     ],
 };

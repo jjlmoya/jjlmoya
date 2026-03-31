@@ -1,0 +1,303 @@
+---
+import "./SewingPatternScaler.css";
+---
+
+<div class="scaler-wrapper" id="master-scaler">
+    <div class="scaler-card">
+        <div class="card-left">
+            <span class="label-tiny">SISTEMA DE TRABAJO</span>
+            <div class="segmented-control" id="mode-selector">
+                <button class="segment-btn active" data-mode="standard">Tallas Estándar</button>
+                <button class="segment-btn" data-mode="custom">Medidas Reales</button>
+            </div>
+
+            <div id="warn-area" class="warn-banner hidden">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" style="flex-shrink:0"><path d="M12,2L1,21H23L12,2M12,6L19.53,19H4.47L12,6M11,10V14H13V10H11M11,16V18H13V16H11Z"/></svg>
+                <span>Escalado mayor a 3 tallas. Riesgo de deformación en sisa.</span>
+            </div>
+
+            <div id="standard-grid">
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label class="label-tiny">Talla Patrón</label>
+                        <select id="origin-size" class="form-input form-select">
+                            <option value="36">Talla 36</option>
+                            <option value="38" selected>Talla 38</option>
+                            <option value="40">Talla 40</option>
+                            <option value="42">Talla 42</option>
+                            <option value="44">Talla 44</option>
+                            <option value="46">Talla 46</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="label-tiny">Talla Destino</label>
+                        <select id="target-size" class="form-input form-select">
+                            <option value="36">Talla 36</option>
+                            <option value="38">Talla 38</option>
+                            <option value="40">Talla 40</option>
+                            <option value="42" selected>Talla 42</option>
+                            <option value="44">Talla 44</option>
+                            <option value="46">Talla 46</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="custom-grid" class="hidden">
+                <span class="label-tiny">MEDIDAS ORIGEN</span>
+                <div class="input-grid">
+                    <div class="input-item">
+                        <label class="label-tiny">Pecho</label>
+                        <input type="number" id="origin-chest" class="form-input" value="88">
+                    </div>
+                    <div class="input-item">
+                        <label class="label-tiny">Cintura</label>
+                        <input type="number" id="origin-waist" class="form-input" value="68">
+                    </div>
+                    <div class="input-item">
+                        <label class="label-tiny">Cadera</label>
+                        <input type="number" id="origin-hips" class="form-input" value="94">
+                    </div>
+                    <div class="input-item">
+                        <label class="label-tiny">Largo</label>
+                        <input type="number" id="origin-length" class="form-input" value="60">
+                    </div>
+                </div>
+
+                <span class="label-tiny" style="margin-top: 16px;">TUS MEDIDAS</span>
+                <div class="input-grid">
+                    <div class="input-item">
+                        <label class="label-tiny">Pecho</label>
+                        <input type="number" id="target-chest" class="form-input" value="96">
+                    </div>
+                    <div class="input-item">
+                        <label class="label-tiny">Cintura</label>
+                        <input type="number" id="target-waist" class="form-input" value="76">
+                    </div>
+                    <div class="input-item">
+                        <label class="label-tiny">Cadera</label>
+                        <input type="number" id="target-hips" class="form-input" value="102">
+                    </div>
+                    <div class="input-item">
+                        <label class="label-tiny">Largo</label>
+                        <input type="number" id="target-length" class="form-input" value="62">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-top: 24px; border-top: 1px solid #f1f5f9; padding-top: 24px;">
+                <label class="label-tiny">Holgura Actual (Ease)</label>
+                <input type="number" id="ease-val" class="form-input" value="4">
+            </div>
+        </div>
+
+        <div class="card-right">
+            <div class="viz-container">
+                <canvas id="scaler-canvas"></canvas>
+                <div class="legend-box">
+                    <div class="legend-item"><span class="ln-o"></span><span>Original</span></div>
+                    <div class="legend-item"><span class="ln-s"></span><span>Actualizado</span></div>
+                </div>
+            </div>
+
+            <div class="action-strip" id="action-pills"></div>
+
+            <div class="totals-section">
+                <div class="totals-grid">
+                    <div class="total-card">
+                        <span class="total-val" id="res-c">100.0</span>
+                        <span class="total-tag">Busto</span>
+                    </div>
+                    <div class="total-card">
+                        <span class="total-val" id="res-w">80.0</span>
+                        <span class="total-tag">Cintura</span>
+                    </div>
+                    <div class="total-card">
+                        <span class="total-val" id="res-h">106.0</span>
+                        <span class="total-tag">Cadera</span>
+                    </div>
+                    <div class="total-card">
+                        <span class="total-val" id="res-l">62.0</span>
+                        <span class="total-tag">Largo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    interface MeasureSet {
+        chest: number;
+        waist: number;
+        hips: number;
+        length: number;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sizes: Record<string, MeasureSet> = {
+            "36": { chest: 84, waist: 64, hips: 90, length: 58 },
+            "38": { chest: 88, waist: 68, hips: 94, length: 59 },
+            "40": { chest: 92, waist: 72, hips: 98, length: 60 },
+            "42": { chest: 96, waist: 76, hips: 102, length: 61 },
+            "44": { chest: 100, waist: 80, hips: 106, length: 62 },
+            "46": { chest: 104, waist: 84, hips: 110, length: 63 }
+        };
+
+        const canvas = document.getElementById('scaler-canvas') as HTMLCanvasElement | null;
+        const ctx = canvas?.getContext('2d');
+        const modeBtns = document.querySelectorAll('#mode-selector button');
+        const stdG = document.getElementById('standard-grid');
+        const cstG = document.getElementById('custom-grid');
+        const easeInp = document.getElementById('ease-val') as HTMLInputElement | null;
+
+        let mode = 'standard';
+
+        const run = () => {
+            const org = get('origin');
+            const tgt = get('target');
+            const ease = parseFloat(easeInp?.value || '0') || 0;
+
+            const res = {
+                c: tgt.chest + ease,
+                w: tgt.waist + ease,
+                h: tgt.hips + ease,
+                l: tgt.length
+            };
+
+            const diff = {
+                c: res.c - (org.chest + ease),
+                l: res.l - org.length
+            };
+
+            const updateText = (id: string, val: string) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = val;
+            };
+
+            updateText('res-c', res.c.toFixed(1));
+            updateText('res-w', res.w.toFixed(1));
+            updateText('res-h', res.h.toFixed(1));
+            updateText('res-l', res.l.toFixed(1));
+
+            const pils = document.getElementById('action-pills');
+            const lat = (diff.c / 4).toFixed(2);
+            const len = diff.l.toFixed(1);
+
+            const isLatPos = parseFloat(lat) >= 0;
+            const isLenPos = parseFloat(len) >= 0;
+
+            if (pils) {
+                pils.innerHTML = `
+                    <div class="action-pill">
+                        <div class="icon-box"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M7 2H17C18.11 2 19 2.9 19 4V20C19 21.11 18.11 22 17 22H7C5.9 22 5 21.11 5 20V4C5 2.9 5.9 2 7 2M7 4V20H17V4H7M9 6H12V8H9V6M9 10H15V12H9V10M9 14H12V16H9V14Z"/></svg></div>
+                        <div class="action-content">
+                            <span class="action-text">${isLatPos ? 'Añade' : 'Quita'} <strong class="${isLatPos ? 'action-val-pos' : 'action-val-neg'}">${isLatPos ? '+' : ''}${lat} cm</strong> al lateral de la pieza</span>
+                            <span class="action-note">Ajuste por cuarto de patrón</span>
+                        </div>
+                    </div>
+                    <div class="action-pill">
+                        <div class="icon-box"><svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M19,3L13,9L15,11L19,7L21,9V3M13,10C12.5,10.5 12.5,11.5 13,12L15,14L19,10L13,10M3,17V21H7L19,9L15,5L3,17M6.12,19.88L5,18.76L16.06,7.7L17.18,8.82L6.12,19.88Z"/></svg></div>
+                        <div class="action-content">
+                            <span class="action-text">${isLenPos ? 'Alarga' : 'Acorta'} el patrón <strong class="${isLenPos ? 'action-val-pos' : 'action-val-neg'}">${isLenPos ? '+' : ''}${len} cm</strong></span>
+                            <span class="action-note">Ajuste en la línea de bajo</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            draw(org, tgt);
+            
+            const warn = document.getElementById('warn-area');
+            if (warn) {
+                if (Math.abs(org.chest - tgt.chest) > 12) warn.classList.remove('hidden');
+                else warn.classList.add('hidden');
+            }
+        };
+
+        const get = (t: string): MeasureSet => {
+            if (mode === 'standard') {
+                const el = document.getElementById(`${t}-size`) as HTMLSelectElement | null;
+                const val = el?.value || "38";
+                return { ...sizes[val] };
+            } else {
+                const f = (id: string) => parseFloat((document.getElementById(`${t}-${id}`) as HTMLInputElement)?.value || '0') || 0;
+                return {
+                    chest: f('chest'),
+                    waist: f('waist'),
+                    hips: f('hips'),
+                    length: f('length'),
+                };
+            }
+        };
+
+        const draw = (org: MeasureSet, tgt: MeasureSet) => {
+            if (!canvas || !ctx) return;
+            const dpr = window.devicePixelRatio || 1;
+            const par = canvas.parentElement;
+            if (!par) return;
+            const w = par.clientWidth;
+            const h = par.clientHeight;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, w, h);
+
+            const render = (d: MeasureSet, isO: boolean) => {
+                ctx.beginPath();
+                ctx.lineWidth = isO ? 1.5 : 3;
+                ctx.strokeStyle = isO ? 'rgba(148, 163, 184, 0.5)' : '#4f46e5';
+                if (isO) ctx.setLineDash([12, 10]);
+                else ctx.setLineDash([]);
+
+                const maxV = Math.max(org.chest, tgt.chest, org.length, tgt.length, 100);
+                const s = Math.min(w, h) * 0.85 / maxV;
+                
+                const cX = w / 2;
+                const cY = h * 0.08;
+                const cW = d.chest * s / 4;
+                const wW = d.waist * s / 4;
+                const hW = d.hips * s / 4;
+                const len = d.length * s;
+                
+                const neckW = 20 * s / 10;
+                const shldW = 55 * s / 10;
+
+                ctx.moveTo(cX, cY);
+                ctx.quadraticCurveTo(cX - neckW * 0.8, cY, cX - neckW, cY + 10 * s / 10);
+                ctx.lineTo(cX - shldW - (d.chest * 0.04 * s / 4), cY + 2 * s / 10);
+                ctx.quadraticCurveTo(cX - shldW * 0.7 - (d.chest * 0.12 * s / 4), cY + 25 * s / 10, cX - cW, cY + len * 0.4);
+                ctx.lineTo(cX - wW, cY + len * 0.65);
+                ctx.lineTo(cX - hW, cY + len);
+                ctx.lineTo(cX, cY + len);
+                ctx.lineTo(cX, cY);
+                ctx.stroke();
+            };
+
+            render(org, true);
+            render(tgt, false);
+        };
+
+        modeBtns.forEach(btn => {
+            const b = btn as HTMLElement;
+            b.addEventListener('click', () => {
+                modeBtns.forEach(x => (x as HTMLElement).classList.remove('active'));
+                b.classList.add('active');
+                mode = b.dataset.mode || 'standard';
+                if (mode === 'standard') { 
+                    stdG?.classList.remove('hidden'); 
+                    cstG?.classList.add('hidden'); 
+                }
+                else { 
+                    stdG?.classList.add('hidden'); 
+                    cstG?.classList.remove('hidden'); 
+                }
+                run();
+            });
+        });
+
+        window.addEventListener('resize', run);
+        document.querySelectorAll('input, select').forEach(i => i.addEventListener('input', run));
+        run();
+    });
+</script>
