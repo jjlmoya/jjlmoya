@@ -1,0 +1,329 @@
+---
+import "./VaccinationCalendar.css";
+---
+
+<div class="vaccination-smart-card" id="vaccination-app">
+  <header class="vc-header">
+    <div class="vc-inputs">
+      <div class="vc-field centered">
+        <label>Fecha de nacimiento del bebé</label>
+        <div class="vc-triple-input">
+          <input type="text" id="birth-day" class="vc-input segment" placeholder="DD" inputmode="numeric" maxlength="2" />
+          <span class="vc-sep">/</span>
+          <input type="text" id="birth-month" class="vc-input segment" placeholder="MM" inputmode="numeric" maxlength="2" />
+          <span class="vc-sep">/</span>
+          <input type="text" id="birth-year" class="vc-input segment year" placeholder="AAAA" inputmode="numeric" maxlength="4" />
+        </div>
+        <div class="vc-age-badge" id="age-badge"></div>
+      </div>
+    </div>
+  </header>
+
+  <div id="vc-empty" class="vc-empty-state">
+    Introduce el día, mes y año de nacimiento para generar el calendario.
+  </div>
+
+  <section class="vc-main-context" id="next-appointment">
+    <h3 class="vc-next-title">Próxima cita calculada</h3>
+    <div class="vc-next-date" id="banner-date"></div>
+    
+    <div class="vc-vac-list" id="banner-vaccines">
+    </div>
+
+    <button id="export-ics" class="vc-btn-primary">
+      <span>Añadir recordatorio al móvil</span>
+    </button>
+  </section>
+
+  <div class="vc-sections">
+    <div class="vc-accordion-item" id="accordion-passed">
+      <button class="vc-accordion-trigger">
+        <span>Citas pasadas</span>
+        <span class="vc-timeline-status vc-timeline-check">✓</span>
+      </button>
+      <div class="vc-accordion-content">
+        <div class="vc-timeline-compact" id="timeline-passed">
+        </div>
+      </div>
+    </div>
+
+    <div class="vc-accordion-item" id="accordion-future">
+      <button class="vc-accordion-trigger">
+        <span>Calendario futuro</span>
+        <span class="vc-timeline-status vc-timeline-clock">...</span>
+      </button>
+      <div class="vc-accordion-content">
+        <div class="vc-timeline-compact" id="timeline-future">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="vc-footer">
+    Fuente: <a href="https://vacunasaep.org" target="_blank">AEP 2026</a> • 
+    <a href="javascript:void(0)" id="share-link">Compartir estas fechas</a>
+  </footer>
+</div>
+
+<script>
+  import { VACCINES } from "./vaccinationData";
+
+  const app = document.getElementById('vaccination-app');
+  const emptyState = document.getElementById('vc-empty');
+  const birthDay = document.getElementById('birth-day') as HTMLInputElement;
+  const birthMonth = document.getElementById('birth-month') as HTMLInputElement;
+  const birthYear = document.getElementById('birth-year') as HTMLInputElement;
+  const ageBadge = document.getElementById('age-badge');
+  const bannerDate = document.getElementById('banner-date');
+  const bannerVaccines = document.getElementById('banner-vaccines');
+  const timelinePassed = document.getElementById('timeline-passed');
+  const timelineFuture = document.getElementById('timeline-future');
+  const exportBtn = document.getElementById('export-ics');
+  const shareBtn = document.getElementById('share-link');
+
+  const tripleContainer = document.querySelector('.vc-triple-input');
+
+  const calculateAge = (birthDate: Date) => {
+    const today = new Date();
+    let years = today.getFullYear() - birthDate.getFullYear();
+    let months = today.getMonth() - birthDate.getMonth();
+    let days = today.getDate() - birthDate.getDate();
+
+    if (days < 0) {
+      months -= 1;
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += lastMonth.getDate();
+    }
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+
+    if (years === 0) return `${months} meses y ${days} días`;
+    return `${years} años, ${months} meses y ${days} días`;
+  };
+
+  const updateCalendar = () => {
+    const d = birthDay.value.trim();
+    const m = birthMonth.value.trim();
+    const y = birthYear.value.trim();
+
+    tripleContainer?.classList.remove('has-error');
+    if (emptyState) emptyState.innerText = "Introduce el día, mes y año de nacimiento para generar el calendario.";
+
+    if (!d || !m || !y || y.length < 4) {
+      app?.classList.remove('vc-app-active');
+      if (emptyState) emptyState.style.display = 'block';
+      ageBadge?.classList.remove('visible');
+      return;
+    }
+
+    const day = parseInt(d);
+    const month = parseInt(m);
+    const year = parseInt(y);
+    const today = new Date();
+
+    const invalidRange = isNaN(day) || isNaN(month) || isNaN(year) || 
+                       day < 1 || day > 31 || 
+                       month < 1 || month > 12 || 
+                       year < 1900 || year > today.getFullYear();
+
+    if (invalidRange) {
+      tripleContainer?.classList.add('has-error');
+      app?.classList.remove('vc-app-active');
+      if (emptyState) {
+        emptyState.style.display = 'block';
+        emptyState.innerText = "La fecha introducida no es válida.";
+      }
+      ageBadge?.classList.remove('visible');
+      return;
+    }
+
+    const isoDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const birthDate = new Date(isoDate);
+    
+    if (isNaN(birthDate.getTime()) || birthDate > today) {
+      tripleContainer?.classList.add('has-error');
+      app?.classList.remove('vc-app-active');
+      if (emptyState) {
+        emptyState.style.display = 'block';
+        emptyState.innerText = birthDate > today ? "Un bebé no puede haber nacido en el futuro." : "Fecha inválida.";
+      }
+      ageBadge?.classList.remove('visible');
+      return;
+    }
+
+    app?.classList.add('vc-app-active');
+    if (emptyState) emptyState.style.display = 'none';
+
+    if (ageBadge) {
+      ageBadge.innerText = `Edad: ${calculateAge(birthDate)}`;
+      ageBadge.classList.add('visible');
+    }
+
+    const dosesByAgePath: { [months: number]: any[] } = {};
+    VACCINES.forEach(vac => {
+      vac.doses.forEach(doseMonth => {
+        if (!dosesByAgePath[doseMonth]) dosesByAgePath[doseMonth] = [];
+        dosesByAgePath[doseMonth].push({ ...vac, currentDoseMonth: doseMonth });
+      });
+    });
+
+    const sortedAges = Object.keys(dosesByAgePath).map(Number).sort((a, b) => a - b);
+    
+    let nextAppointment: any = null;
+    if (timelinePassed) timelinePassed.innerHTML = '';
+    if (timelineFuture) timelineFuture.innerHTML = '';
+
+    sortedAges.forEach(months => {
+      const targetDate = new Date(birthDate);
+      targetDate.setMonth(targetDate.getMonth() + months);
+      const isPassed = targetDate < today;
+
+      if (!isPassed && !nextAppointment) {
+        nextAppointment = { months, date: targetDate, vaccines: dosesByAgePath[months] };
+      }
+
+      let label = `${months} meses`;
+      if (months === 12) label = "12 meses (1 año)";
+      else if (months > 12) {
+        const yrs = Math.floor(months / 12);
+        const rem = months % 12;
+        label = rem === 0 ? `${yrs} ${yrs === 1 ? 'año' : 'años'}` : `${months} meses`;
+      }
+      
+      const row = document.createElement('div');
+      row.className = 'vc-timeline-row';
+      const vacsHtml = dosesByAgePath[months].map(v => `<span class="vc-vac-pill">${v.name}</span>`).join('');
+      row.innerHTML = `
+        <span class="vc-timeline-age">${label}</span>
+        <div class="vc-timeline-vac">${vacsHtml}</div>
+        <span class="vc-timeline-status ${isPassed ? 'vc-timeline-check' : 'vc-timeline-clock'}">${isPassed ? 'OK' : 'PEND.'}</span>
+      `;
+      
+      if (isPassed) timelinePassed?.appendChild(row);
+      else timelineFuture?.appendChild(row);
+    });
+
+    if (nextAppointment && bannerDate && bannerVaccines) {
+      const isToday = nextAppointment.date.toDateString() === today.toDateString();
+      app?.classList.toggle('is-today', isToday);
+
+      bannerDate.innerText = nextAppointment.date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+      
+      if (isToday) {
+        if (exportBtn) exportBtn.innerHTML = "<span>¡Es hoy! No olvides la cartilla</span>";
+      } else {
+        if (exportBtn) exportBtn.innerHTML = "<span>Añadir recordatorio al móvil</span>";
+      }
+
+      bannerVaccines.innerHTML = nextAppointment.vaccines.map((v: any, idx: number) => `
+        <div class="vc-vac-item">
+          <div class="vc-vac-icon">${idx + 1}</div>
+          <div class="vc-vac-info">
+            <span class="vc-vac-name">${v.name}</span>
+            <span class="vc-vac-micro">${v.description}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('birth', isoDate);
+    window.history.replaceState({}, '', newUrl);
+  };
+
+  const exportIcsFile = () => {
+    const d = birthDay.value.trim();
+    const m = birthMonth.value.trim();
+    const y = birthYear.value.trim();
+    if (!d || !m || !y) return;
+    
+    const birthDate = new Date(`${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`);
+    if (isNaN(birthDate.getTime())) return;
+
+    const appointmentGroups: { [months: number]: string[] } = {};
+    VACCINES.forEach(vac => {
+      vac.doses.forEach(months => {
+        if (!appointmentGroups[months]) appointmentGroups[months] = [];
+        appointmentGroups[months].push(vac.name);
+      });
+    });
+
+    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//jjlmoya//VaxCal//ES\n";
+    
+    Object.entries(appointmentGroups).forEach(([months, names]) => {
+      const targetDate = new Date(birthDate);
+      targetDate.setMonth(targetDate.getMonth() + parseInt(months));
+      
+      const isFuture = targetDate > new Date();
+      if (!isFuture) return;
+
+      const dateStr = targetDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const label = parseInt(months) >= 12 
+        ? `${Math.floor(parseInt(months)/12)} años` 
+        : `${months} meses`;
+
+      icsContent += `BEGIN:VEVENT\nDTSTART:${dateStr}\nSUMMARY:Vacunación ${label}: ${names.join(', ')}\nDESCRIPTION:Cita de vacunación infantil.\nEND:VEVENT\n`;
+    });
+
+    icsContent += "END:VCALENDAR";
+    
+    const blob = new Blob([icsContent], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `calendario_vacunacion.ics`;
+    link.click();
+  };
+
+  const handleInput = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    target.value = target.value.replace(/\D/g, '');
+    const val = target.value;
+    if (target.id === 'birth-day' && val.length === 2) birthMonth.focus();
+    if (target.id === 'birth-month' && val.length === 2) birthYear.focus();
+    updateCalendar();
+  };
+
+  const initializeFromUrl = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const birth = urlParams.get('birth');
+    if (birth && birth.includes('-')) {
+      const [y, m, d] = birth.split('-');
+      if (birthDay) birthDay.value = d;
+      if (birthMonth) birthMonth.value = m;
+      if (birthYear) birthYear.value = y;
+      updateCalendar();
+    }
+  };
+
+  [birthDay, birthMonth, birthYear].forEach(el => el?.addEventListener('input', handleInput));
+  exportBtn?.addEventListener('click', exportIcsFile);
+  
+  shareBtn?.addEventListener('click', async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Calendario de Vacunación España (AEP 2026)',
+          text: 'Aquí tienes los plazos de vacunación del bebé en jjlmoya.es.',
+          url: url
+        });
+      } else {
+        await navigator.clipboard.writeText(url);
+        const originalText = shareBtn!.innerText;
+        shareBtn!.innerText = '¡Enlace copiado!';
+        setTimeout(() => { shareBtn!.innerText = originalText; }, 2000);
+      }
+    } catch (err) {}
+  });
+
+  document.querySelectorAll('.vc-accordion-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      trigger.parentElement?.classList.toggle('active');
+    });
+  });
+
+  initializeFromUrl();
+</script>

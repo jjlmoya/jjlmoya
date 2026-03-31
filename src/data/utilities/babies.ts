@@ -22,5 +22,13 @@ export const babiesSection: SectionData = {
             description: "Conversor inteligente de tallas entre marcas como Zara, H&M y Carter's.",
             color: "#60a5fa",
         },
+        {
+            href: "/utilidades/calendario-vacunacion-espana-bebes/",
+            iconBg: "mdi:calendar-check",
+            iconFg: "mdi:baby",
+            title: "Calendario de Vacunación 2026",
+            description: "Esquema oficial de la AEP para que no se te pase ninguna cita de tu hijo.",
+            color: "#6366f1",
+        },
     ],
 };
