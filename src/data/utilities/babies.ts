@@ -46,5 +46,13 @@ export const babiesSection: SectionData = {
             description: "Calcula el percentil de peso, talla e IMC con las tablas oficiales de la OMS.",
             color: "#0d9488",
         },
+        {
+            href: "/utilidades/calculadora-semanas-embarazo/",
+            iconBg: "mdi:calendar-heart",
+            iconFg: "mdi:baby-face-outline",
+            title: "Semanas de Embarazo",
+            description: "Calcula tus semanas de gestación, fecha probable de parto e hitos del bebé.",
+            color: "#8b5cf6",
+        },
     ],
 };
