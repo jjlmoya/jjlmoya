@@ -35,6 +35,7 @@ import { dronesSection } from "./drones";
 import { coffeeSection } from "./coffee";
 import { gamesSection } from "./games";
 import { petsSection } from "./pets";
+import { babiesSection } from "./babies";
 
 
 export const sections: SectionData[] = [
@@ -70,6 +71,7 @@ export const sections: SectionData[] = [
     petsSection,
     nauticalSection,
     statisticsSection,
+    babiesSection,
 ];
 
 

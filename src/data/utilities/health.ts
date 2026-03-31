@@ -68,14 +68,6 @@ export const healthSection: SectionData = {
             color: "#f97316",
         },
         {
-            href: "/utilidades/calculadora-dias-fertiles/",
-            iconBg: "mdi:calendar-heart",
-            iconFg: "mdi:water-percent",
-            title: "Días Fértiles",
-            description: "Estimador de ciclos y ventana de fertilidad con calendario intuitivo.",
-            color: "#ec4899",
-        },
-        {
             href: "/utilidades/sintonizador-ondas-binaurales-suenos-lucidos/",
             iconBg: "mdi:sleep",
             iconFg: "mdi:waves",
