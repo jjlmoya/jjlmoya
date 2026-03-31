@@ -1,0 +1,186 @@
+---
+import "./NeedleConverter.css";
+---
+
+<div class="needle-wrapper" id="master-needle">
+    <div class="needle-card">
+        <div class="card-sidebar">
+            <span class="label-tiny">SISTEMA DE TRABAJO</span>
+            <div class="mode-toggle" id="needle-mode">
+                <button class="toggle-btn active" data-type="knitting">Punto</button>
+                <button class="toggle-btn" data-type="crochet">Ganchillo</button>
+            </div>
+
+            <span class="label-tiny">CALIBRADOR DE PRECISIÓN (ESCALA REAL)</span>
+            <div class="calibration-area">
+                <div class="hole-selector" id="hole-picker">
+                </div>
+            </div>
+            
+            <p class="text-xs text-slate-500 font-light leading-relaxed">
+                Selecciona un diámetro para ver las equivalencias en tiempo real. Los orificios centrales guardan una proporción matemática real respecto al milimetraje.
+            </p>
+        </div>
+
+        <div class="card-main">
+            <div class="conversion-grid">
+                <div class="system-card">
+                    <span class="val-large" id="res-mm">4.0</span>
+                    <span class="val-tag">Métrico (mm)</span>
+                </div>
+                <div class="system-card">
+                    <span class="val-large" id="res-us">6</span>
+                    <span class="val-tag">Sistema US</span>
+                </div>
+                <div class="system-card">
+                    <span class="val-large" id="res-uk">8</span>
+                    <span class="val-tag">Sistema UK</span>
+                </div>
+            </div>
+
+            <div class="yarn-box">
+                <div class="yarn-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M16.6,16.89C16.14,17.35 15.39,17.35 14.93,16.89C14.47,16.43 14.47,15.68 14.93,15.22C15.39,14.76 16.14,14.76 16.6,15.22C17.06,15.68 17.06,16.43 16.6,16.89M12,14C10.9,14 10,13.1 10,12C10,10.9 10.9,10 12,10C13.1,10 14,10.9 14,12C14,13.1 13.1,14 12,14M9.07,16.89C8.61,17.35 7.86,17.35 7.4,16.89C6.94,16.43 6.94,15.68 7.4,15.22C7.86,14.76 8.61,14.76 9.07,15.22C9.53,15.68 9.53,16.43 9.07,16.89M12,7.5C14.48,7.5 16.5,9.52 16.5,12C16.5,14.48 14.48,16.5 12,16.5C9.52,16.5 7.5,14.48 7.5,12C7.5,9.52 9.52,7.5 12,7.5Z"/></svg>
+                </div>
+                <div class="yarn-content">
+                    <span class="yarn-label">GROSOR DE HILO IDEAL</span>
+                    <span class="yarn-name" id="yarn-desc">DK / Light Worsted</span>
+                    <span class="yarn-wpi" id="yarn-wpi">11-13 WPI (Vuelta por pulgada)</span>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <span class="label-tiny">CATÁLOGO TÉCNICO DE EQUIVALENCIAS</span>
+                <div class="needle-table-wrapper">
+                    <table class="needle-table">
+                        <thead>
+                            <tr>
+                                <th>MÉTRICO</th>
+                                <th>US SIZE</th>
+                                <th>UK / IMPERIAL</th>
+                                <th>CATEGORÍA HILO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="needle-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    interface NeedleItem {
+        mm: number;
+        usK: string;
+        usC: string;
+        uk: string;
+        yarn: string;
+        wpi: string;
+    }
+
+    const data: NeedleItem[] = [
+        { mm: 2.0, usK: "0", usC: "B-1", uk: "14", yarn: "Lace / Fingering", wpi: "18+" },
+        { mm: 2.25, usK: "1", usC: "B-1", uk: "13", yarn: "Lace / Fingering", wpi: "18+" },
+        { mm: 2.5, usK: "1.5", usC: "C-2", uk: "12", yarn: "Lace / Fingering", wpi: "18+" },
+        { mm: 2.75, usK: "2", usC: "C-2", uk: "12", yarn: "Fingering", wpi: "18-22" },
+        { mm: 3.0, usK: "2.5", usC: "D-3", uk: "11", yarn: "Fingering", wpi: "18-22" },
+        { mm: 3.25, usK: "3", usC: "D-3", uk: "10", yarn: "Sport", wpi: "14-16" },
+        { mm: 3.5, usK: "4", usC: "E-4", uk: "9", yarn: "Sport", wpi: "14-16" },
+        { mm: 3.75, usK: "5", usC: "F-5", uk: "9", yarn: "Sport", wpi: "14-16" },
+        { mm: 4.0, usK: "6", usC: "G-6", uk: "8", yarn: "DK / Light Worsted", wpi: "11-13" },
+        { mm: 4.5, usK: "7", usC: "7", uk: "7", yarn: "DK / Light Worsted", wpi: "11-13" },
+        { mm: 5.0, usK: "8", usC: "H-8", uk: "6", yarn: "Worsted / Aran", wpi: "9-11" },
+        { mm: 5.5, usK: "9", usC: "I-9", uk: "5", yarn: "Worsted / Aran", wpi: "9-11" },
+        { mm: 6.0, usK: "10", usC: "J-10", uk: "4", yarn: "Bulky / Chunky", wpi: "7-8" },
+        { mm: 6.5, usK: "10.5", usC: "K-10.5", uk: "3", yarn: "Bulky / Chunky", wpi: "7-8" },
+        { mm: 7.0, usK: "-", usC: "-", uk: "2", yarn: "Bulky / Chunky", wpi: "7-8" },
+        { mm: 8.0, usK: "11", usC: "L-11", uk: "—", yarn: "Super Bulky", wpi: "5-6" },
+        { mm: 9.0, usK: "13", usC: "M-13", uk: "—", yarn: "Super Bulky", wpi: "5-6" },
+        { mm: 10.0, usK: "15", usC: "N-15", uk: "—", yarn: "Super Bulky", wpi: "5-6" }
+    ];
+
+    let currentIdx = 8;
+    let currentType = 'knitting';
+
+    function run() {
+        const item = data[currentIdx];
+        const resMm = document.getElementById('res-mm');
+        const resUs = document.getElementById('res-us');
+        const resUk = document.getElementById('res-uk');
+        const yarnDesc = document.getElementById('yarn-desc');
+        const yarnWpi = document.getElementById('yarn-wpi');
+
+        if(resMm) resMm.innerText = item.mm.toFixed(1);
+        if(resUs) resUs.innerText = currentType === 'knitting' ? item.usK : item.usC;
+        if(resUk) resUk.innerText = item.uk;
+        if(yarnDesc) yarnDesc.innerText = item.yarn;
+        if(yarnWpi) yarnWpi.innerText = `${item.wpi} WPI (Vuelta por pulgada)`;
+
+        renderHoles();
+        renderTable();
+    }
+
+    function renderHoles() {
+        const picker = document.getElementById('hole-picker');
+        if(!picker) return;
+        picker.innerHTML = '';
+        data.forEach((item, idx) => {
+            const hole = document.createElement('div');
+            hole.className = `needle-hole ${idx === currentIdx ? 'active' : ''}`;
+            hole.style.setProperty('--size-px', `${item.mm * 4}px`);
+            hole.innerHTML = `<span class="hole-label">${item.mm}</span>`;
+            hole.addEventListener('click', () => {
+                currentIdx = idx;
+                run();
+            });
+            picker.appendChild(hole);
+        });
+        
+        const activeHole = picker.children[currentIdx] as HTMLElement | undefined;
+        if(activeHole) {
+            picker.scrollTo({
+                left: activeHole.offsetLeft - picker.offsetWidth / 2 + activeHole.offsetWidth / 2,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    function renderTable() {
+        const body = document.getElementById('needle-body');
+        if(!body) return;
+        body.innerHTML = '';
+        data.forEach((item, idx) => {
+            const tr = document.createElement('tr');
+            tr.style.cursor = 'pointer';
+            if(idx === currentIdx) {
+                tr.classList.add('active');
+            }
+            tr.addEventListener('click', () => {
+                currentIdx = idx;
+                run();
+            });
+            tr.innerHTML = `
+                <td style="font-weight:700">${item.mm.toFixed(1)}</td>
+                <td>${currentType === 'knitting' ? item.usK : item.usC}</td>
+                <td>${item.uk}</td>
+                <td style="font-size:11px; text-transform: uppercase; letter-spacing: 0.05em;">${item.yarn}</td>
+            `;
+            body.appendChild(tr);
+        });
+    }
+
+    const typeBtns = document.querySelectorAll('#needle-mode button');
+    typeBtns.forEach(btn => {
+        const b = btn as HTMLElement;
+        b.addEventListener('click', () => {
+            typeBtns.forEach(x => (x as HTMLElement).classList.remove('active'));
+            b.classList.add('active');
+            currentType = b.dataset.type || 'knitting';
+            run();
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', run);
+</script>

@@ -584,5 +584,13 @@ export const textileSection: SectionData = {
             description: "Ajusta las medidas de un patrón de costura a tu cuerpo real manteniendo las proporciones y la holgura.",
             color: "#8b5cf6",
         },
+        {
+            href: "/utilidades/conversor-agujas-punto/",
+            iconBg: "mdi:needle",
+            iconFg: "mdi:swap-horizontal",
+            title: "Conversor de Agujas de Punto",
+            description: "Equivalencias entre milímetros (mm), US y UK para agujas de punto y ganchillo con recomendación de hilo.",
+            color: "#6366f1",
+        },
     ],
 };
