@@ -63,12 +63,15 @@
             <div class="res-card-box">
                 <div id="output-breast" class="hidden">
                     <span class="res-main-val">Libre demanda</span>
-                    <span class="res-label">Alimentación fisiológica</span>
+                    <span class="res-label">Pautas recomendadas por la AEP</span>
                 </div>
                 <div id="output-formula">
                     <span class="res-main-val" id="ml-per-feed">90-120</span>
                     <span class="res-label">ml por cada toma</span>
                 </div>
+                <p id="ac-warning" class="hidden" style="margin-top: 16px; color: #064e3b; font-size: 0.85rem; font-weight: 700; background: #ecfdf5; padding: 12px; border-radius: 12px; line-height: 1.4;">
+                  A esta edad la leche es un complemento. Las cantidades indicadas son estimaciones máximas si no ingiere otros sólidos.
+                </p>
             </div>
 
             <div class="stats-grid">
@@ -135,6 +138,7 @@
         dailyTotal: document.getElementById('daily-total'),
         stomachBubble: document.getElementById('stomach-bubble'),
         stomachText: document.getElementById('stomach-text'),
+        acWarning: document.getElementById('ac-warning'),
         steppers: document.querySelectorAll('.btn-step')
     };
 
@@ -142,8 +146,8 @@
         const { age, ageUnit, weight, feedType } = config;
         
         let ageInDays = age;
-        if (ageUnit === 'weeks') ageInDays *= 7;
-        if (ageUnit === 'months') ageInDays *= 30.44;
+        if (ageUnit === 'weeks') ageInDays = age * 7;
+        if (ageUnit === 'months') ageInDays = age * 30.44;
 
         let scale = 0.4;
         let hint = "";
@@ -151,15 +155,15 @@
         if (ageInDays <= 1) {
             scale = 0.25;
             hint = "Estómago como una <strong>cereza</strong>";
-        } else if (ageInDays <= 3) {
+        } else if (ageInDays <= 4) {
             scale = 0.5;
             hint = "Estómago como una <strong>nuez</strong>";
-        } else if (ageInDays <= 10) {
-            scale = 0.75;
+        } else if (ageInDays <= 30) {
+            scale = 0.8;
             hint = "Estómago como un <strong>huevo</strong>";
         } else {
             scale = 1.0;
-            hint = "Estómago del tamaño de un <strong>huevo grande</strong>";
+            hint = "Máxima capacidad gástrica distendida";
         }
 
         DOM.stomachBubble.style.transform = `scale(${scale})`;
@@ -168,26 +172,48 @@
         let numFeeds = 8;
         if (ageInDays < 30) numFeeds = 8;
         else if (ageInDays < 90) numFeeds = 7;
-        else if (ageInDays < 180) numFeeds = 6;
-        else numFeeds = 5;
+        else if (ageInDays < 180) numFeeds = 5;
+        else numFeeds = 4;
 
-        let totalMin = weight * 150;
-        let totalMax = weight * 180;
+        let baseRatio = 150;
+        if (ageInDays > 180) baseRatio = 100;
+        if (ageInDays > 300) baseRatio = 80;
 
-        if (ageInDays < 10) {
-            const factor = Math.max(0.35, ageInDays / 10);
-            totalMin *= factor;
-            totalMax *= factor;
-            if (ageInDays < 2) { totalMin = weight * 40; totalMax = weight * 60; }
+        let totalMin = weight * baseRatio;
+        let totalMax = weight * (baseRatio + 20);
+
+        if (ageInDays >= 180) {
+            totalMin = Math.min(totalMin, 800);
+            totalMax = Math.min(totalMax, 950);
+            DOM.acWarning.classList.remove('hidden');
+        } else {
+            DOM.acWarning.classList.add('hidden');
         }
 
-        const perFeedMin = Math.round((totalMin / numFeeds) / 5) * 5;
-        const perFeedMax = Math.round((totalMax / numFeeds) / 5) * 5;
+        if (ageInDays < 10) {
+            const factor = Math.max(0.15, ageInDays / 10);
+            totalMin *= factor;
+            totalMax *= factor;
+            if (ageInDays < 2) { totalMin = weight * 15; totalMax = weight * 25; }
+        }
+
+        let perFeedMin = Math.round((totalMin / numFeeds) / 5) * 5;
+        let perFeedMax = Math.round((totalMax / numFeeds) / 5) * 5;
+
+        if (ageInDays <= 1) {
+            perFeedMin = 5; perFeedMax = 10;
+            totalMin = perFeedMin * numFeeds;
+            totalMax = perFeedMax * numFeeds;
+        }
+
+        const hardMaxPerFeed = 270;
+        perFeedMin = Math.min(perFeedMin, hardMaxPerFeed - 30);
+        perFeedMax = Math.min(perFeedMax, hardMaxPerFeed);
 
         if (feedType === 'breast') {
             DOM.outputBreast.classList.remove('hidden');
             DOM.outputFormula.classList.add('hidden');
-            DOM.feedsCount.textContent = "8 - 12 tomas";
+            DOM.feedsCount.textContent = ageInDays > 180 ? "3 - 5 tomas" : "8 - 12 tomas";
             DOM.dailyTotal.textContent = "Sin restricción";
         } else {
             DOM.outputBreast.classList.add('hidden');
