@@ -30,5 +30,13 @@ export const babiesSection: SectionData = {
             description: "Esquema oficial de la AEP para que no se te pase ninguna cita de tu hijo.",
             color: "#6366f1",
         },
+        {
+            href: "/utilidades/calculadora-tomas-bebe/",
+            iconBg: "mdi:baby",
+            iconFg: "mdi:baby-bottle",
+            title: "Calculadora de Tomas",
+            description: "Guía personalizada de tomas y frecuencia de alimentación según el peso y edad de tu bebé.",
+            color: "#f43f5e",
+        },
     ],
 };

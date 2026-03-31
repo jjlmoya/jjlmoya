@@ -1,0 +1,260 @@
+---
+---
+
+<div class="feeding-card animate-in fade-in duration-800">
+    <div class="card-main">
+        <div class="card-left">
+            <span class="section-marker">Configuración actual</span>
+
+            <div class="input-group">
+                <div class="unit-nav">
+                    <button class="unit-tab active" data-unit="days">días</button>
+                    <button class="unit-tab" data-unit="weeks">semanas</button>
+                    <button class="unit-tab" data-unit="months">meses</button>
+                </div>
+                <div class="stepper-box">
+                    <button class="btn-step" data-action="dec" data-target="age-slider" aria-label="Reducir edad">-</button>
+                    <div class="val-view">
+                        <span class="val-big" id="age-val">7</span>
+                        <span class="val-sub" id="age-unit">días</span>
+                    </div>
+                    <button class="btn-step" data-action="inc" data-target="age-slider" aria-label="Aumentar edad">+</button>
+                </div>
+                <div style="padding: 0 11px;">
+                    <input type="range" id="age-slider" min="1" max="30" step="1" value="7" class="slider-line" />
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Peso del bebé</label>
+                <div class="stepper-box">
+                    <button class="btn-step" data-action="dec" data-target="weight-slider" aria-label="Reducir peso">-</button>
+                    <div class="val-view">
+                        <span class="val-big" id="weight-val">3.5</span>
+                        <span class="val-sub">kg</span>
+                    </div>
+                    <button class="btn-step" data-action="inc" data-target="weight-slider" aria-label="Aumentar peso">+</button>
+                </div>
+                <div style="padding: 0 11px;">
+                    <input type="range" id="weight-slider" min="2.5" max="12" step="0.1" value="3.5" class="slider-line" />
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Tipo de alimentación</label>
+                <div class="type-rack" id="feed-type-root">
+                    <button class="type-tile" data-type="breast">Pecho</button>
+                    <button class="type-tile" data-type="mixed">Mixta</button>
+                    <button class="type-tile active" data-type="formula">Fórmula</button>
+                </div>
+            </div>
+
+            <div class="gauge-area">
+                <div class="gauge-viz">
+                  <div class="stomach-bubble" id="stomach-bubble"></div>
+                  <p class="visual-hint" id="stomach-text"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-right">
+            <span class="section-marker">Plan recomendado</span>
+
+            <div class="res-card-box">
+                <div id="output-breast" class="hidden">
+                    <span class="res-main-val">Libre demanda</span>
+                    <span class="res-label">Alimentación fisiológica</span>
+                </div>
+                <div id="output-formula">
+                    <span class="res-main-val" id="ml-per-feed">90-120</span>
+                    <span class="res-label">ml por cada toma</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Tomas / 24h</span>
+                    <span class="stat-value" id="feeds-count">8 tomas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total diario (est.)</span>
+                    <span class="stat-value" id="daily-total">650-780 ml</span>
+                </div>
+            </div>
+
+            <div class="behavior-sec">
+                <span class="input-label">Señales de hambre</span>
+                <div class="pills-container">
+                    <span class="pill hambre">Busca con la cabeza</span>
+                    <span class="pill hambre">Puños a la boca</span>
+                    <span class="pill hambre">Ruidos de succión</span>
+                    <span class="pill hambre">Chasquidos</span>
+                </div>
+
+                <div style="height: 20px;"></div>
+
+                <span class="input-label">Señales de saciedad</span>
+                <div class="pills-container">
+                    <span class="pill saciedad">Relaja manos</span>
+                    <span class="pill saciedad">Suelta tetina</span>
+                    <span class="pill saciedad">Sueño profundo</span>
+                    <span class="pill saciedad">Cuerpo blando</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script is:inline>
+    const trans = {
+        days: 'días',
+        weeks: 'semanas',
+        months: 'meses'
+    };
+
+    const config = {
+        age: 7,
+        ageUnit: 'days',
+        weight: 3.5,
+        feedType: 'formula'
+    };
+
+    const DOM = {
+        ageSlider: document.getElementById('age-slider'),
+        ageVal: document.getElementById('age-val'),
+        ageUnitLabel: document.getElementById('age-unit'),
+        weightSlider: document.getElementById('weight-slider'),
+        weightVal: document.getElementById('weight-val'),
+        feedTypeBtns: document.querySelectorAll('.type-tile'),
+        ageUnitBtns: document.querySelectorAll('.unit-nav .unit-tab'),
+        
+        outputBreast: document.getElementById('output-breast'),
+        outputFormula: document.getElementById('output-formula'),
+        mlPerFeed: document.getElementById('ml-per-feed'),
+        feedsCount: document.getElementById('feeds-count'),
+        dailyTotal: document.getElementById('daily-total'),
+        stomachBubble: document.getElementById('stomach-bubble'),
+        stomachText: document.getElementById('stomach-text'),
+        steppers: document.querySelectorAll('.btn-step')
+    };
+
+    function update() {
+        const { age, ageUnit, weight, feedType } = config;
+        
+        let ageInDays = age;
+        if (ageUnit === 'weeks') ageInDays *= 7;
+        if (ageUnit === 'months') ageInDays *= 30.44;
+
+        let scale = 0.4;
+        let hint = "";
+
+        if (ageInDays <= 1) {
+            scale = 0.25;
+            hint = "Estómago como una <strong>cereza</strong>";
+        } else if (ageInDays <= 3) {
+            scale = 0.5;
+            hint = "Estómago como una <strong>nuez</strong>";
+        } else if (ageInDays <= 10) {
+            scale = 0.75;
+            hint = "Estómago como un <strong>huevo</strong>";
+        } else {
+            scale = 1.0;
+            hint = "Estómago del tamaño de un <strong>huevo grande</strong>";
+        }
+
+        DOM.stomachBubble.style.transform = `scale(${scale})`;
+        DOM.stomachText.innerHTML = hint;
+
+        let numFeeds = 8;
+        if (ageInDays < 30) numFeeds = 8;
+        else if (ageInDays < 90) numFeeds = 7;
+        else if (ageInDays < 180) numFeeds = 6;
+        else numFeeds = 5;
+
+        let totalMin = weight * 150;
+        let totalMax = weight * 180;
+
+        if (ageInDays < 10) {
+            const factor = Math.max(0.35, ageInDays / 10);
+            totalMin *= factor;
+            totalMax *= factor;
+            if (ageInDays < 2) { totalMin = weight * 40; totalMax = weight * 60; }
+        }
+
+        const perFeedMin = Math.round((totalMin / numFeeds) / 5) * 5;
+        const perFeedMax = Math.round((totalMax / numFeeds) / 5) * 5;
+
+        if (feedType === 'breast') {
+            DOM.outputBreast.classList.remove('hidden');
+            DOM.outputFormula.classList.add('hidden');
+            DOM.feedsCount.textContent = "8 - 12 tomas";
+            DOM.dailyTotal.textContent = "Sin restricción";
+        } else {
+            DOM.outputBreast.classList.add('hidden');
+            DOM.outputFormula.classList.remove('hidden');
+            DOM.mlPerFeed.textContent = `${perFeedMin} - ${perFeedMax} ml`;
+            DOM.feedsCount.textContent = `${numFeeds} tomas`;
+            DOM.dailyTotal.textContent = `${Math.round(totalMin)} - ${Math.round(totalMax)} ml`;
+        }
+
+        DOM.ageVal.textContent = age;
+        DOM.ageUnitLabel.textContent = trans[ageUnit];
+        DOM.weightVal.textContent = weight.toFixed(1);
+    }
+
+    DOM.ageSlider.addEventListener('input', (e) => {
+        config.age = parseInt(e.target.value);
+        update();
+    });
+
+    DOM.weightSlider.addEventListener('input', (e) => {
+        config.weight = parseFloat(e.target.value);
+        update();
+    });
+
+    DOM.feedTypeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            DOM.feedTypeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            config.feedType = btn.dataset.type;
+            update();
+        });
+    });
+
+    DOM.ageUnitBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            DOM.ageUnitBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            config.ageUnit = btn.dataset.unit;
+            
+            if (config.ageUnit === 'days') { DOM.ageSlider.min = "1"; DOM.ageSlider.max = "30"; }
+            if (config.ageUnit === 'weeks') { DOM.ageSlider.min = "1"; DOM.ageSlider.max = "12"; }
+            if (config.ageUnit === 'months') { DOM.ageSlider.min = "1"; DOM.ageSlider.max = "12"; }
+            
+            config.age = Math.min(config.age, parseInt(DOM.ageSlider.max));
+            DOM.ageSlider.value = config.age;
+            update();
+        });
+    });
+
+    DOM.steppers.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = document.getElementById(btn.dataset.target);
+            if (!target) return;
+            const val = parseFloat(target.value);
+            const step = parseFloat(target.step || "1");
+            const newVal = btn.dataset.action === 'inc' ? val + step : val - step;
+            target.value = newVal;
+            
+            if (target.id === 'age-slider') config.age = parseInt(target.value);
+            if (target.id === 'weight-slider') config.weight = parseFloat(target.value);
+            update();
+        });
+    });
+
+    update();
+</script>
+
+<style>
+    @import "./BabyFeedingCalculator.css";
+</style>
