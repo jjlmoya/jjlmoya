@@ -1,0 +1,291 @@
+---
+import brandsData from "./data.json";
+const { brands } = brandsData;
+---
+
+<div class="converter-card animate-in fade-in duration-800">
+    <div class="card-main">
+        <div class="card-left">
+            <span class="section-marker">Entrada de medidas</span>
+            
+            <div class="brand-picker">
+                <div class="select-box">
+                    <select id="origin-brand" aria-label="Seleccionar marca de referencia">
+                        {brands.map(brand => (
+                            <option value={brand.id}>{brand.name}</option>
+                        ))}
+                    </select>
+                </div>
+                <div class="unit-nav">
+                    <button class="unit-tab active" data-unit="metric">Métrico (cm/kg)</button>
+                    <button class="unit-tab" data-unit="imperial">Imperial (in/lb)</button>
+                </div>
+            </div>
+
+            <div class="num-ctrl">
+                <label class="num-label">Altura del bebé</label>
+                <div class="stepper-box">
+                    <button class="btn-step" data-action="dec" data-target="height-slider" aria-label="Menos altura">-</button>
+                    <div class="val-view">
+                        <span class="val-big" id="height-val">68</span>
+                        <span class="val-sub" id="height-unit">cm</span>
+                    </div>
+                    <button class="btn-step" data-action="inc" data-target="height-slider" aria-label="Más altura">+</button>
+                </div>
+                <input type="range" id="height-slider" min="45" max="100" step="1" value="68" class="slider-line" />
+            </div>
+
+            <div class="num-ctrl">
+                <label class="num-label">Peso actual del bebé</label>
+                <div class="stepper-box">
+                    <button class="btn-step" data-action="dec" data-target="weight-slider" aria-label="Menos peso">-</button>
+                    <div class="val-view">
+                        <span class="val-big" id="weight-val">8.0</span>
+                        <span class="val-sub" id="weight-unit">kg</span>
+                    </div>
+                    <button class="btn-step" data-action="inc" data-target="weight-slider" aria-label="Más peso">+</button>
+                </div>
+                <input type="range" id="weight-slider" min="3" max="18" step="0.5" value="8" class="range-input" />
+            </div>
+
+            <div class="num-ctrl">
+                <label class="num-label mb-2">Preajustes por edad típica</label>
+                <div class="age-rack">
+                    <button class="age-tile" data-age="0.5">NB</button>
+                    <button class="age-tile" data-age="3">3m</button>
+                    <button class="age-tile active" data-age="6">6m</button>
+                    <button class="age-tile" data-age="9">9m</button>
+                    <button class="age-tile" data-age="12">12m</button>
+                    <button class="age-tile" data-age="18">18m</button>
+                    <button class="age-tile" data-age="24">24m</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-right">
+            <span class="section-marker">Equivalencias estimadas</span>
+            
+            <div class="res-header">
+                <span class="res-brand-hint" id="display-brand">Zara</span>
+                <span class="res-size-main" id="display-size">3-6 m</span>
+                <span class="fit-label regular" id="status-badge">Corte regular</span>
+            </div>
+
+            <div class="equivalents-grid-box">
+                <div class="eq-head-row">
+                    <span class="eq-col-name">Marca y Corte</span>
+                    <span class="eq-col-name">Talla sugerida</span>
+                </div>
+                <div class="eq-data-list" id="equivalents-grid">
+                </div>
+            </div>
+
+            <div class="clothes-meta">
+                <span class="meta-title">Medidas estimadas de la prenda</span>
+                <div class="meta-vals">
+                    <div class="meta-cell">
+                        <label>Pecho</label>
+                        <span id="chest-val">44 cm</span>
+                    </div>
+                    <div class="meta-cell">
+                        <label>Cintura</label>
+                        <span id="waist-val">43 cm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pro-tip-footer">
+        <div class="footer-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </div>
+        <div class="footer-text">
+            <h5>Consejo de experto</h5>
+            <p>Los bebés crecen en picos de desarrollo muy rápidos. Si el resultado está en el límite superior de una talla, elige siempre <strong>la talla superior</strong> para garantizar la durabilidad y comodidad del bebé.</p>
+        </div>
+    </div>
+</div>
+
+<script is:inline define:vars={{ brands }}>
+    const hIn = document.getElementById('height-slider');
+    const wIn = document.getElementById('weight-slider');
+    const hOut = document.getElementById('height-val');
+    const wOut = document.getElementById('weight-val');
+    const bSel = document.getElementById('origin-brand');
+    const aPick = document.querySelectorAll('.age-tile');
+    const uTabs = document.querySelectorAll('.unit-tab');
+    const eqList = document.getElementById('equivalents-grid');
+    const bSteps = document.querySelectorAll('.btn-step');
+
+    let uMode = localStorage.getItem('baby-size-units') || 'metric';
+    let bCid = localStorage.getItem('baby-size-brand') || (brands[0] ? brands[0].id : '');
+    let hVal = parseFloat(localStorage.getItem('baby-size-height') || '68');
+    let wVal = parseFloat(localStorage.getItem('baby-size-weight') || '8');
+
+    function start() {
+        if (!bSel || !hIn || !wIn) return;
+        bSel.value = bCid;
+        hIn.value = hVal.toString();
+        wIn.value = wVal.toString();
+        
+        switchU();
+        run();
+
+        const syncI = (t) => {
+            if (t.id === 'height-slider') {
+                hVal = parseFloat(hIn.value);
+                localStorage.setItem('baby-size-height', hVal.toString());
+            } 
+            if (t.id === 'weight-slider') {
+                wVal = parseFloat(wIn.value);
+                localStorage.setItem('baby-size-weight', wVal.toString());
+            }
+            drawNums();
+            run();
+        };
+
+        hIn.addEventListener('input', (e) => syncI(e.target));
+        wIn.addEventListener('input', (e) => syncI(e.target));
+
+        bSteps.forEach(b => {
+            b.addEventListener('click', () => {
+                const i = document.getElementById(b.dataset.target);
+                if (!i) return;
+                const v = parseFloat(i.value);
+                const s = parseFloat(i.step || '1');
+                i.value = (b.dataset.action === 'inc' ? v + s : v - s).toString();
+                syncI(i);
+            });
+        });
+
+        bSel.addEventListener('change', (e) => {
+            bCid = e.target.value;
+            localStorage.setItem('baby-size-brand', bCid);
+            run();
+        });
+
+        aPick.forEach(b => {
+            b.addEventListener('click', () => {
+                aPick.forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                const age = parseFloat(b.dataset.age || '6');
+                const reference = brands[0];
+                const match = reference.sizes.find(s => s.age >= age) || reference.sizes[reference.sizes.length-1];
+                if (match) {
+                    hVal = match.height;
+                    wVal = match.weight;
+                    hIn.value = hVal.toString();
+                    wIn.value = wVal.toString();
+                    drawNums();
+                    run();
+                }
+            });
+        });
+
+        uTabs.forEach(b => {
+            b.addEventListener('click', () => {
+                uMode = b.dataset.unit;
+                localStorage.setItem('baby-size-units', uMode);
+                switchU();
+                run();
+            });
+        });
+    }
+
+    function switchU() {
+        uTabs.forEach(b => b.classList.toggle('active', b.dataset.unit === uMode));
+        const hu = document.getElementById('height-unit');
+        const wu = document.getElementById('weight-unit');
+        if (hu) hu.textContent = uMode === 'metric' ? 'cm' : 'in';
+        if (wu) wu.textContent = uMode === 'metric' ? 'kg' : 'lb';
+        drawNums();
+    }
+
+    function drawNums() {
+        if (hOut && wOut) {
+            if (uMode === 'metric') {
+                hOut.textContent = hVal.toString();
+                wOut.textContent = wVal.toFixed(1);
+            } else {
+                hOut.textContent = (hVal / 2.54).toFixed(1);
+                wOut.textContent = (wVal * 2.20462).toFixed(1);
+            }
+        }
+    }
+
+    function findS(brand, h, w) {
+        let best = brand.sizes[0];
+        let diff = Infinity;
+        brand.sizes.forEach(s => {
+            const d = Math.abs(s.height - h) + Math.abs(s.weight - w) * 8;
+            if (d < diff) { diff = d; best = s; }
+        });
+        return best;
+    }
+
+    function run() {
+        const activeBrand = brands.find(x => x.id === bCid);
+        if (!activeBrand) return;
+        const size = findS(activeBrand, hVal, wVal);
+
+        const dBrand = document.getElementById('display-brand');
+        const dSize = document.getElementById('display-size');
+        const badge = document.getElementById('status-badge');
+
+        if (dBrand) dBrand.textContent = activeBrand.name;
+        if (dSize) dSize.textContent = size.label;
+        if (badge) {
+            badge.className = 'fit-label ' + activeBrand.fit;
+            if (activeBrand.fit === 'large') badge.textContent = 'Corte amplio';
+            else if (activeBrand.fit === 'small') badge.textContent = 'Corte ajustado';
+            else badge.textContent = 'Corte regular';
+        }
+
+        const refBrand = brands[0];
+        const currentRefSize = findS(refBrand, hVal, wVal);
+        aPick.forEach(btn => {
+            btn.classList.toggle('active', parseFloat(btn.dataset.age) === currentRefSize.age);
+        });
+
+        const ch = document.getElementById('chest-val');
+        const wa = document.getElementById('waist-val');
+        if (ch && wa) {
+            if (uMode === 'metric') {
+                ch.textContent = size.chest + ' cm';
+                wa.textContent = size.waist + ' cm';
+            } else {
+                ch.textContent = (size.chest / 2.54).toFixed(1) + ' in';
+                wa.textContent = (size.waist / 2.54).toFixed(1) + ' in';
+            }
+        }
+
+        if (eqList) {
+            eqList.innerHTML = '';
+            brands.filter(x => x.id !== bCid).forEach(x => {
+                const s = findS(x, hVal, wVal);
+                const row = document.createElement('div');
+                row.className = 'eq-data-row';
+                
+                let fitL = 'Corte regular';
+                if (x.fit === 'large') fitL = 'Corte amplio';
+                if (x.fit === 'small') fitL = 'Corte ajustado';
+
+                row.innerHTML = `
+                    <div class="eq-brand-v">
+                        <span class="eq-brand-name">${x.name}</span>
+                        <span class="eq-fit-v ${x.fit}">${fitL}</span>
+                    </div>
+                    <span class="eq-size-v">${s.label}</span>
+                `;
+                eqList.appendChild(row);
+            });
+        }
+    }
+
+    start();
+</script>
+
+<style>
+    @import "./BabySizeConverter.css";
+</style>

@@ -14,5 +14,13 @@ export const babiesSection: SectionData = {
             description: "Estimador de ciclos y ventana de fertilidad con calendario intuitivo.",
             color: "#ec4899",
         },
+        {
+            href: "/utilidades/conversor-tallas-bebe/",
+            iconBg: "mdi:baby-face-outline",
+            iconFg: "mdi:ruler",
+            title: "Tallas Bebé",
+            description: "Conversor inteligente de tallas entre marcas como Zara, H&M y Carter's.",
+            color: "#60a5fa",
+        },
     ],
 };
