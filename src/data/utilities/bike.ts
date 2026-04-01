@@ -1,25 +1,33 @@
+import { bikeCategory, fixedGear, spokeCalculator } from '@jjlmoya/utils-bike/data';
 import type { SectionData } from "./types";
+
+const LOCALE = 'es';
+
+const [fixedGearContent, spokeContent] = await Promise.all([
+    fixedGear.i18n[LOCALE]!(),
+    spokeCalculator.i18n[LOCALE]!(),
+]);
 
 export const bikeSection: SectionData = {
     title: "Ciclismo",
     slug: "ciclismo",
-    icon: "mdi:bike",
+    icon: bikeCategory.icon,
     theme: "rose",
     utilities: [
         {
             href: "/utilidades/calculadora-fixie/",
-            iconBg: "mdi:bicycle",
-            iconFg: "mdi:cog",
-            title: "Calculadora Fixie",
-            description: "Optimiza tu transmisión. Calcula Skid Patches y Gear Inches.",
+            iconBg: fixedGear.icons.bg,
+            iconFg: fixedGear.icons.fg,
+            title: fixedGearContent.title,
+            description: fixedGearContent.description,
             color: "#ef4444",
         },
         {
             href: "/utilidades/calculadora-radios/",
-            iconBg: "mdi:tire",
-            iconFg: "mdi:ruler",
-            title: "Calculadora de Radios",
-            description: "Longitud exacta de radios para construir ruedas. ERD, PCD y cruces.",
+            iconBg: spokeCalculator.icons.bg,
+            iconFg: spokeCalculator.icons.fg,
+            title: spokeContent.title,
+            description: spokeContent.description,
             color: "#6366f1",
         },
     ],
