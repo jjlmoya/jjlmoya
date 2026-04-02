@@ -1,11 +1,12 @@
-import { bikeCategory, fixedGear, spokeCalculator } from '@jjlmoya/utils-bike/data';
+import { bikeCategory, fixedGear, spokeCalculator, gearCalculator } from '@jjlmoya/utils-bike/data';
 import type { SectionData } from "./types";
 
 const LOCALE = 'es';
 
-const [fixedGearContent, spokeContent] = await Promise.all([
+const [fixedGearContent, spokeContent, gearContent] = await Promise.all([
     fixedGear.i18n[LOCALE]!(),
     spokeCalculator.i18n[LOCALE]!(),
+    gearCalculator.i18n[LOCALE]!(),
 ]);
 
 export const bikeSection: SectionData = {
@@ -29,6 +30,14 @@ export const bikeSection: SectionData = {
             title: spokeContent.title,
             description: spokeContent.description,
             color: "#6366f1",
+        },
+        {
+            href: "/utilidades/calculadora-desarrollos/",
+            iconBg: gearCalculator.icons.bg,
+            iconFg: gearCalculator.icons.fg,
+            title: gearContent.title,
+            description: gearContent.description,
+            color: "#10b981",
         },
     ],
 };

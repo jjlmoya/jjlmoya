@@ -1,0 +1,46 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import {
+    GearCalculator,
+    GearCalculatorSEO,
+    GearCalculatorBibliography,
+    gearCalculator,
+} from "@jjlmoya/utils-bike";
+
+const content = await gearCalculator.i18n.es!();
+const words = content.title.split(" ");
+const titleHighlight = words[0] ?? "";
+const titleBase = words.slice(1).join(" ");
+---
+
+<LayoutUtility
+    title={content.title}
+    description={content.description}
+    image="/images/utilities/calculadora-desarrollos.webp"
+    gradientFrom="from-emerald-100"
+    gradientTo="to-teal-300"
+    faqItems={content.faq}
+    howToSteps={content.howTo}
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight={titleHighlight}
+            titleBase={titleBase}
+            description={content.description}
+            gradientFrom="from-emerald-500"
+            gradientTo="to-teal-600"
+        />
+    </div>
+
+    <GearCalculator ui={content.ui} />
+
+    <div slot="seo">
+        <GearCalculatorSEO />
+    </div>
+
+    <div slot="bibliography">
+        <GearCalculatorBibliography />
+    </div>
+</LayoutUtility>
