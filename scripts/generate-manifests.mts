@@ -2,6 +2,10 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import sharp from "sharp";
+import { register } from "module";
+
+// Register loader to handle .astro files
+register(new URL("./astro-loader.mjs", import.meta.url));
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(__dirname, "..");
