@@ -1,46 +1,7 @@
 ---
 export const prerender = true;
-import LayoutUtility from "../../layouts/LayoutUtility.astro";
-import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
-import {
-    FixedGearCalculator,
-    FixedGearSEO,
-    FixedGearBibliography,
-    fixedGear,
-} from "@jjlmoya/utils-bike";
-
-const content = await fixedGear.i18n.es!();
-const words = content.title.split(" ");
-const titleHighlight = words[0] ?? "";
-const titleBase = words.slice(1).join(" ");
+import { FIXED_GEAR_TOOL as tool } from "@jjlmoya/utils-bike";
+import LibraryUtilityLayout from "../../components/utilidades/LibraryUtilityLayout.astro";
 ---
 
-<LayoutUtility
-    title={content.title}
-    description={content.description}
-    image="/images/utilities/calculadora-fixie.webp"
-    gradientFrom="from-slate-100"
-    gradientTo="to-slate-300"
-    faqItems={content.faq}
-    howToSteps={content.howTo}
->
-    <div slot="header">
-        <UtilityHeader
-            titleHighlight={titleHighlight}
-            titleBase={titleBase}
-            description={content.description}
-            gradientFrom="from-red-500"
-            gradientTo="to-indigo-600"
-        />
-    </div>
-
-    <FixedGearCalculator ui={content.ui} />
-
-    <div slot="seo">
-        <FixedGearSEO />
-    </div>
-
-    <div slot="bibliography">
-        <FixedGearBibliography />
-    </div>
-</LayoutUtility>
+<LibraryUtilityLayout tool={tool} />

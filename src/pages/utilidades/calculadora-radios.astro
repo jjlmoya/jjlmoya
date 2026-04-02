@@ -1,47 +1,7 @@
 ---
 export const prerender = true;
-import LayoutUtility from "../../layouts/LayoutUtility.astro";
-import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
-import {
-    SpokeCalculator,
-    SpokeCalculatorSEO,
-    SpokeCalculatorBibliography,
-    spokeCalculator,
-} from "@jjlmoya/utils-bike";
-
-const content = await spokeCalculator.i18n.es!();
-const words = content.title.split(" ");
-const titleHighlight = words[0] ?? "";
-const titleBase = words.slice(1).join(" ");
+import { SPOKE_CALCULATOR_TOOL as tool } from "@jjlmoya/utils-bike";
+import LibraryUtilityLayout from "../../components/utilidades/LibraryUtilityLayout.astro";
 ---
 
-<LayoutUtility
-    title="Calculadora de Radios: Longitud Exacta para Construir Ruedas - Spoke Length Calculator"
-    description="Calcula la longitud exacta de radios para construir ruedas de bicicleta. ERD, PCD, cruces y geometría precisa."
-    image="/images/utilities/calculadora-radios.webp"
-    gradientFrom="from-indigo-100"
-    gradientTo="to-blue-300"
-    faqItems={content.faq}
-    howToSteps={content.howTo}
->
-    <div slot="header">
-        <UtilityHeader
-            titleHighlight={titleHighlight}
-            titleBase={titleBase}
-            description={content.description}
-            gradientFrom="from-indigo-500"
-            gradientTo="to-blue-600"
-            reverse={false}
-        />
-    </div>
-
-    <SpokeCalculator ui={content.ui} />
-
-    <div slot="seo">
-        <SpokeCalculatorSEO />
-    </div>
-
-    <div slot="bibliography">
-        <SpokeCalculatorBibliography />
-    </div>
-</LayoutUtility>
+<LibraryUtilityLayout tool={tool} />
