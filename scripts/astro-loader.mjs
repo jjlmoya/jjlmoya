@@ -11,7 +11,6 @@ export async function resolve(specifier, context, defaultResolve) {
 
 export async function load(url, context, defaultLoad) {
   if (url.endsWith('.astro')) {
-    // Return an empty module for .astro files
     return {
       format: 'module',
       source: 'export default {};',
