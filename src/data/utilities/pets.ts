@@ -1,25 +1,33 @@
 import type { SectionData } from "./types";
+import { petsCategory, petAge, petRation } from '@jjlmoya/utils-pets/data';
+
+const LOCALE = 'es';
+
+const [petAgeContent, petRationContent] = await Promise.all([
+    petAge.i18n[LOCALE]!(),
+    petRation.i18n[LOCALE]!(),
+]);
 
 export const petsSection: SectionData = {
     title: "Mascotas",
     slug: "mascotas",
-    icon: "mdi:paw",
+    icon: petsCategory.icon,
     theme: "amber",
     utilities: [
         {
             href: "/utilidades/calculadora-edad-mascotas/",
-            iconBg: "mdi:paw",
-            iconFg: "mdi:clock-time-eight-outline",
-            title: "Calculadora Edad Mascotas",
-            description: "Traduce años de perro y gato a años humanos con ciencia.",
+            iconBg: petAge.icons.bg,
+            iconFg: petAge.icons.fg,
+            title: petAgeContent.title,
+            description: petAgeContent.description,
             color: "#f59e0b",
         },
         {
             href: "/utilidades/calculadora-racion-diaria-mascotas/",
-            iconBg: "mdi:food-apple",
-            iconFg: "mdi:weight-gram",
-            title: "Calculadora de Ración",
-            description: "Calcula la cantidad exacta de comida para tu perro o gato según su peso y actividad.",
+            iconBg: petRation.icons.bg,
+            iconFg: petRation.icons.fg,
+            title: petRationContent.title,
+            description: petRationContent.description,
             color: "#10b981",
         },
     ],
