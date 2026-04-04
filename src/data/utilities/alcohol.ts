@@ -1,53 +1,66 @@
 import type { SectionData } from "./types";
+import { alcoholCategory, alcoholClearance, beerCooler, carbonationCalculator, cocktailBalancer, partyKeg } from '@jjlmoya/utils-alcohol';
+
+const LOCALE = 'es';
+
+const [
+    alcoholClearanceContent,
+    beerCoolerContent,
+    carbonationContent,
+    cocktailContent,
+    partyKegContent,
+] = await Promise.all([
+    alcoholClearance.i18n[LOCALE]!(),
+    beerCooler.i18n[LOCALE]!(),
+    carbonationCalculator.i18n[LOCALE]!(),
+    cocktailBalancer.i18n[LOCALE]!(),
+    partyKeg.i18n[LOCALE]!(),
+]);
 
 export const alcoholSection: SectionData = {
     title: "Alcohol & Party",
     slug: "alcohol",
-    icon: "mdi:glass-mug-variant",
+    icon: alcoholCategory.icon,
     theme: "purple",
     utilities: [
         {
             href: "/utilidades/equilibrador-cocteles/",
-            iconBg: "mdi:glass-cocktail",
-            iconFg: "mdi:fruit-citrus",
-            title: "Simulador de Cócteles",
-            description:
-                "Mixología Molecular. Analiza la Ley del Sour y el equilibrio químico de tus mezclas.",
+            iconBg: cocktailBalancer.icons.bg,
+            iconFg: cocktailBalancer.icons.fg,
+            title: cocktailContent.title,
+            description: cocktailContent.description,
             color: "#10b981",
         },
         {
             href: "/utilidades/calculadora-enfriamiento-cerveza/",
-            iconBg: "mdi:snowflake-thermometer",
-            iconFg: "mdi:beer",
-            title: "Enfriador de Bebidas",
-            description:
-                "Termodinámica líquida. Evita que las botellas exploten en el congelador con cálculos térmicos precisos.",
+            iconBg: beerCooler.icons.bg,
+            iconFg: beerCooler.icons.fg,
+            title: beerCoolerContent.title,
+            description: beerCoolerContent.description,
             color: "#f59e0b",
         },
         {
             href: "/utilidades/calculadora-barriles-fiesta/",
-            iconBg: "mdi:keg",
-            iconFg: "mdi:snowflake",
-            title: "Calculadora de Fiesta",
-            description:
-                "Estima cerveza y hielo necesarios basándose en invitados y temperatura ambiente.",
+            iconBg: partyKeg.icons.bg,
+            iconFg: partyKeg.icons.fg,
+            title: partyKegContent.title,
+            description: partyKegContent.description,
             color: "#F59E0B",
         },
         {
             href: "/utilidades/calculadora-carbonatacion/",
-            iconBg: "mdi:bottle-soda-classic",
-            iconFg: "mdi:water-opacity",
-            title: "Carbonatación Perfecta",
-            description:
-                "Visualiza y calcula el priming exacto para Stouts, IPAs y Lagers sin riesgo de explosión.",
+            iconBg: carbonationCalculator.icons.bg,
+            iconFg: carbonationCalculator.icons.fg,
+            title: carbonationContent.title,
+            description: carbonationContent.description,
             color: "#D97706",
         },
         {
             href: "/utilidades/calculadora-alcohol-resaca/",
-            iconBg: "mdi:glass-wine",
-            iconFg: "mdi:pill",
-            title: "Predictor de Resaca",
-            description: "Calculadora de metabolismo de alcohol e hidratación basada en la fórmula de Widmark.",
+            iconBg: alcoholClearance.icons.bg,
+            iconFg: alcoholClearance.icons.fg,
+            title: alcoholClearanceContent.title,
+            description: alcoholClearanceContent.description,
             color: "#a855f7",
         },
     ],
