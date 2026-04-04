@@ -1,59 +1,77 @@
 import type { SectionData } from "./types";
+import {
+    nauticalCategory,
+    tideCalculator, underKeel, nauticalConverter,
+    speedConverter, endurance, sailArea,
+} from '@jjlmoya/utils-nautical';
+
+const LOCALE = 'es';
+
+const [
+    tideContent, underKeelContent, nauticalConverterContent,
+    speedContent, enduranceContent, sailAreaContent,
+] = await Promise.all([
+    tideCalculator.i18n[LOCALE]!(),
+    underKeel.i18n[LOCALE]!(),
+    nauticalConverter.i18n[LOCALE]!(),
+    speedConverter.i18n[LOCALE]!(),
+    endurance.i18n[LOCALE]!(),
+    sailArea.i18n[LOCALE]!(),
+]);
 
 export const nauticalSection: SectionData = {
     title: "Vela y Náutica",
     slug: "vela-y-nautica",
-    icon: "mdi:sailing",
+    icon: nauticalCategory.icon,
     theme: "blue",
     utilities: [
         {
             href: "/utilidades/calculadora-altura-marea/",
-            iconBg: "mdi:waves",
-            iconFg: "mdi:sailing",
-            title: "Calculadora de Altura de Marea",
-            description: "Calcula la altura del agua en cualquier momento usando la Regla de los Dozavos.",
+            iconBg: tideCalculator.icons.bg,
+            iconFg: tideCalculator.icons.fg,
+            title: tideContent.title,
+            description: tideContent.description,
             color: "#0074B7",
         },
         {
             href: "/utilidades/calculador-paso-de-bajo/",
-            iconBg: "mdi:anchor",
-            iconFg: "mdi:ship-wheel",
-            title: "Calculador de Paso de Bajo",
-            description: "Determina si tienes agua suficiente para pasar por un punto crítico según tu calado.",
+            iconBg: underKeel.icons.bg,
+            iconFg: underKeel.icons.fg,
+            title: underKeelContent.title,
+            description: underKeelContent.description,
             color: "#003B73",
         },
         {
             href: "/utilidades/conversor-unidades-nauticas/",
-            iconBg: "mdi:speedometer",
-            iconFg: "mdi:compass-outline",
-            title: "Conversor de Unidades Náuticas",
-            description: "Convierte distancias, velocidades, profundidades y presiones atmosféricas con precisión.",
+            iconBg: nauticalConverter.icons.bg,
+            iconFg: nauticalConverter.icons.fg,
+            title: nauticalConverterContent.title,
+            description: nauticalConverterContent.description,
             color: "#0077be",
         },
         {
             href: "/utilidades/calculadora-superficie-velica/",
-            iconBg: "mdi:sailing",
-            iconFg: "mdi:gauge",
-            title: "Calculadora de Superficie Vélica",
-            description: "Mide el rendimiento de tu barco calculando el ratio SA/D a partir de medidas técnicas.",
+            iconBg: sailArea.icons.bg,
+            iconFg: sailArea.icons.fg,
+            title: sailAreaContent.title,
+            description: sailAreaContent.description,
             color: "#0055a4",
         },
         {
             href: "/utilidades/conversor-velocidad-nautica/",
-            iconBg: "mdi:speedometer",
-            iconFg: "mdi:weather-windy",
-            title: "Conversor de Velocidad Náutica",
-            description: "Traduce entre nudos, km/h y m/s. Incluye la escala de viento Beaufort con descripción del mar.",
+            iconBg: speedConverter.icons.bg,
+            iconFg: speedConverter.icons.fg,
+            title: speedContent.title,
+            description: speedContent.description,
             color: "#004F98",
         },
         {
             href: "/utilidades/calculadora-autonomia-nautica/",
-            iconBg: "mdi:gas-station",
-            iconFg: "mdi:gauge",
-            title: "Calculadora de Autonomía Náutica",
-            description: "Calcula cuántas millas y horas puedes navegar con el combustible actual de tu depósito.",
+            iconBg: endurance.icons.bg,
+            iconFg: endurance.icons.fg,
+            title: enduranceContent.title,
+            description: enduranceContent.description,
             color: "#e01e37",
-        }
+        },
     ],
 };
-
