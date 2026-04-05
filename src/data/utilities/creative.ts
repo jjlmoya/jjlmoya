@@ -1,58 +1,35 @@
 import type { SectionData } from "./types";
+import {
+    creativeCategory,
+    excuseGenerator, fortuneCookie, synesthesiaPainter,
+    zalgoGenerator, beadPatternGenerator, diceRoller,
+} from '@jjlmoya/utils-creative';
+
+const LOCALE = 'es';
+
+const [
+    excuseContent, fortuneContent, synesthesiaContent,
+    zalgoContent, beadContent, diceContent,
+] = await Promise.all([
+    excuseGenerator.i18n[LOCALE]!(),
+    fortuneCookie.i18n[LOCALE]!(),
+    synesthesiaPainter.i18n[LOCALE]!(),
+    zalgoGenerator.i18n[LOCALE]!(),
+    beadPatternGenerator.i18n[LOCALE]!(),
+    diceRoller.i18n[LOCALE]!(),
+]);
 
 export const creativeSection: SectionData = {
     title: "Creatividad & Ocio",
     slug: "creatividad-ocio",
-    icon: "mdi:palette",
+    icon: creativeCategory.icons.bg,
     theme: "pink",
     utilities: [
-        {
-            href: "/utilidades/generador-excusas/",
-            iconBg: "mdi:slot-machine",
-            iconFg: "mdi:emoticon-poop",
-            title: "Generador de Excusas",
-            description: "Máquina de azar semántica para librarte de compromisos con estilo.",
-            color: "#ec4899",
-        },
-        {
-            href: "/utilidades/galleta-fortuna/",
-            iconBg: "mdi:cookie",
-            iconFg: "mdi:sparkles",
-            title: "Galleta de la Fortuna",
-            description: "Consulta tu destino diario y descubre tus números de la suerte.",
-            color: "#f59e0b",
-        },
-        {
-            href: "/utilidades/pintor-sinestesia/",
-            iconBg: "mdi:brush",
-            iconFg: "mdi:eye",
-            title: "Pintor de Sinestesia",
-            description: "Visualiza el color de las palabras según la sinestesia grafema-color.",
-            color: "#8b5cf6",
-        },
-        {
-            href: "/utilidades/generador-zalgo/",
-            iconBg: "mdi:skull-outline",
-            iconFg: "mdi:matrix",
-            title: "Generador Zalgo",
-            description: "Corrompe tus mensajes con cascadas de caracteres Unicode desbordantes.",
-            color: "#9333ea",
-        },
-        {
-            href: "/utilidades/generador-patrones-cuentas/",
-            iconBg: "mdi:grid",
-            iconFg: "mdi:palette",
-            title: "Generador de Patrones",
-            description: "Crea esquemas de pixel art y cuentas para Miyuki o Hama desde tus fotos.",
-            color: "#db2777",
-        },
-        {
-            href: "/utilidades/lanzador-dados/",
-            iconBg: "mdi:dice-multiple-outline",
-            iconFg: "mdi:dice-d20",
-            title: "Lanzador de Dados",
-            description: "Simulador de dados para DnD y juegos de mesa con modificadores.",
-            color: "#6366f1",
-        },
+        { href: "/utilidades/generador-excusas/", iconBg: excuseGenerator.icons.bg, iconFg: excuseGenerator.icons.fg, title: excuseContent.title, description: excuseContent.description, color: "#ec4899" },
+        { href: "/utilidades/galleta-fortuna/", iconBg: fortuneCookie.icons.bg, iconFg: fortuneCookie.icons.fg, title: fortuneContent.title, description: fortuneContent.description, color: "#f59e0b" },
+        { href: "/utilidades/pintor-sinestesia/", iconBg: synesthesiaPainter.icons.bg, iconFg: synesthesiaPainter.icons.fg, title: synesthesiaContent.title, description: synesthesiaContent.description, color: "#8b5cf6" },
+        { href: "/utilidades/generador-zalgo/", iconBg: zalgoGenerator.icons.bg, iconFg: zalgoGenerator.icons.fg, title: zalgoContent.title, description: zalgoContent.description, color: "#9333ea" },
+        { href: "/utilidades/generador-patrones-cuentas/", iconBg: beadPatternGenerator.icons.bg, iconFg: beadPatternGenerator.icons.fg, title: beadContent.title, description: beadContent.description, color: "#db2777" },
+        { href: "/utilidades/lanzador-dados/", iconBg: diceRoller.icons.bg, iconFg: diceRoller.icons.fg, title: diceContent.title, description: diceContent.description, color: "#6366f1" },
     ],
 };
