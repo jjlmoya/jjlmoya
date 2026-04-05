@@ -91,6 +91,26 @@ const webAppSchema = {
     inLanguage: "es-ES",
 };
 
+const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: title,
+    description: description,
+    inLanguage: "es-ES",
+    url: fullUrl,
+    author: authorPublisher,
+    publisher: organizationSchema,
+    ...(howToSteps && {
+        step: howToSteps.map((step, index) => ({
+            "@type": "HowToStep",
+            position: index + 1,
+            name: step.name,
+            text: step.text,
+            ...(step.url && { url: step.url }),
+            ...(step.image && { image: step.image }),
+        })),
+    }),
+};
 
 const faqSchema = faqItems
     ? {
@@ -107,7 +127,15 @@ const faqSchema = faqItems
       }
     : null;
 
-const schemas = [breadcrumbSchema, webAppSchema, ...(faqSchema ? [faqSchema] : [])];
+const isCalculator =
+    title.toLowerCase().includes("calculadora") ||
+    title.toLowerCase().includes("simulador") ||
+    title.toLowerCase().includes("marcador") ||
+    title.toLowerCase().includes("generador");
+
+const mainSchema = isCalculator ? webAppSchema : howToSchema;
+
+const schemas = [breadcrumbSchema, mainSchema, ...(faqSchema ? [faqSchema] : [])];
 ---
 
 <script is:inline type="application/ld+json" set:html={JSON.stringify(schemas)} />

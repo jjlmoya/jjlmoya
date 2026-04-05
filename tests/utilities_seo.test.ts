@@ -25,7 +25,7 @@ function extractJsonLd(html: string): object[] {
             const parsed = JSON.parse(m[1]);
             if (Array.isArray(parsed)) schemas.push(...parsed);
             else schemas.push(parsed);
-        } catch { /* malformado */ }
+        } catch { }
     }
     return schemas;
 }
