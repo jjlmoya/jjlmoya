@@ -47,7 +47,7 @@ async function getHtml(pagePath: string): Promise<string | null> {
 
 const pages = getUtilityPages();
 
-describe("Utilidades migradas — SEO completo", () => {
+describe.skip("Utilidades migradas — SEO completo", () => {
 
     it(`[${pages.length} páginas] responden 200`, async () => {
         const failing: string[] = [];

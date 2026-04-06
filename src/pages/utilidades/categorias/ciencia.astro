@@ -1,154 +1,43 @@
 ---
 export const prerender = true;
 import LayoutUtilityCategory from "../../../layouts/LayoutUtilityCategory.astro";
-import SEOArticle from "../../../components/ui/seo/SEOArticle.astro";
-import SEOTitle from "../../../components/ui/seo/SEOTitle.astro";
-import SEOList from "../../../components/ui/seo/SEOList.astro";
-import SEOTip from "../../../components/ui/seo/SEOTip.astro";
-import SEOStats from "../../../components/ui/seo/SEOStats.astro";
-import SEOTool from "../../../components/ui/seo/SEOTool.astro";
-import { scienceSection } from "../../../data/utilities/science";
+import { scienceCategory, ScienceCategorySEO } from "@jjlmoya/utils-science";
 
-const categoryColor = "#06b6d4";
+const categoryColor = "#f97316";
+
+const utilities = await Promise.all(scienceCategory.tools.map(async (tool) => {
+    const toolContent = await tool.i18n.es?.();
+    return {
+        href: `/utilidades/${toolContent?.slug || 'unknown'}/`,
+        iconBg: tool.icons.bg,
+        iconFg: tool.icons.fg,
+        title: toolContent?.title.split('|')[0].trim() || 'Herramienta',
+        description: toolContent?.description || '',
+        color: categoryColor,
+    };
+}));
+
+const categoryContent = await scienceCategory.i18n.es?.();
+
+const section = {
+    title: categoryContent?.title || "Herramientas y Simuladores Científicos Interactivos",
+    slug: 'ciencia',
+    icon: 'mdi:flask',
+    theme: 'orange' as const,
+    utilities,
+};
 ---
 
 <LayoutUtilityCategory
-    title="Herramientas y Simuladores Científicos Interactivos"
-    description="Explora la ciencia con herramientas gratuitas online. Simuladores de impacto de asteroides, conteo de colonias bacterianas, probabilidad de simulación y renovación celular."
+    title={categoryContent?.title || "Herramientas y Simuladores Científicos Interactivos"}
+    description={categoryContent?.description || "Explora la ciencia con herramientas gratuitas online."}
     image="/images/utilities/category/ciencia.webp"
-    utilities={scienceSection.utilities}
-    theme={scienceSection.theme}
+    utilities={utilities}
+    theme="orange"
     categoryColor={categoryColor}
-    section={scienceSection}
+    section={section}
 >
     <div slot="seo">
-        <SEOArticle>
-            <SEOTitle title="Exploración Científica y Simulación: La Ciencia en tus Manos" level={2} />
-
-            <p>
-                La ciencia no es solo un conjunto de conocimientos estáticos, sino un proceso dinámico de exploración y experimentación. En esta sección, ofrecemos <strong>herramientas gratuitas online</strong> diseñadas para acercar conceptos científicos complejos a cualquier usuario mediante la simulación y el análisis de datos. Desde la microbiología hasta la astrofísica, nuestras utilidades aplican modelos matemáticos y teorías físicas para ofrecerte una perspectiva interactiva del universo.
-            </p>
-
-            <p>
-                Ya sea que necesites contar unidades formadoras de colonias en un laboratorio o quieras estimar las probabilidades de que vivamos en un entorno virtual, nuestras calculadoras proporcionan rigor técnico con una interfaz diseñada para la curiosidad.
-            </p>
-
-            <SEOTitle title="Astrofísica y Riesgo Cósmico: El Impacto de Asteroides" level={2} />
-
-            <p>
-                El cosmos es vasto y, en ocasiones, violento. Nuestro <strong>simulador de impacto de asteroides</strong> utiliza ecuaciones de balística terminal y física atmosférica para calcular los efectos de una colisión cósmica sobre la Tierra. Analiza el tamaño del cráter, la onda de choque y la radiación térmica emitida para entender los riesgos reales representados por los objetos cercanos a la Tierra (NEOs).
-            </p>
-            <SEOTool toolKey="simulador-impacto-asteroide" />
-
-            <SEOTitle title="Microbiología y Análisis de Laboratorio Digital" level={2} />
-
-            <p>
-                El trabajo de laboratorio requiere precisión y eficiencia. El <strong>contador de colonias digital</strong> facilita el conteo de UFC (Unidades Formadoras de Colonias) en placas de Petri, ayudando a minimizar el error humano y acelerar los procesos de análisis bacteriológico mediante una interfaz de marcaje táctil.
-            </p>
-            <SEOTool toolKey="contador-colonias" />
-
-            <SEOTitle title="Biología Humana y Renovación Atómica" level={2} />
-
-            <p>
-                Tu cuerpo no es el mismo que hace siete años. La calculadora de <strong>renovación celular</strong> estima la tasa de recambio de tus átomos y células según las investigaciones más recientes en biología molecular. Es una herramienta fascinante para entender la naturaleza fluida de nuestra identidad biológica.
-            </p>
-            <SEOTool toolKey="calculadora-renovacion-celular" />
-
-            <SEOTitle title="Filosofía Analítica y Probabilidad de Simulación" level={2} />
-
-            <p>
-                ¿Existen límites entre la realidad y la computación? Basándonos en el trilema de <strong>Nick Bostrom</strong>, nuestra calculadora de probabilidad de simulación permite ajustar las variables de capacidad de computación y supervivencia de civilizaciones para estimar las posibilidades estadísticas de que nuestra realidad sea artificial.
-            </p>
-            <SEOTool toolKey="calculadora-probabilidad-simulacion" />
-
-            <SEOTitle title="Física Doméstica y Detección de Interferencias" level={2} />
-
-            <p>
-                La ciencia también está en tu cocina. El <strong>detector de microondas</strong> utiliza la intensidad de la señal WiFi para monitorizar posibles fugas de radiofrecuencia (RF) de electrodomésticos, aplicando principios de interferencia de ondas electromagnéticas.
-            </p>
-            <SEOTool toolKey="detector-microondas" />
-
-            <SEOList items={[
-                "<strong>Modelado Matemático:</strong> Simulaciones basadas en leyes físicas reales (gravitación, termodinámica, balística).",
-                "<strong>Educación Interactiva:</strong> Herramientas diseñadas para que estudiantes y entusiastas experimenten con variables científicas.",
-                "<strong>Rigor Técnico:</strong> Datos y fórmulas extraídos de publicaciones científicas y bases de datos académicas.",
-                "<strong>Privacidad de Datos Científicos:</strong> Todos los procesos de cálculo y simulación se ejecutan en local para garantizar la seguridad de tu investigación."
-            ]} />
-
-            <SEOTip title="Nota sobre la Simulación Científica">
-                <p>
-                    <strong>Fundamento Teórico:</strong> Aunque nuestros simuladores (como el de impacto de asteroides) utilizan ecuaciones físicas precisas, los resultados deben tomarse como estimaciones educativas. Los sistemas reales son caóticos y pueden verse influenciados por variables atmosféricas y geológicas no modeladas en esta versión simplificada.
-                </p>
-            </SEOTip>
-
-            <SEOTitle title="Química de Reacciones y Cálculo Estequiométrico" level={2} />
-
-            <p>
-                La química es proporciones. Nuestro <strong>balanceador de ecuaciones químicas</strong> automático utiliza álgebra de matrices para equilibrar las moléculas en una reacción, asegurando que el número de átomos de cada elemento sea idéntico en reactivos y productos. Esto es fundamental en laboratorios de química para calcular dosificaciones precisas sin sobrantes innecesarios.
-            </p>
-
-            <SEOTitle title="Estadística y Análisis de Datos: Significancia Estadística" level={2} />
-
-            <p>
-                Todo experimento produce datos, pero ¿son significativos o solo ruido? Nuestras herramientas de <strong>prueba T de Student</strong> y <strong>chi-cuadrado</strong> te permiten auditar si tus resultados son estadísticamente significativos (p &lt; 0.05) o si simplemente reflejan variación aleatoria. Es la diferencia entre un descubrimiento real y un falso positivo científico.
-            </p>
-
-            <SEOTitle title="Termodinámica y Entropía: El Segundo Principio" level={2} />
-
-            <p>
-                La entropía gobierna el universo. Nuestro calculador de entropía permite entender cómo los sistemas aislados tienden inexorablemente al desorden, aplicando las ecuaciones de Boltzmann y Gibbs. Comprender que el movimiento perpetuo es imposible y que la energía siempre se disipa es fundamental para cualquier aprendiz de ciencia.
-            </p>
-
-            <SEOTitle title="Genética Poblacional y Variabilidad Genética" level={2} />
-
-            <p>
-                Entender cómo evolucionan las poblaciones requiere comprender la genética mendeliana. Nuestro <strong>calculador de Hardy-Weinberg</strong> modela cómo las frecuencias alélicas se mantienen constantes bajo ciertos supuestos (no hay mutación, selección, migración o deriva genética). Cuando estas condiciones se violan ligeramente, la evolución ocurre. Herramientas como esta son fundamentales en genética de conservación para evaluar si una población de especies en peligro mantendrá su variabilidad genética a largo plazo o si sufrirá una depresión endogámica que la condene a la extinción.
-            </p>
-
-            <SEOTitle title="Biofísica Computacional y Modelado de Proteínas" level={2} />
-
-            <p>
-                Las proteínas son la maquinaria molecular de la vida. Nuestro <strong>visualizador de estructuras proteicas</strong> permite explorar en 3D cómo se pliegan y replegan las moléculas, mostrando los puentes de hidrógeno, las cargas electrostáticas y los puntos de unión críticos. Entender la estructura es entender la función: un cambio de un solo aminoácido en la hemoglobina causa anemia falciforme; una mutación en el gen BRCA1 predispone al cáncer. Estas herramientas hacen visible lo molecular, permitiendo que estudiantes de biología visualicen lo que antes solo imaginaban.
-            </p>
-
-            <SEOTitle title="Física de Partículas y Decaimiento Radiactivo" level={2} />
-
-            <p>
-                El carbono-14 decae a una tasa predecible. Nuestro <strong>simulador de decaimiento radiactivo</strong> visualiza cómo los núcleos inestables emiten radiación y se transforman en elementos más estables, permitiéndote entender la datación por radiocarbono que arqueólogos usan para datar artefactos antiguos. Este mismo principio se aplica en medicina nuclear: el tecnecio-99m se inyecta en pacientes para rastrear tumores. Comprender la física nuclear es comprender tanto la vida como la muerte en el mundo atómico.
-            </p>
-
-            <SEOTitle title="Astronomía Observacional y Cálculos de Órbitas" level={2} />
-
-            <p>
-                Los planetas siguen leyes matemáticas precisas. Nuestro <strong>calculador de efemérides</strong> estima la posición de planetas, lunas y satélites artificiales en cualquier fecha y ubicación geográfica. Para astrónomos aficionados, esto significa saber exactamente dónde buscar Júpiter esta noche. Para científicos profesionales, permite calcular ocultaciones, transitos y alineaciones que son críticas para la investigación. Las tres leyes de Kepler no son solo historia científica; son la base del GPS y de toda la navegación espacial moderna.
-            </p>
-
-            <SEOTitle title="Química Ambiental y Ciclos Biogeoquímicos" level={2} />
-
-            <p>
-                El ciclo del nitrógeno, el ciclo del carbono, el ciclo del fósforo—estos son los procesos que sustentan toda la vida en la Tierra. Nuestro <strong>modelador de ciclos biogeoquímicos</strong> visualiza cómo el carbono se mueve desde la atmósfera al suelo, a los océanos, y de vuelta. Cuando quemas un combustible fósil, estás acelerando este ciclo miles de años. Cuando crecen bosques, estás atrapando carbono. Estas herramientas hacen visible el impacto de la acción humana en los sistemas planetarios.
-            </p>
-
-            <SEOTitle title="Neurociencia Computacional: Modelos de Neuronas y Sinapsis" level={2} />
-
-            <p>
-                El cerebro es una red de 86 mil millones de neuronas. Nuestro <strong>simulador neuronal</strong> muestra cómo los potenciales de acción se propagan, cómo las sinapsis se refuerzan o debilitan (plasticidad sináptica), y cómo emergen fenómenos cognitivos como la memoria y el aprendizaje. La matemática subyacente es el modelo de Hodgkin-Huxley. En 2026, esta herramienta permite a estudiantes de neurobiología experimentar con parámetros de una neurona real sin necesidad de laboratorio costoso.
-            </p>
-
-            <SEOTitle title="Hacia la democratización de la ciencia 2026" level={2} />
-            <p>
-                En 2026, la <strong>Ciencia Ciudadana</strong> es más fuerte que nunca. Tener acceso a herramientas de simulación de nivel profesional permite que cualquier persona pueda validar teorías o realizar sus propios experimentos mentales. Estas utilidades rompen las paredes del laboratorio tradicional y llevan el método científico directamente a tu pantalla. La educación científica deja de ser pasiva (leer un libro) y se convierte en activa (experimentar digitalmente con las fuerzas del universo).
-            </p>
-
-            <SEOStats
-                columns={2}
-                stats={[
-                    { label: "Física", value: "Avanzada", icon: "mdi:atom" },
-                    { label: "Biología", value: "Molecular", icon: "mdi:dna" },
-                    { label: "Probabilidad", value: "Simulación", icon: "mdi:matrix" },
-                    { label: "Espacio", value: "Impacto", icon: "mdi:meteor" }
-                ]}
-            />
-        </SEOArticle>
+        <ScienceCategorySEO />
     </div>
 </LayoutUtilityCategory>
