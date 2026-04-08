@@ -1,143 +1,43 @@
 ---
 export const prerender = true;
 import LayoutUtilityCategory from "../../../layouts/LayoutUtilityCategory.astro";
-import SEOArticle from "../../../components/ui/seo/SEOArticle.astro";
-import SEOTitle from "../../../components/ui/seo/SEOTitle.astro";
-import SEOList from "../../../components/ui/seo/SEOList.astro";
-import SEOTip from "../../../components/ui/seo/SEOTip.astro";
-import { gamesSection } from "../../../data/utilities/games";
+import { gamesCategory, GamesCategorySEO } from "@jjlmoya/utils-games";
 
 const categoryColor = "#f43f5e";
+
+const utilities = await Promise.all(gamesCategory.tools.map(async (tool) => {
+    const toolContent = await tool.i18n.es?.();
+    return {
+        href: `/utilidades/${toolContent?.slug || 'unknown'}/`,
+        iconBg: tool.icons.bg,
+        iconFg: tool.icons.fg,
+        title: toolContent?.title.split('|')[0].trim() || 'Herramienta',
+        description: toolContent?.description || '',
+        color: categoryColor,
+    };
+}));
+
+const categoryContent = await gamesCategory.i18n.es?.();
+
+const section = {
+    title: categoryContent?.title || "Retos y Juegos",
+    slug: 'retos-y-juegos',
+    icon: 'mdi:trophy-variant',
+    theme: 'rose' as const,
+    utilities,
+};
 ---
 
 <LayoutUtilityCategory
-    title="Retos y Juegos Virales | Test de Mecanografía y Desafíos Adictivos"
-    description="Desafíos gamificados y juegos virales para poner a prueba tus habilidades. Test de mecanografía, retos de velocidad y juegos adictivos 100% offline."
-    image="/images/utilities/category/retos-y-juegos.webp"
-    utilities={gamesSection.utilities}
-    theme={gamesSection.theme}
+    title={categoryContent?.title || "Retos y Juegos"}
+    description={categoryContent?.description || "Juegos educativos y retos para mejorar tus habilidades."}
+    image={`/images/utilities/category/${categoryContent?.slug || 'retos-y-juegos'}.webp`}
+    utilities={utilities}
+    theme="rose"
     categoryColor={categoryColor}
-    section={gamesSection}
+    section={section}
 >
     <div slot="seo">
-        <SEOArticle>
-            <SEOTitle title="¿Por Qué los Retos y Juegos Gamificados Funcionan Tan Bien?" level={2} />
-            <p>
-                Los retos gamificados son más que una forma de entretenimiento. Son herramientas científicamente diseñadas para mejorar habilidades cognitivas, mantener el engagement mental y crear momentos de competencia sana con uno mismo. Cuando una tarea se transforma en un juego, el cerebro secreta más dopamina, lo que genera una experiencia más satisfactoria y memorable. Esto explica por qué un test de mecanografía puede ser tan adictivo: no solo mides tu velocidad, sino que entras en un estado de flujo (flow state) donde la mente está completamente enfocada.
-            </p>
-            <p>
-                Desde los videojuegos profesionales hasta los tests de productividad personal, la gamificación ha demostrado ser la herramienta más efectiva para motivar mejora continua. El componente competitivo, aunque sea contra ti mismo, dispara el rendimiento. Y cuando puedes ver tu progreso en tiempo real, el cerebro se motiva para seguir mejorando.
-            </p>
-
-            <SEOTitle title="Mecanografía y Velocidad de Escritura: La Habilidad del Siglo XXI" level={2} />
-            <p>
-                La velocidad de escritura es una habilidad fundamental en la era digital. Programadores, periodistas, content creators, estudiantes y profesionales en general pasan horas escribiendo. Una mejora de solo 10 palabras por minuto (WPM) se traduce en horas ahorradas cada mes. Pero más allá de la velocidad, está la precisión. Un test de mecanografía bien diseñado mide ambas cosas, penalizando los errores para recompensar solo la escritura limpia y fluida.
-            </p>
-            <p>
-                Los mejores mecanógrafos del mundo alcanzan velocidades de 200+ WPM sin errores. Estos no son superhúmanos: son personas que practicaron con herramientas de reto progresivo. Cada sesión de test de mecanografía gamificada es una oportunidad de mejorar la consistencia, la precisión muscular y la coordinación ojo-dedo.
-            </p>
-
-            <SEOTitle title="Cómo Funcionan los Retos Gamificados" level={2} />
-            <SEOList
-                items={[
-                    "<strong>Feedback inmediato</strong> Ves tu puntuación, errores y progreso al instante. Sin esperar: análisis en vivo.",
-                    "<strong>Sistemas de puntuación</strong> Las reglas claras y cuantificables generan dopamina. Sabes exactamente qué te falta para mejorar.",
-                    "<strong>Progresión visible</strong> Gráficas, histogramas, récords personales. El cerebro adora ver su evolución.",
-                    "<strong>Dificultad escalable</strong> Comienza fácil, aumenta gradualmente. La curva perfecta de dificultad mantiene el engagement.",
-                    "<strong>Comparación social opcional</strong> Competir contigo mismo es motivante. Publicar resultados lo hace viral.",
-                ]}
-            />
-
-            <SEOTitle title="Beneficios Comprobados de los Tests de Mecanografía" level={2} />
-            <p>
-                <strong>Mejora de velocidad:</strong> La práctica regular con tests de mecanografía aumenta la velocidad de escritura en un 20-30% en solo 4-6 semanas.
-            </p>
-            <p>
-                <strong>Reducción de errores:</strong> Al penalizar errores, entrenas precisión muscular. Los dedos "aprenden" las posiciones correctas.
-            </p>
-            <p>
-                <strong>Memoria muscular:</strong> La mecanografía fluida no requiere mirar el teclado. Los tests gamificados refuerzan esta memoria.
-            </p>
-            <p>
-                <strong>Concentración:</strong> Un reto de mecanografía activa el estado de flujo (flow state), donde la mente está 100% enfocada.
-            </p>
-            <p>
-                <strong>Confianza:</strong> Ver tu récord personal mejora la autoeficacia. Te motiva a intentar en otras áreas.
-            </p>
-
-            <SEOTitle title="Mecánicas de Juego que Hacen Retos Adictivos" level={2} />
-            <p>
-                Los mejores retos gamificados comparten características de diseño:
-            </p>
-            <SEOList
-                items={[
-                    "<strong>Objetivos claros</strong> Sabes exactamente qué quieres lograr: X palabras por minuto, Y% precisión.",
-                    "<strong>Recompensas progresivas</strong> Medallas, badges, o simplemente romper tu récord. Pequeñas victorias generan motivación.",
-                    "<strong>Escalado de dificultad</strong> Textos más largos, vocabulario más complejo, tiempos límite. Siempre hay un siguiente nivel.",
-                    "<strong>Competencia justa</strong> El sistema tiene en cuenta tu nivel anterior, no solo el absoluto.",
-                    "<strong>Análisis detallado</strong> ¿Dónde fallas? ¿Qué palabras son problema? ¿Qué dedos son lentos?",
-                ]}
-            />
-
-            <SEOTitle title="Tendencias 2026: Gamificación y Neurociencia" level={2} />
-            <p>
-                La gamificación ya no es opcional en educación y entrenamiento profesional. Las grandes tech companies usan retos gamificados internamente para mejorar productividad. OpenAI, Google y Meta tienen equipos dedicados a "engagement engineering". Y eso es solo el comienzo.
-            </p>
-            <p>
-                En 2026, los retos y juegos incorporarán más IA: análisis predictivo de dónde vas a fallar, dificultad adaptativa que se ajusta en tiempo real a tu rendimiento, y retroalimentación biomecánica (te dirá exactamente qué dedos mantener relajados para ganar velocidad).
-            </p>
-
-            <SEOTitle title="¿Por Qué 100% Offline?" level={2} />
-            <p>
-                Todos nuestros retos y juegos funcionan completamente offline. No se envían datos a servidores, no hay latencia, no hay publicidades. Solo tú, tu teclado y el desafío. Esto es crítico para un test de mecanografía real: cualquier latencia de red distorsiona tus resultados. Nuestros retos ejecutan todo en tu navegador, garantizando mediciones precisas y un experience inmediato.
-            </p>
-
-            <SEOTip title="Pro Tip: La Técnica de Digitación Correcta">
-                No es suficiente escribir rápido. Los mecanógrafos profesionales usan una postura específica: espalda recta, codos a 90°, muñecas neutras (no dobladas), y dedos sobre las filas de inicio (ASDF JKLÖ en español). Practica con esta postura desde el día 1 de tu test de mecanografía. La velocidad viene después; la forma correcta es primero.
-            </SEOTip>
-
-            <SEOTitle title="Impacto Profesional: ROI de Mejorar tu Mecanografía" level={2} />
-            <p>
-                Supongamos que escribes 200 palabras al día (emails, código, documentos). A 50 WPM son 4 minutos. Si mejoras a 100 WPM con un test de mecanografía dedicado, ahorras 2 minutos diarios. Eso son 10 minutos a la semana, 40 minutos al mes, 8 horas al año. Y no estamos contando la reducción de estrés y el aumento de concentración.
-            </p>
-            <p>
-                En sectores como programación, traducción, transcripción, o periodismo, mejorar mecanografía directamente impacta tus ingresos. Menos tiempo escribiendo = más tiempo pensando = trabajo de mejor calidad.
-            </p>
-
-            <SEOTitle title="Retos Más Allá de la Mecanografía" level={2} />
-            <p>
-                Aunque comenzamos con tests de mecanografía, la categoría Retos y Juegos abarca mucho más: desafíos de reflejos, tests de velocidad visual, retos matemáticos, y todo lo que ponga a prueba tus límites de una forma divertida y adictiva. Cada reto está diseñado para ser:
-            </p>
-            <SEOList
-                items={[
-                    "<strong>Desafiante pero alcanzable</strong> Suficientemente difícil para mantener tu interés, suficientemente fácil para no frustrarte.",
-                    "<strong>Gratuito y accesible</strong> Sin publicidades, sin microtransacciones, sin límites de intentos.",
-                    "<strong>Offline en el navegador</strong> Funciona sin conexión. Privado. Rápido. Sin rastreo.",
-                    "<strong>Socialmente shareable</strong> Puedes presumir tu puntuación. Los retos viraliza cuando las personas competidoras comparten resultados.",
-                ]}
-            />
-
-            <SEOTitle title="La Psicología del Juego: Por Qué No Puedes Parar" level={2} />
-            <p>
-                Los juegos adictivos (positivamente) explotan un principio psicológico llamado <em>variable reward schedule</em>. No sabes exactamente cuándo llegarás a tu mejor puntuación, así que sigues intentando. Cada intento está a mitad de camino entre esperanza y frustración, el punto exacto que genera dopamina.
-            </p>
-            <p>
-                Nuestros retos están diseñados para esta "adicción positiva". No es para que pierdas el día, sino para que dediques 10-15 minutos diarios de mejora continua. Es como hacer ejercicio mental: incómodo al principio, pero con resultados comprobables.
-            </p>
-
-            <SEOTitle title="Comenzar tu Primer Test de Mecanografía" level={2} />
-            <p>
-                No necesitas ser rápido para empezar. Lo único que necesitas es curiosidad y disposición a mejorar. Abre nuestro test de mecanografía, introduce tu nombre (anónimo es OK), selecciona la dificultad (comenzar en "normal" o "fácil") y presiona "Comenzar".
-            </p>
-            <p>
-                Tu primer intento será más lento de lo que esperas. Eso está bien. Es tu baseline. Cada reto posterior será tu competencia personal. Los resultados se guardan localmente en tu navegador, así puedes ver tu progresión a lo largo de semanas y meses.
-            </p>
-
-            <p style={{ marginTop: "2rem", fontSize: "0.95rem", color: "var(--text-secondary)" }}>
-                <em>
-                    Los retos y juegos son herramientas poderosas para el desarrollo personal. Úsalos con intención: para mejorar habilidades específicas, no para procrastinar. La línea entre engagement y distracción es una cuestión de intención.
-                </em>
-            </p>
-        </SEOArticle>
+        <GamesCategorySEO />
     </div>
 </LayoutUtilityCategory>
