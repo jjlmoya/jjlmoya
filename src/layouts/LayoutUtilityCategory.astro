@@ -3,6 +3,7 @@ import Layout from "./Layout.astro";
 import { Icon } from "astro-icon/components";
 import CategorySchema from "../components/ui/seo/CategorySchema.astro";
 import type { SectionData } from "../data/utilities/types";
+import { getCategoryAlternates } from "../i18n/gamebob";
 
 interface UtilityItem {
     href: string;
@@ -24,11 +25,13 @@ interface Props {
 }
 
 const { title, description, image, utilities, theme: _theme = "indigo", categoryColor = "#6366f1", section } = Astro.props;
+
+const alternateUrls = getCategoryAlternates(section.slug);
 ---
 
 <CategorySchema section={section} />
 
-<Layout title={title} description={description} image={image} fullWidth={true}>
+<Layout title={title} description={description} image={image} fullWidth={true} alternateUrls={alternateUrls}>
     <div class="category-wrapper">
         <nav class="breadcrumb" aria-label="Migas de pan">
             <a href="/utilidades/" class="breadcrumb-link">Todas las utilidades</a>

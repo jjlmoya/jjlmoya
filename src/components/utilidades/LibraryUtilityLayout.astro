@@ -1,6 +1,8 @@
 ---
 import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import UtilityHeader from "./UtilityHeader.astro";
+import { getCategoryKeyForTool } from "../../i18n/toolRegistry";
+import { getUtilityAlternates } from "../../i18n/gamebob";
 
 interface Props {
     tool: {
@@ -20,6 +22,9 @@ const titleHighlight = words[0] ?? "";
 const titleBase = words.slice(1).join(" ");
 
 const image = content.slug;
+
+const categoryKey = getCategoryKeyForTool(tool);
+const alternateUrls = categoryKey ? await getUtilityAlternates(tool, categoryKey) : [];
 ---
 
 <LayoutUtility
@@ -29,6 +34,7 @@ const image = content.slug;
     faqItems={content.faq}
     howToSteps={content.howTo}
     appSlug={entry.appSlug}
+    alternateUrls={alternateUrls}
 >
     <div slot="header">
         <UtilityHeader

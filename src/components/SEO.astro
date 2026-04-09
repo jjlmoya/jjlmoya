@@ -1,4 +1,9 @@
 ---
+interface AlternateUrl {
+    lang: string;
+    url: string;
+}
+
 interface Props {
     title: string;
     description?: string;
@@ -6,6 +11,7 @@ interface Props {
     article?: boolean;
     publishedTime?: string;
     modifiedTime?: string;
+    alternateUrls?: AlternateUrl[];
 }
 
 const {
@@ -15,6 +21,7 @@ const {
     article = false,
     publishedTime,
     modifiedTime,
+    alternateUrls = [],
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -42,6 +49,15 @@ const manifestUrl = isUtility && slug ? `/utilidades/${slug}/manifest.json` : "/
 <meta name="author" content="jjlmoya" />
 
 <link rel="canonical" href={canonicalURL} />
+{alternateUrls.map(({ lang, url }) => (
+    <link rel="alternate" hreflang={lang} href={url} />
+))}
+{alternateUrls.length > 0 && (
+    <>
+        <link rel="alternate" hreflang="es" href={canonicalURL} />
+        <link rel="alternate" hreflang="x-default" href={alternateUrls.find(a => a.lang === "en")?.url ?? canonicalURL} />
+    </>
+)}
 
 <title>{fullTitle}</title>
 <meta name="title" content={fullTitle} />

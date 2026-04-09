@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from "../../layouts/Layout.astro";
 import { sections } from "../../data/utilities/index";
+import { getStaticPageAlternates } from "../../i18n/gamebob";
 import { getWidgetHtml } from "../../utils/widget";
 import WidgetSidebar from "../../components/widgets/WidgetSidebar.astro";
 import WidgetHeader from "../../components/widgets/WidgetHeader.astro";
@@ -31,13 +32,15 @@ const sectionsWithHtml = sections.map((section) => ({
 
 const flatUtilities = sectionsWithHtml.flatMap((s) => s.utilities);
 
+const alternateUrls = getStaticPageAlternates("/widgets");
+
 const title = "Estudio de Utilidades: Calculadoras Gratis e Interacción para tu Web";
 const description =
     "Potencia tu sitio con herramientas interactivas. Inserta calculadoras de cocina, utilidades técnicas y herramientas personalizadas gratis. Optimizado para WordPress y sitios personalizados.";
 const image = "/assets/widgets/hero.webp";
 ---
 
-<Layout title={title} description={description} image={image} fullWidth={true}>
+<Layout title={title} description={description} image={image} fullWidth={true} alternateUrls={alternateUrls}>
     <div
         class="flex flex-col lg:flex-row min-h-[calc(100vh-60px)] pt-0 overflow-hidden relative bg-slate-50 dark:bg-black"
     >

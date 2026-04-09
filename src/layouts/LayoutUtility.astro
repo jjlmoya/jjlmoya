@@ -25,6 +25,11 @@ interface HowToStep {
     image?: string;
 }
 
+interface AlternateUrl {
+    lang: string;
+    url: string;
+}
+
 interface Props {
     title: string;
     description: string;
@@ -37,6 +42,7 @@ interface Props {
     faqItems?: FAQItem[];
     howToSteps?: HowToStep[];
     hideWidget?: boolean;
+    alternateUrls?: AlternateUrl[];
 }
 
 const {
@@ -51,6 +57,7 @@ const {
     faqItems,
     howToSteps,
     hideWidget = false,
+    alternateUrls = [],
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -73,7 +80,7 @@ const isWidget = Astro.url.searchParams.get("widget") === "true";
 const hasBanner = !isWidget;
 ---
 
-<Layout title={title} description={description} image={image} fullWidth={true}>
+<Layout title={title} description={description} image={image} fullWidth={true} alternateUrls={alternateUrls}>
     <UtilityStructuredData
         title={title}
         description={description}
