@@ -1,150 +1,43 @@
 ---
 export const prerender = true;
 import LayoutUtilityCategory from "../../../layouts/LayoutUtilityCategory.astro";
-import SEOArticle from "../../../components/ui/seo/SEOArticle.astro";
-import SEOTitle from "../../../components/ui/seo/SEOTitle.astro";
-import SEOList from "../../../components/ui/seo/SEOList.astro";
-import SEOTip from "../../../components/ui/seo/SEOTip.astro";
-import SEOStats from "../../../components/ui/seo/SEOStats.astro";
-import SEOTool from "../../../components/ui/seo/SEOTool.astro";
-import { textileSection } from "../../../data/utilities/textiles";
+import { textilesCategory, textilesCategorySEO as TextilesCategorySEO, ALL_TOOLS } from "@jjlmoya/utils-textiles";
 
 const categoryColor = "#6366f1";
+
+const utilities = await Promise.all(ALL_TOOLS.map(async (tool) => {
+    const toolContent = await tool.entry.i18n.es?.();
+    return {
+        href: `/utilidades/${toolContent?.slug || 'unknown'}/`,
+        iconBg: tool.entry.icons.bg,
+        iconFg: tool.entry.icons.fg,
+        title: toolContent?.title.split('|')[0].trim() || 'Herramienta',
+        description: toolContent?.description || '',
+        color: categoryColor,
+    };
+}));
+
+const categoryContent = await textilesCategory.i18n.es?.();
+
+const section = {
+    title: categoryContent?.title || "Herramientas y Guías de Ingeniería Textil y Cuidado de la Ropa",
+    slug: 'textiles',
+    icon: 'mdi:tshirt-crew',
+    theme: 'indigo' as const,
+    utilities,
+};
 ---
 
 <LayoutUtilityCategory
-    title="Herramientas y Guías de Ingeniería Textil y Cuidado de la Ropa"
-    description="Cuida tu ropa con base científica. Herramientas para identificar fibras por combustión, protocolos químicos de manchas, guías de lavado y conversores de tallas internacionales."
+    title={categoryContent?.title || "Herramientas y Guías de Ingeniería Textil y Cuidado de la Ropa"}
+    description={categoryContent?.description || "Cuida tu ropa con base científica."}
     image="/images/utilities/category/textiles.webp"
-    utilities={textileSection.utilities}
-    theme={textileSection.theme}
+    utilities={utilities}
+    theme="indigo"
     categoryColor={categoryColor}
-    section={textileSection}
+    section={section}
 >
     <div slot="seo">
-        <SEOArticle>
-            <SEOTitle title="Ingeniería Textil y Sostenibilidad: El Cuidado Científico de la Moda" level={2} />
-
-            <p>
-                La ropa que vestimos es una compleja obra de ingeniería de fibras. En esta sección, ofrecemos una suite de <strong>herramientas gratuitas online</strong> diseñadas para alargar la vida útil de tus prendas mediante el conocimiento técnico y científico. En 2026, la sostenibilidad real empieza por entender la composición de nuestros textiles y aplicar protocolos de mantenimiento que eviten el desgaste innecesario y la contaminación química.
-            </p>
-
-            <p>
-                Desde la identificación de materiales mediante pruebas de laboratorio caseras hasta el tratamiento específico de manchas basado en la química de los polímeros, nuestras utilidades te transforman en un experto en el cuidado textil.
-            </p>
-
-            <SEOTitle title="Identificación de Fibras: Veracidad Textil y Prueba de Combustión" level={2} />
-
-            <p>
-                ¿Es seda real o poliéster brillante? ¿Algodón orgánico o mezcla sintética? Nuestra herramienta de <strong>veracidad textil</strong> te ayuda a auditar las etiquetas de tus prendas. Para una verificación definitiva, el simulador de <strong>prueba de combustión</strong> te guía a través del análisis de la llama, el olor y el residuo para identificar la composición real de cualquier tela quemando solo un hilo.
-            </p>
-            <SEOTool toolKey="veracidad-textil" />
-            <SEOTool toolKey="identificador-fibras-combustion" />
-
-            <SEOTitle title="Química de Manchas: Protocolos Específicos por Fibra" level={2} />
-
-            <p>
-                No todas las manchas se tratan igual, y el agente incorrecto puede destruir una fibra noble. El <strong>protocolo químico de manchas</strong> correlaciona el tipo de suciedad (vino, sangre, aceite) con el tipo de fibra (natural o sintética) para sugerirte el solvente y la temperatura de agua ideales, minimizando el daño mecánico y químico a la prenda.
-            </p>
-            <SEOTool toolKey="protocolo-quimico-manchas" />
-
-            <SEOTitle title="Mantenimiento Maestro y Tintorería en Casa" level={2} />
-
-            <p>
-                El <strong>Maestro Textil</strong> es tu guía definitiva para descifrar etiquetas de lavado y entender las necesidades térmicas de cada material. Si te apasiona la personalización, la calculadora de <strong>pigmentación de fibras</strong> determina las cantidades exactas de mordiente y tinte necesarias para un teñido uniforme y duradero.
-            </p>
-            <SEOTool toolKey="guia-lavado-textil" />
-            <SEOTool toolKey="preparacion-fibras-pigmentar" />
-
-            <SEOTitle title="Equivalencias Globales: Conversores de Tallas de Ropa y Calzado" level={2} />
-
-            <p>
-                Comprar moda online internacionalmente puede ser un riesgo logístico. Disponemos de conversores de <strong>tallas de ropa y zapatos</strong> que unifican los estándares de la UE, EE. UU., Reino Unido e Italia, incluyendo recomendaciones basadas en medidas físicas reales en centímetros para asegurar un ajuste perfecto a la primera.
-            </p>
-            <SEOTool toolKey="conversor-tallas-ropa" />
-            <SEOTool toolKey="conversor-tallas-zapatos" />
-
-            <SEOList items={[
-                "<strong>Moda Sostenible:</strong> Alargar la vida de una prenda un 10% reduce su huella hídrica y de carbono significativamente.",
-                "<strong>Ahorro Económico:</strong> Evita destruir ropa cara por el uso de temperaturas o productos químicos inadecuados.",
-                "<strong>Soberanía Crítica:</strong> Aprende a detectar fraudes en el etiquetado y valora la calidad real de los materiales que compras.",
-                "<strong>Conocimiento Científico:</strong> Entiende la física de las fibras (transpirabilidad, higroscopicidad) para vestir mejor."
-            ]} />
-
-            <SEOTip title="Tip de Ingeniería del Lavado">
-                <p>
-                    <strong>La Temperatura es Clave:</strong> Lavar a 30°C en lugar de 60°C no solo ahorra un 60% de energía, sino que protege la estructura molecular de las fibras elásticas (elastano) y evita la migración de tintes, manteniendo la forma y el color original de tus prendas por mucho más tiempo.
-                </p>
-            </SEOTip>
-
-            <SEOTitle title="Sostenibilidad Textil: Ciclo de Vida y Impacto Ambiental" level={2} />
-
-            <p>
-                La industria textil es la segunda contaminadora del planeta, después del petróleo. Un vaquero típico requiere 9,900 litros de agua para producirse. Nuestra herramienta de <strong>huella de carbono textil</strong> estima el impacto ambiental de una prenda según su composición y origen. Entender esto te hace consumidor responsable: ¿Es ético comprar ropa rápida si solo la usarás 5 veces? ¿Compra una pieza de calidad que dure 10 años es mejor opción económica y ambiental?
-            </p>
-
-            <SEOTitle title="Reparación y Parchado Técnico: Circulación de Prendas" level={2} />
-
-            <p>
-                Un agujerito no significa el final. El <strong>simulador de reparación</strong> te muestra diferentes técnicas de parchado según el tipo de rotura (rasgón lineal, agujero, desgaste). Coser un parche con hilo de contraste puede ser un rasgo de moda "visible mending", transformando un fallo en un accesor de diseño. Nuestras guías incluyen puntos de costura resilientes y métodos de refuerzo que permiten usar una prenda otros 2-3 años.
-            </p>
-
-            <SEOTitle title="Alérgenos y Sensibilidades Textiles: Seguridad en la Piel" level={2} />
-
-            <p>
-                Algunas personas tienen reacciones alérgicas a ciertos tintes o fibras. Nuestro auditor de <strong>composición segura</strong> te ayuda a identificar químicos comunes en textiles (formaldehído, colorantes azoicos, níquel en botones) que pueden irritar piel sensible. Entender la diferencia entre algodón orgánico (sin pesticidas) y algodón convencional (con residuos químicos) es vital si tienes dermatitis o alergias.
-            </p>
-
-            <SEOTitle title="Cálculo de Vida Útil y Rendimiento de Fibras" level={2} />
-
-            <p>
-                Cada fibra tiene una vida útil predecible basada en estrés mecánico y químico. El algodón típicamente dura 50-100 lavados antes de deteriorarse significativamente. El poliéster dura 200+. Nuestro <strong>calculador de vida útil</strong> estima cuántos usos y lavados puede resistir una prenda según su composición y método de cuidado. Esto es invaluable para decidir si invertir €50 en una camiseta "de calidad" que durará 5 años o €10 en una que durará 6 meses.
-            </p>
-
-            <SEOTitle title="Elasticidad y Estiramiento Permanente: Recuperación de Fibras" level={2} />
-
-            <p>
-                Después de varios lavados, tu camiseta favorita pierde forma. Esto ocurre porque las fibras se estiran permanentemente bajo estrés mecánico. El <strong>calculador de elasticidad textil</strong> estima cuánto estiramiento es reversible (la fibra vuelve a su forma) versus irreversible (deformación permanente). El elastano (Lycra) es reversible hasta cierto punto; el algodón más bien no. Entender esto te ayuda a elegir prendas que mantienen su forma versus aquellas que se deforman rápidamente.
-            </p>
-
-            <SEOTitle title="Teñido Natural y Mordientes: Química del Color Textil" level={2} />
-
-            <p>
-                Teñir un textil no es simplemente meter tinte y sumergir tela. Requiere un mordiente (alumbre, tanino) que actúa como puente químico entre la fibra y el tinte, fijando permanentemente el color. Nuestro <strong>calculador de teñido natural</strong> permite experimentar con técnicas tradicionales: madreselva para amarillo, rubia para rojo, indigo para azul. Cada combinación de fibra + mordiente + tinte produce un color único. Teñir en casa es una ciencia que produce resultados únicos, imposibles de replicar exactamente.
-            </p>
-
-            <SEOTitle title="Resistencia y Rotura de Textiles: Pruebas Mecánicas" level={2} />
-
-            <p>
-                La resistencia de una tela se mide en resistencia a la tracción (cuánta fuerza necesita para rasgarla) y resistencia al rasgado (cuán rápido se propaga un desgarro). Nuestro <strong>simulador de resistencia textil</strong> modela cómo diferentes fibras (algodón, seda, poliéster) se comportan bajo tensión. Una cuerda de alpinismo debe tener alta resistencia a la tracción; una cortina requiere cierta capacidad de rasgado para ser segura. La ingeniería textil no es obviedad—es precisión mecánica.
-            </p>
-
-            <SEOTitle title="Higroscopicidad y Control de Humedad Textil" level={2} />
-
-            <p>
-                Algunas fibras absorben humedad (higroscópicas): algodón, lana, seda. Otras la repelen: poliéster, nylon. El <strong>calculador de absorción de humedad</strong> permite predecir cuánta agua puede absorber una prenda antes de sentirse mojada. Una prenda de algodón mojada puede absorber el 25% de su peso en agua; el poliéster solo el 1%. Para climas húmedos, las fibras sintéticas mantienen la transpiración; para climas fríos, la lana retiene calor incluso mojada. Esta es la razón científica detrás de la ropa técnica moderna.
-            </p>
-
-            <SEOTitle title="Micro y Nano Fibras: Revolución de Materiales Textiles" level={2} />
-
-            <p>
-                Las fibras ultra-finas (micro y nano) abren nuevas posibilidades. El <strong>analizador de estructuras microfibrares</strong> visualiza cómo los hilos ultra-delgados crean tejidos con propiedades extraordinarias: impermeabilidad (water-resistant pero transpirable), suavidad superior, y ligereza extrema. Las micro-fibras de poliéster pueden ser impermeables al agua pero permeables al vapor. Esto es la diferencia entre ropa técnica de montaña y ropa casual—ingeniera molecular que afecta al mundo real.
-            </p>
-
-            <SEOTitle title="La revolución del cuidado textil en 2026" level={2} />
-            <p>
-                En 2026, el <strong>Upcycling</strong> y el mantenimiento artesanal técnico son tendencia. Ya no tiramos lo que se estropea; lo diagnosticamos, lo saneamos y lo mejoramos. Estas herramientas son parte del renacimiento de la sastrería y el cuidado doméstico de alto nivel, fusionando saberes tradicionales con la química moderna. El futuro de la moda es circular—conocer tus prendas es el primer paso.
-            </p>
-
-            <SEOStats
-                columns={2}
-                stats={[
-                    { label: "Química", value: "Stain-Protocol", icon: "mdi:flask" },
-                    { label: "Fibra", value: "Burn-Test", icon: "mdi:fire" },
-                    { label: "Lavado", value: "Bio-Cuidado", icon: "mdi:washing-machine" },
-                    { label: "Tallas", value: "Uni-Fit", icon: "mdi:ruler" }
-                ]}
-            />
-        </SEOArticle>
+        <TextilesCategorySEO />
     </div>
 </LayoutUtilityCategory>

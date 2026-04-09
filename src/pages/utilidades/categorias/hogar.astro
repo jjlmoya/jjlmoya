@@ -1,173 +1,43 @@
 ---
 export const prerender = true;
 import LayoutUtilityCategory from "../../../layouts/LayoutUtilityCategory.astro";
-import SEOArticle from "../../../components/ui/seo/SEOArticle.astro";
-import SEOTitle from "../../../components/ui/seo/SEOTitle.astro";
-import SEOList from "../../../components/ui/seo/SEOList.astro";
-import SEOTip from "../../../components/ui/seo/SEOTip.astro";
-import SEOStats from "../../../components/ui/seo/SEOStats.astro";
-import SEOTool from "../../../components/ui/seo/SEOTool.astro";
-import { homeSection } from "../../../data/utilities/home";
+import { homeCategory, homeCategorySEO as HomeCategorySEO, ALL_TOOLS } from "@jjlmoya/utils-home";
 
 const categoryColor = "#a855f7";
+
+const utilities = await Promise.all(ALL_TOOLS.map(async (tool) => {
+    const toolContent = await tool.entry.i18n.es?.();
+    return {
+        href: `/utilidades/${toolContent?.slug || 'unknown'}/`,
+        iconBg: tool.entry.icons.bg,
+        iconFg: tool.entry.icons.fg,
+        title: toolContent?.title.split('|')[0].trim() || 'Herramienta',
+        description: toolContent?.description || '',
+        color: categoryColor,
+    };
+}));
+
+const categoryContent = await homeCategory.i18n.es?.();
+
+const section = {
+    title: categoryContent?.title || "Herramientas y Calculadoras para el Hogar del Futuro",
+    slug: 'hogar',
+    icon: 'mdi:home',
+    theme: 'purple' as const,
+    utilities,
+};
 ---
 
 <LayoutUtilityCategory
-    title="Herramientas y Calculadoras para el Hogar del Futuro"
-    description="Optimiza tu hogar con herramientas gratuitas online. Ahorro energético en facturas de luz y gas, configuración de domótica y eficiencia solar. Tecnología aplicada a tu casa."
+    title={categoryContent?.title || "Herramientas y Calculadoras para el Hogar del Futuro"}
+    description={categoryContent?.description || "Optimiza tu hogar con herramientas gratuitas online."}
     image="/images/utilities/category/hogar.webp"
-    utilities={homeSection.utilities}
-    theme={homeSection.theme}
+    utilities={utilities}
+    theme="purple"
     categoryColor={categoryColor}
-    section={homeSection}
+    section={section}
 >
     <div slot="seo">
-        <SEOArticle>
-            <SEOTitle title="Hogar Digital y Eficiencia Energética: Control Total" level={2} />
-
-            <p>
-                Transformar una casa en un <strong>hogar inteligente y eficiente</strong> requiere algo
-                más que comprar dispositivos; requiere entender los datos detrás de cada interruptor,
-                bombilla y panel solar. En esta sección, proporcionamos <strong
-                    >herramientas gratuitas online</strong
-                > diseñadas para digitalizar tu entorno físico y optimizar cada euro invertido en mantenimiento
-                y energía.
-            </p>
-
-            <p>
-                Desde la privacidad total de tus conexiones hasta el cálculo preciso del gradiente
-                térmico para evitar humedades, nuestras calculadoras eliminan la adivinanza.
-                Aplicamos física de edificios y protocolos de seguridad digital para que tu hogar
-                sea, por fin, un lugar predecible y eficiente.
-            </p>
-
-            <SEOTitle
-                title="Ahorro Energético y Tarifas: La ciencia la factura de la luz"
-                level={2}
-            />
-
-            <p>
-                El mercado energético actual es complejo y volátil. Entender si te conviene más el <strong
-                    >mercado libre o el regulado (PVPC)</strong
-                > no es solo cuestión de leer la publicidad, sino de comparar consumos reales y perfiles
-                de uso. ¿Realmente ahorras al cambiar tus bombillas a tecnología LED? ¿Cuánto tiempo
-                tardarás en amortizar la inversión?
-            </p>
-            <SEOTool toolKey="comparador-tarifas-luz" />
-            <SEOTool toolKey="calculadora-ahorro-led" />
-
-            <p>
-                Nuestras herramientas de comparación de tarifas permiten analizar los peajes de
-                acceso y los costes de potencia para que nunca pagues de más por el mismo servicio.
-                La eficiencia empieza por la información.
-            </p>
-
-            <SEOTitle title="Climatización y Confort: Gas vs Aerotermia" level={2} />
-
-            <p>
-                Elegir entre sistemas de calefacción tradicionales y nuevas tecnologías como la <strong
-                    >aerotermia o bomba de calor</strong
-                > es una de las decisiones financieras más importantes en un hogar. No te bases en promesas;
-                usa cálculos de COP (Coefficient of Performance) y comparativas de kWh térmico.
-            </p>
-            <SEOTool toolKey="comparador-consumo-gas-aerotermia-aire" />
-
-            <p>
-                Además del coste, el mantenimiento físico es crucial. El <strong
-                    >punto de rocío</strong
-                > es fundamental para entender por qué aparece condensación en tus cristales y evitar
-                la proliferación de moho y bacterias mediante una ventilación técnica fundamentada.
-            </p>
-            <SEOTool toolKey="punto-de-rocio" />
-
-            <SEOTitle title="Energía Solar y Autoconsumo: Ingeniería en tu tejado" level={2} />
-
-            <p>
-                La instalación de placas solares es una inversión de alta rentabilidad si se diseña
-                correctamente. La latitud y la inclinación determinan la eficiencia de captación de
-                fotones. Calcula el <strong>ángulo de inclinación óptimo</strong> según tu ubicación
-                geográfica exacta para maximizar la producción anual de energía limpia.
-            </p>
-            <SEOTool toolKey="calculadora-solar" />
-
-            <SEOTitle title="Privacidad y QRs: El Hogar Seguro" level={2} />
-
-            <p>
-                Compartir la clave del WiFi o tus datos de contacto no debería implicar subir tu
-                información a una nube externa. Proporcionamos un <strong
-                    >generador de QR offline</strong
-                > que garantiza que tus datos privados nunca salgan de tu navegador. Seguridad local
-                para un hogar digital responsable.
-            </p>
-            <SEOTool toolKey="qr" />
-
-            <SEOList
-                items={[
-                    "<strong>Ahorro Garantizado:</strong> Toma decisiones basadas en comparativas técnicas de kWh y euros mensuales reales.",
-                    "<strong>Optimización de Espacios:</strong> Calcula distancias de tiro para proyectores y pantallas con precisión milimétrica.",
-                    "<strong>Salud y Mantenimiento:</strong> Prevé problemas de humedad y moho entendiendo la termodinámica de tu vivienda.",
-                    "<strong>Privacidad Digital:</strong> Genera códigos QR y utilidades de red sin enviar datos a servidores de terceros.",
-                ]}
-            />
-
-            <SEOTip title="Disclaimer de Ahorro Energético">
-                <p>
-                    <strong>Aviso Técnico:</strong> Los cálculos de ahorro se basan en promedios de consumo
-                    y tarifas estandarizadas. Los resultados individuales pueden variar según el aislamiento
-                    de la vivienda, hábitos de consumo y condiciones meteorológicas extremas. Estas herramientas
-                    son guías de optimización, no garantías contractuales.
-                </p>
-            </SEOTip>
-
-            <SEOTitle title="Domótica Responsable: Automatización sin Complejidad Innecesaria" level={2} />
-
-            <p>
-                La domótica (control automático del hogar) puede ser una fuente de frustración o de verdadera mejora. Muchas personas compran sistemas inteligentes sin una estrategia clara, termina ndo con dispositivos incompatibles, dependencia de apps de terceros y facturas de suscripción ocultas. Un enfoque responsable comienza con la pregunta: "¿Qué problema específico estoy resolviendo?"
-            </p>
-
-            <p>
-                Una cortina motorizada tiene sentido si tienes movilidad reducida o necesitas oscuridad total para dormir. Un termostato inteligente tiene ROI claro si optimiza consumo de calefacción/refrigeración. Un gestor de energía que monitoriza en tiempo real tus consumos por circuito tiene valor si cambias comportamientos basándote en esos datos. Automaticar por automatizar es desperdicio de dinero. Nuestras herramientas te ayudan a modelar el impacto real de cada inversión.
-            </p>
-
-            <SEOTitle title="Acústica y Diseño de Interiores: Física del Confort" level={2} />
-
-            <p>
-                El ruido no es solo molesto; es fisiológicamente dañino. El ruido de tráfico crónico (&gt;65 dB) aumenta presión arterial, interrumpe sueño REM y reduce capacidad cognitiva. La acústica arquitectónica (materiales absorbentes, aislamiento, formas de espacios) controla cómo viaja y refleja el sonido. Una sala con paredes desnudas suena caótica (mucho eco); una sala con cortinas, alfombra y muebles blandos suena controlada.
-            </p>
-
-            <p>
-                Diseñar un hogar con acústica óptima significa considerar frecuencias: bajos (transmitidos fácilmente a través de paredes) requieren aislamiento masivo; medi os y altos se controlan mejor con absorción de materiales blandos. El cálculo de tiempo de reverberación (RT60) es la métrica clásica: ¿cuánto tiempo tarda el sonido en atenuarse 60dB? Una sala viva (RT60 largo) es música amplificada; una sala muerta (RT60 corto) es un estudio de grabación. El equilibrio es confort.
-            </p>
-
-            <SEOTitle title="Sostenibilidad Integral: Agua, Materiales y Desperdicio" level={2} />
-
-            <p>
-                La eficiencia energética es solo una dimensión de la sostenibilidad. El agua es igualmente crítico. Un grifo que gotea 1 gota por segundo desperdicia 2600 litros al año. Una ducha con flujo excesivo (&gt;10 l/minuto) en una ducha de 10 minutos es 100 litros; reducir a 5 l/minuto es 50 litros ahorrados solo en esa ducha. Multiplicado por 365 días: 18,000 litros ahorrados al año.
-            </p>
-
-            <p>
-                Los materiales importan también. Tapicería sintética degrada en 40 años; madera certificada dura siglos. Pintura con COV (Compuestos Volátiles Orgánicos) alto contamina el aire interior; pintura de bajo VOC es más saludable. Estas decisiones parecen pequeñas pero tienen impacto acumulativo en salud, medio ambiente y valor residual de la propiedad. Nuestras herramientas de ahorro energético son el comienzo; la sostenibilidad total considera agua, materiales, aire interior y huella de carbono.
-            </p>
-
-            <SEOTitle title="Tendencias en el hogar digital 2026" level={2} />
-            <p>
-                En 2026, el hogar deja de ser "pasivo" para convertirse en una <strong
-                    >entidad interactiva</strong
-                >. La integración de la IA en la gestión de la demanda energética y el control de la
-                calidad del aire ya no es ciencia ficción. Estas herramientas te preparan para
-                entender y controlar los parámetros que definen la calidad de vida en tu espacio más
-                personal.
-            </p>
-
-            <SEOStats
-                columns={2}
-                stats={[
-                    { label: "Energía", value: "Eficiencia", icon: "mdi:lightning-bolt" },
-                    { label: "Seguridad", value: "Privacidad", icon: "mdi:shield-lock" },
-                    { label: "Confort", value: "Tecnología", icon: "mdi:home-thermometer" },
-                    { label: "Ahorro", value: "Control", icon: "mdi:cash-multiple" },
-                ]}
-            />
-        </SEOArticle>
+        <HomeCategorySEO />
     </div>
 </LayoutUtilityCategory>
