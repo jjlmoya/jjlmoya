@@ -1,5 +1,3 @@
-export const prerender = true;
-
 import type { APIRoute } from "astro";
 import { getAllRegisteredTools } from "../i18n/toolRegistry";
 import { getUtilityAlternates, getCategoryAlternates, getStaticPageAlternates, getUtilitiesHubAlternates } from "../i18n/gamebob";
