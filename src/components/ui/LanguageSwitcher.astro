@@ -1,4 +1,5 @@
 ---
+import { LANG_METADATA } from "../../i18n/slugs";
 ---
 
 <div id="lang-switcher" class="lang-switcher" aria-label="Versiones en otros idiomas" hidden>
@@ -26,16 +27,16 @@
     </ul>
 </div>
 
-<script>
-    const LANG_META: Record<string, { label: string; flag: string }> = {
-        en: { label: "English", flag: "🇬🇧" },
-        fr: { label: "Français", flag: "🇫🇷" },
-    };
+<script is:inline define:vars={{ LANG_METADATA }}>
 
     function init() {
-        const alternates = Array.from(
-            document.querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]')
-        ).filter((el) => el.hreflang && el.hreflang !== "es" && el.hreflang !== "x-default");
+        if (new URLSearchParams(window.location.search).has("widget")) return;
+
+        const allLinks = Array.from(document.querySelectorAll('link[rel="alternate"]'));
+        const alternates = allLinks.filter((el) => {
+            const hreflang = el.getAttribute('hreflang');
+            return hreflang && hreflang !== "es" && hreflang !== "x-default";
+        });
 
         if (alternates.length === 0) return;
 
@@ -45,13 +46,15 @@
         if (!switcher || !btn || !menu) return;
 
         alternates.forEach((link) => {
-            const meta = LANG_META[link.hreflang];
+            const hreflang = link.getAttribute('hreflang');
+            const href = link.getAttribute('href');
+            const meta = LANG_METADATA[hreflang];
             if (!meta) return;
             const li = document.createElement("li");
             li.className = "lang-switcher__item";
             li.setAttribute("role", "option");
             li.setAttribute("aria-selected", "false");
-            li.innerHTML = `<span class="lang-switcher__flag">${meta.flag}</span><a href="${link.href}" class="lang-switcher__link">${meta.label}</a>`;
+            li.innerHTML = `<span class="lang-switcher__flag">${meta.flag}</span><a href="${href}" class="lang-switcher__link">${meta.label}</a>`;
             menu.appendChild(li);
         });
 

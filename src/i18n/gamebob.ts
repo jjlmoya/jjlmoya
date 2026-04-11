@@ -1,20 +1,21 @@
-import { GAMEBOB_URL, GAMEBOB_LANGS, categorySlugMap, esSlugToCategoryKey } from "./slugs";
+import { GAMEBOB_URL, GAMEBOB_LANGS, urlSegments } from "./slugs";
 import type { AlternateUrl, GamebobLang } from "./slugs";
+import { buildEsSlugMap, getCategorySlug } from "./toolRegistry";
 
 export type { AlternateUrl };
 
 export function buildGamebobUtilityUrl(lang: GamebobLang, categoryKey: string, toolSlug: string): string {
-    const utilSlug = categorySlugMap.utilities?.[lang];
-    const catSegSlug = categorySlugMap.categories?.[lang];
-    const catSlug = categorySlugMap[categoryKey]?.[lang];
+    const utilSlug = urlSegments.utilities[lang];
+    const catSegSlug = urlSegments.categories[lang];
+    const catSlug = getCategorySlug(categoryKey, lang);
     if (!utilSlug || !catSegSlug || !catSlug) return "";
     return `${GAMEBOB_URL}/${lang}/${utilSlug}/${catSegSlug}/${catSlug}/${toolSlug}/`;
 }
 
 export function buildGamebobCategoryUrl(lang: GamebobLang, categoryKey: string): string {
-    const utilSlug = categorySlugMap.utilities?.[lang];
-    const catSegSlug = categorySlugMap.categories?.[lang];
-    const catSlug = categorySlugMap[categoryKey]?.[lang];
+    const utilSlug = urlSegments.utilities[lang];
+    const catSegSlug = urlSegments.categories[lang];
+    const catSlug = getCategorySlug(categoryKey, lang);
     if (!utilSlug || !catSegSlug || !catSlug) return "";
     return `${GAMEBOB_URL}/${lang}/${utilSlug}/${catSegSlug}/${catSlug}/`;
 }
@@ -35,8 +36,9 @@ export async function getUtilityAlternates(tool: { entry: any }, categoryKey: st
     return results;
 }
 
-export function getCategoryAlternates(esPageSlug: string): AlternateUrl[] {
-    const categoryKey = esSlugToCategoryKey[esPageSlug];
+export async function getCategoryAlternates(esPageSlug: string): Promise<AlternateUrl[]> {
+    const esSlugMap = await buildEsSlugMap();
+    const categoryKey = esSlugMap[esPageSlug];
     if (!categoryKey) return [];
 
     return GAMEBOB_LANGS.reduce<AlternateUrl[]>((acc, lang) => {
@@ -62,6 +64,6 @@ export function getStaticPageAlternates(pathname: string): AlternateUrl[] {
 export function getUtilitiesHubAlternates(): AlternateUrl[] {
     return GAMEBOB_LANGS.map((lang) => ({
         lang,
-        url: `${GAMEBOB_URL}/${lang}/${categorySlugMap.utilities[lang]}/`,
+        url: `${GAMEBOB_URL}/${lang}/${urlSegments.utilities[lang]}/`,
     }));
 }

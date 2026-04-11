@@ -19,5 +19,10 @@ export default defineConfig({
     test: {
         testTimeout: 10000,
         setupFiles: ["./scripts/vitest-setup.ts"],
+        server: {
+            deps: {
+                inline: [/@jjlmoya\/utils-/],
+            },
+        },
     },
 });

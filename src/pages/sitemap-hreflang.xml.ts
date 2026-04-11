@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
-import { getAllRegisteredTools } from "../i18n/toolRegistry";
+import { getAllRegisteredTools, buildEsSlugMap } from "../i18n/toolRegistry";
 import { getUtilityAlternates, getCategoryAlternates, getStaticPageAlternates, getUtilitiesHubAlternates } from "../i18n/gamebob";
-import { esSlugToCategoryKey } from "../i18n/slugs";
 
 const SITE = "https://www.jjlmoya.es";
 
@@ -35,8 +34,8 @@ export const GET: APIRoute = async () => {
         entries.push(urlEntry(loc, alternates));
     }
 
-    for (const esPageSlug of Object.keys(esSlugToCategoryKey)) {
-        const alternates = getCategoryAlternates(esPageSlug);
+    for (const esPageSlug of Object.keys(await buildEsSlugMap())) {
+        const alternates = await getCategoryAlternates(esPageSlug);
         if (alternates.length === 0) continue;
         entries.push(urlEntry(`${SITE}/utilidades/categorias/${esPageSlug}/`, alternates));
     }
