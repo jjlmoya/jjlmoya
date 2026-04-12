@@ -19,6 +19,8 @@ import { ALL_TOOLS as TRAVEL_TOOLS, travelCategory } from "@jjlmoya/utils-travel
 import { ALL_TOOLS as SOCIAL_TOOLS, socialCategory } from "@jjlmoya/utils-social";
 import { ALL_TOOLS as MUSIC_TOOLS, musicCategory } from "@jjlmoya/utils-music";
 import { ALL_TOOLS as HEALTH_TOOLS, healthCategory } from "@jjlmoya/utils-health";
+import { ALL_TOOLS as SPORTS_TOOLS, sportsCategory } from "@jjlmoya/utils-sports";
+import { ALL_TOOLS as NATURE_TOOLS, natureCategory } from "@jjlmoya/utils-nature";
 
 type LangSlugs = { en: string; fr: string };
 
@@ -53,6 +55,8 @@ register(TRAVEL_TOOLS, travelCategory, "travel", { en: "travel", fr: "voyages" }
 register(SOCIAL_TOOLS, socialCategory, "social", { en: "social-media", fr: "reseaux-sociaux" });
 register(MUSIC_TOOLS, musicCategory, "music", { en: "music", fr: "musique" });
 register(HEALTH_TOOLS, healthCategory, "health", { en: "health", fr: "sante" });
+register(SPORTS_TOOLS, sportsCategory, "sports", { en: "sports", fr: "sport" });
+register(NATURE_TOOLS, natureCategory, "nature", { en: "nature", fr: "nature" });
 
 export function getCategorySlug(categoryKey: string, lang: string): string | undefined {
     return categorySlugRegistry.get(categoryKey)?.[lang as keyof LangSlugs];
@@ -80,6 +84,8 @@ export const REGISTERED_PACKAGES = new Set([
     "@jjlmoya/utils-social",
     "@jjlmoya/utils-music",
     "@jjlmoya/utils-health",
+    "@jjlmoya/utils-sports",
+    "@jjlmoya/utils-nature",
 ]);
 
 export function getCategoryKeyForTool(tool: object): string | undefined {
