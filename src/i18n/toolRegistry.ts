@@ -24,6 +24,7 @@ import { ALL_TOOLS as NATURE_TOOLS, natureCategory } from "@jjlmoya/utils-nature
 import { ALL_TOOLS as DEVELOPER_TOOLS, developerCategory } from "@jjlmoya/utils-developer";
 import { ALL_TOOLS as HARDWARE_TOOLS, hardwareCategory } from "@jjlmoya/utils-hardware";
 import { ALL_TOOLS as COFFEE_TOOLS, coffeeCategory } from "@jjlmoya/utils-coffee";
+import { ALL_TOOLS as PRINTING3D_TOOLS, printing3dCategory } from "@jjlmoya/utils-printing3d";
 
 type LangSlugs = { en: string; fr: string };
 
@@ -63,6 +64,7 @@ register(NATURE_TOOLS, natureCategory, "nature", { en: "nature", fr: "nature" })
 register(DEVELOPER_TOOLS, developerCategory, "developer", { en: "developer", fr: "developpeur" });
 register(HARDWARE_TOOLS, hardwareCategory, "hardware", { en: "hardware-tools", fr: "outils-materiels" });
 register(COFFEE_TOOLS, coffeeCategory, "coffee", { en: "coffee", fr: "cafe" });
+register(PRINTING3D_TOOLS, printing3dCategory, "printing3d", { en: "3d-printing", fr: "impression-3d" });
 
 export function getCategorySlug(categoryKey: string, lang: string): string | undefined {
     return categorySlugRegistry.get(categoryKey)?.[lang as keyof LangSlugs];
@@ -95,6 +97,7 @@ export const REGISTERED_PACKAGES = new Set([
     "@jjlmoya/utils-developer",
     "@jjlmoya/utils-hardware",
     "@jjlmoya/utils-coffee",
+    "@jjlmoya/utils-printing3d",
 ]);
 
 export function getCategoryKeyForTool(tool: object): string | undefined {
