@@ -28,6 +28,7 @@ import { ALL_TOOLS as PRINTING3D_TOOLS, printing3dCategory } from "@jjlmoya/util
 import { ALL_TOOLS as FINANCE_TOOLS, financeCategory } from "@jjlmoya/utils-finance";
 import { ALL_TOOLS as STREAMING_TOOLS, streamingCategory } from "@jjlmoya/utils-streaming";
 import { ALL_TOOLS as STATISTICS_TOOLS, statisticsCategory } from "@jjlmoya/utils-statistics";
+import { ALL_TOOLS as DIY_TOOLS, diyCategory } from "@jjlmoya/utils-diy";
 
 type LangSlugs = { en: string; fr: string };
 
@@ -71,6 +72,7 @@ register(PRINTING3D_TOOLS, printing3dCategory, "printing3d", { en: "3d-printing"
 register(FINANCE_TOOLS, financeCategory, "finance", { en: "finance", fr: "finances" });
 register(STREAMING_TOOLS, streamingCategory, "streaming", { en: "streaming", fr: "streaming" });
 register(STATISTICS_TOOLS, statisticsCategory, "statistics", { en: "statistics", fr: "statistiques" });
+register(DIY_TOOLS, diyCategory, "diy", { en: "diy", fr: "bricolage" });
 
 export function getCategorySlug(categoryKey: string, lang: string): string | undefined {
     return categorySlugRegistry.get(categoryKey)?.[lang as keyof LangSlugs];
@@ -107,6 +109,7 @@ export const REGISTERED_PACKAGES = new Set([
     "@jjlmoya/utils-finance",
     "@jjlmoya/utils-streaming",
     "@jjlmoya/utils-statistics",
+    "@jjlmoya/utils-diy",
 ]);
 
 export function getCategoryKeyForTool(tool: object): string | undefined {
