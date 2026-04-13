@@ -25,6 +25,8 @@ import { ALL_TOOLS as DEVELOPER_TOOLS, developerCategory } from "@jjlmoya/utils-
 import { ALL_TOOLS as HARDWARE_TOOLS, hardwareCategory } from "@jjlmoya/utils-hardware";
 import { ALL_TOOLS as COFFEE_TOOLS, coffeeCategory } from "@jjlmoya/utils-coffee";
 import { ALL_TOOLS as PRINTING3D_TOOLS, printing3dCategory } from "@jjlmoya/utils-printing3d";
+import { ALL_TOOLS as FINANCE_TOOLS, financeCategory } from "@jjlmoya/utils-finance";
+import { ALL_TOOLS as STREAMING_TOOLS, streamingCategory } from "@jjlmoya/utils-streaming";
 
 type LangSlugs = { en: string; fr: string };
 
@@ -61,10 +63,12 @@ register(MUSIC_TOOLS, musicCategory, "music", { en: "music", fr: "musique" });
 register(HEALTH_TOOLS, healthCategory, "health", { en: "health", fr: "sante" });
 register(SPORTS_TOOLS, sportsCategory, "sports", { en: "sports", fr: "sport" });
 register(NATURE_TOOLS, natureCategory, "nature", { en: "nature", fr: "nature" });
-register(DEVELOPER_TOOLS, developerCategory, "developer", { en: "developer", fr: "developpeur" });
+register(DEVELOPER_TOOLS, developerCategory, "developer", { en: "web-development", fr: "developpement-web" });
 register(HARDWARE_TOOLS, hardwareCategory, "hardware", { en: "hardware-tools", fr: "outils-materiels" });
 register(COFFEE_TOOLS, coffeeCategory, "coffee", { en: "coffee", fr: "cafe" });
 register(PRINTING3D_TOOLS, printing3dCategory, "printing3d", { en: "3d-printing", fr: "impression-3d" });
+register(FINANCE_TOOLS, financeCategory, "finance", { en: "finance", fr: "finances" });
+register(STREAMING_TOOLS, streamingCategory, "streaming", { en: "streaming", fr: "streaming" });
 
 export function getCategorySlug(categoryKey: string, lang: string): string | undefined {
     return categorySlugRegistry.get(categoryKey)?.[lang as keyof LangSlugs];
@@ -98,6 +102,8 @@ export const REGISTERED_PACKAGES = new Set([
     "@jjlmoya/utils-hardware",
     "@jjlmoya/utils-coffee",
     "@jjlmoya/utils-printing3d",
+    "@jjlmoya/utils-finance",
+    "@jjlmoya/utils-streaming",
 ]);
 
 export function getCategoryKeyForTool(tool: object): string | undefined {

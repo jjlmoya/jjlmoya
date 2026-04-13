@@ -2,6 +2,8 @@ import type { APIRoute } from "astro";
 import { getAllRegisteredTools, buildEsSlugMap } from "../i18n/toolRegistry";
 import { getUtilityAlternates, getCategoryAlternates, getStaticPageAlternates, getUtilitiesHubAlternates } from "../i18n/gamebob";
 
+export const prerender = true;
+
 const SITE = "https://www.jjlmoya.es";
 
 function urlEntry(loc: string, alternates: Array<{ lang: string; url: string }>) {
