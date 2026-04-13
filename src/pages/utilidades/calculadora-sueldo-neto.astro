@@ -1,74 +1,9 @@
 ---
 export const prerender = true;
-import LayoutUtility from "../../layouts/LayoutUtility.astro";
-import SalaryCalculator from "../../components/utilidades/salary/SalaryCalculator.astro";
-import SalaryCalculatorSEO from "../../components/utilidades/salary/SalaryCalculatorSEO.astro";
-import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+import LibraryUtilityLayout from "../../components/utilidades/LibraryUtilityLayout.astro";
+import { SALARY_CALCULATOR_TOOL } from "@jjlmoya/utils-work";
 
-const faqItems = [
-    {
-        question: "¿Cómo se calcula el sueldo neto en España?",
-        answer: "El sueldo neto se calcula restando al bruto las retenciones de IRPF (según tramos) y las cotizaciones a la Seguridad Social (aproximadamente 6.35% del bruto). El porcentaje de IRPF varía según tu situación personal y nivel salarial.",
-    },
-    {
-        question: "¿Cuál es la diferencia entre 12 y 14 pagas?",
-        answer: "Con 12 pagas, las pagas extra están prorrateadas mensualmente. Con 14 pagas, recibes dos pagas extra completas (normalmente en junio/julio y diciembre). El bruto anual es el mismo, solo cambia la distribución.",
-    },
-    {
-        question: "¿Por qué mi nómina no coincide exactamente con la calculadora?",
-        answer: "Esta calculadora usa valores aproximados estándar. Tu nómina real puede variar por: deducciones específicas de tu empresa, beneficios sociales, hijos a cargo, discapacidad, o situaciones personales que afectan el IRPF.",
-    },
-    {
-        question: "¿Qué porcentaje se queda Hacienda de mi sueldo?",
-        answer: "Depende de tu salario. En general, entre IRPF y Seguridad Social, se retiene entre un 25% y 45% del bruto. A mayor salario, mayor porcentaje de retención por el sistema progresivo del IRPF.",
-    },
-    {
-        question: "¿Qué es el IRPF?",
-        answer: "El Impuesto sobre la Renta de las Personas Físicas. Es un impuesto progresivo: quien más gana, paga un porcentaje mayor sobre los tramos superiores de su sueldo.",
-    },
-];
-
-const howToSteps = [
-    {
-        name: "Introducir salario bruto anual",
-        text: "Escribe la cantidad total pactada en tu contrato antes de impuestos y retenciones.",
-    },
-    {
-        name: "Configurar situación familiar",
-        text: "Indica si tienes hijos o personas a cargo, ya que esto reduce el porcentaje de IRPF que se te aplica.",
-    },
-    {
-        name: "Número de pagas",
-        text: "Elige si recibes tu sueldo en 12 pagas (extras prorrateadas) o 14 pagas.",
-    },
-    {
-        name: "Consultar desglose mensual",
-        text: "Revisa cuánto se destina a Seguridad Social, IRPF y cuál es el ingreso líquido exacto que llegará a tu banco.",
-    },
-];
+const tool = SALARY_CALCULATOR_TOOL;
 ---
 
-<LayoutUtility
-    title="Calculadora Sueldo Neto España | Simulador IRPF y Seguridad Social"
-    description="Descubre cuánto cobrarás realmente cada mes. Cálculo preciso de retenciones, base imponible y sueldo líquido según la normativa española."
-    image="/images/utilities/net-salary.webp"
-    gradientFrom="from-blue-50"
-    faqItems={faqItems}
-    howToSteps={howToSteps}
->
-    <div slot="header">
-        <UtilityHeader
-            titleHighlight="sueldo"
-            titleBase="neto"
-            description="Transforma tu bruto anual en realidad mensual. Simulador de nómina 2026."
-            gradientFrom="from-emerald-600"
-            gradientTo="to-green-600"
-        />
-    </div>
-
-    <SalaryCalculator />
-
-    <div slot="seo">
-        <SalaryCalculatorSEO />
-    </div>
-</LayoutUtility>
+<LibraryUtilityLayout {tool} />
