@@ -12,17 +12,5 @@ export interface SectionData {
     title: string;
     slug: string;
     icon: string;
-    theme:
-    | "emerald"
-    | "orange"
-    | "purple"
-    | "blue"
-    | "pink"
-    | "cyan"
-    | "indigo"
-    | "slate"
-    | "rose"
-    | "amber"
-    | "nature";
     utilities: UtilityItem[];
 }

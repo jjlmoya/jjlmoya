@@ -1,80 +1,31 @@
+import { CATEGORIES } from "../../i18n/toolRegistry";
 import type { SectionData } from "./types";
 
-import { financeSection } from "./finance";
-import { workSection } from "./work";
-import { cookingSection } from "./cooking";
-import { homeSection } from "./home";
-import { filesSection } from "./files";
-import { musicSection } from "./music";
-import { healthSection } from "./health";
-import { sportsSection } from "./sports";
-import { devSection } from "./developer";
-import { toolsSection } from "./tools";
-import { streamingSection } from "./streaming";
-import { hardwareSection } from "./hardware";
-import { nauticalSection } from "./nautical";
-import { statisticsSection } from "./statistics";
+export const sections: SectionData[] = await Promise.all(
+    CATEGORIES.map(async (catDef) => {
+        const catContent = await catDef.entry.i18n.es!();
 
+        const utilities = await Promise.all(
+            catDef.AllTools.map(async (tool) => {
+                const toolContent = await tool.entry.i18n.es?.();
+                return {
+                    href: `/utilidades/${toolContent?.slug || "unknown"}/`,
+                    iconBg: tool.entry.icons.bg,
+                    iconFg: tool.entry.icons.fg,
+                    title: toolContent?.title.split("|")[0].trim() || "Herramienta",
+                    description: toolContent?.description || "",
+                    color: catDef.color,
+                };
+            })
+        );
 
-
-import { natureSection } from "./nature";
-import { alcoholSection } from "./alcohol";
-import { creativeSection } from "./creative";
-import { diySection } from "./diy";
-import { bikeSection } from "./bike";
-import { scienceSection } from "./science";
-import { astronomySection } from "./astronomy";
-import { printing3dSection } from "./printing3d";
-import { audiovisualSection } from "./audiovisual";
-import { socialSection } from "./social";
-import { textileSection } from "./textiles";
-import { converterSection } from "./converters";
-import { travelSection } from "./travel";
-import { educationSection } from "./education";
-import { dronesSection } from "./drones";
-import { coffeeSection } from "./coffee";
-import { gamesSection } from "./games";
-import { petsSection } from "./pets";
-import { babiesSection } from "./babies";
-
-
-export const sections: SectionData[] = [
-    cookingSection,
-    homeSection,
-    filesSection,
-    socialSection,
-    musicSection,
-    healthSection,
-    sportsSection,
-    devSection,
-    hardwareSection,
-    toolsSection,
-    financeSection,
-    workSection,
-    natureSection,
-    textileSection,
-    streamingSection,
-    alcoholSection,
-    creativeSection,
-    diySection,
-    bikeSection,
-    astronomySection,
-    printing3dSection,
-    scienceSection,
-    audiovisualSection,
-    converterSection,
-    travelSection,
-    educationSection,
-    dronesSection,
-    coffeeSection,
-    gamesSection,
-    petsSection,
-    nauticalSection,
-    statisticsSection,
-    babiesSection,
-];
-
-
-
+        return {
+            title: catContent.title,
+            slug: catContent.slug,
+            icon: (catDef.entry as { icon?: string }).icon ?? "mdi:tools",
+            utilities,
+        };
+    })
+);
 
 export type { SectionData, UtilityItem } from "./types";

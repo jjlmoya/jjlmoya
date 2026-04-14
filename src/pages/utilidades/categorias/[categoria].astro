@@ -1,0 +1,82 @@
+---
+export const prerender = true;
+import { CATEGORIES } from "../../../i18n/toolRegistry";
+import type { CategoryDef } from "../../../i18n/toolRegistry";
+import LayoutUtilityCategory from "../../../layouts/LayoutUtilityCategory.astro";
+
+type SEOComp = CategoryDef["SEOComponent"];
+
+export async function getStaticPaths() {
+    const paths: Array<{
+        params: { categoria: string };
+        props: {
+            title: string;
+            description: string;
+            image: string;
+            categoryColor: string;
+            section: {
+                title: string;
+                slug: string;
+                icon: string;
+                utilities: Array<{ href: string; iconBg: string; iconFg: string; title: string; description: string; color: string }>;
+            };
+            SEOComponent: SEOComp;
+        };
+    }> = [];
+
+    for (const catDef of CATEGORIES) {
+        const content = await catDef.entry.i18n.es!();
+
+        const utilities = await Promise.all(
+            catDef.AllTools.map(async (tool) => {
+                const toolContent = await tool.entry.i18n.es?.();
+                return {
+                    href: `/utilidades/${toolContent?.slug || "unknown"}/`,
+                    iconBg: tool.entry.icons.bg,
+                    iconFg: tool.entry.icons.fg,
+                    title: toolContent?.title.split("|")[0].trim() || "Herramienta",
+                    description: toolContent?.description || "",
+                    color: catDef.color,
+                };
+            })
+        );
+
+        const section = {
+            title: content.title,
+            slug: content.slug,
+            icon: (catDef.entry as { icon?: string }).icon ?? "mdi:tools",
+            utilities,
+        };
+
+        paths.push({
+            params: { categoria: content.slug },
+            props: {
+                title: content.title,
+                description: content.description,
+                image: `/images/utilities/category/${content.slug}.webp`,
+                categoryColor: catDef.color,
+                section,
+                SEOComponent: catDef.SEOComponent,
+            },
+        });
+    }
+
+    return paths;
+}
+
+const { title, description, image, categoryColor, section, SEOComponent } = Astro.props;
+const SEO = SEOComponent as unknown as (props: Record<string, unknown>) => unknown;
+---
+
+<LayoutUtilityCategory
+    title={title}
+    description={description}
+    image={image}
+    utilities={section.utilities}
+    categoryColor={categoryColor}
+    section={section}
+>
+    <div slot="seo">
+        <SEO />
+    </div>
+</LayoutUtilityCategory>

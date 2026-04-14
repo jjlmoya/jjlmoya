@@ -1,0 +1,29 @@
+---
+export const prerender = true;
+import { getAllRegisteredTools } from "../../../i18n/toolRegistry";
+import LibraryUtilityLayout from "../../../components/utilidades/LibraryUtilityLayout.astro";
+
+export async function getStaticPaths() {
+    const allTools = getAllRegisteredTools();
+    const paths: Array<{ params: { slug: string }; props: { tool: unknown } }> = [];
+
+    await Promise.all(
+        allTools.map(async ([tool]) => {
+            const toolDef = tool as {
+                entry: { i18n: Record<string, () => Promise<{ slug: string }>> };
+            };
+            const content = await toolDef.entry.i18n.es!();
+            paths.push({
+                params: { slug: content.slug },
+                props: { tool },
+            });
+        })
+    );
+
+    return paths;
+}
+
+const { tool } = Astro.props as { tool: { entry: any; Component: any; SEOComponent: any; BibliographyComponent: any } };
+---
+
+<LibraryUtilityLayout tool={tool} />
