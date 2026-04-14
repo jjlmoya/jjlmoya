@@ -1,72 +1,9 @@
 ---
 export const prerender = true;
+import LibraryUtilityLayout from "../../components/utilidades/LibraryUtilityLayout.astro";
+import { WHATSAPP_LINK_TOOL } from "@jjlmoya/utils-tools";
 
-import LayoutUtility from "../../layouts/LayoutUtility.astro";
-import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
-import WhatsappLinkGenerator from "../../components/utilidades/whatsapp-link-generator/WhatsappLinkGenerator.astro";
-import WhatsappLinkGeneratorSEO from "../../components/utilidades/whatsapp-link-generator/WhatsappLinkGeneratorSEO.astro";
-import Bibliography from "../../components/utilidades/Bibliography.astro";
-
-const title = "Generador de Enlaces para WhatsApp, Link Corto de Chat";
-const description =
-    "Crea fácilmente enlaces cortos directos a tu chat de WhatsApp (incluyendo un código QR) para que tus clientes te hablen sin tener que guardarte en su agenda.";
-
-const faqItems = [
-    {
-        question: "¿Cómo genero un link de WhatsApp?",
-        answer: "Para crear tu enlace necesitas escribir tu número móvil, y es obligatorio incluir el indicativo válido de tu país. Por ejemplo, para España pon primero un 34, para México 52, y justo pegado tu número normal. Puedes además escribir un mensaje opcional y la herramienta formulará el enlace final (wa.me) que podrás copiar.",
-    },
-    {
-        question: "¿Puedo añadir un mensaje predefinido largo?",
-        answer: "Sí. Nuestra plataforma permite anexar un texto a tu conveniencia que figurará automáticamente en la caja de texto del usuario cuando presione el enlace. Internamente usamos la tecnología de codificación de URLs del navegador para soportar espacios, tildes y emoticonos sin corromper la URL.",
-    },
-    {
-        question: "¿Cómo uso el Código QR de WhatsApp creado?",
-        answer: "Al generar un link válido, aparecerá un botón 'Mostrar QR'. El lienzo que desciende contiene el QR de la URL originada. Puedes hacer clic derecho sobre él y escoger 'Guardar imagen como' y llevarte un archivo limpio de alta resolución hacia otro lado (tarjetas de visita o redes) para que te contacten escaneándolo.",
-    },
-    {
-        question: "¿A dónde van mis datos?",
-        answer: "El generador realiza toda la recolección, limpieza de espacios inútiles en tu número y codificación puramente del lado cliente (tu máquina). Tus números de contacto y mensajes predefinidos ni se guardan en base de datos ni abandonan tu ventana para transformarse en tu link corto interactivo.",
-    },
-];
+const tool = WHATSAPP_LINK_TOOL;
 ---
 
-<LayoutUtility
-    title={title}
-    description={description}
-    image="/images/utilities/generador-enlaces-whatsapp.webp"
-    category="Herramientas Prácticas"
-    faqItems={faqItems}
->
-    <div slot="header">
-        <UtilityHeader
-            titleHighlight="Enlace Directo"
-            titleBase="para Chat WhatsApp"
-            description="Acorta la distancia entre tus usuarios y tu negocio creando un link interactivo que abra un chat instantáneo con tan solo un clic, QR incluido."
-            gradientFrom="from-green-500"
-            gradientTo="to-emerald-400"
-        />
-    </div>
-
-    <WhatsappLinkGenerator />
-
-    <div slot="seo">
-        <WhatsappLinkGeneratorSEO />
-    </div>
-
-    <div slot="bibliography">
-        <Bibliography
-            title="Fuentes y Referencias Oficiales"
-            links={[
-                {
-                    name: "Cómo usar la función clic para chatear | Centro de ayuda - WhatsApp",
-                    url: "https://faq.whatsapp.com/591339899867293",
-                },
-                {
-                    name: "API Click to chat parameters and formats",
-                    url: "https://faq.whatsapp.com/425559092497645?cms_platform=android",
-                },
-            ]}
-        />
-    </div>
-</LayoutUtility>
+<LibraryUtilityLayout {tool} />
