@@ -15,6 +15,11 @@ export default defineConfig({
     integrations: [icon(), sitemap()],
     vite: {
         plugins: [tailwindcss()],
+        server: {
+            watch: {
+                ignored: (path) => path.includes('.vercel') || path.includes('/dist/'),
+            },
+        },
         optimizeDeps: {
             exclude: ["date-fns"],
             include: ["jspdf", "html2canvas"],

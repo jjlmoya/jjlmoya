@@ -20,7 +20,7 @@ function urlEntry(loc: string, alternates: Array<{ lang: string; url: string }>)
 export const GET: APIRoute = async () => {
     const entries: string[] = [];
 
-    for (const [tool, categoryKey] of getAllRegisteredTools()) {
+    for (const [tool, categoryKey] of await getAllRegisteredTools()) {
         const toolDef = tool as { entry: any };
         const entry = toolDef.entry;
         if (!entry?.i18n?.es) continue;

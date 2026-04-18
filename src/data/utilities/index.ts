@@ -1,12 +1,16 @@
 import { CATEGORIES } from "../../i18n/toolRegistry";
+import { loadCategory } from "../../i18n/loadCategory";
 import type { SectionData } from "./types";
 
 export const sections: SectionData[] = await Promise.all(
     CATEGORIES.map(async (catDef) => {
-        const catContent = await catDef.entry.i18n.es!();
+        const [catContent, { ALL_TOOLS }] = await Promise.all([
+            catDef.entry.i18n.es!(),
+            loadCategory(catDef.key),
+        ]);
 
         const utilities = await Promise.all(
-            catDef.AllTools.map(async (tool) => {
+            ALL_TOOLS.map(async (tool) => {
                 const toolContent = await tool.entry.i18n.es?.();
                 return {
                     href: `/utilidades/${toolContent?.slug || "unknown"}/`,

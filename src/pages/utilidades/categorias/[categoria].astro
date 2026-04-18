@@ -1,10 +1,8 @@
 ---
 export const prerender = true;
 import { CATEGORIES } from "../../../i18n/toolRegistry";
-import type { CategoryDef } from "../../../i18n/toolRegistry";
+import { loadCategory } from "../../../i18n/loadCategory";
 import LayoutUtilityCategory from "../../../layouts/LayoutUtilityCategory.astro";
-
-type SEOComp = CategoryDef["SEOComponent"];
 
 export async function getStaticPaths() {
     const paths: Array<{
@@ -20,15 +18,18 @@ export async function getStaticPaths() {
                 icon: string;
                 utilities: Array<{ href: string; iconBg: string; iconFg: string; title: string; description: string; color: string }>;
             };
-            SEOComponent: SEOComp;
+            CategorySEO: unknown;
         };
     }> = [];
 
     for (const catDef of CATEGORIES) {
-        const content = await catDef.entry.i18n.es!();
+        const [content, { ALL_TOOLS, CategorySEO }] = await Promise.all([
+            catDef.entry.i18n.es!(),
+            loadCategory(catDef.key),
+        ]);
 
         const utilities = await Promise.all(
-            catDef.AllTools.map(async (tool) => {
+            ALL_TOOLS.map(async (tool) => {
                 const toolContent = await tool.entry.i18n.es?.();
                 return {
                     href: `/utilidades/${toolContent?.slug || "unknown"}/`,
@@ -41,13 +42,6 @@ export async function getStaticPaths() {
             })
         );
 
-        const section = {
-            title: content.title,
-            slug: content.slug,
-            icon: (catDef.entry as { icon?: string }).icon ?? "mdi:tools",
-            utilities,
-        };
-
         paths.push({
             params: { categoria: content.slug },
             props: {
@@ -55,8 +49,13 @@ export async function getStaticPaths() {
                 description: content.description,
                 image: `/images/utilities/category/${content.slug}.webp`,
                 categoryColor: catDef.color,
-                section,
-                SEOComponent: catDef.SEOComponent,
+                section: {
+                    title: content.title,
+                    slug: content.slug,
+                    icon: (catDef.entry as { icon?: string }).icon ?? "mdi:tools",
+                    utilities,
+                },
+                CategorySEO,
             },
         });
     }
@@ -64,8 +63,8 @@ export async function getStaticPaths() {
     return paths;
 }
 
-const { title, description, image, categoryColor, section, SEOComponent } = Astro.props;
-const SEO = SEOComponent as unknown as (props: Record<string, unknown>) => unknown;
+const { title, description, image, categoryColor, section, CategorySEO } = Astro.props;
+const SEO = CategorySEO as unknown as (props: Record<string, unknown>) => unknown;
 ---
 
 <LayoutUtilityCategory

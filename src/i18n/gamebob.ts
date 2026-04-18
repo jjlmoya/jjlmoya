@@ -4,18 +4,18 @@ import { buildEsSlugMap, getCategorySlug } from "./toolRegistry";
 
 export type { AlternateUrl };
 
-export function buildGamebobUtilityUrl(lang: GamebobLang, categoryKey: string, toolSlug: string): string {
+export async function buildGamebobUtilityUrl(lang: GamebobLang, categoryKey: string, toolSlug: string): Promise<string> {
     const utilSlug = urlSegments.utilities[lang];
     const catSegSlug = urlSegments.categories[lang];
-    const catSlug = getCategorySlug(categoryKey, lang);
+    const catSlug = await getCategorySlug(categoryKey, lang);
     if (!utilSlug || !catSegSlug || !catSlug) return "";
     return `${GAMEBOB_URL}/${lang}/${utilSlug}/${catSegSlug}/${catSlug}/${toolSlug}/`;
 }
 
-export function buildGamebobCategoryUrl(lang: GamebobLang, categoryKey: string): string {
+export async function buildGamebobCategoryUrl(lang: GamebobLang, categoryKey: string): Promise<string> {
     const utilSlug = urlSegments.utilities[lang];
     const catSegSlug = urlSegments.categories[lang];
-    const catSlug = getCategorySlug(categoryKey, lang);
+    const catSlug = await getCategorySlug(categoryKey, lang);
     if (!utilSlug || !catSegSlug || !catSlug) return "";
     return `${GAMEBOB_URL}/${lang}/${utilSlug}/${catSegSlug}/${catSlug}/`;
 }
@@ -28,7 +28,7 @@ export async function getUtilityAlternates(tool: { entry: any }, categoryKey: st
         GAMEBOB_LANGS.map(async (lang) => {
             if (!entry.i18n?.[lang]) return;
             const content = await entry.i18n[lang]();
-            const url = buildGamebobUtilityUrl(lang, categoryKey, content.slug);
+            const url = await buildGamebobUtilityUrl(lang, categoryKey, content.slug);
             if (url) results.push({ lang, url });
         })
     );
@@ -41,17 +41,19 @@ export async function getCategoryAlternates(esPageSlug: string): Promise<Alterna
     const categoryKey = esSlugMap[esPageSlug];
     if (!categoryKey) return [];
 
-    return GAMEBOB_LANGS.reduce<AlternateUrl[]>((acc, lang) => {
-        const url = buildGamebobCategoryUrl(lang, categoryKey);
-        if (url) acc.push({ lang, url });
-        return acc;
-    }, []);
+    const results = await Promise.all(
+        GAMEBOB_LANGS.map(async (lang) => {
+            const url = await buildGamebobCategoryUrl(lang, categoryKey);
+            return url ? { lang, url } : null;
+        })
+    );
+    return results.filter((r) => r !== null) as AlternateUrl[];
 }
 
 const STATIC_PAGE_MAP: Record<string, Record<GamebobLang, string>> = {
-    "/": { en: "/en/", fr: "/fr/" },
-    "/apps": { en: "/en/apps/", fr: "/fr/apps/" },
-    "/widgets": { en: "/en/widgets/", fr: "/fr/widgets/" },
+    "/": { en: "/en/", fr: "/fr/", de: "/de/", it: "/it/", pt: "/pt/", nl: "/nl/", sv: "/sv/", pl: "/pl/", id: "/id/", tr: "/tr/", ru: "/ru/", ja: "/ja/", ko: "/ko/", zh: "/zh/" },
+    "/apps": { en: "/en/apps/", fr: "/fr/apps/", de: "/de/apps/", it: "/it/apps/", pt: "/pt/apps/", nl: "/nl/apps/", sv: "/sv/apps/", pl: "/pl/apps/", id: "/id/apps/", tr: "/tr/apps/", ru: "/ru/apps/", ja: "/ja/apps/", ko: "/ko/apps/", zh: "/zh/apps/" },
+    "/widgets": { en: "/en/widgets/", fr: "/fr/widgets/", de: "/de/widgets/", it: "/it/widgets/", pt: "/pt/widgets/", nl: "/nl/widgets/", sv: "/sv/widgets/", pl: "/pl/widgets/", id: "/id/widgets/", tr: "/tr/widgets/", ru: "/ru/widgets/", ja: "/ja/widgets/", ko: "/ko/widgets/", zh: "/zh/widgets/" },
 };
 
 export function getStaticPageAlternates(pathname: string): AlternateUrl[] {

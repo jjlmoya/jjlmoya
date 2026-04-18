@@ -4,7 +4,7 @@ import type { APIRoute, GetStaticPaths } from "astro";
 import { getAllRegisteredTools, CATEGORIES } from "../../../i18n/toolRegistry";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const allTools = getAllRegisteredTools();
+    const allTools = await getAllRegisteredTools();
     const colorByKey = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.color]));
     const paths: Array<{ params: { slug: string }; props: { title: string; description: string; slug: string; color: string } }> = [];
 
