@@ -1,0 +1,296 @@
+.solar-wrapper {
+    --solar-p: #f97316;
+    --solar-winter: #3b82f6;
+    --solar-summer: #eab308;
+
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  .solar-card {
+    background: var(--bg-surface);
+    width: calc(100% - 24px);
+    max-width: 960px;
+    margin: 0 auto;
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+  }
+
+  @media (min-width: 768px) {
+    .solar-card {
+      flex-direction: row;
+      min-height: 560px;
+    }
+  }
+
+  .solar-left {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 32px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .solar-left {
+      width: 340px;
+      border-bottom: none;
+      border-right: 1px solid var(--border-color);
+    }
+  }
+
+  .solar-right {
+    flex: 1;
+    background: #020617;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 380px;
+  }
+
+  .viz-dots {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+    pointer-events: none;
+    background-image: radial-gradient(#fff 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .viz-svg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    padding: 1rem;
+  }
+
+  .sun-pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.5; }
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .lat-row {
+    position: relative;
+  }
+
+  .lat-input {
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-main);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+    padding: 4px 2.5rem 4px 0;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .lat-input:focus {
+    border-color: var(--solar-p);
+  }
+
+  .deg-unit {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .locate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--solar-p);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.2s;
+  }
+
+  .locate-btn:hover {
+    opacity: 0.75;
+  }
+
+  .locate-btn.loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .locate-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .optimal-card {
+    background: var(--bg-muted);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .optimal-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at top right, rgba(249, 115, 22, 0.2), transparent);
+    border-radius: 0 0 0 80px;
+  }
+
+  .optimal-label {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 0 0 4px;
+  }
+
+  .optimal-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  .optimal-value {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--text-main);
+    line-height: 1;
+  }
+
+  .optimal-deg {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--solar-p);
+  }
+
+  .efficiency-tag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: #16a34a;
+    font-weight: 600;
+    margin: 8px 0 0;
+  }
+
+  .efficiency-tag svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .season-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .season-card {
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid transparent;
+  }
+
+  .season-card.winter {
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+
+  .season-card.summer {
+    background: rgba(234, 179, 8, 0.08);
+    border-color: rgba(234, 179, 8, 0.2);
+  }
+
+  .season-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .season-header svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  .season-card.winter .season-header svg {
+    color: var(--solar-winter);
+  }
+
+  .season-card.summer .season-header svg {
+    color: var(--solar-summer);
+  }
+
+  .season-name {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .season-card.winter .season-name {
+    color: var(--solar-winter);
+  }
+
+  .season-card.summer .season-name {
+    color: var(--solar-summer);
+  }
+
+  .season-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+  }
+
+  .hemi-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--bg-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    align-self: flex-start;
+  }

@@ -1,0 +1,650 @@
+.hidden {
+    display: none;
+  }
+
+  .pet-age-calculator {
+    position: relative;
+    max-width: 650px;
+    margin: 2rem auto;
+    background: var(--color-surface, #fff);
+    border-radius: 2rem;
+    padding: 2.5rem;
+    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.08);
+    color: var(--color-text, #334155);
+    border: 1px solid var(--color-border, #f1f5f9);
+    min-height: 400px;
+  }
+
+  .theme-dark .pet-age-calculator {
+    background: var(--color-surface-dark, #1e293b);
+    color: var(--color-text-dark, #e2e8f0);
+    border-color: var(--color-border-dark, #334155);
+    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.3);
+  }
+
+  .age-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-surface, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rem;
+    z-index: 50;
+    transition:
+      opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0.4s;
+  }
+
+  .theme-dark .age-loader {
+    background: var(--color-surface-dark, #1e293b);
+  }
+
+  .age-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .age-loader-spinner {
+    width: 3rem;
+    height: 3rem;
+    color: var(--color-accent, #f59e0b);
+    animation: age-spin 2s infinite linear;
+  }
+
+  @keyframes age-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .age-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    animation: age-fade-up 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes age-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .age-section {
+    border-bottom: 1px dashed var(--color-border-dashed, #e2e8f0);
+    padding-bottom: 2rem;
+  }
+
+  .age-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .theme-dark .age-section {
+    border-bottom-color: var(--color-border-dark, #334155);
+  }
+
+  .age-section-title {
+    font-size: 1.1rem;
+    font-weight: 950;
+    color: var(--color-heading, #0f172a);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .theme-dark .age-section-title {
+    color: var(--color-heading-dark, #f8fafc);
+  }
+
+  .age-section-title svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .age-input-item {
+    margin-bottom: 2rem;
+  }
+
+  .age-input-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .age-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--color-label, #94a3b8);
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  .age-text-input {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    background: var(--color-btn-bg, #f8fafc);
+    border: 2px solid var(--color-btn-border, #e2e8f0);
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text, #334155);
+    outline: none;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+
+  .age-text-input::placeholder {
+    color: var(--color-label, #94a3b8);
+    font-weight: 500;
+  }
+
+  .age-text-input:focus {
+    border-color: var(--color-accent, #f59e0b);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+  }
+
+  .theme-dark .age-text-input {
+    background: var(--color-btn-bg-dark, #0f172a);
+    border-color: var(--color-btn-border-dark, #334155);
+    color: var(--color-text-dark, #e2e8f0);
+  }
+
+  .age-species-selector {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .pet-type-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.25rem 0.75rem;
+    background: var(--color-btn-bg, #f8fafc);
+    border: 2px solid var(--color-btn-border, #e2e8f0);
+    border-radius: 1rem;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--color-text, #334155);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .theme-dark .pet-type-btn {
+    background: var(--color-btn-bg-dark, #0f172a);
+    border-color: var(--color-btn-border-dark, #334155);
+    color: var(--color-text-dark, #e2e8f0);
+  }
+
+  .pet-type-btn.active {
+    background: var(--color-surface, #fff);
+    border-color: var(--color-accent, #f59e0b);
+    color: var(--color-accent, #f59e0b);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .theme-dark .pet-type-btn.active {
+    background: var(--color-surface-elevated-dark, #1e293b);
+  }
+
+  .age-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .age-segmented {
+    display: flex;
+    background: var(--color-btn-bg, #f8fafc);
+    padding: 6px;
+    border-radius: 1rem;
+    border: 1px solid var(--color-btn-border, #e2e8f0);
+  }
+
+  .theme-dark .age-segmented {
+    background: var(--color-btn-bg-dark, #0f172a);
+    border-color: var(--color-btn-border-dark, #334155);
+  }
+
+  .size-btn {
+    flex: 1;
+    text-align: center;
+    padding: 0.85rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border: none;
+    background: transparent;
+    color: var(--color-muted, #64748b);
+    transition: all 0.2s;
+  }
+
+  .size-btn.active {
+    background: var(--color-accent, #f59e0b);
+    color: var(--color-on-accent, #fff);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  }
+
+  .age-year-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .age-year-input {
+    width: 200px;
+    text-align: center;
+    padding: 1rem;
+    background: var(--color-btn-bg, #f8fafc);
+    border: 2px solid var(--color-btn-border, #e2e8f0);
+    border-radius: 1rem;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--color-text, #334155);
+    outline: none;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+
+  .age-year-input::placeholder {
+    color: var(--color-label, #94a3b8);
+    font-weight: 400;
+    font-size: 1rem;
+  }
+
+  .age-year-input:focus,
+  .age-year-input.age-input-valid {
+    border-color: var(--color-accent, #f59e0b);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+  }
+
+  .age-year-input.age-input-error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+  }
+
+  .theme-dark .age-year-input {
+    background: var(--color-btn-bg-dark, #0f172a);
+    border-color: var(--color-btn-border-dark, #334155);
+    color: var(--color-text-dark, #e2e8f0);
+  }
+
+  .age-year-input::-webkit-inner-spin-button,
+  .age-year-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .age-year-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .age-results {
+    background: var(--color-results-bg, #0f172a);
+    border-radius: 2rem;
+    padding: 2.5rem;
+    color: var(--color-results-text, #fff);
+    box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.3);
+  }
+
+  .theme-dark .age-results {
+    background: var(--color-accent, #f59e0b);
+    color: var(--color-results-text-dark, #0f172a);
+    box-shadow: 0 20px 40px -10px rgba(245, 158, 11, 0.2);
+  }
+
+  .age-res-main {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .age-res-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--color-accent, #f59e0b);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  .theme-dark .age-res-label {
+    color: var(--color-results-bg, #0f172a);
+    opacity: 0.7;
+  }
+
+  .age-res-number {
+    font-size: 5rem;
+    font-weight: 950;
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .age-res-number small {
+    font-size: 1.5rem;
+    font-weight: 700;
+    opacity: 0.6;
+  }
+
+  .age-res-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 1.5rem 0;
+  }
+
+  .theme-dark .age-res-divider {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .age-res-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .age-res-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .theme-dark .age-res-card {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .age-res-card-label {
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+  }
+
+  .age-res-card-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .age-res-footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .theme-dark .age-res-footer {
+    border-top-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .age-share-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .age-share-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .theme-dark .age-share-btn {
+    background: rgba(0, 0, 0, 0.15);
+    border-color: rgba(0, 0, 0, 0.2);
+    color: var(--color-results-bg, #0f172a);
+  }
+
+  .age-share-btn.age-btn-success {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .age-icon-sm {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .age-share-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    padding: 1.5rem;
+  }
+
+  .age-share-overlay.visible {
+    display: flex;
+  }
+
+  .age-share-wrap {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .age-share-card {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2.5rem;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .age-share-card-header {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .age-share-badge {
+    background: rgba(99, 102, 241, 0.8);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+  }
+
+  .age-share-animal {
+    width: 5rem;
+    height: 5rem;
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a5b4fc;
+  }
+
+  .age-share-animal svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  #share-pet-name {
+    font-size: 2rem;
+    font-weight: 900;
+    text-align: center;
+    color: #fff;
+    margin: 0;
+  }
+
+  .age-share-card-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .age-share-human-label {
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(165, 180, 252, 0.7);
+  }
+
+  #share-human-age {
+    font-size: 7rem;
+    font-weight: 900;
+    line-height: 0.9;
+    color: #fff;
+  }
+
+  .age-share-years-label {
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: -0.5rem;
+  }
+
+  .age-share-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .age-share-info-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .age-share-info-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(165, 180, 252, 0.5);
+  }
+
+  .age-share-info-val {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .age-share-card-footer {
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .age-share-new-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .age-share-new-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  .age-share-new-btn svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .pet-age-calculator {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+
+    .age-species-selector {
+      flex-direction: column;
+    }
+
+    .age-res-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .age-res-number {
+      font-size: 4rem;
+    }
+
+    .age-year-input {
+      font-size: 2rem;
+    }
+  }

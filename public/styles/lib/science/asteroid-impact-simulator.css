@@ -1,0 +1,810 @@
+:root,
+	.theme-light {
+		--asteroid-primary: #f97316;
+		--asteroid-secondary: #ef4444;
+		--asteroid-accent: #64748b;
+		--asteroid-success: #10b981;
+		--asteroid-warning: #f59e0b;
+		--asteroid-danger: #dc2626;
+		--asteroid-bg-light: #f8fafc;
+		--asteroid-bg-dark: #0f172a;
+		--asteroid-bg-card: #fff;
+		--asteroid-bg-modal: rgba(255, 255, 255, 0.9);
+		--asteroid-border-light: #e2e8f0;
+		--asteroid-border-dark: #1e293b;
+		--asteroid-text-primary: #1e293b;
+		--asteroid-text-secondary: #64748b;
+		--asteroid-text-light: #f1f5f9;
+		--asteroid-shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.02);
+		--asteroid-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+		--asteroid-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+		--asteroid-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+		--asteroid-radius-sm: 0.75rem;
+		--asteroid-radius-md: 1.5rem;
+		--asteroid-radius-lg: 2rem;
+		--asteroid-radius-full: 9999px;
+		--asteroid-transition: all 0.2s ease;
+		--asteroid-transition-slow: all 0.3s ease;
+	}
+
+	.theme-dark {
+		--asteroid-primary: #ff9f43;
+		--asteroid-secondary: #ff6b5b;
+		--asteroid-accent: #94a3b8;
+		--asteroid-success: #2ecc71;
+		--asteroid-warning: #ffa502;
+		--asteroid-danger: #ff4757;
+		--asteroid-bg-light: #0f172a;
+		--asteroid-bg-card: #1a2332;
+		--asteroid-bg-modal: rgba(26, 35, 50, 0.95);
+		--asteroid-border-light: #2d3748;
+		--asteroid-border-dark: #0f172a;
+		--asteroid-text-primary: #f8f9fa;
+		--asteroid-text-secondary: #cbd5e1;
+	}
+
+	.asteroid-app {
+		position: relative;
+		width: 100%;
+		height: 85vh;
+		min-height: 600px;
+		border-radius: var(--asteroid-radius-md);
+		overflow: hidden;
+		background: var(--asteroid-bg-dark);
+		box-shadow: var(--asteroid-shadow-xl);
+		border: 1px solid var(--asteroid-border-dark);
+		user-select: none;
+		touch-action: none;
+	}
+
+	.asteroid-game-map {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		background: var(--asteroid-bg-light);
+		touch-action: none;
+	}
+
+	.asteroid-map-target-overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 10;
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity var(--asteroid-transition-slow);
+		background: rgba(16, 185, 129, 0.05);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.asteroid-map-target-overlay.active {
+		opacity: 1;
+	}
+
+	.asteroid-target-crosshair {
+		position: absolute;
+		width: 100%;
+		height: 1px;
+		background: rgba(16, 185, 129, 0.2);
+	}
+
+	.asteroid-target-crosshair.vertical {
+		width: 1px;
+		height: 100%;
+	}
+
+	.asteroid-target-box {
+		position: absolute;
+		border: 2px solid rgba(16, 185, 129, 0.3);
+		border-radius: var(--asteroid-radius-md);
+		width: 80%;
+		height: 80%;
+	}
+
+	.asteroid-top-bar {
+		position: absolute;
+		top: 1rem;
+		left: 0;
+		right: 0;
+		z-index: 30;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		pointer-events: none;
+		padding: 0 1rem;
+	}
+
+	.asteroid-gps-btn {
+		pointer-events: auto;
+		margin-bottom: 0.5rem;
+		background: rgba(255, 255, 255, 0.9);
+		backdrop-filter: blur(12px);
+		color: var(--asteroid-text-primary);
+		padding: 0.5rem 1rem;
+		border-radius: var(--asteroid-radius-full);
+		font-size: 0.75rem;
+		font-weight: 700;
+		border: 1px solid rgba(255, 255, 255, 0.4);
+		box-shadow: var(--asteroid-shadow-md);
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		cursor: pointer;
+		transition: var(--asteroid-transition);
+	}
+
+	.theme-dark .asteroid-gps-btn {
+		background: rgba(30, 41, 59, 0.95);
+		border: 1px solid rgba(100, 116, 139, 0.4);
+	}
+
+	.asteroid-gps-btn:hover {
+		transform: scale(1.05);
+	}
+
+	.asteroid-gps-dot {
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 50%;
+		background: var(--asteroid-accent);
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-gps-dot.active {
+		background: var(--asteroid-success);
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+
+		50% {
+			opacity: 0.5;
+		}
+	}
+
+	.asteroid-verdict-pill {
+		max-width: 100%;
+		transform: translateY(-20px);
+		opacity: 0;
+		transition: all var(--asteroid-transition-slow);
+		pointer-events: none;
+	}
+
+	.asteroid-verdict-pill.active {
+		transform: translateY(0);
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	.asteroid-verdict-container {
+		background: var(--asteroid-bg-dark);
+		color: var(--asteroid-text-primary);
+		padding: 0.75rem 1.25rem;
+		border-radius: var(--asteroid-radius-lg);
+		box-shadow: var(--asteroid-shadow-xl);
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		backdrop-filter: blur(8px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.asteroid-verdict-icon {
+		width: 1.5rem;
+		height: 1.5rem;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.asteroid-verdict-text {
+		text-align: left;
+		line-height: 1;
+	}
+
+	.asteroid-verdict-label {
+		font-weight: 700;
+		font-size: 0.5625rem;
+		text-transform: uppercase;
+		letter-spacing: 0.125em;
+		opacity: 0.6;
+		margin-bottom: 0.125rem;
+	}
+
+	.asteroid-verdict-value {
+		font-weight: 900;
+		font-size: 1.125rem;
+		text-transform: uppercase;
+		white-space: nowrap;
+		font-style: italic;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	}
+
+	.asteroid-verdict-safe .asteroid-verdict-value {
+		color: #34d399;
+	}
+
+	.asteroid-verdict-shock .asteroid-verdict-value {
+		color: #60a5fa;
+	}
+
+	.asteroid-verdict-burned .asteroid-verdict-value {
+		color: #fb923c;
+	}
+
+	.asteroid-verdict-vaporized .asteroid-verdict-value {
+		color: #f87171;
+	}
+
+	.asteroid-desktop-lab {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.asteroid-desktop-lab {
+			display: flex;
+			position: absolute;
+			top: 1.5rem;
+			left: 1.5rem;
+			bottom: 1.5rem;
+			width: 20rem;
+			z-index: 30;
+			flex-direction: column;
+			pointer-events: none;
+		}
+	}
+
+	.asteroid-lab-panel {
+		background: var(--asteroid-bg-modal);
+		backdrop-filter: blur(32px);
+		border: 1px solid var(--asteroid-border-light);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+		border-radius: var(--asteroid-radius-lg);
+		padding: 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		pointer-events: auto;
+		height: 100%;
+		overflow: hidden;
+		color: var(--asteroid-text-primary);
+	}
+
+	.asteroid-lab-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--asteroid-border-light);
+		flex-shrink: 0;
+	}
+
+	.asteroid-lab-title {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.asteroid-lab-icon {
+		width: 2rem;
+		height: 2rem;
+		border-radius: var(--asteroid-radius-sm);
+		background: linear-gradient(135deg, var(--asteroid-primary) 0%, var(--asteroid-secondary) 100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--asteroid-text-primary);
+		box-shadow: 0 4px 8px rgba(var(--asteroid-primary-rgb), 0.3);
+	}
+
+	.asteroid-lab-name {
+		font-weight: 900;
+		color: var(--asteroid-text-primary);
+		font-size: 1rem;
+		line-height: 1;
+	}
+
+	.asteroid-lab-subtitle {
+		font-size: 0.5625rem;
+		font-weight: 700;
+		color: var(--asteroid-text-secondary);
+		text-transform: uppercase;
+		letter-spacing: 0.125em;
+	}
+
+	.asteroid-lab-content {
+		flex: 1;
+		overflow-y: auto;
+		padding-right: 0.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.asteroid-lab-content::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.asteroid-lab-content::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.asteroid-lab-content::-webkit-scrollbar-thumb {
+		background: rgba(100, 116, 139, 0.3);
+		border-radius: 3px;
+	}
+
+	.asteroid-drag-source {
+		position: relative;
+		cursor: grab;
+		transform-origin: center;
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-drag-source:active {
+		cursor: grabbing;
+		transform: scale(0.98);
+	}
+
+	.asteroid-drag-source:hover {
+		transform: scale(1.02);
+	}
+
+	.asteroid-drag-bg {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(135deg, #f3f4f6 0%, #fff 100%);
+		border-radius: var(--asteroid-radius-lg);
+		border: 1px solid var(--asteroid-border-light);
+		box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+	}
+
+	.asteroid-drag-tooltip {
+		position: absolute;
+		top: -2.5rem;
+		left: 50%;
+		transform: translateX(-50%);
+		opacity: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 10;
+		pointer-events: none;
+		transition: opacity var(--asteroid-transition);
+	}
+
+	.asteroid-drag-source:hover .asteroid-drag-tooltip {
+		opacity: 1;
+	}
+
+	.asteroid-drag-tooltip-text {
+		background: rgba(0, 0, 0, 0.85);
+		color: var(--asteroid-text-primary);
+		font-size: 0.65rem;
+		font-weight: 700;
+		padding: 0.4rem 0.75rem;
+		border-radius: var(--asteroid-radius-sm);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(8px);
+		box-shadow: var(--asteroid-shadow-lg);
+	}
+
+	.asteroid-drag-visual {
+		position: relative;
+		height: 12rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: visible;
+		border-radius: var(--asteroid-radius-lg);
+	}
+
+	.asteroid-drag-grid {
+		position: absolute;
+		inset: 0;
+		background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+		background-size: 20px 20px;
+		opacity: 0.5;
+	}
+
+	.asteroid-visual {
+		width: 5rem;
+		height: 5rem;
+		border-radius: 50%;
+		box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.8);
+		position: relative;
+		transition: var(--asteroid-transition);
+		z-index: 10;
+	}
+
+	.asteroid-visual.ice-type {
+		box-shadow:
+			0 0 20px rgba(103, 232, 249, 0.6),
+			10px 10px 30px rgba(0, 0, 0, 0.2),
+			-5px -5px 15px rgba(255, 255, 255, 0.8);
+	}
+
+	.asteroid-drag-icon-parent {
+		position: absolute;
+		bottom: 0.5rem;
+		right: 0.5rem;
+		width: 2rem;
+		height: 2rem;
+		background: rgba(0, 0, 0, 0.85);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: var(--asteroid-radius-sm);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--asteroid-text-primary);
+		z-index: 20;
+		opacity: 1;
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-drag-source:hover .asteroid-drag-icon-parent {
+		background: rgba(0, 0, 0, 0.95);
+	}
+
+	.asteroid-surface {
+		position: absolute;
+		inset: 0;
+		border-radius: 50%;
+		background: var(--asteroid-accent);
+		overflow: hidden;
+		border: 2px solid rgba(255, 255, 255, 0.2);
+	}
+
+	.asteroid-surface-gradient {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.3) 100%);
+		animation: asteroid-spin 8s linear infinite;
+	}
+
+	@keyframes asteroid-spin {
+		from {
+			transform: rotate(0deg);
+		}
+
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	.asteroid-params-badge {
+		position: absolute;
+		top: 0.5rem;
+		left: 0.5rem;
+		background: rgba(0, 0, 0, 0.85);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: var(--asteroid-radius-sm);
+		padding: 0.5rem 0.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		z-index: 20;
+		font-size: 0.7rem;
+		font-weight: 700;
+		color: var(--asteroid-text-primary);
+		white-space: nowrap;
+		opacity: 1;
+		transition: opacity var(--asteroid-transition-slow);
+	}
+
+	.asteroid-param-item {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.asteroid-param-item:nth-child(1) {
+		color: var(--asteroid-primary);
+	}
+
+	.asteroid-param-item:nth-child(2) {
+		color: var(--asteroid-success);
+	}
+
+	.asteroid-param-item:nth-child(3) {
+		color: var(--asteroid-accent);
+	}
+
+	.asteroid-presets {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.75rem;
+	}
+
+	.asteroid-preset-btn {
+		position: relative;
+		overflow: hidden;
+		background: var(--asteroid-bg-card);
+		border: 1px solid var(--asteroid-border-light);
+		border-radius: var(--asteroid-radius-md);
+		padding: 0.75rem;
+		text-align: left;
+		transition: var(--asteroid-transition-slow);
+		cursor: pointer;
+		flex-shrink: 0;
+	}
+
+	.asteroid-preset-btn:hover {
+		box-shadow: var(--asteroid-shadow-lg);
+		transform: translateY(-2px);
+		border-color: var(--asteroid-primary);
+	}
+
+	.asteroid-preset-title {
+		font-size: 0.6875rem;
+		font-weight: 900;
+		color: var(--asteroid-text-primary);
+		margin-bottom: 0.125rem;
+		position: relative;
+		z-index: 10;
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-preset-btn:hover .asteroid-preset-title {
+		color: var(--asteroid-primary);
+	}
+
+	.asteroid-preset-subtitle {
+		font-size: 0.5625rem;
+		font-weight: 500;
+		color: var(--asteroid-text-secondary);
+		position: relative;
+		z-index: 10;
+	}
+
+	.asteroid-control-group {
+		background: var(--asteroid-bg-light);
+		border-radius: var(--asteroid-radius-md);
+		padding: 0.75rem;
+		border: 1px solid var(--asteroid-border-light);
+	}
+
+	.asteroid-control-label {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		margin-bottom: 0.5rem;
+	}
+
+	.asteroid-control-text {
+		font-size: 0.625rem;
+		font-weight: 700;
+		color: var(--asteroid-text-secondary);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.asteroid-control-value {
+		font-size: 0.875rem;
+		font-weight: 900;
+		color: var(--asteroid-text-primary);
+	}
+
+	.asteroid-slider {
+		width: 100%;
+		height: 0.375rem;
+		background: var(--asteroid-border-light);
+		border-radius: 0.5rem;
+		appearance: none;
+		cursor: pointer;
+		accent-color: var(--asteroid-primary);
+	}
+
+	.asteroid-slider::-webkit-slider-thumb {
+		appearance: none;
+		width: 1.25rem;
+		height: 1.25rem;
+		background: var(--asteroid-primary);
+		border-radius: 50%;
+		cursor: pointer;
+		box-shadow: var(--asteroid-shadow-md);
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-slider::-webkit-slider-thumb:hover {
+		transform: scale(1.2);
+		box-shadow: var(--asteroid-shadow-lg);
+	}
+
+	.asteroid-slider::-moz-range-thumb {
+		width: 1.25rem;
+		height: 1.25rem;
+		background: var(--asteroid-primary);
+		border: none;
+		border-radius: 50%;
+		cursor: pointer;
+		box-shadow: var(--asteroid-shadow-md);
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-slider::-moz-range-thumb:hover {
+		transform: scale(1.2);
+		box-shadow: var(--asteroid-shadow-lg);
+	}
+
+	.asteroid-material-buttons {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.5rem;
+	}
+
+	.asteroid-material-btn {
+		padding: 0.5rem;
+		border-radius: var(--asteroid-radius-md);
+		border: 1px solid var(--asteroid-border-light);
+		background: var(--asteroid-bg-light);
+		cursor: pointer;
+		transition: var(--asteroid-transition);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.asteroid-material-btn:hover {
+		background: white;
+	}
+
+	.asteroid-material-btn.active {
+		border-color: var(--asteroid-primary);
+		background: rgba(249, 115, 22, 0.1);
+	}
+
+	.asteroid-material-dot {
+		width: 1rem;
+		height: 1rem;
+		border-radius: 50%;
+		box-shadow: var(--asteroid-shadow-sm);
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-material-btn:hover .asteroid-material-dot {
+		transform: scale(1.1);
+	}
+
+	.asteroid-material-name {
+		font-size: 0.5625rem;
+		font-weight: 700;
+		color: var(--asteroid-text-secondary);
+		text-transform: uppercase;
+	}
+
+	.asteroid-clear-btn {
+		padding: 0.25rem 0.35rem;
+		border-radius: 0.35rem;
+		background: var(--asteroid-bg-light);
+		color: var(--asteroid-text-secondary);
+		font-weight: 600;
+		font-size: 0.5rem;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		border: none;
+		cursor: pointer;
+		transition: var(--asteroid-transition);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.2rem;
+		height: auto;
+		min-height: 1.5rem;
+		flex-shrink: 0;
+	}
+
+	.asteroid-clear-btn:hover {
+		background: rgba(220, 38, 38, 0.1);
+		color: var(--asteroid-danger);
+	}
+
+	.asteroid-mobile-control {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	@media (min-width: 768px) {
+		.asteroid-mobile-control {
+			display: none;
+		}
+	}
+
+	.asteroid-mobile-bar {
+		position: absolute;
+		bottom: 1.5rem;
+		left: 1rem;
+		right: 1rem;
+		z-index: 40;
+		background: rgba(255, 255, 255, 0.9);
+		backdrop-filter: blur(12px);
+		border-radius: var(--asteroid-radius-lg);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+		border: 1px solid rgba(255, 255, 255, 0.6);
+		padding: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		pointer-events: auto;
+	}
+
+	.asteroid-mobile-asteroid {
+		width: 4rem;
+		height: 4rem;
+		background: var(--asteroid-bg-light);
+		border-radius: 50%;
+		box-shadow: var(--asteroid-shadow-lg);
+		border: 1px solid white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: grab;
+		position: relative;
+		overflow: hidden;
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-mobile-asteroid:active {
+		cursor: grabbing;
+		transform: scale(0.95);
+	}
+
+	.asteroid-mobile-asteroid-label {
+		position: absolute;
+		top: -0.75rem;
+		background: var(--asteroid-bg-dark);
+		color: var(--asteroid-text-primary);
+		font-size: 0.5625rem;
+		font-weight: 900;
+		letter-spacing: 0.125em;
+		padding: 0 0.5rem;
+		border-radius: var(--asteroid-radius-full);
+		box-shadow: var(--asteroid-shadow-lg);
+		transform: scale(0.9);
+	}
+
+	.asteroid-mobile-person {
+		width: 4rem;
+		height: 4rem;
+		background: rgba(59, 130, 246, 0.05);
+		border-radius: 50%;
+		box-shadow: var(--asteroid-shadow-lg);
+		border: 1px solid white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: grab;
+		position: relative;
+		overflow: hidden;
+		transition: var(--asteroid-transition);
+	}
+
+	.asteroid-mobile-person:active {
+		cursor: grabbing;
+		transform: scale(0.95);
+	}
+
+	.asteroid-person-icon {
+		width: 2rem;
+		height: 2rem;
+		color: #3b82f6;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.asteroid-divider {
+		height: 2rem;
+		width: 1px;
+		background: var(--asteroid-border-light);
+		margin: 0 0.5rem;
+	}

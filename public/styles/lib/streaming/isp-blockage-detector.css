@@ -1,0 +1,365 @@
+.tebas-container {
+    --tebas-primary: #f43f5e;
+    --tebas-secondary: #8b5cf6;
+    --tebas-success: #10b981;
+    --tebas-neutral: #64748b;
+    --tebas-bg: #f8fafc;
+    --tebas-card: #fff;
+    --tebas-border: #e2e8f0;
+    --tebas-text: #0f172a;
+    --tebas-text-muted: #64748b;
+    --tebas-console-bg: #0c0c0c;
+    
+    width: 100%;
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  .theme-dark .tebas-container {
+    --tebas-bg: #020617;
+    --tebas-card: #0f172a;
+    --tebas-border: #1e293b;
+    --tebas-text: #f1f5f9;
+    --tebas-text-muted: #94a3b8;
+  }
+
+  .tebas-card {
+    background: var(--tebas-card);
+    border-radius: 2rem;
+    border: 1px solid var(--tebas-border);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tebas-card-bg-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1.5rem;
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  .tebas-card-bg-icon [data-icon] {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .tebas-content {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .tebas-status-view {
+    min-height: 14rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .tebas-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .tebas-spinner-wrapper {
+    position: relative;
+  }
+
+  .tebas-spinner {
+    width: 5rem;
+    height: 5rem;
+    background: var(--tebas-card);
+    border: 3px solid var(--tebas-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    position: relative;
+  }
+
+  .tebas-spinner [data-icon] {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--tebas-secondary);
+  }
+
+  .tebas-ping-ring {
+    position: absolute;
+    inset: 0;
+    background: var(--tebas-secondary);
+    border-radius: 50%;
+    opacity: 0.2;
+    animation: tebas-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes tebas-ping {
+    75%,
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  .tebas-title-main {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--tebas-text);
+    text-transform: uppercase;
+    font-style: italic;
+  }
+
+  .tebas-subtitle-pulse {
+    margin: 0.5rem 0 0;
+    color: var(--tebas-text-muted);
+    font-weight: 500;
+    animation: tebas-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes tebas-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .tebas-result-box {
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    border-width: 2px;
+    border-style: solid;
+    animation: tebas-slide-up 0.5s ease-out;
+  }
+
+  @media (min-width: 640px) {
+    .tebas-result-box {
+      flex-direction: row;
+      text-align: left;
+    }
+  }
+
+  @keyframes tebas-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .tebas-result-box.blocked {
+    background: rgba(244, 63, 94, 0.05);
+    border-color: var(--tebas-primary);
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.2);
+  }
+
+  .tebas-result-box.success {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: var(--tebas-success);
+  }
+
+  .tebas-result-box.error {
+    background: rgba(100, 116, 139, 0.05);
+    border-color: var(--tebas-neutral);
+  }
+
+  .tebas-result-icon-badge {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .tebas-result-main-icon {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 1rem;
+    padding: 0.75rem;
+    background: var(--tebas-card);
+    border: 1px solid var(--tebas-border);
+  }
+
+  .blocked .tebas-result-main-icon { color: var(--tebas-primary); }
+  .success .tebas-result-main-icon { color: var(--tebas-success); }
+  .error .tebas-result-main-icon { color: var(--tebas-neutral); }
+
+  .tebas-badge-overlay {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    background: var(--tebas-primary);
+    color: white;
+    padding: 0.25rem;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .success .tebas-badge-overlay {
+    background: var(--tebas-success);
+  }
+
+  .tebas-result-status {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    transform: skew(-5deg);
+  }
+
+  .blocked .tebas-result-status { color: var(--tebas-primary); }
+  .success .tebas-result-status { color: var(--tebas-success); }
+
+  .tebas-result-details {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tebas-font-bold {
+    font-weight: 700;
+  }
+
+  .tebas-text-sm {
+    margin: 0;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .tebas-actions {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid var(--tebas-border);
+    padding-top: 1.5rem;
+  }
+
+  .tebas-btn {
+    background: var(--tebas-text);
+    color: var(--tebas-card);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .theme-dark .tebas-btn {
+    background: #fff;
+    color: #000;
+  }
+
+  .tebas-btn:hover { transform: scale(1.05); }
+
+  .tebas-note {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .tebas-note-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #f59e0b;
+    flex-shrink: 0;
+  }
+
+  .tebas-note-label {
+    display: block;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #b45309;
+    margin-bottom: 0.25rem;
+  }
+
+  .tebas-note-text {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--tebas-text-muted);
+    font-weight: 500;
+  }
+
+  .tebas-console {
+    background: var(--tebas-console-bg);
+    padding: 1.25rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  .tebas-console-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    opacity: 0.5;
+  }
+
+  .tebas-console-dots {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .tebas-console-dots span {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: #334155;
+  }
+
+  .tebas-console-body {
+    height: 8rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tebas-log-line {
+    border-left: 2px solid transparent;
+    padding-left: 0.5rem;
+  }
+
+  .tebas-log-time {
+    opacity: 0.3;
+    margin-right: 0.5rem;
+  }
+
+  .tebas-log-error {
+    color: #f87171;
+    background: rgba(127, 29, 29, 0.2);
+    border-left-color: #7f1d1d;
+  }
+
+  .tebas-log-success {
+    color: #34d399;
+    background: rgba(6, 78, 59, 0.2);
+    border-left-color: #064e3b;
+  }
+
+  .tebas-log-neutral {
+    color: #94a3b8;
+  }
+
+  .hidden { display: none; }
