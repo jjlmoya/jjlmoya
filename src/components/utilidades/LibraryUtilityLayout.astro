@@ -14,9 +14,15 @@ interface Props {
 }
 
 const { tool } = Astro.props;
-const { entry, Component, SEOComponent, BibliographyComponent } = tool;
+const { entry } = tool;
+
+type ComponentLoader = () => Promise<{ default: any }>;
+const Component = ((await (tool.Component as ComponentLoader)()) as { default: any }).default;
+const SEOComponent = ((await (tool.SEOComponent as ComponentLoader)()) as { default: any }).default;
+const BibliographyComponent = ((await (tool.BibliographyComponent as ComponentLoader)()) as { default: any }).default;
 
 const content = await entry.i18n.es!();
+const enContent = await entry.i18n.en!();
 const words = content.title.split(" ");
 const titleHighlight = words[0] ?? "";
 const titleBase = words.slice(1).join(" ");
@@ -25,6 +31,7 @@ const image = content.slug;
 
 const categoryKey = getCategoryKeyForTool(tool);
 const alternateUrls = categoryKey ? await getUtilityAlternates(tool, categoryKey) : [];
+const cssHref = categoryKey ? `/styles/lib/${categoryKey}/${enContent.slug}.css` : undefined;
 ---
 
 <LayoutUtility
@@ -35,6 +42,7 @@ const alternateUrls = categoryKey ? await getUtilityAlternates(tool, categoryKey
     howToSteps={content.howTo}
     appSlug={entry.appSlug}
     alternateUrls={alternateUrls}
+    toolCss={cssHref}
 >
     <div slot="header">
         <UtilityHeader
