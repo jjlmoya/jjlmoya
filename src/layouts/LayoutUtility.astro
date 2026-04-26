@@ -1,4 +1,5 @@
 ---
+import "./LayoutUtility.css";
 import Layout from "./Layout.astro";
 import BackToUtilities from "../components/ui/BackToUtilities.astro";
 import RelatedUtilities from "../components/utilidades/RelatedUtilities.astro";
@@ -100,16 +101,13 @@ const hasBanner = !isWidget;
         title={title}
         slot="head"
     />
-    <div class="relative min-h-screen overflow-x-clip utility-layout-wrapper">
-        <div
-            class={`absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] ${gradientFrom} via-white ${gradientTo} dark:from-slate-900/40 dark:via-zinc-950 dark:to-black -z-10`}
-        >
-        </div>
+    <div class="utility-layout-wrapper">
+        <div></div>
 
         {
             !isWidget && (
                 appSlug || appLinks?.android || appLinks?.ios ? (
-                    <div class="sticky top-[60px] z-40 transition-all duration-300 w-full">
+                    <div class="utility-banner-sticky">
                         <AppLinksBanner
                             appSlug={appSlug}
                             android={appLinks?.android}
@@ -117,20 +115,18 @@ const hasBanner = !isWidget;
                         />
                     </div>
                 ) : (
-                    <div class="sticky top-[60px] z-40 transition-all duration-300 w-full">
+                    <div class="utility-banner-sticky">
                         <AppLinksBanner />
                     </div>
                 )
             )
         }
 
-        <div
-            class="max-w-6xl mx-auto px-4 sm:px-6 relative focus:outline-none pt-12 sm:pt-20 utility-main-wrapper"
-        >
+        <div class="utility-main-wrapper">
             <div class="text-center utility-header-area">
-                <BackToUtilities class="mb-8" currentPath={targetPath} />
+                <BackToUtilities class="mb-3" currentPath={targetPath} />
                 <slot name="header">
-                    <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-6">
+                    <h1 class="text-sm md:text-lg font-normal tracking-tight mb-2">
                         {title}
                     </h1>
                     <p
