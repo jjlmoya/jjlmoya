@@ -1,0 +1,535 @@
+/* Drone Power Analyzer - Scoped CSS */
+
+.power-analyzer-ui {
+  --pa-primary: #3b82f6;
+  --pa-primary-rgb: 59, 130, 246;
+  --pa-accent: #60a5fa;
+  --pa-bg: #fff;
+  --pa-bg-muted: #f3f4f6;
+  --pa-bg-surface: #eeeff2;
+  --pa-text: #1f2937;
+  --pa-text-muted: #6b7280;
+  --pa-border: #d1d5db;
+  --pa-shadow: rgba(0, 0, 0, 0.08);
+  --pa-zone-low: #ef4444;
+  --pa-zone-optimal: #22c55e;
+  --pa-zone-racing: #a855f7;
+  --pa-input-bg: #fff;
+
+  color: var(--pa-text);
+  line-height: 1.5;
+}
+
+.theme-dark .power-analyzer-ui {
+  --pa-primary: #3b82f6;
+  --pa-accent: #60a5fa;
+  --pa-bg: #111827;
+  --pa-bg-muted: #1f2937;
+  --pa-bg-surface: #2d3748;
+  --pa-text: #f3f4f6;
+  --pa-text-muted: #9ca3af;
+  --pa-border: #4b5563;
+  --pa-shadow: rgba(0, 0, 0, 0.4);
+  --pa-input-bg: #1f2937;
+}
+
+.power-analyzer-ui .tech-mega-card {
+  background: var(--pa-bg);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--pa-shadow);
+  padding: 2.5rem;
+  border: 1px solid var(--pa-border);
+  position: relative;
+}
+
+.power-analyzer-ui .card-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 2.5rem;
+}
+
+@media (max-width: 1100px) {
+  .power-analyzer-ui .card-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .power-analyzer-ui .tech-mega-card {
+    padding: 1rem;
+  }
+
+  .power-analyzer-ui .card-grid {
+    gap: 1rem;
+  }
+}
+
+/* Config Sections */
+
+.power-analyzer-ui .config-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--pa-bg-muted);
+  border-radius: 12px;
+  border: 1px solid var(--pa-border);
+}
+
+.power-analyzer-ui .section-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--pa-text);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.power-analyzer-ui .input-with-unit {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.power-analyzer-ui .input-with-unit input[type="number"] {
+  flex: 1;
+}
+
+.power-analyzer-ui .unit {
+  font-weight: 600;
+  color: var(--pa-text-muted);
+  min-width: 40px;
+}
+
+.power-analyzer-ui .thrust-slider {
+  margin-top: 0.5rem;
+}
+
+.power-analyzer-ui .unit-toggle-global {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--pa-bg-muted);
+  border: 1px solid var(--pa-border);
+  border-radius: 20px;
+}
+
+.power-analyzer-ui .unit-checkbox {
+  display: none;
+}
+
+.power-analyzer-ui .unit-label-global {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--pa-text-muted);
+  padding: 0.35rem 0.65rem;
+  border-radius: 16px;
+  transition: all 0.2s;
+  user-select: none;
+  text-transform: none;
+}
+
+.power-analyzer-ui .unit-checkbox:checked + .unit-label-global {
+  background: var(--pa-primary);
+  color: white;
+}
+
+.power-analyzer-ui .auw-slider {
+  margin-top: 0.5rem;
+}
+
+.power-analyzer-ui .battery-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem;
+  color: var(--pa-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.power-analyzer-ui .battery-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.power-analyzer-ui .battery-chip {
+  padding: 0.5rem 0.85rem;
+  background: var(--pa-bg);
+  border: 1px solid var(--pa-border);
+  color: var(--pa-text);
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.power-analyzer-ui .battery-chip:hover {
+  background: var(--pa-border);
+  border-color: var(--pa-primary);
+}
+
+.power-analyzer-ui .battery-chip:active {
+  background: var(--pa-primary);
+  color: white;
+  border-color: var(--pa-primary);
+}
+
+.power-analyzer-ui .battery-chip-active {
+  background: var(--pa-primary);
+  color: white;
+  border-color: var(--pa-primary);
+}
+
+/* Pulse animation for feedback */
+@keyframes pulse-input {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.power-analyzer-ui input[type="number"].pulse {
+  animation: pulse-input 0.6s ease-out;
+}
+
+.power-analyzer-ui .config-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.power-analyzer-ui .main-display {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Form elements */
+
+.power-analyzer-ui .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.power-analyzer-ui label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--pa-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.power-analyzer-ui input[type="number"],
+.power-analyzer-ui select {
+  padding: 0.85rem 0.9rem;
+  border: 2px solid var(--pa-border);
+  border-radius: 8px;
+  background: var(--pa-input-bg);
+  color: var(--pa-text);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.power-analyzer-ui select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.theme-dark .power-analyzer-ui select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+.power-analyzer-ui input[type="number"]:hover,
+.power-analyzer-ui select:hover {
+  border-color: var(--pa-primary);
+}
+
+.power-analyzer-ui input[type="number"]:focus,
+.power-analyzer-ui select:focus {
+  outline: none;
+  border-color: var(--pa-primary);
+  box-shadow: 0 0 0 4px rgba(var(--pa-primary-rgb), 0.15);
+}
+
+.power-analyzer-ui input[type="range"] {
+  cursor: pointer;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: linear-gradient(to right, var(--pa-zone-low), var(--pa-zone-optimal), var(--pa-zone-racing));
+  background-size: 100% 100%;
+  border-radius: 4px;
+}
+
+.power-analyzer-ui input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--pa-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--pa-bg);
+}
+
+.power-analyzer-ui input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--pa-primary);
+  cursor: pointer;
+  border: 2px solid var(--pa-bg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.power-analyzer-ui input[type="range"]::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+
+/* Buttons */
+
+.power-analyzer-ui button {
+  padding: 0.75rem 1rem;
+  background: var(--pa-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.power-analyzer-ui button:hover {
+  background: var(--pa-accent);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.power-analyzer-ui button:active {
+  transform: translateY(1px);
+}
+
+/* Gauge Container */
+
+.power-analyzer-ui .gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem;
+  background: var(--pa-bg-muted);
+  border-radius: 12px;
+}
+
+.power-analyzer-ui .gauge-wrapper {
+  width: 100%;
+  max-width: 280px;
+}
+
+.power-analyzer-ui .gauge-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Main Ratio Display - Protagonist */
+
+.power-analyzer-ui .ratio-display-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.power-analyzer-ui .ratio-number-large {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--pa-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.power-analyzer-ui .ratio-label-large {
+  font-size: 1.2rem;
+  color: var(--pa-text-muted);
+  font-weight: 500;
+  margin-top: -0.25rem;
+}
+
+.power-analyzer-ui .ratio-badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+  background: var(--pa-zone-low);
+  color: white;
+}
+
+.power-analyzer-ui .ratio-badge.optimal {
+  background: var(--pa-zone-optimal);
+}
+
+.power-analyzer-ui .ratio-badge.racing {
+  background: var(--pa-zone-racing);
+}
+
+/* Secondary Gauge Info */
+
+.power-analyzer-ui .gauge-info {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.power-analyzer-ui .thrust-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.power-analyzer-ui .thrust-label {
+  font-size: 0.8rem;
+  color: var(--pa-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.power-analyzer-ui .thrust-value {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--pa-text);
+}
+
+/* Flight Profile Section */
+
+.power-analyzer-ui .flight-section {
+  padding: 1.5rem;
+  background: var(--pa-bg-muted);
+  border-radius: 12px;
+}
+
+.power-analyzer-ui .flight-title {
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--pa-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.power-analyzer-ui .profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+  margin-bottom: 1.75rem;
+}
+
+@media (max-width: 600px) {
+  .power-analyzer-ui .profiles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.power-analyzer-ui .profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0.5rem 0.9rem;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: 3px solid var(--pa-border);
+  transition: all 0.3s;
+  text-align: center;
+  cursor: default;
+}
+
+.power-analyzer-ui .profile-card.not-suitable {
+  border-bottom-color: var(--pa-zone-low);
+  opacity: 0.45;
+}
+
+.power-analyzer-ui .profile-card.suitable {
+  border-bottom-color: var(--pa-zone-optimal);
+  opacity: 1;
+}
+
+.power-analyzer-ui .profile-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--pa-text);
+}
+
+/* Recommendation Section */
+
+.power-analyzer-ui .recommendation-section {
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--pa-border);
+}
+
+.power-analyzer-ui .recommendation-title {
+  margin: 0 0 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--pa-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.power-analyzer-ui .recommendation-text {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--pa-text);
+  font-size: 0.95rem;
+}
+
+.power-analyzer-ui #recommendation-text {
+  color: var(--pa-text);
+}
+
+/* Battery presets */
+
+.power-analyzer-ui .battery-presets {
+  margin-top: 0.5rem;
+}
+
+.power-analyzer-ui .battery-presets button {
+  width: 100%;
+  font-size: 0.9rem;
+  padding: 0.6rem;
+  text-align: left;
+}

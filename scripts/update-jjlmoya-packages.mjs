@@ -12,15 +12,23 @@ function main() {
     try {
         const pkgData = readFileSync("package.json", "utf8");
         const pkg = JSON.parse(pkgData);
-        
+
         const dependencies = pkg.dependencies || {};
         const devDependencies = pkg.devDependencies || {};
         const allDeps = { ...dependencies, ...devDependencies };
-        
-        const jjlmoyaDeps = Object.keys(allDeps).filter(name => name.startsWith("@jjlmoya/"));
+
+        const filter = process.argv[2];
+        let jjlmoyaDeps = Object.keys(allDeps).filter(name => name.startsWith("@jjlmoya/"));
+
+        if (filter) {
+            jjlmoyaDeps = jjlmoyaDeps.filter(name => name.includes(filter));
+        }
 
         if (jjlmoyaDeps.length === 0) {
-            console.log("No se encontraron dependencias del namespace @jjlmoya.");
+            console.log(filter
+                ? `No se encontraron dependencias que coincidan con "${filter}".`
+                : "No se encontraron dependencias del namespace @jjlmoya."
+            );
             return;
         }
 
@@ -29,7 +37,7 @@ function main() {
         for (const name of jjlmoyaDeps) {
             const currentRaw = allDeps[name];
             const current = currentRaw.replace(/[\^~]/, "");
-            
+
             try {
                 const latest = execSync(`npm view ${name} version`).toString().trim();
 
