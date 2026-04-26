@@ -1,62 +1,24 @@
 ---
+import "./UtilityHeader.css";
+
 interface Props {
     titleHighlight: string;
     titleBase: string;
     description: string;
-    gradientFromColor?: string;
-    gradientToColor?: string;
-    reverse?: boolean;
 }
 
 const {
     titleHighlight,
     titleBase,
     description,
-    gradientFromColor,
-    gradientToColor,
-    reverse = false,
 } = Astro.props;
+
+const fullTitle = titleHighlight && titleBase
+    ? `${titleHighlight} ${titleBase}`.trim()
+    : titleHighlight || titleBase;
 ---
 
-<div style="text-align: center; margin-bottom: 2.5rem;">
-    <h1 style="font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; word-break: break-word; hyphens: auto; line-height: 1.2;">
-        {
-            reverse ? (
-                <>
-                    <span style="color: #0f172a;">{titleBase}</span>
-                    <span
-                        style={gradientFromColor && gradientToColor ? `background: linear-gradient(to right, ${gradientFromColor}, ${gradientToColor}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-right: 0.25rem;` : `background: linear-gradient(to right, #10b981, #0d9488); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-right: 0.25rem;`}
-                    >
-                        {titleHighlight}
-                    </span>
-                </>
-            ) : (
-                <>
-                    <span
-                        style={gradientFromColor && gradientToColor ? `background: linear-gradient(to right, ${gradientFromColor}, ${gradientToColor}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;` : `background: linear-gradient(to right, #10b981, #0d9488); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;`}
-                    >
-                        {titleHighlight}
-                    </span>
-                    <span style="color: #0f172a;">{titleBase}</span>
-                </>
-            )
-        }
-    </h1>
-    <p style="font-size: 0.95rem; color: #64748b; max-width: 42rem; margin-left: auto; margin-right: auto; font-weight: 400; line-height: 1.6;">
-        {description}
-    </p>
+<div class="utility-header-wrapper">
+    <h1>{fullTitle}</h1>
+    <p>{description}</p>
 </div>
-
-<style>
-    @media (prefers-color-scheme: dark) {
-        h1 {
-            color: #f8fafc;
-        }
-        span[style*="color: #0f172a"] {
-            color: #f8fafc !important;
-        }
-        p {
-            color: #cbd5e1 !important;
-        }
-    }
-</style>
