@@ -35,7 +35,10 @@ export const GET: APIRoute = ({ props }) => {
     const manifest = {
         name: title,
         short_name: title.length > 20
-            ? title.split(" ").filter(w => !["de","la","el","los","las","un","una","y","a","en","del"].includes(w.toLowerCase())).map(w => w[0].toUpperCase()).join("")
+            ? title.split(" ")
+                .filter(w => w.length > 0 && !["de","la","el","los","las","un","una","y","a","en","del"].includes(w.toLowerCase()))
+                .map(w => w[0].toUpperCase())
+                .join("")
             : title,
         description,
         start_url: startUrl,
