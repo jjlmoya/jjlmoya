@@ -5,9 +5,42 @@ import { Icon } from "astro-icon/components";
 import GameBobLogo from "../components/GameBobLogo.astro";
 import ProjectHomeCard from "../components/gamebob/ProjectHomeCard.astro";
 import DiscordCTA from "../components/gamebob/DiscordCTA.astro";
-import { apps } from "../data/apps/index";
+import { ALL_APP_DEFINITIONS, type KnownLocale } from "@jjlmoya/apps";
 
-const projects = apps.filter((app) => app.isGame);
+const DEFAULT_THEMES: Record<string, string> = {
+    "sauce-lab": "#FF4D4D",
+    "fortune-cookie": "#FFD700",
+    "lexi-crash": "#4D94FF",
+    "pizzametrics": "#FFA500",
+    "vesp": "#00FF9F",
+    "day-check": "#B185FF",
+    "fast-task": "#00E5FF",
+};
+
+
+const projects = await Promise.all(
+    ALL_APP_DEFINITIONS
+        .map(async ({ entry }) => {
+            const loader = entry.i18n["es" as KnownLocale] ?? entry.i18n.en;
+            const card = await loader!();
+            return {
+                name: card.title,
+                description: card.description,
+                homeDescription: card.subtitle,
+                image: `/assets/apps/${entry.id}/hero.webp`,
+                statusLabel: "publicado" as const,
+                statusType: "released" as const,
+                progress: 100,
+                color: DEFAULT_THEMES[entry.id] || "#1ddabc",
+                links: {
+                    googlePlay: entry.stores.googlePlay,
+                    appStore: entry.stores.appStore,
+                },
+                tasks: [],
+            };
+        })
+);
+
 ---
 
 <GameBobLayout
@@ -39,7 +72,7 @@ const projects = apps.filter((app) => app.isGame);
             <h2
                 class="text-3xl font-bold mb-12 border-l-4 border-[var(--color-gamebob-primary)] pl-4 lowercase text-[var(--color-gamebob-text)]"
             >
-                juegos
+                aplicaciones
             </h2>
 
             <div class="space-y-24">

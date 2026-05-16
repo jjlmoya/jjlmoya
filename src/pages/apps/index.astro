@@ -1,11 +1,30 @@
 ---
 export const prerender = true;
 import Layout from "../../layouts/Layout.astro";
-import { apps } from "../../data/apps/index";
+import { ALL_APP_DEFINITIONS } from "@jjlmoya/apps";
+import type { KnownLocale } from "@jjlmoya/apps";
 import { Icon } from "astro-icon/components";
 import { getStaticPageAlternates } from "../../i18n/gamebob";
 
 const alternateUrls = getStaticPageAlternates("/apps");
+
+const appCards = await Promise.all(
+    ALL_APP_DEFINITIONS.map(async ({ entry }) => {
+        const loader = entry.i18n['es' as KnownLocale] ?? entry.i18n.en;
+        const card = await loader!();
+        return { entry, card };
+    })
+);
+
+const DEFAULT_THEMES: Record<string, any> = {
+    "sauce-lab": { primary: "#FF4D4D", bgSurface: "#1a0f0f" },
+    "fortune-cookie": { primary: "#FFD700", bgSurface: "#1a1a0f" },
+    "lexi-crash": { primary: "#4D94FF", bgSurface: "#0f141a" },
+    "pizzametrics": { primary: "#FFA500", bgSurface: "#1a140f" },
+    "vesp": { primary: "#00FF9F", bgSurface: "#0f1a16" },
+    "day-check": { primary: "#B185FF", bgSurface: "#140f1a" },
+    "fast-task": { primary: "#00E5FF", bgSurface: "#0f1a1a" },
+};
 ---
 
 <Layout title="Apps | jjlmoya" description="Herramientas diseñadas para la precisión y la pasión." alternateUrls={alternateUrls}>
@@ -24,7 +43,7 @@ const alternateUrls = getStaticPageAlternates("/apps");
                     </h1>
                     <div class="md:max-w-md pb-2 text-right md:text-left">
                         <p class="text-xl font-light opacity-60">
-                            Herramientas y utilidades personales.
+                            Herramientas y utilidades personales provenientes de la librería oficial.
                         </p>
                     </div>
                 </div>
@@ -34,184 +53,151 @@ const alternateUrls = getStaticPageAlternates("/apps");
         <section class="max-w-7xl mx-auto px-6 py-12">
             <div class="space-y-12 lg:space-y-32">
                 {
-                    apps.map((app, index) => (
-                        <div
-                            class="app-entry relative flex flex-col lg:flex-row gap-8 lg:gap-16 lg:items-center overflow-hidden rounded-[2rem] bg-[var(--app-surface)] border border-black/5 dark:border-white/5 shadow-2xl p-8 sm:p-10 lg:p-12"
-                            style={`
-                                --app-primary: ${app.theme.primary};
-                                --app-bg: ${app.theme.bgApp || "#000"};
-                                --app-surface: ${app.theme.bgSurface || "#111"};
-                                --app-text: ${app.theme.textMain || "#fff"};
-                                --app-glow: ${app.theme.glowAccent || app.theme.primary};
-                                color: var(--app-text);
-                            `}
-                        >
-                            <div class="absolute top-0 left-0 right-0 h-full bg-[var(--app-primary)] opacity-[0.03] pointer-events-none" />
-                            <div class="absolute -top-24 -right-24 w-64 h-64 bg-[var(--app-primary)] opacity-10 blur-[80px] rounded-full pointer-events-none" />
-
+                    appCards.map(({ entry, card }, index) => {
+                        const theme = DEFAULT_THEMES[entry.id] || { primary: "#555", bgSurface: "#111" };
+                        const heroImage = `/assets/apps/${entry.id}/hero.webp`;
+                        
+                        return (
                             <div
-                                class={`w-full lg:w-[40%] relative group mb-8 lg:mb-0 ${index % 2 !== 0 ? "lg:order-2" : ""}`}
+                                class="app-entry relative flex flex-col lg:flex-row gap-8 lg:gap-16 lg:items-center overflow-hidden rounded-[2rem] bg-[var(--app-surface)] border border-black/5 dark:border-white/5 shadow-2xl p-8 sm:p-10 lg:p-12"
+                                style={`
+                                    --app-primary: ${theme.primary};
+                                    --app-bg: #000;
+                                    --app-surface: ${theme.bgSurface};
+                                    --app-text: #fff;
+                                    --app-glow: ${theme.primary};
+                                    color: var(--app-text);
+                                `}
                             >
-                                <div class="relative aspect-[16/9] lg:aspect-[3/4] overflow-hidden rounded-2xl border border-black/5 dark:border-white/5 shadow-xl transition-all duration-1000 bg-[var(--app-surface)]">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-[var(--app-primary)] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-700" />
+                                <div class="absolute top-0 left-0 right-0 h-full bg-[var(--app-primary)] opacity-[0.03] pointer-events-none" />
+                                <div class="absolute -top-24 -right-24 w-64 h-64 bg-[var(--app-primary)] opacity-10 blur-[80px] rounded-full pointer-events-none" />
 
-                                    <img
-                                        src={app.media.hero}
-                                        alt=""
-                                        class={`w-full h-full object-cover object-center transition-all duration-[2000ms] ${app.hasDetailPage ? "group-hover:scale-105" : "grayscale opacity-50"}`}
-                                    />
+                                <div
+                                    class={`w-full lg:w-[40%] relative group mb-8 lg:mb-0 ${index % 2 !== 0 ? "lg:order-2" : ""}`}
+                                >
+                                    <div class="relative aspect-[16/9] lg:aspect-[3/4] overflow-hidden rounded-2xl border border-black/5 dark:border-white/5 shadow-xl transition-all duration-1000 bg-[var(--app-surface)]">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-[var(--app-primary)] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-700" />
 
-                                    {app.roadmap.statusType !== "released" && (
-                                        <div class="absolute inset-0 flex items-center justify-center">
-                                            <span class="px-6 py-3 bg-black/60 backdrop-blur-md text-white border border-white/20 rounded-full text-xs font-black uppercase tracking-widest">
-                                                En construcción
-                                            </span>
-                                        </div>
-                                    )}
+                                        <img
+                                            src={heroImage}
+                                            alt=""
+                                            class="w-full h-full object-cover object-center transition-all duration-[2000ms] group-hover:scale-105"
+                                        />
 
-                                    <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all duration-1000" />
-                                </div>
-                                {app.hasDetailPage && (
-                                    <a href={`/apps/${app.slug}/`} class="absolute inset-0 z-20" />
-                                )}
-                            </div>
-
-                            <div
-                                class={`w-full lg:w-[60%] relative z-10 ${index % 2 !== 0 ? "lg:order-1" : ""}`}
-                            >
-                                <div class="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-8 opacity-70">
-                                    <span
-                                        class="text-[10px] lg:text-xs font-black uppercase tracking-widest px-2 py-1 lg:px-3 lg:py-1 rounded-full border border-current"
-                                        style="color: var(--app-primary); border-color: var(--app-primary);"
-                                    >
-                                        {app.category}
-                                    </span>
-                                    <div class="w-6 lg:w-10 h-px bg-current opacity-30" />
-                                    <span class="text-[10px] lg:text-xs font-bold">
-                                        0{index + 1}
-                                    </span>
+                                        <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all duration-1000" />
+                                    </div>
+                                    <a href={`/apps/${card.slug}/`} class="absolute inset-0 z-20" />
                                 </div>
 
-                                {app.hasDetailPage ? (
-                                    <a href={`/apps/${app.slug}/`} class="block group">
-                                        <h2 class="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] uppercase transition-all duration-700 group-hover:text-[var(--app-primary)] break-words lg:break-normal">
-                                            {app.title}
-                                        </h2>
-                                    </a>
-                                ) : (
-                                    <h2 class="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] uppercase opacity-40 break-words lg:break-normal">
-                                        {app.title}
-                                    </h2>
-                                )}
-
-                                <p class="text-base sm:text-xl md:text-2xl font-light opacity-80 mb-8 lg:mb-12 leading-relaxed max-w-lg">
-                                    {app.subtitle}
-                                </p>
-
-                                {app.price && (
-                                    <div class="mb-4">
-                                        <span class="text-2xl font-black text-[var(--app-primary)]">
-                                            {app.price}
+                                <div
+                                    class={`w-full lg:w-[60%] relative z-10 ${index % 2 !== 0 ? "lg:order-1" : ""}`}
+                                >
+                                    <div class="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-8 opacity-70">
+                                        <span
+                                            class="text-[10px] lg:text-xs font-black uppercase tracking-widest px-2 py-1 lg:px-3 lg:py-1 rounded-full border border-current"
+                                            style="color: var(--app-primary); border-color: var(--app-primary);"
+                                        >
+                                            {entry.isGame ? "Juego" : "Utilidad"}
+                                        </span>
+                                        <div class="w-6 lg:w-10 h-px bg-current opacity-30" />
+                                        <span class="text-[10px] lg:text-xs font-bold">
+                                            0{index + 1}
                                         </span>
                                     </div>
-                                )}
 
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10">
-                                    <div class="flex flex-col gap-4 w-full sm:w-fit">
-                                        <a
-                                            href={`/apps/${app.slug}/`}
-                                            class="flex items-center justify-center sm:justify-start gap-4 lg:gap-6 text-xs lg:text-sm font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] hover:gap-6 lg:hover:gap-10 transition-all duration-700 px-6 py-3 lg:px-10 lg:py-5 rounded-full bg-[var(--app-primary)] text-white shadow-lg shadow-[var(--app-primary)]/30 hover:shadow-[var(--app-primary)]/50 w-full sm:w-fit"
-                                        >
-                                            <span>
-                                                {app.roadmap.statusType === "released"
-                                                    ? "Explorar"
-                                                    : "Próximamente"}
-                                            </span>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-width="3"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                class="lg:w-5 lg:h-5"
-                                            >
-                                                <>
-                                                    <path d="M5 12h14" />
-                                                    <path d="m12 5 7 7-7 7" />
-                                                </>
-                                            </svg>
-                                        </a>
-                                        {app.domain && (
+                                    <a href={`/apps/${card.slug}/`} class="block group">
+                                        <h2 class="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] uppercase transition-all duration-700 group-hover:text-[var(--app-primary)] break-words lg:break-normal">
+                                            {card.title}
+                                        </h2>
+                                    </a>
+
+                                    <p class="text-base sm:text-xl md:text-2xl font-light opacity-80 mb-8 lg:mb-12 leading-relaxed max-w-lg">
+                                        {card.subtitle}
+                                    </p>
+
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10">
+                                        <div class="flex flex-col gap-4 w-full sm:w-fit">
                                             <a
-                                                href={`https://${app.domain}`}
-                                                target="_blank"
-                                                class="text-[10px] font-bold opacity-40 hover:opacity-100 hover:text-[var(--app-primary)] transition-all uppercase tracking-widest flex items-center gap-2"
+                                                href={`/apps/${card.slug}/`}
+                                                class="flex items-center justify-center sm:justify-start gap-4 lg:gap-6 text-xs lg:text-sm font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] hover:gap-6 lg:hover:gap-10 transition-all duration-700 px-6 py-3 lg:px-10 lg:py-5 rounded-full bg-[var(--app-primary)] text-white shadow-lg shadow-[var(--app-primary)]/30 hover:shadow-[var(--app-primary)]/50 w-full sm:w-fit"
                                             >
-                                                <Icon name="mdi:link-variant" class="w-3 h-3" />
-                                                {app.domain}
+                                                <span>Explorar</span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-width="3"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    class="lg:w-5 lg:h-5"
+                                                >
+                                                    <>
+                                                        <path d="M5 12h14" />
+                                                        <path d="m12 5 7 7-7 7" />
+                                                    </>
+                                                </svg>
                                             </a>
-                                        )}
-                                    </div>
+                                        </div>
 
-                                    <div class="hidden sm:block w-px h-8 lg:h-12 bg-current opacity-10" />
+                                        <div class="hidden sm:block w-px h-8 lg:h-12 bg-current opacity-10" />
 
-                                    <div class="flex justify-center sm:justify-start gap-6 opacity-80 pl-0 sm:pl-2">
-                                        {app.stores.googlePlay ? (
-                                            <a
-                                                href={app.stores.googlePlay}
-                                                target="_blank"
-                                                class="hover:text-[var(--app-primary)] transition-colors duration-300"
-                                                title="Disponible en Google Play"
-                                            >
-                                                <Icon
-                                                    name="mdi:google-play"
-                                                    class="w-6 h-6 lg:w-8 lg:h-8"
-                                                />
-                                            </a>
-                                        ) : (
-                                            <div
-                                                class="opacity-20 cursor-not-allowed"
-                                                title="Próximamente"
-                                            >
-                                                <Icon
-                                                    name="mdi:google-play"
-                                                    class="w-6 h-6 lg:w-8 lg:h-8"
-                                                />
-                                            </div>
-                                        )}
+                                        <div class="flex justify-center sm:justify-start gap-6 opacity-80 pl-0 sm:pl-2">
+                                            {entry.stores.googlePlay ? (
+                                                <a
+                                                    href={entry.stores.googlePlay}
+                                                    target="_blank"
+                                                    class="hover:text-[var(--app-primary)] transition-colors duration-300"
+                                                    title="Disponible en Google Play"
+                                                >
+                                                    <Icon
+                                                        name="mdi:google-play"
+                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                    />
+                                                </a>
+                                            ) : (
+                                                <div
+                                                    class="opacity-20 cursor-not-allowed"
+                                                    title="Próximamente"
+                                                >
+                                                    <Icon
+                                                        name="mdi:google-play"
+                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                    />
+                                                </div>
+                                            )}
 
-                                        {app.stores.appStore ? (
-                                            <a
-                                                href={app.stores.appStore}
-                                                target="_blank"
-                                                class="hover:text-[var(--app-primary)] transition-colors duration-300"
-                                                title="Disponible en App Store"
-                                            >
-                                                <Icon
-                                                    name="mdi:apple"
-                                                    class="w-6 h-6 lg:w-8 lg:h-8"
-                                                />
-                                            </a>
-                                        ) : (
-                                            <div
-                                                class="opacity-20 cursor-not-allowed"
-                                                title="Próximamente"
-                                            >
-                                                <Icon
-                                                    name="mdi:apple"
-                                                    class="w-6 h-6 lg:w-8 lg:h-8"
-                                                />
-                                            </div>
-                                        )}
+                                            {entry.stores.appStore ? (
+                                                <a
+                                                    href={entry.stores.appStore}
+                                                    target="_blank"
+                                                    class="hover:text-[var(--app-primary)] transition-colors duration-300"
+                                                    title="Disponible en App Store"
+                                                >
+                                                    <Icon
+                                                        name="mdi:apple"
+                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                    />
+                                                </a>
+                                            ) : (
+                                                <div
+                                                    class="opacity-20 cursor-not-allowed"
+                                                    title="Próximamente"
+                                                >
+                                                    <Icon
+                                                        name="mdi:apple"
+                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 }
             </div>
         </section>

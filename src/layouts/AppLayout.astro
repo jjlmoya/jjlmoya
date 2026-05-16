@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import { apps } from "../data/apps/index";
+import { ALL_APP_DEFINITIONS } from "@jjlmoya/apps";
+import type { KnownLocale } from "@jjlmoya/apps";
 
 interface Props {
     title: string;
@@ -20,7 +21,48 @@ const {
     currentSlug,
 } = Astro.props;
 
-const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
+
+const appCards = await Promise.all(
+    ALL_APP_DEFINITIONS.map(async ({ entry }) => {
+        const loader = entry.i18n['es' as KnownLocale] ?? entry.i18n.en;
+        const card = await loader!();
+        return { entry, card };
+    })
+);
+
+const otherApps = appCards.filter((a) => a.card.slug !== currentSlug).slice(0, 5);
+
+const currentApp = appCards.find((a) => a.card.slug === currentSlug);
+const site = Astro.site?.origin || "https://www.jjlmoya.es";
+
+const schema = currentApp ? {
+    "@context": "https://schema.org",
+    "@type": currentApp.entry.isGame ? "VideoGame" : "SoftwareApplication",
+    name: currentApp.card.title,
+    description: currentApp.card.description,
+    applicationCategory:
+        currentApp.entry.isGame ? "GameApplication" : "MultimediaApplication",
+    operatingSystem: "ANDROID",
+    author: {
+        "@type": "Person",
+        name: "jjlmoya",
+        url: site,
+    },
+    publisher: {
+        "@type": "Organization",
+        name: "GameBob",
+        logo: {
+            "@type": "ImageObject",
+            url: `${site}/assets/apps/${currentApp.entry.id}/icon.webp`,
+        },
+    },
+    offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "EUR",
+    },
+    image: `${site}/assets/apps/${currentApp.entry.id}/icon.webp`,
+} : null;
 ---
 
 <!doctype html>
@@ -49,45 +91,7 @@ const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
 
         <ClientRouter />
 
-        {
-            currentSlug &&
-                (() => {
-                    const app = apps.find((a) => a.slug === currentSlug);
-                    if (!app) return null;
-                    const site = Astro.site?.origin || "https://www.jjlmoya.es";
-
-                    const schema = {
-                        "@context": "https://schema.org",
-                        "@type": app.category === "Juegos" ? "VideoGame" : "SoftwareApplication",
-                        name: app.title,
-                        description: app.description,
-                        applicationCategory:
-                            app.category === "Juegos" ? "GameApplication" : "MultimediaApplication",
-                        operatingSystem: "ANDROID",
-                        author: {
-                            "@type": "Person",
-                            name: "jjlmoya",
-                            url: site,
-                        },
-                        publisher: {
-                            "@type": "Organization",
-                            name: "GameBob",
-                            logo: {
-                                "@type": "ImageObject",
-                                url: `${site}${app.media.icon}`,
-                            },
-                        },
-                        offers: {
-                            "@type": "Offer",
-                            price: "0",
-                            priceCurrency: "EUR",
-                        },
-                        image: `${site}${app.media.icon}`,
-                    };
-
-                    return <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />;
-                })()
-        }
+        {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
         <script>
             import { stampApi } from "../lib/api";
@@ -161,7 +165,7 @@ const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
         </script>
     </head>
     <body
-        class="bg-white dark:bg-[#050505] text-slate-900 dark:text-neutral-100 antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black min-h-screen flex flex-col"
+        class="theme-light bg-white dark:bg-[#050505] text-slate-900 dark:text-neutral-100 antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black min-h-screen flex flex-col"
     >
         <header class="fixed top-0 left-0 w-full z-50 transition-all duration-500" id="main-header">
             <div class="max-w-7xl mx-auto px-6 py-4 md:py-6 flex justify-between items-center">
@@ -292,8 +296,8 @@ const otherApps = apps.filter((a) => a.slug !== currentSlug).slice(0, 5);
                                 {
                                     otherApps.map((otherApp) => (
                                         <li>
-                                            <a href={`/apps/${otherApp.slug}/`} class="footer-link">
-                                                {otherApp.title}
+                                            <a href={`/apps/${otherApp.card.slug}/`} class="footer-link">
+                                                {otherApp.card.title}
                                             </a>
                                         </li>
                                     ))

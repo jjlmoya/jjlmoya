@@ -3,9 +3,42 @@ export const prerender = true;
 import GameBobLayout from "../../layouts/GameBobLayout.astro";
 import RoadmapHeader from "../../components/gamebob/roadmap/RoadmapHeader.astro";
 import ProjectCard from "../../components/gamebob/roadmap/ProjectCard.astro";
-import { apps } from "../../data/apps/index";
+import { ALL_APP_DEFINITIONS, type KnownLocale } from "@jjlmoya/apps";
 
-const roadmapApps = apps.filter((app) => app.isGame);
+const DEFAULT_THEMES: Record<string, string> = {
+    "sauce-lab": "#FF4D4D",
+    "fortune-cookie": "#FFD700",
+    "lexi-crash": "#4D94FF",
+    "pizzametrics": "#FFA500",
+    "vesp": "#00FF9F",
+    "day-check": "#B185FF",
+    "fast-task": "#00E5FF",
+};
+
+
+const roadmapApps = await Promise.all(
+    ALL_APP_DEFINITIONS
+        .map(async ({ entry }) => {
+            const loader = entry.i18n["es" as KnownLocale] ?? entry.i18n.en;
+            const card = await loader!();
+            return {
+                name: card.title,
+                description: card.description,
+                homeDescription: card.subtitle,
+                image: `/assets/apps/${entry.id}/hero.webp`,
+                statusLabel: "publicado" as const,
+                statusType: "released" as const,
+                progress: 100,
+                color: DEFAULT_THEMES[entry.id] || "#1ddabc",
+                links: {
+                    googlePlay: entry.stores.googlePlay,
+                    appStore: entry.stores.appStore,
+                },
+                tasks: [],
+            };
+        })
+);
+
 ---
 
 <GameBobLayout
