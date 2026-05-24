@@ -31,6 +31,7 @@ import { statisticsCategory } from "@jjlmoya/utils-statistics";
 import { diyCategory } from "@jjlmoya/utils-diy";
 import { workCategory } from "@jjlmoya/utils-work";
 import { toolsCategory } from "@jjlmoya/utils-tools";
+import { chronoCategory } from "@jjlmoya/utils-chrono";
 
 export interface CategoryDef {
     key: string;
@@ -81,6 +82,7 @@ register(statisticsCategory, "statistics", "#4f46e5");
 register(diyCategory, "diy", "#2563eb");
 register(workCategory, "work", "#3b82f6");
 register(toolsCategory, "tools", "#64748b");
+register(chronoCategory, "chrono", "#d97706");
 
 export async function getCategorySlug(categoryKey: string, lang: string): Promise<string | undefined> {
     let langMap = categorySlugCache.get(categoryKey);
@@ -127,6 +129,7 @@ export const REGISTERED_PACKAGES = new Set([
     "@jjlmoya/utils-diy",
     "@jjlmoya/utils-work",
     "@jjlmoya/utils-tools",
+    "@jjlmoya/utils-chrono",
 ]);
 
 export function getCategoryKeyForTool(tool: object): string | undefined {
