@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 import CardUtility from "./CardUtility.astro";
 import type { UtilityItem } from "../../data/utilities";
+import "./UtilitySection.css";
 
 interface Props {
     title: string;
@@ -16,17 +17,15 @@ const categoryUrl = `/utilidades/categorias/${slug}/`;
 ---
 
 <section data-utility-section data-section-title={title}>
-    <a href={categoryUrl} class="group">
-        <h2
-            class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-6 flex items-center gap-3 transition-opacity group-hover:opacity-75"
-        >
-            <span class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                <Icon name={icon} class="w-6 h-6" />
+    <a href={categoryUrl} class="utility-section-link">
+        <h2 class="utility-section-title">
+            <span class="utility-section-icon-container">
+                <Icon name={icon} class="utility-section-icon" />
             </span>
             {title}
         </h2>
     </a>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="utility-cards-grid">
         {utilities.map((u) => <CardUtility {...u} />)}
     </div>
 </section>

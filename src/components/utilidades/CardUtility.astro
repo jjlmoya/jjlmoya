@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import "./CardUtility.css";
 
 interface Props {
     href: string;
@@ -15,41 +16,34 @@ const { href, title, description, iconBg, iconFg, color } = Astro.props;
 
 <a
     href={href}
-    class="group relative p-8 rounded-3xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 overflow-hidden hover:border-[var(--theme-color)] dark:hover:border-[var(--theme-color)] flex flex-col"
+    class="utility-card"
     style={`--theme-color: ${color}`}
     data-utility-card
     data-title={title}
     data-description={description}
 >
-    <div
-        class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity duration-500"
-    >
-        <Icon name={iconBg} class="w-32 h-32" />
+    <div class="utility-card-bg-icon-wrapper">
+        <Icon name={iconBg} class="utility-card-bg-icon" />
     </div>
 
-    <div class="relative z-10">
+    <div class="utility-card-content">
         <div
-            class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500"
+            class="utility-card-icon-container"
             style={`background-color: color-mix(in srgb, var(--theme-color), transparent 90%);`}
         >
-            <Icon name={iconFg} class="w-6 h-6 text-[var(--theme-color)]" />
+            <Icon name={iconFg} class="utility-card-icon" />
         </div>
 
-        <h2
-            class="text-3xl font-bold mb-3 tracking-tight group-hover:text-[var(--theme-color)] transition-colors"
-        >
+        <h2 class="utility-card-title">
             {title}
         </h2>
-        <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+        <p class="utility-card-description">
             {description}
         </p>
 
-        <div class="flex items-center gap-2 text-sm font-medium text-[var(--theme-color)]">
+        <div class="utility-card-action">
             <span>usar herramienta</span>
-            <Icon
-                name="mdi:arrow-right"
-                class="w-4 h-4 group-hover:translate-x-1 transition-transform"
-            />
+            <Icon name="mdi:arrow-right" class="utility-card-arrow" />
         </div>
     </div>
 </a>
