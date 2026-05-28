@@ -7,11 +7,7 @@ import Toast from "../components/ui/Toast.astro";
 import Search from "../components/search/Search.astro";
 import LanguageSwitcher from "../components/ui/LanguageSwitcher.astro";
 
-import "@fontsource/inter/300.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/600.css";
-import "@fontsource/inter/900.css";
-import "@fontsource/fredoka-one";
+import "./Layout.css";
 
 interface AlternateUrl {
     lang: string;
@@ -43,7 +39,8 @@ const {
     alternateUrls = [],
 } = Astro.props;
 
-const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
+const mainClass =
+    Astro.props.mainClass || (fullWidth ? "layout-main-full" : "layout-main-standard");
 ---
 
 <!doctype html>
@@ -51,7 +48,6 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
     <head>
         <SEO title={title} description={description} image={image} alternateUrls={alternateUrls} />
         <slot name="head" />
-
 
         <script>
             import { handleGlobalShare } from "../utils/share";
@@ -80,9 +76,7 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
                     (storedData.id as string) ||
                     `SR-${Math.random().toString(36).substring(7).toUpperCase()}`;
 
-                stampApi
-                    .pageView({ page: window.location.pathname, visitId })
-                    .catch(() => {});
+                stampApi.pageView({ page: window.location.pathname, visitId }).catch(() => {});
 
                 const visits = ((storedData.visits as number) || 0) + 1;
                 const shouldSync = SYNC_THRESHOLDS.includes(visits);
@@ -130,21 +124,19 @@ const mainClass = Astro.props.mainClass || (fullWidth ? "pt-15" : "pt-15 px-4");
             })();
         </script>
     </head>
-    <body
-        class={`min-h-screen flex flex-col antialiased text-slate-900 bg-slate-50 transition-colors duration-300 ${bodyClass}`}
-    >
+    <body class={`layout-body ${bodyClass}`}>
         {
             showBackground && (
                 <>
-                    <div class="fixed inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" />
-                    <div class="fixed inset-0 -z-10 h-full w-full bg-[radial-gradient(circle_800px_at_100%_200px,rgba(29,78,216,0.15),transparent)]" />
+                    <div class="layout-bg-grid" />
+                    <div class="layout-bg-radial" />
                 </>
             )
         }
 
         <Header className={headerClass} />
 
-        <main class={`flex-grow ${mainClass}`}>
+        <main class={`layout-main ${mainClass}`}>
             <slot />
         </main>
 

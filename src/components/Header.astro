@@ -1,4 +1,6 @@
 ---
+import "./Header.css";
+
 const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname.slice(1);
 
@@ -10,62 +12,62 @@ const { className = "" } = Astro.props;
 ---
 
 <nav
-    class={`fixed top-0 w-full z-[100] bg-neutral-950/90 backdrop-blur-md border-b border-white/10 transition-all duration-300 ${className}`}
+    class={`main-navigation ${className}`}
     id="main-nav"
 >
     <div
-        class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center relative z-[100] text-white"
+        class="navigation-container"
     >
         <a
             href="/"
-            class="text-xl font-bold tracking-tighter hover:text-[var(--color-accent)] transition-colors"
+            class="brand-link"
             >jjlmoya</a
         >
 
-        <div class="hidden md:flex items-center gap-6">
+        <div class="nav-links">
             <a
                 href="/proyectos/"
-                class={`text-sm font-medium text-white ${currentPath.startsWith("proyectos") ? "text-[var(--color-accent)] nav-active" : ""} hover:text-[var(--color-accent)] transition-colors`}
+                class={`nav-item-link ${currentPath.startsWith("proyectos") ? "nav-active" : ""}`}
                 aria-current={currentPath.startsWith("proyectos") ? "page" : undefined}
                 data-astro-prefetch>proyectos</a
             >
             <a
                 href="/conceptos/"
-                class={`text-sm font-medium text-white ${currentPath.startsWith("conceptos") ? "text-[var(--color-accent)] nav-active" : ""} hover:text-[var(--color-accent)] transition-colors`}
+                class={`nav-item-link ${currentPath.startsWith("conceptos") ? "nav-active" : ""}`}
                 aria-current={currentPath.startsWith("conceptos") ? "page" : undefined}
                 data-astro-prefetch>conceptos</a
             >
             <a
                 href="/apps/"
-                class={`text-sm font-medium text-white ${currentPath.startsWith("apps") ? "text-[var(--color-accent)] nav-active" : ""} hover:text-[var(--color-accent)] transition-colors`}
+                class={`nav-item-link ${currentPath.startsWith("apps") ? "nav-active" : ""}`}
                 aria-current={currentPath.startsWith("apps") ? "page" : undefined}
                 data-astro-prefetch>apps</a
             >
             <a
                 href="/utilidades/"
-                class={`text-sm font-medium text-white ${currentPath.startsWith("utilidades") ? "text-[var(--color-accent)] nav-active" : ""} hover:text-[var(--color-accent)] transition-colors`}
+                class={`nav-item-link ${currentPath.startsWith("utilidades") ? "nav-active" : ""}`}
                 aria-current={currentPath.startsWith("utilidades") ? "page" : undefined}
                 data-astro-prefetch>utilidades</a
             >
             <a
                 href="/gamebob/"
-                class={`text-sm font-medium text-white ${currentPath.startsWith("gamebob") ? "text-[var(--color-accent)] nav-active" : ""} hover:text-[var(--color-accent)] transition-colors`}
+                class={`nav-item-link ${currentPath.startsWith("gamebob") ? "nav-active" : ""}`}
                 aria-current={currentPath.startsWith("gamebob") ? "page" : undefined}
                 data-astro-prefetch>gamebob</a
             >
             <a
                 href="/charlas/"
-                class={`text-sm font-medium text-white ${currentPath.startsWith("charlas") ? "text-[var(--color-accent)] nav-active" : ""} hover:text-[var(--color-accent)] transition-colors`}
+                class={`nav-item-link ${currentPath.startsWith("charlas") ? "nav-active" : ""}`}
                 aria-current={currentPath.startsWith("charlas") ? "page" : undefined}
                 data-astro-prefetch>charlas</a
             >
 
-            <div class="h-4 w-px bg-white/20 mx-2"></div>
+            <div class="nav-divider"></div>
 
-            <div class="flex items-center gap-2">
+            <div class="nav-actions">
                 <button
                     id="header-search-btn"
-                    class="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all"
+                    class="search-button"
                     aria-label="Buscar (Ctrl + K / Espacio)"
                     title="Buscar (Ctrl + K / Espacio)"
                 >
@@ -89,23 +91,21 @@ const { className = "" } = Astro.props;
 
         <button
             id="menu-toggle"
-            class="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-1.5 group z-[110]"
+            class="menu-toggle-button"
             aria-label="Abrir Menú"
         >
-            <span class="w-6 h-0.5 bg-current transition-all duration-300 origin-center line-1"
-            ></span>
-            <span class="w-6 h-0.5 bg-current transition-all duration-300 origin-center line-2"
-            ></span>
+            <span class="menu-toggle-line line-1"></span>
+            <span class="menu-toggle-line line-2"></span>
         </button>
     </div>
 </nav>
 
 <div
     id="mobile-menu-overlay"
-    class="fixed inset-0 z-[90] pointer-events-none opacity-0 transition-all duration-300 overflow-y-auto bg-white/95 dark:bg-black/95 backdrop-blur-xl"
+    class="mobile-overlay"
 >
     <div
-        class="relative min-h-screen flex flex-col justify-center items-center gap-6 p-8 pt-24 pb-12"
+        class="mobile-overlay-content"
     >
         <a href="/proyectos/" class="menu-link" style="--delay: 0.1s">
             <span class="link-number">01</span>
@@ -133,109 +133,6 @@ const { className = "" } = Astro.props;
         </a>
     </div>
 </div>
-
-<style>
-    :global(body.menu-open) #main-nav {
-        background-color: #ffffff !important;
-        border-bottom-color: #e5e7eb !important;
-    }
-
-    :global(.dark body.menu-open) #main-nav {
-        background-color: #000000 !important;
-        border-bottom-color: #1a1a1a !important;
-    }
-
-    :global(body.menu-open) #main-nav a,
-    :global(body.menu-open) #main-nav button {
-        color: #1a1a1a !important;
-    }
-
-    :global(.dark body.menu-open) #main-nav a,
-    :global(.dark body.menu-open) #main-nav button {
-        color: #ffffff !important;
-    }
-
-    :global(body.menu-open) .line-1 {
-        transform: translateY(4px) rotate(45deg);
-        background-color: #1a1a1a !important;
-    }
-    :global(body.menu-open) .line-2 {
-        transform: translateY(-4px) rotate(-45deg);
-        background-color: #1a1a1a !important;
-    }
-
-    :global(.dark body.menu-open) .line-1,
-    :global(.dark body.menu-open) .line-2 {
-        background-color: #ffffff !important;
-    }
-
-    :global(html.menu-open),
-    :global(body.menu-open) {
-        overflow: hidden;
-    }
-
-    :global(body.menu-open) #mobile-menu-overlay {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .menu-link {
-        display: flex;
-        align-items: baseline;
-        gap: 1rem;
-        text-decoration: none;
-        color: #1a1a1a;
-        overflow: hidden;
-        opacity: 0;
-        transform: translateY(20px);
-        transition:
-            opacity 0.5s ease,
-            transform 0.5s ease;
-        transition-delay: var(--delay);
-    }
-
-    :global(.dark) .menu-link {
-        color: #ffffff;
-    }
-
-    :global(body.menu-open) .menu-link {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .link-number {
-        font-size: 0.875rem;
-        color: var(--color-accent);
-        font-weight: 400;
-    }
-
-    .link-text {
-        font-size: 2.5rem;
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        transition: transform 0.3s ease;
-    }
-
-    @media (min-width: 768px) {
-        .link-text {
-            font-size: 4rem;
-        }
-    }
-
-    .menu-link:hover .link-text {
-        transform: translateX(10px);
-        font-style: italic;
-    }
-
-    @media (max-height: 700px) {
-        .link-text {
-            font-size: 2rem;
-        }
-        .link-number {
-            font-size: 0.75rem;
-        }
-    }
-</style>
 
 <script>
     function setupMenu() {

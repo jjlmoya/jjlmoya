@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import DeathDialogue from "../../components/pages/biblioteca/DeathDialogue.astro";
 import DeathInput from "../../components/pages/biblioteca/DeathInput.astro";
 import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
+import "./biblioteca.css";
 ---
 
 <Layout
@@ -13,20 +14,11 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
     footerClass="bg-black text-white"
     image="/images/concepts/biblioteca_og_scythe.webp"
 >
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap"
-        rel="stylesheet"
-    />
+    <main class="biblioteca-main">
+        <div class="biblioteca-overlay"></div>
 
-    <main
-        class="min-h-screen bg-[#0c0a09] text-[#e7e5e4] overflow-hidden relative flex flex-col items-center justify-center p-4"
-    >
-        <div class="absolute inset-0 pointer-events-none opacity-20"></div>
-
-        <div id="stage-intro" class="z-10 w-full max-w-4xl transition-opacity duration-1000">
-            <div id="intro-initial" class="transition-opacity duration-1000">
+        <div id="stage-intro" class="biblioteca-stage-intro">
+            <div id="intro-initial" class="biblioteca-transition-opacity">
                 <DeathDialogue
                     text="DISCULPAD LA MOLESTIA. HAY DEMASIADOS LIBROS AQUÍ Y PARECE QUE CADA VEZ SOIS MÁS. NECESITO AYUDA PARA LOCALIZAR EL VUESTRO."
                     speed={150}
@@ -34,7 +26,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                     mode="word"
                 />
             </div>
-            <div id="intro-next" class="hidden transition-opacity duration-1000 opacity-0">
+            <div id="intro-next" class="hidden biblioteca-transition-opacity">
                 <DeathDialogue
                     text="¿EN QUÉ AÑO EMPEZASTEIS?"
                     speed={150}
@@ -44,7 +36,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
                 />
             </div>
 
-            <div id="intro-month" class="hidden transition-opacity duration-1000 opacity-0">
+            <div id="intro-month" class="hidden biblioteca-transition-opacity">
                 <DeathDialogue
                     text="COMPRENDO. NECESITO MÁS PRECISIÓN. EL TIEMPO ES UN ASUNTO DELICADO Y LAS ESTANTERÍAS SON INFINITAS. <br><br> ¿Y EL MES?"
                     speed={150}
@@ -56,10 +48,7 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             <DeathInput />
         </div>
 
-        <div
-            id="stage-confirmation"
-            class="hidden z-10 w-full max-w-4xl transition-opacity duration-1000"
-        >
+        <div id="stage-confirmation" class="biblioteca-stage-confirmation">
             <DeathDialogue
                 text="AH, SÍ. AQUÍ ESTÁ. <br><br> VAYA... ES UN TOMO MÁS PESADO DE LO QUE ESPERABA. <br><br> VEAMOS QUÉ DICE."
                 speed={150}
@@ -68,20 +57,11 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             />
         </div>
 
-        <div
-            id="stage-book"
-            class="hidden z-10 w-full h-screen absolute inset-0 transition-opacity duration-1000 opacity-0"
-        >
+        <div id="stage-book" class="biblioteca-stage-book">
             <LifeBook />
         </div>
 
-        <div
-            id="death-of-rats"
-            class="fixed bottom-4 right-8 z-50 text-xl cursor-pointer hover:scale-125 transition-transform duration-200 select-none opacity-50 hover:opacity-100"
-            title="¡IIIIK!"
-        >
-            🐀
-        </div>
+        <div id="death-of-rats" class="biblioteca-death-of-rats" title="¡IIIIK!">🐀</div>
     </main>
 
     <script is:inline>
@@ -247,24 +227,4 @@ import LifeBook from "../../components/pages/biblioteca/LifeBook.astro";
             }
         });
     </script>
-
-    <style is:global>
-        body {
-            background-color: #0c0a09;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1c1917;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #44403c;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #57534e;
-        }
-    </style>
 </Layout>
