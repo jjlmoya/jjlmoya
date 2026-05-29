@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import "./MechanicsFilter.css";
 
 interface Props {
     allTags: string[];
@@ -8,41 +9,39 @@ interface Props {
 const { allTags } = Astro.props;
 ---
 
-<div class="flex flex-col gap-4 md:gap-8 mb-6 md:mb-8">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <h1
-            class="text-2xl md:text-4xl font-bold border-l-4 border-[var(--color-gamebob-accent)] pl-3 md:pl-4 lowercase text-[var(--color-gamebob-text)]"
-        >
+<div class="mfilt-wrapper">
+    <div class="mfilt-header">
+        <h1 class="mfilt-title">
             mecánicas
         </h1>
 
-        <div class="flex flex-wrap gap-2" id="filters">
+        <div class="mfilt-group" id="filters">
             <button
-                class="filter-btn active px-3 py-1 rounded-full text-xs md:text-sm transition-all"
+                class="filter-btn active"
                 data-filter="all"
             >
                 Todos
             </button>
             <button
-                class="filter-btn px-3 py-1 rounded-full text-xs md:text-sm transition-colors"
+                class="filter-btn"
                 data-filter="mobile"
             >
-                <Icon name="mdi:cellphone" class="inline w-3 h-3 md:w-4 md:h-4 mr-1" /> Mobile
+                <Icon name="mdi:cellphone" class="filter-btn-icon" /> Mobile
             </button>
             <button
-                class="filter-btn px-3 py-1 rounded-full text-xs md:text-sm transition-colors"
+                class="filter-btn"
                 data-filter="desktop"
             >
-                <Icon name="mdi:monitor" class="inline w-3 h-3 md:w-4 md:h-4 mr-1" /> Desktop
+                <Icon name="mdi:monitor" class="filter-btn-icon" /> Desktop
             </button>
         </div>
     </div>
 
-    <div class="flex overflow-x-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 gap-2 no-scrollbar">
+    <div class="mfilt-tags-row no-scrollbar">
         {
             allTags.map((tag) => (
                 <button
-                    class="tag-filter-btn whitespace-nowrap px-2 py-1 rounded text-[10px] md:text-xs transition-colors flex-shrink-0"
+                    class="tag-filter-btn"
                     data-tag={tag}
                 >
                     #{tag}
@@ -51,39 +50,3 @@ const { allTags } = Astro.props;
         }
     </div>
 </div>
-
-<style>
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-
-    .filter-btn,
-    .tag-filter-btn {
-        background-color: var(--color-ui-surface);
-        color: var(--color-ui-text-muted);
-        border: 1px solid var(--color-ui-border);
-    }
-
-    .filter-btn:hover,
-    .tag-filter-btn:hover {
-        background-color: var(--color-ui-surface-hover);
-        color: white;
-    }
-
-    .filter-btn.active,
-    .tag-filter-btn.active {
-        background-color: var(--color-gamebob-primary);
-        color: black;
-        box-shadow: 0 0 20px rgba(29, 218, 188, 0.3);
-        border-color: transparent;
-    }
-
-    .filter-btn.active:hover,
-    .tag-filter-btn.active:hover {
-        background-color: rgba(29, 218, 188, 0.8);
-    }
-</style>
