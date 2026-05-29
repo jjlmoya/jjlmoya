@@ -19,9 +19,7 @@ import InflationPersonalNote from "../../components/pages/inflacion/InflationPer
     image="/images/concepts/inflacion_concept.webp"
     fullWidth={true}
 >
-    <div
-        class="flex flex-col items-center justify-center bg-amber-50 text-amber-900 p-4 relative overflow-hidden"
-    >
+    <div class="inf-main-container">
         <InflationHeader>
             <InflationBill />
             <InflationSlider />
@@ -62,18 +60,18 @@ import InflationPersonalNote from "../../components/pages/inflacion/InflationPer
         const items = itemsData;
 
         const createItemHtml = (item: any, count: number, delay: number) => {
-            const scale = item.price > 50 ? "scale-110" : "scale-100";
-            const bg = item.price > 50 ? "bg-amber-200/50" : "bg-amber-100/50";
+            const scale = item.price > 50 ? "inf-item-large" : "inf-item-normal";
+            const bg = item.price > 50 ? "inf-bg-large" : "inf-bg-normal";
 
             const countBadge =
                 count > 1
-                    ? `<div class="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">${count}</div>`
+                    ? `<div class="inf-badge-count">${count}</div>`
                     : "";
 
-            return `<div class="relative animate-pop text-amber-900 flex flex-col items-center p-2 ${bg} rounded-lg border border-amber-200/50 ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€) ${count > 1 ? `x${count}` : ""}">
+            return `<div class="inf-item-wrapper ${bg} ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€) ${count > 1 ? `x${count}` : ""}">
             ${countBadge}
             ${getIconHtml(item.icon)}
-            <span class="text-[10px] font-bold mt-1 opacity-60">${item.name}</span>
+            <span class="inf-item-name">${item.name}</span>
           </div>`;
         };
 
@@ -112,6 +110,75 @@ import InflationPersonalNote from "../../components/pages/inflacion/InflationPer
 </script>
 
 <style>
+    .inf-main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fffbeb;
+        color: #78350f;
+        padding: 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+    :global(.inf-item-wrapper) {
+        position: relative;
+        animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        opacity: 0;
+        color: #78350f;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(253, 230, 138, 0.5);
+    }
+    :global(.inf-item-normal) {
+        transform: scale(1);
+    }
+    :global(.inf-item-large) {
+        transform: scale(1.1);
+    }
+    :global(.inf-bg-normal) {
+        background-color: rgba(253, 230, 138, 0.5);
+    }
+    :global(.inf-bg-large) {
+        background-color: rgba(251, 191, 36, 0.5);
+    }
+    :global(.inf-badge-count) {
+        position: absolute;
+        top: -0.5rem;
+        right: -0.5rem;
+        background-color: #000000;
+        color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: bold;
+        border-radius: 50%;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #ffffff;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    :global(.inf-item-name) {
+        font-size: 10px;
+        font-weight: bold;
+        margin-top: 0.25rem;
+        opacity: 0.6;
+    }
+    :global(.registry-icon) {
+        width: 2rem;
+        height: 2rem;
+        display: block;
+    }
+    :global(.inf-items-container svg) {
+        width: 2rem;
+        height: 2rem;
+        display: block;
+    }
+
     @keyframes pop {
         0% {
             transform: scale(0);
@@ -125,9 +192,5 @@ import InflationPersonalNote from "../../components/pages/inflacion/InflationPer
             transform: scale(1);
             opacity: 1;
         }
-    }
-    .animate-pop {
-        animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        opacity: 0;
     }
 </style>
