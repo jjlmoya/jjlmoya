@@ -15,7 +15,6 @@ const DEFAULT_THEMES: Record<string, string> = {
     "fast-task": "#00E5FF",
 };
 
-
 const roadmapApps = await Promise.all(
     ALL_APP_DEFINITIONS
         .map(async ({ entry }) => {
@@ -38,7 +37,6 @@ const roadmapApps = await Promise.all(
             };
         })
 );
-
 ---
 
 <GameBobLayout
@@ -46,16 +44,42 @@ const roadmapApps = await Promise.all(
     description="Próximos lanzamientos, actualizaciones de juegos y planes futuros. Transparencia total sobre lo que estoy construyendo."
     image="/images/gamebob/roadmap/index.webp"
 >
-    <div class="min-h-screen flex flex-col items-center py-12 px-4">
-        <div class="z-10 w-full max-w-5xl mt-8">
+    <div class="gr-page">
+        <div class="gr-container">
             <RoadmapHeader
                 title="roadmap"
                 description="Transparencia total sobre lo que estoy construyendo y lo que vendrá después."
             />
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="gr-grid">
                 {roadmapApps.map((app) => <ProjectCard project={app} />)}
             </div>
         </div>
     </div>
 </GameBobLayout>
+
+<style>
+    .gr-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 1rem;
+    }
+    .gr-container {
+        z-index: 10;
+        width: 100%;
+        max-width: 64rem;
+        margin-top: 2rem;
+    }
+    .gr-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    @media (min-width: 1024px) {
+        .gr-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>

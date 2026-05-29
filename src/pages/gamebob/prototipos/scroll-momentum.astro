@@ -9,23 +9,23 @@ import { Icon } from "astro-icon/components";
     description="Vuela por el espacio y recolecta scrap en este prototipo de inercia espacial."
     image="/images/gamebob/prototypes/scroll-momentum.webp"
     showBackground={false}
-    headerClass="hidden"
-    footerClass="hidden"
-    mainClass="p-0"
-    bodyClass="overflow-hidden cursor-none"
+    headerClass="sm-header-hidden"
+    footerClass="sm-footer-hidden"
+    mainClass="sm-main"
+    bodyClass="sm-body"
 >
-    <div class="fixed inset-0 w-full h-full bg-slate-950 overflow-hidden cursor-none">
-        <canvas id="momentum-canvas" class="block w-full h-full touch-none"></canvas>
+    <div class="sm-container">
+        <canvas id="momentum-canvas" class="sm-canvas"></canvas>
 
-        <div class="absolute top-6 left-6 z-50">
+        <div class="sm-back-btn">
             <a
                 href="/gamebob/mecanicas/"
-                class="group flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/20 transition-all duration-300 backdrop-blur-sm"
+                class="sm-back-link"
                 aria-label="Volver"
             >
                 <Icon
                     name="mdi:arrow-left"
-                    class="w-4 h-4 transition-transform group-hover:-translate-x-0.5"
+                    class="sm-back-icon"
                 />
             </a>
         </div>
@@ -51,6 +51,65 @@ import { Icon } from "astro-icon/components";
 <style>
     :root {
         color-scheme: dark;
+    }
+
+    .sm-header-hidden { display: none; }
+    .sm-footer-hidden { display: none; }
+    .sm-main { padding: 0 !important; }
+    .sm-body {
+        overflow: hidden;
+        cursor: none;
+    }
+
+    .sm-container {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: #020617;
+        overflow: hidden;
+        cursor: none;
+    }
+
+    .sm-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+    }
+
+    .sm-back-btn {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        z-index: 50;
+    }
+
+    .sm-back-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.4);
+        transition: all 0.3s;
+        backdrop-filter: blur(4px);
+    }
+    .sm-back-link:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sm-back-icon {
+        width: 1rem;
+        height: 1rem;
+        transition: transform 0.3s;
+    }
+    .sm-back-link:hover .sm-back-icon {
+        transform: translateX(-0.125rem);
     }
 
     #momentum-canvas {

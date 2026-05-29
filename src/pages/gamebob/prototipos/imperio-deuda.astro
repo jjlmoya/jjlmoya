@@ -5,7 +5,7 @@ import { Icon } from "astro-icon/components";
 ---
 
 <!doctype html>
-<html lang="es" class="bg-[#F8FAFC] overflow-hidden select-none">
+<html lang="es" class="id-root">
     <head>
         <meta charset="UTF-8" />
         <meta
@@ -49,6 +49,13 @@ import { Icon } from "astro-icon/components";
                 justify-content: center;
                 overflow: hidden;
                 -webkit-tap-highlight-color: transparent;
+            }
+
+            .id-root {
+                background: #f8fafc;
+                overflow: hidden;
+                -webkit-user-select: none;
+                user-select: none;
             }
 
             .phone-container {
@@ -508,6 +515,52 @@ import { Icon } from "astro-icon/components";
             .scrollbar-hide::-webkit-scrollbar {
                 display: none;
             }
+
+            .id-action-hint {
+                position: absolute;
+                bottom: 2.5rem;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20;
+                pointer-events: none;
+                opacity: 0.5;
+            }
+            .id-hint-box {
+                padding: 0.5rem 1rem;
+                background: rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(4px);
+                border-radius: 9999px;
+                font-size: 0.625rem;
+                font-weight: 900;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #94a3b8;
+                border: 1px solid #e2e8f0;
+            }
+            .id-flex-between {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.25rem;
+            }
+            .id-flex-center {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .id-icon-sm {
+                width: 0.75rem;
+                height: 0.75rem;
+                color: #94a3b8;
+            }
+            .id-label-tag {
+                margin: 0;
+                font-size: 8px;
+            }
+            .id-summary {
+                color: var(--accent);
+                font-size: 8px;
+            }
         </style>
     </head>
     <body>
@@ -543,13 +596,8 @@ import { Icon } from "astro-icon/components";
                 </div>
             </main>
 
-            <div
-                id="action-hint"
-                class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 pointer-events-none opacity-50"
-            >
-                <div
-                    class="px-4 py-2 bg-white/80 backdrop-blur rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 border border-slate-200"
-                >
+            <div id="action-hint" class="id-action-hint">
+                <div class="id-hint-box">
                     Clica en la ciudad para extraer fondos
                 </div>
             </div>
@@ -569,18 +617,12 @@ import { Icon } from "astro-icon/components";
                     >
                 </div>
 
-                <div class="flex justify-between items-center mb-1">
-                    <div class="flex items-center gap-2">
-                        <Icon name="mdi:office-building-cog" class="w-3 h-3 text-slate-400" />
-                        <span class="label-tag" style="margin:0; font-size: 8px;"
-                            >Sistema de Activos</span
-                        >
+                <div class="id-flex-between">
+                    <div class="id-flex-center">
+                        <Icon name="mdi:office-building-cog" class="id-icon-sm" />
+                        <span class="id-label-tag">Sistema de Activos</span>
                     </div>
-                    <span
-                        id="biz-summary"
-                        class="label-tag"
-                        style="color: var(--accent); font-size: 8px;">0 Sedes</span
-                    >
+                    <span id="biz-summary" class="id-summary">0 Sedes</span>
                 </div>
 
                 <div id="biz-list-ui" class="biz-scroller scrollbar-hide"></div>

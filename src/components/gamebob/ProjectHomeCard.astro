@@ -27,66 +27,49 @@ const links =
 
 const isEven = index % 2 === 0;
 
-const statusColors = {
-    released: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
-    developing: "bg-blue-500/10 border-blue-300/30 text-blue-400",
-    qa: "bg-amber-500/10 border-amber-500/30 text-amber-400",
-    planning: "bg-blue-500/10 border-blue-500/30 text-blue-400",
-};
-
-const statusClasses = statusColors[statusType] || statusColors.developing;
-
 const nameParts = name.includes(":") ? [name.split(":")[0], name.split(":")[1]] : [name, ""];
 ---
 
-<div
-    class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mt-24 pt-24 border-t border-white/5 first:mt-0 first:pt-0 first:border-0"
->
-    <div class:list={["space-y-6", { "order-2": !isEven, "order-2 md:order-1": isEven }]}>
-        <h3
-            class="text-5xl font-black tracking-tighter text-[var(--color-gamebob-text)] uppercase leading-none"
-        >
+<div class="phc-grid">
+    <div class:list={["phc-text-col", { "phc-text-col--right": isEven }]}>
+        <h3 class="phc-title">
             {nameParts[0]}<br />
             <span style={`color: ${color}`}>{nameParts[1].trim()}</span>
         </h3>
-        <p class="text-gray-400 text-lg leading-relaxed lowercase">
+        <p class="phc-desc">
             {homeDescription}
         </p>
 
-        <div class="flex items-center gap-4 pt-4">
+        <div class="phc-status-row">
             <div
-                class:list={[
-                    "px-4 py-2 border rounded-lg text-sm font-medium",
-                    statusClasses,
-                    { "animate-pulse": statusType !== "released" },
-                ]}
+                class:list={["phc-status", `phc-status--${statusType}`, { "phc-status--pulse": statusType !== "released" }]}
             >
                 {statusLabel}
             </div>
         </div>
 
-        <div class="flex gap-4 pt-4">
+        <div class="phc-actions">
             {
                 links?.googlePlay ? (
                     <a
                         href={links.googlePlay}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="h-12 px-6 bg-white text-black hover:bg-[var(--color-gamebob-primary)] transition-colors rounded-lg flex items-center gap-3 shadow-lg"
+                        class="phc-action-btn"
                     >
-                        <Icon name="mdi:google-play" class="w-6 h-6" />
-                        <div class="text-left">
-                            <div class="text-[10px] leading-none">DISPONIBLE EN</div>
-                            <div class="text-sm font-bold leading-none">Google Play</div>
+                        <Icon name="mdi:google-play" class="phc-action-icon" />
+                        <div class="phc-action-text">
+                            <div class="phc-action-label">DISPONIBLE EN</div>
+                            <div class="phc-action-name">Google Play</div>
                         </div>
                     </a>
                 ) : (
-                    <div class="flex gap-4 opacity-50 grayscale">
-                        <div class="h-12 px-6 bg-white/10 rounded-lg flex items-center gap-3 text-white">
-                            <Icon name="mdi:google-play" class="w-6 h-6" />
-                            <div class="text-left">
-                                <div class="text-[10px] leading-none">PRÓXIMAMENTE EN</div>
-                                <div class="text-sm font-bold leading-none">Google Play</div>
+                    <div class="phc-action-disabled-group">
+                        <div class="phc-action-btn phc-action-btn--disabled">
+                            <Icon name="mdi:google-play" class="phc-action-icon" />
+                            <div class="phc-action-text">
+                                <div class="phc-action-label">PRÓXIMAMENTE EN</div>
+                                <div class="phc-action-name">Google Play</div>
                             </div>
                         </div>
                     </div>
@@ -94,53 +77,257 @@ const nameParts = name.includes(":") ? [name.split(":")[0], name.split(":")[1]] 
             }
 
             <button
-                class="h-12 px-6 bg-white/10 rounded-lg flex items-center gap-3 cursor-not-allowed text-white opacity-50 grayscale"
+                class="phc-action-btn phc-action-btn--disabled"
                 title="Próximamente en App Store"
             >
-                <Icon name="mdi:apple" class="w-6 h-6" />
-                <div class="text-left">
-                    <div class="text-[10px] leading-none text-gray-400">Descárgalo en el</div>
-                    <div class="text-sm font-bold leading-none text-gray-400">App Store</div>
+                <Icon name="mdi:apple" class="phc-action-icon" />
+                <div class="phc-action-text">
+                    <div class="phc-action-label phc-action-label--muted">Descárgalo en el</div>
+                    <div class="phc-action-name phc-action-name--muted">App Store</div>
                 </div>
             </button>
         </div>
     </div>
 
     <div
-        class:list={[
-            "relative group rounded-2xl overflow-hidden shadow-2xl border border-white/10",
-            { "order-1": !isEven, "order-1 md:order-2": isEven },
-        ]}
-        style={`--tw-shadow-color: ${color}33; shadow-color: var(--tw-shadow-color)`}
+        class:list={["phc-visual", { "phc-visual--left": isEven }]}
+        style={`--phc-shadow: ${color}33;`}
     >
-        <div
-            class:list={[
-                "bg-slate-900 flex items-center justify-center relative overflow-hidden",
-                "aspect-[2/3] md:aspect-[3/4]",
-            ]}
-        >
+        <div class="phc-visual-inner">
             {
                 image ? (
                     <img
                         src={image}
                         alt={`${name} Cover`}
-                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        class="phc-visual-img"
                     />
                 ) : (
-                    <div class="text-white/10 font-black text-6xl uppercase tracking-widest text-center px-4">
+                    <div class="phc-visual-fallback">
                         {name}
                     </div>
                 )
             }
             <div
-                class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent z-10"
-                style={`background-image: linear-gradient(to bottom right, ${color}33, transparent)`}
+                class="phc-overlay-gradient"
+                style="background-image: linear-gradient(to bottom right, ${color}33, transparent)"
             >
             </div>
-            <div
-                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 z-20"
-            >
-            </div>
+            <div class="phc-overlay-shadow"></div>
         </div>
     </div>
 </div>
+
+<style>
+    @keyframes phc-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .phc-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        align-items: center;
+        margin-top: 6rem;
+        padding-top: 6rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .phc-grid:first-of-type {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+    }
+    @media (min-width: 768px) {
+        .phc-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    .phc-text-col {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .phc-title {
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        color: var(--color-gamebob-text);
+        text-transform: uppercase;
+        line-height: 1;
+    }
+
+    .phc-desc {
+        color: #9ca3af;
+        font-size: 1.125rem;
+        line-height: 1.625;
+        text-transform: lowercase;
+    }
+
+    .phc-status-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 1rem;
+    }
+
+    .phc-status {
+        padding: 0.5rem 1rem;
+        border: 1px solid;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    .phc-status--released {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.3);
+        color: #34d399;
+    }
+    .phc-status--developing {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(147, 197, 253, 0.3);
+        color: #60a5fa;
+    }
+    .phc-status--qa {
+        background: rgba(245, 158, 11, 0.1);
+        border-color: rgba(245, 158, 11, 0.3);
+        color: #fbbf24;
+    }
+    .phc-status--planning {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #60a5fa;
+    }
+    .phc-status--pulse {
+        animation: phc-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .phc-actions {
+        display: flex;
+        gap: 1rem;
+        padding-top: 1rem;
+    }
+
+    .phc-action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        height: 3rem;
+        padding: 0 1.5rem;
+        background: #ffffff;
+        color: #000000;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+    .phc-action-btn:hover {
+        background: var(--color-gamebob-primary);
+    }
+
+    .phc-action-btn--disabled {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        cursor: not-allowed;
+        opacity: 0.5;
+        filter: grayscale(1);
+    }
+    .phc-action-btn--disabled:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .phc-action-disabled-group {
+        display: flex;
+        gap: 1rem;
+        opacity: 0.5;
+        filter: grayscale(1);
+    }
+
+    .phc-action-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .phc-action-text {
+        text-align: left;
+    }
+
+    .phc-action-label {
+        font-size: 0.625rem;
+        line-height: 1;
+    }
+    .phc-action-label--muted {
+        color: #9ca3af;
+    }
+
+    .phc-action-name {
+        font-size: 0.875rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .phc-action-name--muted {
+        color: #9ca3af;
+    }
+
+    .phc-visual {
+        position: relative;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px var(--phc-shadow);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .phc-visual-inner {
+        background: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 2 / 3;
+    }
+    @media (min-width: 768px) {
+        .phc-visual-inner {
+            aspect-ratio: 3 / 4;
+        }
+    }
+
+    .phc-visual-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.7s;
+    }
+    .phc-visual:hover .phc-visual-img {
+        transform: scale(1.1);
+    }
+
+    .phc-visual-fallback {
+        color: rgba(255, 255, 255, 0.1);
+        font-weight: 900;
+        font-size: 3.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .phc-overlay-gradient {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+    }
+
+    .phc-overlay-shadow {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent, transparent);
+        opacity: 0.6;
+        z-index: 20;
+    }
+</style>

@@ -10,27 +10,23 @@ import { prototypes } from "../../../data/gamebob/prototypes";
     description="Zona de pruebas experimental. Prototipos en fase muy temprana (pre-alpha) para validar ideas de juego."
     image="/images/gamebob/prototipos/index.webp"
 >
-    <div class="min-h-screen flex flex-col items-center py-12 px-4">
-        <div class="z-10 w-full max-w-6xl mt-8 mb-16">
-            <h1
-                class="text-4xl font-bold mb-4 border-l-4 border-purple-500 pl-4 lowercase text-[var(--color-gamebob-text)]"
-            >
+    <div class="gp-page">
+        <div class="gp-container">
+            <h1 class="gp-title">
                 prototipos
             </h1>
-            <p class="text-gray-400 text-lg font-light max-w-2xl">
+            <p class="gp-subtitle">
                 zona de experimentación radical. ideas en fase muy temprana.
             </p>
         </div>
 
-        <div
-            class="w-full max-w-3xl mx-auto mb-16 p-6 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex gap-4 items-start"
-        >
-            <Icon name="mdi:alert-decagram" class="w-8 h-8 text-yellow-500 flex-shrink-0 mt-1" />
-            <div class="space-y-2">
-                <h3 class="text-yellow-500 font-bold uppercase tracking-widest text-sm">
+        <div class="gp-warning">
+            <Icon name="mdi:alert-decagram" class="gp-warning-icon" />
+            <div class="gp-warning-body">
+                <h3 class="gp-warning-heading">
                     Advertencia: Zona Inestable
                 </h3>
-                <p class="text-yellow-200/80 text-sm leading-relaxed">
+                <p class="gp-warning-text">
                     Estos prototipos están tan verdes que todavía hacen la fotosíntesis. Son
                     versiones muy tempranas creadas únicamente para validar si una idea rudimentaria
                     es divertida. Pueden contener errores, romperse sin previo aviso o no estar
@@ -40,38 +36,38 @@ import { prototypes } from "../../../data/gamebob/prototypes";
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+        <div class="gp-grid">
             {
                 prototypes.map((proto) => (
                     <a
                         href={`/gamebob/prototipos/${proto.slug}/`}
-                        class={`group relative p-8 rounded-2xl bg-slate-900/50 border border-white/5 ${proto.borderColor} transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${proto.bgHover}`}
+                        class={`gp-card ${proto.borderColor} ${proto.bgHover}`}
                     >
-                        <div class="absolute top-4 right-4 opacity-20 group-hover:opacity-100 transition-opacity">
-                            <Icon name="mdi:arrow-top-right" class="w-6 h-6 text-white" />
+                        <div class="gp-card-arrow">
+                            <Icon name="mdi:arrow-top-right" class="gp-card-arrow-icon" />
                         </div>
 
-                        <div class="mb-6 p-4 rounded-xl bg-slate-950 inline-block border border-white/5 group-hover:scale-110 transition-transform duration-300">
-                            <Icon name={proto.icon} class={`w-10 h-10 ${proto.color}`} />
+                        <div class="gp-card-iconbox">
+                            <Icon name={proto.icon} class={`gp-card-icon ${proto.color}`} />
                         </div>
 
-                        <h2 class="text-2xl font-bold text-white mb-3 tracking-tight">
+                        <h2 class="gp-card-title">
                             {proto.title}
                         </h2>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        <p class="gp-card-desc">
                             {proto.description}
                         </p>
 
                         {proto.verdict === "liked" && (
-                            <div class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-emerald-400 opacity-80 group-hover:opacity-100 transition-opacity">
-                                <Icon name="mdi:thumb-up" class="w-4 h-4" />
+                            <div class="gp-verdict gp-verdict-liked">
+                                <Icon name="mdi:thumb-up" class="gp-verdict-icon" />
                                 Ma gustao
                             </div>
                         )}
 
                         {proto.verdict === "disliked" && (
-                            <div class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-red-400 opacity-80 group-hover:opacity-100 transition-opacity">
-                                <Icon name="mdi:thumb-down" class="w-4 h-4" />
+                            <div class="gp-verdict gp-verdict-disliked">
+                                <Icon name="mdi:thumb-down" class="gp-verdict-icon" />
                                 No ma gustao
                             </div>
                         )}
@@ -80,39 +76,31 @@ import { prototypes } from "../../../data/gamebob/prototypes";
             }
         </div>
 
-        <div class="mt-24 w-full max-w-4xl mx-auto border-t border-white/10 pt-12">
-            <h3 class="text-sm font-mono uppercase tracking-widest text-center text-gray-500 mb-8">
+        <div class="gp-legend">
+            <h3 class="gp-legend-title">
                 Leyenda de Veredictos
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div
-                    class="flex gap-4 items-start p-6 rounded-xl bg-emerald-500/5 border border-emerald-500/10"
-                >
-                    <Icon name="mdi:thumb-up" class="w-5 h-5 text-emerald-400 flex-shrink-0 mt-1" />
+            <div class="gp-legend-grid">
+                <div class="gp-legend-card gp-legend-liked">
+                    <Icon name="mdi:thumb-up" class="gp-legend-icon gp-legend-icon-liked" />
                     <div>
-                        <div
-                            class="font-mono uppercase tracking-widest text-emerald-400 text-xs font-bold mb-2"
-                        >
+                        <div class="gp-legend-label gp-legend-label-liked">
                             Ma gustao
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed">
+                        <p class="gp-legend-desc">
                             Posiblemente en algún momento se vuelva un juego más completo dándole
                             una vuelta a las mecánicas y puliéndolo.
                         </p>
                     </div>
                 </div>
 
-                <div
-                    class="flex gap-4 items-start p-6 rounded-xl bg-red-500/5 border border-red-500/10"
-                >
-                    <Icon name="mdi:thumb-down" class="w-5 h-5 text-red-400 flex-shrink-0 mt-1" />
+                <div class="gp-legend-card gp-legend-disliked">
+                    <Icon name="mdi:thumb-down" class="gp-legend-icon gp-legend-icon-disliked" />
                     <div>
-                        <div
-                            class="font-mono uppercase tracking-widest text-red-400 text-xs font-bold mb-2"
-                        >
+                        <div class="gp-legend-label gp-legend-label-disliked">
                             No ma gustao
                         </div>
-                        <p class="text-gray-400 text-sm leading-relaxed">
+                        <p class="gp-legend-desc">
                             La idea resonaba increíble en mi cabeza pero no ha aterrizado. Si sabes
                             cómo arreglarlo, contacta conmigo para ver si salvamos este
                             despropósito.
@@ -123,3 +111,243 @@ import { prototypes } from "../../../data/gamebob/prototypes";
         </div>
     </div>
 </GameBobLayout>
+
+<style>
+    .gp-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 1rem;
+    }
+    .gp-container {
+        z-index: 10;
+        width: 100%;
+        max-width: 72rem;
+        margin-top: 2rem;
+        margin-bottom: 4rem;
+    }
+    .gp-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        border-left: 4px solid #a855f7;
+        padding-left: 1rem;
+        text-transform: lowercase;
+        color: var(--color-gamebob-text);
+    }
+    .gp-subtitle {
+        color: #9ca3af;
+        font-size: 1.125rem;
+        font-weight: 300;
+        max-width: 42rem;
+    }
+    .gp-warning {
+        width: 100%;
+        max-width: 48rem;
+        margin: 0 auto 4rem;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        background: rgba(234, 179, 8, 0.1);
+        border: 1px solid rgba(234, 179, 8, 0.2);
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    .gp-warning-icon {
+        width: 2rem;
+        height: 2rem;
+        color: #eab308;
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+    }
+    .gp-warning-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .gp-warning-heading {
+        color: #eab308;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.875rem;
+    }
+    .gp-warning-text {
+        color: rgba(254, 240, 138, 0.8);
+        font-size: 0.875rem;
+        line-height: 1.625;
+    }
+    .gp-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+        max-width: 72rem;
+    }
+    @media (min-width: 768px) {
+        .gp-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1024px) {
+        .gp-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    .gp-card {
+        position: relative;
+        padding: 2rem;
+        border-radius: 1rem;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s;
+        display: block;
+    }
+    .gp-card:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .gp-card-arrow {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        opacity: 0.2;
+        transition: opacity 0.3s;
+    }
+    .gp-card:hover .gp-card-arrow {
+        opacity: 1;
+    }
+    .gp-card-arrow-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #fff;
+    }
+    .gp-card-iconbox {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background: #020617;
+        display: inline-block;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: transform 0.3s;
+    }
+    .gp-card:hover .gp-card-iconbox {
+        transform: scale(1.1);
+    }
+    .gp-card-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+    .gp-card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.025em;
+    }
+    .gp-card-desc {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        line-height: 1.625;
+        margin-bottom: 1.5rem;
+    }
+    .gp-verdict {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        font-family: ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.8;
+        transition: opacity 0.3s;
+    }
+    .gp-card:hover .gp-verdict {
+        opacity: 1;
+    }
+    .gp-verdict-liked {
+        color: #34d399;
+    }
+    .gp-verdict-disliked {
+        color: #f87171;
+    }
+    .gp-verdict-icon {
+        width: 1rem;
+        height: 1rem;
+    }
+    .gp-legend {
+        margin-top: 6rem;
+        width: 100%;
+        max-width: 56rem;
+        margin-left: auto;
+        margin-right: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 3rem;
+    }
+    .gp-legend-title {
+        font-size: 0.875rem;
+        font-family: ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-align: center;
+        color: #6b7280;
+        margin-bottom: 2rem;
+    }
+    .gp-legend-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        .gp-legend-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    .gp-legend-card {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+    }
+    .gp-legend-liked {
+        background: rgba(16, 185, 129, 0.05);
+        border: 1px solid rgba(16, 185, 129, 0.1);
+    }
+    .gp-legend-disliked {
+        background: rgba(239, 68, 68, 0.05);
+        border: 1px solid rgba(239, 68, 68, 0.1);
+    }
+    .gp-legend-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+    }
+    .gp-legend-icon-liked {
+        color: #34d399;
+    }
+    .gp-legend-icon-disliked {
+        color: #f87171;
+    }
+    .gp-legend-label {
+        font-family: ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .gp-legend-label-liked {
+        color: #34d399;
+    }
+    .gp-legend-label-disliked {
+        color: #f87171;
+    }
+    .gp-legend-desc {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        line-height: 1.625;
+    }
+</style>

@@ -18,7 +18,7 @@ const CODE_URL =
     codeUrl={CODE_URL}
     image="/images/gamebob/mechanics/magnetic-finger.webp"
 >
-    <Icon slot="icon" name="mdi:magnet" class="text-blue-400" />
+    <Icon slot="icon" name="mdi:magnet" class="gm-icon-blue" />
 
     <MechanicCanvas
         id="game-canvas"
@@ -29,32 +29,26 @@ const CODE_URL =
 
     <MechanicInfo>
         <Fragment slot="how-it-works">
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Simulación de fuerzas magnéticas.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Partículas con masa y fricción variable.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Interacción táctil directa.</span>
             </li>
         </Fragment>
 
         <Fragment slot="controls">
-            <div class="flex gap-4 justify-center w-full">
-                <button
-                    id="btn-attract"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition-colors active-mode"
-                >
+            <div class="gm-btn-group">
+                <button id="btn-attract" class="gm-polarity-btn gm-polarity-active">
                     Atraer
                 </button>
-                <button
-                    id="btn-repel"
-                    class="bg-zinc-700 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold transition-colors"
-                >
+                <button id="btn-repel" class="gm-polarity-btn">
                     Repeler
                 </button>
             </div>
@@ -63,9 +57,40 @@ const CODE_URL =
 </MechanicPage>
 
 <style>
-    .active-mode {
-        outline: 2px solid white;
+    .gm-li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .gm-bullet {
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+    .gm-bullet-blue { color: #60a5fa; }
+    .gm-icon-blue { color: #60a5fa; }
+    .gm-btn-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        width: 100%;
+    }
+    .gm-polarity-btn {
+        background: #3f3f46;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .gm-polarity-btn:hover {
+        background: #dc2626;
+    }
+    .gm-polarity-active {
+        outline: 2px solid #fff;
         outline-offset: 2px;
+        background: #2563eb;
     }
 </style>
 
@@ -100,21 +125,25 @@ const CODE_URL =
             btnAttract.addEventListener("click", () => {
                 if (game) game.setPolarity(1);
 
-                btnAttract.classList.add("active-mode", "bg-blue-600");
-                btnAttract.classList.remove("bg-zinc-700");
+                btnAttract.classList.add("gm-polarity-active");
+                btnAttract.style.background = "#2563eb";
+                btnAttract.classList.remove("gm-polarity-inactive");
 
-                btnRepel.classList.remove("active-mode", "bg-red-600");
-                btnRepel.classList.add("bg-zinc-700");
+                btnRepel.classList.remove("gm-polarity-active");
+                btnRepel.style.background = "#3f3f46";
+                btnRepel.classList.add("gm-polarity-inactive");
             });
 
             btnRepel.addEventListener("click", () => {
                 if (game) game.setPolarity(-1);
 
-                btnRepel.classList.add("active-mode", "bg-red-600");
-                btnRepel.classList.remove("bg-zinc-700");
+                btnRepel.classList.add("gm-polarity-active");
+                btnRepel.style.background = "#dc2626";
+                btnRepel.classList.remove("gm-polarity-inactive");
 
-                btnAttract.classList.remove("active-mode", "bg-blue-600");
-                btnAttract.classList.add("bg-zinc-700");
+                btnAttract.classList.remove("gm-polarity-active");
+                btnAttract.style.background = "#3f3f46";
+                btnAttract.classList.add("gm-polarity-inactive");
             });
         }
     }

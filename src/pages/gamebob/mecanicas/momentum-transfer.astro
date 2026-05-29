@@ -18,61 +18,46 @@ const CODE_URL =
     codeUrl={CODE_URL}
     image="/images/gamebob/mechanics/momentum-transfer.svg"
 >
-    <Icon slot="icon" name="mdi:billiards" class="text-[#00ffd2]" />
+    <Icon slot="icon" name="mdi:billiards" class="mt-icon" />
 
-    <div class="max-w-7xl mx-auto px-6 space-y-12 py-10">
-        <div class="relative group">
-            <div
-                class="flex flex-col bg-[#050505] rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_50px_100px_-30px_rgba(0,0,0,0.9)]"
-            >
-                <div class="relative bg-black">
-                    <MechanicCanvas
-                        id="game-canvas"
-                        instruction="Tú eres la bola AZUL"
-                        subInstruction="Golpea a los NARANJAS hacia los PINCHOS o VACÍO"
-                        verticalOnMobile={true}
-                    />
-                </div>
+    <div class="mt-section">
+        <div class="mt-card">
+            <div class="mt-card-inner">
+                <MechanicCanvas
+                    id="game-canvas"
+                    instruction="Tú eres la bola AZUL"
+                    subInstruction="Golpea a los NARANJAS hacia los PINCHOS o VACÍO"
+                    verticalOnMobile={true}
+                />
             </div>
         </div>
     </div>
 
     <MechanicInfo>
         <Fragment slot="how-it-works">
-            <li class="flex items-start gap-3">
-                <span class="text-[#00ffd2] mt-1.5">•</span>
+            <li class="mt-li">
+                <span class="mt-bullet">•</span>
                 <span>Arrastra el mouse para lanzar al jugador.</span>
             </li>
-            <li class="flex items-start gap-3">
-                <span class="text-[#00ffd2] mt-1.5">•</span>
-                <span
-                    >Choca contra enemigos para transferirles tu velocidad y detenerte en seco.</span
-                >
+            <li class="mt-li">
+                <span class="mt-bullet">•</span>
+                <span>Choca contra enemigos para transferirles tu velocidad y detenerte en seco.</span>
             </li>
-            <li class="flex items-start gap-3">
-                <span class="text-[#00ffd2] mt-1.5">•</span>
+            <li class="mt-li">
+                <span class="mt-bullet">•</span>
                 <span>Empuja a los enemigos hacia los pinchos o el vacío para eliminarlos.</span>
             </li>
         </Fragment>
 
         <Fragment slot="controls">
-            <div class="col-span-2 flex flex-col gap-3">
-                <div
-                    class="group flex items-center justify-between bg-zinc-950/40 p-5 rounded-2xl border border-white/5 hover:border-[#00ffd2]/30 transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,210,0.05)] w-full"
-                >
-                    <div class="flex flex-col gap-1.5">
-                        <span class="text-white font-black uppercase text-[10px] tracking-[0.2em]"
-                            >Click & Drag</span
-                        >
-                        <span
-                            class="text-xs text-[#00ffd2] font-bold uppercase tracking-widest opacity-70 group-hover:opacity-100 transition-opacity italic"
-                            >Lanzar Jugador</span
-                        >
+            <div class="mt-controls-col">
+                <div class="mt-control-card">
+                    <div class="mt-control-body">
+                        <span class="mt-control-title">Click & Drag</span>
+                        <span class="mt-control-sub">Lanzar Jugador</span>
                     </div>
-                    <div
-                        class="flex items-center justify-center w-12 h-12 rounded-xl bg-[#00ffd2]/5 border border-[#00ffd2]/10 group-hover:bg-[#00ffd2]/10 transition-all group-hover:scale-110"
-                    >
-                        <Icon name="mdi:mouse-left-click" class="w-6 h-6 text-[#00ffd2]" />
+                    <div class="mt-control-icon-box">
+                        <Icon name="mdi:mouse-left-click" class="mt-control-icon" />
                     </div>
                 </div>
             </div>
@@ -95,6 +80,113 @@ const CODE_URL =
         image-rendering: crisp-edges;
         cursor: crosshair;
         object-fit: contain;
+    }
+</style>
+
+<style>
+    .mt-icon { color: #00ffd2; }
+    .mt-section {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+    .mt-section > * + * {
+        margin-top: 3rem;
+    }
+    .mt-section:first-child {
+        padding-top: 2.5rem;
+    }
+    .mt-card {
+        position: relative;
+    }
+    .mt-card-inner {
+        display: flex;
+        flex-direction: column;
+        background: #050505;
+        border-radius: 3rem;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.9);
+    }
+    .mt-card-inner > div:first-child {
+        position: relative;
+        background: #000;
+    }
+    .mt-li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .mt-bullet {
+        color: #00ffd2;
+        margin-top: 0.375rem;
+        flex-shrink: 0;
+    }
+    .mt-controls-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        grid-column: span 2;
+    }
+    .mt-control-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(9, 9, 11, 0.4);
+        padding: 1.25rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.5s;
+        width: 100%;
+    }
+    .mt-control-card:hover {
+        border-color: rgba(0, 255, 210, 0.3);
+        box-shadow: 0 0 30px rgba(0, 255, 210, 0.05);
+    }
+    .mt-control-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+    }
+    .mt-control-title {
+        color: #fff;
+        font-weight: 900;
+        text-transform: uppercase;
+        font-size: 0.625rem;
+        letter-spacing: 0.2em;
+    }
+    .mt-control-sub {
+        font-size: 0.75rem;
+        color: #00ffd2;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.7;
+        font-style: italic;
+        transition: opacity 0.3s;
+    }
+    .mt-control-card:hover .mt-control-sub {
+        opacity: 1;
+    }
+    .mt-control-icon-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 0.75rem;
+        background: rgba(0, 255, 210, 0.05);
+        border: 1px solid rgba(0, 255, 210, 0.1);
+        transition: all 0.3s;
+    }
+    .mt-control-card:hover .mt-control-icon-box {
+        background: rgba(0, 255, 210, 0.1);
+        transform: scale(1.1);
+    }
+    .mt-control-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #00ffd2;
     }
 </style>
 

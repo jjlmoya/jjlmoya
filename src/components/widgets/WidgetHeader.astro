@@ -2,79 +2,248 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<div
-    class="sticky top-0 z-20 bg-slate-50/90 dark:bg-black/90 backdrop-blur-md px-6 lg:px-10 py-4 lg:py-6 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4"
->
-    <div class="text-center sm:text-left w-full">
-        <div
-            id="current-category-badge"
-            class="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-widest rounded-md mb-2 opacity-0 transition-opacity"
-        >
-            Categoría
-        </div>
-        <h2
-            id="current-title"
-            class="text-xl lg:text-3xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight"
-        >
-            Explorador de Utilidades
-        </h2>
-        <p
-            id="current-desc"
-            class="hidden sm:block text-sm text-slate-500 dark:text-slate-400 font-light mt-1"
-        >
-            Personaliza e integra herramientas en tu web gratis.
-        </p>
+<div class="wh-header">
+    <div class="wh-info">
+        <div id="current-category-badge" class="wh-badge">Categoría</div>
+        <h2 id="current-title" class="wh-title">Explorador de Utilidades</h2>
+        <p id="current-desc" class="wh-desc">Personaliza e integra herramientas en tu web gratis.</p>
     </div>
 
-    <div class="flex flex-col sm:flex-row items-center gap-4 shrink-0">
-        <div
-            class="flex items-center gap-2 bg-white dark:bg-zinc-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"
-        >
-            <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2 mr-1"
-                >Utilidad</span
-            >
+    <div class="wh-controls">
+        <div class="wh-theme-group">
+            <span class="wh-group-label">Utilidad</span>
             <button
                 id="widget-theme-light"
-                class="widget-theme-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all bg-indigo-50 text-indigo-600 dark:bg-zinc-800 dark:text-slate-400"
+                class="wh-theme-btn wh-theme-btn--active"
                 data-theme="light"
                 title="Modo Claro"
             >
-                <Icon name="mdi:white-balance-sunny" class="w-4 h-4" />
+                <Icon name="mdi:white-balance-sunny" class="wh-icon" />
             </button>
             <button
                 id="widget-theme-dark"
-                class="widget-theme-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800"
+                class="wh-theme-btn"
                 data-theme="dark"
                 title="Modo Oscuro"
             >
-                <Icon name="mdi:moon-waning-crescent" class="w-4 h-4" />
+                <Icon name="mdi:moon-waning-crescent" class="wh-icon" />
             </button>
         </div>
 
-        <div
-            class="flex items-center gap-2 bg-white dark:bg-zinc-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"
-        >
-            <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2 mr-1"
-                >Previa</span
-            >
-            <button
-                data-bg="white"
-                class="bg-toggle w-9 h-9 rounded-xl bg-white border border-slate-200 shadow-sm active-bg"
-                title="Fondo Blanco"></button>
-            <button
-                data-bg="black"
-                class="bg-toggle w-9 h-9 rounded-xl bg-black border border-slate-800"
-                title="Fondo Negro"></button>
-            <button
-                data-bg="grid"
-                class="bg-toggle w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden relative"
-                title="Fondo Cuadrícula"
-            >
-                <div
-                    class="absolute inset-0 bg-[linear-gradient(to_right,#80808022_1px,transparent_1px),linear-gradient(to_bottom,#80808022_1px,transparent_1px)] bg-[size:4px_4px]"
-                >
-                </div>
+        <div class="wh-preview-group">
+            <span class="wh-group-label">Previa</span>
+            <button data-bg="white" class="wh-bg-btn wh-bg-btn--white wh-bg-btn--active" title="Fondo Blanco"></button>
+            <button data-bg="black" class="wh-bg-btn wh-bg-btn--black" title="Fondo Negro"></button>
+            <button data-bg="grid" class="wh-bg-btn wh-bg-btn--grid" title="Fondo Cuadrícula">
+                <div class="wh-grid-overlay"></div>
             </button>
         </div>
     </div>
 </div>
+
+<style>
+    .wh-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background-color: rgba(248, 250, 252, 0.9);
+        backdrop-filter: blur(12px);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+    .dark .wh-header {
+        background-color: rgba(0, 0, 0, 0.9);
+        border-bottom-color: #1e293b;
+    }
+    @media (min-width: 640px) {
+        .wh-header {
+            flex-direction: row;
+        }
+    }
+    @media (min-width: 1024px) {
+        .wh-header {
+            padding: 1.5rem 2.5rem;
+        }
+    }
+
+    .wh-info {
+        text-align: center;
+        width: 100%;
+    }
+    @media (min-width: 640px) {
+        .wh-info {
+            text-align: left;
+        }
+    }
+
+    .wh-badge {
+        display: inline-block;
+        padding: 0.125rem 0.5rem;
+        background-color: #eef2ff;
+        color: #4f46e5;
+        font-size: 9px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 0.375rem;
+        margin-bottom: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.15s;
+    }
+    .dark .wh-badge {
+        background-color: rgba(49, 46, 129, 0.2);
+        color: #818cf8;
+    }
+
+    .wh-title {
+        font-size: 1.25rem;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        color: #0f172a;
+        line-height: 1.25;
+    }
+    .dark .wh-title {
+        color: #ffffff;
+    }
+    @media (min-width: 1024px) {
+        .wh-title {
+            font-size: 1.875rem;
+        }
+    }
+
+    .wh-desc {
+        display: none;
+        font-size: 0.875rem;
+        color: #64748b;
+        font-weight: 300;
+        margin-top: 0.25rem;
+    }
+    .dark .wh-desc {
+        color: #94a3b8;
+    }
+    @media (min-width: 640px) {
+        .wh-desc {
+            display: block;
+        }
+    }
+
+    .wh-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        flex-shrink: 0;
+    }
+    @media (min-width: 640px) {
+        .wh-controls {
+            flex-direction: row;
+        }
+    }
+
+    .wh-theme-group,
+    .wh-preview-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: #ffffff;
+        padding: 0.375rem;
+        border-radius: 1rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+    .dark .wh-theme-group,
+    .dark .wh-preview-group {
+        background-color: #18181b;
+        border-color: #1e293b;
+    }
+
+    .wh-group-label {
+        font-size: 9px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #94a3b8;
+        margin-left: 0.5rem;
+        margin-right: 0.25rem;
+    }
+
+    .wh-theme-btn,
+    .wh-bg-btn {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .wh-theme-btn {
+        color: #94a3b8;
+    }
+    .wh-theme-btn:hover {
+        background-color: #f8fafc;
+    }
+    .dark .wh-theme-btn:hover {
+        background-color: #27272a;
+    }
+
+    .wh-theme-btn--active {
+        background-color: #eef2ff;
+        color: #4f46e5;
+    }
+    .dark .wh-theme-btn--active {
+        background-color: #27272a;
+        color: #94a3b8;
+    }
+
+    .wh-icon {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .wh-bg-btn {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        padding: 0;
+    }
+
+    .wh-bg-btn--white {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+    }
+
+    .wh-bg-btn--black {
+        background-color: #000000;
+        border: 1px solid #1e293b;
+    }
+
+    .wh-bg-btn--grid {
+        background-color: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .wh-bg-btn--active {
+        border-color: #4f46e5 !important;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    }
+
+    .wh-grid-overlay {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(to right, rgba(128, 128, 128, 0.133) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(128, 128, 128, 0.133) 1px, transparent 1px);
+        background-size: 4px 4px;
+    }
+</style>

@@ -12,47 +12,34 @@ const toolSlug = url.split("/").filter(Boolean).pop() || "";
 const studioUrl = `/widgets/?utilidad=${toolSlug}`;
 ---
 
-<section class="mt-12 no-widget-hidden">
-    <div class="max-w-4xl mx-auto px-4">
-        <div
-            class="group relative bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-800 shadow-2xl shadow-indigo-500/5 overflow-hidden transition-all duration-500 hover:border-indigo-500/30"
-        >
-            <div
-                class="absolute -right-20 -top-20 w-48 h-48 bg-indigo-500/5 rounded-full blur-[60px] group-hover:bg-indigo-500/10 transition-colors duration-700"
-            >
-            </div>
+<section class="wc-section no-widget-hidden">
+    <div class="wc-container">
+        <div class="wc-card">
+            <div class="wc-glow"></div>
 
-            <div
-                class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left"
-            >
-                <div class="space-y-2 max-w-lg">
-                    <div
-                        class="inline-flex items-center gap-2 px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-[9px] font-black uppercase tracking-widest"
-                    >
-                        <Icon name="mdi:widgets-outline" class="w-3 h-3" />
+            <div class="wc-content">
+                <div class="wc-text-col">
+                    <div class="wc-badge">
+                        <Icon name="mdi:widgets-outline" class="wc-badge-icon" />
                         Estudio de Utilidades
                     </div>
-                    <h2
-                        class="text-2xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight"
-                    >
-                        ¿Quieres tener esta <span class="text-indigo-600 dark:text-indigo-400"
-                            >utilidad</span
-                        > en tu web?
+                    <h2 class="wc-title">
+                        ¿Quieres tener esta <span class="wc-title-highlight">utilidad</span> en tu web?
                     </h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm font-light leading-snug">
+                    <p class="wc-desc">
                         Personaliza colores y modo oscuro para WordPress, Notion o tu propio sitio.
                     </p>
                 </div>
 
-                <div class="shrink-0">
+                <div class="wc-btn-col">
                     <a
                         href={studioUrl}
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-extrabold shadow-lg shadow-indigo-600/20 transition-all active:scale-95 group/btn"
+                        class="wc-btn"
                     >
                         Adelante
                         <Icon
                             name="mdi:arrow-right"
-                            class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform"
+                            class="wc-btn-icon"
                         />
                     </a>
                 </div>
@@ -60,3 +47,165 @@ const studioUrl = `/widgets/?utilidad=${toolSlug}`;
         </div>
     </div>
 </section>
+
+<style>
+    .wc-section {
+        margin-top: 3rem;
+    }
+
+    .wc-container {
+        max-width: 56rem;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .wc-card {
+        position: relative;
+        background: #ffffff;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.05);
+        overflow: hidden;
+        transition: border-color 0.5s, box-shadow 0.5s;
+    }
+    .wc-card:hover {
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+    .dark .wc-card {
+        background: #18181b;
+        border-color: #1e293b;
+    }
+    .dark .wc-card:hover {
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+    @media (min-width: 768px) {
+        .wc-card {
+            padding: 2rem;
+        }
+    }
+
+    .wc-glow {
+        position: absolute;
+        right: -5rem;
+        top: -5rem;
+        width: 12rem;
+        height: 12rem;
+        background: rgba(99, 102, 241, 0.05);
+        border-radius: 9999px;
+        filter: blur(60px);
+        transition: background 0.7s;
+    }
+    .wc-card:hover .wc-glow {
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .wc-content {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    @media (min-width: 768px) {
+        .wc-content {
+            flex-direction: row;
+            text-align: left;
+        }
+    }
+
+    .wc-text-col {
+        max-width: 32rem;
+    }
+    .wc-text-col > * + * {
+        margin-top: 0.5rem;
+    }
+
+    .wc-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.125rem 0.5rem;
+        background: #eef2ff;
+        color: #4f46e5;
+        border-radius: 9999px;
+        font-size: 0.5625rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    .dark .wc-badge {
+        background: rgba(49, 46, 129, 0.3);
+        color: #818cf8;
+    }
+
+    .wc-badge-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+    }
+
+    .wc-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        color: #0f172a;
+        line-height: 1.25;
+    }
+    .dark .wc-title {
+        color: #ffffff;
+    }
+
+    .wc-title-highlight {
+        color: #4f46e5;
+    }
+    .dark .wc-title-highlight {
+        color: #818cf8;
+    }
+
+    .wc-desc {
+        color: #64748b;
+        font-size: 0.875rem;
+        font-weight: 300;
+        line-height: 1.375;
+    }
+    .dark .wc-desc {
+        color: #94a3b8;
+    }
+
+    .wc-btn-col {
+        flex-shrink: 0;
+    }
+
+    .wc-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: #4f46e5;
+        color: #ffffff;
+        border-radius: 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 800;
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2), 0 4px 6px -4px rgba(99, 102, 241, 0.2);
+        transition: background 0.2s, transform 0.2s;
+        text-decoration: none;
+    }
+    .wc-btn:hover {
+        background: #4338ca;
+    }
+    .wc-btn:active {
+        transform: scale(0.95);
+    }
+
+    .wc-btn-icon {
+        width: 1rem;
+        height: 1rem;
+        transition: transform 0.2s;
+    }
+    .wc-btn:hover .wc-btn-icon {
+        transform: translateX(0.25rem);
+    }
+</style>

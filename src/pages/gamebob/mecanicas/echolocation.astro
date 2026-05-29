@@ -18,7 +18,7 @@ const CODE_URL =
     codeUrl={CODE_URL}
     image="/images/gamebob/mechanics/echolocation.webp"
 >
-    <Icon slot="icon" name="mdi:radar" class="text-emerald-400" />
+    <Icon slot="icon" name="mdi:radar" class="gm-icon-emerald" />
 
     <MechanicCanvas
         id="game-canvas"
@@ -29,42 +29,36 @@ const CODE_URL =
 
     <MechanicInfo>
         <Fragment slot="how-it-works">
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Juego de plataformas en oscuridad total.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>El sonido rebota en las superficies revelando su posición.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Saltar, aterrizar y chocar genera ondas de sonido.</span>
             </li>
         </Fragment>
 
         <Fragment slot="controls">
-            <div class="bg-zinc-800 p-3 rounded-lg text-center">
-                <span class="block text-white font-bold">Flechas / WASD</span>
-                <span class="text-xs text-zinc-400">Moverse y Saltar</span>
+            <div class="gm-control-box">
+                <span class="gm-label">Flechas / WASD</span>
+                <span class="gm-desc">Moverse y Saltar</span>
             </div>
-            <div class="bg-zinc-800 p-3 rounded-lg text-center">
-                <span class="block text-white font-bold">Z / Enter</span>
-                <span class="text-xs text-zinc-400">Gritar (Sonar)</span>
+            <div class="gm-control-box">
+                <span class="gm-label">Z / Enter</span>
+                <span class="gm-desc">Gritar (Sonar)</span>
             </div>
         </Fragment>
     </MechanicInfo>
 
-    <div
-        id="winMessage"
-        class="hidden absolute inset-0 flex items-center justify-center bg-black/80 z-50 pointer-events-none"
-    >
-        <div class="text-center pointer-events-auto">
-            <h2 class="text-4xl font-bold text-emerald-400 mb-4">¡Salida Encontrada!</h2>
-            <button
-                id="restartBtn"
-                class="px-6 py-3 bg-white text-black rounded-full font-bold hover:scale-105 transition-transform"
-            >
+    <div id="winMessage" class="gm-win-overlay">
+        <div class="gm-win-content">
+            <h2 class="gm-win-title">¡Salida Encontrada!</h2>
+            <button id="restartBtn" class="gm-win-btn">
                 Jugar de nuevo
             </button>
         </div>
@@ -96,3 +90,65 @@ const CODE_URL =
         });
     }
 </script>
+
+<style>
+    .gm-li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .gm-bullet {
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+    .gm-bullet-blue { color: #60a5fa; }
+    .gm-control-box {
+        background: #27272a;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        text-align: center;
+    }
+    .gm-label {
+        display: block;
+        color: #fff;
+        font-weight: 700;
+    }
+    .gm-desc {
+        font-size: 0.75rem;
+        color: #a1a1aa;
+    }
+    .gm-icon-emerald { color: #34d399; }
+    .gm-win-overlay {
+        display: none;
+        position: absolute;
+        inset: 0;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 50;
+        pointer-events: none;
+    }
+    .gm-win-content {
+        text-align: center;
+        pointer-events: auto;
+    }
+    .gm-win-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: #34d399;
+        margin-bottom: 1rem;
+    }
+    .gm-win-btn {
+        padding: 0.75rem 1.5rem;
+        background: #fff;
+        color: #000;
+        border-radius: 9999px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+    .gm-win-btn:hover {
+        transform: scale(1.05);
+    }
+</style>

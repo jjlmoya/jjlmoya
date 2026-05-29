@@ -2,34 +2,126 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<section id="preview-section" class="space-y-4">
-    <div
-        class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest px-2"
-    >
-        <Icon name="mdi:eye-outline" class="w-4 h-4" />
+<section class="wprev-section">
+    <div class="wprev-label">
+        <Icon name="mdi:eye-outline" class="wprev-label-icon" />
         Vista Previa
     </div>
     <div
         id="preview-canvas"
-        class="bg-white rounded-[2rem] p-0 sm:p-10 min-h-[300px] flex items-center justify-center border border-slate-200 dark:border-slate-800 shadow-2xl transition-all duration-500 relative overflow-hidden"
+        class="wprev-canvas"
     >
-        <div id="canvas-inner" class="w-full">
-            <div
-                id="empty-canvas-msg"
-                class="flex flex-col items-center justify-center text-center p-12 lg:p-20 space-y-4"
-            >
-                <div
-                    class="w-16 h-16 lg:w-20 lg:h-20 bg-indigo-50 dark:bg-indigo-950/30 rounded-full flex items-center justify-center"
-                >
-                    <Icon
-                        name="mdi:mouse-left-click-outline"
-                        class="w-8 h-8 lg:w-10 lg:h-10 text-indigo-500"
-                    />
+        <div id="canvas-inner" class="wprev-canvas-inner">
+            <div id="empty-canvas-msg" class="wprev-empty">
+                <div class="wprev-empty-icon-wrapper">
+                    <Icon name="mdi:mouse-left-click-outline" class="wprev-empty-icon" />
                 </div>
-                <p class="text-slate-400 font-medium italic text-sm lg:text-base">
-                    Elige una utilidad para empezar
-                </p>
+                <p class="wprev-empty-text">Elige una utilidad para empezar</p>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    .wprev-section > * + * {
+        margin-top: 1rem;
+    }
+
+    .wprev-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 10px;
+        font-weight: 900;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0 0.5rem;
+    }
+
+    .wprev-label-icon {
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .wprev-canvas {
+        background-color: #ffffff;
+        border-radius: 2rem;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        transition: all 0.5s;
+        position: relative;
+        overflow: hidden;
+    }
+    .dark .wprev-canvas {
+        border-color: #1e293b;
+    }
+
+    .wprev-canvas-inner {
+        width: 100%;
+    }
+
+    .wprev-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3rem 5rem;
+    }
+    .wprev-empty > * + * {
+        margin-top: 1rem;
+    }
+    @media (min-width: 1024px) {
+        .wprev-empty {
+            padding: 5rem;
+        }
+    }
+
+    .wprev-empty-icon-wrapper {
+        width: 4rem;
+        height: 4rem;
+        background-color: #eef2ff;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .dark .wprev-empty-icon-wrapper {
+        background-color: rgba(30, 27, 75, 0.3);
+    }
+    @media (min-width: 1024px) {
+        .wprev-empty-icon-wrapper {
+            width: 5rem;
+            height: 5rem;
+        }
+    }
+
+    .wprev-empty-icon {
+        width: 2rem;
+        height: 2rem;
+        color: #6366f1;
+    }
+    @media (min-width: 1024px) {
+        .wprev-empty-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+    }
+
+    .wprev-empty-text {
+        color: #94a3b8;
+        font-weight: 500;
+        font-style: italic;
+        font-size: 0.875rem;
+    }
+    @media (min-width: 1024px) {
+        .wprev-empty-text {
+            font-size: 1rem;
+        }
+    }
+</style>
