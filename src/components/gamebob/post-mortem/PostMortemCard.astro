@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import type { PostMortemEntry } from "../../../data/gamebob/post-mortem/entries";
+import "./PostMortemCard.css";
 
 interface Props {
     entry: PostMortemEntry;
@@ -10,75 +11,63 @@ const { entry } = Astro.props;
 const imagePath = entry.image ? `/images/gamebob/post-mortem/${entry.image}` : null;
 ---
 
-<a
-    href={`/gamebob/post-mortem/${entry.id}/`}
-    class="group relative flex flex-col h-full bg-[#0a0f1a] rounded-2xl border border-white/5 overflow-hidden transition-all duration-500 hover:border-red-500/40 hover:shadow-[0_0_30px_rgba(239,68,68,0.1)] hover:-translate-y-2"
->
-    <div
-        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500/50 via-emerald-500/50 to-blue-500/50 opacity-30 group-hover:opacity-100 transition-opacity"
-    >
-    </div>
+<a href={`/gamebob/post-mortem/${entry.id}/`} class="pm-card">
+    <div class="pm-card-topbar"></div>
 
-    <div class="relative h-48 overflow-hidden bg-slate-900 border-b border-white/5">
+    <div class="pm-card-media">
         {
             imagePath ? (
                 <img
                     src={imagePath}
                     alt={entry.title}
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80"
+                    class="pm-card-img"
                 />
             ) : (
-                <div class="w-full h-full flex items-center justify-center opacity-20">
-                    <Icon name="mdi:alert-decagram" class="w-16 h-16 text-red-500" />
+                <div class="pm-card-placeholder">
+                    <Icon name="mdi:alert-decagram" class="pm-card-placeholder-icon" />
                 </div>
             )
         }
 
-        <div
-            class="absolute top-4 left-4 px-3 py-1 bg-red-600 text-white text-[10px] font-black font-mono rounded shadow-lg shadow-red-900/40 z-10 uppercase tracking-wider"
-        >
+        <div class="pm-card-badge">
             ID: {entry.id}
         </div>
 
-        <div
-            class="absolute bottom-4 right-4 text-[10px] font-mono text-gray-400 bg-black/60 backdrop-blur-md px-2 py-1 rounded border border-white/10 z-10"
-        >
+        <div class="pm-card-date">
             {entry.date}
         </div>
     </div>
 
-    <div class="flex-1 p-6 flex flex-col space-y-4">
-        <h2
-            class="text-xl font-bold text-white group-hover:text-red-400 transition-colors leading-tight line-clamp-2"
-        >
+    <div class="pm-card-body">
+        <h2 class="pm-card-title">
             {entry.title}
         </h2>
 
-        <div class="space-y-3 flex-1">
-            <div class="flex gap-2">
-                <Icon name="mdi:close-circle-outline" class="w-4 h-4 text-red-500 mt-1 shrink-0" />
-                <p class="text-xs text-gray-400 line-clamp-2 italic leading-relaxed">
+        <div class="pm-card-details">
+            <div class="pm-card-row">
+                <Icon name="mdi:close-circle-outline" class="pm-card-row-icon pm-card-row-icon--error" />
+                <p class="pm-card-text pm-card-text--error">
                     "{entry.error}"
                 </p>
             </div>
-            <div class="flex gap-2">
+            <div class="pm-card-row">
                 <Icon
                     name="mdi:check-circle-outline"
-                    class="w-4 h-4 text-emerald-500 mt-1 shrink-0"
+                    class="pm-card-row-icon pm-card-row-icon--lesson"
                 />
-                <p class="text-xs text-gray-300 line-clamp-2 leading-relaxed">
+                <p class="pm-card-text pm-card-text--lesson">
                     {entry.lesson}
                 </p>
             </div>
         </div>
 
-        <div class="pt-4 border-t border-white/5 flex flex-wrap gap-2">
+        <div class="pm-card-footer">
             {
                 entry.tags &&
                     entry.tags
                         .slice(0, 3)
                         .map((tag) => (
-                            <span class="px-2 py-0.5 rounded-full bg-white/5 text-[10px] text-gray-500 border border-white/5 font-mono">
+                            <span class="pm-card-tag">
                                 #{tag}
                             </span>
                         ))
@@ -86,8 +75,5 @@ const imagePath = entry.image ? `/images/gamebob/post-mortem/${entry.image}` : n
         </div>
     </div>
 
-    <div
-        class="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-10 transition-opacity bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"
-    >
-    </div>
+    <div class="pm-card-crt-overlay"></div>
 </a>

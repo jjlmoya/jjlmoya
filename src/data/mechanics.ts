@@ -5,6 +5,7 @@ export interface MechanicItem {
     icon: string;
     tags: string[];
     platforms: "mobile" | "desktop" | "all";
+    theme?: "purple" | "sky" | "blue" | "emerald" | "rose" | "amber";
 }
 
 export const mechanics: MechanicItem[] = [
@@ -16,6 +17,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:gesture-swipe",
         tags: ["física", "táctil", "arcade"],
         platforms: "all",
+        theme: "sky",
     },
     {
         title: "Swipe Gesture",
@@ -25,6 +27,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:gesture-swipe-horizontal",
         tags: ["input", "táctil", "utilidad"],
         platforms: "all",
+        theme: "blue",
     },
     {
         title: "Gravity Well",
@@ -34,6 +37,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:magnet",
         tags: ["física", "partículas", "simulación"],
         platforms: "all",
+        theme: "purple",
     },
     {
         title: "Flocking",
@@ -43,6 +47,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:bird",
         tags: ["ia", "simulación", "naturaleza"],
         platforms: "all",
+        theme: "emerald",
     },
     {
         title: "Tap & Fly",
@@ -51,6 +56,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:arrow-up-bold",
         tags: ["arcade", "física"],
         platforms: "all",
+        theme: "amber",
     },
     {
         title: "Hold to Jump",
@@ -60,6 +66,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:arrow-collapse-down",
         tags: ["física", "plataformas", "input"],
         platforms: "all",
+        theme: "rose",
     },
     {
         title: "Clicker",
@@ -68,6 +75,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:cursor-default-click",
         tags: ["idle", "incremental", "ui"],
         platforms: "all",
+        theme: "sky",
     },
     {
         title: "Autorunner",
@@ -76,6 +84,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:run-fast",
         tags: ["arcade", "procedural", "plataformas"],
         platforms: "all",
+        theme: "purple",
     },
     {
         title: "Platformer",
@@ -85,6 +94,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:gamepad-variant",
         tags: ["plataformas", "física", "controles"],
         platforms: "desktop",
+        theme: "blue",
     },
     {
         title: "Size Matters",
@@ -94,6 +104,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:arrow-expand-all",
         tags: ["física", "puzzle", "único"],
         platforms: "all",
+        theme: "emerald",
     },
     {
         title: "One Bullet Shooter",
@@ -102,6 +113,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:bullet",
         tags: ["shooter", "puzzle", "acción"],
         platforms: "desktop",
+        theme: "rose",
     },
     {
         title: "Echolocation",
@@ -110,6 +122,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:radar",
         tags: ["puzzle", "experimental", "audio"],
         platforms: "all",
+        theme: "purple",
     },
     {
         title: "Vibrator Cracker",
@@ -119,6 +132,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:safe",
         tags: ["haptics", "experimental", "mobile"],
         platforms: "all",
+        theme: "amber",
     },
     {
         title: "Magnetic Finger",
@@ -127,6 +141,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:magnet",
         tags: ["física", "partículas", "input"],
         platforms: "all",
+        theme: "sky",
     },
     {
         title: "Color Chameleon",
@@ -135,6 +150,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:palette",
         tags: ["sigilo", "colores", "acción"],
         platforms: "all",
+        theme: "emerald",
     },
     {
         title: "The Barrier",
@@ -143,6 +159,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:vector-line",
         tags: ["física", "dibujo", "simulación"],
         platforms: "all",
+        theme: "blue",
     },
     {
         title: "Finger Twister",
@@ -151,6 +168,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:hand-back-right",
         tags: ["multitouch", "arcade", "caos"],
         platforms: "mobile",
+        theme: "rose",
     },
     {
         title: "Gravity Flip",
@@ -160,6 +178,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:flip-vertical",
         tags: ["arcade", "física", "runner"],
         platforms: "all",
+        theme: "purple",
     },
     {
         title: "Neon Grapple",
@@ -169,6 +188,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:hook",
         tags: ["física", "skill", "flow"],
         platforms: "all",
+        theme: "sky",
     },
     {
         title: "Rhythm Jump",
@@ -178,6 +198,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:palette-swatch",
         tags: ["color", "runner", "coordinación"],
         platforms: "all",
+        theme: "rose",
     },
     {
         title: "Draw The Path",
@@ -187,8 +208,8 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:draw",
         tags: ["dibujo", "creatividad", "reflejos"],
         platforms: "all",
+        theme: "amber",
     },
-
     {
         title: "Viewport Edge Collision",
         description:
@@ -197,6 +218,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:resize",
         tags: ["física", "browser", "experimental"],
         platforms: "desktop",
+        theme: "blue",
     },
     {
         title: "Bullet-Time Painting",
@@ -206,6 +228,7 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:brush",
         tags: ["táctica", "bullet-time", "física"],
         platforms: "all",
+        theme: "emerald",
     },
     {
         title: "Momentum Transfer",
@@ -214,5 +237,6 @@ export const mechanics: MechanicItem[] = [
         icon: "mdi:billiards",
         tags: ["física", "billar", "arcade"],
         platforms: "all",
+        theme: "purple",
     },
 ];

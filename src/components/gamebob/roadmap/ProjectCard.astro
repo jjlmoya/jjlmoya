@@ -4,6 +4,7 @@ import ProjectTasks from "./ProjectTasks.astro";
 
 import type { Project } from "../../../data/gamebob/roadmap/types";
 import type { Application } from "../../../types/apps";
+import "./ProjectCard.css";
 
 interface Props {
     project: Project | Application;
@@ -19,51 +20,41 @@ const progress = "roadmap" in project ? project.roadmap.progress : project.progr
 const tasks = "roadmap" in project ? project.roadmap.tasks : project.tasks;
 ---
 
-<div class="h-full">
-    <div
-        class="relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-[var(--color-gamebob-primary)]/30 transition-colors duration-300 group h-full"
-    >
-        <div class="absolute inset-0 z-0">
+<div class="pcard-wrapper">
+    <div class="pcard-container">
+        <div class="pcard-bg">
             {
                 image && (
                     <div
-                        class="w-full h-full bg-cover bg-no-repeat opacity-30 group-hover:scale-105 transition-transform duration-700"
+                        class="pcard-image"
                         style={`background-image: url('${image}'); background-position: center;`}
                     />
                 )
             }
-            <div
-                class="absolute inset-0 bg-gradient-to-t from-[#000000] via-[#000000]/90 to-[#000000]/40"
-            >
-            </div>
+            <div class="pcard-overlay"></div>
         </div>
 
-        <div class="relative z-10 p-8 flex flex-col h-full">
-            <div class="flex justify-between items-start mb-8">
+        <div class="pcard-content">
+            <div class="pcard-header">
                 <div>
-                    <div
-                        class="text-[var(--color-gamebob-primary)] text-xs font-bold mb-2 uppercase tracking-widest"
-                    >
+                    <div class="pcard-meta">
                         {statusLabel}
                     </div>
-                    <h2 class="text-3xl font-bold text-white mb-2">
+                    <h2 class="pcard-title">
                         {name}
                     </h2>
-                    <p class="text-gray-400">{description}</p>
+                    <p class="pcard-desc">{description}</p>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <span class="relative flex h-3 w-3">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"
-                        ></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"
-                        ></span>
+                <div class="pcard-status-indicator">
+                    <span class="pcard-ping-wrapper">
+                        <span class="pcard-ping-radar"></span>
+                        <span class="pcard-ping-dot"></span>
                     </span>
                 </div>
             </div>
 
-            <div class="flex-grow">
+            <div class="pcard-body">
                 <ProgressBar progress={progress} />
                 <ProjectTasks tasks={tasks} />
             </div>
