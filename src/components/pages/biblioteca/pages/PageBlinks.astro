@@ -7,32 +7,29 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative">
-            <div class="relative w-32 h-32 border-4 border-[#e7e5e4]/20 rounded-full flex items-center justify-center overflow-hidden">
-                <div class="w-full h-full bg-[#e7e5e4]/10 animate-blink origin-top" />
+        <div class="lb-page-visual-container">
+            <div class="lb-page-blinks-eye-wrap">
+                <div class="lb-page-blinks-lid animate-blink" />
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-purple-400/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-purple">
                 El Parpadeo
             </h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="blinks-count"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="blinks-count">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                <div class="lb-page-counter-label">
                     Veces que cerraste los ojos
                 </div>
             </div>
 
-            <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            <p class="lb-page-quote">
                 PEQUEÑOS MOMENTOS DE OSCURIDAD. SI LOS SUMAS TODOS, HAS PASADO{" "}
-                <span id="darkness-time" class="text-purple-400">
+                <span id="darkness-time" class="lb-page-blinks-highlight">
                     0 DÍAS
                 </span>{" "}
                 SIN VER NADA EN ABSOLUTO. FASCINANTE.
@@ -42,18 +39,40 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes blink {
-        0%,
-        90%,
-        100% {
+    .lb-page-blinks-eye-wrap {
+        position: relative;
+        width: 8rem;
+        height: 8rem;
+        border: 4px solid rgba(231, 229, 228, 0.2);
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .lb-page-blinks-lid {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(231, 229, 228, 0.1);
+        transform-origin: top;
+    }
+
+    .lb-page-blinks-highlight {
+        color: #c084fc;
+    }
+
+    .animate-blink {
+        animation: lb-blink 4s infinite;
+    }
+
+    @keyframes lb-blink {
+        0%, 90%, 100% {
             transform: scaleY(0);
         }
         95% {
             transform: scaleY(1);
         }
-    }
-    .animate-blink {
-        animation: blink 4s infinite;
     }
 </style>
 

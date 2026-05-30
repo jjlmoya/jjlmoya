@@ -7,11 +7,11 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative">
-            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,#3f1d1d_0%,transparent_60%)] blur-2xl" />
+        <div class="lb-page-visual-container">
+            <div class="lb-page-heart-glow" />
 
-            <div class="relative w-64 h-64 md:w-80 md:h-80 animate-heartbeat filter drop-shadow-[0_0_10px_rgba(63,29,29,0.5)]">
-                <svg viewBox="0 0 200 200" class="w-full h-full" style="overflow: visible;">
+            <div class="lb-page-heart-wrapper">
+                <svg viewBox="0 0 200 200" class="lb-page-heart-svg">
                     <g opacity="0.2">
                         <circle
                             cx="100"
@@ -71,24 +71,19 @@ const { side } = Astro.props;
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-8 max-w-md mx-auto relative z-10">
-            <div class="space-y-2">
-                <h2 class="font-serif text-4xl md:text-5xl text-[#e7e5e4] font-bold tracking-wide">
-                    El Motor
-                </h2>
-            </div>
+        <div class="lb-page-text-container">
+            <h2 class="lb-page-title">
+                El Motor
+            </h2>
 
-            <div class="relative py-8">
-                <div
-                    class="font-variant-numeric tabular-nums text-5xl md:text-6xl font-bold text-[#e7e5e4] tracking-tight drop-shadow-lg"
-                    id="heart-counter"
-                >
+            <div>
+                <div class="lb-page-counter" id="heart-counter">
                     0
                 </div>
-                <div class="text-[#78716c] font-serif italic mt-2">latidos registrados</div>
+                <div class="lb-page-sublabel">latidos registrados</div>
             </div>
 
-            <p class="font-serif text-lg md:text-xl leading-relaxed text-[#a8a29e] max-w-sm uppercase tracking-wide">
+            <p class="lb-page-description">
                 UN PEQUEÑO TAMBOR EN LA OSCURIDAD. GOLPEA SIN DESCANSO, CONTANDO LOS SEGUNDOS HASTA
                 QUE SE DETIENE. ADMIRABLE TENACIDAD.
             </p>
@@ -97,32 +92,48 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes heartbeat {
-        0% {
+    .lb-page-heart-glow {
+        position: absolute;
+        inset: 0;
+        opacity: 0.2;
+        background: radial-gradient(circle at center, #3f1d1d 0%, transparent 60%);
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+    .lb-page-heart-wrapper {
+        position: relative;
+        width: 16rem;
+        height: 16rem;
+        animation: lb-heartbeat 2s ease-in-out infinite;
+        filter: drop-shadow(0 0 10px rgba(63,29,29,0.5));
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    @media (min-width: 768px) {
+        .lb-page-heart-wrapper {
+            width: 20rem;
+            height: 20rem;
+        }
+    }
+
+    .lb-page-heart-svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
+    @keyframes lb-heartbeat {
+        0%, 60%, 100% {
             transform: scale(1);
         }
-        15% {
+        15%, 45% {
             transform: scale(1.05);
         }
         30% {
             transform: scale(1);
         }
-        45% {
-            transform: scale(1.05);
-        }
-        60% {
-            transform: scale(1);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-    .animate-heartbeat {
-        animation: heartbeat 2s ease-in-out infinite;
-        will-change: transform;
-        transform: translateZ(0);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
     }
 </style>
 
@@ -136,10 +147,8 @@ const { side } = Astro.props;
 
         const start = () => {
             const now = new Date();
-
             const msAlive = now.getTime() - new Date(birthdate).getTime();
             const preciseHeartbeats = msAlive * (80 / 60000);
-
             counter.innerText = Math.floor(preciseHeartbeats).toLocaleString();
             animationFrame = requestAnimationFrame(start);
         };

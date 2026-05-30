@@ -11,7 +11,7 @@ import "./biblioteca.css";
     title="La Biblioteca de la Muerte - El libro de tu vida"
     description="Tu vida es un libro en la inmensa biblioteca del tiempo. Deja que ELLA te lo muestre."
     fullWidth={true}
-    footerClass="bg-black text-white"
+    footerClass=""
     image="/images/concepts/biblioteca_og_scythe.webp"
 >
     <main class="biblioteca-main">
@@ -26,7 +26,7 @@ import "./biblioteca.css";
                     mode="word"
                 />
             </div>
-            <div id="intro-next" class="hidden biblioteca-transition-opacity">
+            <div id="intro-next" class="hidden opacity-0 biblioteca-transition-opacity">
                 <DeathDialogue
                     text="¿EN QUÉ AÑO EMPEZASTEIS?"
                     speed={150}
@@ -36,7 +36,7 @@ import "./biblioteca.css";
                 />
             </div>
 
-            <div id="intro-month" class="hidden biblioteca-transition-opacity">
+            <div id="intro-month" class="hidden opacity-0 biblioteca-transition-opacity">
                 <DeathDialogue
                     text="COMPRENDO. NECESITO MÁS PRECISIÓN. EL TIEMPO ES UN ASUNTO DELICADO Y LAS ESTANTERÍAS SON INFINITAS. <br><br> ¿Y EL MES?"
                     speed={150}
@@ -48,7 +48,7 @@ import "./biblioteca.css";
             <DeathInput />
         </div>
 
-        <div id="stage-confirmation" class="biblioteca-stage-confirmation">
+        <div id="stage-confirmation" class="biblioteca-stage-confirmation hidden">
             <DeathDialogue
                 text="AH, SÍ. AQUÍ ESTÁ. <br><br> VAYA... ES UN TOMO MÁS PESADO DE LO QUE ESPERABA. <br><br> VEAMOS QUÉ DICE."
                 speed={150}
@@ -57,7 +57,7 @@ import "./biblioteca.css";
             />
         </div>
 
-        <div id="stage-book" class="biblioteca-stage-book">
+        <div id="stage-book" class="biblioteca-stage-book opacity-0 hidden">
             <LifeBook />
         </div>
 
@@ -65,166 +65,212 @@ import "./biblioteca.css";
     </main>
 
     <script is:inline>
-        document.addEventListener("DOMContentLoaded", () => {
-            const rat = document.getElementById("death-of-rats");
-            if (rat) {
-                const newRat = rat.cloneNode(true);
-                rat.parentNode.replaceChild(newRat, rat);
-                newRat.addEventListener("click", () => {
-                    if (window.toast) {
-                        window.toast.show("¡IIIIK!", "info");
-                    }
+        (() => {
+            console.log("Biblioteca page script loaded");
+            const initBiblioteca = () => {
+                console.log("initBiblioteca started");
+                const rat = document.getElementById("death-of-rats");
+                if (rat) {
+                    const newRat = rat.cloneNode(true);
+                    rat.parentNode.replaceChild(newRat, rat);
+                    newRat.addEventListener("click", () => {
+                        if (window.toast) {
+                            window.toast.show("¡IIIIK!", "info");
+                        }
+                    });
+                }
+
+                const stageIntro = document.getElementById("stage-intro");
+                const introInitial = document.getElementById("intro-initial");
+                const introNext = document.getElementById("intro-next");
+                const introMonth = document.getElementById("intro-month");
+                const stageConfirmation = document.getElementById("stage-confirmation");
+                const stageBook = document.getElementById("stage-book");
+
+                console.log("Biblioteca stages found:", {
+                    stageIntro: !!stageIntro,
+                    introInitial: !!introInitial,
+                    introNext: !!introNext,
+                    introMonth: !!introMonth,
+                    stageConfirmation: !!stageConfirmation,
+                    stageBook: !!stageBook
                 });
-            }
 
-            const stageIntro = document.getElementById("stage-intro");
-            const introInitial = document.getElementById("intro-initial");
-            const introNext = document.getElementById("intro-next");
-            const introMonth = document.getElementById("intro-month");
-            const stageConfirmation = document.getElementById("stage-confirmation");
-            const stageBook = document.getElementById("stage-book");
+                const storedData = localStorage.getItem("life-birthdate");
+                let hasSkippedIntro = false;
+                console.log("Biblioteca storedData:", storedData);
 
-            const storedData = localStorage.getItem("life-birthdate");
-            let hasSkippedIntro = false;
+                if (storedData) {
+                    try {
+                        const { year, month } = JSON.parse(storedData);
+                        if (year && month !== undefined) {
+                            hasSkippedIntro = true;
+                            console.log("Biblioteca skipping intro because storedData exists:", { year, month });
 
-            if (storedData) {
-                try {
-                    const { year, month } = JSON.parse(storedData);
-                    if (year && month !== undefined) {
-                        hasSkippedIntro = true;
+                            if (stageIntro) stageIntro.classList.add("hidden");
+                            if (stageConfirmation) stageConfirmation.classList.add("hidden");
 
-                        if (stageIntro) stageIntro.classList.add("hidden");
-                        if (stageConfirmation) stageConfirmation.classList.add("hidden");
+                            if (stageBook) {
+                                stageBook.classList.remove("hidden");
+                                stageBook.classList.remove("opacity-0");
 
-                        if (stageBook) {
-                            stageBook.classList.remove("hidden");
-                            stageBook.classList.remove("opacity-0");
-
-                            setTimeout(() => {
-                                const initEvent = new CustomEvent("init-life-book", {
-                                    detail: { year, month },
-                                });
-                                document.dispatchEvent(initEvent);
-                            }, 100);
-                        }
-                    }
-                } catch (e) {
-                    console.error("Error parsing stored birthdate", e);
-                }
-            }
-
-            if (!hasSkippedIntro) {
-                const firstDialogue = document.querySelector(
-                    "#intro-initial .death-dialogue-container"
-                );
-                const nextDialogue = document.querySelector(
-                    "#intro-next .death-dialogue-container"
-                );
-                const monthDialogue = document.querySelector(
-                    "#intro-month .death-dialogue-container"
-                );
-
-                if (firstDialogue) {
-                    firstDialogue.addEventListener("dialogue-complete", () => {
-                        setTimeout(() => {
-                            if (introInitial) introInitial.style.opacity = "0";
-                            setTimeout(() => {
-                                if (introInitial) introInitial.classList.add("hidden");
-                                if (introNext) {
-                                    introNext.classList.remove("hidden");
-                                    void introNext.offsetWidth;
-                                    introNext.classList.remove("opacity-0");
-
-                                    setTimeout(() => {
-                                        if (nextDialogue)
-                                            nextDialogue.dispatchEvent(new Event("start-typing"));
-                                    }, 500);
-                                }
-                            }, 1000);
-                        }, 4000);
-                    });
-                }
-
-                if (nextDialogue) {
-                    nextDialogue.addEventListener("dialogue-complete", () => {
-                        setTimeout(() => {
-                            document.dispatchEvent(new Event("show-death-year-input"));
-                        }, 500);
-                    });
-                }
-
-                if (monthDialogue) {
-                    monthDialogue.addEventListener("dialogue-complete", () => {
-                        setTimeout(() => {
-                            document.dispatchEvent(new Event("show-death-month-input"));
-                        }, 500);
-                    });
-                }
-
-                const handleYearSelected = () => {
-                    if (introNext) introNext.style.opacity = "0";
-                    setTimeout(() => {
-                        if (introNext) introNext.classList.add("hidden");
-                        if (introMonth) {
-                            introMonth.classList.remove("hidden");
-                            void introMonth.offsetWidth;
-                            introMonth.classList.remove("opacity-0");
-
-                            setTimeout(() => {
-                                if (monthDialogue)
-                                    monthDialogue.dispatchEvent(new Event("start-typing"));
-                            }, 500);
-                        }
-                    }, 1000);
-                };
-
-                const handleBirthdateSelected = (e) => {
-                    const { year, month } = e.detail;
-                    window.localStorage.setItem("life-birthdate", JSON.stringify({ year, month }));
-
-                    if (stageIntro) {
-                        stageIntro.style.opacity = "0";
-                        setTimeout(() => {
-                            stageIntro.classList.add("hidden");
-                            if (stageConfirmation) stageConfirmation.classList.remove("hidden");
-                        }, 1000);
-                    }
-
-                    setTimeout(() => {
-                        if (stageConfirmation) {
-                            stageConfirmation.style.opacity = "0";
-                            setTimeout(() => {
-                                stageConfirmation.classList.add("hidden");
-                                if (stageBook) {
-                                    stageBook.classList.remove("hidden");
-                                    void stageBook.offsetWidth;
-                                    stageBook.classList.remove("opacity-0");
-
+                                setTimeout(() => {
+                                    console.log("Biblioteca dispatching init-life-book event");
                                     const initEvent = new CustomEvent("init-life-book", {
                                         detail: { year, month },
                                     });
                                     document.dispatchEvent(initEvent);
-                                }
+                                }, 100);
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Error parsing stored birthdate", e);
+                    }
+                }
+
+                if (!hasSkippedIntro) {
+                    console.log("Biblioteca starting normal intro flow");
+                    const firstDialogue = document.querySelector(
+                        "#intro-initial .dd-container"
+                    );
+                    const nextDialogue = document.querySelector(
+                        "#intro-next .dd-container"
+                    );
+                    const monthDialogue = document.querySelector(
+                        "#intro-month .dd-container"
+                    );
+
+                    console.log("Biblioteca dialogues found:", {
+                        firstDialogue: !!firstDialogue,
+                        nextDialogue: !!nextDialogue,
+                        monthDialogue: !!monthDialogue
+                    });
+
+                    if (firstDialogue) {
+                        console.log("Adding dialogue-complete listener to firstDialogue");
+                        firstDialogue.addEventListener("dialogue-complete", () => {
+                            console.log("firstDialogue dialogue-complete event received");
+                            setTimeout(() => {
+                                console.log("Hiding introInitial, showing introNext");
+                                if (introInitial) introInitial.style.opacity = "0";
+                                setTimeout(() => {
+                                    if (introInitial) introInitial.classList.add("hidden");
+                                    if (introNext) {
+                                        introNext.classList.remove("hidden");
+                                        void introNext.offsetWidth;
+                                        introNext.classList.remove("opacity-0");
+
+                                        setTimeout(() => {
+                                            if (nextDialogue) {
+                                                console.log("Dispatching start-typing to nextDialogue");
+                                                nextDialogue.dispatchEvent(new Event("start-typing"));
+                                            }
+                                        }, 500);
+                                    }
+                                }, 1000);
+                            }, 4000);
+                        });
+                    }
+
+                    if (nextDialogue) {
+                        console.log("Adding dialogue-complete listener to nextDialogue");
+                        nextDialogue.addEventListener("dialogue-complete", () => {
+                            console.log("nextDialogue dialogue-complete event received");
+                            setTimeout(() => {
+                                console.log("Dispatching show-death-year-input event");
+                                document.dispatchEvent(new Event("show-death-year-input"));
+                            }, 500);
+                        });
+                    }
+
+                    if (monthDialogue) {
+                        console.log("Adding dialogue-complete listener to monthDialogue");
+                        monthDialogue.addEventListener("dialogue-complete", () => {
+                            console.log("monthDialogue dialogue-complete event received");
+                            setTimeout(() => {
+                                console.log("Dispatching show-death-month-input event");
+                                document.dispatchEvent(new Event("show-death-month-input"));
+                            }, 500);
+                        });
+                    }
+
+                    const handleYearSelected = () => {
+                        console.log("year-selected event received. Hiding introNext, showing introMonth");
+                        if (introNext) introNext.style.opacity = "0";
+                        setTimeout(() => {
+                            if (introNext) introNext.classList.add("hidden");
+                            if (introMonth) {
+                                introMonth.classList.remove("hidden");
+                                void introMonth.offsetWidth;
+                                introMonth.classList.remove("opacity-0");
+
+                                setTimeout(() => {
+                                    if (monthDialogue) {
+                                        console.log("Dispatching start-typing to monthDialogue");
+                                        monthDialogue.dispatchEvent(new Event("start-typing"));
+                                    }
+                                }, 500);
+                            }
+                        }, 1000);
+                    };
+
+                    const handleBirthdateSelected = (e) => {
+                        const { year, month } = e.detail;
+                        console.log("birthdate-selected event received:", { year, month });
+                        window.localStorage.setItem("life-birthdate", JSON.stringify({ year, month }));
+
+                        if (stageIntro) {
+                            stageIntro.style.opacity = "0";
+                            setTimeout(() => {
+                                stageIntro.classList.add("hidden");
+                                if (stageConfirmation) stageConfirmation.classList.remove("hidden");
                             }, 1000);
                         }
-                    }, 8000);
-                };
 
-                if (window._handleYearSelected) {
-                    document.removeEventListener("year-selected", window._handleYearSelected);
-                }
-                window._handleYearSelected = handleYearSelected;
-                document.addEventListener("year-selected", handleYearSelected);
+                        setTimeout(() => {
+                            console.log("Starting book transition from confirmation stage");
+                            if (stageConfirmation) {
+                                stageConfirmation.style.opacity = "0";
+                                setTimeout(() => {
+                                    stageConfirmation.classList.add("hidden");
+                                    if (stageBook) {
+                                        stageBook.classList.remove("hidden");
+                                        void stageBook.offsetWidth;
+                                        stageBook.classList.remove("opacity-0");
 
-                if (window._handleBirthdateSelected) {
-                    document.removeEventListener(
-                        "birthdate-selected",
-                        window._handleBirthdateSelected
-                    );
+                                        console.log("Dispatching init-life-book event with birthdate data");
+                                        const initEvent = new CustomEvent("init-life-book", {
+                                            detail: { year, month },
+                                        });
+                                        document.dispatchEvent(initEvent);
+                                    }
+                                }, 1000);
+                            }
+                        }, 8000);
+                    };
+
+                    if (window._handleYearSelected) {
+                        document.removeEventListener("year-selected", window._handleYearSelected);
+                    }
+                    window._handleYearSelected = handleYearSelected;
+                    document.addEventListener("year-selected", handleYearSelected);
+
+                    if (window._handleBirthdateSelected) {
+                        document.removeEventListener(
+                            "birthdate-selected",
+                            window._handleBirthdateSelected
+                        );
+                    }
+                    window._handleBirthdateSelected = handleBirthdateSelected;
+                    document.addEventListener("birthdate-selected", handleBirthdateSelected);
                 }
-                window._handleBirthdateSelected = handleBirthdateSelected;
-                document.addEventListener("birthdate-selected", handleBirthdateSelected);
+            };
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initBiblioteca);
+            } else {
+                initBiblioteca();
             }
-        });
+        })();
     </script>
 </Layout>

@@ -9,35 +9,30 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-full h-full flex items-center justify-center">
-                <div class="w-64 h-64 relative flex items-center justify-center">
-                    <div class="absolute inset-0 bg-yellow-500/10 blur-3xl rounded-full animate-pulse" />
-                    <div class="w-full h-full opacity-80 drop-shadow-[0_0_15px_rgba(234,179,8,0.3)]">
-                        <GameBobLogo />
-                    </div>
+        <div class="lb-page-visual-container">
+            <div class="lb-page-cats-wrapper">
+                <div class="lb-page-cats-glow" />
+                <div class="lb-page-cats-logo-wrap">
+                    <GameBobLogo />
                 </div>
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-yellow-600/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-orange">
                 Los Gatos
             </h3>
 
-            <div class="space-y-2">
-                <div class="font-variant-numeric tabular-nums text-5xl md:text-6xl font-bold text-[#e7e5e4]">
+            <div>
+                <div class="lb-page-counter">
                     ∞
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                <div class="lb-page-sublabel">
                     Importancia Relativa
                 </div>
             </div>
 
-            <p
-                class="text-sm md:text-base leading-normal text-[#e7e5e4]"
-                style="font-family: 'Cinzel', serif; font-variant: small-caps;"
-            >
+            <p class="lb-page-quote">
                 LOS GATOS. LOS GATOS SON AGRADABLES.{" "}
                 <>
                     <br />
@@ -52,32 +47,33 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes blink-eyes {
-        0%,
-        45%,
-        55%,
-        100% {
-            transform: scaleY(1);
-        }
-        50% {
-            transform: scaleY(0.1);
-        }
-    }
-    .animate-blink-eyes {
-        animation: blink-eyes 5s infinite;
+    .lb-page-cats-wrapper {
+        position: relative;
+        width: 16rem;
+        height: 16rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    @keyframes ping-slow {
-        0% {
-            transform: scale(0.8);
-            opacity: 0.5;
-        }
-        100% {
-            transform: scale(2);
-            opacity: 0;
-        }
+    .lb-page-cats-glow {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(234, 179, 8, 0.1);
+        filter: blur(64px);
+        border-radius: 9999px;
+        animation: lb-pulse 2s infinite;
     }
-    .animate-ping-slow {
-        animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+    .lb-page-cats-logo-wrap {
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+        filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.3));
+    }
+
+    @keyframes lb-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
     }
 </style>

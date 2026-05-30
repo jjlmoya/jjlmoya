@@ -1,28 +1,19 @@
----
-
----
-
-<div
-    class="fixed inset-0 pointer-events-none z-[90] flex flex-col justify-end md:justify-center pb-12 md:pb-0"
->
-    <div class="w-full max-w-[90rem] mx-auto flex justify-between items-center px-6 md:px-12">
+<div class="bn-wrapper">
+    <div class="bn-container">
         <button
             id="prev-page"
-            class="pointer-events-auto group relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#0c0a09]/50 backdrop-blur-md border border-[#292524]/50 text-[#a8a29e] hover:text-[#e7e5e4] hover:border-[#78716c]/50 hover:bg-[#1c1917]/80 transition-all duration-300 shadow-2xl disabled:opacity-0 disabled:pointer-events-none disabled:translate-y-4 active:scale-95"
+            class="bn-btn bn-btn-prev"
             style="touch-action: none; -webkit-tap-highlight-color: transparent;"
             aria-label="Página anterior"
         >
-            <div
-                class="absolute inset-0 rounded-full bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            >
-            </div>
+            <div class="bn-btn-gradient bn-gradient-prev"></div>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform duration-300 relative z-10"
+                class="bn-btn-icon bn-icon-prev"
             >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"
                 ></path>
@@ -31,21 +22,18 @@
 
         <button
             id="next-page"
-            class="pointer-events-auto group relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#0c0a09]/50 backdrop-blur-md border border-[#292524]/50 text-[#a8a29e] hover:text-[#e7e5e4] hover:border-[#78716c]/50 hover:bg-[#1c1917]/80 transition-all duration-300 shadow-2xl disabled:opacity-0 disabled:pointer-events-none disabled:translate-y-4 active:scale-95"
+            class="bn-btn bn-btn-next"
             style="touch-action: none; -webkit-tap-highlight-color: transparent;"
             aria-label="Página siguiente"
         >
-            <div
-                class="absolute inset-0 rounded-full bg-gradient-to-tl from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            >
-            </div>
+            <div class="bn-btn-gradient bn-gradient-next"></div>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform duration-300 relative z-10"
+                class="bn-btn-icon bn-icon-next"
             >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"
                 ></path>
@@ -53,3 +41,126 @@
         </button>
     </div>
 </div>
+
+<style>
+    .bn-wrapper {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 90;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-bottom: 3rem;
+    }
+
+    @media (min-width: 768px) {
+        .bn-wrapper {
+            justify-content: center;
+            padding-bottom: 0;
+        }
+    }
+
+    .bn-container {
+        width: 100%;
+        max-width: 90rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .bn-container {
+            padding-left: 3rem;
+            padding-right: 3rem;
+        }
+    }
+
+    .bn-btn {
+        pointer-events: auto;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 9999px;
+        background-color: rgba(12, 10, 9, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(41, 37, 36, 0.5);
+        color: #a8a29e;
+        transition: all 0.3s;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+        .bn-btn {
+            width: 5rem;
+            height: 5rem;
+        }
+    }
+
+    .bn-btn:hover {
+        color: #e7e5e4;
+        border-color: rgba(120, 113, 108, 0.5);
+        background-color: rgba(28, 25, 23, 0.8);
+    }
+
+    .bn-btn:active {
+        transform: scale(0.95);
+    }
+
+    .bn-btn:disabled {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(1rem);
+    }
+
+    .bn-btn-gradient {
+        position: absolute;
+        inset: 0;
+        border-radius: 9999px;
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+
+    .bn-gradient-prev {
+        background-image: linear-gradient(to top right, rgba(255, 255, 255, 0.05), transparent);
+    }
+
+    .bn-gradient-next {
+        background-image: linear-gradient(to top left, rgba(255, 255, 255, 0.05), transparent);
+    }
+
+    .bn-btn:hover .bn-btn-gradient {
+        opacity: 1;
+    }
+
+    .bn-btn-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        transition: transform 0.3s;
+        position: relative;
+        z-index: 10;
+    }
+
+    @media (min-width: 768px) {
+        .bn-btn-icon {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+
+    .bn-btn:hover .bn-icon-prev {
+        transform: translateX(-0.25rem);
+    }
+
+    .bn-btn:hover .bn-icon-next {
+        transform: translateX(0.25rem);
+    }
+</style>

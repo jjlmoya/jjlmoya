@@ -1,47 +1,31 @@
----
-
----
-
 <div
     id="death-input-container"
-    class="hidden grid-cols-1 place-items-center mt-8 transition-opacity duration-1000 opacity-0 w-full max-w-3xl mx-auto"
+    class="di-container hidden w-full"
 >
     <div
         id="year-section"
-        class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full transition-opacity duration-500 z-20"
+        class="di-year-section w-full"
     >
-        <div class="relative w-full group">
-            <div
-                class="absolute inset-0 pointer-events-none z-20 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(12,10,9,0.4)_40%,rgba(12,10,9,0.9)_80%)]"
-            >
-            </div>
-
-            <div
-                class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-40 bg-orange-500/10 blur-3xl z-10 pointer-events-none"
-            >
-            </div>
-
-            <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-56 border-x border-orange-500/20 bg-orange-500/5 z-10 pointer-events-none rounded-lg blur-[1px]"
-            >
-            </div>
+        <div class="di-slider-wrapper">
+            <div class="di-gradient-overlay"></div>
+            <div class="di-glow-center"></div>
+            <div class="di-border-center"></div>
 
             <div
                 id="year-slider"
-                class="flex overflow-x-auto snap-x snap-mandatory w-full py-12 px-[50%] gap-4 no-scrollbar cursor-grab active:cursor-grabbing items-center h-80 select-none"
+                class="di-slider no-scrollbar"
             >
                 {
                     Array.from({ length: 126 }, (_, i) => 1900 + i)
                         .reverse()
                         .map((year) => (
                             <div
-                                class="year-item snap-center shrink-0 transition-all duration-500 select-none flex flex-col items-center justify-center w-12 cursor-pointer group"
+                                class="year-item di-year-item"
                                 data-year={year}
                             >
-                                <div class="book-spine wood-spine w-full h-40 rounded-sm relative shadow-lg group-hover:scale-105 transition-all duration-500 flex items-center justify-center overflow-hidden pointer-events-none">
-                                    <div class="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent pointer-events-none" />
-
-                                    <span class="book-text writing-vertical font-serif text-[#e7e5e4]/60 text-lg tracking-widest rotate-180 transition-colors duration-300">
+                                <div class="book-spine di-spine-inactive w-full">
+                                    <div class="di-book-spine-overlay" />
+                                    <span class="book-text di-text-inactive writing-vertical font-serif">
                                         {year}
                                     </span>
                                 </div>
@@ -53,8 +37,7 @@
 
         <button
             id="year-confirm-btn"
-            class="z-30 mt-4 text-[#e7e5e4] border border-[#e7e5e4]/30 px-12 py-3 rounded-sm bg-[#1c1917] hover:bg-[#e7e5e4] hover:text-[#0c0a09] hover:border-[#e7e5e4] transition-all font-serif uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(0,0,0,0.5)] active:scale-95"
-            style="touch-action: none; -webkit-tap-highlight-color: transparent;"
+            class="di-confirm-btn"
         >
             Siguiente
         </button>
@@ -62,9 +45,9 @@
 
     <div
         id="month-section"
-        class="col-start-1 row-start-1 flex flex-col items-center gap-6 w-full opacity-0 pointer-events-none transition-opacity duration-500 z-10"
+        class="di-month-section w-full"
     >
-        <div class="grid grid-cols-3 gap-3 md:gap-4 md:grid-cols-4 w-full max-w-2xl">
+        <div class="di-month-grid">
             {
                 [
                     "ENE",
@@ -81,8 +64,7 @@
                     "DIC",
                 ].map((month, index) => (
                     <button
-                        class="month-btn text-[#e7e5e4]/60 hover:text-[#0c0a09] hover:bg-[#e7e5e4] transition-all px-4 py-3 rounded-sm font-serif text-lg border border-[#e7e5e4]/20 hover:border-[#e7e5e4] hover:scale-105 active:scale-95"
-                        style="touch-action: none; -webkit-tap-highlight-color: transparent;"
+                        class="month-btn di-month-btn"
                         data-month={index}
                     >
                         {month}
@@ -94,243 +76,335 @@
 </div>
 
 <script is:inline>
-    document.addEventListener("DOMContentLoaded", () => {
-        const container = document.getElementById("death-input-container");
-        const yearSlider = document.getElementById("year-slider");
-        const yearItems = document.querySelectorAll(".year-item");
-        const yearConfirmBtn = document.getElementById("year-confirm-btn");
-        const yearSection = document.getElementById("year-section");
-        const monthSection = document.getElementById("month-section");
-        const monthBtns = document.querySelectorAll(".month-btn");
+    (() => {
+        const initDeathInput = () => {
+            const container = document.getElementById("death-input-container");
+            const yearSlider = document.getElementById("year-slider");
+            const yearItems = document.querySelectorAll(".year-item");
+            const yearConfirmBtn = document.getElementById("year-confirm-btn");
+            const yearSection = document.getElementById("year-section");
+            const monthSection = document.getElementById("month-section");
+            const monthBtns = document.querySelectorAll(".month-btn");
 
-        let selectedYear = null;
-        let isDragging = false;
-        let startX;
-        let scrollLeft;
+            let selectedYear = null;
+            let isDragging = false;
+            let startX;
+            let scrollLeft;
 
-        const handleShowYearInput = () => {
-            if (container) {
-                container.classList.remove("hidden");
-                container.classList.add("grid");
-                setTimeout(() => {
-                    container.classList.remove("opacity-0");
+            const handleShowYearInput = () => {
+                if (container) {
+                    container.classList.remove("hidden");
+                    container.classList.add("di-grid-display");
+                    setTimeout(() => {
+                        container.classList.remove("di-opacity-0");
 
-                    const defaultYear = document.querySelector('.year-item[data-year="1990"]');
-                    defaultYear?.scrollIntoView({
+                        const defaultYear = document.querySelector('.year-item[data-year="1990"]');
+                        defaultYear?.scrollIntoView({
+                            behavior: "smooth",
+                            inline: "center",
+                            block: "nearest",
+                        });
+                    }, 100);
+                }
+            };
+            document.removeEventListener("show-death-year-input", handleShowYearInput);
+            document.addEventListener("show-death-year-input", handleShowYearInput);
+
+            if (yearSlider) {
+                yearSlider.addEventListener("mousedown", (e) => {
+                    isDragging = false;
+                    yearSlider.classList.add("di-dragging");
+                    startX = e.pageX - yearSlider.offsetLeft;
+                    scrollLeft = yearSlider.scrollLeft;
+
+                    yearSlider.style.scrollSnapType = "none";
+                });
+
+                yearSlider.addEventListener("mouseleave", () => {
+                    yearSlider.classList.remove("di-dragging");
+                    yearSlider.style.scrollSnapType = "x mandatory";
+                });
+
+                yearSlider.addEventListener("mouseup", () => {
+                    yearSlider.classList.remove("di-dragging");
+                    yearSlider.style.scrollSnapType = "x mandatory";
+
+                    setTimeout(() => {
+                        isDragging = false;
+                    }, 50);
+                });
+
+                yearSlider.addEventListener("mousemove", (e) => {
+                    if (!yearSlider.classList.contains("di-dragging")) return;
+                    e.preventDefault();
+                    const x = e.pageX - yearSlider.offsetLeft;
+                    const walk = (x - startX) * 2;
+                    if (Math.abs(walk) > 5) isDragging = true;
+                    yearSlider.scrollLeft = scrollLeft - walk;
+                });
+            }
+
+            yearItems.forEach((item) => {
+                item.addEventListener("click", (e) => {
+                    if (isDragging) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                    }
+                    item.scrollIntoView({
                         behavior: "smooth",
                         inline: "center",
                         block: "nearest",
                     });
-                }, 100);
-            }
-        };
-        document.removeEventListener("show-death-year-input", handleShowYearInput);
-        document.addEventListener("show-death-year-input", handleShowYearInput);
-
-        if (yearSlider) {
-            yearSlider.addEventListener("mousedown", (e) => {
-                isDragging = false;
-                yearSlider.classList.add("cursor-grabbing");
-                yearSlider.classList.remove("cursor-grab");
-                startX = e.pageX - yearSlider.offsetLeft;
-                scrollLeft = yearSlider.scrollLeft;
-
-                yearSlider.style.scrollSnapType = "none";
-            });
-
-            yearSlider.addEventListener("mouseleave", () => {
-                yearSlider.classList.remove("cursor-grabbing");
-                yearSlider.classList.add("cursor-grab");
-
-                yearSlider.style.scrollSnapType = "x mandatory";
-            });
-
-            yearSlider.addEventListener("mouseup", () => {
-                yearSlider.classList.remove("cursor-grabbing");
-                yearSlider.classList.add("cursor-grab");
-
-                yearSlider.style.scrollSnapType = "x mandatory";
-
-                setTimeout(() => {
-                    isDragging = false;
-                }, 50);
-            });
-
-            yearSlider.addEventListener("mousemove", (e) => {
-                if (!yearSlider.classList.contains("cursor-grabbing")) return;
-                e.preventDefault();
-                const x = e.pageX - yearSlider.offsetLeft;
-                const walk = (x - startX) * 2;
-                if (Math.abs(walk) > 5) isDragging = true;
-                yearSlider.scrollLeft = scrollLeft - walk;
-            });
-        }
-
-        yearItems.forEach((item) => {
-            item.addEventListener("click", (e) => {
-                if (isDragging) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return;
-                }
-                item.scrollIntoView({
-                    behavior: "smooth",
-                    inline: "center",
-                    block: "nearest",
                 });
             });
-        });
 
-        const updateActiveYear = () => {
-            if (!yearSlider) return;
+            const updateActiveYear = () => {
+                if (!yearSlider) return;
 
-            const sliderRect = yearSlider.getBoundingClientRect();
-            const center = sliderRect.left + sliderRect.width / 2;
+                const sliderRect = yearSlider.getBoundingClientRect();
+                const center = sliderRect.left + sliderRect.width / 2;
 
-            let closestItem = null;
-            let minDiff = Infinity;
+                let closestItem = null;
+                let minDiff = Infinity;
 
-            yearItems.forEach((item) => {
-                const el = item;
-                const rect = el.getBoundingClientRect();
-                const itemCenter = rect.left + rect.width / 2;
-                const diff = Math.abs(center - itemCenter);
+                yearItems.forEach((item) => {
+                    const el = item;
+                    const rect = el.getBoundingClientRect();
+                    const itemCenter = rect.left + rect.width / 2;
+                    const diff = Math.abs(center - itemCenter);
 
-                const spine = el.querySelector(".book-spine");
-                const text = el.querySelector(".book-text");
+                    const spine = el.querySelector(".book-spine");
+                    const text = el.querySelector(".book-text");
 
-                spine?.classList.add("wood-spine", "h-40", "opacity-50");
-                spine?.classList.remove("wood-spine-active", "h-64", "z-10");
-                text?.classList.add("text-[#e7e5e4]/60");
-                text?.classList.remove("text-[#e7e5e4]", "font-bold", "text-2xl", "drop-shadow-lg");
+                    if (spine) {
+                        spine.classList.add("di-spine-inactive");
+                        spine.classList.remove("di-spine-active");
+                    }
+                    if (text) {
+                        text.classList.add("di-text-inactive");
+                        text.classList.remove("di-text-active");
+                    }
 
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    closestItem = el;
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        closestItem = el;
+                    }
+                });
+
+                if (closestItem) {
+                    const el = closestItem;
+                    const spine = el.querySelector(".book-spine");
+                    const text = el.querySelector(".book-text");
+
+                    if (spine) {
+                        spine.classList.remove("di-spine-inactive");
+                        spine.classList.add("di-spine-active");
+                    }
+                    if (text) {
+                        text.classList.remove("di-text-inactive");
+                        text.classList.add("di-text-active");
+                    }
+
+                    selectedYear = parseInt(el.dataset.year || "0");
                 }
-            });
+            };
 
-            if (closestItem) {
-                const el = closestItem;
-                const spine = el.querySelector(".book-spine");
-                const text = el.querySelector(".book-text");
+            if (yearSlider) {
+                yearSlider.addEventListener("scroll", () => {
+                    window.requestAnimationFrame(updateActiveYear);
+                });
 
-                spine?.classList.remove("wood-spine", "h-40", "opacity-50");
-                spine?.classList.add("wood-spine-active", "h-64", "z-10");
-                text?.classList.remove("text-[#e7e5e4]/60");
-                text?.classList.add("text-[#e7e5e4]", "font-bold", "text-2xl", "drop-shadow-lg");
-
-                selectedYear = parseInt(el.dataset.year || "0");
+                setTimeout(updateActiveYear, 500);
             }
-        };
 
-        if (yearSlider) {
-            yearSlider.addEventListener("scroll", () => {
-                window.requestAnimationFrame(updateActiveYear);
-            });
+            const handleConfirmYear = () => {
+                if (selectedYear) {
+                    const event = new CustomEvent("year-selected", { detail: { year: selectedYear } });
+                    document.dispatchEvent(event);
 
-            setTimeout(updateActiveYear, 500);
-        }
+                    if (yearSection) {
+                        yearSection.classList.add("di-hidden-interaction");
+                    }
+                }
+            };
 
-        const handleConfirmYear = () => {
-            if (selectedYear) {
-                const event = new CustomEvent("year-selected", { detail: { year: selectedYear } });
+            if (yearConfirmBtn) {
+                yearConfirmBtn.addEventListener(
+                    "touchstart",
+                    (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleConfirmYear();
+                    },
+                    { passive: false }
+                );
+
+                yearConfirmBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    handleConfirmYear();
+                });
+            }
+
+            const handleShowMonthInput = () => {
+                if (monthSection) {
+                    monthSection.classList.remove("di-hidden-interaction");
+                }
+            };
+            document.removeEventListener("show-death-month-input", handleShowMonthInput);
+            document.addEventListener("show-death-month-input", handleShowMonthInput);
+
+            const handleMonthSelect = (btn) => {
+                const month = parseInt(btn.dataset.month || "0");
+
+                const event = new CustomEvent("birthdate-selected", {
+                    detail: { year: selectedYear, month },
+                });
                 document.dispatchEvent(event);
 
-                if (yearSection) {
-                    yearSection.classList.add("opacity-0", "pointer-events-none");
-                }
-            }
-        };
+                if (container) container.classList.add("di-opacity-0");
+                setTimeout(() => {
+                    if (container) {
+                        container.classList.add("hidden");
+                        container.classList.remove("di-grid-display");
+                    }
+                }, 1000);
+            };
 
-        if (yearConfirmBtn) {
-            yearConfirmBtn.addEventListener(
-                "touchstart",
-                (e) => {
+            monthBtns.forEach((btn) => {
+                btn.addEventListener(
+                    "touchstart",
+                    (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleMonthSelect(btn);
+                    },
+                    { passive: false }
+                );
+
+                btn.addEventListener("click", (e) => {
                     e.preventDefault();
-                    e.stopPropagation();
-                    handleConfirmYear();
-                },
-                { passive: false }
-            );
-
-            yearConfirmBtn.addEventListener("click", (e) => {
-                e.preventDefault();
-                handleConfirmYear();
-            });
-        }
-
-        const handleShowMonthInput = () => {
-            if (monthSection) {
-                monthSection.classList.remove("opacity-0", "pointer-events-none");
-            }
-        };
-        document.removeEventListener("show-death-month-input", handleShowMonthInput);
-        document.addEventListener("show-death-month-input", handleShowMonthInput);
-
-        const handleMonthSelect = (btn) => {
-            const month = parseInt(btn.dataset.month || "0");
-
-            const event = new CustomEvent("birthdate-selected", {
-                detail: { year: selectedYear, month },
-            });
-            document.dispatchEvent(event);
-
-            if (container) container.classList.add("opacity-0");
-            setTimeout(() => {
-                if (container) {
-                    container.classList.add("hidden");
-                    container.classList.remove("grid");
-                }
-            }, 1000);
-        };
-
-        monthBtns.forEach((btn) => {
-            btn.addEventListener(
-                "touchstart",
-                (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
                     handleMonthSelect(btn);
-                },
-                { passive: false }
-            );
-
-            btn.addEventListener("click", (e) => {
-                e.preventDefault();
-                handleMonthSelect(btn);
+                });
             });
-        });
-    });
+        };
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initDeathInput);
+        } else {
+            initDeathInput();
+        }
+    })();
 </script>
 
 <style>
-    .no-scrollbar::-webkit-scrollbar {
+    .di-container {
         display: none;
-    }
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    .animate-fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
-    }
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    .writing-vertical {
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        margin-top: 2rem;
+        transition: opacity 1s;
+        opacity: 0;
+        max-width: 48rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .wood-spine {
+    .di-grid-display {
+        display: grid !important;
+    }
+
+    .di-opacity-0 {
+        opacity: 0 !important;
+    }
+
+    .di-year-section {
+        grid-column-start: 1;
+        grid-row-start: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        transition: opacity 0.5s;
+        z-index: 20;
+    }
+
+    .di-slider-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .di-gradient-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 20;
+        background: radial-gradient(circle at center, transparent 20%, rgba(12, 10, 9, 0.4) 40%, rgba(12, 10, 9, 0.9) 80%);
+    }
+
+    .di-glow-center {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10rem;
+        background-color: rgba(249, 115, 22, 0.1);
+        filter: blur(24px);
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .di-border-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 5rem;
+        height: 14rem;
+        border-left: 1px solid rgba(249, 115, 22, 0.2);
+        border-right: 1px solid rgba(249, 115, 22, 0.2);
+        background-color: rgba(249, 115, 22, 0.05);
+        z-index: 10;
+        pointer-events: none;
+        border-radius: 0.5rem;
+        filter: blur(1px);
+    }
+
+    .di-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        width: 100%;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        padding-left: 50%;
+        padding-right: 50%;
+        gap: 1rem;
+        align-items: center;
+        height: 20rem;
+        user-select: none;
+        cursor: grab;
+    }
+
+    .di-slider.di-dragging {
+        cursor: grabbing;
+    }
+
+    .di-year-item {
+        scroll-snap-align: center;
+        flex-shrink: 0;
+        transition: all 0.5s;
+        user-select: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        cursor: pointer;
+    }
+
+    .di-spine-inactive {
         background-color: #3e2723;
         background-image:
             linear-gradient(
@@ -352,9 +426,20 @@
         border-right: 1px solid #281814;
         border-top: 1px solid #5d4037;
         box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+        height: 10rem;
+        opacity: 0.5;
+        border-radius: 0.125rem;
+        position: relative;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transition: all 0.5s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        pointer-events: none;
     }
 
-    .wood-spine-active {
+    .di-spine-active {
         background-color: #6d4c41;
         background-image:
             linear-gradient(
@@ -378,5 +463,150 @@
         box-shadow:
             0 0 30px rgba(249, 115, 22, 0.4),
             inset 0 0 5px rgba(0, 0, 0, 0.3);
+        height: 16rem;
+        z-index: 10;
+        border-radius: 0.125rem;
+        position: relative;
+        transition: all 0.5s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        pointer-events: none;
+    }
+
+    .di-book-spine-overlay {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+        pointer-events: none;
+    }
+
+    .di-book-text {
+        font-family: serif;
+        transition: color 0.3s;
+        rotate: 180deg;
+        letter-spacing: 0.1em;
+    }
+
+    .di-text-inactive {
+        color: rgba(231, 229, 228, 0.6);
+        font-size: 1.125rem;
+    }
+
+    .di-text-active {
+        color: #e7e5e4;
+        font-weight: bold;
+        font-size: 1.5rem;
+        filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.5));
+    }
+
+    .di-confirm-btn {
+        z-index: 30;
+        margin-top: 1rem;
+        color: #e7e5e4;
+        border: 1px solid rgba(231, 229, 228, 0.3);
+        padding: 0.75rem 3rem;
+        border-radius: 0.125rem;
+        background-color: #1c1917;
+        font-family: serif;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.875rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.2s;
+        cursor: pointer;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .di-confirm-btn:hover {
+        background-color: #e7e5e4;
+        color: #0c0a09;
+        border-color: #e7e5e4;
+    }
+
+    .di-confirm-btn:active {
+        transform: scale(0.95);
+    }
+
+    .di-month-section {
+        grid-column-start: 1;
+        grid-row-start: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        width: 100%;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s;
+        z-index: 10;
+    }
+
+    .di-hidden-interaction {
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    :not(.di-hidden-interaction).di-month-section {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .di-month-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+        width: 100%;
+        max-width: 42rem;
+    }
+
+    @media (min-width: 768px) {
+        .di-month-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
+        }
+    }
+
+    .di-month-btn {
+        color: rgba(231, 229, 228, 0.6);
+        background: none;
+        transition: all 0.2s;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        border-radius: 0.125rem;
+        font-family: serif;
+        font-size: 1.125rem;
+        border: 1px solid rgba(231, 229, 228, 0.2);
+        cursor: pointer;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .di-month-btn:hover {
+        color: #0c0a09;
+        background-color: #e7e5e4;
+        border-color: #e7e5e4;
+        transform: scale(1.05);
+    }
+
+    .di-month-btn:active {
+        transform: scale(0.95);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .writing-vertical {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
     }
 </style>

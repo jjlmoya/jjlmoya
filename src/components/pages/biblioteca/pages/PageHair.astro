@@ -7,9 +7,9 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-full h-full flex items-center justify-center">
-                <svg viewBox="0 0 200 200" class="w-64 h-64 opacity-30 text-[#e7e5e4]">
+        <div class="lb-page-visual-container">
+            <div class="lb-page-hair-svg-wrap">
+                <svg viewBox="0 0 200 200" class="lb-page-hair-svg">
                     <path
                         d="M100,20 C100,20 120,50 110,100 C100,150 130,180 130,180"
                         fill="none"
@@ -37,24 +37,21 @@ const { side } = Astro.props;
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-emerald-700/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-emerald">
                 El Cabello
             </h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="hair-count"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="hair-count">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                <div class="lb-page-counter-label">
                     Metros de Cabello
                 </div>
             </div>
 
-            <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            <p class="lb-page-quote">
                 LO CORTÁIS Y VUELVE A SALIR. UNA Y OTRA VEZ. PERSISTENTE.
             </p>
         </div>
@@ -62,7 +59,29 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes grow {
+    .lb-page-hair-svg-wrap {
+        position: relative;
+        width: 16rem;
+        height: 16rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .lb-page-hair-svg {
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        color: #e7e5e4;
+    }
+
+    .animate-grow {
+        animation: lb-grow 4s ease-out infinite;
+    }
+
+    @keyframes lb-grow {
         0% {
             stroke-dasharray: 200;
             stroke-dashoffset: 200;
@@ -71,9 +90,6 @@ const { side } = Astro.props;
             stroke-dasharray: 200;
             stroke-dashoffset: 0;
         }
-    }
-    .animate-grow {
-        animation: grow 4s ease-out infinite;
     }
 </style>
 
@@ -87,7 +103,6 @@ const { side } = Astro.props;
         if (!countEl || !stats) return;
 
         const { hairMeters } = calculateGrowthStats(stats.daysAlive);
-
         countEl.innerText = hairMeters.toFixed(2).replace(".", ",");
     });
 </script>
