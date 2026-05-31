@@ -32,37 +32,30 @@ const sections = [
 ---
 
 <nav
-    class="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4"
+    class="wheat-fixed wheat-toc wheat-flex wheat-flex-col wheat-gap-4"
     aria-label="Table of Contents"
 >
     {
         sections.map((section) => (
             <a
                 href={`#${section.id}`}
-                class="group flex items-center justify-end gap-3"
+                class="group wheat-flex wheat-items-center wheat-justify-end wheat-gap-3 wheat-toc-link"
                 aria-label={`Ir a ${section.label}`}
                 data-theme={section.theme}
             >
                 <span
                     class:list={[
-                        "text-[10px] uppercase tracking-widest opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 bg-black/50 backdrop-blur-sm px-2 py-1 rounded",
+                        "wheat-text-xs wheat-uppercase wheat-tracking-widest wheat-toc-label",
                         section.theme === "emerald"
-                            ? "text-emerald-400"
+                            ? "wheat-toc-label--emerald"
                             : section.theme === "amber"
-                              ? "text-amber-400"
-                              : "text-stone-400",
+                              ? "wheat-toc-label--amber"
+                              : "wheat-toc-label--neutral",
                     ]}
                 >
                     {section.label}
                 </span>
-                <div
-                    class:list={[
-                        "w-2 h-2 rounded-full border transition-all duration-300 group-hover:scale-125",
-                        "bg-stone-800 border-stone-700",
-                        `group-hover:bg-${section.theme === "neutral" ? "stone" : section.theme}-500`,
-                        `group-hover:border-${section.theme === "neutral" ? "stone" : section.theme}-500`,
-                    ]}
-                />
+                <div class:list={["wheat-toc-dot", section.theme]} />
             </a>
         ))
     }
@@ -70,7 +63,7 @@ const sections = [
 
 <button
     id="toc-mobile-toggle"
-    class="fixed bottom-6 right-6 z-50 lg:hidden w-12 h-12 bg-stone-900/80 backdrop-blur border border-stone-700 rounded-full flex items-center justify-center text-amber-500 shadow-lg hover:scale-105 transition-transform"
+    class="wheat-fixed wheat-toc-mobile-btn wheat-rounded-full wheat-flex wheat-items-center wheat-justify-center"
     aria-label="Abrir índice"
 >
     <svg
@@ -79,7 +72,7 @@ const sections = [
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="w-6 h-6"
+        class="wheat-toc-mobile-icon"
     >
         <path
             stroke-linecap="round"
@@ -90,39 +83,44 @@ const sections = [
 
 <div
     id="toc-mobile-menu"
-    class="fixed inset-0 z-[60] bg-stone-950/95 backdrop-blur-sm transform translate-y-full transition-transform duration-300 lg:hidden flex flex-col"
+    class="wheat-fixed wheat-toc-mobile-menu wheat-flex wheat-flex-col translate-y-full"
 >
-    <div class="flex justify-end p-6">
-        <button id="toc-mobile-close" class="text-stone-400 hover:text-white p-2">
+    <div class="wheat-flex wheat-justify-end wheat-p-6">
+        <button id="toc-mobile-close" class="wheat-toc-mobile-close wheat-p-2">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-8 h-8"
+                class="wheat-toc-mobile-close-icon"
             >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"
                 ></path>
             </svg>
         </button>
     </div>
-    <div class="flex-1 overflow-y-auto px-8 pb-12">
-        <h3
-            class="text-amber-500 text-xs uppercase tracking-[0.2em] mb-8 font-bold border-b border-stone-800 pb-4"
-        >
+    <div class="wheat-flex-1 wheat-overflow-y-auto wheat-px-6 wheat-pb-12">
+        <h3 class="wheat-toc-mobile-title wheat-text-xs wheat-uppercase wheat-tracking-widest wheat-mb-8 wheat-pb-4">
             Índice de Contenidos
         </h3>
-        <nav class="flex flex-col gap-6">
+        <nav class="wheat-flex wheat-flex-col wheat-gap-6">
             {
                 sections.map((section) => (
                     <a
                         href={`#${section.id}`}
-                        class="toc-mobile-link text-lg font-serif text-stone-300 hover:text-amber-500 transition-colors flex items-center gap-4"
+                        class="toc-mobile-link wheat-text-lg wheat-font-serif wheat-flex wheat-items-center wheat-gap-4 wheat-toc-mobile-link"
                         data-target={section.id}
                     >
                         <span
-                            class={`w-1.5 h-1.5 rounded-full ${section.theme === "emerald" ? "bg-emerald-500" : section.theme === "amber" ? "bg-amber-500" : "bg-stone-500"}`}
+                            class:list={[
+                                "wheat-toc-mobile-dot wheat-rounded-full",
+                                section.theme === "emerald"
+                                    ? "wheat-toc-mobile-dot--emerald"
+                                    : section.theme === "amber"
+                                      ? "wheat-toc-mobile-dot--amber"
+                                      : "wheat-toc-mobile-dot--neutral"
+                            ]}
                         />
                         {section.label}
                     </a>
@@ -144,24 +142,15 @@ const sections = [
             if (entry.isIntersecting) {
                 const id = entry.target.id;
                 const link = document.querySelector(`a[href="#${id}"]`);
-                const navDot = link?.querySelector("div");
+                const navDot = link?.querySelector(".wheat-toc-dot");
 
                 if (!link || !navDot) return;
 
-                const theme = link.getAttribute("data-theme");
-
-                document.querySelectorAll("nav a div").forEach((dot) => {
-                    dot.className =
-                        "w-2 h-2 rounded-full border transition-all duration-300 group-hover:scale-125 bg-stone-800 border-stone-700";
+                document.querySelectorAll(".wheat-toc-dot").forEach((dot) => {
+                    dot.classList.remove("active");
                 });
 
-                let activeClass = "";
-                if (theme === "emerald")
-                    activeClass = "bg-emerald-500 border-emerald-500 scale-125";
-                else if (theme === "amber") activeClass = "bg-amber-500 border-amber-500 scale-125";
-                else activeClass = "bg-stone-500 border-stone-500 scale-125";
-
-                navDot.className = `w-2 h-2 rounded-full border transition-all duration-300 ${activeClass}`;
+                navDot.classList.add("active");
             }
         });
     }, observerOptions);
@@ -187,3 +176,149 @@ const sections = [
         link.addEventListener("click", toggleMenu);
     });
 </script>
+
+<style>
+    .wheat-toc {
+        position: fixed;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 50;
+        display: none;
+    }
+    @media (min-width: 1024px) {
+        .wheat-toc {
+            display: flex;
+        }
+    }
+    .wheat-toc-link {
+        text-decoration: none;
+    }
+    .wheat-toc-label {
+        font-size: 10px;
+        opacity: 0;
+        transform: translateX(-0.5rem);
+        transition: all 0.3s;
+        background-color: rgba(0, 0, 0, 0.5);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+    }
+    .group:hover .wheat-toc-label {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    .wheat-toc-label--emerald {
+        color: #34d399;
+    }
+    .wheat-toc-label--amber {
+        color: #fbbf24;
+    }
+    .wheat-toc-label--neutral {
+        color: #a8a29e;
+    }
+    .wheat-toc-dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        border: 1px solid #44403c;
+        background-color: #292524;
+        transition: all 0.3s;
+    }
+    .group:hover .wheat-toc-dot {
+        transform: scale(1.25);
+    }
+    .group:hover .wheat-toc-dot.emerald, .wheat-toc-dot.emerald.active {
+        background-color: #10b981;
+        border-color: #10b981;
+        transform: scale(1.25);
+    }
+    .group:hover .wheat-toc-dot.amber, .wheat-toc-dot.amber.active {
+        background-color: #f59e0b;
+        border-color: #f59e0b;
+        transform: scale(1.25);
+    }
+    .group:hover .wheat-toc-dot.neutral, .wheat-toc-dot.neutral.active {
+        background-color: #78716c;
+        border-color: #78716c;
+        transform: scale(1.25);
+    }
+
+    .wheat-toc-mobile-btn {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 50;
+        width: 3rem;
+        height: 3rem;
+        background-color: rgba(28, 25, 23, 0.8);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        border: 1px solid #44403c;
+        color: #f59e0b;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    @media (min-width: 1024px) {
+        .wheat-toc-mobile-btn {
+            display: none;
+        }
+    }
+    .wheat-toc-mobile-btn:hover {
+        transform: scale(1.05);
+    }
+    .wheat-toc-mobile-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .wheat-toc-mobile-menu {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background-color: rgba(12, 10, 9, 0.95);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+        transition: transform 0.3s;
+    }
+    @media (min-width: 1024px) {
+        .wheat-toc-mobile-menu {
+            display: none;
+        }
+    }
+    .wheat-toc-mobile-close {
+        background: none;
+        border: none;
+        color: #a8a29e;
+        cursor: pointer;
+    }
+    .wheat-toc-mobile-close:hover {
+        color: #ffffff;
+    }
+    .wheat-toc-mobile-close-icon {
+        width: 2rem;
+        height: 2rem;
+    }
+    .wheat-toc-mobile-title {
+        color: #f59e0b;
+        font-weight: bold;
+        border-bottom: 1px solid #292524;
+    }
+    .wheat-toc-mobile-link {
+        text-decoration: none;
+        color: #d6d3d1;
+        transition: color 0.2s;
+    }
+    .wheat-toc-mobile-link:hover {
+        color: #f59e0b;
+    }
+    .wheat-toc-mobile-dot {
+        width: 0.375rem;
+        height: 0.375rem;
+    }
+    .wheat-toc-mobile-dot--emerald { background-color: #10b981; }
+    .wheat-toc-mobile-dot--amber { background-color: #f59e0b; }
+    .wheat-toc-mobile-dot--neutral { background-color: #78716c; }
+</style>

@@ -5,22 +5,18 @@ interface Props {
 }
 
 const { theme, active = false } = Astro.props;
-
-const themeStyles = {
-    hunter: "bg-[#1c1917] text-[#d6d3d1] font-mono border-stone-800",
-    gatherer: "bg-[#0c0a09] text-[#e7e5e4] font-serif border-amber-900/30",
-    neutral: "bg-black text-white",
-};
-
-const currentTheme = themeStyles[theme];
 ---
 
 <div
-    class={`absolute inset-0 w-full h-full transition-opacity duration-500 flex flex-col ${active ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"} ${currentTheme} overflow-hidden`}
+    class:list={[
+        "wheat-absolute wheat-inset-0 wheat-w-full wheat-h-full wheat-flex wheat-flex-col wheat-overflow-hidden wheat-slide",
+        theme,
+        active ? "active" : ""
+    ]}
 >
     {
         theme === "hunter" && (
-            <div class="absolute inset-0 opacity-5 pointer-events-none">
+            <div class="wheat-absolute wheat-inset-0 wheat-opacity-5 wheat-pointer-events-none">
                 <svg width="100%" height="100%">
                     <filter id="noise">
                         <feTurbulence
@@ -38,14 +34,55 @@ const currentTheme = themeStyles[theme];
 
     {
         theme === "gatherer" && (
-            <div
-                class="absolute inset-0 opacity-5 pointer-events-none"
-                style="background-image: radial-gradient(#f59e0b 1px, transparent 1px); background-size: 40px 40px;"
-            />
+            <div class="wheat-absolute wheat-inset-0 wheat-opacity-5 wheat-pointer-events-none wheat-slide-gatherer-pattern" />
         )
     }
 
-    <div class="relative z-10 w-full h-full flex flex-col p-6 md:p-12 max-w-7xl mx-auto">
+    <div class="wheat-relative wheat-w-full wheat-h-full wheat-flex wheat-flex-col wheat-p-6 wheat-p-12@md wheat-slide-container wheat-mx-auto">
         <slot />
     </div>
 </div>
+
+<style>
+    .wheat-slide {
+        transition: opacity 0.5s;
+        opacity: 0;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .wheat-slide.active {
+        opacity: 1;
+        z-index: 10;
+        pointer-events: auto;
+    }
+    .wheat-slide.hunter {
+        background-color: #1c1917;
+        color: #d6d3d1;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        border-color: #292524;
+    }
+    .wheat-slide.gatherer {
+        background-color: #0c0a09;
+        color: #e7e5e4;
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+        border-color: rgba(146, 64, 14, 0.3);
+    }
+    .wheat-slide.neutral {
+        background-color: #000000;
+        color: #ffffff;
+    }
+    .wheat-slide-gatherer-pattern {
+        background-image: radial-gradient(#f59e0b 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+    .wheat-slide-container {
+        z-index: 10;
+        max-width: 80rem;
+        box-sizing: border-box;
+    }
+    @media (min-width: 768px) {
+        .wheat-p-12\@md {
+            padding: 3rem;
+        }
+    }
+</style>
