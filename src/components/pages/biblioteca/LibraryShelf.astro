@@ -8,32 +8,89 @@ interface Props {
     extraClasses?: string;
 }
 
-const { title, subtitle, id, statId, minHeight = "min-h-[200px]", extraClasses = "" } = Astro.props;
+const { title, subtitle, id, statId, minHeight = "200px", extraClasses = "" } = Astro.props;
+
+const getMinHeight = (val: string) => {
+    const match = val.match(/min-h-\[(.*?)\]/);
+    if (match) return match[1];
+    if (val === "min-h-[200px]") return "200px";
+    return val;
+};
+
+const resolvedMinHeight = getMinHeight(minHeight);
+
+const classNames = [
+    "shelf",
+    extraClasses.includes("gap-2") ? "shelf--gap-2" : "",
+    extraClasses.includes("overflow-hidden") ? "shelf--overflow-hidden" : "",
+    extraClasses.includes("relative") ? "shelf--relative" : ""
+].filter(Boolean).join(" ");
 ---
 
 <section class="shelf-section">
-    <h2
-        class="text-2xl font-sans uppercase tracking-widest mb-4 border-b border-[#dcd9d2] pb-2 flex justify-between items-center"
-    >
+    <h2 class="shelf-title">
         <span>{title}</span>
         {
             subtitle && (
-                <span class="text-sm opacity-50 normal-case font-serif italic">{subtitle}</span>
+                <span class="shelf-subtitle">{subtitle}</span>
             )
         }
     </h2>
     <div
-        class={`shelf bg-[#e8e5de] p-8 shadow-inner rounded-sm flex flex-wrap gap-1 items-end ${minHeight} ${extraClasses}`}
+        class={classNames}
         id={id}
+        style={{ minHeight: resolvedMinHeight }}
     >
         <slot />
     </div>
-    <p class="mt-4 text-right font-sans text-sm opacity-50" id={statId}></p>
+    <p class="shelf-stat" id={statId}></p>
 </section>
 
 <style>
+    .shelf-title {
+        font-size: 1.5rem;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #dcd9d2;
+        padding-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .shelf-subtitle {
+        font-size: 0.875rem;
+        opacity: 0.5;
+        text-transform: none;
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+        font-style: italic;
+    }
     .shelf {
+        background-color: #e8e5de;
+        padding: 2rem;
         box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.05);
+        border-radius: 0.125rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        align-items: flex-end;
         border-bottom: 12px solid #dcd9d2;
+    }
+    .shelf--gap-2 {
+        gap: 0.5rem;
+    }
+    .shelf--overflow-hidden {
+        overflow: hidden;
+    }
+    .shelf--relative {
+        position: relative;
+    }
+    .shelf-stat {
+        margin-top: 1rem;
+        text-align: right;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 0.875rem;
+        opacity: 0.5;
     }
 </style>

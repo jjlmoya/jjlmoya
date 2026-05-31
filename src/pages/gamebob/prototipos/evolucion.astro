@@ -182,7 +182,7 @@ const { base_elements, recipes } = evolutionData;
     </div>
 </Layout>
 
-<style>
+<style is:global>
     .ev-body {
         background: #020617;
         color: #fff;
@@ -808,6 +808,14 @@ const { base_elements, recipes } = evolutionData;
         transition: all 0.5s;
         padding: 1rem;
     }
+    .ev-battle-overlay--active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    .evo-fighter-icon {
+        width: 100%;
+        height: 100%;
+    }
     .ev-battle-container {
         width: 100%;
         max-width: 72rem;
@@ -1140,17 +1148,402 @@ const { base_elements, recipes } = evolutionData;
     .carved-text {
         filter: drop-shadow(1px 1px 0px rgba(255, 255, 255, 0.3));
     }
+
+    .evo-inventory-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        background-color: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.2s;
+        cursor: grab;
+        user-select: none;
+        touch-action: manipulation;
+    }
+    .evo-inventory-item:hover {
+        background-color: rgba(79, 70, 229, 0.2);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+    .evo-inventory-item:active {
+        cursor: grabbing;
+    }
+    .evo-inventory-icon-box {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.25rem;
+        background-color: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    @media (max-width: 767px) {
+        .evo-inventory-item {
+            padding: 0.5rem;
+        }
+        .evo-inventory-icon-box {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+    .evo-inventory-icon {
+        color: #cbd5e1;
+        font-size: 1.25rem;
+        transition: color 0.2s;
+    }
+    .evo-inventory-item:hover .evo-inventory-icon {
+        color: #a5b4fc;
+    }
+    .evo-inventory-name-box {
+        flex: 1;
+        min-width: 0;
+        display: none;
+    }
+    @media (min-width: 768px) {
+        .evo-inventory-name-box {
+            display: block;
+        }
+    }
+    .evo-inventory-name {
+        font-size: 0.75rem;
+        font-weight: bold;
+        color: #cbd5e1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0;
+    }
+    .evo-inventory-item:hover .evo-inventory-name {
+        color: #ffffff;
+    }
+    .evo-entity {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 6rem;
+        height: 6rem;
+        cursor: grab;
+        transition: transform 0.2s;
+        z-index: 10;
+        touch-action: none;
+    }
+    .evo-entity--dragging {
+        opacity: 0.5;
+    }
+    .evo-drag-ghost {
+        position: fixed;
+        z-index: 50;
+        width: 3rem;
+        height: 3rem;
+        background-color: #4f46e5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        pointer-events: none;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        opacity: 0.8;
+    }
+    .evo-drag-ghost-icon {
+        font-size: 1.5rem;
+    }
+    .evo-fx-particle {
+        position: absolute;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 50;
+    }
+    .evo-entity:active {
+        cursor: grabbing;
+    }
+    .evo-entity:hover {
+        transform: translate(-50%, -50%) scale(1.1) !important;
+    }
+    .evo-entity--feeding {
+        transform: translate(-50%, -50%) scale(1.25) !important;
+    }
+    .evo-entity-visual {
+        position: relative;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        pointer-events: none;
+    }
+    .evo-entity-icon {
+        font-size: 2.25rem;
+    }
+    .evo-entity-name {
+        position: absolute;
+        bottom: -0.5rem;
+        padding: 0.125rem 0.5rem;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-radius: 9999px;
+        font-size: 9px;
+        font-weight: bold;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        white-space: nowrap;
+    }
+    .evo-type-fuego {
+        color: #ffedd5;
+        border-color: rgba(255, 87, 34, 0.3);
+        background-color: rgba(255, 87, 34, 0.15);
+        filter: drop-shadow(0 0 15px rgba(255, 87, 34, 0.5));
+    }
+    .evo-type-agua {
+        color: #bfdbfe;
+        border-color: rgba(33, 150, 243, 0.3);
+        background-color: rgba(33, 150, 243, 0.15);
+        filter: drop-shadow(0 0 15px rgba(33, 150, 243, 0.5));
+    }
+    .evo-type-tierra {
+        color: #fef3c7;
+        border-color: rgba(121, 85, 72, 0.3);
+        background-color: rgba(121, 85, 72, 0.15);
+        filter: drop-shadow(0 0 15px rgba(121, 85, 72, 0.5));
+    }
+    .evo-type-aire {
+        color: #e2e8f0;
+        border-color: rgba(158, 158, 158, 0.3);
+        background-color: rgba(158, 158, 158, 0.15);
+        filter: drop-shadow(0 0 15px rgba(158, 158, 158, 0.5));
+    }
+    .evo-type-poop {
+        color: #b45309;
+        border-color: rgba(180, 83, 9, 0.3);
+        background-color: rgba(120, 53, 15, 0.2);
+        filter: drop-shadow(0 0 5px rgba(180, 83, 9, 0.3));
+    }
+    .evo-entity-slots {
+        position: absolute;
+        top: -1rem;
+        display: flex;
+        gap: 0.25rem;
+    }
+    .evo-entity-slot {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+    .evo-entity-slot--empty {
+        background-color: #1e293b;
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+    .evo-entity-slot--filled {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8px;
+        color: #ffffff;
+    }
+    .evo-entity-level {
+        position: absolute;
+        right: -0.5rem;
+        top: -0.5rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        background-color: #f59e0b;
+        color: #0f172a;
+        font-size: 10px;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        z-index: 20;
+    }
+    .evo-entity-hp-container {
+        position: absolute;
+        bottom: -1rem;
+        width: 4rem;
+        height: 6px;
+        background-color: rgba(15, 23, 42, 0.8);
+        border-radius: 9999px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .evo-entity-hp-bar {
+        height: 100%;
+        transition: width 0.3s;
+    }
+    .evo-hp-bar--ok {
+        background-color: #10b981;
+    }
+    .evo-hp-bar--low {
+        background-color: #ef4444;
+    }
+    .evo-entity-xp-container {
+        position: absolute;
+        bottom: -1.5rem;
+        width: 3.5rem;
+        height: 4px;
+        background-color: rgba(15, 23, 42, 0.8);
+        border-radius: 9999px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .evo-entity-xp-bar {
+        height: 100%;
+        background-color: #818cf8;
+        transition: width 0.3s;
+    }
+    .evo-enc-card {
+        position: relative;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        border: 1px solid;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: all 0.2s;
+    }
+    .evo-enc-card:hover {
+        transform: scale(1.02);
+    }
+    .evo-enc-card--discovered {
+        background-color: rgba(30, 41, 59, 0.5);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    .evo-enc-card--locked {
+        background-color: rgba(15, 23, 42, 0.5);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+    .evo-enc-card-icon-box-wrapper {
+        margin-bottom: 0.75rem;
+        position: relative;
+    }
+    .evo-enc-card-icon-box-wrapper.evo-locked {
+        opacity: 0.2;
+    }
+    .evo-enc-card-icon-box {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background-color: #0f172a;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        font-size: 1.875rem;
+    }
+    .evo-enc-recipe-title {
+        font-size: 1.125rem;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 0.25rem;
+        margin-top: 0;
+    }
+    .evo-locked-title {
+        font-size: 1.125rem;
+        font-weight: bold;
+        color: #334155;
+        margin-bottom: 0.25rem;
+        margin-top: 0;
+    }
+    .evo-enc-recipe-desc {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-bottom: 1rem;
+        height: 2rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-top: 0;
+    }
+    .evo-locked-desc {
+        font-size: 0.75rem;
+        color: #1e293b;
+        margin-bottom: 1rem;
+        margin-top: 0;
+    }
+    .evo-enc-recipe-inputs-container {
+        width: 100%;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .evo-enc-recipe-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #64748b;
+        margin-bottom: 0.5rem;
+        margin-top: 0;
+    }
+    .evo-enc-recipe-inputs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .evo-enc-recipe-input {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.25rem;
+        background-color: #0f172a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+        font-size: 1rem;
+    }
+    .evo-enc-recipe-plus {
+        color: #475569;
+        font-size: 0.875rem;
+    }
 </style>
 
 <script>
     import { Game } from "../../../scripts/evolution/Game.js";
 
-    const dataScript = document.getElementById("evolution-data");
-    if (dataScript && dataScript.textContent) {
-        const { base_elements, recipes } = JSON.parse(dataScript.textContent);
+    function initGame() {
+        const dataScript = document.getElementById("evolution-data");
+        const playground = document.getElementById("playground");
 
-        new Game({ base_elements, recipes });
+        if (window["__gameInstance"]) {
+            try {
+                window["__gameInstance"].destroy();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        if (dataScript && dataScript.textContent) {
+            try {
+                const { base_elements, recipes } = JSON.parse(dataScript.textContent);
+                window["__gameInstance"] = new Game({ base_elements, recipes });
+            } catch (err) {
+                console.error("Error initializing Game:", err);
+            }
+        }
     }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initGame);
+    } else {
+        initGame();
+    }
+    document.addEventListener("astro:page-load", initGame);
 
     const script = document.createElement("script");
     script.src = "https://code.iconify.design/3/3.1.0/iconify.min.js";
@@ -1162,4 +1555,6 @@ const { base_elements, recipes } = evolutionData;
     id="evolution-data"
     type="application/json"
     set:html={JSON.stringify({ base_elements, recipes })}
-/>
+></script>
+
+

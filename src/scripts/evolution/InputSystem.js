@@ -24,29 +24,20 @@ export class InputSystem {
     }
 
     makeDraggable(el, type, data) {
-        console.log("[InputSystem] makeDraggable called:", {
-            type,
-            data,
-            element: el.id || "no-id",
-        });
-
         el.draggable = true;
         el.addEventListener("dragstart", (e) => {
-            console.log("[InputSystem] dragstart (desktop):", type);
             e.dataTransfer.setData("application/json", JSON.stringify({ type, ...data }));
             e.dataTransfer.effectAllowed = type === "ingredient" ? "copy" : "move";
-            if (type === "entity") el.classList.add("opacity-50");
+            if (type === "entity") el.classList.add("evo-entity--dragging");
         });
 
         el.addEventListener("dragend", () => {
-            console.log("[InputSystem] dragend (desktop):", type);
-            if (type === "entity") el.classList.remove("opacity-50");
+            if (type === "entity") el.classList.remove("evo-entity--dragging");
         });
 
         el.addEventListener(
             "touchstart",
             (e) => {
-                console.log("[InputSystem] touchstart event fired:", { type, data });
                 this.handleTouchStart(e, type, data);
             },
             { passive: false }
@@ -71,24 +62,18 @@ export class InputSystem {
     }
 
     handleTouchStart(e, type, data) {
-        console.log("[InputSystem] handleTouchStart:", { type, data, touches: e.touches.length });
-
         if (e.cancelable) e.preventDefault();
         const touch = e.touches[0];
 
         if (type === "ingredient") {
-            console.log("[InputSystem] Creating ghost for ingredient");
             const ghost = document.createElement("div");
-            ghost.className =
-                "fixed z-50 w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white pointer-events-none shadow-xl opacity-80";
-            ghost.innerHTML = `<span class="iconify text-2xl" data-icon="${data.data.icon}"></span>`;
+            ghost.className = "evo-drag-ghost";
+            ghost.innerHTML = `<span class="iconify evo-drag-ghost-icon" data-icon="${data.data.icon}"></span>`;
             ghost.style.left = `${touch.clientX - 24}px`;
             ghost.style.top = `${touch.clientY - 24}px`;
             document.body.appendChild(ghost);
             this.dragItem = { type, data: data.data, ghost };
         } else if (type === "entity") {
-            console.log("[InputSystem] Setting up entity drag, entity id:", data.id);
-
             const ent = this.entities.find((e) => e.id === data.id);
             if (!ent) {
                 console.error("[InputSystem] Entity not found:", data.id);
@@ -100,7 +85,6 @@ export class InputSystem {
                 entity: ent,
                 offset: { x: touch.clientX - ent.x, y: touch.clientY - ent.y },
             };
-            console.log("[InputSystem] Entity drag setup complete:", this.dragItem);
         }
 
         const moveHandler = (ev) => this.handleTouchMove(ev);
@@ -117,7 +101,6 @@ export class InputSystem {
 
         document.addEventListener("touchmove", moveHandler, { passive: false });
         document.addEventListener("touchend", endHandler);
-        console.log("[InputSystem] Touch listeners registered");
     }
 
     handleTouchMove(e) {
@@ -181,33 +164,20 @@ export class InputSystem {
     }
 
     cleanup() {
-        console.log("[InputSystem] cleanup called, current state:", {
-            dragItem: this.dragItem,
-            hasActiveListeners: !!(
-                this.activeListeners.moveHandler || this.activeListeners.endHandler
-            ),
-        });
-
         if (this.activeListeners.moveHandler) {
             document.removeEventListener("touchmove", this.activeListeners.moveHandler);
             this.activeListeners.moveHandler = null;
-            console.log("[InputSystem] Removed touchmove listener");
         }
         if (this.activeListeners.endHandler) {
             document.removeEventListener("touchend", this.activeListeners.endHandler);
             this.activeListeners.endHandler = null;
-            console.log("[InputSystem] Removed touchend listener");
         }
 
         if (this.dragItem) {
             if (this.dragItem.ghost) {
                 this.dragItem.ghost.remove();
-                console.log("[InputSystem] Removed ghost element");
             }
             this.dragItem = null;
-            console.log("[InputSystem] Cleared dragItem");
         }
-
-        console.log("[InputSystem] cleanup complete");
     }
 }

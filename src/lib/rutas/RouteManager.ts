@@ -105,10 +105,10 @@ export class RouteManager extends EventTarget {
     private updateMarkerPopup(point: RoutePoint) {
         const popupContent = document.createElement("div");
         popupContent.innerHTML = `
-            <div class="text-center">
-                <strong class="block mb-1 text-sm">${point.name}</strong>
-                <p class="text-xs text-slate-500 mb-2">Lat: ${point.lat.toFixed(4)}, Lng: ${point.lng.toFixed(4)}</p>
-                <button class="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-colors" id="delete-btn-${point.id}">
+            <div class="route-popup-container">
+                <strong class="route-popup-title">${point.name}</strong>
+                <p class="route-popup-coords">Lat: ${point.lat.toFixed(4)}, Lng: ${point.lng.toFixed(4)}</p>
+                <button class="route-popup-delete-btn" id="delete-btn-${point.id}">
                     Eliminar
                 </button>
             </div>

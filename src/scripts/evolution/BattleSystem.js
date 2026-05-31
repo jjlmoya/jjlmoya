@@ -36,15 +36,15 @@ export class BattleSystem {
 
         if (this.onBattleStart) this.onBattleStart();
 
-        this.ui.overlay.classList.remove("opacity-0", "pointer-events-none");
+        this.ui.overlay.classList.add("ev-battle-overlay--active");
         this.ui.closeBtn.classList.add("hidden");
         this.ui.actionText.innerText = "¡COMIENZA LA PELEA!";
 
         const f1Color = this.getTypeColor(fighter1.data.types);
         const f2Color = this.getTypeColor(fighter2.data.types);
 
-        this.ui.f1.visual.innerHTML = `<span class="iconify w-full h-full" data-icon="${fighter1.data.icon}" style="color: rgb(${f1Color}); filter: drop-shadow(0 0 10px rgba(${f1Color}, 0.6))"></span>`;
-        this.ui.f2.visual.innerHTML = `<span class="iconify w-full h-full" data-icon="${fighter2.data.icon}" style="color: rgb(${f2Color}); filter: drop-shadow(0 0 10px rgba(${f2Color}, 0.6))"></span>`;
+        this.ui.f1.visual.innerHTML = `<span class="iconify evo-fighter-icon" data-icon="${fighter1.data.icon}" style="color: rgb(${f1Color}); filter: drop-shadow(0 0 10px rgba(${f1Color}, 0.6))"></span>`;
+        this.ui.f2.visual.innerHTML = `<span class="iconify evo-fighter-icon" data-icon="${fighter2.data.icon}" style="color: rgb(${f2Color}); filter: drop-shadow(0 0 10px rgba(${f2Color}, 0.6))"></span>`;
         this.ui.f1.name.innerText = `${fighter1.data.name} (Lvl ${fighter1.level})`;
         this.ui.f2.name.innerText = `${fighter2.data.name} (Lvl ${fighter2.level})`;
 
@@ -148,7 +148,7 @@ export class BattleSystem {
     }
 
     close() {
-        this.ui.overlay.classList.add("opacity-0", "pointer-events-none");
+        this.ui.overlay.classList.remove("ev-battle-overlay--active");
         if (this.onClose) this.onClose();
     }
 }

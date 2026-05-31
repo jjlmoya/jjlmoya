@@ -12,11 +12,16 @@ export class Game {
         this.playground = document.getElementById("playground");
         this.entitiesLayer = document.getElementById("entities-layer");
         this.inventoryContainer = document.getElementById("inventory");
-        this.instructions = document.getElementById("instructions");
+        this.instructions = document.getElementById("stone-tutorial");
 
         this.encyclopediaModal = document.getElementById("encyclopedia-modal");
         this.encyclopediaGrid = document.getElementById("encyclopedia-grid");
         this.encyclopediaStats = document.getElementById("encyclopedia-stats");
+
+        if (!this.playground || !this.entitiesLayer || !this.inventoryContainer) {
+            console.warn("[Game] Required elements missing. Aborting init.");
+            return;
+        }
 
         this.fx = new FX(this.entitiesLayer);
         this.battleSystem = new BattleSystem({
@@ -60,10 +65,10 @@ export class Game {
 
     getTypeColor(types) {
         const typeColors = {
-            fuego: { glow: "255, 87, 34", bg: "255, 87, 34", text: "text-orange-200" },
-            agua: { glow: "33, 150, 243", bg: "33, 150, 243", text: "text-blue-200" },
-            tierra: { glow: "121, 85, 72", bg: "121, 85, 72", text: "text-amber-200" },
-            aire: { glow: "158, 158, 158", bg: "158, 158, 158", text: "text-slate-200" },
+            fuego: { glow: "255, 87, 34", bg: "255, 87, 34", class: "evo-type-fuego" },
+            agua: { glow: "33, 150, 243", bg: "33, 150, 243", class: "evo-type-agua" },
+            tierra: { glow: "121, 85, 72", bg: "121, 85, 72", class: "evo-type-tierra" },
+            aire: { glow: "158, 158, 158", bg: "158, 158, 158", class: "evo-type-aire" },
         };
 
         const primaryType = types && types[0] ? types[0] : "aire";
@@ -137,7 +142,9 @@ export class Game {
     setupControls() {
         document.getElementById("spawn-egg-btn").addEventListener("click", () => {
             this.spawnEgg();
-            this.instructions.style.opacity = "0";
+            if (this.instructions) {
+                this.instructions.style.opacity = "0";
+            }
         });
 
         document.getElementById("clear-btn").addEventListener("click", () => {
@@ -162,7 +169,7 @@ export class Game {
     }
 
     startPassiveHealing() {
-        setInterval(() => {
+        this.healingInterval = setInterval(() => {
             this.entities.forEach((entity) => {
                 if (entity.currentHp <= 0 || entity.inBattle) return;
 
@@ -175,25 +182,33 @@ export class Game {
                     if (hpBar) {
                         const pct = (entity.currentHp / maxHp) * 100;
                         hpBar.style.width = `${pct}%`;
-                        hpBar.className = `h-full transition-all duration-300 ${pct < 30 ? "bg-red-500" : "bg-emerald-500"}`;
+                        hpBar.className = "evo-entity-hp-bar " + (pct < 30 ? "evo-hp-bar--low" : "evo-hp-bar--ok");
                     }
                 }
             });
         }, 1000);
     }
 
+    destroy() {
+        if (this.healingInterval) {
+            clearInterval(this.healingInterval);
+        }
+        if (this.inputSystem) {
+            this.inputSystem.cleanup();
+        }
+    }
+
     renderInventory() {
         this.inventoryContainer.innerHTML = "";
         this.base_elements.forEach((item) => {
             const el = document.createElement("div");
-            el.className =
-                "group flex items-center gap-3 p-3 md:p-2 rounded-lg bg-slate-800/50 hover:bg-indigo-600/20 border border-white/5 hover:border-indigo-500/30 transition-all cursor-grab active:cursor-grabbing select-none touch-manipulation";
+            el.className = "evo-inventory-item";
             el.innerHTML = `
-                <div class="w-10 h-10 md:w-8 md:h-8 rounded bg-slate-900 flex items-center justify-center text-xl md:text-lg border border-white/10">
-                    <span class="iconify text-slate-300 group-hover:text-indigo-300" data-icon="${item.icon}"></span>
+                <div class="evo-inventory-icon-box">
+                    <span class="iconify evo-inventory-icon" data-icon="${item.icon}"></span>
                 </div>
-                <div class="flex-1 min-w-0 hidden md:block">
-                    <p class="text-xs font-bold text-slate-300 group-hover:text-white truncate">${item.name}</p>
+                <div class="evo-inventory-name-box">
+                    <p class="evo-inventory-name">${item.name}</p>
                 </div>
             `;
 
@@ -203,6 +218,11 @@ export class Game {
     }
 
     spawnEgg() {
+        const width = this.playground ? this.playground.clientWidth : 800;
+        const height = this.playground ? this.playground.clientHeight : 600;
+        const finalWidth = width > 100 ? width : 800;
+        const finalHeight = height > 100 ? height : 600;
+
         this.spawnEntity({
             type: "creature",
             data: {
@@ -213,8 +233,8 @@ export class Game {
                 stats: { atk: 10, def: 5, hp: 100 },
                 types: ["normal"],
             },
-            x: Math.random() * (this.playground.clientWidth - 100) + 50,
-            y: Math.random() * (this.playground.clientHeight - 100) + 50,
+            x: Math.random() * (finalWidth - 100) + 50,
+            y: Math.random() * (finalHeight - 100) + 50,
         });
     }
 
@@ -243,31 +263,29 @@ export class Game {
 
         const el = document.createElement("div");
         el.id = `entity-${entity.id}`;
-        el.className =
-            "absolute flex flex-col items-center justify-center w-24 h-24 cursor-grab active:cursor-grabbing transition-transform hover:scale-110 z-10 touch-none";
+        el.className = "evo-entity";
         el.style.left = `${entity.x}px`;
         el.style.top = `${entity.y}px`;
         el.style.transform = "translate(-50%, -50%)";
 
         const typeColor = this.getTypeColor(entity.data.types);
-        let visualClass = `${typeColor.text} drop-shadow-[0_0_15px_rgba(${typeColor.glow},0.5)]`;
-        let bgClass = `bg-slate-900/80 border-[rgba(${typeColor.bg},0.3)]`;
-
-        if (entity.type === "poop") {
-            visualClass = "text-amber-700 drop-shadow-md";
-            bgClass = "bg-amber-900/20 border-amber-700/30";
+        
+        let entityTypeClass = typeColor.class;
+        let isPoop = entity.type === "poop";
+        if (isPoop) {
+            entityTypeClass = "evo-type-poop";
         }
 
         let slotsHtml = "";
         if (entity.type === "creature") {
-            slotsHtml = `<div class="absolute -top-4 flex gap-1">`;
+            slotsHtml = `<div class="evo-entity-slots">`;
             for (let i = 0; i < entity.maxStomach; i++) {
                 const filled = entity.stomach[i];
                 if (filled) {
                     const slotColor = this.getTypeColor(filled.types);
-                    slotsHtml += `<div class="w-3 h-3 rounded-full border border-white/20 flex items-center justify-center text-[8px] text-white" style="background-color: rgba(${slotColor.bg}, 0.8)"><span class="iconify" data-icon="${filled.icon}"></span></div>`;
+                    slotsHtml += `<div class="evo-entity-slot evo-entity-slot--filled ${slotColor.class}" style="background-color: rgba(${slotColor.bg}, 0.8)"><span class="iconify" data-icon="${filled.icon}"></span></div>`;
                 } else {
-                    slotsHtml += `<div class="w-3 h-3 rounded-full bg-slate-800 border border-white/20 border-dashed"></div>`;
+                    slotsHtml += `<div class="evo-entity-slot evo-entity-slot--empty"></div>`;
                 }
             }
             slotsHtml += `</div>`;
@@ -275,14 +293,14 @@ export class Game {
 
         const levelHtml =
             entity.type === "creature"
-                ? `<div class="absolute -right-2 -top-2 w-5 h-5 rounded-full bg-amber-500 text-slate-900 text-[10px] font-black flex items-center justify-center border border-white/20 shadow-lg z-20">${entity.level}</div>`
+                ? `<div class="evo-entity-level">${entity.level}</div>`
                 : "";
 
         const hpPct = (entity.currentHp / entity.data.stats.hp) * 100;
-        const hpColor = hpPct < 30 ? "bg-red-500" : "bg-emerald-500";
+        const hpColorClass = hpPct < 30 ? "evo-hp-bar--low" : "evo-hp-bar--ok";
         const hpBarHtml = `
-            <div class="absolute -bottom-4 w-16 h-1.5 bg-slate-900/80 rounded-full overflow-hidden border border-white/10">
-                <div id="hp-bar-${entity.id}" class="h-full ${hpColor} transition-all duration-300" style="width: ${hpPct}%"></div>
+            <div class="evo-entity-hp-container">
+                <div id="hp-bar-${entity.id}" class="evo-entity-hp-bar ${hpColorClass}" style="width: ${hpPct}%"></div>
             </div>
         `;
 
@@ -291,8 +309,8 @@ export class Game {
             const xpNeeded = entity.level * 100;
             const xpPct = (entity.xp / xpNeeded) * 100;
             xpBarHtml = `
-                <div class="absolute -bottom-6 w-14 h-1 bg-slate-900/80 rounded-full overflow-hidden border border-white/10">
-                    <div id="xp-bar-${entity.id}" class="h-full bg-indigo-400 transition-all duration-300" style="width: ${xpPct}%"></div>
+                <div class="evo-entity-xp-container">
+                    <div id="xp-bar-${entity.id}" class="evo-entity-xp-bar" style="width: ${xpPct}%"></div>
                 </div>
             `;
         }
@@ -300,12 +318,12 @@ export class Game {
         el.innerHTML = `
             ${levelHtml}
             ${slotsHtml}
-            <div class="relative w-16 h-16 rounded-full border ${bgClass} backdrop-blur-sm flex items-center justify-center shadow-xl animate-float pointer-events-none">
-                <span class="iconify text-4xl ${visualClass}" data-icon="${entity.data.icon}"></span>
+            <div class="evo-entity-visual ${entityTypeClass}" style="--type-glow: ${typeColor.glow}; --type-bg: ${typeColor.bg};">
+                <span class="iconify evo-entity-icon" data-icon="${entity.data.icon}"></span>
                 ${
                     entity.type === "creature"
                         ? `
-                    <div class="absolute -bottom-2 px-2 py-0.5 bg-black/80 rounded-full text-[9px] font-bold text-white border border-white/10 whitespace-nowrap">
+                    <div class="evo-entity-name">
                         ${entity.data.name}
                     </div>
                 `
@@ -378,8 +396,8 @@ export class Game {
 
         const el = document.getElementById(`entity-${entity.id}`);
         if (el) {
-            el.classList.add("scale-125");
-            setTimeout(() => el.classList.remove("scale-125"), 200);
+            el.classList.add("evo-entity--feeding");
+            setTimeout(() => el.classList.remove("evo-entity--feeding"), 200);
         }
 
         entity.stomach.push(ingredient);
@@ -525,7 +543,7 @@ export class Game {
             if (isDiscovered) discoveredCount++;
 
             const el = document.createElement("div");
-            el.className = `relative p-4 rounded-xl border ${isDiscovered ? "bg-slate-800/50 border-white/10" : "bg-slate-900/50 border-white/5"} flex flex-col items-center text-center transition-all hover:scale-[1.02]`;
+            el.className = "evo-enc-card " + (isDiscovered ? "evo-enc-card--discovered" : "evo-enc-card--locked");
 
             if (isDiscovered) {
                 const typeColor = this.getTypeColor(recipe.result.types);
@@ -534,38 +552,38 @@ export class Game {
                     .map((inputId) => {
                         const data = this.getEntityData(inputId);
                         return `
-                        <div class="w-8 h-8 rounded bg-slate-900 flex items-center justify-center border border-white/10" title="${data ? data.name : inputId}">
-                            <span class="iconify text-slate-400" data-icon="${data ? data.icon : "mdi:help"}"></span>
+                        <div class="evo-enc-recipe-input" title="${data ? data.name : inputId}">
+                            <span class="iconify" data-icon="${data ? data.icon : "mdi:help"}"></span>
                         </div>
                     `;
                     })
-                    .join('<span class="text-slate-600">+</span>');
+                    .join('<span class="evo-enc-recipe-plus">+</span>');
 
                 el.innerHTML = `
-                    <div class="mb-3 relative">
-                        <div class="w-16 h-16 rounded-full bg-slate-900 border border-[rgba(${typeColor.bg},0.3)] flex items-center justify-center shadow-lg">
-                            <span class="iconify text-3xl ${typeColor.text} drop-shadow-[0_0_10px_rgba(${typeColor.glow},0.5)]" data-icon="${recipe.result.icon}"></span>
+                    <div class="evo-enc-card-icon-box-wrapper">
+                        <div class="evo-enc-card-icon-box ${typeColor.class}" style="--type-bg: ${typeColor.bg}; --type-glow: ${typeColor.glow}">
+                            <span class="iconify" data-icon="${recipe.result.icon}"></span>
                         </div>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-1">${recipe.result.name}</h3>
-                    <p class="text-xs text-slate-400 mb-4 h-8 line-clamp-2">${recipe.result.desc}</p>
+                    <h3 class="evo-enc-recipe-title">${recipe.result.name}</h3>
+                    <p class="evo-enc-recipe-desc">${recipe.result.desc}</p>
                     
-                    <div class="w-full pt-3 border-t border-white/5">
-                        <p class="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Receta</p>
-                        <div class="flex items-center justify-center gap-2">
+                    <div class="evo-enc-recipe-inputs-container">
+                        <p class="evo-enc-recipe-label">Receta</p>
+                        <div class="evo-enc-recipe-inputs">
                             ${inputsHtml}
                         </div>
                     </div>
                 `;
             } else {
                 el.innerHTML = `
-                    <div class="mb-3 relative opacity-20">
-                        <div class="w-16 h-16 rounded-full bg-slate-900 border border-white/10 flex items-center justify-center">
-                            <span class="iconify text-3xl text-white" data-icon="mdi:help"></span>
+                    <div class="evo-enc-card-icon-box-wrapper evo-locked">
+                        <div class="evo-enc-card-icon-box">
+                            <span class="iconify" data-icon="mdi:help"></span>
                         </div>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-700 mb-1">???</h3>
-                    <p class="text-xs text-slate-800 mb-4">Bloqueado</p>
+                    <h3 class="evo-locked-title">???</h3>
+                    <p class="evo-locked-desc">Bloqueado</p>
                 `;
             }
 
