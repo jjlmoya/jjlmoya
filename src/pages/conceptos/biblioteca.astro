@@ -66,9 +66,7 @@ import "./biblioteca.css";
 
     <script is:inline>
         (() => {
-            console.log("Biblioteca page script loaded");
             const initBiblioteca = () => {
-                console.log("initBiblioteca started");
                 const rat = document.getElementById("death-of-rats");
                 if (rat) {
                     const newRat = rat.cloneNode(true);
@@ -87,25 +85,18 @@ import "./biblioteca.css";
                 const stageConfirmation = document.getElementById("stage-confirmation");
                 const stageBook = document.getElementById("stage-book");
 
-                console.log("Biblioteca stages found:", {
-                    stageIntro: !!stageIntro,
-                    introInitial: !!introInitial,
-                    introNext: !!introNext,
-                    introMonth: !!introMonth,
-                    stageConfirmation: !!stageConfirmation,
-                    stageBook: !!stageBook
-                });
+
 
                 const storedData = localStorage.getItem("life-birthdate");
                 let hasSkippedIntro = false;
-                console.log("Biblioteca storedData:", storedData);
+
 
                 if (storedData) {
                     try {
                         const { year, month } = JSON.parse(storedData);
                         if (year && month !== undefined) {
                             hasSkippedIntro = true;
-                            console.log("Biblioteca skipping intro because storedData exists:", { year, month });
+
 
                             if (stageIntro) stageIntro.classList.add("hidden");
                             if (stageConfirmation) stageConfirmation.classList.add("hidden");
@@ -115,7 +106,6 @@ import "./biblioteca.css";
                                 stageBook.classList.remove("opacity-0");
 
                                 setTimeout(() => {
-                                    console.log("Biblioteca dispatching init-life-book event");
                                     const initEvent = new CustomEvent("init-life-book", {
                                         detail: { year, month },
                                     });
@@ -129,7 +119,7 @@ import "./biblioteca.css";
                 }
 
                 if (!hasSkippedIntro) {
-                    console.log("Biblioteca starting normal intro flow");
+
                     const firstDialogue = document.querySelector(
                         "#intro-initial .dd-container"
                     );
@@ -140,18 +130,11 @@ import "./biblioteca.css";
                         "#intro-month .dd-container"
                     );
 
-                    console.log("Biblioteca dialogues found:", {
-                        firstDialogue: !!firstDialogue,
-                        nextDialogue: !!nextDialogue,
-                        monthDialogue: !!monthDialogue
-                    });
+
 
                     if (firstDialogue) {
-                        console.log("Adding dialogue-complete listener to firstDialogue");
                         firstDialogue.addEventListener("dialogue-complete", () => {
-                            console.log("firstDialogue dialogue-complete event received");
                             setTimeout(() => {
-                                console.log("Hiding introInitial, showing introNext");
                                 if (introInitial) introInitial.style.opacity = "0";
                                 setTimeout(() => {
                                     if (introInitial) introInitial.classList.add("hidden");
@@ -162,7 +145,6 @@ import "./biblioteca.css";
 
                                         setTimeout(() => {
                                             if (nextDialogue) {
-                                                console.log("Dispatching start-typing to nextDialogue");
                                                 nextDialogue.dispatchEvent(new Event("start-typing"));
                                             }
                                         }, 500);
@@ -173,29 +155,22 @@ import "./biblioteca.css";
                     }
 
                     if (nextDialogue) {
-                        console.log("Adding dialogue-complete listener to nextDialogue");
                         nextDialogue.addEventListener("dialogue-complete", () => {
-                            console.log("nextDialogue dialogue-complete event received");
                             setTimeout(() => {
-                                console.log("Dispatching show-death-year-input event");
                                 document.dispatchEvent(new Event("show-death-year-input"));
                             }, 500);
                         });
                     }
 
                     if (monthDialogue) {
-                        console.log("Adding dialogue-complete listener to monthDialogue");
                         monthDialogue.addEventListener("dialogue-complete", () => {
-                            console.log("monthDialogue dialogue-complete event received");
                             setTimeout(() => {
-                                console.log("Dispatching show-death-month-input event");
                                 document.dispatchEvent(new Event("show-death-month-input"));
                             }, 500);
                         });
                     }
 
                     const handleYearSelected = () => {
-                        console.log("year-selected event received. Hiding introNext, showing introMonth");
                         if (introNext) introNext.style.opacity = "0";
                         setTimeout(() => {
                             if (introNext) introNext.classList.add("hidden");
@@ -206,7 +181,6 @@ import "./biblioteca.css";
 
                                 setTimeout(() => {
                                     if (monthDialogue) {
-                                        console.log("Dispatching start-typing to monthDialogue");
                                         monthDialogue.dispatchEvent(new Event("start-typing"));
                                     }
                                 }, 500);
@@ -216,7 +190,6 @@ import "./biblioteca.css";
 
                     const handleBirthdateSelected = (e) => {
                         const { year, month } = e.detail;
-                        console.log("birthdate-selected event received:", { year, month });
                         window.localStorage.setItem("life-birthdate", JSON.stringify({ year, month }));
 
                         if (stageIntro) {
@@ -228,7 +201,6 @@ import "./biblioteca.css";
                         }
 
                         setTimeout(() => {
-                            console.log("Starting book transition from confirmation stage");
                             if (stageConfirmation) {
                                 stageConfirmation.style.opacity = "0";
                                 setTimeout(() => {
@@ -238,7 +210,6 @@ import "./biblioteca.css";
                                         void stageBook.offsetWidth;
                                         stageBook.classList.remove("opacity-0");
 
-                                        console.log("Dispatching init-life-book event with birthdate data");
                                         const initEvent = new CustomEvent("init-life-book", {
                                             detail: { year, month },
                                         });

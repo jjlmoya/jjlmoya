@@ -111,7 +111,7 @@ import BookNavigation from "./BookNavigation.astro";
     <BookNavigation />
 </div>
 
-<div id="tear-warning-modal" class="lb-modal lb-hidden">
+<div id="tear-warning-modal" class="lb-modal lb-modal-fade lb-hidden">
     <div class="lb-modal-content" id="tear-warning-content">
         <h3 class="lb-modal-title">Advertencia</h3>
         <p class="lb-modal-text">
@@ -339,13 +339,33 @@ import BookNavigation from "./BookNavigation.astro";
                 shareBtn.style.pointerEvents = "none";
             }
 
+            const currentVisual = document.querySelector(`.lb-page-visual[data-page="${index}"]`);
+            if (currentVisual) {
+                currentVisual.classList.remove("lb-hidden");
+                currentVisual.innerHTML = `
+                    <div class="lb-torn-visual">
+                        <div class="lb-torn-edge"></div>
+                        <div class="lb-torn-void"></div>
+                    </div>
+                `;
+            }
+
             const currentText = document.querySelector(`.lb-page-text[data-page="${index}"]`);
             if (currentText) {
                 currentText.classList.remove("lb-hidden");
                 currentText.innerHTML = `
                     <div class="lb-torn-wrap">
+                        <div class="lb-torn-tear-icon">
+                            <svg viewBox="0 0 40 40" fill="none" width="40" height="40">
+                                <path d="M20 4L28 16L20 36L12 16L20 4Z" stroke="#57534e" stroke-width="1.5" fill="none"/>
+                                <path d="M20 10V22" stroke="#57534e" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M14 18L20 22L26 18" stroke="#57534e" stroke-width="1" stroke-linecap="round"/>
+                            </svg>
+                        </div>
                         <p class="lb-torn-title">Página Arrancada</p>
-                        <p class="lb-torn-sub">(Ya no está aquí)</p>
+                        <p class="lb-torn-sub">Esta página fue arrancada para compartirla.</p>
+                        <p class="lb-torn-sub">Ya no está aquí.</p>
+                        <p class="lb-torn-price">Todo tiene un precio.</p>
                     </div>
                 `;
             }
@@ -763,7 +783,6 @@ import BookNavigation from "./BookNavigation.astro";
         justify-content: center;
         background-color: rgba(0,0,0,0.8);
         backdrop-filter: blur(4px);
-        opacity: 0;
         transition: opacity 0.3s;
     }
     .lb-modal-fade {
@@ -834,27 +853,78 @@ import BookNavigation from "./BookNavigation.astro";
         background-color: rgba(127, 29, 29, 0.4);
     }
 
-    .lb-torn-wrap {
+    :global(.lb-torn-wrap) {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100%;
-        opacity: 0.3;
+        gap: 0.5rem;
+        padding: 2rem;
     }
-    .lb-torn-title {
+    :global(.lb-torn-tear-icon) {
+        opacity: 0.4;
+        margin-bottom: 0.5rem;
+    }
+    :global(.lb-torn-title) {
         font-family: serif;
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: #a8a29e;
+        font-weight: bold;
     }
-    .lb-torn-sub {
+    :global(.lb-torn-sub) {
         font-family: serif;
-        font-size: 0.875rem;
-        margin-top: 1rem;
+        font-size: 0.8rem;
         font-style: italic;
         color: #57534e;
+        line-height: 1.5;
+    }
+    :global(.lb-torn-price) {
+        font-family: 'Cinzel', serif;
+        font-size: 0.75rem;
+        font-variant: small-caps;
+        color: #44403c;
+        margin-top: 1rem;
+        letter-spacing: 0.15em;
+    }
+    :global(.lb-torn-visual) {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    :global(.lb-torn-void) {
+        width: 60%;
+        max-width: 8rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(circle at center, #0c0a09 0%, transparent 70%);
+        opacity: 0.6;
+    }
+    :global(.lb-torn-edge) {
+        position: absolute;
+        inset: 0;
+        background-image:
+            repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 3px,
+                rgba(0,0,0,0.15) 3px,
+                rgba(0,0,0,0.15) 6px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 3px,
+                rgba(0,0,0,0.1) 3px,
+                rgba(0,0,0,0.1) 6px
+            );
+        opacity: 0.5;
+        pointer-events: none;
     }
 
     .lb-hidden {

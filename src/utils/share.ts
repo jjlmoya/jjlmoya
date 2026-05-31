@@ -66,11 +66,7 @@ export const shareElementAsImage = async ({
                 document.body.removeChild(textArea);
             }
 
-            if (customMessage) {
-                console.log(`[Share] Clipboard success: ${customMessage}`);
-            } else {
-                console.log("[Share] Text copied to clipboard.");
-            }
+
 
             onSuccess?.();
         } catch (err) {
@@ -102,7 +98,7 @@ export const shareElementAsImage = async ({
             },
             onclone: (clonedDoc) => {
                 try {
-                    console.log("[Share] Starting aggressive oklab/oklch sanitization...");
+
 
                     let replacements = 0;
 
@@ -174,9 +170,7 @@ export const shareElementAsImage = async ({
                         }
                     });
 
-                    console.log(
-                        `[Share] Sanitization finished. Replaced ~${replacements} instances.`
-                    );
+
                 } catch (e) {
                     console.error("Sanitization error:", e);
                 }
@@ -203,7 +197,6 @@ export const shareElementAsImage = async ({
 
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
-                    console.log("[Share] Creating text backup in clipboard...");
                     await copyToClipboard(fullShareText);
 
                     if ((window as any).toast) {
@@ -213,9 +206,7 @@ export const shareElementAsImage = async ({
                         );
                     }
 
-                    console.log(
-                        `DEBUG: Intentando compartir.\nTexto: ${fullShareText}\nURL: ${url}`
-                    );
+
 
                     const isIOS =
                         /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
@@ -224,9 +215,7 @@ export const shareElementAsImage = async ({
                         files: [file],
                     };
 
-                    if (isIOS) {
-                        console.log("[Share] iOS detected. Sharing file only.");
-                    } else {
+                    if (!isIOS) {
                         shareData.text = fullShareText;
                         shareData.title = title;
                     }
@@ -237,39 +226,32 @@ export const shareElementAsImage = async ({
                     console.error("[Share] Image share failed:", err);
 
                     if (err.name === "AbortError") {
-                        console.log("[Share] User cancelled share.");
                         return;
                     }
 
-                    console.log("[Share] Falling back to download due to error.");
                     downloadBlob(blob, fileName);
                 }
             } else {
-                console.log(
-                    "[Share] Navigator.share not supported or file sharing not allowed (Likely due to HTTP/Insecure Context)."
-                );
+
 
                 let textShared = false;
                 if (navigator.share) {
                     try {
-                        console.log("[Share] Attempting text-only share...");
                         await navigator.share({
                             title: title,
                             text: fullShareText,
                         });
                         textShared = true;
-                        console.log("[Share] Text-only share successful.");
+
                     } catch (err) {
                         console.warn("[Share] Text-only share failed:", err);
                     }
                 }
 
                 if (!textShared) {
-                    console.log("[Share] Copying text to clipboard as last resort.");
                     copyToClipboard();
                 }
 
-                console.log("[Share] Downloading image as fallback.");
                 downloadBlob(blob, fileName);
             }
         } else {

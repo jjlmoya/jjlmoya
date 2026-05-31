@@ -48,13 +48,10 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
 
 <script is:inline>
     (() => {
-        console.log("DeathDialogue script loaded");
         const init = () => {
             const containers = document.querySelectorAll(".dd-container");
-            console.log("DeathDialogue init: containers found:", containers.length);
 
             containers.forEach((container, index) => {
-                console.log(`DeathDialogue container ${index} init. Initialized:`, container.hasAttribute("data-initialized"));
                 if (container.hasAttribute("data-initialized")) return;
                 container.setAttribute("data-initialized", "true");
 
@@ -62,10 +59,8 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
                 const speed = parseInt(container.getAttribute("data-speed") || "50");
                 const delay = parseInt(container.getAttribute("data-delay") || "0");
                 const autoStart = container.getAttribute("data-auto-start") === "true";
-                console.log(`DeathDialogue container ${index} stats:`, { speed, delay, autoStart, unitsCount: units.length });
 
                 const startTyping = () => {
-                    console.log(`DeathDialogue container ${index} startTyping. Units:`, units.length);
                     units.forEach((c) => c.classList.add("dd-hidden"));
 
                     setTimeout(() => {
@@ -76,7 +71,6 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
                                 i++;
                                 setTimeout(revealUnit, speed);
                             } else {
-                                console.log(`DeathDialogue container ${index} completed typing. Dispatching event.`);
                                 const event = new CustomEvent("dialogue-complete");
                                 container.dispatchEvent(event);
                             }
@@ -86,12 +80,10 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
                 };
 
                 if (autoStart) {
-                    console.log(`DeathDialogue container ${index} auto-starting`);
                     startTyping();
                 }
 
                 container.addEventListener("start-typing", () => {
-                    console.log(`DeathDialogue container ${index} start-typing event received`);
                     startTyping();
                 });
             });
