@@ -1518,11 +1518,14 @@ const { base_elements, recipes } = evolutionData;
 
     function initGame() {
         const dataScript = document.getElementById("evolution-data");
-        const playground = document.getElementById("playground");
 
-        if (window["__gameInstance"]) {
+        const gameInstance = (window as unknown as Record<string, unknown>)["__gameInstance"] as
+            | { destroy: () => void }
+            | undefined;
+
+        if (gameInstance) {
             try {
-                window["__gameInstance"].destroy();
+                gameInstance.destroy();
             } catch (e) {
                 console.error(e);
             }
@@ -1531,7 +1534,7 @@ const { base_elements, recipes } = evolutionData;
         if (dataScript && dataScript.textContent) {
             try {
                 const { base_elements, recipes } = JSON.parse(dataScript.textContent);
-                window["__gameInstance"] = new Game({ base_elements, recipes });
+                (window as unknown as Record<string, unknown>)["__gameInstance"] = new Game({ base_elements, recipes });
             } catch (err) {
                 console.error("Error initializing Game:", err);
             }
