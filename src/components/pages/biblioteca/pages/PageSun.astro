@@ -7,51 +7,44 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-full h-full flex items-center justify-center">
-                <div class="absolute w-64 h-64 bg-amber-600/20 rounded-full blur-3xl animate-pulse-slow" />
-                <div class="absolute w-48 h-48 bg-yellow-500/10 rounded-full blur-2xl animate-pulse-slower" />
+        <div class="lb-page-visual-container">
+            <div class="lb-page-sun-wrapper">
+                <div class="lb-page-sun-corona" />
+                <div class="lb-page-sun-glow-outer" />
 
-                <div class="relative w-32 h-32 rounded-full overflow-hidden shadow-[0_0_60px_rgba(245,158,11,0.6)]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 via-amber-500 to-red-600 animate-solar-flare" />
-
-                    <div class="absolute top-0 left-0 w-full h-full opacity-50 mix-blend-overlay animate-spin-slow">
-                        <div class="absolute top-4 left-8 w-4 h-4 bg-black/20 rounded-full blur-[2px]" />
-                        <div class="absolute bottom-6 right-6 w-6 h-6 bg-black/10 rounded-full blur-[3px]" />
-                        <div class="absolute top-1/2 left-1/2 w-8 h-8 bg-yellow-200/40 rounded-full blur-md" />
+                <div class="lb-page-sun-sphere">
+                    <div class="lb-page-sun-solar-flare" />
+                    <div class="lb-page-sun-spin-layer">
+                        <div class="lb-page-sun-spot-1" />
+                        <div class="lb-page-sun-spot-2" />
+                        <div class="lb-page-sun-spot-3" />
                     </div>
                 </div>
 
-                <div class="absolute inset-0 flex items-center justify-center animate-spin-very-slow opacity-40">
-                    <div class="absolute w-1 h-48 bg-gradient-to-b from-transparent via-amber-400/50 to-transparent blur-[1px]" />
-                    <div class="absolute w-48 h-1 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent blur-[1px]" />
-                    <div class="absolute w-1 h-40 bg-gradient-to-b from-transparent via-yellow-300/30 to-transparent rotate-45 blur-[1px]" />
-                    <div class="absolute w-40 h-1 bg-gradient-to-r from-transparent via-yellow-300/30 to-transparent rotate-45 blur-[1px]" />
+                <div class="lb-page-sun-rays">
+                    <div class="lb-page-sun-ray ray-v" />
+                    <div class="lb-page-sun-ray ray-h" />
+                    <div class="lb-page-sun-ray ray-d1" />
+                    <div class="lb-page-sun-ray ray-d2" />
                 </div>
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-yellow-600/60 uppercase tracking-widest">El Sol</h3>
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-orange">El Sol</h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="sun-count"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="sun-count">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                <div class="lb-page-counter-label">
                     Amaneceres Vistos
                 </div>
             </div>
 
-            <p
-                class="text-xl leading-relaxed text-[#e7e5e4]"
-                style="font-family: 'Cinzel', serif; font-variant: small-caps;"
-            >
+            <p class="lb-page-quote">
                 LA BOLA DE FUEGO GIGANTE GIRA PARA VOSOTROS.{" "}
-                <span id="sun-text-count" class="text-yellow-600">
+                <span id="sun-text-count" class="lb-page-sun-highlight">
                     0 VECES
                 </span>{" "}
                 HA VUELTO A SALIR PARA VER SI SEGUÍAIS AHÍ. QUÉ TOZUDEZ.
@@ -61,70 +54,163 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes solar-flare {
-        0% {
-            transform: scale(1.2) translate(0, 0);
-        }
-        50% {
-            transform: scale(1.3) translate(-5px, -5px);
-        }
-        100% {
-            transform: scale(1.2) translate(0, 0);
-        }
-    }
-    @keyframes spin-slow {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @keyframes spin-very-slow {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    @keyframes pulse-slow {
-        0%,
-        100% {
-            opacity: 0.5;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.8;
-            transform: scale(1.1);
-        }
-    }
-    @keyframes pulse-slower {
-        0%,
-        100% {
-            opacity: 0.3;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.6;
-            transform: scale(1.2);
-        }
+    .lb-page-sun-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .animate-solar-flare {
-        animation: solar-flare 10s ease-in-out infinite alternate;
+    .lb-page-sun-corona {
+        position: absolute;
+        width: 16rem;
+        height: 16rem;
+        background-color: rgba(217, 119, 6, 0.2);
+        border-radius: 9999px;
+        filter: blur(64px);
+        animation: lb-pulse-slow 4s ease-in-out infinite;
     }
-    .animate-spin-slow {
-        animation: spin-slow 30s linear infinite;
+
+    .lb-page-sun-glow-outer {
+        position: absolute;
+        width: 12rem;
+        height: 12rem;
+        background-color: rgba(245, 158, 11, 0.1);
+        border-radius: 9999px;
+        filter: blur(40px);
+        animation: lb-pulse-slower 7s ease-in-out infinite;
     }
-    .animate-spin-very-slow {
-        animation: spin-very-slow 120s linear infinite;
+
+    .lb-page-sun-sphere {
+        position: relative;
+        width: 8rem;
+        height: 8rem;
+        border-radius: 9999px;
+        overflow: hidden;
+        box-shadow: 0 0 60px rgba(245, 158, 11, 0.6);
+        max-width: 100%;
+        max-height: 100%;
     }
-    .animate-pulse-slow {
-        animation: pulse-slow 4s ease-in-out infinite;
+
+    .lb-page-sun-solar-flare {
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(to bottom right, #facc15, #f59e0b, #dc2626);
+        animation: lb-solar-flare 10s ease-in-out infinite alternate;
     }
-    .animate-pulse-slower {
-        animation: pulse-slower 7s ease-in-out infinite;
+
+    .lb-page-sun-spin-layer {
+        position: absolute;
+        inset: 0;
+        opacity: 0.5;
+        mix-blend-mode: overlay;
+        animation: lb-spin-slow 30s linear infinite;
+    }
+
+    .lb-page-sun-spot-1 {
+        position: absolute;
+        top: 1rem;
+        left: 2rem;
+        width: 1rem;
+        height: 1rem;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 9999px;
+        filter: blur(2px);
+    }
+
+    .lb-page-sun-spot-2 {
+        position: absolute;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 9999px;
+        filter: blur(3px);
+    }
+
+    .lb-page-sun-spot-3 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 2rem;
+        height: 2rem;
+        background-color: rgba(254, 240, 138, 0.4);
+        border-radius: 9999px;
+        filter: blur(8px);
+    }
+
+    .lb-page-sun-rays {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: lb-spin-very-slow 120s linear infinite;
+        opacity: 0.4;
+    }
+
+    .lb-page-sun-ray {
+        position: absolute;
+        background-image: linear-gradient(to right, transparent, rgba(251, 191, 36, 0.5), transparent);
+        filter: blur(1px);
+    }
+
+    .lb-page-sun-ray.ray-v {
+        width: 4px;
+        height: 12rem;
+        background-image: linear-gradient(to bottom, transparent, rgba(251, 191, 36, 0.5), transparent);
+    }
+
+    .lb-page-sun-ray.ray-h {
+        width: 12rem;
+        height: 4px;
+    }
+
+    .lb-page-sun-ray.ray-d1 {
+        width: 4px;
+        height: 10rem;
+        background-image: linear-gradient(to bottom, transparent, rgba(253, 224, 71, 0.3), transparent);
+        transform: rotate(45deg);
+    }
+
+    .lb-page-sun-ray.ray-d2 {
+        width: 10rem;
+        height: 4px;
+        background-image: linear-gradient(to right, transparent, rgba(253, 224, 71, 0.3), transparent);
+        transform: rotate(45deg);
+    }
+
+    .lb-page-sun-highlight {
+        color: #ca8a04;
+    }
+
+    @keyframes lb-solar-flare {
+        0% { transform: scale(1.2) translate(0, 0); }
+        50% { transform: scale(1.3) translate(-5px, -5px); }
+        100% { transform: scale(1.2) translate(0, 0); }
+    }
+
+    @keyframes lb-spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes lb-spin-very-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes lb-pulse-slow {
+        0%, 100% { opacity: 0.5; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    @keyframes lb-pulse-slower {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.2); }
     }
 </style>
 
@@ -139,7 +225,6 @@ const { side } = Astro.props;
         if (!countEl || !stats) return;
 
         const { sunrises } = calculateSunStats(stats.daysAlive);
-
         countEl.innerText = Math.floor(sunrises).toLocaleString();
         if (textCountEl) textCountEl.innerText = `${Math.floor(sunrises).toLocaleString()} VECES`;
     });

@@ -49,20 +49,18 @@ const image = "/assets/widgets/hero.webp";
             document.head.appendChild(m);
         }
     </script>
-    <div
-        class="flex flex-col lg:flex-row min-h-[calc(100vh-60px)] pt-0 overflow-hidden relative bg-slate-50 dark:bg-black"
-    >
+    <div class="wi-layout">
         <WidgetSidebar sections={sectionsWithHtml} />
 
-        <main class="flex-grow flex flex-col overflow-y-auto custom-scrollbar relative">
+        <main class="wi-main custom-scrollbar">
             <WidgetHeader />
 
-            <div class="p-4 lg:p-10 pb-32">
-                <div class="max-w-5xl mx-auto space-y-8 lg:space-y-16">
+            <div class="wi-content">
+                <div class="wi-content-inner">
                     <WidgetPreview />
                     <WidgetEmbedCodes />
 
-                    <div class="mt-20 space-y-16">
+                    <div class="wi-section-group">
                         <WidgetEducation />
                         <WidgetPlatforms />
                         <WidgetWordPressGuide />
@@ -80,8 +78,8 @@ const image = "/assets/widgets/hero.webp";
     let activeWidgetTheme = "light";
 
     const searchInput = document.getElementById("widget-search");
-    const buttons = document.querySelectorAll(".utility-btn");
-    const toggles = document.querySelectorAll(".category-toggle");
+    const buttons = document.querySelectorAll(".ws-utility-btn");
+    const toggles = document.querySelectorAll(".ws-category-toggle");
     const display = document.getElementById("canvas-inner");
     const canvas = document.getElementById("preview-canvas");
     const titleEl = document.getElementById("current-title");
@@ -92,7 +90,7 @@ const image = "/assets/widgets/hero.webp";
     const codeIframe = document.getElementById("code-iframe");
     const copyUrlBtn = document.getElementById("copy-url");
     const copyIframeBtn = document.getElementById("copy-iframe");
-    const widgetThemeBtns = document.querySelectorAll(".widget-theme-btn");
+    const widgetThemeBtns = document.querySelectorAll(".wh-theme-btn");
 
     function getWidgetHtmlClient({ widgetId, widgetUrl, cleanUrl, theme }) {
         const params = new URLSearchParams();
@@ -168,34 +166,27 @@ const image = "/assets/widgets/hero.webp";
 
     toggles.forEach((toggle) => {
         toggle.addEventListener("click", () => {
-            const group = toggle.closest(".category-group");
-            const content = group.querySelector(".category-content");
-            const chevron = toggle.querySelector(".chevron");
-            const isHidden = content.classList.contains("hidden");
+            const group = toggle.closest(".ws-category");
+            const content = group.querySelector(".ws-category-content");
+            const chevron = toggle.querySelector(".ws-chevron");
+            const isHidden = content.classList.contains("ws-category-content--hidden");
 
-            document.querySelectorAll(".category-group").forEach((otherGroup) => {
+            document.querySelectorAll(".ws-category").forEach((otherGroup) => {
                 if (otherGroup !== group) {
-                    otherGroup.querySelector(".category-content").classList.add("hidden");
-                    otherGroup.querySelector(".chevron").classList.remove("rotate-180");
-                    otherGroup.classList.remove(
-                        "ring-1",
-                        "ring-indigo-500/20",
-                        "border-indigo-500/30"
-                    );
-                    otherGroup.classList.add("border-slate-100", "dark:border-slate-800/50");
+                    otherGroup.querySelector(".ws-category-content").classList.add("ws-category-content--hidden");
+                    otherGroup.querySelector(".ws-chevron").classList.remove("ws-chevron--open");
+                    otherGroup.classList.remove("ws-category--open");
                 }
             });
 
             if (isHidden) {
-                content.classList.remove("hidden");
-                chevron.classList.add("rotate-180");
-                group.classList.add("ring-1", "ring-indigo-500/20", "border-indigo-500/30");
-                group.classList.remove("border-slate-100", "dark:border-slate-800/50");
+                content.classList.remove("ws-category-content--hidden");
+                chevron.classList.add("ws-chevron--open");
+                group.classList.add("ws-category--open");
             } else {
-                content.classList.add("hidden");
-                chevron.classList.remove("rotate-180");
-                group.classList.remove("ring-1", "ring-indigo-500/20", "border-indigo-500/30");
-                group.classList.add("border-slate-100", "dark:border-slate-800/50");
+                content.classList.add("ws-category-content--hidden");
+                chevron.classList.remove("ws-chevron--open");
+                group.classList.remove("ws-category--open");
             }
         });
     });
@@ -203,11 +194,11 @@ const image = "/assets/widgets/hero.webp";
     searchInput?.addEventListener("input", (e) => {
         const term = e.target.value.toLowerCase();
 
-        document.querySelectorAll(".category-group").forEach((group) => {
-            const groupContent = group.querySelector(".category-content");
-            const groupToggle = group.querySelector(".category-toggle");
-            const groupBtns = group.querySelectorAll(".utility-btn");
-            const chevron = groupToggle.querySelector(".chevron");
+        document.querySelectorAll(".ws-category").forEach((group) => {
+            const groupContent = group.querySelector(".ws-category-content");
+            const groupToggle = group.querySelector(".ws-category-toggle");
+            const groupBtns = group.querySelectorAll(".ws-utility-btn");
+            const chevron = groupToggle.querySelector(".ws-chevron");
 
             let groupHasMatch = false;
 
@@ -221,33 +212,26 @@ const image = "/assets/widgets/hero.webp";
             group.style.display = groupHasMatch || term === "" ? "block" : "none";
 
             if (term !== "" && groupHasMatch) {
-                groupContent.classList.remove("hidden");
-                chevron.classList.add("rotate-180");
+                groupContent.classList.remove("ws-category-content--hidden");
+                chevron.classList.add("ws-chevron--open");
             } else if (term === "") {
-                groupContent.classList.add("hidden");
-                chevron.classList.remove("rotate-180");
+                groupContent.classList.add("ws-category-content--hidden");
+                chevron.classList.remove("ws-chevron--open");
             }
         });
     });
 
-    document.querySelectorAll(".bg-toggle").forEach((btn) => {
+    document.querySelectorAll(".wh-bg-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
             const bg = btn.dataset.bg;
-            document.querySelectorAll(".bg-toggle").forEach((b) => b.classList.remove("active-bg"));
-            btn.classList.add("active-bg");
+            document.querySelectorAll(".wh-bg-btn").forEach((b) => b.classList.remove("wh-bg-btn--active"));
+            btn.classList.add("wh-bg-btn--active");
 
-            canvas.className =
-                "rounded-[2rem] p-0 sm:p-10 min-h-[300px] flex items-center justify-center border transition-all duration-500 shadow-2xl relative overflow-hidden";
+            canvas.className = "wprev-canvas";
 
-            if (bg === "white") canvas.classList.add("bg-white", "border-slate-200");
-            if (bg === "black") canvas.classList.add("bg-black", "border-slate-800");
-            if (bg === "grid")
-                canvas.classList.add(
-                    "bg-slate-50",
-                    "border-slate-200",
-                    "bg-[linear-gradient(to_right,#80808011_1px,transparent_1px),linear-gradient(to_bottom,#80808011_1px,transparent_1px)]",
-                    "bg-[size:14px_24px]"
-                );
+            if (bg === "white") canvas.classList.add("wi-canvas--white");
+            if (bg === "black") canvas.classList.add("wi-canvas--black");
+            if (bg === "grid") canvas.classList.add("wi-canvas--grid");
         });
     });
 
@@ -255,15 +239,11 @@ const image = "/assets/widgets/hero.webp";
         activeWidgetTheme = theme;
         widgetThemeBtns.forEach((btn) => {
             if (btn.dataset.theme === theme) {
-                btn.classList.add("bg-indigo-50", "text-indigo-600");
-                btn.classList.remove(
-                    "text-slate-400",
-                    "hover:bg-slate-50",
-                    "dark:hover:bg-zinc-800"
-                );
+                btn.classList.add("wh-theme-btn--active");
+                btn.classList.remove("wh-theme-btn--inactive");
             } else {
-                btn.classList.remove("bg-indigo-50", "text-indigo-600");
-                btn.classList.add("text-slate-400", "hover:bg-slate-50", "dark:hover:bg-zinc-800");
+                btn.classList.remove("wh-theme-btn--active");
+                btn.classList.add("wh-theme-btn--inactive");
             }
         });
         updateCurrentWidget();
@@ -308,15 +288,12 @@ const image = "/assets/widgets/hero.webp";
 
             titleEl.textContent = utData.title;
             categoryBadge.textContent = category;
-            categoryBadge.classList.remove("opacity-0");
+            categoryBadge.style.opacity = "1";
             descEl.textContent = utData.description || "Widget profesional para tu sitio web.";
 
             updateCurrentWidget();
 
-            embedSection.classList.remove("hidden");
-            setTimeout(() => {
-                embedSection.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
-            }, 50);
+            embedSection.classList.add("wec-embed-section--visible");
 
             if (window.innerWidth < 1024) {
                 titleEl.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -347,11 +324,11 @@ const image = "/assets/widgets/hero.webp";
                 btn.dataset.href.includes(toolSlug)
             );
             if (targetBtn) {
-                const group = targetBtn.closest(".category-group");
-                const content = group?.querySelector(".category-content");
-                const toggle = group?.querySelector(".category-toggle");
+                const group = targetBtn.closest(".ws-category");
+                const content = group?.querySelector(".ws-category-content");
+                const toggle = group?.querySelector(".ws-category-toggle");
 
-                if (content?.classList.contains("hidden")) {
+                if (content?.classList.contains("ws-category-content--hidden")) {
                     toggle?.click();
                 }
 
@@ -362,6 +339,99 @@ const image = "/assets/widgets/hero.webp";
 </script>
 
 <style is:global>
+    .wi-layout {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 60px);
+        overflow: hidden;
+        position: relative;
+        background-color: #f8fafc;
+    }
+    .dark .wi-layout {
+        background-color: #000000;
+    }
+    @media (min-width: 1024px) {
+        .wi-layout {
+            flex-direction: row;
+        }
+    }
+
+    .wi-main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    .wi-content {
+        padding: 1rem;
+        padding-bottom: 8rem;
+    }
+    @media (min-width: 1024px) {
+        .wi-content {
+            padding: 2.5rem;
+            padding-bottom: 8rem;
+        }
+    }
+
+    .wi-content-inner {
+        max-width: 64rem;
+        margin: 0 auto;
+    }
+    .wi-content-inner > * + * {
+        margin-top: 2rem;
+    }
+    @media (min-width: 1024px) {
+        .wi-content-inner > * + * {
+            margin-top: 4rem;
+        }
+    }
+
+    .wi-section-group {
+        margin-top: 5rem;
+    }
+    .wi-section-group > * + * {
+        margin-top: 4rem;
+    }
+
+    .wi-canvas--white {
+        background-color: #ffffff;
+        border-color: #e2e8f0;
+    }
+
+    .wi-canvas--black {
+        background-color: #000000;
+        border-color: #1e293b;
+    }
+
+    .wi-canvas--grid {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        background-image: linear-gradient(to right, rgba(128, 128, 128, 0.067) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(128, 128, 128, 0.067) 1px, transparent 1px);
+        background-size: 14px 24px;
+    }
+
+    .wh-theme-btn--active {
+        background-color: #eef2ff;
+        color: #4f46e5;
+    }
+    .dark .wh-theme-btn--active {
+        background-color: #27272a;
+        color: #94a3b8;
+    }
+
+    .wh-theme-btn--inactive {
+        color: #94a3b8;
+    }
+    .wh-theme-btn--inactive:hover {
+        background-color: #f8fafc;
+    }
+    .dark .wh-theme-btn--inactive:hover {
+        background-color: #27272a;
+    }
+
     .custom-scrollbar::-webkit-scrollbar {
         width: 4px;
     }

@@ -7,36 +7,33 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-48 h-48 rounded-full bg-[#e7e5e4] shadow-[0_0_50px_rgba(231,229,228,0.2)] overflow-hidden">
-                <div class="absolute top-10 left-10 w-8 h-8 rounded-full bg-[#d6d3d1] opacity-50" />
-                <div class="absolute bottom-12 right-12 w-12 h-12 rounded-full bg-[#d6d3d1] opacity-40" />
-                <div class="absolute top-1/2 left-1/2 w-6 h-6 rounded-full bg-[#d6d3d1] opacity-60" />
+        <div class="lb-page-visual-container">
+            <div class="lb-page-moon-wrapper">
+                <div class="lb-page-moon-crater crater-1" />
+                <div class="lb-page-moon-crater crater-2" />
+                <div class="lb-page-moon-crater crater-3" />
 
-                <div class="absolute inset-0 bg-black/80 rounded-full animate-moon-phase origin-left mix-blend-multiply" />
+                <div class="lb-page-moon-phase-shadow animate-moon-phase" />
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-gray-400/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-sub">
                 Las Lunas
             </h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="moon-count"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="moon-count">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                <div class="lb-page-counter-label">
                     Lunas Llenas Vividas
                 </div>
             </div>
 
-            <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            <p class="lb-page-quote">
                 LA PLATA QUE SE ESCAPA. HAS VISTO AL LOBO AULLAR{" "}
-                <span id="moon-count-text" class="text-gray-400">
+                <span id="moon-count-text" class="lb-page-moon-highlight">
                     0 VECES
                 </span>
                 . Y AÚN ASÍ, LA NOCHE SIEMPRE VUELVE.
@@ -46,19 +43,69 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes moon-phase {
-        0% {
-            transform: translateX(100%);
-        }
-        50% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
+    .lb-page-moon-wrapper {
+        position: relative;
+        width: 12rem;
+        height: 12rem;
+        border-radius: 9999px;
+        background-color: #e7e5e4;
+        box-shadow: 0 0 50px rgba(231, 229, 228, 0.2);
+        overflow: hidden;
+        max-width: 100%;
+        max-height: 100%;
     }
+
+    .lb-page-moon-crater {
+        position: absolute;
+        border-radius: 9999px;
+        background-color: #d6d3d1;
+    }
+
+    .lb-page-moon-crater.crater-1 {
+        top: 2.5rem;
+        left: 2.5rem;
+        width: 2rem;
+        height: 2rem;
+        opacity: 0.5;
+    }
+
+    .lb-page-moon-crater.crater-2 {
+        bottom: 3rem;
+        right: 3rem;
+        width: 3rem;
+        height: 3rem;
+        opacity: 0.4;
+    }
+
+    .lb-page-moon-crater.crater-3 {
+        top: 50%;
+        left: 50%;
+        width: 1.5rem;
+        height: 1.5rem;
+        opacity: 0.6;
+    }
+
+    .lb-page-moon-phase-shadow {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-radius: 9999px;
+        transform-origin: left;
+        mix-blend-mode: multiply;
+    }
+
+    .lb-page-moon-highlight {
+        color: #a8a29e;
+    }
+
     .animate-moon-phase {
-        animation: moon-phase 10s linear infinite;
+        animation: lb-moon-phase 10s linear infinite;
+    }
+
+    @keyframes lb-moon-phase {
+        0% { transform: translateX(100%); }
+        50% { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
     }
 </style>
 
@@ -73,7 +120,6 @@ const { side } = Astro.props;
         if (!countEl || !stats) return;
 
         const { fullMoons } = calculateMoonStats(stats.daysAlive);
-
         countEl.innerText = fullMoons.toLocaleString();
         if (textEl) textEl.innerText = `${fullMoons.toLocaleString()} VECES`;
     });

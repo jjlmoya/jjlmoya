@@ -33,7 +33,6 @@ export class VibratorCrackerSystem {
             Math.floor(Math.random() * 100),
             Math.floor(Math.random() * 100),
         ];
-        console.log("Safe Combination:", this.combination);
     }
 
     reset() {

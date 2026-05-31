@@ -17,7 +17,7 @@ const CODE_URL =
     codeUrl={CODE_URL}
     image="/images/gamebob/mechanics/platformer.webp"
 >
-    <Icon slot="icon" name="mdi:controller-classic" class="text-indigo-400" />
+    <Icon slot="icon" name="mdi:controller-classic" class="gm-icon-indigo" />
 
     <MechanicCanvas
         id="game-canvas"
@@ -28,42 +28,40 @@ const CODE_URL =
 
     <MechanicInfo>
         <Fragment slot="how-it-works">
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Máquina de estados finitos para el jugador.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Física de movimiento con inercia y fricción.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-blue-400 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-blue">•</span>
                 <span>Sistema de partículas para feedback visual.</span>
             </li>
         </Fragment>
 
         <Fragment slot="controls">
-            <div class="bg-zinc-800 p-3 rounded-lg text-center">
-                <span class="block text-white font-bold">← / →</span>
-                <span class="text-xs text-zinc-400">Moverse</span>
+            <div class="gm-control-box">
+                <span class="gm-label">← / →</span>
+                <span class="gm-desc">Moverse</span>
             </div>
-            <div class="bg-zinc-800 p-3 rounded-lg text-center">
-                <span class="block text-white font-bold">Espacio</span>
-                <span class="text-xs text-zinc-400">Saltar</span>
+            <div class="gm-control-box">
+                <span class="gm-label">Espacio</span>
+                <span class="gm-desc">Saltar</span>
             </div>
-            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
-                <span class="block text-white font-bold">Shift + ↓</span>
-                <span class="text-xs text-zinc-400">Deslizar / Caer</span>
+            <div class="gm-control-box gm-control-box-wide">
+                <span class="gm-label">Shift + ↓</span>
+                <span class="gm-desc">Deslizar / Caer</span>
             </div>
         </Fragment>
     </MechanicInfo>
 
-    <div
-        class="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded text-xs font-mono text-white pointer-events-none z-20 hidden md:block"
-    >
-        <div>State: <span id="debug-state" class="text-green-400">Idle</span></div>
-        <div>VX: <span id="debug-vel-x" class="text-blue-400">0.00</span></div>
-        <div>VY: <span id="debug-vel-y" class="text-red-400">0.00</span></div>
+    <div class="gm-debug">
+        <div>State: <span id="debug-state" class="gm-debug-val gm-debug-green">Idle</span></div>
+        <div>VX: <span id="debug-vel-x" class="gm-debug-val gm-debug-blue">0.00</span></div>
+        <div>VY: <span id="debug-vel-y" class="gm-debug-val gm-debug-red">0.00</span></div>
     </div>
 </MechanicPage>
 
@@ -92,3 +90,59 @@ const CODE_URL =
         });
     }
 </script>
+
+<style>
+    .gm-li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .gm-bullet {
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+    .gm-bullet-blue { color: #60a5fa; }
+    .gm-control-box {
+        background: #27272a;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        text-align: center;
+    }
+    .gm-control-box-wide {
+        grid-column: span 2;
+    }
+    .gm-label {
+        display: block;
+        color: #fff;
+        font-weight: 700;
+    }
+    .gm-desc {
+        font-size: 0.75rem;
+        color: #a1a1aa;
+    }
+    .gm-icon-indigo { color: #818cf8; }
+    .gm-debug {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-family: ui-monospace, monospace;
+        color: #fff;
+        pointer-events: none;
+        z-index: 20;
+        display: none;
+    }
+    @media (min-width: 768px) {
+        .gm-debug {
+            display: block;
+        }
+    }
+    .gm-debug-val { font-weight: 400; }
+    .gm-debug-green { color: #4ade80; }
+    .gm-debug-blue { color: #60a5fa; }
+    .gm-debug-red { color: #f87171; }
+</style>

@@ -5,6 +5,7 @@ import { ALL_APP_DEFINITIONS } from "@jjlmoya/apps";
 import type { KnownLocale } from "@jjlmoya/apps";
 import { Icon } from "astro-icon/components";
 import { getStaticPageAlternates } from "../../i18n/gamebob";
+import "./index.css";
 
 const alternateUrls = getStaticPageAlternates("/apps");
 
@@ -28,21 +29,15 @@ const DEFAULT_THEMES: Record<string, any> = {
 ---
 
 <Layout title="Apps | jjlmoya" description="Herramientas diseñadas para la precisión y la pasión." alternateUrls={alternateUrls}>
-    <div
-        class="min-h-screen bg-white dark:bg-black text-black dark:text-white font-sans selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-700"
-    >
-        <header class="relative pt-10 pb-8 px-6">
-            <div class="max-w-7xl mx-auto w-full">
-                <div
-                    class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-6 border-b-2 border-black/10 dark:border-white/10"
-                >
-                    <h1
-                        class="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-none"
-                    >
+    <div class="apps-page">
+        <header class="apps-header">
+            <div class="apps-header-container">
+                <div class="apps-header-layout">
+                    <h1 class="apps-title">
                         Aplicaciones
                     </h1>
-                    <div class="md:max-w-md pb-2 text-right md:text-left">
-                        <p class="text-xl font-light opacity-60">
+                    <div class="apps-subtitle-container">
+                        <p class="apps-subtitle">
                             Herramientas y utilidades personales provenientes de la librería oficial.
                         </p>
                     </div>
@@ -50,8 +45,8 @@ const DEFAULT_THEMES: Record<string, any> = {
             </div>
         </header>
 
-        <section class="max-w-7xl mx-auto px-6 py-12">
-            <div class="space-y-12 lg:space-y-32">
+        <section class="apps-section">
+            <div class="apps-list">
                 {
                     appCards.map(({ entry, card }, index) => {
                         const theme = DEFAULT_THEMES[entry.id] || { primary: "#555", bgSurface: "#111" };
@@ -59,7 +54,7 @@ const DEFAULT_THEMES: Record<string, any> = {
                         
                         return (
                             <div
-                                class="app-entry relative flex flex-col lg:flex-row gap-8 lg:gap-16 lg:items-center overflow-hidden rounded-[2rem] bg-[var(--app-surface)] border border-black/5 dark:border-white/5 shadow-2xl p-8 sm:p-10 lg:p-12"
+                                class="app-entry"
                                 style={`
                                     --app-primary: ${theme.primary};
                                     --app-bg: #000;
@@ -69,102 +64,89 @@ const DEFAULT_THEMES: Record<string, any> = {
                                     color: var(--app-text);
                                 `}
                             >
-                                <div class="absolute top-0 left-0 right-0 h-full bg-[var(--app-primary)] opacity-[0.03] pointer-events-none" />
-                                <div class="absolute -top-24 -right-24 w-64 h-64 bg-[var(--app-primary)] opacity-10 blur-[80px] rounded-full pointer-events-none" />
+                                <div class="app-entry-overlay" />
+                                <div class="app-entry-glow" />
 
-                                <div
-                                    class={`w-full lg:w-[40%] relative group mb-8 lg:mb-0 ${index % 2 !== 0 ? "lg:order-2" : ""}`}
-                                >
-                                    <div class="relative aspect-[16/9] lg:aspect-[3/4] overflow-hidden rounded-2xl border border-black/5 dark:border-white/5 shadow-xl transition-all duration-1000 bg-[var(--app-surface)]">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-[var(--app-primary)] to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-700" />
-
+                                <div class={`app-image-wrapper ${index % 2 !== 0 ? "order-odd" : ""}`}>
+                                    <div class="app-image-container">
+                                        <div class="app-image-hover-overlay" />
                                         <img
                                             src={heroImage}
                                             alt=""
-                                            class="w-full h-full object-cover object-center transition-all duration-[2000ms] group-hover:scale-105"
+                                            class="app-image"
                                         />
-
-                                        <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-all duration-1000" />
+                                        <div class="app-image-darken" />
                                     </div>
-                                    <a href={`/apps/${card.slug}/`} class="absolute inset-0 z-20" />
+                                    <a href={`/apps/${card.slug}/`} class="app-link-overlay" />
                                 </div>
 
-                                <div
-                                    class={`w-full lg:w-[60%] relative z-10 ${index % 2 !== 0 ? "lg:order-1" : ""}`}
-                                >
-                                    <div class="flex items-center gap-3 lg:gap-4 mb-4 lg:mb-8 opacity-70">
-                                        <span
-                                            class="text-[10px] lg:text-xs font-black uppercase tracking-widest px-2 py-1 lg:px-3 lg:py-1 rounded-full border border-current"
-                                            style="color: var(--app-primary); border-color: var(--app-primary);"
-                                        >
+                                <div class={`app-content-wrapper ${index % 2 !== 0 ? "order-odd" : ""}`}>
+                                    <div class="app-meta">
+                                        <span class="app-badge">
                                             {entry.isGame ? "Juego" : "Utilidad"}
                                         </span>
-                                        <div class="w-6 lg:w-10 h-px bg-current opacity-30" />
-                                        <span class="text-[10px] lg:text-xs font-bold">
+                                        <div class="app-meta-separator" />
+                                        <span class="app-meta-index">
                                             0{index + 1}
                                         </span>
                                     </div>
 
-                                    <a href={`/apps/${card.slug}/`} class="block group">
-                                        <h2 class="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] uppercase transition-all duration-700 group-hover:text-[var(--app-primary)] break-words lg:break-normal">
+                                    <a href={`/apps/${card.slug}/`} class="app-title-link">
+                                        <h2 class="app-card-title">
                                             {card.title}
                                         </h2>
                                     </a>
 
-                                    <p class="text-base sm:text-xl md:text-2xl font-light opacity-80 mb-8 lg:mb-12 leading-relaxed max-w-lg">
+                                    <p class="app-card-subtitle">
                                         {card.subtitle}
                                     </p>
 
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-10">
-                                        <div class="flex flex-col gap-4 w-full sm:w-fit">
-                                            <a
-                                                href={`/apps/${card.slug}/`}
-                                                class="flex items-center justify-center sm:justify-start gap-4 lg:gap-6 text-xs lg:text-sm font-black uppercase tracking-[0.2em] lg:tracking-[0.3em] hover:gap-6 lg:hover:gap-10 transition-all duration-700 px-6 py-3 lg:px-10 lg:py-5 rounded-full bg-[var(--app-primary)] text-white shadow-lg shadow-[var(--app-primary)]/30 hover:shadow-[var(--app-primary)]/50 w-full sm:w-fit"
+                                    <div class="app-actions">
+                                        <a
+                                            href={`/apps/${card.slug}/`}
+                                            class="app-btn-explore"
+                                        >
+                                            <span>Explorar</span>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="3"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="app-btn-explore-icon"
                                             >
-                                                <span>Explorar</span>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="16"
-                                                    height="16"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-width="3"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    class="lg:w-5 lg:h-5"
-                                                >
-                                                    <>
-                                                        <path d="M5 12h14" />
-                                                        <path d="m12 5 7 7-7 7" />
-                                                    </>
-                                                </svg>
-                                            </a>
-                                        </div>
+                                                <path d="M5 12h14" />
+                                                <path d="m12 5 7 7-7 7" />
+                                            </svg>
+                                        </a>
 
-                                        <div class="hidden sm:block w-px h-8 lg:h-12 bg-current opacity-10" />
+                                        <div class="app-actions-separator" />
 
-                                        <div class="flex justify-center sm:justify-start gap-6 opacity-80 pl-0 sm:pl-2">
+                                        <div class="app-stores">
                                             {entry.stores.googlePlay ? (
                                                 <a
                                                     href={entry.stores.googlePlay}
                                                     target="_blank"
-                                                    class="hover:text-[var(--app-primary)] transition-colors duration-300"
+                                                    class="app-store-link"
                                                     title="Disponible en Google Play"
                                                 >
                                                     <Icon
                                                         name="mdi:google-play"
-                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                        class="app-store-icon"
                                                     />
                                                 </a>
                                             ) : (
                                                 <div
-                                                    class="opacity-20 cursor-not-allowed"
+                                                    class="app-store-disabled"
                                                     title="Próximamente"
                                                 >
                                                     <Icon
                                                         name="mdi:google-play"
-                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                        class="app-store-icon"
                                                     />
                                                 </div>
                                             )}
@@ -173,22 +155,22 @@ const DEFAULT_THEMES: Record<string, any> = {
                                                 <a
                                                     href={entry.stores.appStore}
                                                     target="_blank"
-                                                    class="hover:text-[var(--app-primary)] transition-colors duration-300"
+                                                    class="app-store-link"
                                                     title="Disponible en App Store"
                                                 >
                                                     <Icon
                                                         name="mdi:apple"
-                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                        class="app-store-icon"
                                                     />
                                                 </a>
                                             ) : (
                                                 <div
-                                                    class="opacity-20 cursor-not-allowed"
+                                                    class="app-store-disabled"
                                                     title="Próximamente"
                                                 >
                                                     <Icon
                                                         name="mdi:apple"
-                                                        class="w-6 h-6 lg:w-8 lg:h-8"
+                                                        class="app-store-icon"
                                                     />
                                                 </div>
                                             )}
@@ -202,58 +184,13 @@ const DEFAULT_THEMES: Record<string, any> = {
             </div>
         </section>
 
-        <footer
-            class="py-24 relative overflow-hidden bg-neutral-50 dark:bg-neutral-950 border-t border-black/5 dark:border-white/5"
-        >
-            <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-center">
-                <p
-                    class="text-2xl md:text-3xl font-light tracking-tight text-center max-w-3xl leading-tight mb-8"
-                >
-                    Diseño apps que <span class="italic font-normal">respetan</span> tu tiempo y tu inteligencia.
+        <footer class="apps-footer">
+            <div class="apps-footer-container">
+                <p class="apps-footer-text">
+                    Diseño apps que <span class="apps-footer-text-italic">respetan</span> tu tiempo y tu inteligencia.
                 </p>
             </div>
-
-            <div class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay">
-            </div>
+            <div class="apps-footer-grid" />
         </footer>
     </div>
 </Layout>
-
-<style>
-    .animate-in {
-        animation: reveal 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-    }
-
-    @keyframes reveal {
-        from {
-            opacity: 0;
-            transform: translateY(40px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .app-entry {
-        transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    .app-entry:hover {
-        transform: scale(0.99);
-    }
-
-    .animate-pulse-slow {
-        animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    @keyframes pulse-slow {
-        0%,
-        100% {
-            opacity: 0.1;
-        }
-        50% {
-            opacity: 0.4;
-        }
-    }
-</style>

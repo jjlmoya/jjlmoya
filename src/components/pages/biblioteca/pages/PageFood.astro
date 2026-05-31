@@ -7,61 +7,45 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-full h-full flex flex-col items-center justify-center">
-                <div class="relative w-full h-48 flex justify-center overflow-hidden pointer-events-none opacity-60">
-                    <div
-                        class="absolute bottom-0 w-20 h-40 bg-stone-400/10 blur-2xl rounded-full animate-steam-rise"
-                        style="animation-delay: 0s;"
-                    />
-                    <div
-                        class="absolute bottom-0 w-24 h-48 bg-stone-300/5 blur-3xl rounded-full animate-steam-rise"
-                        style="animation-delay: 1.5s;"
-                    />
-                    <div
-                        class="absolute bottom-0 w-16 h-32 bg-amber-500/5 blur-2xl rounded-full animate-steam-rise"
-                        style="animation-delay: 2.5s;"
-                    />
-                    <div class="absolute bottom-[-20px] w-32 h-32 bg-white/5 blur-xl rounded-full animate-steam-base" />
+        <div class="lb-page-visual-container">
+            <div class="lb-page-food-wrapper">
+                <div class="lb-page-food-steam-wrap">
+                    <div class="lb-page-food-steam steam-1" />
+                    <div class="lb-page-food-steam steam-2" />
+                    <div class="lb-page-food-steam steam-3" />
+                    <div class="lb-page-food-steam-base" />
                 </div>
 
-                <div class="relative z-10">
-                    <div class="w-48 h-20 bg-gradient-to-b from-[#292524] to-[#0c0a09] rounded-b-[4rem] border-t border-[#44403c]/30 shadow-2xl relative overflow-hidden">
-                        <div class="absolute top-2 left-4 w-40 h-10 bg-white/5 blur-md rounded-full transform -rotate-3 opacity-30" />
+                <div class="lb-page-food-bowl-position">
+                    <div class="lb-page-food-bowl">
+                        <div class="lb-page-food-bowl-shine" />
                     </div>
 
-                    <div class="absolute -top-3 left-2 w-44 h-6 bg-[#b45309] rounded-[100%] opacity-90 blur-[0.5px] shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]" />
-
-                    <div class="absolute -top-4 left-0 w-48 h-8 rounded-[100%] border border-[#44403c]/20 z-[-1]" />
+                    <div class="lb-page-food-soup" />
+                    <div class="lb-page-food-bowl-back-rim" />
                 </div>
 
-                <div class="w-40 h-4 bg-black/60 blur-lg rounded-[100%] mt-2" />
+                <div class="lb-page-food-bowl-shadow" />
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-amber-700/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-amber">
                 El Hambre
             </h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="food-count"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="food-count">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">
+                <div class="lb-page-counter-label">
                     Toneladas Ingeridas
                 </div>
             </div>
 
-            <p
-                class="text-xl leading-relaxed text-[#e7e5e4]"
-                style="font-family: 'Cinzel', serif; font-variant: small-caps;"
-            >
+            <p class="lb-page-quote">
                 LA MÁQUINA NECESITA COMBUSTIBLE. HABÉIS DEVORADO{" "}
-                <span id="food-kg" class="text-amber-700">
+                <span id="food-kg" class="lb-page-food-highlight">
                     0 KG
                 </span>{" "}
                 DE MATERIA. VIDA QUE SE CONVIERTE EN VIDA. ESPERO QUE AL MENOS UNA PARTE HAYA SIDO
@@ -72,7 +56,135 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes steam-rise {
+    .lb-page-food-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lb-page-food-steam-wrap {
+        position: relative;
+        width: 100%;
+        height: 12rem;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    .lb-page-food-steam {
+        position: absolute;
+        bottom: 0;
+        border-radius: 9999px;
+        animation: lb-steam-rise 5s ease-out infinite;
+    }
+
+    .lb-page-food-steam.steam-1 {
+        width: 5rem;
+        height: 10rem;
+        background-color: rgba(168, 162, 158, 0.1);
+        filter: blur(24px);
+    }
+
+    .lb-page-food-steam.steam-2 {
+        width: 6rem;
+        height: 12rem;
+        background-color: rgba(214, 211, 209, 0.05);
+        filter: blur(64px);
+        animation-delay: 1.5s;
+    }
+
+    .lb-page-food-steam.steam-3 {
+        width: 4rem;
+        height: 8rem;
+        background-color: rgba(245, 158, 11, 0.05);
+        filter: blur(24px);
+        animation-delay: 2.5s;
+    }
+
+    .lb-page-food-steam-base {
+        position: absolute;
+        bottom: -20px;
+        width: 8rem;
+        height: 8rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        filter: blur(24px);
+        border-radius: 9999px;
+        animation: lb-steam-base 4s ease-in-out infinite;
+    }
+
+    .lb-page-food-bowl-position {
+        position: relative;
+        z-index: 10;
+    }
+
+    .lb-page-food-bowl {
+        width: 12rem;
+        height: 5rem;
+        background-image: linear-gradient(to bottom, #292524, #0c0a09);
+        border-radius: 0 0 4rem 4rem;
+        border-top: 1px solid rgba(68, 64, 60, 0.3);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .lb-page-food-bowl-shine {
+        position: absolute;
+        top: 0.5rem;
+        left: 1rem;
+        width: 10rem;
+        height: 2.5rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        filter: blur(8px);
+        border-radius: 9999px;
+        transform: rotate(-3deg);
+        opacity: 0.3;
+    }
+
+    .lb-page-food-soup {
+        position: absolute;
+        top: -0.75rem;
+        left: 0.5rem;
+        width: 11rem;
+        height: 1.5rem;
+        background-color: #b45309;
+        border-radius: 100%;
+        opacity: 0.9;
+        filter: blur(0.5px);
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .lb-page-food-bowl-back-rim {
+        position: absolute;
+        top: -1rem;
+        left: 0;
+        width: 12rem;
+        height: 2rem;
+        border-radius: 100%;
+        border: 1px solid rgba(68, 64, 60, 0.2);
+        z-index: -1;
+    }
+
+    .lb-page-food-bowl-shadow {
+        width: 10rem;
+        height: 1rem;
+        background-color: rgba(0, 0, 0, 0.6);
+        filter: blur(8px);
+        border-radius: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .lb-page-food-highlight {
+        color: #b45309;
+    }
+
+    @keyframes lb-steam-rise {
         0% {
             transform: translateY(20px) scaleX(0.8);
             opacity: 0;
@@ -90,9 +202,8 @@ const { side } = Astro.props;
         }
     }
 
-    @keyframes steam-base {
-        0%,
-        100% {
+    @keyframes lb-steam-base {
+        0%, 100% {
             opacity: 0.2;
             transform: scale(1);
         }
@@ -100,13 +211,6 @@ const { side } = Astro.props;
             opacity: 0.4;
             transform: scale(1.1);
         }
-    }
-
-    .animate-steam-rise {
-        animation: steam-rise 5s ease-out infinite;
-    }
-    .animate-steam-base {
-        animation: steam-base 4s ease-in-out infinite;
     }
 </style>
 
@@ -121,7 +225,6 @@ const { side } = Astro.props;
         if (!countEl || !stats) return;
 
         const { kgEaten, tonsEaten } = calculateFoodStats(stats.daysAlive);
-
         countEl.innerText = tonsEaten.toFixed(2).replace(".", ",");
         if (kgEl) kgEl.innerText = `${Math.floor(kgEaten).toLocaleString()} KG`;
     });

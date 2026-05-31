@@ -18,7 +18,7 @@ const CODE_URL =
     codeUrl={CODE_URL}
     image="/images/gamebob/mechanics/vibrator-cracker.webp"
 >
-    <Icon slot="icon" name="mdi:safe" class="text-rose-500" />
+    <Icon slot="icon" name="mdi:safe" class="gm-icon-rose" />
 
     <MechanicCanvas
         id="game-canvas"
@@ -29,51 +29,49 @@ const CODE_URL =
 
     <MechanicInfo>
         <Fragment slot="how-it-works">
-            <li class="flex items-start gap-2">
-                <span class="text-rose-500 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-rose">•</span>
                 <span>Gira el dial arrastrando con el dedo o mouse.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-rose-500 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-rose">•</span>
                 <span>Tu dispositivo vibrará ligeramente al pasar números.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-rose-500 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-rose">•</span>
                 <span>Una vibración distinta indica el número correcto.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-rose-500 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-rose">•</span>
                 <span>Mantén el dial en la posición correcta unos segundos para confirmar.</span>
             </li>
-            <li class="flex items-start gap-2">
-                <span class="text-rose-500 mt-1">•</span>
+            <li class="gm-li">
+                <span class="gm-bullet gm-bullet-rose">•</span>
                 <span>Encuentra 3 números para abrir la caja.</span>
             </li>
         </Fragment>
 
         <Fragment slot="controls">
-            <div class="bg-zinc-800 p-3 rounded-lg text-center">
-                <span class="block text-white font-bold">Arrastrar / Touch</span>
-                <span class="text-xs text-zinc-400">Girar Dial</span>
+            <div class="gm-control-box">
+                <span class="gm-label">Arrastrar / Touch</span>
+                <span class="gm-desc">Girar Dial</span>
             </div>
         </Fragment>
     </MechanicInfo>
 
-    <div
-        class="mt-4 p-4 bg-yellow-900/20 border border-yellow-700/50 rounded-lg max-w-md mx-auto text-center"
-    >
-        <p class="text-yellow-200 text-sm">
-            <Icon name="mdi:alert" class="inline-block w-4 h-4 mr-1 mb-1" />
+    <div class="gm-warning-box">
+        <p class="gm-warning-text">
+            <Icon name="mdi:alert" class="gm-warning-inline-icon" />
             Soporte experimental de vibración en iOS activado.
         </p>
-        <div class="mt-2 flex flex-col gap-2 items-center">
+        <div class="gm-warning-actions">
             <button
                 id="test-vibrate-btn"
-                class="px-3 py-1 bg-zinc-700 text-white text-xs rounded hover:bg-zinc-600"
+                class="gm-test-btn"
             >
                 Test Vibration
             </button>
-            <p id="debug-log" class="text-xs text-zinc-500 font-mono"></p>
+            <p id="debug-log" class="gm-debug-log"></p>
         </div>
     </div>
 </MechanicPage>
@@ -89,7 +87,6 @@ const CODE_URL =
 
     function log(msg: string) {
         if (debugLog) debugLog.textContent = msg;
-        console.log(msg);
     }
 
     if (testBtn) {
@@ -125,5 +122,78 @@ const CODE_URL =
 <style>
     #game-canvas {
         touch-action: pan-y !important;
+    }
+    .gm-li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .gm-bullet {
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+    .gm-bullet-rose { color: #f43f5e; }
+    .gm-control-box {
+        background: #27272a;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        text-align: center;
+    }
+    .gm-label {
+        display: block;
+        color: #fff;
+        font-weight: 700;
+    }
+    .gm-desc {
+        font-size: 0.75rem;
+        color: #a1a1aa;
+    }
+    .gm-icon-rose { color: #f43f5e; }
+    .gm-warning-box {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: rgba(113, 63, 18, 0.2);
+        border: 1px solid rgba(161, 98, 7, 0.5);
+        border-radius: 0.5rem;
+        max-width: 28rem;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+    .gm-warning-text {
+        color: #fef08a;
+        font-size: 0.875rem;
+    }
+    .gm-warning-inline-icon {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+        vertical-align: middle;
+    }
+    .gm-warning-actions {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    .gm-test-btn {
+        padding: 0.25rem 0.75rem;
+        background: #3f3f46;
+        color: #fff;
+        font-size: 0.75rem;
+        border-radius: 0.25rem;
+        border: none;
+        cursor: pointer;
+    }
+    .gm-test-btn:hover {
+        background: #52525b;
+    }
+    .gm-debug-log {
+        font-size: 0.75rem;
+        color: #71717a;
+        font-family: ui-monospace, monospace;
     }
 </style>

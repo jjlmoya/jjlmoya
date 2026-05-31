@@ -7,14 +7,13 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-full h-full flex items-center justify-center">
-                <div class="relative w-32 h-64 flex flex-col items-center justify-end overflow-hidden">
-                    <div class="absolute bottom-0 w-full h-full">
+        <div class="lb-page-visual-container">
+            <div class="lb-page-steps-wrapper">
+                <div class="lb-page-steps-track">
+                    <div class="lb-page-steps-feet">
                         <svg
-                            class="absolute bottom-4 right-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-r"
+                            class="lb-page-steps-icon step-r r-1"
                             viewBox="0 0 100 250"
-                            style="animation-delay: 0s;"
                         >
                             <path
                                 fill="currentColor"
@@ -23,9 +22,8 @@ const { side } = Astro.props;
                         </svg>
 
                         <svg
-                            class="absolute bottom-20 left-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-l"
+                            class="lb-page-steps-icon step-l l-1"
                             viewBox="0 0 100 250"
-                            style="animation-delay: 1s;"
                         >
                             <path
                                 fill="currentColor"
@@ -34,9 +32,8 @@ const { side } = Astro.props;
                         </svg>
 
                         <svg
-                            class="absolute bottom-36 right-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-r"
+                            class="lb-page-steps-icon step-r r-2"
                             viewBox="0 0 100 250"
-                            style="animation-delay: 2s;"
                         >
                             <path
                                 fill="currentColor"
@@ -45,9 +42,8 @@ const { side } = Astro.props;
                         </svg>
 
                         <svg
-                            class="absolute bottom-52 left-8 w-8 h-12 text-[#e7e5e4] opacity-0 animate-step-l"
+                            class="lb-page-steps-icon step-l l-2"
                             viewBox="0 0 100 250"
-                            style="animation-delay: 3s;"
                         >
                             <path
                                 fill="currentColor"
@@ -59,27 +55,21 @@ const { side } = Astro.props;
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-orange-500/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-orange">
                 El Camino
             </h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="steps-count"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="steps-count">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Pasos Dados</div>
+                <div class="lb-page-counter-label">Pasos Dados</div>
             </div>
 
-            <p
-                class="text-xl leading-relaxed text-[#e7e5e4]"
-                style="font-family: 'Cinzel', serif; font-variant: small-caps;"
-            >
+            <p class="lb-page-quote">
                 ...
-                <span id="steps-km" class="text-orange-500">
+                <span id="steps-km" class="lb-page-steps-highlight">
                     0 KM
                 </span>{" "}
                 RECORRIDOS. AL FINAL LLEGÁIS AL MISMO SITIO, PERO PARECE QUE OS GUSTA DAR RODEOS.
@@ -91,16 +81,79 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes step-appear {
+    .lb-page-steps-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lb-page-steps-track {
+        position: relative;
+        width: 8rem;
+        height: 16rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        overflow: hidden;
+    }
+
+    .lb-page-steps-feet {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .lb-page-steps-icon {
+        position: absolute;
+        width: 2rem;
+        height: 3rem;
+        color: #e7e5e4;
+        opacity: 0;
+    }
+
+    .lb-page-steps-icon.step-r.r-1 {
+        bottom: 1rem;
+        right: 2rem;
+        animation: lb-step-appear 4s ease-in-out infinite;
+        animation-delay: 0s;
+    }
+
+    .lb-page-steps-icon.step-l.l-1 {
+        bottom: 5rem;
+        left: 2rem;
+        animation: lb-step-appear 4s ease-in-out infinite;
+        animation-delay: 1s;
+    }
+
+    .lb-page-steps-icon.step-r.r-2 {
+        bottom: 9rem;
+        right: 2rem;
+        animation: lb-step-appear 4s ease-in-out infinite;
+        animation-delay: 2s;
+    }
+
+    .lb-page-steps-icon.step-l.l-2 {
+        bottom: 13rem;
+        left: 2rem;
+        animation: lb-step-appear 4s ease-in-out infinite;
+        animation-delay: 3s;
+    }
+
+    .lb-page-steps-highlight {
+        color: #fb923c;
+    }
+
+    @keyframes lb-step-appear {
         0% {
             opacity: 0;
             transform: scale(0.9);
         }
-        20% {
-            opacity: 0.6;
-            transform: scale(1);
-        }
-        80% {
+        20%, 80% {
             opacity: 0.6;
             transform: scale(1);
         }
@@ -108,13 +161,6 @@ const { side } = Astro.props;
             opacity: 0;
             transform: scale(0.95);
         }
-    }
-
-    .animate-step-l {
-        animation: step-appear 4s ease-in-out infinite;
-    }
-    .animate-step-r {
-        animation: step-appear 4s ease-in-out infinite;
     }
 </style>
 
@@ -129,7 +175,6 @@ const { side } = Astro.props;
         if (!countEl || !stats) return;
 
         const { stepsTaken } = calculateStepsStats(stats.daysAlive);
-
         const km = (stepsTaken * 0.762) / 1000;
 
         countEl.innerText = stepsTaken.toLocaleString();

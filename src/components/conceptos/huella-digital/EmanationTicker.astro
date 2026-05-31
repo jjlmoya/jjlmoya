@@ -2,20 +2,65 @@
 
 ---
 
-<div
-    class="w-full bg-black text-[#00ff00] font-mono text-[10px] py-1 overflow-hidden whitespace-nowrap border-y border-[#00ff00]/20 relative z-[100]"
->
-    <div
-        id="ticker-content"
-        class="inline-block animate-[ticker_60s_linear_infinite] hover:[animation-play-state:paused] cursor-default"
-    >
-        <span class="opacity-50">[SISTEMA OPERATIVO]</span> ESPERANDO SEÑAL...
-        <span class="mx-8 opacity-20">||</span>
-        <span class="opacity-50">[SISTEMA OPERATIVO]</span> CONFIGURANDO RECEPCIÓN...
+<div class="emanation-ticker">
+    <div id="ticker-content" class="emanation-ticker-content">
+        <span class="emanation-ticker-system">[SISTEMA OPERATIVO]</span> ESPERANDO SEÑAL...
+        <span class="emanation-ticker-separator">||</span>
+        <span class="emanation-ticker-system">[SISTEMA OPERATIVO]</span> CONFIGURANDO RECEPCIÓN...
     </div>
 </div>
 
 <style>
+    .emanation-ticker {
+        width: 100%;
+        background-color: #000;
+        color: #00ff00;
+        font-family: monospace;
+        font-size: 10px;
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        overflow: hidden;
+        white-space: nowrap;
+        border-top: 1px solid rgba(0, 255, 0, 0.2);
+        border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        position: relative;
+        z-index: 100;
+    }
+
+    .emanation-ticker-content {
+        display: inline-block;
+        animation: ticker 60s linear infinite;
+        cursor: default;
+    }
+
+    .emanation-ticker-content:hover {
+        animation-play-state: paused;
+    }
+
+    .emanation-ticker-system {
+        opacity: 0.5;
+    }
+
+    .emanation-ticker-separator {
+        margin-left: 2rem;
+        margin-right: 2rem;
+        opacity: 0.2;
+    }
+
+    :global(.emanation-ticker-item) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    :global(.emanation-ticker-dimmed) {
+        opacity: 0.4;
+    }
+
+    :global(.emanation-ticker-highlight) {
+        color: #fff;
+    }
+
     @keyframes ticker {
         0% {
             transform: translateX(100vw);
@@ -40,14 +85,14 @@
                 const os = ((f[2] || "").split(")")[0].split("(").pop() || "UNKN").toUpperCase();
                 const color = f[1];
                 const path = f[5] || "/";
-                return `<span class="inline-flex items-center gap-2">
+                return `<span class="emanation-ticker-item">
                 <span style="color: ${color}">●</span>
-                <span class="opacity-40">[${id}]</span> 
-                DETECTADO EN <span class="text-white">${path}</span> 
-                <span class="opacity-40">//</span> OS: ${os}
+                <span class="emanation-ticker-dimmed">[${id}]</span> 
+                DETECTADO EN <span class="emanation-ticker-highlight">${path}</span> 
+                <span class="emanation-ticker-dimmed">//</span> OS: ${os}
             </span>`;
             })
-            .join('<span class="mx-12 opacity-20">||</span>');
+            .join('<span class="emanation-ticker-separator">||</span>');
     }
 
     window.addEventListener("footprints-updated", (e: any) => {

@@ -6,7 +6,7 @@ export class FX {
     createExplosion(x, y, colorRGB) {
         for (let i = 0; i < 10; i++) {
             const p = document.createElement("div");
-            p.className = "absolute w-2 h-2 rounded-full pointer-events-none z-50";
+            p.className = "evo-fx-particle";
             p.style.backgroundColor = `rgb(${colorRGB})`;
             p.style.left = `${x}px`;
             p.style.top = `${y}px`;

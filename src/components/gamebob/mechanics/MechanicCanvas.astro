@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import "./MechanicCanvas.css";
 
 interface Props {
     id: string;
@@ -17,29 +18,23 @@ const {
     verticalOnMobile = false,
 } = Astro.props;
 
-const aspectRatioClasses = {
-    video: "aspect-video",
-    square: "aspect-square",
-    portrait: "aspect-[9/16]",
-};
-
 const containerClasses = [
-    "relative w-full bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 shadow-2xl",
-    verticalOnMobile ? "h-[60vh] md:h-auto" : "",
-    !verticalOnMobile ? aspectRatioClasses[aspectRatio] : "md:" + aspectRatioClasses[aspectRatio],
-].join(" ");
+    "mc-container",
+    `mc-container--${aspectRatio}`,
+    verticalOnMobile ? "mc-container--mobile-height" : "",
+].filter(Boolean).join(" ");
 ---
 
 <div class={containerClasses}>
-    <canvas id={id} class="w-full h-full block touch-none"></canvas>
+    <canvas id={id} class="mc-canvas"></canvas>
 
     <div
         id={`${id}-overlay`}
-        class="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-10 transition-opacity duration-300"
+        class="mc-overlay"
     >
-        <Icon name="mdi:cursor-default-click" class="w-16 h-16 text-white mb-4 animate-bounce" />
-        <p class="text-white text-xl font-bold text-center px-4">{instruction}</p>
-        <p class="text-zinc-400 mt-2 text-sm text-center px-4">{subInstruction}</p>
+        <Icon name="mdi:cursor-default-click" class="mc-overlay-icon" />
+        <p class="mc-overlay-title">{instruction}</p>
+        <p class="mc-overlay-subtitle">{subInstruction}</p>
     </div>
 
     <slot />

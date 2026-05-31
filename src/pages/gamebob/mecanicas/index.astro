@@ -14,17 +14,17 @@ const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
     description="Explora un sandbox con una variedad de experimentos de mecánicas de juego. Cada ejemplo es una demostración técnica lista para su análisis y aplicación en desarrollo."
     image="/images/gamebob/mechanics/index.webp"
 >
-    <div class="min-h-screen flex flex-col items-center justify-start py-6 md:py-12 px-4">
-        <div class="z-10 w-full max-w-5xl mt-4 md:mt-8">
-            <h1 class="sr-only">Colección de Mecánicas de Juego y Prototipos</h1>
+    <div class="gm-index-page">
+        <div class="gm-index-container">
+            <h1 class="gm-index-sr">Colección de Mecánicas de Juego y Prototipos</h1>
             <MechanicsFilter allTags={allTags} />
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mechanics-grid">
+            <div class="gm-index-grid" id="mechanics-grid">
                 {mechanics.map((mechanic) => <MechanicCard mechanic={mechanic} />)}
             </div>
 
-            <div id="no-results" class="hidden text-center py-12 text-zinc-500">
-                <Icon name="mdi:ghost-off" class="w-12 h-12 mx-auto mb-2 opacity-50" />
+            <div id="no-results" class="gm-index-noresults">
+                <Icon name="mdi:ghost-off" class="gm-index-noresults-icon" />
                 <p>No se encontraron mecánicas con estos filtros.</p>
             </div>
         </div>
@@ -61,7 +61,7 @@ const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
         });
 
         if (noResults) {
-            noResults.classList.toggle("hidden", visibleCount > 0);
+            noResults.classList.toggle("gm-index-hidden", visibleCount > 0);
         }
     }
 
@@ -96,4 +96,69 @@ const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
     if (allBtn) allBtn.classList.add("active");
 </script>
 
-<style></style>
+<style>
+    .gm-index-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 1.5rem 1rem;
+    }
+    @media (min-width: 768px) {
+        .gm-index-page {
+            padding: 3rem 1rem;
+        }
+    }
+    .gm-index-container {
+        z-index: 10;
+        width: 100%;
+        max-width: 64rem;
+        margin-top: 1rem;
+    }
+    @media (min-width: 768px) {
+        .gm-index-container {
+            margin-top: 2rem;
+        }
+    }
+    .gm-index-sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+    .gm-index-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        .gm-index-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1024px) {
+        .gm-index-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    .gm-index-noresults {
+        display: none;
+        text-align: center;
+        padding: 3rem 0;
+        color: #71717a;
+    }
+    .gm-index-noresults-icon {
+        width: 3rem;
+        height: 3rem;
+        margin: 0 auto 0.5rem;
+        opacity: 0.5;
+    }
+    .gm-index-hidden {
+        display: none !important;
+    }
+</style>

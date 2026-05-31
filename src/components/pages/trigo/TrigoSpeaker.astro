@@ -9,30 +9,90 @@ interface Props {
 const { role, title } = Astro.props;
 
 const isHunter = role === "hunter";
-const alignment = isHunter ? "text-left" : "text-right";
-const containerAlignment = isHunter ? "items-start" : "items-end";
-const color = isHunter ? "text-stone-400" : "text-amber-500";
 const label = isHunter ? "EL CAZADOR" : "EL RECOLECTOR";
 ---
 
-<div class={`flex flex-col ${containerAlignment} mb-8 md:mb-12`}>
-    <div class={`flex items-end gap-4 mb-4 ${isHunter ? "flex-row" : "flex-row-reverse"}`}>
-        <div
-            class="relative w-24 h-24 md:w-32 md:h-32 overflow-hidden rounded-full border-4 border-[#1c1917] bg-[#292524] shadow-xl"
-        >
+<div class:list={["wheat-flex wheat-flex-col wheat-mb-8 wheat-mb-12@md wheat-speaker", role]}>
+    <div class="wheat-flex wheat-items-end wheat-gap-4 wheat-mb-4 wheat-speaker-header">
+        <div class="wheat-relative wheat-speaker-avatar wheat-overflow-hidden wheat-rounded-full">
             <TrigoCharacterSVG role={role} />
         </div>
 
-        <div class={`flex flex-col ${isHunter ? "items-start" : "items-end"} mb-2`}>
-            <span class={`text-xs font-bold tracking-[0.3em] uppercase ${color} mb-1`}>{label}</span
-            >
-            <div class={`w-12 h-0.5 ${isHunter ? "bg-stone-700" : "bg-amber-600"}`}></div>
+        <div class="wheat-flex wheat-flex-col wheat-mb-2 wheat-speaker-info">
+            <span class="wheat-text-xs wheat-font-bold wheat-tracking-widest wheat-uppercase wheat-mb-1 wheat-speaker-label">{label}</span>
+            <div class="wheat-speaker-bar"></div>
         </div>
     </div>
 
-    <h2
-        class={`text-2xl md:text-4xl font-bold text-[#e7e5e4] max-w-2xl ${alignment} leading-tight`}
-    >
+    <h2 class="wheat-text-2xl wheat-text-4xl@md wheat-font-bold wheat-speaker-title">
         "{title}"
     </h2>
 </div>
+
+<style>
+    .wheat-speaker {
+        color: #e7e5e4;
+    }
+    .wheat-speaker-avatar {
+        width: 6rem;
+        height: 6rem;
+        border: 4px solid #1c1917;
+        background-color: #292524;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        box-sizing: border-box;
+    }
+    @media (min-width: 768px) {
+        .wheat-speaker-avatar {
+            width: 8rem;
+            height: 8rem;
+        }
+        .wheat-mb-12\@md {
+            margin-bottom: 3rem;
+        }
+    }
+    .wheat-speaker-bar {
+        width: 3rem;
+        height: 2px;
+    }
+    .wheat-speaker.hunter {
+        align-items: flex-start;
+    }
+    .wheat-speaker.hunter .wheat-speaker-header {
+        flex-direction: row;
+    }
+    .wheat-speaker.hunter .wheat-speaker-info {
+        align-items: flex-start;
+    }
+    .wheat-speaker.hunter .wheat-speaker-label {
+        color: #a8a29e;
+    }
+    .wheat-speaker.hunter .wheat-speaker-bar {
+        background-color: #44403c;
+    }
+    .wheat-speaker.hunter .wheat-speaker-title {
+        text-align: left;
+    }
+
+    .wheat-speaker.gatherer {
+        align-items: flex-end;
+    }
+    .wheat-speaker.gatherer .wheat-speaker-header {
+        flex-direction: row-reverse;
+    }
+    .wheat-speaker.gatherer .wheat-speaker-info {
+        align-items: flex-end;
+    }
+    .wheat-speaker.gatherer .wheat-speaker-label {
+        color: #f59e0b;
+    }
+    .wheat-speaker.gatherer .wheat-speaker-bar {
+        background-color: #b45309;
+    }
+    .wheat-speaker.gatherer .wheat-speaker-title {
+        text-align: right;
+    }
+    .wheat-speaker-title {
+        max-width: 42rem;
+        line-height: 1.25;
+    }
+</style>

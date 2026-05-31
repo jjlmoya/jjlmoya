@@ -1,15 +1,15 @@
 <div
     id="waiting-state"
-    class="hidden absolute inset-0 w-full h-full flex flex-col items-center justify-center transition-opacity duration-1000 opacity-0 bg-[#f8f5f2]"
+    class="espera-waiting"
 >
-    <div class="absolute top-8 right-8 md:top-16 md:right-16 flex flex-col items-end opacity-50">
-        <span class="text-[10px] font-sans uppercase tracking-widest text-[#666]">Su Turno</span>
-        <span class="text-4xl md:text-5xl font-light text-[#1a1a1a]" id="ticket-display">001</span>
+    <div class="espera-waiting-ticket-box">
+        <span class="espera-waiting-ticket-label">Su Turno</span>
+        <span class="espera-waiting-ticket-val" id="ticket-display">001</span>
     </div>
 
-    <div class="relative w-72 h-72 md:w-96 md:h-96 flex items-center justify-center">
+    <div class="espera-waiting-circle-container">
         <svg
-            class="absolute inset-0 w-full h-full transform -rotate-90 pointer-events-none overflow-visible"
+            class="espera-waiting-svg"
         >
             <circle cx="50%" cy="50%" r="48%" fill="none" stroke="#e0dedb" stroke-width="1"
             ></circle>
@@ -23,24 +23,164 @@
                 stroke-width="1.5"
                 stroke-dasharray="1000"
                 stroke-dashoffset="1000"
-                class="transition-all duration-1000 ease-linear"></circle>
+                class="espera-waiting-progress-circle"></circle>
         </svg>
 
-        <div class="absolute inset-0 flex items-center justify-center p-12 text-center">
+        <div class="espera-waiting-fact-box">
             <p
                 id="fact-text"
-                class="text-xl md:text-2xl italic text-[#444] leading-relaxed transition-opacity duration-700"
+                class="espera-waiting-fact-text"
             >
             </p>
         </div>
     </div>
 
-    <div class="absolute bottom-16 text-center w-full">
+    <div class="espera-waiting-status-box">
         <p
             id="system-msg"
-            class="text-xs font-sans uppercase tracking-[0.3em] text-[#888] animate-pulse"
+            class="espera-waiting-status-text"
         >
             Respire
         </p>
     </div>
 </div>
+
+<style>
+    .espera-waiting {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 1s;
+        opacity: 0;
+        background-color: #f8f5f2;
+        box-sizing: border-box;
+    }
+
+    :global(.espera-waiting.hidden) {
+        display: none !important;
+    }
+
+    .espera-waiting-ticket-box {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        opacity: 0.5;
+    }
+
+    @media (min-width: 768px) {
+        .espera-waiting-ticket-box {
+            top: 4rem;
+            right: 4rem;
+        }
+    }
+
+    .espera-waiting-ticket-label {
+        font-size: 10px;
+        font-family: sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #666;
+    }
+
+    .espera-waiting-ticket-val {
+        font-size: 2.25rem;
+        font-weight: 300;
+        color: #1a1a1a;
+    }
+
+    @media (min-width: 768px) {
+        .espera-waiting-ticket-val {
+            font-size: 3rem;
+        }
+    }
+
+    .espera-waiting-circle-container {
+        position: relative;
+        width: 18rem;
+        height: 18rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+        .espera-waiting-circle-container {
+            width: 24rem;
+            height: 24rem;
+        }
+    }
+
+    .espera-waiting-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+        pointer-events: none;
+        overflow: visible;
+    }
+
+    .espera-waiting-progress-circle {
+        transition: all 1s ease-linear;
+    }
+
+    .espera-waiting-fact-box {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .espera-waiting-fact-text {
+        font-size: 1.25rem;
+        font-style: italic;
+        color: #444;
+        line-height: 1.625;
+        transition: opacity 0.7s;
+        margin: 0;
+    }
+
+    @media (min-width: 768px) {
+        .espera-waiting-fact-text {
+            font-size: 1.5rem;
+        }
+    }
+
+    .espera-waiting-status-box {
+        position: absolute;
+        bottom: 4rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .espera-waiting-status-text {
+        font-size: 0.75rem;
+        font-family: sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        color: #888;
+        margin: 0;
+        animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes status-pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: .5;
+        }
+    }
+</style>

@@ -7,9 +7,9 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-full h-full flex items-center justify-center">
-                <svg viewBox="0 0 200 200" class="w-64 h-64 opacity-30 text-[#e7e5e4]">
+        <div class="lb-page-visual-container">
+            <div class="lb-page-nails-svg-wrap">
+                <svg viewBox="0 0 200 200" class="lb-page-nails-svg">
                     <path
                         d="M60,40 Q80,100 70,160"
                         fill="none"
@@ -18,7 +18,6 @@ const { side } = Astro.props;
                         stroke-linecap="round"
                         class="animate-scratch"
                     />
-
                     <path
                         d="M100,30 Q120,100 110,170"
                         fill="none"
@@ -28,7 +27,6 @@ const { side } = Astro.props;
                         class="animate-scratch"
                         style="animation-delay: 0.2s"
                     />
-
                     <path
                         d="M140,40 Q160,100 150,160"
                         fill="none"
@@ -42,22 +40,19 @@ const { side } = Astro.props;
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-stone-500/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-stone">
                 Las Uñas
             </h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="nails-count"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="nails-count">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Metros de Uñas</div>
+                <div class="lb-page-counter-label">Metros de Uñas</div>
             </div>
 
-            <p class="font-serif text-xl leading-relaxed text-[#e7e5e4]">
+            <p class="lb-page-quote">
                 HAN ARAÑADO EL TIEMPO. UNA DEFENSA ANTIGUA QUE AÚN CONSERVÁIS.
             </p>
         </div>
@@ -65,23 +60,39 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes scratch {
+    .lb-page-nails-svg-wrap {
+        position: relative;
+        width: 16rem;
+        height: 16rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .lb-page-nails-svg {
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        color: #e7e5e4;
+    }
+
+    .animate-scratch {
+        animation: lb-scratch 2s ease-out infinite;
+    }
+
+    @keyframes lb-scratch {
         0% {
             stroke-dasharray: 200;
             stroke-dashoffset: 200;
             opacity: 0;
         }
-        20% {
-            opacity: 1;
-        }
-        100% {
+        20%, 100% {
             stroke-dasharray: 200;
             stroke-dashoffset: 0;
             opacity: 1;
         }
-    }
-    .animate-scratch {
-        animation: scratch 2s ease-out infinite;
     }
 </style>
 
@@ -95,7 +106,6 @@ const { side } = Astro.props;
         if (!countEl || !stats) return;
 
         const { nailsMeters } = calculateGrowthStats(stats.daysAlive);
-
         countEl.innerText = nailsMeters.toFixed(2).replace(".", ",");
     });
 </script>

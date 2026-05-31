@@ -43,57 +43,49 @@ const jsonLd = {
 >
     <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
-    <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4 relative">
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-3xl">
-            </div>
-            <div
-                class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"
-            >
-            </div>
+    <div class="gpmd-page">
+        <div class="gpmd-bg">
+            <div class="gpmd-bg-blob gpmd-bg-red"></div>
+            <div class="gpmd-bg-blob gpmd-bg-green"></div>
         </div>
 
-        <div class="z-10 w-full max-w-3xl">
+        <div class="gpmd-content">
             <a
                 href="/gamebob/post-mortem/"
-                class="inline-flex items-center gap-2 text-gray-500 hover:text-white mb-8 transition-colors group"
+                class="gpmd-back"
             >
                 <Icon
                     name="mdi:arrow-left"
-                    class="w-5 h-5 group-hover:-translate-x-1 transition-transform"
+                    class="gpmd-back-icon"
                 />
                 Volver al muro de la vergüenza
             </a>
 
             <article
                 id="post-mortem-card"
-                class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden"
+                class="gpmd-card"
             >
-                <div class="absolute top-4 right-4 opacity-10 rotate-12 pointer-events-none z-20">
-                    <div
-                        class="border-4 border-red-500 text-red-500 font-black text-4xl px-4 py-2 uppercase tracking-widest rounded-lg"
-                    >
+                <div class="gpmd-badge-wrap">
+                    <div class="gpmd-badge">
                         Fallo
                     </div>
                 </div>
 
-                <header class="mb-10 relative z-10">
-                    <div class="flex items-center gap-3 text-sm text-gray-500 font-mono mb-4">
+                <header class="gpmd-header">
+                    <div class="gpmd-meta">
                         <time datetime={entry.date}>{entry.date}</time>
-                        <span>•</span>
-                        <span class="text-red-400">ID: {entry.id}</span>
+                        <span class="gpmd-dot">•</span>
+                        <span class="gpmd-id">ID: {entry.id}</span>
                     </div>
-                    <h1 class="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                    <h1 class="gpmd-title">
                         {entry.title}
                     </h1>
 
                     {
                         entry.tags && (
-                            <div class="flex flex-wrap gap-2 mb-8">
+                            <div class="gpmd-tags">
                                 {entry.tags.map((tag) => (
-                                    <span class="px-3 py-1 rounded-full bg-white/5 text-gray-400 text-xs font-mono border border-white/5">
-                                        #{tag}
-                                    </span>
+                                    <span class="gpmd-tag">#{tag}</span>
                                 ))}
                             </div>
                         )
@@ -101,77 +93,66 @@ const jsonLd = {
 
                     {
                         imagePath && (
-                            <div class="w-full rounded-xl overflow-hidden border border-white/10 shadow-lg mb-8">
+                            <div class="gpmd-image-wrap">
                                 <img
                                     src={imagePath}
                                     alt={`Imagen del error: ${entry.title}`}
-                                    class="w-full h-auto object-cover max-h-[300px]"
+                                    class="gpmd-image"
                                 />
                             </div>
                         )
                     }
                 </header>
 
-                <div class="space-y-10">
-                    <section class="relative pl-6 border-l-2 border-red-500/30">
-                        <div
-                            class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-red-500"
-                        >
-                        </div>
-                        <h2
-                            class="text-red-400 font-mono text-sm uppercase tracking-widest mb-3 flex items-center gap-2"
-                        >
-                            <Icon name="mdi:alert-circle-outline" class="w-5 h-5" />
+                <div class="gpmd-sections">
+                    <section class="gpmd-section gpmd-section-error">
+                        <div class="gpmd-section-dot gpmd-dot-error"></div>
+                        <h2 class="gpmd-section-title gpmd-title-error">
+                            <Icon name="mdi:alert-circle-outline" class="gpmd-section-icon" />
                             Lo que hice mal (El Drama)
                         </h2>
-                        <p class="text-xl text-gray-200 leading-relaxed font-light">
+                        <p class="gpmd-section-text">
                             {entry.error}
                         </p>
                     </section>
 
-                    <section class="relative pl-6 border-l-2 border-emerald-500/30">
-                        <div
-                            class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-emerald-500"
-                        >
-                        </div>
-                        <h2
-                            class="text-emerald-400 font-mono text-sm uppercase tracking-widest mb-3 flex items-center gap-2"
-                        >
-                            <Icon name="mdi:lightbulb-on-outline" class="w-5 h-5" />
+                    <section class="gpmd-section gpmd-section-lesson">
+                        <div class="gpmd-section-dot gpmd-dot-lesson"></div>
+                        <h2 class="gpmd-section-title gpmd-title-lesson">
+                            <Icon name="mdi:lightbulb-on-outline" class="gpmd-section-icon" />
                             Lo que aprendí (La Redención)
                         </h2>
-                        <p class="text-xl text-gray-200 leading-relaxed font-light">
+                        <p class="gpmd-section-text">
                             {entry.lesson}
                         </p>
                     </section>
                     {
                         entry.codeSteps && (
-                            <section class="relative pl-6 border-l-2 border-blue-500/30">
-                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-blue-500" />
-                                <h2 class="text-blue-400 font-mono text-sm uppercase tracking-widest mb-6 flex items-center gap-2">
-                                    <Icon name="mdi:code-braces" class="w-5 h-5" />
+                            <section class="gpmd-section gpmd-section-code">
+                                <div class="gpmd-section-dot gpmd-dot-code" />
+                                <h2 class="gpmd-section-title gpmd-title-code">
+                                    <Icon name="mdi:code-braces" class="gpmd-section-icon" />
                                     La Solución (El Algoritmo)
                                 </h2>
 
-                                <div class="space-y-8">
+                                <div class="gpmd-code-steps">
                                     {entry.codeSteps.map((step, index) => (
-                                        <div class="space-y-3">
-                                            <h3 class="text-white font-bold text-lg flex items-center gap-2">
-                                                <span class="w-6 h-6 rounded bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-mono">
+                                        <div class="gpmd-step">
+                                            <h3 class="gpmd-step-title">
+                                                <span class="gpmd-step-num">
                                                     {index + 1}
                                                 </span>
                                                 {step.title.replace(`${index + 1}. `, "")}
                                             </h3>
-                                            <div class="bg-[#1e1e1e] rounded-lg overflow-hidden border border-white/10 shadow-xl">
-                                                <div
-                                                    class="bg-[#1e1e1e] rounded-lg border border-white/10 shadow-xl p-5 overflow-x-auto text-sm font-mono text-gray-300 text-left whitespace-pre"
+                                            <div class="gpmd-code-block">
+                                                <div class="gpmd-code"
                                                     set:text={step.code.join("\n")}
                                                 />
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                                <p class="mt-8 text-sm text-gray-400 italic leading-relaxed border-t border-white/5 pt-6">
+                                <p class="gpmd-code-note">
                                     Nota: Esta es una forma simplificada de mostrar la idea. Para
                                     una implementación final, prefiero tests más unitarios y
                                     verbosos que permitan un control total sobre cada caso de fallo.
@@ -181,20 +162,18 @@ const jsonLd = {
                     }
                 </div>
 
-                <div
-                    class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6"
-                >
-                    <div class="flex flex-col md:flex-row gap-4 flex-1">
+                <div class="gpmd-nav">
+                    <div class="gpmd-nav-inner">
                         {
                             prev && (
                                 <a
                                     href={`/gamebob/post-mortem/${prev.id}/`}
-                                    class="flex-1 p-4 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 transition-all group/nav"
+                                    class="gpmd-nav-link"
                                 >
-                                    <span class="text-[10px] text-gray-500 font-mono uppercase tracking-widest block mb-1">
+                                    <span class="gpmd-nav-label">
                                         Anterior
                                     </span>
-                                    <span class="text-white font-bold group-hover/nav:text-red-400 transition-colors line-clamp-1">
+                                    <span class="gpmd-nav-text">
                                         {prev.title}
                                     </span>
                                 </a>
@@ -204,12 +183,12 @@ const jsonLd = {
                             next && (
                                 <a
                                     href={`/gamebob/post-mortem/${next.id}/`}
-                                    class="flex-1 p-4 rounded-xl border border-white/5 bg-white/2 hover:bg-white/5 transition-all group/nav text-right"
+                                    class="gpmd-nav-link gpmd-nav-right"
                                 >
-                                    <span class="text-[10px] text-gray-500 font-mono uppercase tracking-widest block mb-1">
+                                    <span class="gpmd-nav-label">
                                         Siguiente
                                     </span>
-                                    <span class="text-white font-bold group-hover/nav:text-red-400 transition-colors line-clamp-1">
+                                    <span class="gpmd-nav-text">
                                         {next.title}
                                     </span>
                                 </a>
@@ -222,9 +201,9 @@ const jsonLd = {
                         data-share-title={`Post Mortem: ${entry.title}`}
                         data-share-target-id="post-mortem-card"
                         data-share-filename={`post-mortem-${entry.id}.webp`}
-                        class="flex items-center justify-center gap-2 px-6 py-4 bg-white text-black rounded-xl font-bold hover:bg-red-500 hover:text-white transition-all transform hover:scale-105"
+                        class="gpmd-share"
                     >
-                        <Icon name="mdi:share-variant" class="w-5 h-5" />
+                        <Icon name="mdi:share-variant" class="gpmd-share-icon" />
                         Compartir
                     </button>
                 </div>
@@ -236,3 +215,350 @@ const jsonLd = {
 <script>
     import "../../../utils/share";
 </script>
+
+<style>
+    .gpmd-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        position: relative;
+    }
+    .gpmd-bg {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+    }
+    .gpmd-bg-blob {
+        position: absolute;
+        width: 24rem;
+        height: 24rem;
+        border-radius: 9999px;
+        filter: blur(64px);
+    }
+    .gpmd-bg-red {
+        top: 25%;
+        left: 25%;
+        background: rgba(239, 68, 68, 0.05);
+    }
+    .gpmd-bg-green {
+        bottom: 25%;
+        right: 25%;
+        background: rgba(16, 185, 129, 0.05);
+    }
+    .gpmd-content {
+        z-index: 10;
+        width: 100%;
+        max-width: 48rem;
+    }
+    .gpmd-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6b7280;
+        margin-bottom: 2rem;
+        transition: color 0.3s;
+    }
+    .gpmd-back:hover {
+        color: #fff;
+    }
+    .gpmd-back-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        transition: transform 0.3s;
+    }
+    .gpmd-back:hover .gpmd-back-icon {
+        transform: translateX(-0.25rem);
+    }
+    .gpmd-card {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+    @media (min-width: 768px) {
+        .gpmd-card {
+            padding: 3rem;
+        }
+    }
+    .gpmd-badge-wrap {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        opacity: 0.1;
+        transform: rotate(12deg);
+        pointer-events: none;
+        z-index: 20;
+    }
+    .gpmd-badge {
+        border: 4px solid #ef4444;
+        color: #ef4444;
+        font-weight: 900;
+        font-size: 2.25rem;
+        padding: 0.5rem 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 0.5rem;
+    }
+    .gpmd-header {
+        margin-bottom: 2.5rem;
+        position: relative;
+        z-index: 10;
+    }
+    .gpmd-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.875rem;
+        color: #6b7280;
+        font-family: ui-monospace, monospace;
+        margin-bottom: 1rem;
+    }
+    .gpmd-dot { color: #6b7280; }
+    .gpmd-id { color: #f87171; }
+    .gpmd-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 1.5rem;
+        line-height: 1.25;
+    }
+    @media (min-width: 768px) {
+        .gpmd-title {
+            font-size: 3rem;
+        }
+    }
+    .gpmd-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    .gpmd-tag {
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #9ca3af;
+        font-size: 0.75rem;
+        font-family: ui-monospace, monospace;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .gpmd-image-wrap {
+        width: 100%;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    .gpmd-image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        max-height: 300px;
+        display: block;
+    }
+    .gpmd-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+    .gpmd-section {
+        position: relative;
+        padding-left: 1.5rem;
+        border-left-width: 2px;
+        border-left-style: solid;
+    }
+    .gpmd-section-error { border-color: rgba(239, 68, 68, 0.3); }
+    .gpmd-section-lesson { border-color: rgba(16, 185, 129, 0.3); }
+    .gpmd-section-code { border-color: rgba(59, 130, 246, 0.3); }
+    .gpmd-section-dot {
+        position: absolute;
+        left: -9px;
+        top: 0;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 9999px;
+        background: #0f172a;
+        border-width: 2px;
+        border-style: solid;
+    }
+    .gpmd-dot-error { border-color: #ef4444; }
+    .gpmd-dot-lesson { border-color: #10b981; }
+    .gpmd-dot-code { border-color: #3b82f6; }
+    .gpmd-section-title {
+        font-family: ui-monospace, monospace;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .gpmd-title-error { color: #f87171; }
+    .gpmd-title-lesson { color: #34d399; }
+    .gpmd-title-code { color: #60a5fa; }
+    .gpmd-section-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    .gpmd-section-text {
+        font-size: 1.25rem;
+        color: #e5e7eb;
+        line-height: 1.625;
+        font-weight: 300;
+    }
+    .gpmd-code-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .gpmd-step {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    .gpmd-step-title {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.125rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .gpmd-step-num {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 0.25rem;
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-family: ui-monospace, monospace;
+    }
+    .gpmd-code-block {
+        background: #1e1e1e;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .gpmd-code {
+        background: #1e1e1e;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        padding: 1.25rem;
+        overflow-x: auto;
+        font-size: 0.875rem;
+        font-family: ui-monospace, monospace;
+        color: #d1d5db;
+        text-align: left;
+        white-space: pre;
+    }
+    .gpmd-code-note {
+        margin-top: 2rem;
+        font-size: 0.875rem;
+        color: #9ca3af;
+        font-style: italic;
+        line-height: 1.625;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: 1.5rem;
+    }
+    .gpmd-nav {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        .gpmd-nav {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+    .gpmd-nav-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        flex: 1;
+    }
+    @media (min-width: 768px) {
+        .gpmd-nav-inner {
+            flex-direction: row;
+            gap: 1rem;
+        }
+    }
+    .gpmd-nav-link {
+        flex: 1;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.02);
+        transition: all 0.3s;
+        display: block;
+    }
+    .gpmd-nav-link:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    .gpmd-nav-right {
+        text-align: right;
+    }
+    .gpmd-nav-label {
+        font-size: 0.625rem;
+        color: #6b7280;
+        font-family: ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    .gpmd-nav-text {
+        color: #fff;
+        font-weight: 700;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: color 0.3s;
+    }
+    .gpmd-nav-link:hover .gpmd-nav-text {
+        color: #f87171;
+    }
+    .gpmd-share {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem;
+        background: #fff;
+        color: #000;
+        border-radius: 0.75rem;
+        font-weight: 700;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    .gpmd-share:hover {
+        background: #ef4444;
+        color: #fff;
+        transform: scale(1.05);
+    }
+    .gpmd-share-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+</style>

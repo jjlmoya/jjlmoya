@@ -7,61 +7,41 @@ const { side } = Astro.props;
 
 {
     side === "left" ? (
-        <div class="flex items-center justify-center h-full w-full relative overflow-hidden bg-[#0c0a09]">
-            <div class="relative w-full h-full flex items-center justify-center p-8">
-                <div class="relative w-64 h-64 md:w-72 md:h-72">
-                    <div class="absolute inset-0 rounded-full border border-[#292524] bg-[#0c0a09] shadow-2xl" />
-
-                    <div
-                        class="absolute inset-0 rounded-full opacity-80"
-                        style="background: conic-gradient(from 180deg, #172554 0deg, #3b82f6 120deg, transparent 120deg);"
-                    />
-
-                    <div
-                        class="absolute inset-0 rounded-full overflow-hidden"
-                        style="clip-path: polygon(50% 50%, 50% 100%, 0% 75%, 0% 25%, 15% 0%); transform: rotate(180deg);"
-                    >
-                        <div class="absolute top-1/2 left-1/2 w-1 h-1 bg-white rounded-full animate-pulse" />
-                        <div class="absolute top-3/4 left-1/3 w-0.5 h-0.5 bg-blue-200 rounded-full animate-pulse delay-75" />
-                        <div class="absolute top-2/3 left-1/4 w-1 h-1 bg-white/80 rounded-full animate-pulse delay-150" />
-                        <div class="absolute top-1/3 left-1/2 w-0.5 h-0.5 bg-white rounded-full animate-pulse delay-300" />
+        <div class="lb-page-visual-container">
+            <div class="lb-page-sleep-wrapper">
+                <div class="lb-page-sleep-dial">
+                    <div class="lb-page-sleep-bg-circle" />
+                    <div class="lb-page-sleep-conic" />
+                    <div class="lb-page-sleep-stars">
+                        <div class="lb-page-sleep-star star-1" />
+                        <div class="lb-page-sleep-star star-2" />
+                        <div class="lb-page-sleep-star star-3" />
+                        <div class="lb-page-sleep-star star-4" />
                     </div>
-
-                    <div class="absolute inset-6 md:inset-8 rounded-full bg-[#0c0a09] flex items-center justify-center border border-[#292524] z-10 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
-                        <div class="text-center">
-                            <span class="block text-3xl md:text-4xl font-bold text-blue-200 font-variant-numeric">
-                                ~33%
-                            </span>
-                            <span class="block text-[10px] md:text-xs uppercase tracking-widest text-blue-400/60 mt-1">
-                                Inconsciente
-                            </span>
+                    <div class="lb-page-sleep-inner-circle">
+                        <div class="lb-page-sleep-center-text">
+                            <span class="lb-page-sleep-pct">~33%</span>
+                            <span class="lb-page-sleep-label">Inconsciente</span>
                         </div>
                     </div>
-
-                    <div class="absolute -inset-4 rounded-full border border-blue-500/10 border-dashed animate-spin-slow pointer-events-none" />
+                    <div class="lb-page-sleep-outer-dashed animate-spin-slow" />
                 </div>
             </div>
         </div>
     ) : (
-        <div class="flex flex-col items-center justify-center h-full text-center space-y-6 max-w-md mx-auto">
-            <h3 class="font-serif text-3xl text-blue-400/60 uppercase tracking-widest">
+        <div class="lb-page-text-container">
+            <h3 class="lb-page-title-colored lb-page-title-blue">
                 El Letargo
             </h3>
 
-            <div class="space-y-2">
-                <div
-                    class="font-variant-numeric tabular-nums text-4xl md:text-5xl font-bold text-[#e7e5e4]"
-                    id="sleep-hours"
-                >
+            <div>
+                <div class="lb-page-counter-small" id="sleep-hours">
                     0
                 </div>
-                <div class="text-sm text-[#e7e5e4]/40 uppercase tracking-wider">Horas Dormidas</div>
+                <div class="lb-page-counter-label">Horas Dormidas</div>
             </div>
 
-            <p
-                class="text-xl leading-relaxed text-[#e7e5e4]"
-                style="font-family: 'Cinzel', serif; font-variant: small-caps;"
-            >
+            <p class="lb-page-quote">
                 PASÁIS UN TERCIO DE LA EXISTENCIA INCONSCIENTES. Y LUEGO OS QUEJÁIS DE QUE LA VIDA
                 ES CORTA. CURIOSA GESTIÓN DEL TIEMPO.
             </p>
@@ -70,30 +50,180 @@ const { side } = Astro.props;
 }
 
 <style>
-    @keyframes spin-slow {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
+    .lb-page-sleep-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .lb-page-sleep-dial {
+        position: relative;
+        width: 16rem;
+        height: 16rem;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    @media (min-width: 768px) {
+        .lb-page-sleep-dial {
+            width: 18rem;
+            height: 18rem;
         }
     }
-    .animate-spin-slow {
-        animation: spin-slow 60s linear infinite;
+
+    .lb-page-sleep-bg-circle {
+        position: absolute;
+        inset: 0;
+        border-radius: 9999px;
+        border: 1px solid #292524;
+        background-color: #0c0a09;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .lb-page-sleep-conic {
+        position: absolute;
+        inset: 0;
+        border-radius: 9999px;
+        opacity: 0.8;
+        background: conic-gradient(from 180deg, #172554 0deg, #3b82f6 120deg, transparent 120deg);
+    }
+
+    .lb-page-sleep-stars {
+        position: absolute;
+        inset: 0;
+        border-radius: 9999px;
+        overflow: hidden;
+        clip-path: polygon(50% 50%, 50% 100%, 0% 75%, 0% 25%, 15% 0%);
+        transform: rotate(180deg);
+    }
+
+    .lb-page-sleep-star {
+        position: absolute;
+        border-radius: 9999px;
+        background-color: #ffffff;
+        animation: lb-pulse 2s infinite;
+    }
+
+    .lb-page-sleep-star.star-1 {
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+    }
+
+    .lb-page-sleep-star.star-2 {
+        top: 75%;
+        left: 33.333%;
+        width: 2px;
+        height: 2px;
+        animation-delay: 75ms;
+        background-color: #bfdbfe;
+    }
+
+    .lb-page-sleep-star.star-3 {
+        top: 66.666%;
+        left: 25%;
+        width: 4px;
+        height: 4px;
+        animation-delay: 150ms;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .lb-page-sleep-star.star-4 {
+        top: 33.333%;
+        left: 50%;
+        width: 2px;
+        height: 2px;
+        animation-delay: 300ms;
+    }
+
+    .lb-page-sleep-inner-circle {
+        position: absolute;
+        inset: 1.5rem;
+        border-radius: 9999px;
+        background-color: #0c0a09;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #292524;
+        z-index: 10;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    @media (min-width: 768px) {
+        .lb-page-sleep-inner-circle {
+            inset: 2rem;
+        }
+    }
+
+    .lb-page-sleep-center-text {
+        text-align: center;
+    }
+
+    .lb-page-sleep-pct {
+        display: block;
+        font-size: 1.875rem;
+        font-weight: bold;
+        color: #bfdbfe;
+        font-variant-numeric: normal;
+    }
+
+    @media (min-width: 768px) {
+        .lb-page-sleep-pct {
+            font-size: 2.25rem;
+        }
+    }
+
+    .lb-page-sleep-label {
+        display: block;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(96, 165, 250, 0.6);
+        margin-top: 0.25rem;
+    }
+
+    @media (min-width: 768px) {
+        .lb-page-sleep-label {
+            font-size: 0.75rem;
+        }
+    }
+
+    .lb-page-sleep-outer-dashed {
+        position: absolute;
+        top: -1rem;
+        right: -1rem;
+        bottom: -1rem;
+        left: -1rem;
+        border-radius: 9999px;
+        border: 1px dashed rgba(59, 130, 246, 0.1);
+        pointer-events: none;
+        animation: lb-spin-slow 60s linear infinite;
+    }
+
+    @keyframes lb-spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes lb-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
     }
 </style>
 
 <script>
     import { calculateSleepStats } from "../../../../utils/libraryLogic";
-
     const hoursEl = document.getElementById("sleep-hours");
 
     document.addEventListener("update-life-stats", (e: any) => {
         const { stats } = e.detail;
         if (!hoursEl || !stats) return;
-
         const { hoursSlept } = calculateSleepStats(stats.hoursAlive);
-
         hoursEl.innerText = hoursSlept.toLocaleString();
     });
 </script>

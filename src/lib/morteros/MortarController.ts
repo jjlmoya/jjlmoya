@@ -31,7 +31,6 @@ export class MortarController {
     };
 
     constructor() {
-        console.log("MortarController constructor called");
         this.elements = {
             columnSections: document.querySelectorAll(".column-section"),
             phaseName: document.getElementById("phase-name"),

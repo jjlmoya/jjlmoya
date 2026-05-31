@@ -12,12 +12,12 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
 ---
 
 <div
-    class="death-dialogue-container font-serif text-xl md:text-2xl leading-relaxed tracking-wide text-[#e7e5e4] max-w-2xl mx-auto text-center min-h-[100px] flex items-center justify-center"
+    class="dd-container"
     data-auto-start={autoStart.toString()}
     data-speed={speed}
     data-delay={delay}
 >
-    <p class="death-text transition-opacity duration-500">
+    <p class="dd-text">
         {
             text.split(/<br\s*\/?>/i).map((part, index, array) => (
                 <>
@@ -26,7 +26,7 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
                               .toUpperCase()
                               .split("")
                               .map((char) => (
-                                  <span class="death-anim-unit opacity-0 transition-opacity duration-75">
+                                  <span class="dd-unit dd-unit-char dd-hidden">
                                       {char === " " ? "\u00A0" : char}
                                   </span>
                               ))
@@ -34,7 +34,7 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
                               .toUpperCase()
                               .split(" ")
                               .map((word, wIndex, wArray) => (
-                                  <span class="death-anim-unit opacity-0 transition-all duration-700 ease-out">
+                                  <span class="dd-unit dd-unit-word dd-hidden">
                                       {word}
                                       {wIndex < wArray.length - 1 ? " " : ""}
                                   </span>
@@ -47,62 +47,104 @@ const { text, speed = 50, delay = 0, autoStart = true, mode = "char" } = Astro.p
 </div>
 
 <script is:inline>
-    document.addEventListener("DOMContentLoaded", () => {
-        const containers = document.querySelectorAll(".death-dialogue-container");
+    (() => {
+        const init = () => {
+            const containers = document.querySelectorAll(".dd-container");
 
-        containers.forEach((container) => {
-            if (container.hasAttribute("data-initialized")) return;
-            container.setAttribute("data-initialized", "true");
+            containers.forEach((container, index) => {
+                if (container.hasAttribute("data-initialized")) return;
+                container.setAttribute("data-initialized", "true");
 
-            const units = container.querySelectorAll(".death-anim-unit");
-            const speed = parseInt(container.getAttribute("data-speed") || "50");
-            const delay = parseInt(container.getAttribute("data-delay") || "0");
-            const autoStart = container.getAttribute("data-auto-start") === "true";
+                const units = container.querySelectorAll(".dd-unit");
+                const speed = parseInt(container.getAttribute("data-speed") || "50");
+                const delay = parseInt(container.getAttribute("data-delay") || "0");
+                const autoStart = container.getAttribute("data-auto-start") === "true";
 
-            const startTyping = () => {
-                units.forEach((c) => c.classList.add("opacity-0"));
+                const startTyping = () => {
+                    units.forEach((c) => c.classList.add("dd-hidden"));
 
-                setTimeout(() => {
-                    let i = 0;
-                    const revealUnit = () => {
-                        if (i < units.length) {
-                            units[i].classList.remove("opacity-0");
-                            i++;
-                            setTimeout(revealUnit, speed);
-                        } else {
-                            const event = new CustomEvent("dialogue-complete");
-                            container.dispatchEvent(event);
-                        }
-                    };
-                    revealUnit();
-                }, delay);
-            };
+                    setTimeout(() => {
+                        let i = 0;
+                        const revealUnit = () => {
+                            if (i < units.length) {
+                                units[i].classList.remove("dd-hidden");
+                                i++;
+                                setTimeout(revealUnit, speed);
+                            } else {
+                                const event = new CustomEvent("dialogue-complete");
+                                container.dispatchEvent(event);
+                            }
+                        };
+                        revealUnit();
+                    }, delay);
+                };
 
-            if (autoStart) {
-                startTyping();
-            }
+                if (autoStart) {
+                    startTyping();
+                }
 
-            container.addEventListener("start-typing", () => {
-                startTyping();
+                container.addEventListener("start-typing", () => {
+                    startTyping();
+                });
             });
-        });
-    });
+        };
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", init);
+        } else {
+            init();
+        }
+    })();
 </script>
 
 <style>
-    .death-text {
+    .dd-container {
+        font-family: serif;
+        font-size: 1.25rem;
+        line-height: 1.625;
+        letter-spacing: 0.025em;
+        color: #e7e5e4;
+        max-width: 42rem;
+        margin: 0 auto;
+        text-align: center;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+        .dd-container {
+            font-size: 1.5rem;
+        }
+    }
+
+    .dd-text {
         font-family: "Cinzel", serif;
         font-variant: small-caps;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        transition: opacity 0.5s;
     }
 
-    .death-anim-unit.opacity-0 {
-        filter: blur(8px);
-        transform: scale(0.95);
-    }
-
-    .death-anim-unit {
+    .dd-unit {
+        transition-property: opacity, filter, transform;
+        transition-timing-function: ease-out;
         filter: blur(0);
         transform: scale(1);
+        opacity: 1;
+    }
+
+    .dd-unit-char {
+        transition-duration: 75ms;
+    }
+
+    .dd-unit-word {
+        transition-duration: 700ms;
+    }
+
+    .dd-hidden {
+        opacity: 0 !important;
+        filter: blur(8px) !important;
+        transform: scale(0.95) !important;
     }
 </style>

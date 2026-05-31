@@ -1,4 +1,5 @@
 ---
+import "./AppLinksBanner.css";
 import { Icon } from "astro-icon/components";
 import { ALL_APP_DEFINITIONS, type KnownLocale } from "@jjlmoya/apps";
 
@@ -52,96 +53,59 @@ const ios =
     (isGeneric ? "https://apps.apple.com/developer/juan-jose-lopez-moya/id1871275518" : "");
 
 const primaryColor = app?.theme.primary || "#6366f1";
-
-const theme = isGeneric
-    ? {
-          bg: "bg-slate-50 dark:bg-zinc-950",
-          text: "text-slate-900 dark:text-white",
-          heading: "text-slate-900 dark:text-white",
-          subtitle: "text-slate-500 dark:text-zinc-400",
-          border: "border-slate-200 dark:border-zinc-800",
-          badge: "bg-indigo-50 text-indigo-600 border-indigo-100 dark:bg-indigo-950/30 dark:text-indigo-400 dark:border-indigo-900/50",
-          shine: "via-indigo-500/5",
-          glowOpacity: "opacity-5",
-          backdrop: "bg-white/40 dark:bg-black/40",
-          btnText: "text-white",
-          btnSecondaryBg: "bg-slate-900 text-white hover:bg-black dark:bg-white dark:text-black",
-      }
-    : {
-          bg: "bg-slate-900 dark:bg-black",
-          text: "text-white",
-          heading: "text-white",
-          subtitle: "text-white/50",
-          border: "border-white/10",
-          badge: "bg-white/10 text-white border-white/10",
-          shine: "via-white/5",
-          glowOpacity: "opacity-20",
-          backdrop: "bg-black/40",
-          btnText: "text-white",
-          btnSecondaryBg: "bg-white text-black hover:bg-zinc-100",
-      };
 ---
 
 <div
-    class={`w-full ${theme.bg} pt-6 pb-2 md:pt-5 md:pb-2.5 px-4 sm:px-6 relative overflow-hidden group border-b ${theme.border} shadow-2xl transition-colors duration-500`}
+    class={`alb-bar ${isGeneric ? "alb-bar--generic" : "alb-bar--app"}`}
     style={`--app-primary: ${primaryColor}`}
 >
-    <div class="absolute inset-0 pointer-events-none overflow-hidden text-black">
+    <div class="alb-glow-wrap">
         <div
-            class={`absolute top-[-50%] left-[-10%] w-[80%] h-[200%] ${theme.glowOpacity} blur-[80px] rounded-full animate-pulse-slow`}
-            style={`background: var(--app-primary);`}
+            class="alb-glow"
+            style="background: var(--app-primary);"
         >
         </div>
-        <div
-            class={`absolute bottom-[-50%] right-[-10%] w-[60%] h-[180%] bg-blue-500/20 blur-[100px] rounded-full animate-pulse-slow-delay`}
-        >
-        </div>
+        <div class="alb-glow-secondary"></div>
     </div>
 
-    <div class={`absolute inset-0 ${theme.backdrop} backdrop-blur-md`}></div>
+    <div class="alb-backdrop"></div>
 
-    <div
-        class="max-w-7xl md:max-w-4xl mx-auto flex flex-row items-center justify-start md:justify-center gap-3 sm:gap-6 relative z-10"
-    >
-        <div class="relative group/icon flex-shrink-0 flex -space-x-5 sm:-space-x-6">
+    <div class="alb-inner">
+        <div class="alb-icon-wrapper">
             {
                 isGeneric ? (
                     apps.slice(0, 3).map((a, i) => (
                         <div
-                            class="relative"
-                            style={`z-index: ${10 - i}; transform: translateY(${(i - 1) * 4}px)`}
+                            class="alb-stacked-icon"
+                            style={`z-index: ${10 - i}`}
                         >
                             <img
                                 src={a.media.icon}
                                 alt=""
-                                class="w-6 h-6 sm:w-8 sm:h-8 rounded-lg shadow-lg border border-white/20 dark:border-white/10"
+                                class="alb-generic-icon"
                             />
                         </div>
                     ))
                 ) : app ? (
-                    <div class="relative">
-                        <div
-                            class={`absolute -inset-1 bg-[var(--app-primary)] opacity-30 blur-md rounded-xl group-hover/icon:opacity-50 transition-opacity duration-500`}
-                        />
+                    <div class="alb-app-icon-wrap">
+                        <div class="alb-app-icon-glow" />
                         <img
                             src={app.media.icon}
                             alt={app.title}
-                            class={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10 shadow-lg border border-white/20 transition-transform duration-500 group-hover/icon:scale-105`}
+                            class="alb-app-icon"
                         />
                     </div>
                 ) : (
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 p-2.5 bg-white/10 rounded-xl backdrop-blur-sm border border-white/10 flex items-center justify-center">
-                        <Icon name="mdi:cellphone" class="w-full h-full text-indigo-400" />
+                    <div class="alb-fallback-icon-wrap">
+                        <Icon name="mdi:cellphone" class="alb-fallback-icon" />
                     </div>
                 )
             }
         </div>
 
-        <div class="min-w-0 py-0.5 ml-2 sm:ml-0">
-            <div class="flex items-center gap-2 mb-0.5">
-                <h3
-                    class={`font-black text-[10px] sm:text-sm tracking-tight ${theme.heading} leading-none sm:truncate`}
-                >
+        <div class="alb-text-content">
+            <div class="alb-heading-row">
+                <h3 class="alb-heading">
                     {
                         isGeneric
                             ? "Mis mejores utilidades, ahora en tu móvil."
@@ -152,17 +116,13 @@ const theme = isGeneric
                 </h3>
                 {
                     !isGeneric && (
-                        <span
-                            class={`inline-flex items-center px-1 py-0.5 rounded text-[6px] sm:text-[8px] font-black uppercase tracking-widest ${theme.badge} border backdrop-blur-md whitespace-nowrap`}
-                        >
+                        <span class="alb-badge">
                             Nativa
                         </span>
                     )
                 }
             </div>
-            <p
-                class={`text-[9px] sm:text-xs ${theme.subtitle} font-medium leading-tight line-clamp-2 max-w-sm sm:max-w-xl`}
-            >
+            <p class="alb-subtitle">
                 {
                     isGeneric
                         ? "Accede a todas mis herramientas y proyectos de forma rápida, optimizada y en un solo lugar."
@@ -172,22 +132,20 @@ const theme = isGeneric
             </p>
         </div>
 
-        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <div class="alb-buttons">
             {
                 android && (
                     <a
                         href={android}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center justify-center bg-black text-white border border-white/20 hover:bg-zinc-900 transition-colors w-9 h-9 rounded-full sm:w-auto sm:h-[42px] sm:px-4 sm:rounded-lg sm:gap-2"
+                        class="alb-store-btn"
                         title="Disponible en Google Play"
                     >
-                        <Icon name="mdi:google-play" class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        <div class="hidden sm:flex flex-col items-start justify-center leading-none">
-                            <span class="text-[10px] uppercase font-medium opacity-80">
-                                Disponible en
-                            </span>
-                            <span class="text-sm font-bold tracking-tight">Google Play</span>
+                        <Icon name="mdi:google-play" class="alb-store-icon" />
+                        <div class="alb-store-text">
+                            <span class="alb-store-label">Disponible en</span>
+                            <span class="alb-store-name">Google Play</span>
                         </div>
                     </a>
                 )
@@ -198,28 +156,24 @@ const theme = isGeneric
                         href={ios}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center justify-center bg-black text-white border border-white/20 hover:bg-zinc-900 transition-colors w-9 h-9 rounded-full sm:w-auto sm:h-[42px] sm:px-4 sm:rounded-lg sm:gap-2"
+                        class="alb-store-btn"
                         title="Consíguelo en el App Store"
                     >
-                        <Icon name="mdi:apple" class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        <div class="hidden sm:flex flex-col items-start justify-center leading-none">
-                            <span class="text-[10px] bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 font-medium">
-                                Consíguelo en el
-                            </span>
-                            <span class="text-sm font-bold tracking-tight">App Store</span>
+                        <Icon name="mdi:apple" class="alb-store-icon" />
+                        <div class="alb-store-text">
+                            <span class="alb-store-label">Consíguelo en el</span>
+                            <span class="alb-store-name">App Store</span>
                         </div>
                     </a>
                 ) : (
                     <div
-                        class="flex items-center justify-center bg-black text-white border border-white/5 cursor-not-allowed w-9 h-9 rounded-full sm:w-auto sm:h-[42px] sm:px-4 sm:rounded-lg sm:gap-2 opacity-10 grayscale"
+                        class="alb-store-btn alb-store-btn--disabled"
                         title="Próximamente en el App Store"
                     >
-                        <Icon name="mdi:apple" class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                        <div class="hidden sm:flex flex-col items-start justify-center leading-none">
-                            <span class="text-[10px] font-medium opacity-40">Consíguelo en el</span>
-                            <span class="text-sm font-bold tracking-tight opacity-40">
-                                App Store
-                            </span>
+                        <Icon name="mdi:apple" class="alb-store-icon" />
+                        <div class="alb-store-text">
+                            <span class="alb-store-label">Consíguelo en el</span>
+                            <span class="alb-store-name">App Store</span>
                         </div>
                     </div>
                 )
@@ -228,42 +182,4 @@ const theme = isGeneric
     </div>
 </div>
 
-<style>
-    @keyframes pulse-slow {
-        0%,
-        100% {
-            opacity: 0.15;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.25;
-            transform: scale(1.1);
-        }
-    }
-    .animate-pulse-slow {
-        animation: pulse-slow 8s ease-in-out infinite;
-    }
-    .animate-pulse-slow-delay {
-        animation: pulse-slow 8s ease-in-out infinite 4s;
-    }
-    @keyframes shine {
-        0% {
-            transform: translateX(-100%) skewX(-20deg);
-        }
-        20%,
-        100% {
-            transform: translateX(200%) skewX(-20deg);
-        }
-    }
-    .animate-shine {
-        animation: shine 5s infinite;
-    }
-    a {
-        text-decoration: none;
-        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
-    }
-    a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.4);
-    }
-</style>
+
