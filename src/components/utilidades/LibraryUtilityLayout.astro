@@ -1,7 +1,6 @@
 ---
 import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import UtilityHeader from "./UtilityHeader.astro";
-import { getCategoryKeyForTool } from "../../i18n/toolRegistry";
 import { getUtilityAlternates } from "../../i18n/gamebob";
 
 interface Props {
@@ -11,9 +10,10 @@ interface Props {
         SEOComponent: any;
         BibliographyComponent: any;
     };
+    categoryKey: string;
 }
 
-const { tool } = Astro.props;
+const { tool, categoryKey } = Astro.props;
 const { entry } = tool;
 
 type ComponentLoader = () => Promise<{ default: any }>;
@@ -29,9 +29,8 @@ const titleBase = words.slice(1).join(" ");
 
 const image = content.slug;
 
-const categoryKey = getCategoryKeyForTool(tool);
 const alternateUrls = categoryKey ? await getUtilityAlternates(tool, categoryKey) : [];
-const cssHref = categoryKey ? `/styles/lib/${categoryKey}/${enContent.slug}.css` : undefined;
+const cssHref = `/styles/lib/${categoryKey}/${enContent.slug}.css`;
 ---
 
 <LayoutUtility

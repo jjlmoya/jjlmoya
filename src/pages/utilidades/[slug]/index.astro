@@ -5,17 +5,17 @@ import LibraryUtilityLayout from "../../../components/utilidades/LibraryUtilityL
 
 export async function getStaticPaths() {
     const allTools = await getAllRegisteredTools();
-    const paths: Array<{ params: { slug: string }; props: { tool: unknown } }> = [];
+    const paths: Array<{ params: { slug: string }; props: { tool: unknown; categoryKey: string } }> = [];
 
     await Promise.all(
-        allTools.map(async ([tool]) => {
+        allTools.map(async ([tool, categoryKey]) => {
             const toolDef = tool as {
                 entry: { i18n: Record<string, () => Promise<{ slug: string }>> };
             };
             const content = await toolDef.entry.i18n.es!();
             paths.push({
                 params: { slug: content.slug },
-                props: { tool },
+                props: { tool, categoryKey },
             });
         })
     );
@@ -23,7 +23,6 @@ export async function getStaticPaths() {
     return paths;
 }
 
-const { tool } = Astro.props as { tool: { entry: any; Component: any; SEOComponent: any; BibliographyComponent: any } };
+const { tool, categoryKey } = Astro.props as { tool: { entry: any; Component: any; SEOComponent: any; BibliographyComponent: any }; categoryKey: string };
 ---
-
-<LibraryUtilityLayout tool={tool} />
+<LibraryUtilityLayout tool={tool} categoryKey={categoryKey} />

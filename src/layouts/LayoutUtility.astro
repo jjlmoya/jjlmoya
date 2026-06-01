@@ -178,9 +178,11 @@ const hasBanner = !isWidget;
 
         const theme = urlParams.get("theme");
         if (theme === "dark") {
-            document.documentElement.classList.add("dark");
+            document.documentElement.classList.add("theme-dark", "dark");
+            document.documentElement.classList.remove("theme-light");
         } else if (theme === "light") {
-            document.documentElement.classList.remove("dark");
+            document.documentElement.classList.add("theme-light");
+            document.documentElement.classList.remove("theme-dark", "dark");
         }
 
         const id =
@@ -242,7 +244,9 @@ const hasBanner = !isWidget;
     body.is-widget .utility-header-area,
     body.is-widget [slot="header"],
     body.is-widget .BackToUtilities,
-    body.is-widget .prose {
+    body.is-widget .prose,
+    body.is-widget .utility-banner-sticky,
+    body.is-widget .sticky-banner {
         display: none !important;
     }
 
@@ -261,17 +265,34 @@ const hasBanner = !isWidget;
         margin-top: 0 !important;
     }
 
-    body.is-widget .utility-tool-container {
+    body.is-widget .utility-tool-container,
+    body.is-widget .utility-tool-container > div:first-child {
         margin-top: 0 !important;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
+        border: none !important;
+        background: transparent !important;
+    }
+
+    body.is-widget .utility-tool-container [class*="max-w-"],
+    body.is-widget .utility-tool-container [class*="mx-auto"] {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    body.is-widget .utility-tool-container [class*="shadow-"],
+    body.is-widget .utility-tool-container [class*="border"] {
+        box-shadow: none !important;
+        border-color: transparent !important;
     }
 
     body.is-widget .utility-main-wrapper {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
     }
 
     body.is-widget .utility-layout-wrapper,
