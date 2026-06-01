@@ -70,6 +70,23 @@ const schema = currentApp ? {
 <!doctype html>
 <html lang="es" class="scroll-smooth">
     <head>
+        <script is:inline>
+            (function() {
+                const applyTheme = () => {
+                    const theme = localStorage.getItem("theme") || "theme-light";
+                    const root = document.documentElement;
+                    if (theme === "theme-dark") {
+                        root.classList.add("theme-dark", "dark");
+                        root.classList.remove("theme-light");
+                    } else {
+                        root.classList.add("theme-light");
+                        root.classList.remove("theme-dark", "dark");
+                    }
+                };
+                applyTheme();
+                document.addEventListener("astro:after-swap", applyTheme);
+            })();
+        </script>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" href={favicon} />

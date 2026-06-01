@@ -165,24 +165,33 @@ const concepts = [
     </div>
 </Layout>
 
-
-
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    let cleanup: (() => void) | null = null;
+
+    const initStardust = () => {
         const canvas = document.getElementById("stardust") as HTMLCanvasElement;
         if (!canvas) return;
 
-        const ctx = canvas.getContext("2d");
+        if (cleanup) {
+            cleanup();
+        }
 
+        const ctx = canvas.getContext("2d");
         let width = 0;
         let height = 0;
         let particles: Star[] = [];
         const mouse = { x: 0, y: 0 };
-        
-        let targetColor = { r: 220, g: 220, b: 230 };
+        let animationFrameId: number;
+
+        const getBaseColor = () => {
+            const isDark = document.documentElement.classList.contains("dark") || document.documentElement.classList.contains("theme-dark");
+            return isDark ? { r: 220, g: 220, b: 230 } : { r: 100, g: 116, b: 139 };
+        };
+
+        let targetColor = getBaseColor();
         const currentColor = { ...targetColor };
 
-        const PARTICLE_COUNT = 150; 
+        const PARTICLE_COUNT = 150;
 
         class Star {
             x: number;
@@ -200,7 +209,7 @@ const concepts = [
             }
 
             update() {
-                this.y -= 0.05 * (1 / this.z); 
+                this.y -= 0.05 * (1 / this.z);
 
                 if (this.y < 0) this.y = height;
                 if (this.x < 0) this.x = width;
@@ -250,34 +259,59 @@ const concepts = [
                 p.draw(offsetX, offsetY);
             });
 
-            requestAnimationFrame(animate);
+            animationFrameId = requestAnimationFrame(animate);
         }
 
-        window.addEventListener("resize", () => {
+        const handleResize = () => {
             resize();
             init();
-        });
+        };
 
-        window.addEventListener("mousemove", (e) => {
+        const handleMouseMove = (e: MouseEvent) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
-        });
+        };
+
+        window.addEventListener("resize", handleResize);
+        window.addEventListener("mousemove", handleMouseMove);
 
         const cards = document.querySelectorAll(".concept-card");
+        const cardListeners: Array<{ card: Element, enter: () => void, leave: () => void }> = [];
+
         cards.forEach((card) => {
-            card.addEventListener("mouseenter", () => {
+            const enter = () => {
                 const color = card.getAttribute("data-color");
                 if (color) {
                     const [r, g, b] = color.split(",").map(Number);
                     targetColor = { r, g, b };
                 }
-            });
-
-            card.addEventListener("mouseleave", () => {
-                targetColor = { r: 220, g: 220, b: 230 };
-            });
+            };
+            const leave = () => {
+                targetColor = getBaseColor();
+            };
+            card.addEventListener("mouseenter", enter);
+            card.addEventListener("mouseleave", leave);
+            cardListeners.push({ card, enter, leave });
         });
 
         init();
-    });
+
+        cleanup = () => {
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("mousemove", handleMouseMove);
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            cardListeners.forEach(({ card, enter, leave }) => {
+                card.removeEventListener("mouseenter", enter);
+                card.removeEventListener("mouseleave", leave);
+            });
+        };
+    };
+
+    document.addEventListener("astro:page-load", initStardust);
 </script>
+
+
+
+

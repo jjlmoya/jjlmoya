@@ -1,0 +1,102 @@
+---
+import "./ThemeToggle.css";
+---
+
+<button
+    class="theme-toggle-btn"
+    aria-label="Cambiar tema"
+    title="Cambiar tema"
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="sun-icon"
+    >
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="m4.93 4.93 1.41 1.41"></path>
+        <path d="m17.66 17.66 1.41 1.41"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="m6.34 17.66-1.41 1.41"></path>
+        <path d="m19.07 4.93-1.41 1.41"></path>
+    </svg>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="moon-icon"
+    >
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+    </svg>
+</button>
+
+<script>
+    const applyStoredTheme = () => {
+        const currentTheme = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "theme-light";
+        const root = document.documentElement;
+        if (currentTheme === "theme-dark") {
+            root.classList.add("theme-dark", "dark");
+            root.classList.remove("theme-light");
+        } else {
+            root.classList.add("theme-light");
+            root.classList.remove("theme-dark", "dark");
+        }
+    };
+
+    const setupThemeToggle = () => {
+        const themeToggleBtns = document.querySelectorAll(".theme-toggle-btn");
+        
+        const getCurrentTheme = () => {
+            if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+                return localStorage.getItem("theme");
+            }
+            return "theme-light";
+        };
+
+        const setTheme = (theme: string) => {
+            const root = document.documentElement;
+            if (theme === "theme-dark") {
+                root.classList.remove("theme-light");
+                root.classList.add("theme-dark");
+                root.classList.add("dark");
+            } else {
+                root.classList.remove("theme-dark", "dark");
+                root.classList.add("theme-light");
+            }
+            localStorage.setItem("theme", theme);
+        };
+
+        themeToggleBtns.forEach((btn) => {
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode?.replaceChild(newBtn, btn);
+
+            newBtn.addEventListener("click", () => {
+                const current = getCurrentTheme();
+                const nextTheme = current === "theme-dark" ? "theme-light" : "theme-dark";
+                setTheme(nextTheme);
+            });
+        });
+    };
+
+    applyStoredTheme();
+    setupThemeToggle();
+    document.addEventListener("astro:after-swap", () => {
+        applyStoredTheme();
+        setupThemeToggle();
+    });
+</script>

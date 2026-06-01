@@ -17,8 +17,25 @@ const { title, description, image } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es" class="dark">
+<html lang="es">
     <head>
+        <script is:inline>
+            (function() {
+                const applyTheme = () => {
+                    const theme = localStorage.getItem("theme") || "theme-light";
+                    const root = document.documentElement;
+                    if (theme === "theme-dark") {
+                        root.classList.add("theme-dark", "dark");
+                        root.classList.remove("theme-light");
+                    } else {
+                        root.classList.add("theme-light");
+                        root.classList.remove("theme-dark", "dark");
+                    }
+                };
+                applyTheme();
+                document.addEventListener("astro:after-swap", applyTheme);
+            })();
+        </script>
         <SEO title={title} description={description} image={image} />
     </head>
     <body class="gamebob-body">
@@ -28,7 +45,7 @@ const { title, description, image } = Astro.props;
             <div class="gamebob-bg-glow-3" style="animation-delay: 4s;"></div>
             <div
                 class="gamebob-bg-grid"
-                style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"
+                style="background-image: radial-gradient(circle at 2px 2px, var(--color-gamebob-grid) 1px, transparent 0); background-size: 40px 40px;"
             >
             </div>
         </div>

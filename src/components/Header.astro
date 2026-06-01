@@ -1,8 +1,7 @@
 ---
+import HeaderLight from "./HeaderLight.astro";
+import HeaderDark from "./HeaderDark.astro";
 import "./Header.css";
-
-const pathname = new URL(Astro.request.url).pathname;
-const currentPath = pathname.slice(1);
 
 interface Props {
     className?: string;
@@ -11,163 +10,64 @@ interface Props {
 const { className = "" } = Astro.props;
 ---
 
-<nav
-    class={`main-navigation ${className}`}
-    id="main-nav"
->
-    <div
-        class="navigation-container"
-    >
-        <a
-            href="/"
-            class="brand-link"
-            >jjlmoya</a
-        >
-
-        <div class="nav-links">
-            <a
-                href="/proyectos/"
-                class={`nav-item-link ${currentPath.startsWith("proyectos") ? "nav-active" : ""}`}
-                aria-current={currentPath.startsWith("proyectos") ? "page" : undefined}
-                data-astro-prefetch>proyectos</a
-            >
-            <a
-                href="/conceptos/"
-                class={`nav-item-link ${currentPath.startsWith("conceptos") ? "nav-active" : ""}`}
-                aria-current={currentPath.startsWith("conceptos") ? "page" : undefined}
-                data-astro-prefetch>conceptos</a
-            >
-            <a
-                href="/apps/"
-                class={`nav-item-link ${currentPath.startsWith("apps") ? "nav-active" : ""}`}
-                aria-current={currentPath.startsWith("apps") ? "page" : undefined}
-                data-astro-prefetch>apps</a
-            >
-            <a
-                href="/utilidades/"
-                class={`nav-item-link ${currentPath.startsWith("utilidades") ? "nav-active" : ""}`}
-                aria-current={currentPath.startsWith("utilidades") ? "page" : undefined}
-                data-astro-prefetch>utilidades</a
-            >
-            <a
-                href="/gamebob/"
-                class={`nav-item-link ${currentPath.startsWith("gamebob") ? "nav-active" : ""}`}
-                aria-current={currentPath.startsWith("gamebob") ? "page" : undefined}
-                data-astro-prefetch>gamebob</a
-            >
-            <a
-                href="/charlas/"
-                class={`nav-item-link ${currentPath.startsWith("charlas") ? "nav-active" : ""}`}
-                aria-current={currentPath.startsWith("charlas") ? "page" : undefined}
-                data-astro-prefetch>charlas</a
-            >
-
-            <div class="nav-divider"></div>
-
-            <div class="nav-actions">
-                <button
-                    id="header-search-btn"
-                    class="search-button"
-                    aria-label="Buscar (Ctrl + K / Espacio)"
-                    title="Buscar (Ctrl + K / Espacio)"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-search"
-                        ><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"
-                        ></path></svg
-                    >
-                </button>
-            </div>
-        </div>
-
-        <button
-            id="menu-toggle"
-            class="menu-toggle-button"
-            aria-label="Abrir Menú"
-        >
-            <span class="menu-toggle-line line-1"></span>
-            <span class="menu-toggle-line line-2"></span>
-        </button>
+<div class={`header-wrapper ${className}`}>
+    <div class="header-light-container">
+        <HeaderLight />
     </div>
-</nav>
-
-<div
-    id="mobile-menu-overlay"
-    class="mobile-overlay"
->
-    <div
-        class="mobile-overlay-content"
-    >
-        <a href="/proyectos/" class="menu-link" style="--delay: 0.1s">
-            <span class="link-number">01</span>
-            <span class="link-text">Proyectos</span>
-        </a>
-        <a href="/conceptos/" class="menu-link" style="--delay: 0.2s">
-            <span class="link-number">02</span>
-            <span class="link-text">Conceptos</span>
-        </a>
-        <a href="/apps/" class="menu-link" style="--delay: 0.3s">
-            <span class="link-number">03</span>
-            <span class="link-text">Apps</span>
-        </a>
-        <a href="/utilidades/" class="menu-link" style="--delay: 0.4s">
-            <span class="link-number">04</span>
-            <span class="link-text">Utilidades</span>
-        </a>
-        <a href="/gamebob/" class="menu-link" style="--delay: 0.5s">
-            <span class="link-number">05</span>
-            <span class="link-text">GameBob</span>
-        </a>
-        <a href="/charlas/" class="menu-link" style="--delay: 0.6s">
-            <span class="link-number">06</span>
-            <span class="link-text">Charlas</span>
-        </a>
+    <div class="header-dark-container">
+        <HeaderDark />
     </div>
 </div>
 
 <script>
-    function setupMenu() {
-        const menuToggle = document.getElementById("menu-toggle");
+    function setupHeader() {
         const body = document.body;
         const html = document.documentElement;
-        const menuLinks = document.querySelectorAll(".menu-link");
 
-        if (!menuToggle) return;
+        const setupMenuForContainer = (
+            toggleBtnSelector: string,
+            linksSelector: string,
+            overlaySelector: string
+        ) => {
+            const toggleBtns = document.querySelectorAll(toggleBtnSelector);
+            const overlay = document.querySelector(overlaySelector);
+            const links = document.querySelectorAll(linksSelector);
 
-        const newToggle = menuToggle.cloneNode(true);
-        menuToggle.parentNode?.replaceChild(newToggle, menuToggle);
+            toggleBtns.forEach((btn) => {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode?.replaceChild(newBtn, btn);
 
-        newToggle.addEventListener("click", (e) => {
-            e.stopPropagation();
-            body.classList.toggle("menu-open");
-            html.classList.toggle("menu-open");
-        });
+                newBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    body.classList.toggle("menu-open");
+                    html.classList.toggle("menu-open");
+                    overlay?.classList.toggle("menu-open");
+                    (newBtn as HTMLElement).classList.toggle("menu-open");
+                });
+            });
 
-        menuLinks.forEach((link) => {
-            link.addEventListener("click", () => {
-                body.classList.remove("menu-open");
-                html.classList.remove("menu-open");
+            links.forEach((link) => {
+                link.addEventListener("click", () => {
+                    body.classList.remove("menu-open");
+                    html.classList.remove("menu-open");
+                    overlay?.classList.remove("menu-open");
+                });
+            });
+        };
+
+        setupMenuForContainer(".menu-toggle-button-light", ".menu-link-light", ".mobile-overlay-light");
+        setupMenuForContainer(".menu-toggle-button-dark", ".menu-link-dark", ".mobile-overlay-dark");
+
+        const searchBtns = document.querySelectorAll(".search-button-light, .search-button-dark");
+        searchBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                document.dispatchEvent(new CustomEvent("open-search"));
             });
         });
     }
 
-    setupMenu();
+    setupHeader();
 
-    document.addEventListener("DOMContentLoaded", () => {
-        setupMenu();
-
-        const searchBtn = document.getElementById("header-search-btn");
-        searchBtn?.addEventListener("click", () => {
-            document.dispatchEvent(new CustomEvent("open-search"));
-        });
-    });
+    document.addEventListener("DOMContentLoaded", setupHeader);
+    document.addEventListener("astro:after-swap", setupHeader);
 </script>
