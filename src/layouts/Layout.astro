@@ -49,14 +49,20 @@ const mainClass =
         <script is:inline>
             (function() {
                 const applyTheme = () => {
-                    const theme = localStorage.getItem("theme") || "theme-light";
+                    const stored = localStorage.getItem("theme") || "theme-system";
                     const root = document.documentElement;
-                    if (theme === "theme-dark") {
-                        root.classList.add("theme-dark", "dark");
-                        root.classList.remove("theme-light");
+                    let isDark;
+                    if (stored === "theme-system") {
+                        isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
                     } else {
-                        root.classList.add("theme-light");
-                        root.classList.remove("theme-dark", "dark");
+                        isDark = stored === "theme-dark";
+                    }
+                    root.classList.remove("theme-light", "theme-dark", "theme-system");
+                    root.classList.add(stored);
+                    if (isDark) {
+                        root.classList.add("dark");
+                    } else {
+                        root.classList.remove("dark");
                     }
                 };
                 applyTheme();

@@ -43,19 +43,51 @@ import "./ThemeToggle.css";
     >
         <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
     </svg>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="system-icon"
+    >
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+    </svg>
 </button>
 
 <script>
+    const THEMES = ["theme-light", "theme-dark", "theme-system"];
+
     const applyStoredTheme = () => {
-        const currentTheme = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "theme-light";
+        const stored = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "theme-system";
         const root = document.documentElement;
-        if (currentTheme === "theme-dark") {
-            root.classList.add("theme-dark", "dark");
-            root.classList.remove("theme-light");
+        let isDark;
+        if (stored === "theme-system") {
+            isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         } else {
-            root.classList.add("theme-light");
-            root.classList.remove("theme-dark", "dark");
+            isDark = stored === "theme-dark";
         }
+        root.classList.remove("theme-light", "theme-dark", "theme-system");
+        root.classList.add(stored);
+        if (isDark) {
+            root.classList.add("dark");
+        } else {
+            root.classList.remove("dark");
+        }
+    };
+
+    const getEffectiveTheme = () => {
+        const stored = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "theme-system";
+        if (stored === "theme-system") {
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? "theme-dark" : "theme-light";
+        }
+        return stored;
     };
 
     const setupThemeToggle = () => {
@@ -65,20 +97,31 @@ import "./ThemeToggle.css";
             if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
                 return localStorage.getItem("theme");
             }
-            return "theme-light";
+            return "theme-system";
         };
 
         const setTheme = (theme: string) => {
             const root = document.documentElement;
-            if (theme === "theme-dark") {
-                root.classList.remove("theme-light");
-                root.classList.add("theme-dark");
+            root.classList.remove("theme-light", "theme-dark", "theme-system");
+            root.classList.add(theme);
+            if (theme === "theme-system") {
+                const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                if (isDark) {
+                    root.classList.add("dark");
+                } else {
+                    root.classList.remove("dark");
+                }
+            } else if (theme === "theme-dark") {
                 root.classList.add("dark");
             } else {
-                root.classList.remove("theme-dark", "dark");
-                root.classList.add("theme-light");
+                root.classList.remove("dark");
             }
             localStorage.setItem("theme", theme);
+        };
+
+        const cycleTheme = (current: string) => {
+            const idx = THEMES.indexOf(current);
+            return THEMES[(idx + 1) % THEMES.length];
         };
 
         themeToggleBtns.forEach((btn) => {
@@ -87,16 +130,35 @@ import "./ThemeToggle.css";
 
             newBtn.addEventListener("click", () => {
                 const current = getCurrentTheme();
-                const nextTheme = current === "theme-dark" ? "theme-light" : "theme-dark";
-                setTheme(nextTheme);
+                const next = cycleTheme(current);
+                setTheme(next);
             });
         });
     };
 
+    let systemThemeListener: MediaQueryList | null = null;
+
+    const watchSystemTheme = () => {
+        if (systemThemeListener) return;
+        const mq = window.matchMedia("(prefers-color-scheme: dark)");
+        systemThemeListener = mq;
+        const handler = () => {
+            const stored = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "theme-system";
+            if (stored === "theme-system") {
+                applyStoredTheme();
+            }
+        };
+        if (mq.addEventListener) {
+            mq.addEventListener("change", handler);
+        }
+    };
+
     applyStoredTheme();
+    watchSystemTheme();
     setupThemeToggle();
     document.addEventListener("astro:after-swap", () => {
         applyStoredTheme();
+        watchSystemTheme();
         setupThemeToggle();
     });
 </script>
