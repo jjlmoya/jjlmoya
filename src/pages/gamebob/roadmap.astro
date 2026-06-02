@@ -17,6 +17,7 @@ const DEFAULT_THEMES: Record<string, string> = {
 
 const roadmapApps = await Promise.all(
     ALL_APP_DEFINITIONS
+        .filter(({ entry }) => entry.isGame)
         .map(async ({ entry }) => {
             const loader = entry.i18n["es" as KnownLocale] ?? entry.i18n.en;
             const card = await loader!();

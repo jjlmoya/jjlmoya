@@ -1,0 +1,67 @@
+---
+import HeaderKitty from "../HeaderKitty.astro";
+import "./FooterKitty.css";
+
+interface Props {
+    mood?: "sleepy" | "curious" | "somnoliento" | "surprise";
+}
+
+const { mood = "sleepy" } = Astro.props;
+---
+
+<div class={`footer-kitty mood-${mood}`} id="footer-kitty-container">
+    <HeaderKitty />
+    <div class="zzz-bubble">Z</div>
+    <div class="zzz-bubble zzz-2">z</div>
+    <div class="zzz-bubble zzz-3">z</div>
+</div>
+
+<script>
+    const kitty = document.getElementById("footer-kitty-container");
+    let curiousTimeout: number;
+    let somnolientoTimeout: number;
+
+    function startSleepCycle() {
+        curiousTimeout = window.setTimeout(() => {
+            if (!kitty) return;
+            kitty.classList.remove("mood-curious");
+            kitty.classList.add("mood-somnoliento");
+
+            somnolientoTimeout = window.setTimeout(() => {
+                if (!kitty) return;
+                kitty.classList.remove("mood-somnoliento");
+                kitty.classList.add("mood-sleepy");
+
+                kitty.querySelectorAll(".zzz-bubble").forEach((el) => {
+                    (el as HTMLElement).style.display = "block";
+                });
+            }, 2000);
+        }, 15000);
+    }
+
+    if (kitty) {
+        kitty.addEventListener("click", () => {
+            if (kitty.classList.contains("mood-surprise")) return;
+
+            window.clearTimeout(curiousTimeout);
+            window.clearTimeout(somnolientoTimeout);
+
+            kitty.classList.remove("mood-sleepy", "mood-curious", "mood-somnoliento");
+            kitty.classList.add("mood-surprise");
+
+            kitty.querySelectorAll(".zzz-bubble").forEach((el) => {
+                (el as HTMLElement).style.display = "none";
+            });
+
+            kitty.addEventListener("animationend", function handler(e) {
+                if (e.animationName === "kitty-surprise-jump") {
+                    kitty.removeEventListener("animationend", handler);
+                    kitty.classList.remove("mood-surprise");
+                    kitty.classList.add("mood-curious");
+
+                    startSleepCycle();
+                }
+            });
+        });
+    }
+</script>

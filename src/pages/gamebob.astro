@@ -65,177 +65,105 @@ const projects = await Promise.all(
         <DiscordCTA title="Únete a la comunidad" />
 
         <div class="gamebob-home-section">
-            <h2
-                class="gamebob-home-section-title"
-            >
+            <h2 class="gamebob-home-section-title">
                 aplicaciones
             </h2>
 
-            <div class="gamebob-home-released-list">
+            <div class="gamebob-games-grid">
                 {
-                    projects.map((project, index) => (
-                        <ProjectHomeCard project={project} index={index} />
+                    projects.map((project) => (
+                        <div class="gamebob-game-card" style={`--theme-color: ${project.color}`}>
+                            <div class="game-card-image-wrapper">
+                                <img src={project.image} alt={project.name} class="game-card-image" />
+                                <span class="game-card-badge">{project.statusLabel}</span>
+                            </div>
+                            <div class="game-card-content">
+                                <h3 class="game-card-title">{project.name}</h3>
+                                <p class="game-card-description">{project.homeDescription}</p>
+                                <div class="game-card-actions">
+                                    <a href={`/apps/${project.name.toLowerCase().replace(/\s+/g, "-")}/`} class="game-card-btn-explore">
+                                        <span>Explorar</span>
+                                        <Icon name="mdi:arrow-right" class="game-card-btn-icon" />
+                                    </a>
+                                    <div class="game-card-stores">
+                                        {project.links?.googlePlay ? (
+                                            <a href={project.links.googlePlay} target="_blank" class="game-card-store-link" title="Google Play">
+                                                <Icon name="mdi:google-play" class="game-card-store-icon" />
+                                            </a>
+                                        ) : (
+                                            <div class="game-card-store-disabled" title="Próximamente">
+                                                <Icon name="mdi:google-play" class="game-card-store-icon" />
+                                            </div>
+                                        )}
+                                        {project.links?.appStore ? (
+                                            <a href={project.links.appStore} target="_blank" class="game-card-store-link" title="App Store">
+                                                <Icon name="mdi:apple" class="game-card-store-icon" />
+                                            </a>
+                                        ) : (
+                                            <div class="game-card-store-disabled" title="Próximamente">
+                                                <Icon name="mdi:apple" class="game-card-store-icon" />
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     ))
                 }
             </div>
         </div>
 
         <div class="gamebob-home-section">
-            <h2
-                class="gamebob-home-section-title purple"
-            >
-                prototipos
+            <h2 class="gamebob-home-section-title">
+                el estudio
             </h2>
-
-            <div class="gamebob-home-split-row">
-                <div class="gamebob-home-info-col order-2">
-                    <h3
-                        class="gamebob-home-heading purple"
-                    >
-                        EVO<span>LUCIÓN</span>
-                    </h3>
-                    <p class="gamebob-home-desc">
-                        alquimia del caos. combina elementos primordiales, crea criaturas únicas y
-                        enfréntalas en la arena de combate. un experimento de generación procedural.
-                    </p>
-
-                    <div class="gamebob-home-actions">
-                        <a
-                            href="/gamebob/prototipos/"
-                            class="gamebob-home-button purple"
-                        >
-                            <Icon name="mdi:flask-empty-outline" style="width: 1.25rem; height: 1.25rem;" />
-                            Explorar Prototipos
-                        </a>
+            
+            <div class="gamebob-studio-grid">
+                <div class="gamebob-studio-card purple">
+                    <div class="gamebob-studio-visual">
+                        <Icon name="mdi:egg-outline" class="gamebob-studio-icon" />
+                        <Icon name="mdi:arrow-right" class="gamebob-studio-arrow" />
+                        <Icon name="mdi:dna" class="gamebob-studio-icon glow" />
                     </div>
+                    <h3 class="gamebob-studio-title">evo<span>lución</span></h3>
+                    <p class="gamebob-studio-desc">alquimia del caos. combina elementos primordiales, crea criaturas únicas y enfréntalas en la arena.</p>
+                    <a href="/gamebob/prototipos/" class="gamebob-studio-btn">
+                        <Icon name="mdi:flask-empty-outline" style="width: 1.15rem; height: 1.15rem;" />
+                        prototipos
+                    </a>
                 </div>
 
-                <div
-                    class="gamebob-home-visual-box purple"
-                >
-                    <div
-                        class="gamebob-home-visual-glow"
-                    >
+                <div class="gamebob-studio-card blue">
+                    <div class="gamebob-studio-visual">
+                        <div class="gamebob-studio-visual-icons">
+                            <Icon name="mdi:gesture-tap" class="gamebob-studio-icon-small" />
+                            <Icon name="mdi:run-fast" class="gamebob-studio-icon-small" />
+                            <Icon name="mdi:target" class="gamebob-studio-icon-small" />
+                            <Icon name="mdi:controller" class="gamebob-studio-icon-small" />
+                        </div>
                     </div>
+                    <h3 class="gamebob-studio-title">lab<span>oratorio</span></h3>
+                    <p class="gamebob-studio-desc">librería de componentes aislados. mecánicas de movimiento, sistemas de física y controles.</p>
+                    <a href="/gamebob/mecanicas/" class="gamebob-studio-btn">
+                        <Icon name="mdi:code-braces" style="width: 1.15rem; height: 1.15rem;" />
+                        mecánicas
+                    </a>
+                </div>
 
-                    <div class="gamebob-home-visual-content animate-float">
-                        <Icon name="mdi:egg-outline" class="gamebob-home-visual-icon" />
-                        <Icon name="mdi:arrow-right" class="gamebob-home-visual-arrow" />
-                        <Icon
-                            name="mdi:dna"
-                            class="gamebob-home-visual-icon glow-purple"
-                        />
+                <div class="gamebob-studio-card red">
+                    <div class="gamebob-studio-visual">
+                        <Icon name="mdi:alert-decagram" class="gamebob-studio-icon" />
+                        <Icon name="mdi:arrow-right" class="gamebob-studio-arrow" />
+                        <Icon name="mdi:book-open-page-variant" class="gamebob-studio-icon glow" />
                     </div>
+                    <h3 class="gamebob-studio-title">post<span>mortem</span></h3>
+                    <p class="gamebob-studio-desc">el cementerio de las buenas intenciones. análisis forense de proyectos fallidos y errores.</p>
+                    <a href="/gamebob/post-mortem/" class="gamebob-studio-btn">
+                        <Icon name="mdi:skull-scan-outline" style="width: 1.15rem; height: 1.15rem;" />
+                        memorándums
+                    </a>
                 </div>
             </div>
         </div>
-
-        <div class="gamebob-home-section">
-            <h2
-                class="gamebob-home-section-title blue"
-            >
-                mecánicas
-            </h2>
-
-            <div class="gamebob-home-split-row">
-                <div
-                    class="gamebob-home-visual-box blue"
-                >
-                    <div
-                        class="gamebob-home-visual-glow"
-                    >
-                    </div>
-
-                    <div class="gamebob-home-visual-content grid-4 gamebob-animate-pulse">
-                        <Icon name="mdi:gesture-tap" class="gamebob-home-visual-icon blue-icon" />
-                        <Icon name="mdi:run-fast" class="gamebob-home-visual-icon blue-icon" />
-                        <Icon name="mdi:target" class="gamebob-home-visual-icon blue-icon" />
-                        <Icon name="mdi:controller" class="gamebob-home-visual-icon blue-icon" />
-                    </div>
-                </div>
-
-                <div class="gamebob-home-info-col">
-                    <h3
-                        class="gamebob-home-heading blue"
-                    >
-                        LAB<span>ORATORIO</span>
-                    </h3>
-                    <p class="gamebob-home-desc">
-                        librería de componentes aislados. mecánicas de movimiento, sistemas de
-                        física y controles experimentales listos para testear.
-                    </p>
-
-                    <div class="gamebob-home-actions">
-                        <a
-                            href="/gamebob/mecanicas/"
-                            class="gamebob-home-button blue"
-                        >
-                            <Icon name="mdi:code-braces" style="width: 1.25rem; height: 1.25rem;" />
-                            Explorar Mecánicas
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="gamebob-home-section" style="margin-top: 6rem;">
-            <h2
-                class="gamebob-home-section-title red"
-            >
-                post mortem
-            </h2>
-
-            <div class="gamebob-home-split-row">
-                <div class="gamebob-home-info-col order-2">
-                    <h3
-                        class="gamebob-home-heading red"
-                    >
-                        POST<span>MORTEM</span>
-                    </h3>
-                    <p class="gamebob-home-desc">
-                        el cementerio de las buenas intenciones. análisis forense de proyectos
-                        fallidos, errores de diseño y lecciones aprendidas a base de golpes.
-                    </p>
-
-                    <div class="gamebob-home-actions">
-                        <a
-                            href="/gamebob/post-mortem/"
-                            class="gamebob-home-button red"
-                        >
-                            <Icon name="mdi:skull-scan-outline" style="width: 1.25rem; height: 1.25rem;" />
-                            Leer Memorándums
-                        </a>
-                    </div>
-                </div>
-
-                <div
-                    class="gamebob-home-visual-box red"
-                >
-                    <div
-                        class="gamebob-home-visual-glow"
-                    >
-                    </div>
-
-                    <div class="gamebob-home-visual-content gamebob-animate-pulse">
-                        <Icon name="mdi:alert-decagram" class="gamebob-home-visual-icon red-icon" />
-                        <Icon name="mdi:arrow-right" class="gamebob-home-visual-arrow" />
-                        <Icon
-                            name="mdi:book-open-page-variant"
-                            class="gamebob-home-visual-icon glow-red"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div
-        class="gamebob-home-footer"
-    >
-        <a
-            href="/gamebob/privacidad/"
-            class="gamebob-home-footer-link"
-        >
-            política de privacidad
-        </a>
     </div>
 </GameBobLayout>
