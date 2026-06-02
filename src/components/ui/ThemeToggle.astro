@@ -75,47 +75,34 @@ import "./ThemeToggle.css";
         }
         root.classList.remove("theme-light", "theme-dark", "theme-system");
         root.classList.add(stored);
-        if (isDark) {
-            root.classList.add("dark");
-        } else {
-            root.classList.remove("dark");
-        }
-    };
-
-    const getEffectiveTheme = () => {
-        const stored = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "theme-system";
-        if (stored === "theme-system") {
-            return window.matchMedia("(prefers-color-scheme: dark)").matches ? "theme-dark" : "theme-light";
-        }
-        return stored;
+        root.classList.toggle("theme-light", !isDark);
+        root.classList.toggle("theme-dark", isDark);
+        root.classList.toggle("dark", isDark);
     };
 
     const setupThemeToggle = () => {
         const themeToggleBtns = document.querySelectorAll(".theme-toggle-btn");
         
-        const getCurrentTheme = () => {
-            if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-                return localStorage.getItem("theme");
+        const getCurrentTheme = (): string => {
+            if (typeof localStorage !== "undefined") {
+                return localStorage.getItem("theme") || "theme-system";
             }
             return "theme-system";
         };
 
         const setTheme = (theme: string) => {
             const root = document.documentElement;
+            let isDark;
+            if (theme === "theme-system") {
+                isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            } else {
+                isDark = theme === "theme-dark";
+            }
             root.classList.remove("theme-light", "theme-dark", "theme-system");
             root.classList.add(theme);
-            if (theme === "theme-system") {
-                const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                if (isDark) {
-                    root.classList.add("dark");
-                } else {
-                    root.classList.remove("dark");
-                }
-            } else if (theme === "theme-dark") {
-                root.classList.add("dark");
-            } else {
-                root.classList.remove("dark");
-            }
+            root.classList.toggle("theme-light", !isDark);
+            root.classList.toggle("theme-dark", isDark);
+            root.classList.toggle("dark", isDark);
             localStorage.setItem("theme", theme);
         };
 
