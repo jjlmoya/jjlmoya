@@ -21,7 +21,7 @@ export default defineConfig({
         },
         optimizeDeps: {
             exclude: ["date-fns"],
-            include: ["jspdf", "html2canvas"],
+            include: ["jspdf", "html2canvas", "interactjs"],
         },
     },
     trailingSlash: "always",
