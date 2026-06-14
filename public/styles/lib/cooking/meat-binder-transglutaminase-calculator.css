@@ -1,0 +1,785 @@
+.tg {
+  --tg-paper: #f5f0eb;
+  --tg-paper-dark: #0c0c0e;
+  --tg-surface: #fff;
+  --tg-surface-dark: #151518;
+  --tg-card: #faf8f5;
+  --tg-card-dark: #1a1a20;
+  --tg-border: #e5ddd4;
+  --tg-border-dark: #2a2a35;
+  --tg-ink: #292524;
+  --tg-ink-dark: #e4e4e7;
+  --tg-ink-muted: #8a8078;
+  --tg-ink-muted-dark: #6b7280;
+  --tg-ink-faint: #c5bdb4;
+  --tg-ink-faint-dark: #3f3f4a;
+  --tg-accent-rust: #b91c1c;
+  --tg-accent-rust-dark: #ef4444;
+  --tg-accent-teal: #0d9488;
+  --tg-accent-teal-dark: #2dd4bf;
+  --tg-accent-bond: #059669;
+  --tg-accent-bond-dark: #22c55e;
+  --tg-accent-bond-glow: rgba(5, 150, 105, 0.15);
+  --tg-accent-bond-glow-dark: rgba(34, 197, 94, 0.2);
+  --tg-accent-warn: #dc2626;
+  --tg-accent-warn-dark: #f87171;
+  --tg-grid: #e5ddd4;
+  --tg-grid-dark: #1f1f28;
+  --tg-shape-a: #dc2626;
+  --tg-shape-a-dark: #ef4444;
+  --tg-shape-b: #b91c1c;
+  --tg-shape-b-dark: #dc2626;
+  --tg-fiber: #fca5a5;
+  --tg-fiber-dark: #7f1d1d;
+  --tg-denatured: #9ca3af;
+  --tg-shadow: rgba(0, 0, 0, 0.04);
+  --tg-shadow-dark: rgba(0, 0, 0, 0.4);
+  --tg-white: #fff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  
+}
+
+.tg-bench {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  background: var(--tg-paper);
+  border: 1px solid var(--tg-border);
+  border-radius: 4px;
+  padding: 2px;
+  box-shadow: 0 4px 24px var(--tg-shadow);
+}
+
+.theme-dark .tg-bench {
+  background: var(--tg-paper-dark);
+  border-color: var(--tg-border-dark);
+  box-shadow: 0 4px 24px var(--tg-shadow-dark);
+}
+
+.tg-bench-inner {
+  position: relative;
+  background: var(--tg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 2px;
+  padding: 2.5rem 2rem;
+}
+
+.theme-dark .tg-bench-inner {
+  background: var(--tg-surface-dark);
+  border-color: var(--tg-border-dark);
+}
+
+.tg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--tg-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tg-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.theme-dark .tg-grid {
+  background-image:
+    linear-gradient(var(--tg-grid-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--tg-grid-dark) 1px, transparent 1px);
+}
+
+.tg-header {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--tg-accent-rust);
+}
+
+.theme-dark .tg-header {
+  border-bottom-color: var(--tg-accent-rust-dark);
+}
+
+.tg-header-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--tg-ink);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.theme-dark .tg-header-title {
+  color: var(--tg-ink-dark);
+}
+
+.tg-header-sub {
+  font-size: 0.6rem;
+  color: var(--tg-ink-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0.15rem 0 0;
+}
+
+.theme-dark .tg-header-sub {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 280px 1fr 240px;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .tg-layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* ===== SPECIMEN SHEET (Controls) ===== */
+.tg-specimen {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--tg-border);
+  border: 1px solid var(--tg-border);
+}
+
+.theme-dark .tg-specimen {
+  background: var(--tg-border-dark);
+  border-color: var(--tg-border-dark);
+}
+
+.tg-specimen-header {
+  background: var(--tg-card);
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-dark .tg-specimen-header {
+  background: var(--tg-card-dark);
+}
+
+.tg-specimen-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tg-accent-rust);
+  flex-shrink: 0;
+}
+
+.theme-dark .tg-specimen-dot {
+  background: var(--tg-accent-rust-dark);
+}
+
+.tg-specimen-label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--tg-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.theme-dark .tg-specimen-label {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-specimen-body {
+  background: var(--tg-card);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.theme-dark .tg-specimen-body {
+  background: var(--tg-card-dark);
+}
+
+.tg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tg-field-label {
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: var(--tg-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.theme-dark .tg-field-label {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-toggle-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--tg-border);
+  padding: 2px;
+}
+
+.theme-dark .tg-toggle-group {
+  background: var(--tg-border-dark);
+}
+
+.tg-toggle {
+  background: var(--tg-card);
+  border: none;
+  color: var(--tg-ink-muted);
+  padding: 0.4rem 0.3rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.theme-dark .tg-toggle {
+  background: var(--tg-card-dark);
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-toggle:hover {
+  background: var(--tg-accent-bond-glow);
+}
+
+.theme-dark .tg-toggle:hover {
+  background: var(--tg-accent-bond-glow-dark);
+}
+
+.tg-toggle.active {
+  background: var(--tg-accent-rust);
+  color: var(--tg-white, #fff);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.theme-dark .tg-toggle.active {
+  background: var(--tg-accent-rust-dark);
+}
+
+.tg-input {
+  background: var(--tg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 2px;
+  color: var(--tg-ink);
+  padding: 0.45rem 0.6rem;
+  font-size: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.theme-dark .tg-input {
+  background: var(--tg-surface-dark);
+  border-color: var(--tg-border-dark);
+  color: var(--tg-ink-dark);
+}
+
+.tg-input:focus {
+  border-color: var(--tg-accent-teal);
+  box-shadow: 0 0 0 1px var(--tg-accent-teal);
+}
+
+.theme-dark .tg-input:focus {
+  border-color: var(--tg-accent-teal-dark);
+  box-shadow: 0 0 0 1px var(--tg-accent-teal-dark);
+}
+
+.tg-select {
+  background: var(--tg-surface);
+  border: 1px solid var(--tg-border);
+  border-radius: 2px;
+  color: var(--tg-ink);
+  padding: 0.45rem 0.6rem;
+  font-size: 0.65rem;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4'%3E%3Cpath d='M1 1l3 3 3-3' fill='none' stroke='%238a8078' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.theme-dark .tg-select {
+  background: var(--tg-surface-dark);
+  border-color: var(--tg-border-dark);
+  color: var(--tg-ink-dark);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4'%3E%3Cpath d='M1 1l3 3 3-3' fill='none' stroke='%236b7280' stroke-width='1.2'/%3E%3C/svg%3E");
+}
+
+.tg-select:focus {
+  border-color: var(--tg-accent-teal);
+  box-shadow: 0 0 0 1px var(--tg-accent-teal);
+}
+
+.theme-dark .tg-select:focus {
+  border-color: var(--tg-accent-teal-dark);
+  box-shadow: 0 0 0 1px var(--tg-accent-teal-dark);
+}
+
+/* ===== TISSUE VISUALIZER ===== */
+.tg-visualizer {
+  display: flex;
+  flex-direction: column;
+  background: var(--tg-card);
+  border: 1px solid var(--tg-border);
+}
+
+.theme-dark .tg-visualizer {
+  background: var(--tg-card-dark);
+  border-color: var(--tg-border-dark);
+}
+
+.tg-visualizer-header {
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--tg-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-dark .tg-visualizer-header {
+  border-bottom-color: var(--tg-border-dark);
+}
+
+.tg-visualizer-label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--tg-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.theme-dark .tg-visualizer-label {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-visualizer-status {
+  font-size: 0.5rem;
+  color: var(--tg-ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.theme-dark .tg-visualizer-status {
+  color: var(--tg-ink-faint-dark);
+}
+
+.tg-visualizer-body {
+  padding: 1rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex: 1;
+  min-height: 280px;
+  gap: 0.75rem;
+}
+
+.tg-visualizer-svg {
+  flex: 1;
+  max-width: 480px;
+  height: auto;
+  min-height: 240px;
+}
+
+/* ===== Temperature Bar (HTML) ===== */
+.tg-temp-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  width: 40px;
+  padding: 0.25rem 0;
+}
+
+.tg-temp-bar-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: var(--tg-ink-muted);
+  letter-spacing: 0.1em;
+}
+
+.theme-dark .tg-temp-bar-label {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-temp-bar-track {
+  position: relative;
+  width: 8px;
+  flex: 1;
+  min-height: 180px;
+  background: var(--tg-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.theme-dark .tg-temp-bar-track {
+  background: var(--tg-border-dark);
+}
+
+.tg-temp-bar-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 4px;
+  background: var(--tg-accent-teal);
+  transition: height 0.3s, background 0.3s, bottom 0.3s;
+}
+
+.theme-dark .tg-temp-bar-fill {
+  background: var(--tg-accent-teal-dark);
+}
+
+.tg-temp-bar-fill.warm { background: #f59e0b; }
+.tg-temp-bar-fill.hot { background: var(--tg-accent-warn); }
+.theme-dark .tg-temp-bar-fill.warm { background: #fbbf24; }
+.theme-dark .tg-temp-bar-fill.hot { background: var(--tg-accent-warn-dark); }
+
+.tg-temp-bar-tick {
+  position: absolute;
+  left: 12px;
+  transform: translateY(50%);
+  pointer-events: none;
+}
+
+.tg-temp-bar-tick span {
+  font-size: 0.5rem;
+  color: var(--tg-ink-faint);
+  white-space: nowrap;
+  
+}
+
+.theme-dark .tg-temp-bar-tick span {
+  color: var(--tg-ink-faint-dark);
+}
+
+.tg-temp-bar-value {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--tg-ink);
+  text-align: center;
+  
+}
+
+.theme-dark .tg-temp-bar-value {
+  color: var(--tg-ink-dark);
+}
+.tg-report {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--tg-border);
+  border: 1px solid var(--tg-border);
+}
+
+.theme-dark .tg-report {
+  background: var(--tg-border-dark);
+  border-color: var(--tg-border-dark);
+}
+
+.tg-report-header {
+  background: var(--tg-card);
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-dark .tg-report-header {
+  background: var(--tg-card-dark);
+}
+
+.tg-report-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tg-accent-teal);
+  flex-shrink: 0;
+}
+
+.theme-dark .tg-report-dot {
+  background: var(--tg-accent-teal-dark);
+}
+
+.tg-report-label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--tg-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.theme-dark .tg-report-label {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-report-body {
+  background: var(--tg-card);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.theme-dark .tg-report-body {
+  background: var(--tg-card-dark);
+}
+
+.tg-measurement {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.3rem 0;
+  border-bottom: 1px dotted var(--tg-border);
+}
+
+.theme-dark .tg-measurement {
+  border-bottom-color: var(--tg-border-dark);
+}
+
+.tg-measurement:last-child {
+  border-bottom: none;
+}
+
+.tg-measurement-label {
+  font-size: 0.55rem;
+  color: var(--tg-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.theme-dark .tg-measurement-label {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-measurement-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--tg-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.theme-dark .tg-measurement-value {
+  color: var(--tg-ink-dark);
+}
+
+.tg-measurement-value .tg-unit {
+  font-size: 0.55rem;
+  font-weight: 500;
+  color: var(--tg-ink-muted);
+  margin-left: 0.15rem;
+}
+
+.theme-dark .tg-measurement-value .tg-unit {
+  color: var(--tg-ink-muted-dark);
+}
+
+.tg-incubation-badge {
+  background: var(--tg-accent-bond-glow);
+  border: 1px solid var(--tg-accent-bond);
+  border-radius: 2px;
+  padding: 0.5rem 0.65rem;
+  text-align: center;
+  margin-top: 0.3rem;
+}
+
+.theme-dark .tg-incubation-badge {
+  background: var(--tg-accent-bond-glow-dark);
+  border-color: var(--tg-accent-bond-dark);
+}
+
+.tg-incubation-badge-label {
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tg-accent-bond);
+  margin-bottom: 0.1rem;
+}
+
+.theme-dark .tg-incubation-badge-label {
+  color: var(--tg-accent-bond-dark);
+}
+
+.tg-incubation-badge-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tg-ink);
+}
+
+.theme-dark .tg-incubation-badge-value {
+  color: var(--tg-ink-dark);
+}
+
+.tg-alert {
+  background: #fef2f2;
+  border: 1px solid var(--tg-accent-warn);
+  border-radius: 2px;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.theme-dark .tg-alert {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: var(--tg-accent-warn-dark);
+}
+
+.tg-alert-text {
+  font-size: 0.6rem;
+  color: var(--tg-accent-warn);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.theme-dark .tg-alert-text {
+  color: var(--tg-accent-warn-dark);
+}
+
+/* ===== ANNOTATION (method description) ===== */
+.tg-annotation {
+  background: var(--tg-card);
+  border: 1px solid var(--tg-border);
+  padding: 0.65rem 0.85rem;
+  margin-top: 1px;
+}
+
+.theme-dark .tg-annotation {
+  background: var(--tg-card-dark);
+  border-color: var(--tg-border-dark);
+}
+
+.tg-annotation-text {
+  font-size: 0.6rem;
+  color: var(--tg-ink-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.theme-dark .tg-annotation-text {
+  color: var(--tg-ink-muted-dark);
+}
+
+/* ===== SVG Tissue Styles ===== */
+.tg-tissue-a { fill: var(--tg-tissue-a-current, var(--tg-shape-a)); }
+.tg-tissue-b { fill: var(--tg-tissue-b-current, var(--tg-shape-b)); }
+.theme-dark .tg-tissue-a { fill: var(--tg-tissue-a-current, var(--tg-shape-a-dark)); }
+.theme-dark .tg-tissue-b { fill: var(--tg-tissue-b-current, var(--tg-shape-b-dark)); }
+
+.tg-fiber {
+  stroke: var(--tg-fiber-current, var(--tg-fiber));
+  fill: none;
+}
+.theme-dark .tg-fiber {
+  stroke: var(--tg-fiber-current, var(--tg-fiber-dark));
+}
+
+.tg-bond-line {
+  stroke: var(--tg-accent-bond);
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.theme-dark .tg-bond-line {
+  stroke: var(--tg-accent-bond-dark);
+}
+
+.tg-bond-line.active {
+  opacity: 0.7;
+  animation: tg-bond-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tg-bond-pulse {
+  0%, 100% {
+    stroke-dashoffset: 0;
+    opacity: 0.4;
+  }
+  50% {
+    stroke-dashoffset: -8;
+    opacity: 0.9;
+  }
+}
+
+.tg-bond-node {
+  fill: var(--tg-accent-bond);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.theme-dark .tg-bond-node {
+  fill: var(--tg-accent-bond-dark);
+}
+
+.tg-bond-node.active {
+  animation: tg-node-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes tg-node-glow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.tg-particle {
+  fill: var(--tg-accent-bond);
+  opacity: 0;
+}
+
+.theme-dark .tg-particle {
+  fill: var(--tg-accent-bond-dark);
+}
+
+.tg-particle.active {
+  animation: tg-particle-drift 3s ease-in-out infinite;
+}
+
+@keyframes tg-particle-drift {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+.tg-denatured-overlay {
+  fill: var(--tg-denatured);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.tg-denatured-overlay.active {
+  opacity: 0.6;
+}
