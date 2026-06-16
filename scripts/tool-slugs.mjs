@@ -11,7 +11,7 @@ const COLOR = {
   DIM: '\x1b[2m',
 };
 
-const SLUG_RE = /slug\s*:\s*['"`]([^'"`]+)['"`]/;
+const SLUG_RE = /(?:const\s+slug\s*=\s*|slug\s*:\s*)['"`]([^'"`]+)['"`]/;
 
 function extractSlug(filePath) {
   const content = readFileSync(filePath, 'utf8');
@@ -20,13 +20,28 @@ function extractSlug(filePath) {
 }
 
 function findToolInRepo(repoPath, toolId) {
-  const toolPath = join(repoPath, 'src', 'tool', toolId);
-  if (!existsSync(toolPath)) return null;
+  const directPath = join(repoPath, 'src', 'tool', toolId);
+  if (existsSync(directPath)) {
+    const i18nPath = join(directPath, 'i18n');
+    if (existsSync(i18nPath)) return i18nPath;
+  }
 
-  const i18nPath = join(toolPath, 'i18n');
-  if (!existsSync(i18nPath)) return null;
+  const toolsRoot = join(repoPath, 'src', 'tool');
+  if (!existsSync(toolsRoot)) return null;
 
-  return i18nPath;
+  const cssFilename = `${toolId}.css`;
+  const dirs = readdirSync(toolsRoot, { withFileTypes: true })
+    .filter(e => e.isDirectory())
+    .map(e => join(toolsRoot, e.name));
+
+  for (const dir of dirs) {
+    if (existsSync(join(dir, cssFilename))) {
+      const i18nPath = join(dir, 'i18n');
+      if (existsSync(i18nPath)) return i18nPath;
+    }
+  }
+
+  return null;
 }
 
 function getLocalesFromDir(i18nPath) {
