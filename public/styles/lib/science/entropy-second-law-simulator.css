@@ -1,0 +1,445 @@
+.entropy-lab {
+  --entropy-ink: #162033;
+  --entropy-muted: rgba(22, 32, 51, 0.64);
+  --entropy-shell: #edf4fb;
+  --entropy-cold: #56d7ff;
+  --entropy-cold-deep: #1a71ff;
+  --entropy-hot: #ffa347;
+  --entropy-line: rgba(22, 32, 51, 0.12);
+  --entropy-shadow: rgba(41, 79, 120, 0.16);
+  --entropy-guide: rgba(22, 32, 51, 0.16);
+  --entropy-area: rgba(255, 163, 71, 0.14);
+  --entropy-thumb-shadow: rgba(26, 113, 255, 0.18);
+  --entropy-canvas-top-glow: rgba(255, 255, 255, 0.26);
+  --entropy-cold-rgb: 86, 215, 255;
+  --entropy-hot-rgb: 255, 163, 71;
+
+  display: grid;
+  gap: 1.8rem;
+  width: min(100%, 1220px);
+  padding: clamp(1rem, 3vw, 2.4rem);
+  color: var(--entropy-ink);
+  background:
+    radial-gradient(circle at top left, rgba(86, 215, 255, 0.22), transparent 26%),
+    radial-gradient(circle at top right, rgba(255, 163, 71, 0.2), transparent 28%),
+    linear-gradient(145deg, #f7fbff, #edf4fb 54%, #e5eef8);
+  border: 1px solid rgba(22, 32, 51, 0.08);
+  border-radius: 32px;
+  box-shadow: 0 30px 80px var(--entropy-shadow);
+}
+
+.theme-dark .entropy-lab {
+  --entropy-ink: #fff7e8;
+  --entropy-muted: rgba(255, 247, 232, 0.72);
+  --entropy-line: rgba(255, 247, 232, 0.14);
+  --entropy-shadow: rgba(2, 9, 18, 0.5);
+  --entropy-guide: rgba(255, 247, 232, 0.16);
+  --entropy-area: rgba(255, 211, 106, 0.13);
+  --entropy-thumb-shadow: rgba(86, 215, 255, 0.24);
+  --entropy-canvas-top-glow: rgba(255, 255, 255, 0.03);
+
+  background:
+    radial-gradient(circle at top left, rgba(86, 215, 255, 0.26), transparent 26%),
+    radial-gradient(circle at top right, rgba(255, 163, 71, 0.24), transparent 28%),
+    linear-gradient(145deg, #07111d, #0f1a2b 54%, #09131f);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.entropy-controls,
+.entropy-stage,
+.entropy-console {
+  min-width: 0;
+}
+
+.entropy-controls {
+  width: min(100%, 260px);
+}
+
+.entropy-controls,
+.entropy-stage,
+.entropy-console,
+.entropy-control-grid,
+.entropy-canvas-head,
+.entropy-actions,
+.entropy-metrics {
+  display: grid;
+  gap: 1rem;
+}
+
+.entropy-status,
+.entropy-canvas-side span,
+.entropy-readout span,
+.entropy-field span,
+.entropy-metrics span,
+.entropy-divider span,
+.entropy-graph-meta span,
+.entropy-note span {
+  margin: 0;
+  color: var(--entropy-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.entropy-status {
+  color: var(--entropy-cold-deep);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+}
+
+.entropy-field {
+  display: grid;
+  gap: 0.7rem;
+  width: 100%;
+}
+
+.entropy-field-barrier {
+  margin-top: 0.2rem;
+}
+
+.entropy-field output,
+.entropy-readout strong,
+.entropy-canvas-side strong,
+.entropy-metrics strong {
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 0.86;
+}
+
+.entropy-field output {
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+}
+
+.entropy-field input[type='range'] {
+  --fill: 50%;
+  --track-base: rgba(22, 32, 51, 0.14);
+  --track-active: rgba(var(--entropy-cold-rgb), 0.5);
+
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+}
+
+.theme-dark .entropy-field input[type='range'] {
+  --track-base: rgba(255, 247, 232, 0.15);
+  --track-active: rgba(var(--entropy-cold-rgb), 0.72);
+}
+
+.entropy-field input[type='range']::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 0;
+  background:
+    linear-gradient(90deg, var(--track-active) 0, var(--track-active) var(--fill), var(--track-base) var(--fill), var(--track-base) 100%);
+}
+
+.entropy-field input[type='range']::-webkit-slider-thumb {
+  width: 10px;
+  height: 10px;
+  margin-top: -4px;
+  border: 1px solid var(--entropy-shell);
+  border-radius: 50%;
+  appearance: none;
+  background: var(--entropy-ink);
+  box-shadow: 0 8px 18px var(--entropy-thumb-shadow);
+  cursor: grab;
+  transition:
+    transform 100ms ease,
+    box-shadow 160ms ease;
+}
+
+.entropy-field input[type='range']::-moz-range-track {
+  height: 2px;
+  border-radius: 0;
+  background: var(--track-base);
+}
+
+.entropy-field input[type='range']::-moz-range-progress {
+  height: 2px;
+  border-radius: 0;
+  background: var(--track-active);
+}
+
+.entropy-field input[type='range']::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--entropy-shell);
+  border-radius: 50%;
+  background: var(--entropy-ink);
+  box-shadow: 0 8px 18px var(--entropy-thumb-shadow);
+  cursor: grab;
+  transition:
+    transform 100ms ease,
+    box-shadow 160ms ease;
+}
+
+.entropy-field input[type='range']:hover::-webkit-slider-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 6px rgba(var(--entropy-cold-rgb), 0.08), 0 10px 20px var(--entropy-thumb-shadow);
+}
+
+.entropy-field input[type='range']:hover::-moz-range-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 6px rgba(var(--entropy-cold-rgb), 0.08), 0 10px 20px var(--entropy-thumb-shadow);
+}
+
+.entropy-field input[type='range']:active::-webkit-slider-thumb {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 7px rgba(var(--entropy-cold-rgb), 0.12), 0 12px 24px var(--entropy-thumb-shadow);
+  cursor: grabbing;
+}
+
+.entropy-field input[type='range']:active::-moz-range-thumb {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 7px rgba(var(--entropy-cold-rgb), 0.12), 0 12px 24px var(--entropy-thumb-shadow);
+  cursor: grabbing;
+}
+
+.entropy-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+
+.entropy-actions button {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--entropy-line);
+  border-radius: 999px;
+  color: var(--entropy-ink);
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    color 300ms ease,
+    background-color 300ms ease,
+    border-color 300ms ease;
+}
+
+.entropy-actions button:hover {
+  border-color: rgba(86, 215, 255, 0.3);
+  background: rgba(86, 215, 255, 0.06);
+}
+
+.entropy-canvas-head {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding-bottom: 0.15rem;
+}
+
+.entropy-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.entropy-divider-line {
+  display: block;
+  width: 1px;
+  height: 1.2rem;
+  background: var(--entropy-line);
+}
+
+#entropy-canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 18 / 11;
+  background:
+    radial-gradient(circle at 22% 50%, rgba(86, 215, 255, 0.05), transparent 34%),
+    radial-gradient(circle at 78% 50%, rgba(255, 163, 71, 0.05), transparent 34%),
+    linear-gradient(180deg, var(--entropy-canvas-top-glow), transparent);
+  border: 0;
+  border-radius: 28px;
+}
+
+.entropy-graph-shell {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.entropy-graph-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.entropy-graph {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--entropy-line);
+}
+
+.entropy-graph text {
+  fill: var(--entropy-muted);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  opacity: 0.4;
+  text-transform: uppercase;
+}
+
+.entropy-graph-guide,
+.entropy-graph-line,
+.entropy-graph-area {
+  fill: none;
+}
+
+.entropy-graph-guide {
+  stroke: var(--entropy-guide);
+  stroke-width: 1.5;
+}
+
+.entropy-graph-line {
+  stroke: url("#entropy-fill");
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: url("#entropy-line-glow");
+}
+
+.entropy-graph-area {
+  fill: var(--entropy-area);
+}
+
+.entropy-console {
+  align-content: start;
+  gap: 1.3rem;
+}
+
+.entropy-readout {
+  display: grid;
+  gap: 0.35rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--entropy-line);
+}
+
+.entropy-readout strong {
+  font-size: clamp(3rem, 9vw, 5.4rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+}
+
+.entropy-metrics article {
+  display: grid;
+  gap: 0.32rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--entropy-line);
+}
+
+.entropy-metrics {
+  padding-top: 0.8rem;
+}
+
+.entropy-metrics strong {
+  font-size: 2rem;
+  line-height: 0.88;
+}
+
+.entropy-note {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 38ch;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(22, 32, 51, 0.06);
+  opacity: 0.5;
+}
+
+.theme-dark .entropy-note {
+  border-top-color: rgba(255, 247, 232, 0.06);
+}
+
+.entropy-note p {
+  margin: 0;
+  color: var(--entropy-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.entropy-stateboard {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+  min-height: 4.8rem;
+}
+
+.entropy-state-dial {
+  --entropy-progress: 0;
+
+  position: relative;
+  width: 16px;
+  min-height: 4.8rem;
+}
+
+.entropy-state-track {
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  left: 50%;
+  width: 1px;
+  background: currentcolor;
+  opacity: 0.24;
+  transform: translateX(-50%);
+}
+
+.entropy-state-node {
+  position: absolute;
+  bottom: 0.2rem;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentcolor;
+  box-shadow: 0 0 0 0 rgba(var(--entropy-cold-rgb), 0);
+  opacity: 0.9;
+  transform: translate(-50%, calc(var(--entropy-progress) * -4rem));
+  transition:
+    transform 280ms ease,
+    box-shadow 280ms ease,
+    opacity 280ms ease;
+}
+
+.entropy-state-dial.is-equilibrium .entropy-state-node {
+  box-shadow: 0 0 0 6px rgba(var(--entropy-cold-rgb), 0.1);
+}
+
+.entropy-state-labels {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.entropy-state-labels strong {
+  color: var(--entropy-muted);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  opacity: 0.2;
+  text-transform: uppercase;
+  transition: opacity 220ms ease, color 220ms ease;
+}
+
+.entropy-state-labels strong.is-active {
+  color: var(--entropy-ink);
+  opacity: 1;
+}
+
+@media (min-width: 960px) {
+  .entropy-lab {
+    grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.45fr) minmax(280px, 0.72fr);
+    align-items: start;
+  }
+
+  .entropy-controls {
+    width: 260px;
+  }
+
+  .entropy-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.25rem;
+  }
+}

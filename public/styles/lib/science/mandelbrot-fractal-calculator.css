@@ -1,0 +1,357 @@
+:root {
+  --mandel-bg: #f4f5f2;
+  --mandel-ink: #141820;
+  --mandel-muted: #5b6472;
+  --mandel-line: rgba(20, 24, 32, 0.12);
+  --mandel-panel: rgba(255, 255, 255, 0.86);
+  --mandel-hot: #e24d2f;
+  --mandel-active: #c9361f;
+  --mandel-cool: #159a9c;
+  --mandel-shadow: rgba(18, 24, 38, 0.14);
+  --mandel-radius: 10px;
+}
+
+.theme-dark {
+  --mandel-bg: #07090d;
+  --mandel-ink: #f2f6ff;
+  --mandel-muted: #8f98a8;
+  --mandel-line: rgba(242, 246, 255, 0.08);
+  --mandel-panel: rgba(10, 12, 16, 0.8);
+  --mandel-hot: #ff6b4a;
+  --mandel-active: #43d8c9;
+  --mandel-cool: #43d8c9;
+  --mandel-shadow: rgba(0, 0, 0, 0.36);
+}
+
+.mandelbrot-root {
+  display: grid;
+  gap: 1rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.75rem;
+  color: var(--mandel-ink);
+  background:
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--mandel-hot) 16%, transparent), transparent 34%),
+    radial-gradient(circle at 92% 100%, color-mix(in srgb, var(--mandel-cool) 14%, transparent), transparent 36%),
+    var(--mandel-bg);
+  border: 1px solid var(--mandel-line);
+  border-radius: var(--mandel-radius);
+}
+
+.mandelbrot-stage {
+  position: relative;
+  min-height: 380px;
+  overflow: hidden;
+  background: #07080b;
+  border: 1px solid color-mix(in srgb, var(--mandel-cool) 24%, var(--mandel-line));
+  border-radius: calc(var(--mandel-radius) - 2px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 24px 70px var(--mandel-shadow),
+    0 0 70px color-mix(in srgb, var(--mandel-hot) 18%, transparent);
+}
+
+.mandelbrot-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  cursor: crosshair;
+}
+
+.mandelbrot-reticle {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 72px;
+  height: 72px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.mandelbrot-reticle::before,
+.mandelbrot-reticle::after {
+  position: absolute;
+  content: "";
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.mandelbrot-reticle::before {
+  left: 50%;
+  top: -18px;
+  width: 1px;
+  height: 108px;
+}
+
+.mandelbrot-reticle::after {
+  left: -18px;
+  top: 50%;
+  width: 108px;
+  height: 1px;
+}
+
+.mandelbrot-coordinate-strip {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  justify-content: space-between;
+  padding: 0.75rem;
+  color: #f8fafc;
+  background: rgba(7, 8, 11, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: calc(var(--mandel-radius) - 2px);
+  backdrop-filter: blur(14px);
+}
+
+.mandelbrot-coordinate-strip span,
+.mandelbrot-readouts span,
+.mandelbrot-control span {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mandel-muted);
+}
+
+.mandelbrot-coordinate-strip span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mandelbrot-coordinate-strip strong {
+  font-size: 0.9rem;
+  font-weight: 450;
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+
+.mandelbrot-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.25rem;
+  background: var(--mandel-panel);
+  border: 1px solid var(--mandel-line);
+  border-radius: calc(var(--mandel-radius) - 2px);
+  backdrop-filter: blur(12px);
+}
+
+.mandelbrot-presets {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--mandel-line);
+  border-radius: calc(var(--mandel-radius) - 2px);
+}
+
+.mandelbrot-preset {
+  min-height: 42px;
+  padding: 0.7rem 0.85rem;
+  color: var(--mandel-ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--mandel-line);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.mandelbrot-preset:last-child {
+  border-bottom: 0;
+}
+
+.mandelbrot-preset.active,
+.mandelbrot-preset:hover {
+  color: var(--mandel-ink);
+  background: color-mix(in srgb, var(--mandel-active) 11%, transparent);
+  box-shadow: inset 0 -2px 0 var(--mandel-active);
+}
+
+.theme-dark .mandelbrot-preset.active,
+.theme-dark .mandelbrot-preset:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 -2px 0 var(--mandel-active);
+}
+
+.mandelbrot-reset-button {
+  align-self: flex-start;
+  min-height: 30px;
+  padding: 0;
+  color: var(--mandel-muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mandelbrot-reset-button:hover {
+  color: var(--mandel-ink);
+  border-bottom-color: var(--mandel-active);
+}
+
+.mandelbrot-readouts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.15rem;
+}
+
+.mandelbrot-readout {
+  display: grid;
+  gap: 0.3rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--mandel-line);
+}
+
+.mandelbrot-readouts strong {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--mandel-ink);
+  overflow-wrap: anywhere;
+}
+
+.mandelbrot-readout-hero strong {
+  font-size: clamp(2rem, 9vw, 2.65rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  color: var(--mandel-ink);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .mandelbrot-readout-hero strong {
+  color: #fff;
+}
+
+.mandelbrot-controls {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.mandelbrot-control {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.mandelbrot-control input,
+.mandelbrot-control select {
+  width: 100%;
+  min-height: 42px;
+}
+
+.mandelbrot-control input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.mandelbrot-control input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--mandel-line);
+  border-radius: 999px;
+}
+
+.mandelbrot-control input[type="range"]::-moz-range-track {
+  height: 2px;
+  background: var(--mandel-line);
+  border-radius: 999px;
+}
+
+.mandelbrot-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  margin-top: -3px;
+  background: var(--mandel-ink);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--mandel-ink) 10%, transparent);
+}
+
+.mandelbrot-control input[type="range"]::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+  background: var(--mandel-ink);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--mandel-ink) 10%, transparent);
+}
+
+.theme-dark .mandelbrot-control input[type="range"]::-webkit-slider-thumb {
+  background: #fff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
+}
+
+.theme-dark .mandelbrot-control input[type="range"]::-moz-range-thumb {
+  background: #fff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
+}
+
+.mandelbrot-control select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0 1.85rem 0 0;
+  color: var(--mandel-ink);
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23141820' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-position: right 0.05rem center;
+  background-repeat: no-repeat;
+  border: 0;
+  border-bottom: 1px solid var(--mandel-line);
+  border-radius: 0;
+  font-size: 0.95rem;
+}
+
+.theme-dark .mandelbrot-control select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+}
+
+.mandelbrot-control select option {
+  color: #141820;
+  background: #fff;
+}
+
+.theme-dark .mandelbrot-control select option {
+  color: #f2f6ff;
+  background: #111722;
+}
+
+@media (min-width: 760px) {
+  .mandelbrot-root {
+    grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.45fr);
+    padding: 1rem;
+  }
+
+  .mandelbrot-stage,
+  .mandelbrot-canvas {
+    min-height: 640px;
+  }
+
+  .mandelbrot-presets {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mandelbrot-preset {
+    border-right: 1px solid var(--mandel-line);
+    border-bottom: 0;
+  }
+
+  .mandelbrot-preset:last-child {
+    border-right: 0;
+  }
+}

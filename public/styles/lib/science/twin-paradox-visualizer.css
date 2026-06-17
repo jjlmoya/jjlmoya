@@ -1,0 +1,395 @@
+:root {
+  --twin-bg: #f8fbff;
+  --twin-ink: #112033;
+  --twin-muted: #536276;
+  --twin-panel: #fff;
+  --twin-line: rgba(17, 32, 51, 0.09);
+  --twin-rule: rgba(0, 0, 0, 0.05);
+  --twin-track: #e2e8f0;
+  --twin-blue: #183f8f;
+  --twin-red: #b92d3a;
+  --twin-gold: #c8a24d;
+  --twin-green: #16a085;
+  --twin-shadow: 0 24px 70px rgba(24, 54, 92, 0.16);
+}
+
+.theme-dark {
+  --twin-bg: #091014;
+  --twin-ink: #eef6ff;
+  --twin-muted: #b2c1ce;
+  --twin-panel: #10191f;
+  --twin-line: rgba(238, 246, 255, 0.1);
+  --twin-rule: rgba(255, 255, 255, 0.05);
+  --twin-track: rgba(238, 246, 255, 0.12);
+  --twin-blue: #8fb5ff;
+  --twin-red: #ff6b78;
+  --twin-gold: #ffd166;
+  --twin-green: #45d3b4;
+  --twin-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+.twin-lab {
+  display: grid;
+  gap: 1rem;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1rem;
+  color: var(--twin-ink);
+  background: var(--twin-bg);
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--twin-line);
+  border-radius: 8px;
+  box-shadow: var(--twin-shadow);
+}
+
+@media (min-width: 860px) {
+  .twin-lab {
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+    gap: 1.25rem;
+    padding: 1.25rem;
+  }
+}
+
+.twin-viewport,
+.twin-console {
+  min-width: 0;
+}
+
+.twin-viewport {
+  display: grid;
+  gap: 1rem;
+}
+
+.twin-orbit {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--twin-panel) 92%, var(--twin-bg)), var(--twin-panel)),
+    var(--twin-panel);
+  border: 1px solid var(--twin-line);
+  border-radius: 8px;
+}
+
+.twin-earth,
+.twin-ship-clock {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 132px;
+  min-height: 116px;
+  padding: 1.25rem 1.5rem;
+  background: color-mix(in srgb, var(--twin-panel) 88%, transparent);
+  border: 1px solid var(--twin-line);
+  border-radius: 8px;
+}
+
+.twin-earth {
+  left: 1rem;
+  top: 1rem;
+}
+
+.twin-ship-clock {
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.twin-earth span,
+.twin-ship-clock span,
+.twin-metric span,
+.twin-field span {
+  color: var(--twin-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.twin-earth strong,
+.twin-ship-clock strong {
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.twin-path {
+  position: absolute;
+  inset: 112px 18px;
+  display: flex;
+  align-items: center;
+  border-bottom: 0;
+}
+
+.twin-path::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--twin-blue), var(--twin-blue) 10px, transparent 10px, transparent 27px);
+  transform: translateY(-50%);
+  opacity: 0.52;
+}
+
+.twin-turnaround {
+  position: absolute;
+  left: var(--turnaround-progress, 71%);
+  top: 50%;
+  width: 1px;
+  height: 118px;
+  background: var(--twin-red);
+  transform: translate(-50%, -50%);
+  opacity: 0.48;
+}
+
+.twin-turnaround::after {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  background: var(--twin-red);
+  border-radius: 50%;
+}
+
+.twin-ship {
+  position: absolute;
+  left: var(--ship-progress, 71%);
+  top: 50%;
+  width: 46px;
+  height: 22px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--twin-gold) 80%, var(--twin-panel)), var(--twin-red));
+  border-radius: 999px 40% 40% 999px;
+  transform: translate(-50%, -50%);
+  box-shadow: none;
+}
+
+.twin-ship::before {
+  content: "";
+  position: absolute;
+  right: -12px;
+  top: 6px;
+  border-left: 16px solid var(--twin-blue);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+.twin-ship::after {
+  content: var(--clock-rate, "50%");
+  position: absolute;
+  left: 50%;
+  top: 32px;
+  min-width: 58px;
+  padding: 0.2rem 0.35rem;
+  color: var(--twin-panel);
+  background: var(--twin-ink);
+  border-radius: 8px;
+  font-size: 0.72rem;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.twin-worldline {
+  width: 100%;
+  min-height: 220px;
+  background: linear-gradient(180deg, var(--twin-panel), color-mix(in srgb, var(--twin-panel) 88%, var(--twin-bg)));
+  border: 1px solid var(--twin-line);
+  border-radius: 8px;
+}
+
+.twin-lab-grid circle {
+  fill: var(--twin-muted);
+  opacity: 0.18;
+  transition: opacity 0.18s ease;
+}
+
+.twin-earth-line,
+.twin-ship-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.twin-earth-line {
+  stroke: var(--twin-green);
+  stroke-width: 4;
+  opacity: 0.84;
+}
+
+.twin-ship-line {
+  stroke: var(--twin-red);
+  stroke-width: 4;
+  opacity: 0.88;
+}
+
+.twin-event {
+  fill: var(--twin-blue);
+}
+
+.twin-event-return {
+  fill: var(--twin-red);
+}
+
+.twin-console {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: 1rem 1rem 0.7rem;
+  background: color-mix(in srgb, var(--twin-panel) 82%, transparent);
+  border-left: 1px solid var(--twin-rule);
+  border-radius: 0;
+}
+
+.twin-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.twin-presets button {
+  min-height: 42px;
+  padding: 0.55rem 0.45rem;
+  color: var(--twin-ink);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  opacity: 0.4;
+}
+
+.twin-presets button.active,
+.twin-presets button:hover {
+  color: var(--twin-ink);
+  background: color-mix(in srgb, var(--twin-blue) 9%, transparent);
+  border-color: transparent;
+  backdrop-filter: blur(8px);
+  font-weight: 600;
+  opacity: 1;
+}
+
+.twin-field {
+  display: grid;
+  gap: 0.55rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--twin-rule);
+}
+
+.twin-field output {
+  justify-self: start;
+  color: var(--twin-blue);
+  font-size: 1.55rem;
+  font-weight: 800;
+}
+
+.twin-field input {
+  width: 100%;
+  height: 3px;
+  appearance: none;
+  background: linear-gradient(90deg, var(--twin-blue) 0 var(--fill, 50%), var(--twin-track) var(--fill, 50%) 100%);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.twin-field input::-webkit-slider-thumb {
+  width: 13px;
+  height: 13px;
+  appearance: none;
+  background: color-mix(in srgb, var(--twin-gold) 72%, transparent);
+  border: 1px solid var(--twin-panel);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--twin-line);
+}
+
+.twin-field input:active::-webkit-slider-thumb,
+.twin-field input:focus-visible::-webkit-slider-thumb {
+  background: var(--twin-gold);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--twin-gold) 24%, transparent);
+}
+
+.twin-readout {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--twin-rule);
+}
+
+.twin-reunion {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.twin-reunion > span {
+  color: var(--twin-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.twin-reunion strong {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: var(--twin-ink);
+  font-size: clamp(3.6rem, 11.8vw, 5.75rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: 0;
+}
+
+.twin-reunion small {
+  color: var(--twin-muted);
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.twin-results {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--twin-rule);
+  margin-inline: -1rem;
+}
+
+.twin-metric {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 1rem;
+  background: transparent;
+  border-bottom: 1px solid var(--twin-rule);
+  border-radius: 0;
+}
+
+.twin-metric strong {
+  color: var(--twin-ink);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+@media (max-width: 520px) {
+  .twin-lab {
+    padding: 0.7rem;
+  }
+
+  .twin-orbit {
+    min-height: 320px;
+  }
+
+  .twin-earth,
+  .twin-ship-clock {
+    width: 116px;
+    padding: 0.7rem;
+  }
+
+  .twin-presets {
+    grid-template-columns: 1fr;
+  }
+}

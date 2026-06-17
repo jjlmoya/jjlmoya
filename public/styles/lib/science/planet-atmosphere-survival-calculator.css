@@ -1,0 +1,494 @@
+.survival-console {
+  --survival-ink: #162023;
+  --survival-muted: #667578;
+  --survival-soft: #0fa;
+  --survival-panel: rgba(255, 255, 255, 0.72);
+  --survival-panel-strong: rgba(255, 255, 255, 0.86);
+  --survival-line: rgba(20, 43, 46, 0.09);
+  --survival-grid: transparent;
+  --survival-cyan: #00a994;
+  --survival-yellow: #cfaa45;
+  --survival-red: #d64258;
+  --survival-violet: #7368ff;
+  --survival-shadow: rgba(0, 0, 0, 0.02);
+
+  position: relative;
+  display: grid;
+  gap: clamp(0.9rem, 3vw, 1.5rem);
+  width: min(100%, 1180px);
+  padding: clamp(0.9rem, 2.4vw, 1.35rem);
+  overflow: hidden;
+  color: var(--survival-ink);
+  background: #fafbfc;
+  border: 1px solid rgba(20, 43, 46, 0.06);
+  border-radius: 18px;
+  box-shadow: 0 30px 60px var(--survival-shadow);
+}
+
+.theme-dark .survival-console {
+  --survival-ink: #eef7f1;
+  --survival-muted: #889a98;
+  --survival-panel: rgba(18, 31, 34, 0.88);
+  --survival-panel-strong: rgba(10, 21, 24, 0.94);
+  --survival-line: rgba(151, 255, 235, 0.12);
+  --survival-grid: rgba(133, 231, 217, 0.04);
+  --survival-cyan: #85e7d9;
+  --survival-shadow: rgba(0, 0, 0, 0.34);
+
+  background:
+    linear-gradient(90deg, rgba(133, 231, 217, 0.045) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(133, 231, 217, 0.04) 1px, transparent 1px),
+    linear-gradient(135deg, #0b1518 0%, #101d20 48%, #151c1f 100%);
+  background-size: 18px 18px, 18px 18px, auto;
+}
+
+.survival-visor,
+.survival-panel,
+.survival-summary-card {
+  min-width: 0;
+}
+
+.survival-summary-card {
+  display: grid;
+  gap: 1.1rem;
+  padding: clamp(1rem, 2.5vw, 1.35rem);
+  border: 1px solid rgba(20, 43, 46, 0.055);
+  border-radius: 14px;
+  background: var(--survival-panel);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.02);
+}
+
+.theme-dark .survival-summary-card {
+  border-color: rgba(133, 231, 217, 0.06);
+}
+
+.survival-summary-kicker,
+.survival-summary-readouts span {
+  display: block;
+  color: var(--survival-muted);
+  font-size: 0.64rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.survival-summary-card h2 {
+  margin: 0.18rem 0 0;
+  color: var(--survival-ink);
+  font-size: clamp(1.7rem, 4vw, 3.2rem);
+  font-weight: 860;
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+.survival-summary-readouts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.survival-summary-readouts strong {
+  display: block;
+  margin-top: 0.22rem;
+  color: var(--survival-ink);
+  font-size: clamp(1rem, 2.2vw, 1.34rem);
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.survival-visor {
+  display: grid;
+  gap: 1rem;
+}
+
+.survival-planet,
+.survival-timeline,
+.survival-panel {
+  border: 1px solid rgba(20, 43, 46, 0.055);
+  border-radius: 14px;
+  background:
+    linear-gradient(90deg, var(--survival-grid) 1px, transparent 1px),
+    linear-gradient(0deg, var(--survival-grid) 1px, transparent 1px),
+    var(--survival-panel);
+  background-size: 14px 14px, 14px 14px, auto;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.02);
+}
+
+.theme-dark .survival-planet,
+.theme-dark .survival-timeline,
+.theme-dark .survival-panel {
+  border-color: rgba(133, 231, 217, 0.06);
+}
+
+.survival-planet {
+  position: relative;
+  display: grid;
+  min-height: 420px;
+  place-items: center;
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.02),
+    inset -80px -80px 140px rgba(217, 75, 96, 0.035);
+}
+
+.survival-particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.52;
+}
+
+.theme-dark .survival-particle-canvas {
+  opacity: 0.86;
+}
+
+.theme-dark .survival-planet {
+  box-shadow: inset -80px -80px 140px rgba(217, 75, 96, 0.08);
+}
+
+.survival-orbit {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 580px);
+  height: auto;
+  overflow: visible;
+}
+
+.survival-shell {
+  fill: none;
+  stroke: var(--survival-line);
+  stroke-width: 1.2;
+}
+
+.survival-shell-outer {
+  stroke-dasharray: 4 12;
+}
+
+.survival-particles {
+  transform-origin: 230px 230px;
+}
+
+.survival-particle {
+  stroke: var(--survival-cyan);
+  stroke-linecap: round;
+  stroke-width: 1.5;
+  opacity: var(--particle-opacity);
+  transform-origin: 230px 230px;
+  animation: survival-particle-drift var(--particle-speed, 18s) linear infinite;
+  animation-delay: var(--particle-delay);
+}
+
+.survival-core {
+  fill: var(--survival-panel-strong);
+  stroke: rgba(20, 43, 46, 0.1);
+}
+
+.theme-dark .survival-core {
+  stroke: rgba(133, 231, 217, 0.12);
+}
+
+.survival-core-time,
+.survival-core-label,
+.survival-spoke-label,
+.survival-timeline text {
+  fill: var(--survival-ink);
+  text-anchor: middle;
+}
+
+.survival-core-time {
+  font-size: 42px;
+  font-weight: 850;
+}
+
+.survival-core-label {
+  fill: var(--survival-muted);
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.survival-risk-ring {
+  display: none;
+}
+
+.survival-hazard-spoke {
+  stroke: var(--survival-red);
+  stroke-linecap: round;
+  stroke-width: 1.4;
+  opacity: 0.92;
+  filter: drop-shadow(0 0 5px rgba(217, 75, 96, 0.45));
+}
+
+.survival-hazard-node {
+  fill: var(--survival-red);
+  filter: drop-shadow(0 0 9px rgba(217, 75, 96, 0.58));
+}
+
+.survival-spoke-label {
+  fill: var(--survival-muted);
+  font-size: 10px;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.survival-timeline {
+  min-height: 142px;
+  padding: 0.3rem;
+}
+
+.survival-timeline svg {
+  width: 100%;
+  height: 150px;
+}
+
+.survival-timeline-grid {
+  fill: none;
+  stroke: var(--survival-line);
+  stroke-width: 1;
+}
+
+.survival-timeline-fill {
+  fill: rgba(217, 75, 96, 0.28);
+}
+
+.survival-timeline-cold {
+  fill: rgba(171, 218, 255, 0.42);
+}
+
+.survival-timeline-line {
+  fill: none;
+  stroke: var(--survival-red);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.survival-timeline text {
+  fill: var(--survival-muted);
+  font-size: 10px;
+  text-anchor: middle;
+}
+
+.survival-axis-label {
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.survival-axis-y {
+  text-anchor: start;
+}
+
+.survival-axis-x {
+  text-anchor: end;
+}
+
+.survival-panel {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 1.3rem);
+}
+
+.survival-panel-top {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.survival-unit-toggle {
+  display: flex;
+  justify-self: end;
+  padding: 2px;
+  border: 1px solid rgba(20, 43, 46, 0.08);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.theme-dark .survival-unit-toggle {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.survival-unit-toggle button {
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 18px;
+  color: var(--survival-muted);
+  background: transparent;
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.survival-unit-toggle button:is(.is-active, .active) {
+  color: #000;
+  background: var(--survival-soft);
+  box-shadow: 0 0 18px rgba(133, 231, 217, 0.28);
+}
+
+.survival-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.survival-field span,
+.survival-metrics span {
+  color: var(--survival-muted);
+  font-size: 0.64rem;
+  font-weight: 850;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.survival-field output,
+.survival-metrics strong {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: var(--survival-ink);
+  font-size: 1.26rem;
+  font-weight: 750;
+  line-height: 1;
+}
+
+.survival-field select {
+  width: 100%;
+  min-height: 50px;
+  padding-right: 1.6rem;
+  border: 0;
+  appearance: none;
+  color: var(--survival-ink);
+  background-color: transparent;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentcolor 50%),
+    linear-gradient(135deg, currentcolor 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 54%,
+    calc(100% - 8px) 54%;
+  background-repeat: no-repeat;
+  background-size: 6px 6px, 6px 6px;
+  font-size: 1.82rem;
+  font-weight: 850;
+}
+
+.survival-field select option {
+  color: #101d20;
+}
+
+.survival-note {
+  min-height: 4rem;
+  margin: 0;
+  color: #637174;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.theme-dark .survival-note {
+  color: #a6b7b4;
+}
+
+.survival-grid,
+.survival-metrics {
+  display: grid;
+  gap: 1.05rem;
+}
+
+.survival-field input[type='range'] {
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+}
+
+.survival-field input[type='range']::-webkit-slider-runnable-track {
+  height: 3px;
+  background: linear-gradient(90deg, var(--survival-cyan), var(--survival-yellow), var(--survival-red));
+}
+
+.survival-field input[type='range']::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  margin-top: -6px;
+  border: 2px solid #f8f9fa;
+  border-radius: 50%;
+  appearance: none;
+  background: var(--survival-violet);
+  box-shadow: 0 0 0 1px rgba(0, 169, 148, 0.32), 0 0 14px rgba(115, 104, 255, 0.28);
+}
+
+.theme-dark .survival-field input[type='range']::-webkit-slider-thumb {
+  border-color: #0d171a;
+  box-shadow: 0 0 0 1px rgba(133, 231, 217, 0.38), 0 0 16px rgba(115, 104, 255, 0.42);
+}
+
+.survival-field input[type='range']::-moz-range-track {
+  height: 3px;
+  background: linear-gradient(90deg, var(--survival-cyan), var(--survival-yellow), var(--survival-red));
+}
+
+.survival-field input[type='range']::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #f8f9fa;
+  border-radius: 50%;
+  background: var(--survival-violet);
+  box-shadow: 0 0 0 1px rgba(0, 169, 148, 0.32), 0 0 14px rgba(115, 104, 255, 0.28);
+}
+
+.theme-dark .survival-field input[type='range']::-moz-range-thumb {
+  border-color: #0d171a;
+  box-shadow: 0 0 0 1px rgba(133, 231, 217, 0.38), 0 0 16px rgba(115, 104, 255, 0.42);
+}
+
+.survival-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--survival-line);
+}
+
+@media (min-width: 900px) {
+  .survival-console {
+    grid-template-columns: minmax(0, 1.38fr) minmax(315px, 0.78fr);
+    align-items: start;
+  }
+
+  .survival-summary-card {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.62fr);
+    align-items: end;
+  }
+
+  .survival-planet {
+    min-height: 560px;
+  }
+
+  .survival-panel-top {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .survival-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@keyframes survival-particle-drift {
+  0% {
+    transform: rotate(0deg) translateX(0);
+  }
+
+  50% {
+    transform: rotate(180deg) translateX(var(--particle-chaos, 0));
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(0);
+  }
+}
