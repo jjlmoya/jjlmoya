@@ -1,0 +1,603 @@
+:root {
+  --life-bg: #eef3ed;
+  --life-panel: rgba(255, 255, 255, 0.88);
+  --life-ink: #132019;
+  --life-muted: #657469;
+  --life-line: rgba(19, 32, 25, 0.13);
+  --life-board: #dfe7dd;
+  --life-board-canvas: #dfe7dd;
+  --life-grid-canvas: rgba(35, 55, 43, 0.08);
+  --life-cell: #0f5f45;
+  --life-cell-low: #1f684d;
+  --life-cell-high: #092f24;
+  --life-warm: #f0b35b;
+  --life-accent: #2aa876;
+  --life-danger: #d95757;
+  --life-shadow: rgba(8, 24, 16, 0.18);
+  --life-board-inset: 34px;
+  --life-glass: rgba(247, 251, 246, 0.56);
+  --life-glass-line: rgba(19, 32, 25, 0.12);
+}
+
+.theme-dark,
+:root.theme-dark,
+[data-theme="dark"] {
+  --life-bg: #080d0a;
+  --life-panel: rgba(15, 25, 19, 0.88);
+  --life-ink: #f0fff4;
+  --life-muted: #9db1a4;
+  --life-line: rgba(240, 255, 244, 0.12);
+  --life-board: #030704;
+  --life-board-canvas: #030704;
+  --life-grid-canvas: rgba(166, 255, 197, 0.07);
+  --life-cell: #a1ffbd;
+  --life-cell-low: #8af0ac;
+  --life-cell-high: #d8ffd8;
+  --life-warm: #ffc46b;
+  --life-accent: #50d89b;
+  --life-danger: #ff7474;
+  --life-shadow: rgba(0, 0, 0, 0.42);
+  --life-glass: rgba(3, 7, 4, 0.5);
+  --life-glass-line: rgba(161, 255, 189, 0.14);
+}
+
+.theme-dark .life-lab-root,
+:root.theme-dark .life-lab-root,
+[data-theme="dark"] .life-lab-root {
+  --life-bg: #080d0a;
+  --life-panel: rgba(15, 25, 19, 0.88);
+  --life-ink: #f0fff4;
+  --life-muted: #9db1a4;
+  --life-line: rgba(240, 255, 244, 0.12);
+  --life-board: #0b0f12;
+  --life-board-canvas: #0b0f12;
+  --life-grid-canvas: rgba(255, 255, 255, 0.03);
+  --life-cell-low: #50d89b;
+  --life-cell-high: #b7ffd0;
+  --life-accent: #50d89b;
+  --life-shadow: rgba(0, 0, 0, 0.42);
+  --life-glass: rgba(6, 10, 12, 0.58);
+  --life-glass-line: rgba(161, 255, 189, 0.14);
+}
+
+.life-lab-root {
+  display: grid;
+  gap: 1rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0.75rem;
+  color: var(--life-ink);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--life-accent) 13%, transparent), transparent 38%),
+    linear-gradient(315deg, color-mix(in srgb, var(--life-warm) 16%, transparent), transparent 40%),
+    var(--life-bg);
+  border: 1px solid var(--life-line);
+  border-radius: 8px;
+}
+
+.life-lab-board-shell {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  background: var(--life-board);
+  border: 1px solid color-mix(in srgb, var(--life-accent) 22%, var(--life-line));
+  border-radius: 8px;
+  box-shadow: 0 28px 80px var(--life-shadow);
+}
+
+.life-lab-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+.life-lab-editing .life-lab-canvas {
+  cursor: cell;
+}
+
+.life-lab-board-toolbar,
+.life-lab-signal {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  gap: 0.18rem;
+  align-items: center;
+  background: var(--life-glass);
+  border: 1px solid var(--life-glass-line);
+  border-radius: 999px;
+  backdrop-filter: blur(18px);
+}
+
+.life-lab-board-toolbar {
+  top: 0.8rem;
+  left: 50%;
+  padding: 0.22rem;
+  transform: translateX(-50%);
+}
+
+.life-lab-signal {
+  left: 50%;
+  bottom: 0.8rem;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  color: var(--life-ink);
+  transform: translateX(-50%);
+}
+
+.life-lab-signal span,
+.life-lab-readout span,
+.life-lab-control span {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.life-lab-signal span {
+  color: var(--life-muted);
+}
+
+.life-lab-signal strong {
+  font-size: clamp(1rem, 4.5vw, 1.45rem);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.life-lab-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.life-lab-icon-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: var(--life-ink);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.72;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.life-lab-icon-button:hover,
+.life-lab-icon-button:focus-visible,
+.life-lab-icon-button.life-lab-running {
+  opacity: 1;
+  background: color-mix(in srgb, var(--life-accent) 14%, transparent);
+}
+
+.life-lab-icon {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.life-lab-icon-play::before {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  width: 0;
+  height: 0;
+  content: "";
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 9px solid currentcolor;
+  transition:
+    left 160ms ease,
+    width 160ms ease,
+    height 160ms ease,
+    border 160ms ease,
+    background 160ms ease;
+}
+
+.life-lab-paused-icon .life-lab-icon-play::before,
+.life-lab-paused-icon .life-lab-icon-play::after {
+  position: absolute;
+  top: 3px;
+  width: 1.5px;
+  height: 12px;
+  content: "";
+  background: currentcolor;
+  border: 0;
+  transition:
+    left 160ms ease,
+    background 160ms ease,
+    opacity 160ms ease;
+}
+
+.life-lab-paused-icon .life-lab-icon-play::before {
+  left: 6px;
+}
+
+.life-lab-paused-icon .life-lab-icon-play::after {
+  left: 11px;
+}
+
+.life-lab-icon-step::before,
+.life-lab-icon-step::after {
+  position: absolute;
+  content: "";
+}
+
+.life-lab-icon-step::before {
+  top: 5px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-top: 1.5px solid currentcolor;
+  border-right: 1.5px solid currentcolor;
+  transform: rotate(45deg);
+}
+
+.life-lab-icon-step::after {
+  top: 3px;
+  right: 3px;
+  width: 1.5px;
+  height: 12px;
+  background: currentcolor;
+}
+
+.life-lab-icon-clear::before,
+.life-lab-icon-clear::after {
+  position: absolute;
+  top: 8px;
+  left: 3px;
+  width: 12px;
+  height: 1.5px;
+  content: "";
+  background: currentcolor;
+}
+
+.life-lab-icon-clear::before {
+  transform: rotate(45deg);
+}
+
+.life-lab-icon-clear::after {
+  transform: rotate(-45deg);
+}
+
+.life-lab-console {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.15rem;
+  background: var(--life-panel);
+  border: 1px solid var(--life-line);
+  border-radius: 8px;
+  backdrop-filter: blur(14px);
+}
+
+.life-lab-readouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.life-lab-readout {
+  min-height: 64px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.life-lab-readout span,
+.life-lab-control span {
+  color: var(--life-muted);
+}
+
+.life-lab-readout strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: clamp(1.55rem, 7vw, 2.25rem);
+  font-weight: 430;
+  line-height: 1;
+  white-space: nowrap;
+  overflow-wrap: anywhere;
+}
+
+.life-lab-readout-main {
+  grid-column: 1 / -1;
+  min-height: 132px;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--life-line);
+  background: transparent;
+}
+
+.life-lab-readout-main strong {
+  margin-top: 0.2rem;
+  font-size: clamp(5rem, 30vw, 8.5rem);
+  font-weight: 360;
+  letter-spacing: -0.05em;
+}
+
+.life-lab-achievements {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.2rem 0 0.4rem;
+  border-bottom: 1px solid var(--life-line);
+}
+
+.life-lab-achievements-label {
+  color: var(--life-muted);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.life-lab-achievement {
+  display: grid;
+  grid-template-columns: minmax(74px, 0.35fr) minmax(0, 0.65fr);
+  gap: 0.65rem;
+  align-items: baseline;
+  color: var(--life-muted);
+  opacity: 0.46;
+}
+
+.life-lab-achievement strong {
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.life-lab-achievement span {
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.life-lab-achievement-active {
+  color: var(--life-ink);
+  opacity: 1;
+}
+
+.life-lab-achievement-active strong {
+  color: var(--life-accent);
+}
+
+.life-lab-rule-deck {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.15rem;
+  padding: 0.15rem 0;
+  overflow: visible;
+  border: 0;
+  border-top: 1px solid var(--life-line);
+  border-bottom: 1px solid var(--life-line);
+  border-radius: 0;
+}
+
+.life-lab-rule-preset,
+.life-lab-command {
+  min-height: 42px;
+  color: var(--life-ink);
+  background: transparent;
+  border: 0;
+  font-weight: 780;
+  cursor: pointer;
+}
+
+.life-lab-rule-preset {
+  min-height: 38px;
+  padding: 0.55rem 0.15rem;
+  color: var(--life-muted);
+  border-bottom: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.life-lab-rule-preset:hover,
+.life-lab-rule-preset.active {
+  color: var(--life-ink);
+  background: transparent;
+  box-shadow: inset 0 -1px 0 var(--life-accent);
+}
+
+.life-lab-controls {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.life-lab-control {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.life-lab-control input,
+.life-lab-control select {
+  width: 100%;
+  min-height: 42px;
+  color: var(--life-ink);
+  background: transparent;
+  border: 1px solid var(--life-line);
+  border-radius: 6px;
+}
+
+.life-lab-control input[type="text"],
+.life-lab-control select {
+  padding: 0 0.75rem;
+  font-size: 1rem;
+}
+
+.life-lab-select-shell {
+  position: relative;
+  display: block;
+}
+
+.life-lab-select-shell::after {
+  position: absolute;
+  top: 50%;
+  right: 0.85rem;
+  width: 0.52rem;
+  height: 0.52rem;
+  content: "";
+  border-right: 1.5px solid var(--life-muted);
+  border-bottom: 1.5px solid var(--life-muted);
+  transform: translateY(-68%) rotate(45deg);
+  pointer-events: none;
+}
+
+.life-lab-control select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 2.15rem;
+}
+
+.life-lab-control select option {
+  color: #132019;
+  background: #f7fbf6;
+}
+
+.theme-dark .life-lab-control select option,
+:root.theme-dark .life-lab-control select option,
+[data-theme="dark"] .life-lab-control select option {
+  color: #f0fff4;
+  background: #0b0f12;
+}
+
+.life-lab-control input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.life-lab-control input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: color-mix(in srgb, var(--life-accent) 28%, var(--life-line));
+  border-radius: 999px;
+}
+
+.life-lab-control input[type="range"]::-moz-range-track {
+  height: 2px;
+  background: color-mix(in srgb, var(--life-accent) 28%, var(--life-line));
+  border-radius: 999px;
+}
+
+.life-lab-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -8px;
+  background: var(--life-accent);
+  border: 2px solid var(--life-panel);
+  border-radius: 50%;
+}
+
+.life-lab-control input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--life-accent);
+  border: 2px solid var(--life-panel);
+  border-radius: 50%;
+}
+
+.life-lab-control input[type="range"]:hover::-webkit-slider-thumb {
+  background: color-mix(in srgb, var(--life-accent) 82%, var(--life-ink));
+}
+
+.life-lab-control input[type="range"]:hover::-moz-range-thumb {
+  background: color-mix(in srgb, var(--life-accent) 82%, var(--life-ink));
+}
+
+.life-lab-invalid {
+  border-color: var(--life-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--life-danger) 18%, transparent);
+}
+
+.life-lab-command {
+  padding: 0 0.9rem;
+  color: var(--life-ink);
+  background: transparent;
+  border: 1px solid var(--life-line);
+  border-radius: 6px;
+}
+
+.life-lab-controls > .life-lab-command {
+  align-self: end;
+}
+
+.life-lab-command:hover {
+  background: color-mix(in srgb, var(--life-accent) 10%, transparent);
+}
+
+.life-lab-command-warm {
+  color: var(--life-ink);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--life-warm) 44%, var(--life-line));
+}
+
+.life-lab-console .life-lab-command {
+  min-height: 42px;
+  color: var(--life-ink);
+  background: transparent;
+  border-color: var(--life-line);
+}
+
+.life-lab-console .life-lab-command:hover {
+  border-color: color-mix(in srgb, var(--life-accent) 52%, var(--life-line));
+}
+
+@media (min-width: 760px) {
+  .life-lab-root {
+    grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.65fr);
+    padding: 1rem;
+  }
+
+  .life-lab-board-shell,
+  .life-lab-canvas {
+    min-height: 690px;
+  }
+
+  .life-lab-board-toolbar {
+    right: auto;
+  }
+
+  .life-lab-signal {
+    right: auto;
+    min-width: 240px;
+  }
+
+  .life-lab-readouts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .life-lab-readout-main {
+    grid-column: span 3;
+  }
+
+  .life-lab-rule-deck {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .life-lab-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+  }
+
+  .life-lab-control-wide {
+    grid-column: 1 / -1;
+  }
+}

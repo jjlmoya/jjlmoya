@@ -1,0 +1,530 @@
+.albedo-lab {
+  --albedo-ink: #101817;
+  --albedo-muted: rgba(16, 24, 23, 0.62);
+  --albedo-line: rgba(16, 24, 23, 0.13);
+  --albedo-panel: rgba(255, 255, 255, 0.42);
+  --albedo-track: rgba(16, 24, 23, 0.14);
+  --albedo-sea: #1d8da0;
+  --albedo-land: #4f9a68;
+  --albedo-ice: #f1fdff;
+  --albedo-warm: #ef8f35;
+  --solar-intensity: 0.566;
+  --greenhouse-intensity: 0.179;
+  --atmosphere-intensity: 0.36;
+  --ice-cover: 22%;
+  --initial-ice-cover: 22%;
+  --north-ice-height: 16.58%;
+  --south-ice-height: 18.46%;
+  --mid-ice-height: 2.86%;
+  --mid-ice-opacity: 0;
+  --north-ice-tilt: -3.45deg;
+  --south-ice-tilt: 4.43deg;
+  --albedo-glow: 0.42;
+  --chart-ice-opacity: 0.22;
+  --solar-panel-alpha: 0.22;
+  --solar-panel-alpha-dark: 0.31;
+  --atmosphere-panel-alpha: 0.11;
+  --atmosphere-panel-alpha-dark: 0.12;
+  --sun-size: 211px;
+  --sun-glow-near: 91px;
+  --sun-glow-far: 216px;
+  --sun-glow-alpha-near: 0.58;
+  --sun-glow-alpha-far: 0.24;
+  --sun-saturation: 1.14;
+  --earth-atmosphere-glow: 49px;
+  --earth-atmosphere-alpha: 0.3;
+  --earth-albedo-glow: 42px;
+  --earth-albedo-alpha: 0.21;
+  --earth-saturation: 0.86;
+  --earth-brightness: 1;
+  --atmosphere-inset: -12px;
+  --atmosphere-border-width: 4px;
+  --atmosphere-border-alpha: 0.25;
+  --glint-alpha: 0.23;
+  --snowball-reflection: 0;
+
+  position: relative;
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  overflow: hidden;
+  color: var(--albedo-ink);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 10% 38%, rgba(239, 143, 53, var(--solar-panel-alpha)), transparent 32%),
+    radial-gradient(circle at 64% 16%, rgba(0, 168, 204, 0.15), transparent 36%),
+    radial-gradient(circle at 64% 16%, rgba(29, 141, 160, var(--atmosphere-panel-alpha)), transparent 44%),
+    var(--albedo-panel);
+  box-shadow: 0 26px 90px rgba(16, 24, 23, 0.13);
+  backdrop-filter: blur(24px);
+}
+
+.theme-dark .albedo-lab,
+body.theme-dark .albedo-lab,
+html.theme-dark .albedo-lab {
+  --albedo-ink: #fff;
+  --albedo-muted: rgba(255, 255, 255, 0.64);
+  --albedo-line: rgba(255, 255, 255, 0.13);
+  --albedo-panel: rgba(15, 23, 42, 0.3);
+  --albedo-track: rgba(255, 255, 255, 0.16);
+
+  border-color: rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at 8% 42%, rgba(239, 143, 53, var(--solar-panel-alpha-dark)), transparent 34%),
+    radial-gradient(circle at 67% 12%, rgba(90, 200, 220, var(--atmosphere-panel-alpha-dark)), transparent 38%),
+    var(--albedo-panel);
+  box-shadow: 0 28px 96px rgba(0, 0, 0, 0.44);
+}
+
+.albedo-lab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 0 38%, var(--albedo-line) 38% calc(38% + 1px), transparent calc(38% + 1px)),
+    linear-gradient(180deg, transparent 0 68%, var(--albedo-line) 68% calc(68% + 1px), transparent calc(68% + 1px));
+  opacity: 0.72;
+}
+
+.albedo-planet {
+  position: relative;
+  min-height: 430px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.albedo-guide {
+  position: absolute;
+  background: var(--albedo-line);
+  pointer-events: none;
+}
+
+.albedo-guide-horizontal {
+  left: 1rem;
+  right: 1rem;
+  bottom: 5.4rem;
+  height: 1px;
+}
+
+.albedo-guide-vertical {
+  top: 1rem;
+  bottom: 1rem;
+  left: 24%;
+  width: 1px;
+}
+
+.albedo-sun {
+  position: absolute;
+  left: clamp(-112px, -14vw, -72px);
+  width: var(--sun-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff9d6 0 16%, #f8c65a 52%, #df672f 100%);
+  box-shadow:
+    0 0 var(--sun-glow-near) rgba(239, 143, 53, var(--sun-glow-alpha-near)),
+    0 0 var(--sun-glow-far) rgba(239, 143, 53, var(--sun-glow-alpha-far));
+  filter: saturate(var(--sun-saturation));
+  transition: width 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+}
+
+.albedo-lab[data-state="snowball"] .albedo-sun {
+  box-shadow:
+    0 0 calc(var(--sun-glow-near) + 34px) rgba(255, 255, 255, 0.62),
+    0 0 calc(var(--sun-glow-far) + 120px) rgba(188, 232, 245, 0.28),
+    0 0 220px rgba(239, 143, 53, 0.16);
+  filter: saturate(0.82) brightness(1.18);
+}
+
+.albedo-orbit {
+  width: min(78vw, 420px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(29, 141, 160, 0.18);
+  border-radius: 50%;
+  transform: translateX(4%);
+}
+
+.albedo-earth {
+  position: relative;
+  width: min(58vw, 278px);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.38), transparent 16%),
+    radial-gradient(circle at 56% 44%, var(--albedo-land) 0 13%, transparent 14%),
+    radial-gradient(circle at 36% 58%, #3d875e 0 10%, transparent 11%),
+    linear-gradient(135deg, #166178 0 26%, var(--albedo-sea) 26% 58%, #126e8b 58% 100%);
+  box-shadow:
+    inset -34px -24px 52px rgba(4, 19, 28, 0.42),
+    inset 20px 16px 34px rgba(255, 255, 255, 0.12),
+    0 0 var(--earth-atmosphere-glow) rgba(83, 209, 226, var(--earth-atmosphere-alpha)),
+    0 0 var(--earth-albedo-glow) rgba(241, 253, 255, var(--earth-albedo-alpha));
+  transition: box-shadow 220ms ease, filter 220ms ease;
+  filter: saturate(var(--earth-saturation)) brightness(var(--earth-brightness));
+}
+
+.albedo-lab[data-state="snowball"] .albedo-earth {
+  box-shadow:
+    inset -28px -22px 54px rgba(47, 83, 105, 0.34),
+    inset 24px 18px 38px rgba(255, 255, 255, 0.28),
+    0 0 54px rgba(255, 255, 255, 0.62),
+    0 0 104px rgba(173, 216, 230, 0.42);
+  filter: saturate(0.68) brightness(1.12);
+}
+
+.albedo-atmosphere {
+  position: absolute;
+  inset: var(--atmosphere-inset);
+  border-radius: 50%;
+  border: var(--atmosphere-border-width) solid rgba(106, 222, 235, var(--atmosphere-border-alpha));
+  box-shadow: inset 0 0 36px rgba(106, 222, 235, 0.18);
+}
+
+.albedo-ice {
+  position: absolute;
+  left: -13%;
+  width: 126%;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.98), rgba(207, 240, 247, 0.92)),
+    repeating-linear-gradient(105deg, transparent 0 16px, rgba(29, 141, 160, 0.12) 16px 19px);
+  filter: drop-shadow(0 7px 12px rgba(222, 250, 255, 0.26));
+  transition: height 220ms ease, opacity 220ms ease, transform 220ms ease;
+}
+
+.albedo-ice-north {
+  top: -1%;
+  height: var(--north-ice-height);
+  border-radius: 0 0 54% 46%;
+  transform: rotate(var(--north-ice-tilt));
+}
+
+.albedo-ice-mid {
+  top: 48%;
+  height: var(--mid-ice-height);
+  opacity: var(--mid-ice-opacity);
+  border-radius: 48% 52%;
+  transform: rotate(-12deg);
+}
+
+.albedo-ice-south {
+  bottom: -1%;
+  height: var(--south-ice-height);
+  border-radius: 48% 58% 0 0;
+  transform: rotate(var(--south-ice-tilt));
+}
+
+.albedo-glint {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, var(--glint-alpha)), transparent 42%),
+    radial-gradient(circle at 28% 26%, rgba(255, 255, 255, 0.34), transparent 17%);
+  mix-blend-mode: screen;
+}
+
+.albedo-lab[data-state="snowball"] .albedo-glint {
+  background:
+    linear-gradient(112deg, transparent 4%, rgba(255, 255, 255, 0.62), transparent 46%),
+    radial-gradient(circle at 28% 26%, rgba(255, 255, 255, 0.58), transparent 22%);
+}
+
+.albedo-state-pill {
+  position: absolute;
+  left: 50%;
+  width: min(58vw, 278px);
+  bottom: 1.2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: end;
+  transform: translateX(calc(-50% + 4%));
+}
+
+.albedo-state-pill span,
+.albedo-slider span,
+.albedo-readouts span,
+.albedo-chart-head span {
+  color: var(--albedo-muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.albedo-state-pill strong {
+  max-width: 100%;
+  text-align: left;
+  font-size: clamp(1.35rem, 4.8vw, 2.7rem);
+  font-weight: 300;
+  line-height: 0.95;
+}
+
+.albedo-lab[data-state="snowball"] .albedo-state-pill strong {
+  color: #f8fdff;
+  font-size: clamp(1.55rem, 5.4vw, 3.1rem);
+  text-shadow:
+    -1px 0 rgba(130, 219, 242, 0.38),
+    1px 0 rgba(255, 255, 255, 0.32),
+    0 0 22px rgba(210, 245, 255, 0.32);
+  animation: albedo-snowball-pulse 2.4s ease-in-out infinite;
+}
+
+.albedo-controls,
+.albedo-readouts,
+.albedo-chart-panel {
+  position: relative;
+  padding: 1.1rem;
+  border-top: 1px solid var(--albedo-line);
+}
+
+.albedo-controls {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.albedo-slider {
+  --track-color: var(--albedo-sea);
+  --accent-color: var(--albedo-sea);
+
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(7.5rem, 0.18fr);
+  gap: 0.42rem 1rem;
+  align-items: center;
+  min-height: 72px;
+}
+
+.albedo-slider output {
+  color: var(--albedo-ink);
+  font-size: clamp(1.55rem, 7vw, 2.55rem);
+  font-weight: 300;
+  line-height: 1;
+  justify-self: end;
+  padding-right: 0.28rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.albedo-slider output sup,
+.albedo-readouts strong sup {
+  font-size: 0.48em;
+  line-height: 0;
+  margin-left: 0.04em;
+  position: relative;
+  top: -0.42em;
+  vertical-align: baseline;
+}
+
+.albedo-slider input {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 22px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.albedo-slider-solar {
+  --track-color: #ef8f35;
+  --accent-color: #ef8f35;
+}
+
+.albedo-slider-greenhouse {
+  --track-color: #8aa274;
+  --accent-color: #8aa274;
+}
+
+.albedo-slider-ice {
+  --track-color: #88ddeb;
+  --accent-color: #dff9ff;
+}
+
+.albedo-slider input::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(90deg, var(--track-color) 0 var(--fill, 50%), var(--albedo-track) var(--fill, 50%) 100%);
+}
+
+.albedo-slider input::-webkit-slider-thumb {
+  width: 17px;
+  height: 17px;
+  margin-top: -7.5px;
+  appearance: none;
+  border: 2px solid var(--accent-color);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);
+  transition: transform 100ms ease, box-shadow 100ms ease;
+}
+
+.albedo-slider input:active::-webkit-slider-thumb {
+  transform: scale(1.3);
+  box-shadow: 0 0 22px rgba(0, 0, 0, 0.18);
+}
+
+.albedo-slider input::-moz-range-track {
+  height: 2px;
+  background: var(--albedo-track);
+}
+
+.albedo-slider input::-moz-range-progress {
+  height: 2px;
+  background: var(--accent-color);
+}
+
+.albedo-slider input::-moz-range-thumb {
+  width: 17px;
+  height: 17px;
+  border: 2px solid var(--accent-color);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.albedo-readouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 0;
+  border-top: 1px solid var(--albedo-line);
+  background: var(--albedo-line);
+}
+
+.albedo-readouts article {
+  min-height: 124px;
+  display: grid;
+  align-content: space-between;
+  padding: 1.15rem 1.05rem 1.02rem;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.theme-dark .albedo-readouts article,
+body.theme-dark .albedo-readouts article,
+html.theme-dark .albedo-readouts article {
+  background: rgba(15, 23, 42, 0.18);
+}
+
+.albedo-readouts strong {
+  font-size: clamp(2.05rem, 8vw, 3.45rem);
+  font-weight: 300;
+  line-height: 0.88;
+  align-self: end;
+}
+
+@keyframes albedo-snowball-pulse {
+  0%,
+  100% {
+    opacity: 0.82;
+    filter: blur(0);
+  }
+
+  48% {
+    opacity: 1;
+    filter: blur(0.2px);
+  }
+
+  52% {
+    text-shadow:
+      -2px 0 rgba(130, 219, 242, 0.42),
+      2px 0 rgba(255, 255, 255, 0.36),
+      0 0 30px rgba(210, 245, 255, 0.44);
+  }
+}
+
+.albedo-chart-panel {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.albedo-chart-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+}
+
+.albedo-chart-head strong {
+  font-weight: 400;
+}
+
+.albedo-chart {
+  width: 100%;
+  min-height: 200px;
+  overflow: visible;
+}
+
+.albedo-chart-grid {
+  fill: none;
+  stroke: var(--albedo-line);
+  stroke-width: 1;
+}
+
+.albedo-chart-band {
+  fill: url("#albedo-ice-gradient");
+}
+
+.albedo-chart-line {
+  fill: none;
+  stroke: var(--albedo-sea);
+  stroke-linecap: round;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 10px rgba(29, 141, 160, 0.25));
+}
+
+.albedo-chart-dot {
+  fill: var(--albedo-warm);
+  stroke: rgba(255, 255, 255, 0.88);
+  stroke-width: 3;
+}
+
+.albedo-chart text {
+  fill: var(--albedo-muted);
+  font-size: 0.82rem;
+}
+
+.albedo-lab[data-state="snowball"] {
+  --albedo-sea: #74bdd2;
+  --albedo-land: #9cc7bd;
+  --albedo-warm: #bfefff;
+}
+
+.albedo-lab[data-state="hothouse"] {
+  --albedo-sea: #267c82;
+  --albedo-land: #6f9b59;
+  --albedo-warm: #e86f37;
+}
+
+@media (min-width: 780px) {
+  .albedo-lab {
+    grid-template-columns: minmax(0, 1.22fr) minmax(360px, 0.78fr);
+  }
+
+  .albedo-planet {
+    grid-row: span 3;
+    min-height: 730px;
+  }
+
+  .albedo-controls {
+    border-top: 0;
+  }
+
+  .albedo-chart-panel {
+    padding-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .albedo-state-pill {
+    display: grid;
+  }
+
+  .albedo-state-pill strong {
+    max-width: none;
+    text-align: left;
+  }
+
+  .albedo-readouts {
+    grid-template-columns: 1fr;
+  }
+}
