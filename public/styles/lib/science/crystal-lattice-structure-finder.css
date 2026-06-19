@@ -17,7 +17,8 @@
   --lattice-button-text: #fff;
   --lattice-structure-label: #187c78;
   --lattice-main-value: #9f4f23;
-  --lattice-reset-bg: rgba(19, 40, 44, 0.04);
+  --lattice-divider: rgba(19, 40, 44, 0.12);
+  --lattice-menu-bg: rgba(247, 252, 249, 0.88);
 
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
@@ -51,7 +52,8 @@ html.theme-dark .lattice-lab {
   --lattice-button-text: #071314;
   --lattice-structure-label: #91d8c8;
   --lattice-main-value: #f6d37a;
-  --lattice-reset-bg: rgba(255, 255, 255, 0.04);
+  --lattice-divider: rgba(255, 255, 255, 0.08);
+  --lattice-menu-bg: rgba(10, 22, 27, 0.86);
 }
 
 .lattice-viewer {
@@ -123,7 +125,8 @@ html.theme-dark .lattice-lab {
 
 .lattice-summary strong {
   color: var(--lattice-main-value);
-  font-size: clamp(1.35rem, 5vw, 2rem);
+  font-size: 1.85rem;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
@@ -140,6 +143,8 @@ html.theme-dark .lattice-lab {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  align-self: start;
+  padding-inline: 0.15rem;
 }
 
 .lattice-legend span {
@@ -190,17 +195,37 @@ html.theme-dark .lattice-lab {
   min-width: 0;
 }
 
-.lattice-number {
+.lattice-field-select {
   position: relative;
 }
 
+.lattice-number {
+  position: relative;
+  gap: 0.2rem;
+  padding: 0.15rem 1rem 0.2rem;
+}
+
+.lattice-number + .lattice-number {
+  border-left: 1px solid var(--lattice-divider);
+}
+
 .lattice-number > span {
-  position: absolute;
-  top: 0.55rem;
-  left: 0.68rem;
-  z-index: 1;
-  font-size: 0.62rem;
+  position: static;
+  font-size: 0.64rem;
   pointer-events: none;
+}
+
+.lattice-number em {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.5rem;
+  color: var(--lattice-muted);
+  font-size: 0.9rem;
+  font-style: normal;
+  line-height: 1;
+  opacity: 0.3;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .lattice-field > span,
@@ -214,50 +239,121 @@ html.theme-dark .lattice-lab {
   text-transform: uppercase;
 }
 
-.lattice-field select,
+.lattice-native-select {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lattice-select-button,
 .lattice-number input {
   width: 100%;
   min-height: 2.65rem;
-  border: 1px solid var(--lattice-border);
-  border-radius: 8px;
-  background: var(--lattice-panel-strong);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: var(--lattice-text);
   font-size: inherit;
   font-weight: inherit;
 }
 
-.lattice-field select {
-  appearance: none;
-  padding: 0 2.45rem 0 0.7rem;
-  background-image:
-    linear-gradient(45deg, transparent 50%, currentcolor 50%),
-    linear-gradient(135deg, currentcolor 50%, transparent 50%);
-  background-position:
-    calc(100% - 1.15rem) 50%,
-    calc(100% - 0.82rem) 50%;
-  background-repeat: no-repeat;
-  background-size:
-    0.38rem 0.38rem,
-    0.38rem 0.38rem;
+.lattice-select-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.9rem;
+  padding: 0 0.15rem 0.35rem;
+  border-bottom: 1px solid var(--lattice-divider);
+  text-align: left;
+  cursor: pointer;
+}
+
+.lattice-select-button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lattice-select-button i {
+  width: 0.48rem;
+  height: 0.48rem;
+  margin-left: 0.8rem;
+  border-right: 1.5px solid currentcolor;
+  border-bottom: 1.5px solid currentcolor;
+  opacity: 0.55;
+  transform: rotate(45deg) translateY(-0.12rem);
+  transition: transform 160ms ease;
+}
+
+.lattice-select-open .lattice-select-button i {
+  transform: rotate(225deg) translate(-0.08rem, -0.08rem);
+}
+
+.lattice-select-menu {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  left: 0;
+  display: none;
+  overflow: hidden;
+  border: 1px solid var(--lattice-border);
+  border-radius: 8px;
+  background: var(--lattice-menu-bg);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+.lattice-select-open .lattice-select-menu {
+  display: grid;
+}
+
+.lattice-select-menu button {
+  min-height: 2.45rem;
+  padding: 0 0.8rem;
+  border: 0;
+  border-bottom: 1px solid var(--lattice-divider);
+  background: transparent;
+  color: var(--lattice-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.lattice-select-menu button:last-child {
+  border-bottom: 0;
+}
+
+.lattice-select-menu button:hover,
+.lattice-select-menu button[aria-selected="true"] {
+  background: color-mix(in srgb, var(--lattice-button-bg) 12%, transparent);
 }
 
 .lattice-number input {
-  min-height: 4rem;
-  padding: 1.45rem 0.65rem 0.45rem;
-  font-size: 1.12rem;
+  min-height: 2.35rem;
+  padding: 0 2.55rem 0 0;
+  font-size: 1.15rem;
   font-variant-numeric: tabular-nums;
 }
 
-.lattice-field option {
-  color: #102025;
+.lattice-number input:focus,
+.lattice-select-button:focus {
+  outline: 0;
+}
+
+.lattice-number:focus-within,
+.lattice-field-select:focus-within {
+  color: var(--lattice-text);
 }
 
 .lattice-note {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.7rem;
+  gap: 0.85rem;
   align-items: center;
-  padding: 0.75rem;
+  padding: 0.85rem 1rem;
   border: 1px solid var(--lattice-border);
   border-radius: 8px;
   background: var(--lattice-panel);
@@ -276,6 +372,7 @@ html.theme-dark .lattice-lab {
 
 .lattice-note p {
   margin: 0;
+  padding-right: 0.3rem;
   color: var(--lattice-text);
   font-size: 0.95rem;
   line-height: 1.35;
@@ -284,76 +381,111 @@ html.theme-dark .lattice-lab {
 .lattice-slider-grid,
 .lattice-input-grid {
   display: grid;
-  gap: 0.7rem;
+  gap: 0.9rem;
+}
+
+.lattice-slider-grid .lattice-field {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+}
+
+.lattice-slider-grid .lattice-field input {
+  grid-column: 1 / -1;
 }
 
 .lattice-input-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-block: 0.25rem;
 }
 
 .lattice-field output {
+  align-self: start;
   justify-self: end;
-  margin-top: -1.55rem;
   color: var(--lattice-text);
+  font-size: 0.86rem;
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .lattice-field input[type="range"] {
+  appearance: none;
   width: 100%;
-  accent-color: #54d6b0;
+  height: 1rem;
+  background: transparent;
 }
 
-.lattice-reset {
-  min-height: 2.8rem;
-  border: 1px solid var(--lattice-border);
-  border-radius: 8px;
-  background: var(--lattice-reset-bg);
-  color: var(--lattice-muted);
-  font-size: inherit;
-  font-weight: inherit;
-  cursor: pointer;
-  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+.lattice-field input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 999px;
+  background: var(--lattice-divider);
 }
 
-.lattice-reset-active,
-.lattice-reset:hover {
-  border-color: color-mix(in srgb, var(--lattice-button-bg) 45%, var(--lattice-border));
-  background: color-mix(in srgb, var(--lattice-button-bg) 12%, transparent);
-  color: var(--lattice-text);
+.lattice-field input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 0.86rem;
+  height: 0.86rem;
+  margin-top: -0.39rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--lattice-button-bg);
+}
+
+.lattice-field input[type="range"]::-moz-range-track {
+  height: 2px;
+  border-radius: 999px;
+  background: var(--lattice-divider);
+}
+
+.lattice-field input[type="range"]::-moz-range-thumb {
+  width: 0.86rem;
+  height: 0.86rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--lattice-button-bg);
 }
 
 .lattice-results {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.5rem, 5vw, 4rem);
+  gap: 2.5rem;
   padding: 0.35rem 0.25rem 0;
 }
 
 .lattice-result-group {
   display: grid;
-  gap: 0.7rem;
+  grid-template-columns: 1fr;
+  gap: 0.52rem;
   min-width: 0;
 }
 
 .lattice-result-group h2 {
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.35rem;
 }
 
 .lattice-metric-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1rem;
+  grid-template-columns: minmax(7.75rem, 8.75rem) minmax(0, 1fr);
+  gap: 0.9rem;
   align-items: baseline;
+  min-width: 0;
 }
 
 .lattice-metric-row strong {
   overflow-wrap: anywhere;
   color: var(--lattice-text);
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.15;
-  text-align: right;
+  text-align: left;
+}
+
+.lattice-metric-row span {
+  max-width: 8.75rem;
+  font-size: 0.68rem;
+  line-height: 1.2;
 }
 
 @media (max-width: 900px) {
@@ -362,6 +494,10 @@ html.theme-dark .lattice-lab {
   }
 
   .lattice-results {
+    grid-template-columns: 1fr;
+  }
+
+  .lattice-result-group {
     grid-template-columns: 1fr;
   }
 }
@@ -379,6 +515,18 @@ html.theme-dark .lattice-lab {
   .lattice-input-grid,
   .lattice-results {
     grid-template-columns: 1fr;
+  }
+
+  .lattice-number + .lattice-number {
+    border-left: 0;
+  }
+
+  .lattice-number {
+    padding-inline: 0;
+  }
+
+  .lattice-metric-row {
+    grid-template-columns: minmax(6.8rem, 7.5rem) minmax(0, 1fr);
   }
 
   .lattice-note {
