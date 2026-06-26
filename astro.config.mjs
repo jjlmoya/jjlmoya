@@ -1,13 +1,10 @@
 import { defineConfig } from "astro/config";
 import icon from "astro-icon";
-import vercel from "@astrojs/vercel";
 
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
     site: "https://www.jjlmoya.es",
-    output: "server",
-    adapter: vercel(),
     devToolbar: {
         enabled: false,
     },

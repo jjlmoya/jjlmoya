@@ -1,3 +1,5 @@
+export const prerender = true;
+
 import { getSearchIndex } from "../../lib/search/SearchIndex";
 
 export async function GET() {
