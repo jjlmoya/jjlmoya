@@ -1,0 +1,386 @@
+.widmark-simulator {
+  --wm-ink: #0f172a;
+  --wm-muted: #64748b;
+  --wm-paper: #fff;
+  --wm-border: #e2e8f0;
+  --wm-accent: #0284c7;
+  --wm-accent-light: rgba(2, 132, 199, 0.06);
+  --wm-input-bg: #f8fafc;
+  --wm-input-border: #cbd5e1;
+  --wm-limit-danger: #ef4444;
+  --wm-limit-warning: #f59e0b;
+  --wm-limit-safe: #10b981;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--wm-paper);
+  border: 1px solid var(--wm-border);
+  border-radius: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+  color: var(--wm-ink);
+  box-sizing: border-box;
+}
+
+.theme-dark .widmark-simulator {
+  --wm-ink: #f1f5f9;
+  --wm-muted: #94a3b8;
+  --wm-paper: #0f172a;
+  --wm-border: #1e293b;
+  --wm-accent: #38bdf8;
+  --wm-accent-light: rgba(56, 189, 248, 0.08);
+  --wm-input-bg: #1e293b;
+  --wm-input-border: #334155;
+  --wm-limit-danger: #f87171;
+  --wm-limit-warning: #fbbf24;
+  --wm-limit-safe: #34d399;
+}
+
+@media (min-width: 800px) {
+  .widmark-simulator {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+.widmark-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--wm-border);
+}
+
+@media (min-width: 800px) {
+  .widmark-panel {
+    border-bottom: none;
+    border-right: 1px solid var(--wm-border);
+  }
+}
+
+.widmark-section-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--wm-accent);
+  margin: 0;
+}
+
+.widmark-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.widmark-field span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--wm-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.widmark-input,
+.widmark-select {
+  background: var(--wm-input-bg);
+  border: 1px solid var(--wm-input-border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  color: var(--wm-ink);
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.widmark-input:focus,
+.widmark-select:focus {
+  outline: none;
+  border-color: var(--wm-accent);
+  box-shadow: 0 0 0 2px var(--wm-accent-light);
+}
+
+.widmark-radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.widmark-radio-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wm-input-bg);
+  border: 1px solid var(--wm-input-border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.widmark-radio-card input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.widmark-radio-card span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--wm-muted);
+}
+
+.widmark-radio-card:hover {
+  border-color: var(--wm-accent);
+}
+
+.widmark-radio-card:has(input:checked) {
+  background: var(--wm-accent-light);
+  border-color: var(--wm-accent);
+}
+
+.widmark-radio-card:has(input:checked) span {
+  color: var(--wm-accent);
+}
+
+.widmark-drink-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.widmark-drink-form-grid .widmark-field:last-of-type {
+  grid-column: span 2;
+}
+
+.widmark-quick-drinks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+}
+
+.widmark-quick-btn {
+  background: var(--wm-input-bg);
+  border: 1px solid var(--wm-input-border);
+  border-radius: 4px;
+  padding: 0.35rem;
+  color: var(--wm-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.widmark-quick-btn:hover {
+  border-color: var(--wm-accent);
+  color: var(--wm-ink);
+}
+
+.widmark-btn-primary {
+  background: var(--wm-accent);
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.widmark-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.widmark-drinks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.widmark-drink-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--wm-border);
+  padding: 0.4rem 0;
+}
+
+.widmark-drink-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.widmark-drink-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--wm-ink);
+}
+
+.widmark-drink-meta {
+  font-size: 0.7rem;
+  color: var(--wm-muted);
+}
+
+.widmark-btn-remove {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.widmark-dashboard {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.5rem;
+}
+
+.widmark-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  border-bottom: 1px solid var(--wm-border);
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 550px) {
+  .widmark-metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.widmark-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  border-left: 2px solid var(--wm-border);
+  padding-left: 0.75rem;
+}
+
+.widmark-metric-card.alert-safe {
+  border-left-color: var(--wm-limit-safe);
+}
+
+.widmark-metric-card.alert-warning {
+  border-left-color: var(--wm-limit-warning);
+}
+
+.widmark-metric-card.alert-danger {
+  border-left-color: var(--wm-limit-danger);
+}
+
+.widmark-metric-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--wm-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.widmark-metric-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--wm-ink);
+}
+
+.widmark-metric-unit {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--wm-muted);
+  margin-left: 0.15rem;
+  letter-spacing: 0;
+}
+
+.widmark-visual-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+.widmark-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.widmark-chart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.widmark-grid-line {
+  stroke: var(--wm-chart-grid);
+  stroke-width: 1;
+}
+
+.widmark-grid-text {
+  fill: var(--wm-muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.widmark-limit-line {
+  stroke: var(--wm-limit-danger);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.widmark-curve-path {
+  fill: none;
+  stroke: var(--wm-accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.widmark-curve-fill {
+  fill: url("#chart-gradient");
+  opacity: 0.08;
+}
+
+.widmark-no-drinks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wm-input-bg);
+  border-radius: 8px;
+  color: var(--wm-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.widmark-disclaimer {
+  background: var(--wm-accent-light);
+  border-left: 3px solid var(--wm-accent);
+  padding: 0.75rem 1rem;
+  color: var(--wm-ink);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.widmark-disclaimer strong {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--wm-accent);
+}

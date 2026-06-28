@@ -1,0 +1,532 @@
+.forensic-chemical-card {
+  --fbt-bg: #fff;
+  --fbt-border: #e2e8f0;
+  --fbt-muted: #64748b;
+  --fbt-text: #0f172a;
+  --fbt-panel-bg: #f8fafc;
+  --fbt-panel-border: #e2e8f0;
+  --fbt-badge-bg: #f1f5f9;
+  --fbt-badge-text: #475569;
+  --fbt-primary: #0284c7;
+  --fbt-primary-hover: #0369a1;
+  --fbt-active: #38bdf8;
+  --fbt-viewport-bg: #f1f5f9;
+  --fbt-viewport-border: #cbd5e1;
+  --fbt-glass-tube: rgba(15, 23, 42, 0.05);
+  --fbt-glass-tube-border: rgba(15, 23, 42, 0.2);
+  --fbt-bottle-bg: #cbd5e1;
+  --fbt-bottle-cap: #475569;
+
+  background: var(--fbt-bg);
+  border: 1px solid var(--fbt-border);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--fbt-text);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.theme-dark .forensic-chemical-card {
+  --fbt-bg: #0f172a;
+  --fbt-border: rgba(255, 255, 255, 0.08);
+  --fbt-muted: #94a3b8;
+  --fbt-text: #f8fafc;
+  --fbt-panel-bg: rgba(30, 41, 59, 0.4);
+  --fbt-panel-border: rgba(255, 255, 255, 0.05);
+  --fbt-badge-bg: rgba(255, 255, 255, 0.05);
+  --fbt-badge-text: #cbd5e1;
+  --fbt-primary: #06b6d4;
+  --fbt-primary-hover: #0891b2;
+  --fbt-active: #67e8f9;
+  --fbt-viewport-bg: #020617;
+  --fbt-viewport-border: rgba(255, 255, 255, 0.05);
+  --fbt-glass-tube: rgba(255, 255, 255, 0.05);
+  --fbt-glass-tube-border: rgba(255, 255, 255, 0.2);
+  --fbt-bottle-bg: #334155;
+  --fbt-bottle-cap: #1e293b;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.forensic-chemical-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2.5rem;
+}
+
+
+.btn-toggle-lights {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 38px;
+  height: 38px;
+  background: var(--fbt-bg);
+  border: 1px solid var(--fbt-border);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-toggle-lights:hover {
+  transform: scale(1.05);
+  border-color: var(--fbt-primary);
+}
+
+.light-switch-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f59e0b;
+  position: relative;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+.btn-toggle-lights.lights-off {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.btn-toggle-lights.lights-off .light-switch-icon {
+  background: #94a3b8;
+  box-shadow: none;
+}
+
+.chemical-workbench {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .chemical-workbench {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+.workbench-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--fbt-muted);
+  margin: 0 0 1rem;
+}
+
+.specimen-rack-container {
+  background: var(--fbt-panel-bg);
+  border: 1px solid var(--fbt-panel-border);
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+.specimen-rack {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+}
+
+.specimen-tube {
+  background: transparent;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 1rem 0.5rem;
+  border-radius: 12px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  width: 100%;
+}
+
+.specimen-tube:hover {
+  background: var(--fbt-bg);
+  border-color: var(--fbt-border);
+}
+
+.tube-glass {
+  width: 20px;
+  height: 60px;
+  border: 2px solid var(--fbt-glass-tube-border);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  position: relative;
+  background: var(--fbt-glass-tube);
+  display: block;
+}
+
+.tube-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35px;
+  border-radius: 0 0 8px 8px;
+  display: block;
+}
+
+.tube-liquid-blood { background: #dc2626; }
+.tube-liquid-rust { background: #b45309; }
+.tube-liquid-bleach {
+  background: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+}
+.tube-liquid-potato {
+  background: #ca8a04;
+  opacity: 0.6;
+}
+.tube-liquid-saliva { background: rgba(255, 255, 255, 0.15); }
+
+.tube-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--fbt-muted);
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.specimen-tube.selected {
+  background: var(--fbt-bg);
+  border-color: var(--fbt-primary);
+}
+
+.specimen-tube.selected .tube-label {
+  color: var(--fbt-primary);
+}
+
+.reagents-shelf-container {
+  background: var(--fbt-panel-bg);
+  border: 1px solid var(--fbt-panel-border);
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+.reagents-shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.reagent-bottle {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: var(--fbt-bg);
+  border: 1px solid var(--fbt-border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.bottle-visual {
+  width: 44px;
+  height: 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.bottle-neck {
+  width: 14px;
+  height: 14px;
+  background: var(--fbt-bottle-cap);
+  border-radius: 2px 2px 0 0;
+}
+
+.bottle-body {
+  width: 40px;
+  height: 62px;
+  background: var(--fbt-bottle-bg);
+  border: 2px solid var(--fbt-glass-tube-border);
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottle-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 4px 4px;
+}
+
+.bottle-km .bottle-liquid { background: rgba(236, 72, 153, 0.15); }
+.bottle-h2o2 .bottle-liquid { background: rgba(14, 165, 233, 0.15); }
+.bottle-luminol .bottle-liquid { background: rgba(56, 189, 248, 0.1); }
+
+.bottle-label-sticker {
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #94a3b8;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 2px 4px;
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.reagent-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reagent-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.reagent-desc {
+  font-size: 0.75rem;
+  color: var(--fbt-muted);
+}
+
+.btn-dispense-fluid {
+  background: var(--fbt-panel-bg);
+  border: 1px solid var(--fbt-border);
+  color: var(--fbt-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-dispense-fluid:hover {
+  background: var(--fbt-primary);
+  color: #fff;
+  border-color: var(--fbt-primary);
+}
+
+.workbench-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.workbench-viewport {
+  background: var(--fbt-viewport-bg);
+  border: 1px solid var(--fbt-viewport-border);
+  border-radius: 16px;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.workbench-viewport.workbench-lights-off {
+  background-color: #000;
+  border-color: #1e293b;
+}
+
+.petri-dish {
+  width: 180px;
+  height: 180px;
+  border: 3px solid var(--fbt-glass-tube-border);
+  border-radius: 50%;
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.workbench-viewport.workbench-lights-off .petri-dish {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.petri-specimen {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: transparent;
+  filter: blur(12px);
+  transition: all 0.4s ease;
+}
+
+.specimen-texture-overlay {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  opacity: 0.1;
+  background-size: cover;
+  pointer-events: none;
+}
+
+.chemical-drop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 12px;
+  background: #38bdf8;
+  border-radius: 50% / 70% 70% 30% 30%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chemical-drop.animating {
+  animation: dripAnimation 0.5s cubic-bezier(0.5, 0, 0.7, 0.2) forwards;
+}
+
+@keyframes dripAnimation {
+  0% {
+    top: 20px;
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1.2);
+  }
+  90% {
+    top: 130px;
+    opacity: 0.8;
+  }
+  100% {
+    top: 140px;
+    opacity: 0;
+    transform: translateX(-50%) scale(0);
+  }
+}
+
+.analysis-console {
+  background: var(--fbt-panel-bg);
+  border: 1px solid var(--fbt-panel-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.console-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--fbt-border);
+  padding-bottom: 0.75rem;
+}
+
+.status-indicator-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.console-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--fbt-muted);
+}
+
+.status-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.status-true-positive {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.status-false-positive {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.status-negative {
+  background: var(--fbt-badge-bg);
+  color: var(--fbt-badge-text);
+}
+
+.btn-clear-lab {
+  background: var(--fbt-bg);
+  border: 1px solid var(--fbt-border);
+  color: var(--fbt-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-clear-lab:hover {
+  background: var(--fbt-panel-border);
+}
+
+.console-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.indicator-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reaction-explanation-panel {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--fbt-text);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.stat-cell {
+  background: var(--fbt-bg);
+  border: 1px solid var(--fbt-border);
+  padding: 0.85rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--fbt-muted);
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 800;
+}

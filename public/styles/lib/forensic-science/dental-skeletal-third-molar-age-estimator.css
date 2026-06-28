@@ -1,0 +1,634 @@
+.forensic-age {
+  --forensic-ink: #211d19;
+  --forensic-muted: #6f675d;
+  --forensic-paper: #f9f7f2;
+  --forensic-line: rgba(92, 29, 29, 0.2);
+  --forensic-oxblood: #5c1d1d;
+  --forensic-amber: #e8a87c;
+  --forensic-warning: #f2b45f;
+  --forensic-steel: #59686a;
+  --dental-maturity: 0.5;
+  --epiphyseal-maturity: 0.5;
+  --molar-maturity: 0.5;
+  --overall-maturity: 0.5;
+
+  display: grid;
+  gap: clamp(1.2rem, 3vw, 2.25rem);
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  padding: clamp(1rem, 2.4vw, 2rem);
+  color: var(--forensic-ink);
+  background: var(--forensic-paper);
+}
+
+@keyframes forensic-age-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes forensic-age-menu {
+  from {
+    opacity: 0;
+    transform: translateY(-0.45rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes forensic-age-pulse {
+  0% {
+    filter: drop-shadow(0 0 0 transparent);
+    transform: scale(1);
+  }
+
+  42% {
+    filter: drop-shadow(0 0 18px color-mix(in srgb, var(--forensic-amber) 28%, transparent));
+    transform: scale(1.012);
+  }
+
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+    transform: scale(1);
+  }
+}
+
+@keyframes forensic-age-interval-pulse {
+  0% {
+    filter: none;
+  }
+
+  44% {
+    filter: drop-shadow(0 0 22px color-mix(in srgb, var(--forensic-amber) 20%, transparent));
+  }
+
+  100% {
+    filter: none;
+  }
+}
+
+.theme-dark .forensic-age {
+  --forensic-ink: rgba(255, 255, 255, 0.92);
+  --forensic-muted: rgba(255, 255, 255, 0.7);
+  --forensic-paper: #141210;
+  --forensic-line: rgba(255, 255, 255, 0.2);
+  --forensic-oxblood: #c99191;
+  --forensic-amber: #e8a87c;
+  --forensic-warning: #f2b45f;
+  --forensic-steel: rgba(255, 255, 255, 0.68);
+}
+
+.forensic-age-panel,
+.forensic-age-visual,
+.forensic-age-results {
+  min-width: 0;
+}
+
+.forensic-age-panel,
+.forensic-age-results {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+}
+
+.forensic-age-panel {
+  animation: forensic-age-reveal 0.48s ease-out both;
+}
+
+.forensic-age-results {
+  align-content: center;
+  gap: 0.9rem;
+  padding: 0;
+  animation: forensic-age-reveal 0.56s 0.08s ease-out both;
+}
+
+.forensic-age-band span,
+.forensic-age-field span,
+.forensic-age-stage-field b,
+.forensic-age-stage-card strong,
+.forensic-age-score-label {
+  color: var(--forensic-muted);
+  font-size: 0.66rem;
+  font-weight: 760;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.forensic-age-field,
+.forensic-age-stage-field,
+.forensic-age-notes {
+  margin: 0;
+  padding: 0 0 1.05rem;
+  border: 0;
+  border-bottom: 1px solid var(--forensic-line);
+}
+
+.forensic-age-stage-field {
+  position: relative;
+}
+
+.forensic-age-field {
+  display: grid;
+  gap: 0.58rem;
+}
+
+.forensic-age-field select {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-radius: 0;
+  color: var(--forensic-ink);
+  background: var(--forensic-paper);
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.forensic-age-field select option {
+  color: var(--forensic-ink);
+  background: var(--forensic-paper);
+}
+
+.forensic-age-stage-select {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 0.7rem;
+  gap: 0.9rem;
+  align-items: center;
+  width: 100%;
+  min-height: 4.8rem;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.forensic-age-stage-select::before {
+  position: absolute;
+  right: 0;
+  bottom: -1.05rem;
+  left: 0;
+  height: 1px;
+  background: var(--forensic-amber);
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.2);
+  transform-origin: left;
+  transition:
+    opacity 0.26s ease-out,
+    transform 0.26s ease-out;
+}
+
+.forensic-age-stage-select:hover::before,
+.forensic-age-stage-select[aria-expanded='true']::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.forensic-age-stage-select::after {
+  width: 0.44rem;
+  height: 0.44rem;
+  border-right: 1px solid var(--forensic-muted);
+  border-bottom: 1px solid var(--forensic-muted);
+  content: "";
+  transform: rotate(45deg) translateY(-0.12rem);
+  transition: transform 0.2s ease-out;
+}
+
+.forensic-age-stage-select[aria-expanded='true']::after {
+  transform: rotate(225deg) translateY(-0.12rem);
+}
+
+.forensic-age-stage-select span {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.forensic-age-stage-field small {
+  color: var(--forensic-muted);
+  font-size: 0.72rem;
+  font-weight: 520;
+  line-height: 1.35;
+}
+
+.forensic-age-stage-field output {
+  justify-self: end;
+  padding: 0.42rem 0.58rem;
+  border: 1px solid color-mix(in srgb, var(--forensic-amber) 62%, transparent);
+  color: var(--forensic-oxblood);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--forensic-amber) 13%, transparent);
+  transition:
+    border-color 0.26s ease-out,
+    box-shadow 0.26s ease-out,
+    color 0.26s ease-out;
+}
+
+.forensic-age-stage-select:hover output,
+.forensic-age-stage-select[aria-expanded='true'] output {
+  border-color: var(--forensic-amber);
+  color: var(--forensic-amber);
+  box-shadow:
+    inset 0 0 18px color-mix(in srgb, var(--forensic-amber) 18%, transparent),
+    0 0 22px color-mix(in srgb, var(--forensic-amber) 12%, transparent);
+}
+
+.forensic-age-stage-list {
+  position: absolute;
+  top: calc(100% - 0.5rem);
+  left: 0;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.42rem;
+  width: min(31rem, calc(100vw - 2rem));
+  padding: 0.65rem;
+  overflow: visible;
+  border: 1px solid var(--forensic-line);
+  background: color-mix(in srgb, var(--forensic-paper) 94%, transparent);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px);
+  animation: forensic-age-menu 0.2s ease-out both;
+  transform-origin: top left;
+}
+
+.forensic-age-stage-list[hidden] {
+  display: none;
+}
+
+.forensic-age-stage-card {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0.42rem 0.55rem;
+  align-items: start;
+  min-height: 4.7rem;
+  padding: 0.42rem 0.5rem;
+  border: 1px solid transparent;
+  color: var(--forensic-muted);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease-out,
+    box-shadow 0.3s ease-out,
+    color 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+
+.forensic-age-stage-card:has(input:checked) {
+  color: var(--forensic-ink);
+  border-color: var(--forensic-amber);
+  box-shadow:
+    inset 0 0 20px color-mix(in srgb, var(--forensic-amber) 16%, transparent),
+    0 0 18px color-mix(in srgb, var(--forensic-amber) 10%, transparent);
+}
+
+.forensic-age-stage-card:has(input:focus-visible) {
+  outline: 2px solid color-mix(in srgb, var(--forensic-oxblood) 65%, transparent);
+  outline-offset: 2px;
+}
+
+.forensic-age-stage-card:hover {
+  transform: translateY(-1px);
+}
+
+.forensic-age-stage-card input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.forensic-age-stage-card svg {
+  width: 2.04rem;
+  height: 2.04rem;
+  color: var(--forensic-steel);
+}
+
+.forensic-age-stage-card path,
+.forensic-age-stage-card circle {
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.forensic-age-stage-card:has(input:checked) svg {
+  color: var(--forensic-oxblood);
+}
+
+.forensic-age-stage-card span {
+  grid-column: 2;
+  color: inherit;
+  font-size: 0.7rem;
+  font-weight: 540;
+  line-height: 1.25;
+}
+
+.forensic-age-visual {
+  display: grid;
+  place-items: center;
+  min-height: 520px;
+  animation: forensic-age-reveal 0.62s 0.04s ease-out both;
+}
+
+.forensic-age-instrument {
+  width: min(100%, 560px);
+  overflow: visible;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.forensic-age-instrument-pulse {
+  animation: forensic-age-pulse 0.46s ease-out both;
+}
+
+.forensic-age-progress-track,
+.forensic-age-progress-fill {
+  fill: none;
+  stroke-width: 2;
+  transform: rotate(-90deg);
+  transform-origin: 215px 176px;
+  vector-effect: non-scaling-stroke;
+}
+
+.forensic-age-progress-track {
+  stroke: var(--forensic-line);
+}
+
+.forensic-age-progress-fill {
+  stroke: var(--forensic-amber);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--forensic-amber) 24%, transparent));
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 * (1 - var(--overall-maturity)));
+  transition:
+    filter 0.3s ease-out,
+    stroke-dashoffset 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.forensic-age-progress-fill-complete {
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+}
+
+.forensic-age-signal {
+  stroke: color-mix(in srgb, var(--forensic-line) 72%, transparent);
+  stroke-linecap: round;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.forensic-age-signal-dot {
+  fill: var(--forensic-amber);
+  opacity: calc(0.48 + var(--overall-maturity) * 0.38);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--forensic-amber) 20%, transparent));
+  transition:
+    filter 0.3s ease-out,
+    opacity 0.3s ease-out,
+    transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.forensic-age-signal-dot-dental {
+  transform: scale(calc(0.72 + var(--dental-maturity) * 0.72));
+  transform-origin: 108px 320px;
+}
+
+.forensic-age-signal-dot-epiphyseal {
+  transform: scale(calc(0.72 + var(--epiphyseal-maturity) * 0.72));
+  transform-origin: 215px 320px;
+}
+
+.forensic-age-signal-dot-molar {
+  transform: scale(calc(0.72 + var(--molar-maturity) * 0.72));
+  transform-origin: 322px 320px;
+}
+
+.forensic-age-signals text {
+  fill: var(--forensic-muted);
+  font-size: 0.58rem;
+  font-weight: 760;
+  letter-spacing: 0.05em;
+  text-anchor: middle;
+}
+
+.forensic-age-score-label,
+.forensic-age-score-value {
+  text-anchor: middle;
+}
+
+.forensic-age-score-label {
+  fill: var(--forensic-muted);
+  opacity: 0.9;
+}
+
+.forensic-age-score-value {
+  fill: var(--forensic-amber);
+  font-size: 2.75rem;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 820;
+}
+
+.forensic-age-band {
+  display: none;
+  gap: 0.5rem;
+  padding-block: 0 0.3rem;
+  border-bottom: 0;
+}
+
+.forensic-age-band strong {
+  color: var(--forensic-ink);
+  font-size: clamp(8rem, 15vw, 14rem);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 660;
+  letter-spacing: 0;
+  line-height: 0.78;
+}
+
+.forensic-age-band-main strong {
+  color: var(--forensic-oxblood);
+}
+
+.forensic-age-number,
+.forensic-age-unit {
+  display: inline-block;
+}
+
+.forensic-age-unit {
+  margin-left: 0.2em;
+  color: var(--forensic-muted);
+  font-size: 0.15em;
+  font-weight: 480;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  vertical-align: 0.5em;
+}
+
+.forensic-age-band-main .forensic-age-unit {
+  color: color-mix(in srgb, var(--forensic-oxblood) 72%, var(--forensic-muted));
+}
+
+.forensic-age-interval {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.7rem 1rem;
+  align-items: center;
+  padding: 0;
+  border-bottom: 1px solid var(--forensic-line);
+}
+
+.forensic-age-interval strong {
+  color: var(--forensic-ink);
+  font-size: clamp(2.4rem, 4.6vw, 3.6rem);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 680;
+  line-height: 1;
+}
+
+.forensic-age-interval i {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  position: relative;
+  height: 0.62rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--forensic-amber) 64%, var(--forensic-line));
+  box-shadow:
+    inset 0 0 10px color-mix(in srgb, var(--forensic-paper) 24%, transparent),
+    0 0 28px color-mix(in srgb, var(--forensic-amber) 18%, transparent);
+}
+
+.forensic-age-interval-pulse i {
+  animation: forensic-age-interval-pulse 0.44s ease-out both;
+}
+
+.forensic-age-interval i::before,
+.forensic-age-interval i::after {
+  position: absolute;
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--forensic-amber);
+  content: "";
+  transform: translateY(-50%);
+}
+
+.forensic-age-interval i::before {
+  left: 0;
+}
+
+.forensic-age-interval i::after {
+  right: 0;
+}
+
+.forensic-age-interval strong:first-of-type {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.forensic-age-interval strong:last-of-type {
+  grid-column: 3;
+  grid-row: 3;
+  justify-self: end;
+}
+
+#forensic-likely-marker {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: center;
+  color: var(--forensic-amber);
+  font-size: clamp(3.8rem, 7.2vw, 6.2rem);
+  line-height: 0.85;
+}
+
+#forensic-likely-marker .forensic-age-unit {
+  font-size: 0.18em;
+  vertical-align: 0.42em;
+}
+
+.forensic-age-notes {
+  display: grid;
+  gap: 0.62rem;
+  padding: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--forensic-warning) 58%, transparent);
+  background: color-mix(in srgb, var(--forensic-warning) 10%, transparent);
+  box-shadow: inset 0 0 24px color-mix(in srgb, var(--forensic-warning) 9%, transparent);
+  transition:
+    border-color 0.3s ease-out,
+    box-shadow 0.3s ease-out,
+    transform 0.3s ease-out;
+}
+
+.forensic-age-notes:hover {
+  border-color: color-mix(in srgb, var(--forensic-warning) 76%, transparent);
+  box-shadow:
+    inset 0 0 24px color-mix(in srgb, var(--forensic-warning) 12%, transparent),
+    0 0 30px color-mix(in srgb, var(--forensic-warning) 8%, transparent);
+  transform: translateY(-1px);
+}
+
+.forensic-age-notes strong {
+  justify-self: start;
+  color: var(--forensic-warning);
+  font-size: 1.2rem;
+  font-weight: 820;
+  text-transform: capitalize;
+}
+
+.forensic-age-notes p {
+  max-width: 36ch;
+  margin: 0;
+  color: var(--forensic-muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 1080px) {
+  .forensic-age {
+    grid-template-columns: minmax(270px, 0.72fr) minmax(460px, 1.26fr) minmax(300px, 0.82fr);
+    align-items: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .forensic-age {
+    padding-inline: 1rem;
+  }
+
+  .forensic-age-visual {
+    min-height: 380px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forensic-age-panel,
+  .forensic-age-results,
+  .forensic-age-stage-list,
+  .forensic-age-visual,
+  .forensic-age-instrument-pulse,
+  .forensic-age-interval-pulse i {
+    animation: none;
+  }
+
+  .forensic-age-progress-fill,
+  .forensic-age-signal-dot,
+  .forensic-age-stage-card,
+  .forensic-age-stage-field output,
+  .forensic-age-notes {
+    transition: none;
+  }
+}
