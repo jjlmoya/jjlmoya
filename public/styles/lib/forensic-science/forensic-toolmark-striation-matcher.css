@@ -1,0 +1,580 @@
+.toolmark-shell {
+  --toolmark-split: 50%;
+  --toolmark-score: 0%;
+
+  width: 100%;
+  color: #132126;
+}
+
+.toolmark-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(280px, 0.55fr);
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(20, 184, 166, 0.13), transparent 34%),
+    linear-gradient(315deg, rgba(245, 158, 11, 0.16), transparent 38%),
+    #eef3f0;
+  box-shadow: 0 22px 44px rgba(15, 23, 42, 0.12);
+}
+
+.toolmark-view-wrap {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.toolmark-view {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #0d161c;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 -24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.toolmark-view canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+}
+
+.toolmark-split {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.toolmark-handle {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  left: var(--toolmark-split);
+  width: 34px;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.toolmark-handle::before {
+  position: absolute;
+  inset: 0 auto 0 50%;
+  width: 4px;
+  content: "";
+  border-radius: 99px;
+  background: #f59e0b;
+  box-shadow: 0 0 22px rgba(245, 158, 11, 0.74);
+  transform: translateX(-50%);
+}
+
+.toolmark-handle span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 54px;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 8px;
+  background: rgba(12, 18, 24, 0.8);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  transform: translate(-50%, -50%);
+}
+
+.toolmark-handle span::before,
+.toolmark-handle span::after {
+  position: absolute;
+  top: 15px;
+  width: 5px;
+  height: 24px;
+  content: "";
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.toolmark-handle span::before {
+  left: 8px;
+}
+
+.toolmark-handle span::after {
+  right: 8px;
+}
+
+.toolmark-score {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 5;
+  display: grid;
+  gap: 1px;
+  min-width: 132px;
+  padding: 12px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 16px 16px, rgba(20, 184, 166, 0.42), transparent 36px),
+    rgba(8, 14, 19, 0.9);
+  color: #f8fafc;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.32);
+}
+
+.toolmark-score span,
+.toolmark-bars span {
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.toolmark-score strong {
+  font-size: 2.25rem;
+  line-height: 0.95;
+  overflow-wrap: anywhere;
+}
+
+.toolmark-score small {
+  color: #8fe7db;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.toolmark-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.toolmark-strip span {
+  height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #14b8a6, #f59e0b);
+  opacity: 0.78;
+}
+
+.toolmark-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toolmark-unit-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.toolmark-panel-head .toolmark-unit-toggle {
+  width: 116px;
+  padding: 2px;
+  border-radius: 999px;
+  background: rgba(19, 33, 38, 0.08);
+}
+
+.toolmark-profile {
+  display: grid;
+  gap: 7px;
+}
+
+.toolmark-panel,
+.toolmark-demo,
+.toolmark-actions {
+  padding: 10px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.toolmark-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.toolmark-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.toolmark-panel-label {
+  color: #475569;
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.toolmark-panel:has(.toolmark-upload) {
+  grid-template-columns: 1fr 1fr;
+}
+
+.toolmark-panel:has(.toolmark-upload) .toolmark-panel-label {
+  grid-column: 1 / -1;
+}
+
+.toolmark-upload {
+  position: relative;
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  min-height: 66px;
+  padding: 9px;
+  border: 1px dashed rgba(20, 184, 166, 0.55);
+  border-radius: 7px;
+  background: rgba(20, 184, 166, 0.08);
+  cursor: pointer;
+}
+
+.toolmark-upload span {
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.toolmark-upload strong {
+  color: #132126;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.12;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toolmark-upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.toolmark-unit-toggle button,
+.toolmark-actions button,
+.toolmark-profile button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 850;
+  line-height: 1.1;
+}
+
+.toolmark-panel-head .toolmark-unit-toggle button {
+  min-height: 28px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+}
+
+.toolmark-unit-toggle button,
+.toolmark-profile button {
+  background: transparent;
+  color: #334155;
+}
+
+.toolmark-unit-toggle button[data-active="true"],
+.toolmark-profile button[data-active="true"] {
+  background: #132126;
+  color: #f8fafc;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.toolmark-profile button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.toolmark-profile small {
+  color: currentcolor;
+  font-size: 0.72rem;
+  font-weight: 750;
+  opacity: 0.68;
+}
+
+.toolmark-slider {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 0;
+}
+
+.toolmark-slider span,
+.toolmark-bars span {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.toolmark-slider b {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.toolmark-slider strong,
+.toolmark-bars strong {
+  color: #132126;
+  font-size: 0.98rem;
+  line-height: 1;
+}
+
+.toolmark-slider input {
+  width: 100%;
+  height: 18px;
+  accent-color: #14b8a6;
+}
+
+.toolmark-bars {
+  display: grid;
+  gap: 10px;
+}
+
+.toolmark-tune {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.toolmark-tune label {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.toolmark-tune span {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.toolmark-tune input {
+  width: 100%;
+  accent-color: #f59e0b;
+}
+
+.toolmark-bars div {
+  display: grid;
+  gap: 6px;
+}
+
+.toolmark-bars meter {
+  width: 100%;
+  height: 13px;
+}
+
+.toolmark-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.toolmark-actions button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(19, 33, 38, 0.1);
+  color: #132126;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.toolmark-actions button[data-active="true"] {
+  background: #14b8a6;
+  color: #06211e;
+}
+
+.toolmark-demo {
+  display: grid;
+  gap: 8px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.toolmark-demo summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 900;
+  list-style: none;
+}
+
+.toolmark-demo summary::-webkit-details-marker {
+  display: none;
+}
+
+.toolmark-demo summary::after {
+  width: 9px;
+  height: 9px;
+  content: "";
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.toolmark-demo[open] summary::after {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.toolmark-demo .toolmark-profile,
+.toolmark-demo .toolmark-bars {
+  margin-top: 6px;
+}
+
+.toolmark-demo .toolmark-profile {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.toolmark-demo .toolmark-profile button {
+  min-height: 34px;
+  padding: 6px 9px;
+  font-size: 0.8rem;
+}
+
+.toolmark-demo .toolmark-bars {
+  gap: 7px;
+  padding-top: 2px;
+}
+
+.toolmark-demo .toolmark-bars span {
+  font-size: 0.68rem;
+}
+
+.toolmark-demo .toolmark-bars meter {
+  height: 8px;
+}
+
+.toolmark-interpretation {
+  margin: 0;
+  padding: 2px 4px;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.34;
+}
+
+.toolmark-interpretation:empty {
+  display: none;
+}
+
+.theme-dark .toolmark-shell {
+  color: #e5edf2;
+}
+
+.theme-dark .toolmark-stage {
+  border-color: rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(135deg, rgba(20, 184, 166, 0.13), transparent 34%),
+    linear-gradient(315deg, rgba(245, 158, 11, 0.12), transparent 38%),
+    #111a20;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.38);
+}
+
+.theme-dark .toolmark-panel,
+.theme-dark .toolmark-demo,
+.theme-dark .toolmark-actions,
+.theme-dark .toolmark-interpretation {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(13, 22, 29, 0.82);
+}
+
+.theme-dark .toolmark-upload {
+  border-color: rgba(20, 184, 166, 0.44);
+  background: rgba(20, 184, 166, 0.1);
+}
+
+.theme-dark .toolmark-unit-toggle button,
+.theme-dark .toolmark-profile button {
+  color: #dbe7ee;
+}
+
+.theme-dark .toolmark-panel-head .toolmark-unit-toggle {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .toolmark-unit-toggle button[data-active="true"],
+.theme-dark .toolmark-profile button[data-active="true"] {
+  background: #f8fafc;
+  color: #122029;
+}
+
+.theme-dark .toolmark-slider b,
+.theme-dark .toolmark-slider strong,
+.theme-dark .toolmark-panel-label,
+.theme-dark .toolmark-upload span,
+.theme-dark .toolmark-upload strong,
+.theme-dark .toolmark-tune span,
+.theme-dark .toolmark-bars strong,
+.theme-dark .toolmark-demo summary {
+  color: #f8fafc;
+}
+
+.theme-dark .toolmark-interpretation {
+  color: #b8c5cf;
+}
+
+.theme-dark .toolmark-actions button {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+}
+
+.theme-dark .toolmark-actions button[data-active="true"] {
+  background: #5eead4;
+  color: #06211e;
+}
+
+@media (max-width: 900px) {
+  .toolmark-stage {
+    grid-template-columns: 1fr;
+    padding: 9px;
+  }
+
+  .toolmark-view,
+  .toolmark-view canvas {
+    min-height: 380px;
+  }
+
+  .toolmark-profile {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 540px) {
+  .toolmark-view,
+  .toolmark-view canvas {
+    min-height: 340px;
+  }
+
+  .toolmark-panel:has(.toolmark-upload),
+  .toolmark-tune {
+    grid-template-columns: 1fr;
+  }
+
+  .toolmark-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .toolmark-score {
+    min-width: 112px;
+  }
+
+  .toolmark-score strong {
+    font-size: 1.8rem;
+  }
+}
