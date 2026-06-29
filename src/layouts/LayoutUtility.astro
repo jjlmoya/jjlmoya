@@ -7,6 +7,7 @@ import AppLinksBanner from "../components/utilidades/AppLinksBanner.astro";
 import UtilityStructuredData from "../components/utilidades/UtilityStructuredData.astro";
 import FAQSection from "../components/utilidades/FAQSection.astro";
 import WidgetCreator from "../components/utilidades/WidgetCreator.astro";
+import ZoomControl from "../components/utilidades/ZoomControl.astro";
 import { sections } from "../data/utilities";
 
 interface AppLinks {
@@ -92,6 +93,16 @@ const hasBanner = !isWidget;
         slot="head"
     />
     {toolCss && <link rel="stylesheet" href={toolCss} slot="head" />}
+    <script is:inline slot="head">
+        (function() {
+            const savedZoom = localStorage.getItem("gamebob-utility-zoom");
+            if (savedZoom) {
+                const style = document.createElement("style");
+                style.textContent = `.utility-tool-container { zoom: ${savedZoom}; }`;
+                document.head.appendChild(style);
+            }
+        })();
+    </script>
     <div class="utility-layout-wrapper">
         <div></div>
 
@@ -130,6 +141,10 @@ const hasBanner = !isWidget;
 
             <div class="utility-tool-container">
                 <slot />
+            </div>
+
+            <div class="no-widget-hidden">
+                <ZoomControl />
             </div>
 
             {!hideWidget && <WidgetCreator title={title} url={currentPath} />}

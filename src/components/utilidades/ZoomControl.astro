@@ -1,0 +1,66 @@
+---
+import "./ZoomControl.css";
+---
+
+<div class="zoom-control-container">
+    <span class="zoom-label">Zoom</span>
+    <input
+        type="range"
+        id="zoom-slider"
+        class="zoom-slider"
+        min="50"
+        max="150"
+        step="5"
+        value="100"
+        aria-label="Zoom level"
+    />
+    <span class="zoom-value" id="zoom-display-val">100%</span>
+    <button class="zoom-btn" id="zoom-reset-btn" aria-label="Reset zoom">↺</button>
+</div>
+
+<script>
+    function initializeZoomControl() {
+        const slider = document.getElementById("zoom-slider") as HTMLInputElement;
+        const resetBtn = document.getElementById("zoom-reset-btn");
+        const displayVal = document.getElementById("zoom-display-val");
+        const toolContainer = document.querySelector(".utility-tool-container") as HTMLElement;
+
+        if (!slider || !resetBtn || !displayVal || !toolContainer) {
+            return;
+        }
+
+        const savedZoom = localStorage.getItem("gamebob-utility-zoom") || "1";
+        let currentZoom = parseFloat(savedZoom);
+
+        slider.value = Math.round(currentZoom * 100).toString();
+
+        function applyZoom(zoomVal: number) {
+            displayVal!.textContent = `${Math.round(zoomVal * 100)}%`;
+            toolContainer.style.zoom = zoomVal.toString();
+        }
+
+        applyZoom(currentZoom);
+
+        slider.addEventListener("input", (e) => {
+            const val = parseInt((e.target as HTMLInputElement).value, 10);
+            displayVal!.textContent = `${val}%`;
+        });
+
+        slider.addEventListener("change", (e) => {
+            const val = parseInt((e.target as HTMLInputElement).value, 10);
+            currentZoom = val / 100;
+            toolContainer.style.zoom = currentZoom.toString();
+            localStorage.setItem("gamebob-utility-zoom", currentZoom.toString());
+        });
+
+        resetBtn.addEventListener("click", () => {
+            currentZoom = 1;
+            slider.value = "100";
+            localStorage.setItem("gamebob-utility-zoom", "1");
+            applyZoom(currentZoom);
+        });
+    }
+
+    initializeZoomControl();
+    document.addEventListener("astro:after-swap", initializeZoomControl);
+</script>
