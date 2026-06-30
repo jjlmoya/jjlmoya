@@ -1,0 +1,371 @@
+.concept-map-tool {
+  --cmt-ink: #17202a;
+  --cmt-muted: #657282;
+  --cmt-line: rgba(23, 32, 42, 0.13);
+  --cmt-hairline: rgba(23, 32, 42, 0.065);
+  --cmt-paper: #f7f9fc;
+  --cmt-panel: rgba(255, 255, 255, 0.86);
+  --cmt-glass: rgba(255, 255, 255, 0.54);
+  --cmt-inverse: #fff;
+  --cmt-accent: #146c5f;
+  --cmt-accent-2: #234f9f;
+  --cmt-warm: #d68b28;
+  --cmt-shadow: rgba(25, 39, 52, 0.14);
+
+  width: 100%;
+  display: grid;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(20, 108, 95, 0.1), transparent 38%),
+    linear-gradient(315deg, rgba(214, 139, 40, 0.12), transparent 42%),
+    var(--cmt-paper);
+  color: var(--cmt-ink);
+  border: 1px solid var(--cmt-line);
+  border-radius: 8px;
+  box-shadow: 0 18px 44px var(--cmt-shadow);
+}
+
+.theme-dark .concept-map-tool {
+  --cmt-ink: #f4f7fb;
+  --cmt-muted: #a5b2c1;
+  --cmt-line: rgba(244, 247, 251, 0.16);
+  --cmt-hairline: rgba(244, 247, 251, 0.08);
+  --cmt-paper: #0d1117;
+  --cmt-panel: rgba(19, 26, 34, 0.9);
+  --cmt-glass: rgba(19, 26, 34, 0.62);
+  --cmt-accent: #4db7a8;
+  --cmt-accent-2: #87a8ff;
+  --cmt-warm: #f0ad55;
+  --cmt-shadow: rgba(0, 0, 0, 0.32);
+}
+
+.cmt-editor,
+.cmt-stage {
+  min-width: 0;
+}
+
+.cmt-editor {
+  display: grid;
+  grid-template-rows: auto minmax(15rem, 1fr);
+  gap: 0.35rem;
+  padding: 0.9rem;
+  background: linear-gradient(90deg, var(--cmt-glass), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(12px);
+}
+
+.cmt-editor-actions,
+.cmt-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cmt-editor-actions {
+  min-height: 2rem;
+  justify-content: space-between;
+}
+
+.cmt-editor-actions label {
+  color: var(--cmt-muted);
+  font-size: 0.76rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.cmt-editor-actions > div {
+  display: flex;
+  gap: 0.7rem;
+}
+
+.concept-map-tool button {
+  min-height: 2.35rem;
+  border: 1px solid var(--cmt-line);
+  border-radius: 6px;
+  background: var(--cmt-panel);
+  color: var(--cmt-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 820;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  padding: 0 0.7rem;
+  white-space: normal;
+}
+
+.concept-map-tool button:hover {
+  border-color: var(--cmt-accent);
+  color: var(--cmt-accent);
+}
+
+.cmt-editor-actions button {
+  min-height: 1.7rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--cmt-ink) 58%, transparent);
+  font-size: 0.72rem;
+  font-weight: 760;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentcolor 34%, transparent);
+  text-underline-offset: 0.22rem;
+}
+
+.cmt-editor textarea {
+  width: 100%;
+  min-height: 15rem;
+  resize: vertical;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--cmt-ink);
+  font: 600 0.94rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+  outline: 0;
+  padding: 0.55rem 0.35rem 0.75rem 0;
+}
+
+.cmt-editor textarea:focus {
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--cmt-accent) 62%, transparent);
+}
+
+.cmt-stage {
+  min-width: 0;
+  padding: 0.55rem;
+}
+
+.cmt-canvas-shell {
+  position: relative;
+  min-height: 28rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 24% 16%, rgba(20, 108, 95, 0.09), transparent 32%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.36));
+  cursor: grab;
+  touch-action: none;
+}
+
+.theme-dark .cmt-canvas-shell {
+  background:
+    radial-gradient(circle at 24% 16%, rgba(77, 183, 168, 0.1), transparent 32%),
+    linear-gradient(145deg, rgba(19, 26, 34, 0.84), rgba(13, 17, 23, 0.68));
+}
+
+.cmt-canvas-shell:active {
+  cursor: grabbing;
+}
+
+.cmt-metrics {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.9rem;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0.8rem;
+  pointer-events: none;
+}
+
+.cmt-metrics span {
+  display: flex;
+  align-items: baseline;
+  gap: 0.22rem;
+  color: color-mix(in srgb, var(--cmt-ink) 42%, transparent);
+  font-size: 0.68rem;
+  font-weight: 520;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.cmt-metrics strong {
+  color: color-mix(in srgb, var(--cmt-ink) 48%, transparent);
+  font-size: clamp(1.45rem, 5vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.cmt-toolbar {
+  position: absolute;
+  right: 0.8rem;
+  bottom: 0.8rem;
+  z-index: 4;
+  justify-content: flex-end;
+  gap: 0.18rem;
+  padding: 0.22rem;
+  border: 1px solid var(--cmt-hairline);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--cmt-panel) 82%, transparent);
+  box-shadow: 0 16px 38px rgba(25, 39, 52, 0.12);
+  backdrop-filter: blur(14px);
+}
+
+.cmt-toolbar button:first-child,
+.cmt-toolbar button:nth-child(3) {
+  width: 2.35rem;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.cmt-toolbar button:nth-last-child(-n + 2) {
+  border-color: var(--cmt-hairline);
+  background: transparent;
+  color: var(--cmt-accent);
+}
+
+.cmt-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 28rem;
+  display: block;
+}
+
+.cmt-canvas pattern circle {
+  fill: rgba(101, 114, 130, 0.26);
+}
+
+.cmt-grid {
+  fill: url("#cmt-dot-grid");
+}
+
+.cmt-links path {
+  fill: none;
+  stroke: rgba(35, 79, 159, 0.32);
+  stroke-linecap: round;
+  stroke-width: 2.5;
+}
+
+.theme-dark .cmt-links path {
+  stroke: rgba(135, 168, 255, 0.46);
+}
+
+.cmt-node {
+  cursor: move;
+}
+
+.cmt-node rect {
+  fill: var(--cmt-panel);
+  stroke: color-mix(in srgb, var(--cmt-ink) 18%, transparent);
+  stroke-width: 1;
+  filter: drop-shadow(0 12px 18px rgba(25, 39, 52, 0.12));
+}
+
+.cmt-node text {
+  fill: var(--cmt-ink);
+  font-size: 13px;
+  font-weight: 780;
+  pointer-events: none;
+}
+
+.cmt-node-label {
+  line-height: 1.15;
+}
+
+.cmt-node-depth {
+  fill: var(--cmt-muted);
+  font-size: 9px;
+  font-weight: 760;
+  opacity: 0.4;
+}
+
+.cmt-toggle {
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.cmt-node:hover .cmt-toggle,
+.cmt-toggle:hover {
+  opacity: 1;
+}
+
+.cmt-toggle circle {
+  fill: color-mix(in srgb, var(--cmt-ink) 72%, transparent);
+  stroke: var(--cmt-panel);
+  stroke-width: 2.5;
+}
+
+.cmt-toggle text {
+  fill: var(--cmt-inverse);
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.cmt-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.3rem;
+  padding: 1rem;
+  text-align: center;
+  background: rgba(247, 249, 252, 0.88);
+}
+
+.theme-dark .cmt-empty {
+  background: rgba(13, 17, 23, 0.9);
+}
+
+.cmt-empty[hidden] {
+  display: none;
+}
+
+.cmt-empty strong {
+  font-size: 1.2rem;
+}
+
+.cmt-empty span {
+  color: var(--cmt-muted);
+}
+
+@media (min-width: 860px) {
+  .concept-map-tool {
+    grid-template-columns: minmax(18rem, 0.42fr) minmax(0, 0.58fr);
+  }
+
+  .cmt-editor {
+    border-right: 1px solid var(--cmt-hairline);
+    padding: 1rem 1.05rem 1rem 1.1rem;
+  }
+
+  .cmt-stage {
+    padding: 0.65rem;
+  }
+
+  .cmt-editor textarea,
+  .cmt-canvas,
+  .cmt-canvas-shell {
+    min-height: 38rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .cmt-metrics {
+    left: 0.75rem;
+    right: auto;
+    grid-template-columns: repeat(3, auto);
+    gap: 0.48rem;
+  }
+
+  .cmt-metrics span {
+    font-size: 0.6rem;
+  }
+
+  .cmt-toolbar {
+    left: 0.55rem;
+    right: 0.55rem;
+    display: grid;
+    grid-template-columns: 2.35rem minmax(0, 1fr) 2.35rem repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+
+  .cmt-toolbar button {
+    min-width: 0;
+    padding-inline: 0.45rem;
+  }
+}
