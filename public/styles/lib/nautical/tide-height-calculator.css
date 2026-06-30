@@ -1,4 +1,4 @@
-.tide-calculator {
+  .tide-calculator {
     --n-bg: #fff;
     --n-bg-muted: #f1f5f9;
     --n-text: #0f172a;
@@ -17,8 +17,14 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    width: 100%;
     max-width: 1000px;
     margin: 0 auto;
+  }
+
+  .tide-calculator,
+  .tide-calculator * {
+    box-sizing: border-box;
   }
 
   .theme-dark .tide-calculator {
@@ -46,6 +52,7 @@
     grid-template-columns: 320px 1fr;
     overflow: hidden;
     box-shadow: 0 20px 40px var(--n-shadow);
+    min-width: 0;
   }
 
   @media (max-width: 850px) {
@@ -61,12 +68,14 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    min-width: 0;
   }
 
   .tc-sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
   }
 
   .tc-sidebar-header h3 {
@@ -76,6 +85,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     opacity: 0.9;
+    overflow-wrap: anywhere;
   }
 
   #invert-btn {
@@ -129,16 +139,20 @@
     color: var(--n-primary-on);
     font-size: 1rem;
     outline: none;
+    min-width: 0;
+    width: 100%;
   }
 
   .tc-unit-input {
     position: relative;
     display: flex;
     align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .tc-unit-input input {
-    width: 80px;
+    width: 100%;
     padding-right: 25px;
   }
 
@@ -169,17 +183,20 @@
     flex-direction: column;
     gap: 2rem;
     background: var(--n-bg-muted);
+    min-width: 0;
   }
 
   .tc-top-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 1.5rem;
   }
 
   .tc-result-display {
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 
   .tc-result-display .label {
@@ -234,6 +251,8 @@
   .tc-summary-info {
     display: flex;
     gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .tc-stat {
@@ -262,6 +281,7 @@
     padding: 1.5rem;
     height: 250px;
     position: relative;
+    min-width: 0;
   }
 
   .tc-table-card {
@@ -279,6 +299,7 @@
 
   .tc-table-wrapper {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .tide-calculator table {
@@ -303,8 +324,118 @@
   }
 
   @media (max-width: 640px) {
+    .tide-calculator {
+      gap: 1rem;
+    }
+
+    .tc-main-card {
+      border-radius: 1rem;
+      box-shadow: 0 10px 24px var(--n-shadow);
+    }
+
+    .tc-calc-sidebar {
+      padding: 1.25rem;
+      gap: 1.25rem;
+    }
+
+    .tc-sidebar-header h3 {
+      font-size: 0.95rem;
+    }
+
+    #invert-btn {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+    }
+
+    .tc-input-set {
+      gap: 1rem;
+    }
+
+    .tc-input-block .row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(92px, 0.75fr);
+    }
+
+    .tide-calculator input[type='time'],
+    .tide-calculator input[type='number'] {
+      padding: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .tide-calculator input[type='time'].large-time {
+      font-size: 1.45rem;
+    }
+
+    .tc-calc-content {
+      padding: 1.25rem;
+      gap: 1.25rem;
+    }
+
     .tc-top-row {
-      flex-direction: column;
-      gap: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .tc-result-display .label {
+      font-size: 0.75rem;
+    }
+
+    #target-value {
+      font-size: 3rem;
+    }
+
+    .tc-value-box small {
+      font-size: 1rem;
+    }
+
+    .tc-summary-info {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      justify-content: stretch;
+    }
+
+    .tc-stat {
+      background: var(--n-bg);
+      border: 1px solid var(--n-border);
+      border-radius: 0.8rem;
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    .tc-chart-area {
+      height: 220px;
+      border-radius: 1rem;
+      padding: 0.75rem;
+    }
+
+    .tc-table-card {
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+
+    .tide-calculator th,
+    .tide-calculator td {
+      padding: 0.75rem 0.6rem;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .tc-calc-sidebar,
+    .tc-calc-content {
+      padding: 1rem;
+    }
+
+    .tc-input-block .row,
+    .tc-summary-info {
+      grid-template-columns: 1fr;
+    }
+
+    #target-value {
+      font-size: 2.6rem;
     }
   }

@@ -16,16 +16,34 @@ const { title, slug, icon, utilities } = Astro.props;
 const categoryUrl = `/utilidades/categorias/${slug}/`;
 ---
 
-<section data-utility-section data-section-title={title}>
-    <a href={categoryUrl} class="utility-section-link">
-        <h2 class="utility-section-title">
-            <span class="utility-section-icon-container">
-                <Icon name={icon} class="utility-section-icon" />
-            </span>
-            {title}
-        </h2>
-    </a>
-    <div class="utility-cards-grid">
-        {utilities.map((u) => <CardUtility {...u} />)}
-    </div>
+<section class="utility-section-collapsible" data-utility-section data-section-title={title}>
+    <details class="utility-category-details">
+        <summary class="utility-section-summary">
+            <div class="utility-section-title-wrapper">
+                <span class="utility-section-icon-container">
+                    <Icon name={icon} class="utility-section-icon" />
+                </span>
+                <h2 class="utility-section-title">
+                    {title}
+                    <span class="utility-section-count">({utilities.length})</span>
+                </h2>
+                <a href={categoryUrl} class="utility-category-direct-link" title={`Ver todas las utilidades de ${title}`} onclick="event.stopPropagation()">
+                    <Icon name="mdi:open-in-new" class="direct-link-icon" />
+                </a>
+            </div>
+            <div class="utility-section-toggle-icon">
+                <Icon name="mdi:chevron-down" class="chevron-icon" />
+            </div>
+        </summary>
+        <div class="utility-cards-grid-wrapper">
+            <div class="utility-cards-grid">
+                {utilities.map((u) => <CardUtility {...u} />)}
+            </div>
+            <div class="utility-category-footer">
+                <a href={categoryUrl} class="utility-category-view-all">
+                    Ver página de categoría →
+                </a>
+            </div>
+        </div>
+    </details>
 </section>

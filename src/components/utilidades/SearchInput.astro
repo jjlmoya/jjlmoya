@@ -71,65 +71,92 @@ const flatUtilities: FlatUtility[] = sections.flatMap((section) =>
     function initSearch() {
         const input = document.getElementById("utility-search");
         const results = document.getElementById("search-results");
-        const resultsList = document.getElementById("results-list");
         const noResults = document.getElementById("no-results-view");
         const requestBtn = document.getElementById("request-tool-btn");
         const status = document.getElementById("request-status");
 
         if (!input) return;
 
+        if (results) {
+            results.style.pointerEvents = "none";
+            results.style.position = "absolute";
+            results.style.opacity = "0";
+            results.style.visibility = "hidden";
+        }
+
         input.addEventListener("input", (e) => {
             const query = normalize(e.target.value.trim());
-            if (!query) {
-                results.classList.remove("active");
-                return;
+            const sections = document.querySelectorAll("[data-utility-section]");
+            let hasAnyMatches = false;
+
+            sections.forEach((section) => {
+                const details = section.querySelector("details");
+                const cards = section.querySelectorAll("[data-utility-card]");
+                const sectionTitle = normalize(section.getAttribute("data-section-title") || "");
+                const isCategoryMatch = query && sectionTitle.includes(query);
+                let sectionMatchCount = 0;
+
+                cards.forEach((card) => {
+                    const title = normalize(card.getAttribute("data-title") || "");
+                    const description = normalize(card.getAttribute("data-description") || "");
+                    
+                    if (!query || isCategoryMatch || title.includes(query) || description.includes(query)) {
+                        card.style.display = "";
+                        sectionMatchCount++;
+                        hasAnyMatches = true;
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+
+                const countBadge = section.querySelector(".utility-section-count");
+                if (countBadge) {
+                    if (query && !isCategoryMatch) {
+                        countBadge.textContent = `(${sectionMatchCount} de ${cards.length})`;
+                    } else {
+                        countBadge.textContent = `(${cards.length})`;
+                    }
+                }
+
+                if (query) {
+                    if (sectionMatchCount > 0) {
+                        section.style.display = "";
+                        if (details) details.open = true;
+                    } else {
+                        section.style.display = "none";
+                    }
+                } else {
+                    section.style.display = "";
+                    if (details) details.open = false;
+                }
+            });
+
+            if (noResults) {
+                if (query && !hasAnyMatches) {
+                    if (results) {
+                        results.style.pointerEvents = "";
+                        results.style.position = "";
+                        results.style.opacity = "";
+                        results.style.visibility = "";
+                        results.classList.add("active");
+                    }
+                    noResults.style.display = "block";
+                } else {
+                    if (results) {
+                        results.style.pointerEvents = "none";
+                        results.style.position = "absolute";
+                        results.style.opacity = "0";
+                        results.style.visibility = "hidden";
+                        results.classList.remove("active");
+                    }
+                    noResults.style.display = "none";
+                }
             }
-
-            const matches = flatUtilities
-                .filter(
-                    (u) =>
-                        normalize(u.title).includes(query) ||
-                        normalize(u.description).includes(query) ||
-                        normalize(u.category).includes(query)
-                )
-                .slice(0, 10);
-
-            results.classList.add("active");
-            noResults.style.display = matches.length === 0 ? "block" : "none";
-            resultsList.innerHTML = matches
-                .map((m) => {
-                    const originalCard = document.querySelector(`a[href="${m.href}"]`);
-                    const originalIcon = originalCard
-                        ? originalCard.querySelector("svg.utility-card-icon")
-                        : null;
-                    const iconContent = originalIcon
-                        ? originalIcon.outerHTML
-                        : '<span class="search-fallback-icon">#</span>';
-
-                    return `
-                    <a href="${m.href}" class="search-item">
-                        <div class="search-item-icon">
-                            ${iconContent}
-                        </div>
-                        <div>
-                            <div class="search-item-title">${m.title}</div>
-                            <div style="font-size: 0.7rem; color: #64748b;">${m.category}</div>
-                        </div>
-                    </a>
-                `;
-                })
-                .join("");
 
             status.style.display = "none";
             status.className = "request-status";
             requestBtn.classList.remove("is-success");
             requestBtn.disabled = false;
-        });
-
-        document.addEventListener("click", (e) => {
-            if (!document.getElementById("search-container").contains(e.target)) {
-                results.classList.remove("active");
-            }
         });
 
         document.addEventListener("keydown", (e) => {
