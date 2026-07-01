@@ -24,13 +24,15 @@
   max-width: 1200px;
   margin: 0 auto;
   border: 1px solid var(--sid-border);
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 
 
 .sid-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 2.5rem;
   margin-top: 1.5rem;
 }
@@ -65,11 +67,13 @@
   align-items: center;
   position: relative;
   padding: 2rem;
+  min-width: 0;
 }
 
 .sid-svg-clock {
   width: 100%;
   max-width: 420px;
+  min-width: 0;
   height: auto;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
 }
@@ -96,6 +100,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 .sid-card-panel {
@@ -111,6 +116,8 @@
   align-items: center;
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--sid-border);
+  gap: 1rem;
+  min-width: 0;
 }
 
 
@@ -122,6 +129,7 @@
 .sid-readout-label {
   font-size: 0.95rem;
   color: var(--sid-text-muted);
+  min-width: 0;
 }
 
 .sid-readout-value {
@@ -129,6 +137,8 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--sid-text);
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 .sid-readout-value.sid-gold-text {
@@ -200,10 +210,12 @@
 .sid-speed-btn-row {
   display: flex;
   gap: 0.5rem;
+  min-width: 0;
 }
 
 .sid-speed-btn-row button {
   flex: 1;
+  min-width: 0;
 }
 
 .sid-tip-box {
@@ -254,4 +266,51 @@
 .sid-btn-location:hover {
   background: color-mix(in srgb, var(--sid-gold) 10%, transparent);
   transform: scale(1.1);
+}
+
+@media (max-width: 520px) {
+  .sid-card {
+    padding: 1rem;
+    border-radius: 0.875rem;
+    max-width: 100%;
+  }
+
+  .sid-grid {
+    gap: 1rem;
+    margin-top: 0;
+  }
+
+  .sid-dial-container {
+    padding: 0.25rem;
+  }
+
+  .sid-svg-clock {
+    max-width: min(100%, 320px);
+  }
+
+  .sid-card-panel {
+    padding: 1rem;
+    border-radius: 0.875rem;
+  }
+
+  .sid-readout-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .sid-readout-value {
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+  }
+
+  .sid-speed-btn-row {
+    flex-wrap: wrap;
+  }
+
+  .sid-btn-toggle {
+    padding: 0.5rem 0.65rem;
+    font-size: 0.8rem;
+  }
 }

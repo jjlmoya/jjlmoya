@@ -1,538 +1,443 @@
-.fabric-calculator-card {
-    --f-p: #4f46e5;
-    --f-a: #818cf8;
-    --f-side: rgba(79, 70, 229, 0.04);
+#fabric-calc-app {
+  --fpc-accent: #4f46e5;
+  --fpc-accent-soft: rgba(79, 70, 229, 0.12);
 
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    max-width: 1200px;
-    width: 95%;
-    margin: 2rem auto;
-    background: var(--bg-surface);
-    backdrop-filter: blur(25px);
-    border-radius: 32px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
-    color: var(--text-main);
+  width: min(100%, 1120px);
+  margin: 1.5rem auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  color: var(--text-main);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+  overflow: visible;
+  isolation: isolate;
+}
+
+#fabric-calc-app *,
+#fabric-calc-app *::before,
+#fabric-calc-app *::after {
+  box-sizing: border-box;
+}
+
+#fabric-calc-app .fpc-controls,
+#fabric-calc-app .fpc-main,
+#fabric-calc-app .fpc-layout,
+#fabric-calc-app .fpc-canvas,
+#fabric-calc-app .fpc-result,
+#fabric-calc-app .fpc-merch {
+  min-width: 0;
+  max-width: 100%;
+}
+
+#fabric-calc-app .fpc-controls,
+#fabric-calc-app .fpc-config,
+#fabric-calc-app .fpc-field,
+#fabric-calc-app .fpc-main,
+#fabric-calc-app .fpc-checklist {
+  display: grid;
+}
+
+#fabric-calc-app .fpc-controls,
+#fabric-calc-app .fpc-main {
+  gap: 1rem;
+  align-content: start;
+}
+
+#fabric-calc-app .fpc-config,
+#fabric-calc-app .fpc-result,
+#fabric-calc-app .fpc-canvas,
+#fabric-calc-app .fpc-merch {
+  padding: 1rem;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 0.85rem;
+}
+
+#fabric-calc-app .fpc-config,
+#fabric-calc-app .fpc-field {
+  gap: 0.85rem;
+}
+
+#fabric-calc-app .fpc-config h3,
+#fabric-calc-app .fpc-merch-title {
+  margin: 0;
+  color: var(--fpc-accent);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#fabric-calc-app .fpc-field {
+  gap: 0.4rem;
+}
+
+#fabric-calc-app .fpc-field label,
+#fabric-calc-app .fpc-result-label {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+#fabric-calc-app .fpc-select,
+#fabric-calc-app .fpc-input {
+  width: 100%;
+  min-height: 44px;
+  color: var(--text-main);
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--border-color);
+  border-radius: 0.7rem;
+  outline: none;
+}
+
+#fabric-calc-app .fpc-select {
+  padding: 0.75rem 2.4rem 0.75rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 750;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1rem;
+}
+
+#fabric-calc-app .fpc-select:focus,
+#fabric-calc-app .fpc-input:focus {
+  border-color: var(--fpc-accent);
+  box-shadow: 0 0 0 3px var(--fpc-accent-soft);
+}
+
+#fabric-calc-app .fpc-size-options,
+#fabric-calc-app .fpc-actions,
+#fabric-calc-app .fpc-stepper,
+#fabric-calc-app .fpc-scheme {
+  display: grid;
+}
+
+#fabric-calc-app .fpc-size-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+#fabric-calc-app .fpc-size-option,
+#fabric-calc-app .fpc-action,
+#fabric-calc-app .fpc-copy-button,
+#fabric-calc-app .fpc-step-button {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+#fabric-calc-app .fpc-size-option {
+  min-height: 40px;
+  padding: 0.6rem 0.4rem;
+  color: var(--fpc-accent);
+  background: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.28);
+  border-radius: 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+#fabric-calc-app .fpc-size-option.active,
+#fabric-calc-app .fpc-action-primary {
+  color: #fff;
+  background: var(--fpc-accent);
+}
+
+#fabric-calc-app .fpc-stepper {
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  overflow: hidden;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-color);
+  border-radius: 0.7rem;
+}
+
+#fabric-calc-app .fpc-step-button {
+  min-height: 44px;
+  color: var(--fpc-accent);
+  background: transparent;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+#fabric-calc-app .fpc-input {
+  min-height: 44px;
+  border-block: 0;
+  border-radius: 0;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 850;
+}
+
+#fabric-calc-app .fpc-actions {
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+#fabric-calc-app .fpc-action {
+  min-height: 44px;
+  border-radius: 0.7rem;
+  font-weight: 850;
+}
+
+#fabric-calc-app .fpc-action-secondary {
+  color: var(--text-main);
+  background: var(--bg-muted);
+  border: 1px solid var(--border-color);
+}
+
+#fabric-calc-app .fpc-main {
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+}
+
+#fabric-calc-app .fpc-warning {
+  grid-column: 1 / -1;
+  display: none;
+  padding: 0.85rem 1rem;
+  color: #c2410c;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+#fabric-calc-app .fpc-result-label {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+#fabric-calc-app .fpc-result-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
+  color: var(--fpc-accent);
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: 950;
+  line-height: 0.95;
+}
+
+#fabric-calc-app .fpc-result-unit {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+
+#fabric-calc-app .fpc-advice {
+  display: inline-flex;
+  max-width: 100%;
+  margin-top: 0.9rem;
+  padding: 0.6rem 0.85rem;
+  color: var(--fpc-accent);
+  background: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.22);
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+#fabric-calc-app .fpc-scheme {
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 0.55rem;
+}
+
+#fabric-calc-app .fpc-ruler,
+#fabric-calc-app .fpc-board {
+  height: 260px;
+}
+
+#fabric-calc-app .fpc-ruler {
+  position: relative;
+}
+
+#fabric-calc-app .fpc-ruler-mark {
+  position: absolute;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-start;
+  transform: translateY(-50%);
+}
+
+#fabric-calc-app .fpc-ruler-mark::before {
+  content: '';
+  width: 8px;
+  height: 1.5px;
+  margin-top: 0.42em;
+  margin-right: 4px;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+#fabric-calc-app .fpc-ruler-mark span {
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+#fabric-calc-app .fpc-board {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 6px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  background: var(--bg-surface);
+  border: 2px solid var(--fpc-accent);
+  border-radius: 0.35rem;
+}
+
+#fabric-calc-app .fpc-piece-row {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+#fabric-calc-app .fpc-piece {
+  min-width: 0;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  border: 1.5px solid;
+  border-radius: 0.3rem;
+}
+
+#fabric-calc-app .fpc-piece-name {
+  width: 100%;
+  overflow: hidden;
+  color: var(--text-main);
+  font-size: 0.62rem;
+  font-weight: 850;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#fabric-calc-app .fpc-piece-fold {
+  border-left: 3px dashed rgba(79, 70, 229, 0.68);
+}
+
+#fabric-calc-app .fpc-fold-indicator {
+  margin-top: 2px;
+  color: rgba(79, 70, 229, 0.78);
+  font-size: 0.48rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#fabric-calc-app .fpc-board-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-align: center;
+}
+
+#fabric-calc-app .fpc-scheme-info {
+  margin-top: 0.55rem;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 750;
+  text-align: right;
+}
+
+#fabric-calc-app .fpc-merch-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+#fabric-calc-app .fpc-copy-button {
+  min-height: 36px;
+  padding: 0 0.8rem;
+  color: var(--fpc-accent);
+  background: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  border-radius: 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+#fabric-calc-app .fpc-checklist {
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+#fabric-calc-app .fpc-merch-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-main);
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+#fabric-calc-app .fpc-merch-dot {
+  color: var(--fpc-accent);
+  font-size: 0.5rem;
+  flex-shrink: 0;
+  opacity: 0.72;
+}
+
+@media (max-width: 900px) {
+  #fabric-calc-app,
+  #fabric-calc-app .fpc-main {
+    grid-template-columns: 1fr;
   }
 
-  .theme-dark .fabric-calculator-card {
-    --f-side: rgba(255, 255, 255, 0.03);
+  #fabric-calc-app .fpc-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .fabric-sidebar {
-    background: var(--f-side);
-    padding: 2.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    border-right: 1px solid var(--border-color);
+  #fabric-calc-app .fpc-actions {
+    grid-column: 1 / -1;
   }
+}
 
-  .config-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .config-group h3 {
-    font-size: 0.7rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.18rem;
-    color: var(--f-p);
+@media (max-width: 600px) {
+  #fabric-calc-app {
     margin: 0;
+    padding: 0.85rem;
+    border-radius: 0.85rem;
   }
 
-  .fabric-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
+  #fabric-calc-app .fpc-controls,
+  #fabric-calc-app .fpc-actions,
+  #fabric-calc-app .fpc-size-options {
+    grid-template-columns: 1fr;
   }
 
-  .fabric-field label {
-    font-size: 0.72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.06rem;
-    color: var(--text-muted);
+  #fabric-calc-app .fpc-scheme {
+    grid-template-columns: 34px minmax(0, 1fr);
   }
 
-  .fabric-select {
-    width: 100%;
-    padding: 0.85rem 3rem 0.85rem 1.1rem;
-    border-radius: 14px;
-    border: 1.5px solid var(--border-color);
-    background: var(--bg-surface);
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: inherit;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1.1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
+  #fabric-calc-app .fpc-ruler,
+  #fabric-calc-app .fpc-board {
+    height: 220px;
   }
-
-  .fabric-select:focus {
-    border-color: var(--f-p);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-  }
-
-  .shop-stepper {
-    display: grid;
-    grid-template-columns: 48px 1fr 48px;
-    align-items: center;
-    background: var(--bg-surface);
-    border-radius: 14px;
-    border: 1.5px solid var(--border-color);
-    overflow: hidden;
-    height: 50px;
-    max-width: 190px;
-  }
-
-  .step-btn {
-    height: 100%;
-    border: none;
-    background: transparent;
-    color: var(--f-p);
-    font-size: 1.6rem;
-    font-weight: 300;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s, color 0.15s;
-    flex-shrink: 0;
-  }
-
-  .step-btn:hover {
-    background: var(--f-p);
-    color: white;
-  }
-
-  .fabric-input {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: transparent;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 800;
-    color: inherit;
-    padding: 0;
-    outline: none;
-    box-shadow: none;
-  }
-
-  .preset-group {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-  }
-
-  .preset-pill {
-    padding: 0.75rem 0;
-    border-radius: 12px;
-    border: 1.5px solid rgba(79, 70, 229, 0.25);
-    background: rgba(79, 70, 229, 0.06);
-    font-size: 0.72rem;
-    font-weight: 900;
-    color: var(--f-p);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-
-  .theme-dark .preset-pill {
-    background: rgba(79, 70, 229, 0.08);
-    border-color: rgba(129, 140, 248, 0.3);
-    color: var(--f-a);
-  }
-
-  .preset-pill:hover {
-    background: rgba(79, 70, 229, 0.12);
-    border-color: var(--f-p);
-  }
-
-  .preset-pill.active {
-    background: var(--f-p);
-    color: white;
-    border-color: var(--f-p);
-    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
-  }
-
-  .btn-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: auto;
-    padding-top: 1rem;
-  }
-
-  .f-btn {
-    height: 50px;
-    border-radius: 14px;
-    font-size: 0.85rem;
-    font-weight: 800;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-  }
-
-  .f-seco {
-    background: var(--bg-muted);
-    color: var(--text-muted);
-    border: 1.5px solid var(--border-color);
-  }
-
-  .f-seco:hover {
-    filter: brightness(0.95);
-  }
-
-  .f-prim {
-    background: var(--f-p);
-    color: white;
-  }
-
-  .f-prim:hover {
-    filter: brightness(1.1);
-  }
-
-  .fabric-main {
-    padding: 3rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    min-width: 0;
-  }
-
-  .magic-result-area {
-    background: linear-gradient(145deg, rgba(79, 70, 229, 0.07), rgba(129, 140, 248, 0.03));
-    padding: 2.5rem 2rem;
-    border-radius: 28px;
-    border: 1px solid rgba(79, 70, 229, 0.12);
-  }
-
-  .result-lbl {
-    display: block;
-    font-size: 0.68rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.12rem;
-    color: var(--text-muted);
-    margin-bottom: 0.4rem;
-  }
-
-  .magic-result-area .val {
-    font-size: 6rem;
-    font-weight: 950;
-    letter-spacing: -5px;
-    color: var(--f-p);
-    line-height: 0.85;
-  }
-
-  .magic-result-area .unit {
-    font-size: 1.75rem;
-    font-weight: 900;
-    opacity: 0.4;
-    margin-left: 0.5rem;
-  }
-
-  .advice-tag {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 1.5rem;
-    padding: 0.85rem 2rem;
-    background: rgba(79, 70, 229, 0.1);
-    border: 1.5px solid rgba(79, 70, 229, 0.22);
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--f-p);
-  }
-
-  .theme-dark .advice-tag {
-    background: rgba(129, 140, 248, 0.12);
-    border-color: rgba(129, 140, 248, 0.25);
-    color: var(--f-a);
-  }
-
-  .layout-container {
-    min-width: 0;
-  }
-
-  .canvas-wrapper {
-    background: var(--bg-muted);
-    padding: 24px 24px 14px 12px;
-    border-radius: 28px;
-  }
-
-  .scheme-area {
-    display: flex;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .ruler {
-    width: 34px;
-    flex-shrink: 0;
-    position: relative;
-  }
-
-  .ruler-mark {
-    position: absolute;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: flex-start;
-    transform: translateY(-50%);
-  }
-
-  .ruler-mark::before {
-    content: '';
-    width: 8px;
-    height: 1.5px;
-    background: var(--text-muted);
-    flex-shrink: 0;
-    margin-top: 0.42em;
-    margin-right: 4px;
-  }
-
-  .ruler-mark span {
-    font-size: 0.58rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-
-  .fabric-board {
-    flex: 1;
-    height: 300px;
-    background: var(--bg-surface);
-    border: 2.5px solid var(--f-p);
-    padding: 6px 6px 28px;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 4px;
-  }
-
-  .piece-row {
-    display: flex;
-    flex-direction: row;
-    gap: 4px;
-    flex-shrink: 0;
-    align-items: stretch;
-  }
-
-  .piece-block {
-    border-radius: 4px;
-    border: 1.5px solid;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 4px 8px;
-    overflow: hidden;
-    min-width: 0;
-    transition: filter 0.15s;
-  }
-
-  .piece-block:hover {
-    filter: brightness(1.08);
-  }
-
-  .piece-name {
-    font-size: 0.62rem;
-    font-weight: 800;
-    color: var(--text-main);
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-  }
-
-  .piece-fold {
-    border-left: 3px dashed rgba(79, 70, 229, 0.65);
-  }
-
-  .fold-indicator {
-    font-size: 0.48rem;
-    font-weight: 800;
-    color: rgba(79, 70, 229, 0.75);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-top: 2px;
-  }
-
-  .board-empty-state {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .scheme-info {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    margin-top: 0.6rem;
-    text-align: right;
-  }
-
-  .merch-section {
-    min-width: 0;
-  }
-
-  .merch-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border-color);
-  }
-
-  .merch-title {
-    font-size: 0.7rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.18rem;
-    color: var(--f-p);
-    margin: 0;
-  }
-
-  .copy-list-btn {
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--f-p);
-    background: rgba(79, 70, 229, 0.08);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    border-radius: 8px;
-    padding: 0.35rem 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .copy-list-btn:hover {
-    background: rgba(79, 70, 229, 0.15);
-  }
-
-  .merceria-checklist {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .merch-item {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-main);
-  }
-
-  .merch-dot {
-    color: var(--f-p);
-    font-size: 0.5rem;
-    flex-shrink: 0;
-    opacity: 0.65;
-  }
-
-  .warning-banner {
-    display: none;
-    background: #fff7ed;
-    color: #c2410c;
-    border: 1.5px solid #fed7aa;
-    padding: 1rem 1.25rem;
-    border-radius: 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-
-  @media (max-width: 1100px) {
-    .fabric-calculator-card {
-      grid-template-columns: 1fr;
-      width: 100%;
-      border-radius: 1rem;
-      margin: 0;
-    }
-
-    .fabric-sidebar {
-      border-right: none;
-      border-bottom: 1px solid var(--border-color);
-      padding: 1.75rem 1.5rem;
-    }
-
-    .btn-actions {
-      margin-top: 1rem;
-    }
-
-    .fabric-main {
-      padding: 2rem 1.5rem;
-      gap: 2rem;
-    }
-
-    .magic-result-area .val {
-      font-size: 4.5rem;
-      letter-spacing: -3px;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .fabric-sidebar {
-      padding: 1.25rem;
-    }
-
-    .fabric-main {
-      padding: 1.25rem;
-      gap: 1.5rem;
-    }
-
-    .magic-result-area {
-      padding: 1.5rem 1.25rem;
-      border-radius: 1rem;
-    }
-
-    .magic-result-area .val {
-      font-size: 3rem;
-      letter-spacing: -2px;
-    }
-
-    .magic-result-area .unit {
-      font-size: 1.2rem;
-    }
-
-    .advice-tag {
-      font-size: 0.875rem;
-      padding: 0.7rem 1.25rem;
-    }
-
-    .canvas-wrapper {
-      padding: 14px 14px 10px 8px;
-      border-radius: 16px;
-    }
-
-    .fabric-board {
-      height: 220px;
-      padding-bottom: 20px;
-    }
-  }
+}

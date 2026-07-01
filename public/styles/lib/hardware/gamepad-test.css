@@ -20,7 +20,15 @@
   --tm-stick-border: #64748b;
 
   width: 100%;
+  max-width: 100%;
   color: var(--tm-text);
+  overflow-x: clip;
+}
+
+.tm-wrapper *,
+.tm-wrapper *::before,
+.tm-wrapper *::after {
+  box-sizing: border-box;
 }
 
 .theme-dark .tm-wrapper {
@@ -103,6 +111,8 @@ body.is-widget .tm-wrapper {
       padding: 2rem;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--tm-border);
+      max-width: 100%;
+      overflow: hidden;
     }
 
     .tm-card-header {
@@ -148,24 +158,28 @@ body.is-widget .tm-wrapper {
       flex-direction: column;
       align-items: center;
       gap: 1rem;
+      width: 100%;
+      overflow: hidden;
     }
 
     .tm-stage {
       position: relative;
       width: 600px;
       height: 420px;
+      flex: 0 0 600px;
+      transform-origin: top center;
       transition: all 500ms;
     }
 
     .tm-stage-inactive {
       opacity: 0.25;
       filter: grayscale(1);
-      transform: scale(0.9);
+      transform: scale(var(--tm-stage-scale, 1));
     }
 
     @media (min-width: 640px) {
       .tm-stage-inactive {
-        transform: scale(1);
+        transform: scale(var(--tm-stage-scale, 1));
       }
     }
 
@@ -460,6 +474,7 @@ body.is-widget .tm-wrapper {
       font-size: 0.75rem;
       color: var(--tm-text-muted);
       transition: opacity 500ms;
+      min-width: 0;
     }
 
     .tm-info-inactive { opacity: 0.5; }
@@ -468,6 +483,7 @@ body.is-widget .tm-wrapper {
     .tm-info-right {
       display: flex;
       gap: 1rem;
+      min-width: 0;
     }
 
     .tm-gp-id {
@@ -630,6 +646,7 @@ body.is-widget .tm-wrapper {
       justify-content: center;
       border: 1px solid rgba(255, 255, 255, 0.05);
       color: white;
+      max-width: 100%;
     }
 
     .tm-game-intro {
@@ -732,6 +749,7 @@ body.is-widget .tm-wrapper {
       align-items: center;
       width: 100%;
       margin-bottom: 3rem;
+      gap: 1rem;
     }
 
     .tm-hud-item {
@@ -783,6 +801,7 @@ body.is-widget .tm-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
+      max-width: 100%;
     }
 
     .tm-target-ring {
@@ -852,6 +871,8 @@ body.is-widget .tm-wrapper {
       background: rgba(255, 255, 255, 0.05);
       border-radius: 9999px;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 100%;
+      text-align: center;
     }
 
     .tm-instruction-dot {
@@ -920,6 +941,153 @@ body.is-widget .tm-wrapper {
       flex-direction: column;
       gap: 1rem;
       justify-content: center;
+    }
+
+    @media (max-width: 700px) {
+      .tm-container {
+        padding: 0;
+        gap: 1.25rem;
+      }
+
+      .tm-card,
+      .tm-game-card {
+        border-radius: 0.875rem;
+        padding: 1rem;
+      }
+
+      .tm-card-header {
+        margin-bottom: 1.25rem;
+      }
+
+      .tm-title {
+        font-size: 1.5rem;
+      }
+
+      .tm-stage-wrapper {
+        --tm-stage-scale: 0.9;
+
+        min-height: calc(420px * var(--tm-stage-scale));
+      }
+
+      .tm-stage {
+        transform: scale(var(--tm-stage-scale));
+        margin-bottom: calc((420px * var(--tm-stage-scale)) - 420px);
+      }
+
+      .tm-info-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding-top: 0.75rem;
+      }
+
+      .tm-info-left,
+      .tm-info-right {
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .tm-vibration-panel,
+      .tm-log-section {
+        margin-top: 1rem;
+        border-radius: 0.75rem;
+        padding: 0.875rem;
+      }
+
+      .tm-vibration-btns,
+      .tm-results-btns {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .tm-vib-btn,
+      .tm-restart-btn,
+      .tm-share-btn {
+        width: 100%;
+      }
+
+      .tm-game-card {
+        min-height: 420px;
+      }
+
+      .tm-game-icon {
+        width: 4rem;
+        height: 4rem;
+        margin-bottom: 1rem;
+      }
+
+      .tm-game-intro-title {
+        font-size: 1.65rem;
+      }
+
+      .tm-game-intro-desc {
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+      }
+
+      .tm-game-start-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+      }
+
+      .tm-game-hud {
+        margin-bottom: 1.5rem;
+      }
+
+      .tm-hud-label {
+        font-size: 0.55rem;
+      }
+
+      .tm-hud-value {
+        font-size: 1.5rem;
+      }
+
+      .tm-target-container {
+        width: min(15rem, 78vw);
+        height: min(15rem, 78vw);
+      }
+
+      .tm-target-btn {
+        width: min(8rem, 45vw);
+        height: min(8rem, 45vw);
+        font-size: 2.5rem;
+      }
+
+      .tm-game-instruction {
+        margin-top: 1.5rem;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+      }
+
+      .tm-final-score {
+        font-size: 4rem;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .tm-stage-wrapper {
+        --tm-stage-scale: 0.82;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .tm-stage-wrapper {
+        --tm-stage-scale: 0.72;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .tm-stage-wrapper {
+        --tm-stage-scale: 0.62;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .tm-stage-wrapper {
+        --tm-stage-scale: 0.54;
+      }
     }
 
     @media (min-width: 640px) {

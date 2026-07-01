@@ -27,6 +27,13 @@
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    box-sizing: border-box;
+  }
+
+  .wl-root *,
+  .wl-root *::before,
+  .wl-root *::after {
+    box-sizing: border-box;
   }
 
   .theme-dark .wl-root {
@@ -50,7 +57,9 @@
     background: var(--wl-panel-bg);
     border: 1px solid var(--wl-panel-border);
     border-radius: 1.25rem;
-    padding: 1.5rem;
+    width: 100%;
+    min-width: 0;
+    padding: clamp(1rem, 4vw, 1.5rem);
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -73,11 +82,14 @@
   .wl-phone-row {
     display: flex;
     gap: 0.5rem;
+    width: 100%;
+    min-width: 0;
   }
 
   .wl-prefix-select {
     flex-shrink: 0;
-    width: 7.5rem;
+    width: min(7.5rem, 42%);
+    min-width: 6.75rem;
     background: var(--wl-field-bg);
     border: 1px solid var(--wl-field-border);
     border-radius: 0.75rem;
@@ -96,6 +108,8 @@
 
   .wl-phone-input {
     flex: 1;
+    min-width: 0;
+    width: 100%;
     background: var(--wl-field-bg);
     border: 1px solid var(--wl-field-border);
     border-radius: 0.75rem;
@@ -183,7 +197,9 @@
     background: var(--wl-result-bg);
     border: 1px solid var(--wl-result-border);
     border-radius: 1.25rem;
-    padding: 1.25rem 1.5rem;
+    width: 100%;
+    min-width: 0;
+    padding: clamp(1rem, 4vw, 1.5rem);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -205,10 +221,12 @@
     display: flex;
     align-items: center;
     gap: 0.625rem;
+    min-width: 0;
   }
 
   .wl-link-display {
     flex: 1;
+    min-width: 0;
     font-size: 0.8rem;
     font-weight: 500;
     color: var(--wl-link-color);
@@ -257,6 +275,25 @@
   }
 
   .wl-qr-canvas {
+    max-width: 100%;
+    height: auto;
     border-radius: 0.75rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 24rem) {
+    .wl-phone-row,
+    .wl-result-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .wl-prefix-select {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .wl-result-actions {
+      justify-content: flex-end;
+    }
   }

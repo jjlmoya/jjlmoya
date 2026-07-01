@@ -1,14 +1,17 @@
 .rc-root {
     width: 100%;
+    min-width: 0;
   }
 
   .rc-container {
+    container-type: inline-size;
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
     padding: 1.5rem;
+    min-width: 0;
   }
 
   @media (min-width: 1024px) {
@@ -28,6 +31,7 @@
     flex-direction: column;
     gap: 2rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    min-width: 0;
   }
 
   .theme-dark .rc-card {
@@ -61,7 +65,7 @@
 
   .rc-inputs-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
     gap: 1.5rem;
   }
 
@@ -90,6 +94,7 @@
     padding: 0.5rem;
     border-radius: 0.75rem;
     transition: all 0.2s ease;
+    min-width: 0;
   }
 
   .theme-dark .rc-color-input-container {
@@ -127,6 +132,8 @@
     font-weight: 600;
     color: rgb(71, 85, 105);
     flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   .theme-dark .rc-hex-text {
@@ -193,7 +200,7 @@
 
   .rc-comparison-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
     gap: 1rem;
   }
 
@@ -206,6 +213,7 @@
     gap: 0.5rem;
     background: rgba(255, 255, 255, 0.4);
     border: 1px solid rgba(0, 0, 0, 0.05);
+    min-width: 0;
   }
 
   .theme-dark .rc-score-card {
@@ -232,6 +240,8 @@
     padding: 0.2rem 0.6rem;
     border-radius: 0.5rem;
     text-transform: uppercase;
+    text-align: center;
+    overflow-wrap: anywhere;
   }
 
   .rc-status-pass {
@@ -274,6 +284,7 @@
   .rc-preview-text {
     line-height: 1.5;
     margin: 0;
+    overflow-wrap: anywhere;
   }
 
   .rc-apca-breakdown {
@@ -292,6 +303,7 @@
   .rc-breakdown-item {
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
     font-size: 0.875rem;
   }
 
@@ -309,6 +321,8 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    text-align: right;
+    white-space: nowrap;
   }
 
   .rc-check-yes {
@@ -317,4 +331,74 @@
 
   .rc-check-no {
     color: rgb(239, 68, 68);
+  }
+
+  @container (max-width: 520px) {
+    .rc-container {
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .rc-card {
+      border-radius: 1rem;
+      gap: 1.25rem;
+      padding: 1rem;
+    }
+
+    .rc-control-section {
+      gap: 1.25rem;
+    }
+
+    .rc-group-title {
+      margin-bottom: 0.75rem;
+    }
+
+    .rc-inputs-grid,
+    .rc-comparison-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .rc-color-input-container {
+      align-items: stretch;
+    }
+
+    .rc-color-picker {
+      flex: 0 0 2.5rem;
+    }
+
+    .rc-score-card,
+    .rc-apca-breakdown {
+      padding: 1rem;
+      border-radius: 0.75rem;
+    }
+
+    .rc-main-preview-box {
+      min-height: 120px;
+      padding: 1.25rem;
+      border-radius: 0.875rem;
+    }
+
+    .rc-breakdown-item {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .rc-item-check {
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .rc-container {
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .rc-card {
+      border-radius: 1rem;
+      gap: 1.25rem;
+      padding: 1rem;
+    }
   }

@@ -22,21 +22,33 @@
   }
 
   .sc-root {
+    box-sizing: border-box;
     width: 100%;
     max-width: 1100px;
     margin: 1.5rem auto;
     padding: 0 1rem;
     color: var(--sc-neutral);
+    container-type: inline-size;
+    overflow-x: clip;
+  }
+
+  .sc-root *,
+  .sc-root *::before,
+  .sc-root *::after {
+    box-sizing: border-box;
   }
 
   .sc-card {
+    width: 100%;
+    max-width: 100%;
     background: var(--sc-bg);
     border-radius: 2rem;
     overflow: hidden;
     display: grid;
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: minmax(0, 350px) minmax(0, 1fr);
     box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
     border: 1px solid var(--sc-border);
+    min-width: 0;
   }
 
   .sc-sidebar {
@@ -46,6 +58,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-width: 0;
   }
 
   .sc-section h3 {
@@ -63,6 +76,7 @@
     flex-direction: column;
     gap: 1.5rem;
     background: var(--sc-bg);
+    min-width: 0;
   }
 
   .sc-results-header {
@@ -72,6 +86,7 @@
   }
 
   .sc-stat-box {
+    min-width: 0;
     background: rgba(255, 255, 255, 0.5);
     padding: 0.75rem 0.5rem;
     border-radius: 1.25rem;
@@ -93,9 +108,12 @@
   }
 
   .sc-stat-value {
+    display: inline-block;
+    max-width: 100%;
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--sc-neutral);
+    overflow-wrap: anywhere;
   }
 
   .sc-stat-unit {
@@ -131,6 +149,7 @@
 
   .sc-input-group {
     margin-bottom: 0.75rem;
+    min-width: 0;
   }
 
   .sc-input-group label {
@@ -207,6 +226,7 @@
 
   .sc-select {
     width: 100%;
+    box-sizing: border-box;
     padding: 0.8rem 2.8rem 0.8rem 1rem;
     border-radius: 1rem;
     border: 2px solid var(--sc-border);
@@ -241,6 +261,7 @@
 
   .sc-optimize-btn {
     width: 100%;
+    box-sizing: border-box;
     padding: 0.75rem;
     background: var(--sc-primary-dark);
     color: white;
@@ -317,7 +338,7 @@
 
   .sc-table-wrapper {
     max-height: 220px;
-    overflow-y: auto;
+    overflow: auto;
   }
 
   .sc-table-wrapper table {
@@ -370,6 +391,7 @@
 
   .sc-material-row {
     display: flex;
+    gap: 0.75rem;
     justify-content: space-between;
     align-items: baseline;
     padding-bottom: 0.4rem;
@@ -384,6 +406,7 @@
   .sc-material-row strong {
     font-size: 1.15rem;
     color: var(--sc-primary);
+    overflow-wrap: anywhere;
   }
 
   .sc-actions-row {
@@ -459,20 +482,140 @@
   }
 
   @media (max-width: 480px) {
+    .sc-root {
+      padding: 0 0.5rem;
+    }
+
+    .sc-card {
+      border-radius: 1rem;
+    }
+
+    .sc-sidebar,
+    .sc-main {
+      padding: 1rem;
+    }
+
+    .sc-input-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .sc-step-btn {
+      width: 38px;
+      height: 38px;
+      font-size: 1.35rem;
+    }
+
+    .sc-stepper input {
+      height: 38px;
+      font-size: 1rem;
+    }
+
+    .sc-select {
+      font-size: 0.9rem;
+      padding: 0.7rem 2.5rem 0.7rem 0.85rem;
+    }
+
     .sc-results-header {
-      gap: 0.4rem;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
     }
 
     .sc-stat-box {
-      padding: 0.4rem;
-      border-radius: 1rem;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 0.35rem;
+      align-items: baseline;
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      border-radius: 0.875rem;
     }
 
     .sc-stat-value {
       font-size: 1.1rem;
     }
 
+    .sc-stat-unit {
+      font-size: 0.7rem;
+    }
+
+    .sc-visualizer-container {
+      min-height: 210px;
+      padding: 0.5rem;
+      border-radius: 1rem;
+    }
+
+    #sc-stair-svg {
+      min-width: 0;
+    }
+
+    .sc-table-card,
+    .sc-materials-card {
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+
+    .sc-material-row {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
     .sc-material-row strong {
       font-size: 1rem;
+    }
+  }
+
+  @container (max-width: 720px) {
+    .sc-root {
+      padding: 0;
+    }
+
+    .sc-card {
+      grid-template-columns: minmax(0, 1fr);
+      border-radius: 1rem;
+      max-width: 100%;
+    }
+
+    .sc-sidebar {
+      border-right: 0;
+      border-bottom: 1px solid var(--sc-border);
+      padding: 1rem;
+    }
+
+    .sc-main {
+      padding: 1rem;
+    }
+
+    .sc-results-header,
+    .sc-bottom-grid,
+    .sc-input-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sc-stepper,
+    .sc-select,
+    .sc-optimize-btn {
+      max-width: 100%;
+    }
+
+    .sc-step-btn {
+      width: 38px;
+      height: 38px;
+    }
+
+    .sc-stepper input {
+      height: 38px;
+      font-size: 1rem;
+    }
+
+    .sc-visualizer-container {
+      min-height: 210px;
+      padding: 0.5rem;
+      border-radius: 1rem;
+    }
+
+    #sc-stair-svg {
+      min-width: 0;
+      max-width: 100%;
     }
   }
