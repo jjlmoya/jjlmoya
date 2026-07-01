@@ -23,33 +23,36 @@ import "./ZoomControl.css";
         const slider = document.getElementById("zoom-slider") as HTMLInputElement;
         const resetBtn = document.getElementById("zoom-reset-btn");
         const displayVal = document.getElementById("zoom-display-val");
-        const toolContainer = document.querySelector(".utility-tool-container") as HTMLElement;
+        const tool = document.querySelector(".utility-tool-container") as HTMLElement;
 
-        if (!slider || !resetBtn || !displayVal || !toolContainer) {
+        if ([slider, resetBtn, displayVal, tool].includes(null)) {
             return;
         }
 
-        const savedZoom = localStorage.getItem("gamebob-utility-zoom") || "1";
-        let currentZoom = parseFloat(savedZoom);
+        let saved = localStorage.getItem("gamebob-utility-zoom");
+        if (saved === null) {
+            saved = "1";
+        }
+        let currentZoom = parseFloat(saved);
 
         slider.value = Math.round(currentZoom * 100).toString();
 
-        function applyZoom(zoomVal: number) {
-            displayVal!.textContent = `${Math.round(zoomVal * 100)}%`;
-            toolContainer.style.zoom = zoomVal.toString();
-        }
+        const applyZoom = (zoomVal: number) => {
+            displayVal.textContent = `${Math.round(zoomVal * 100)}%`;
+            tool.style.zoom = zoomVal.toString();
+        };
 
         applyZoom(currentZoom);
 
         slider.addEventListener("input", (e) => {
-            const val = parseInt((e.target as HTMLInputElement).value, 10);
-            displayVal!.textContent = `${val}%`;
+            const val = (e.target as HTMLInputElement).value;
+            displayVal.textContent = `${val}%`;
         });
 
         slider.addEventListener("change", (e) => {
             const val = parseInt((e.target as HTMLInputElement).value, 10);
             currentZoom = val / 100;
-            toolContainer.style.zoom = currentZoom.toString();
+            tool.style.zoom = currentZoom.toString();
             localStorage.setItem("gamebob-utility-zoom", currentZoom.toString());
         });
 

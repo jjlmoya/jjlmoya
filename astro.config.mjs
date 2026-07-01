@@ -5,6 +5,9 @@ import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
     site: "https://www.jjlmoya.es",
+    build: {
+        inlineStylesheets: "always",
+    },
     devToolbar: {
         enabled: false,
     },
