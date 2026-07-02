@@ -1,197 +1,185 @@
-.gear-train-card {
+.gte-tool {
+  --gte-gold: #d4af37;
+  --gte-gold-soft: rgba(212, 175, 55, 0.18);
+  --gte-blue: #38bdf8;
+  --gte-stage: #111827;
+
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  color: var(--text-base);
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 1.25rem;
-  margin: 0 auto;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  border-radius: 0.875rem;
   box-shadow: var(--shadow-base);
 }
 
-.gear-train-card .canvas-wrapper {
-  background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1a 100%);
-  border-radius: 0.75rem;
-  overflow: hidden;
-  border: 1px solid rgba(212, 175, 55, 0.15);
+.gte-tool *,
+.gte-tool *::before,
+.gte-tool *::after {
+  box-sizing: border-box;
 }
 
-.gear-train-card canvas#gear-canvas {
+.gte-toolbar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.gte-control {
+  min-width: 0;
+  padding: 0.75rem;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+}
+
+.gte-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gte-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.gte-button {
+  min-width: 0;
+  min-height: 2rem;
+  padding: 0.42rem 0.62rem;
+  color: var(--text-base);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.gte-button.is-active {
+  color: var(--text-on-primary, #fff);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.gte-stage {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 900 / 520;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 70% 20%, rgba(56, 189, 248, 0.16), transparent 28%),
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.18), transparent 30%),
+    var(--gte-stage);
+  border: 1px solid color-mix(in srgb, var(--gte-gold) 25%, transparent);
+  border-radius: 0.75rem;
+}
+
+.gte-canvas {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
-.gear-train-card .controls-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.gear-train-card .control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.gear-train-card .control-label {
-  font-size: 0.6rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-base);
-  opacity: 0.5;
-}
-
-.gear-train-card .control-group .btn-group {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.gear-train-card .control-group .btn-group button {
-  padding: 0.25rem 0.55rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  border: 1px solid var(--border-base);
-  border-radius: 0.4rem;
-  background: var(--bg-page);
-  color: var(--text-base);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.gear-train-card .control-group .btn-group button:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.gear-train-card .control-group .btn-group button.active {
-  background: color-mix(in srgb, var(--accent) 10%, var(--bg-page));
-  border-color: var(--accent);
-  color: var(--accent);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 12%, transparent);
-}
-
-.gear-train-card .data-grid {
+.gte-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
-  gap: 0.35rem;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
-.gear-train-card .data-card {
-  background: var(--bg-page);
-  border: 1px solid var(--border-base);
-  border-radius: 0.5rem;
-  padding: 0.4rem 0.5rem;
-  transition: all 0.2s ease;
-  cursor: default;
-}
-
-.gear-train-card .data-card:hover {
-  border-color: var(--accent);
-}
-
-.gear-train-card .data-card.highlighted {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 6%, var(--bg-page));
-  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.gear-train-card .data-card .name {
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--accent);
-  margin-bottom: 0.15rem;
-}
-
-.gear-train-card .data-card .stats {
-  display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
-}
-
-.gear-train-card .data-card .stats span {
-  font-size: 0.65rem;
+.gte-card {
+  min-width: 0;
+  padding: 0.65rem;
   color: var(--text-base);
-  opacity: 0.75;
+  text-align: left;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: 0.625rem;
+  cursor: pointer;
 }
 
-.gear-train-card .data-card .stats .val {
-  color: var(--accent);
-  font-weight: 600;
+.gte-card.is-active {
+  border-color: var(--gte-gold);
+  box-shadow: 0 0 0 1px var(--gte-gold-soft);
+}
+
+.gte-card span,
+.gte-card strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.gte-card span {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gte-card strong {
+  margin-top: 0.25rem;
+  color: var(--gte-gold);
+  font-size: 0.82rem;
   font-variant-numeric: tabular-nums;
-  opacity: 1;
 }
 
-.gear-train-card .flow-bar {
+.gte-flow {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
   background: var(--bg-page);
-  border: 1px solid var(--border-base);
-  border-radius: 0.5rem;
-  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
 }
 
-.gear-train-card .flow-bar .flow-label {
-  font-size: 0.6rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-base);
-  opacity: 0.5;
-  margin-bottom: 0.2rem;
-}
-
-.gear-train-card .flow-bar .flow-path {
+.gte-flow-track {
   display: flex;
-  align-items: center;
-  gap: 0.2rem;
   flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
-.gear-train-card .flow-bar .flow-path .step {
-  font-size: 0.65rem;
-  color: var(--text-base);
-  opacity: 0.4;
-  padding: 0.1rem 0.3rem;
-  border-radius: 0.2rem;
-  transition: all 0.25s ease;
+.gte-flow-track span {
+  padding: 0.25rem 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
 }
 
-.gear-train-card .flow-bar .flow-path .step.active {
-  opacity: 1;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 8%, var(--bg-page));
+.gte-flow-track span.is-active {
+  color: var(--gte-gold);
+  border-color: var(--gte-gold);
 }
 
-.gear-train-card .flow-bar .flow-path .arrow {
-  color: var(--text-base);
-  opacity: 0.2;
-  font-size: 0.7rem;
-}
-
-@media (max-width: 520px) {
-  .gear-train-card {
-    padding: 0.875rem;
-    max-width: 100%;
-    overflow: hidden;
+@media (max-width: 860px) {
+  .gte-toolbar,
+  .gte-stats {
+    grid-template-columns: 1fr;
   }
 
-  .gear-train-card .canvas-wrapper {
-    width: 100%;
+  .gte-tool {
+    padding: 0.75rem;
   }
 
-  .gear-train-card .control-group,
-  .gear-train-card .control-group .btn-group {
-    width: 100%;
+  .gte-stage {
+    aspect-ratio: 1 / 0.78;
   }
 
-  .gear-train-card .control-group .btn-group {
-    flex-wrap: wrap;
-  }
-
-  .gear-train-card .control-group .btn-group button {
+  .gte-button,
+  .gte-card {
     flex: 1 1 auto;
   }
 }
