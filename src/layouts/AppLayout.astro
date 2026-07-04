@@ -23,10 +23,9 @@ const {
     currentSlug,
 } = Astro.props;
 
-
 const appCards = await Promise.all(
     ALL_APP_DEFINITIONS.map(async ({ entry }) => {
-        const loader = entry.i18n['es' as KnownLocale] ?? entry.i18n.en;
+        const loader = entry.i18n["es" as KnownLocale] ?? entry.i18n.en;
         const card = await loader!();
         return { entry, card };
     })
@@ -37,41 +36,44 @@ const otherApps = appCards.filter((a) => a.card.slug !== currentSlug).slice(0, 5
 const currentApp = appCards.find((a) => a.card.slug === currentSlug);
 const site = Astro.site?.origin || "https://www.jjlmoya.es";
 
-const schema = currentApp ? {
-    "@context": "https://schema.org",
-    "@type": currentApp.entry.isGame ? "VideoGame" : "SoftwareApplication",
-    name: currentApp.card.title,
-    description: currentApp.card.description,
-    applicationCategory:
-        currentApp.entry.isGame ? "GameApplication" : "MultimediaApplication",
-    operatingSystem: "ANDROID",
-    author: {
-        "@type": "Person",
-        name: "jjlmoya",
-        url: site,
-    },
-    publisher: {
-        "@type": "Organization",
-        name: "GameBob",
-        logo: {
-            "@type": "ImageObject",
-            url: `${site}/assets/apps/${currentApp.entry.id}/icon.webp`,
-        },
-    },
-    offers: {
-        "@type": "Offer",
-        price: "0",
-        priceCurrency: "EUR",
-    },
-    image: `${site}/assets/apps/${currentApp.entry.id}/icon.webp`,
-} : null;
+const schema = currentApp
+    ? {
+          "@context": "https://schema.org",
+          "@type": currentApp.entry.isGame ? "VideoGame" : "SoftwareApplication",
+          name: currentApp.card.title,
+          description: currentApp.card.description,
+          applicationCategory: currentApp.entry.isGame
+              ? "GameApplication"
+              : "MultimediaApplication",
+          operatingSystem: "ANDROID",
+          author: {
+              "@type": "Person",
+              name: "jjlmoya",
+              url: site,
+          },
+          publisher: {
+              "@type": "Organization",
+              name: "GameBob",
+              logo: {
+                  "@type": "ImageObject",
+                  url: `${site}/assets/apps/${currentApp.entry.id}/icon.webp`,
+              },
+          },
+          offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "EUR",
+          },
+          image: `${site}/assets/apps/${currentApp.entry.id}/icon.webp`,
+      }
+    : null;
 ---
 
 <!doctype html>
 <html lang="es" class="scroll-smooth">
     <head>
         <script is:inline>
-            (function() {
+            (function () {
                 const applyTheme = () => {
                     const stored = localStorage.getItem("theme") || "theme-system";
                     const root = document.documentElement;
@@ -116,14 +118,16 @@ const schema = currentApp ? {
 
         <ClientRouter />
 
-        {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+        {
+            schema && (
+                <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+            )
+        }
 
         <script>
             import { stampApi } from "../lib/api";
 
             (function init() {
-                if (navigator.userAgent.includes("vercel")) return;
-
                 const STORAGE_KEY = "jjlmoya_footprint_v5";
                 const APPS_SCRIPT_URL =
                     "https://script.google.com/macros/s/AKfycbwCYuz1UvpKD60u8L9B6WIewL8tEHdPP4pTnXN5GcNAXd3XPh4bvJw0n86mLEBMrRE3Yg/exec";
@@ -139,9 +143,7 @@ const schema = currentApp ? {
                     (storedData.id as string) ||
                     `SR-${Math.random().toString(36).substring(7).toUpperCase()}`;
 
-                stampApi
-                    .pageView({ page: window.location.pathname, visitId })
-                    .catch(() => {});
+                stampApi.pageView({ page: window.location.pathname, visitId }).catch(() => {});
 
                 const visits = ((storedData.visits as number) || 0) + 1;
                 const shouldSync = SYNC_THRESHOLDS.includes(visits);
@@ -188,15 +190,11 @@ const schema = currentApp ? {
             })();
         </script>
     </head>
-    <body
-        class="app-body"
-    >
+    <body class="app-body">
         <header class="app-header" id="main-header">
             <div class="app-header-container">
                 <a href="/apps/" class="app-header-link">
-                    <div
-                        class="app-header-back-icon"
-                    >
+                    <div class="app-header-back-icon">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"
@@ -210,14 +208,8 @@ const schema = currentApp ? {
                         >
                     </div>
                     <div class="app-header-text-wrapper">
-                        <span
-                            class="app-header-back-label"
-                            >Volver al</span
-                        >
-                        <span
-                            class="app-header-marketplace-label"
-                            >Marketplace</span
-                        >
+                        <span class="app-header-back-label">Volver al</span>
+                        <span class="app-header-marketplace-label">Marketplace</span>
                     </div>
                 </a>
             </div>
@@ -227,27 +219,19 @@ const schema = currentApp ? {
             <slot />
         </main>
 
-        <footer
-            class="app-footer"
-        >
+        <footer class="app-footer">
             <div class="app-footer-container">
                 <div class="app-footer-grid">
                     <div class="app-footer-brand-col">
                         <span class="app-footer-brand"
                             >jjlmoya<span class="app-footer-brand-suffix">.es</span></span
                         >
-                        <p
-                            class="app-footer-desc"
-                        >
+                        <p class="app-footer-desc">
                             Diseñando y desarrollando herramientas digitales que priorizan la
                             utilidad y la experiencia de usuario.
                         </p>
                         <div class="app-footer-socials">
-                            <a
-                                href="https://x.com/jjlmoya"
-                                target="_blank"
-                                class="social-circle"
-                            >
+                            <a href="https://x.com/jjlmoya" target="_blank" class="social-circle">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="18"
@@ -309,18 +293,20 @@ const schema = currentApp ? {
 
                     <div class="app-footer-links-col">
                         <div>
-                            <span
-                                class="app-footer-section-title"
-                                >Marketplace</span
-                            >
+                            <span class="app-footer-section-title">Marketplace</span>
                             <ul class="app-footer-list">
                                 <li>
-                                    <a href="/apps/" class="footer-link footer-link--bold">Ver todos</a>
+                                    <a href="/apps/" class="footer-link footer-link--bold"
+                                        >Ver todos</a
+                                    >
                                 </li>
                                 {
                                     otherApps.map((otherApp) => (
                                         <li>
-                                            <a href={`/apps/${otherApp.card.slug}/`} class="footer-link">
+                                            <a
+                                                href={`/apps/${otherApp.card.slug}/`}
+                                                class="footer-link"
+                                            >
                                                 {otherApp.card.title}
                                             </a>
                                         </li>
@@ -329,10 +315,7 @@ const schema = currentApp ? {
                             </ul>
                         </div>
                         <div>
-                            <span
-                                class="app-footer-section-title"
-                                >Contacto</span
-                            >
+                            <span class="app-footer-section-title">Contacto</span>
                             <ul class="app-footer-list">
                                 <li>
                                     <a href="mailto:juanjo1989@gmail.com" class="footer-link"
@@ -363,10 +346,7 @@ const schema = currentApp ? {
                             </ul>
                         </div>
                         <div>
-                            <span
-                                class="app-footer-section-title"
-                                >Legal</span
-                            >
+                            <span class="app-footer-section-title">Legal</span>
                             <ul class="app-footer-list">
                                 <li>
                                     <a
@@ -387,9 +367,7 @@ const schema = currentApp ? {
                     </div>
                 </div>
 
-                <div
-                    class="app-footer-copyright-row"
-                >
+                <div class="app-footer-copyright-row">
                     <p class="app-footer-copyright-text">
                         © {new Date().getFullYear()} jjlmoya.
                     </p>

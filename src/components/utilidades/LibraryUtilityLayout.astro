@@ -2,6 +2,7 @@
 import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import UtilityHeader from "./UtilityHeader.astro";
 import { getUtilityAlternates } from "../../i18n/gamebob";
+import packageJson from "../../../package.json";
 
 interface Props {
     tool: {
@@ -30,7 +31,16 @@ const titleBase = words.slice(1).join(" ");
 const image = content.slug;
 
 const alternateUrls = categoryKey ? await getUtilityAlternates(tool, categoryKey) : [];
-const cssHref = `/styles/lib/${categoryKey}/${enContent.slug}.css`;
+
+const getPackageVersion = (key: string): string => {
+    const pkgName = `@jjlmoya/utils-${key}`;
+    const deps = packageJson.dependencies as Record<string, string>;
+    const range = deps[pkgName] || packageJson.version;
+    return range.replace(/^[\^~]/, "");
+};
+
+const version = getPackageVersion(categoryKey ?? "");
+const cssHref = `/styles/lib/${categoryKey}/${enContent.slug}.css?version=${version}`;
 ---
 
 <LayoutUtility
