@@ -1,0 +1,415 @@
+.wsm-root {
+  --wsm-ink: #172018;
+  --wsm-muted: #5c6b60;
+  --wsm-panel: #fbfdf8;
+  --wsm-raised: #fff;
+  --wsm-soft: #eef6e8;
+  --wsm-line: #bfcfba;
+  --wsm-green: #217a4b;
+  --wsm-teal: #09747a;
+  --wsm-amber: #c58516;
+  --wsm-red: #bc4638;
+  --wsm-terminal: #101610;
+  --wsm-terminal-2: #172216;
+  --wsm-terminal-text: #d8ffcf;
+
+  color: var(--wsm-ink);
+}
+
+.theme-dark .wsm-root {
+  --wsm-ink: #f3f8f0;
+  --wsm-muted: #a7b9a7;
+  --wsm-panel: #101511;
+  --wsm-raised: #171e18;
+  --wsm-soft: #202c20;
+  --wsm-line: #38503a;
+  --wsm-green: #72e09a;
+  --wsm-teal: #5ad4d1;
+  --wsm-amber: #f4c768;
+  --wsm-red: #ff897a;
+  --wsm-terminal: #050805;
+  --wsm-terminal-2: #0d140c;
+  --wsm-terminal-text: #d8ffcf;
+}
+
+.wsm-shell {
+  display: grid;
+  grid-template-areas:
+    "device"
+    "controls"
+    "terminal";
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid var(--wsm-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--wsm-green) 18%, transparent), transparent 34%),
+    linear-gradient(315deg, color-mix(in srgb, var(--wsm-teal) 12%, transparent), transparent 42%),
+    var(--wsm-panel);
+}
+
+.wsm-device {
+  grid-area: device;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 5.8rem;
+  padding: 0.8rem;
+  border: 1px solid var(--wsm-line);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 1.1rem, color-mix(in srgb, var(--wsm-line) 25%, transparent) 1.1rem 1.16rem),
+    var(--wsm-raised);
+}
+
+.wsm-device-icon {
+  display: grid;
+  place-items: center;
+  width: 4.2rem;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--wsm-green), var(--wsm-teal));
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.wsm-device-icon svg {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.wsm-device span,
+.wsm-dials label span,
+.wsm-metrics dt,
+.wsm-terminal-head span {
+  color: var(--wsm-muted);
+  font-size: 0.68rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.wsm-device strong {
+  display: block;
+  min-width: 0;
+  margin-top: 0.1rem;
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  font-weight: 950;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.wsm-device small {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--wsm-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.wsm-controls {
+  grid-area: controls;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.wsm-status,
+.wsm-privacy,
+.wsm-metrics div,
+.wsm-dials label {
+  border: 1px solid var(--wsm-line);
+  border-radius: 8px;
+  background: var(--wsm-raised);
+}
+
+.wsm-status {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 3.15rem;
+  gap: 0.55rem;
+  padding: 0.7rem;
+}
+
+.wsm-status span {
+  width: 0.72rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--wsm-muted);
+  box-shadow: 0 0 0 0.28rem color-mix(in srgb, var(--wsm-muted) 18%, transparent);
+}
+
+.wsm-status span[data-state="busy"] { background: var(--wsm-teal); }
+.wsm-status span[data-state="ok"] { background: var(--wsm-green); }
+.wsm-status span[data-state="warn"] { background: var(--wsm-amber); }
+.wsm-status span[data-state="error"] { background: var(--wsm-red); }
+
+.wsm-status strong,
+.wsm-connect {
+  font-weight: 950;
+}
+
+.wsm-dials {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+}
+
+.wsm-dials label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.65rem;
+}
+
+.wsm-dials select {
+  width: 100%;
+  min-height: 2.1rem;
+  border: 1px solid color-mix(in srgb, var(--wsm-line) 70%, transparent);
+  border-radius: 6px;
+  background: var(--wsm-soft);
+  color: var(--wsm-ink);
+  font: inherit;
+  font-weight: 950;
+  padding: 0 0.45rem;
+}
+
+.theme-dark .wsm-dials select,
+.theme-dark .wsm-dials select option {
+  background: #202c20;
+  color: #f3f8f0;
+}
+
+.wsm-check {
+  align-content: center;
+  grid-template-columns: auto auto;
+  align-items: center;
+}
+
+.wsm-check input {
+  accent-color: var(--wsm-green);
+}
+
+.wsm-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.wsm-presets button,
+.wsm-terminal-head button,
+.wsm-terminal form button {
+  min-height: 2.45rem;
+  border: 1px solid var(--wsm-line);
+  border-radius: 8px;
+  background: var(--wsm-soft);
+  color: var(--wsm-ink);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.wsm-presets button:hover,
+.wsm-terminal-head button:hover,
+.wsm-terminal form button:hover {
+  filter: brightness(1.05);
+}
+
+.wsm-connect {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, auto);
+  place-content: center;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 4rem;
+  border: 0;
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #fff 18%, transparent), transparent),
+    linear-gradient(135deg, var(--wsm-green), var(--wsm-teal));
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 0.9rem 1.7rem color-mix(in srgb, var(--wsm-green) 22%, transparent);
+}
+
+.wsm-connect svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.wsm-privacy {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  padding: 0.75rem;
+  background: color-mix(in srgb, var(--wsm-green) 10%, var(--wsm-raised));
+}
+
+.wsm-privacy svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--wsm-green);
+}
+
+.wsm-privacy span {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.wsm-privacy small {
+  color: var(--wsm-muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.wsm-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.wsm-metrics div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  padding: 0.65rem;
+}
+
+.wsm-metrics dd {
+  min-width: 0;
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.wsm-terminal {
+  grid-area: terminal;
+  display: grid;
+  gap: 0.55rem;
+  min-height: 25rem;
+  padding: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--wsm-green) 45%, transparent);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--wsm-green) 18%, transparent), transparent 34%),
+    linear-gradient(180deg, var(--wsm-terminal-2), var(--wsm-terminal));
+  color: var(--wsm-terminal-text);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.wsm-terminal-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.wsm-terminal-head span {
+  color: color-mix(in srgb, var(--wsm-terminal-text) 72%, transparent);
+  letter-spacing: 0;
+}
+
+.wsm-terminal-head div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.wsm-terminal-head button,
+.wsm-terminal form button {
+  border-color: color-mix(in srgb, var(--wsm-terminal-text) 22%, transparent);
+  background: color-mix(in srgb, var(--wsm-terminal-text) 10%, transparent);
+  color: var(--wsm-terminal-text);
+}
+
+.wsm-terminal pre {
+  min-height: 17rem;
+  max-height: 31rem;
+  margin: 0;
+  padding: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--wsm-terminal-text) 18%, transparent);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 1.72rem, rgba(255, 255, 255, 0.025) 1.72rem 1.78rem),
+    rgba(0, 0, 0, 0.16);
+  color: var(--wsm-terminal-text);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.wsm-terminal form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+}
+
+.wsm-terminal input {
+  min-width: 0;
+  min-height: 2.9rem;
+  border: 1px solid color-mix(in srgb, var(--wsm-terminal-text) 20%, transparent);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--wsm-terminal-text);
+  font: inherit;
+  padding: 0 0.75rem;
+}
+
+.wsm-terminal input::placeholder {
+  color: color-mix(in srgb, var(--wsm-terminal-text) 52%, transparent);
+}
+
+@media (min-width: 920px) {
+  .wsm-shell {
+    grid-template-areas:
+      "device terminal"
+      "controls terminal";
+    grid-template-columns: minmax(20rem, 0.7fr) minmax(0, 1.3fr);
+    align-items: start;
+  }
+
+  .wsm-terminal {
+    min-height: 36rem;
+  }
+
+  .wsm-terminal pre {
+    min-height: 27rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .wsm-shell {
+    padding: 0.5rem;
+  }
+
+  .wsm-device {
+    grid-template-columns: 1fr;
+  }
+
+  .wsm-device-icon {
+    width: 3.5rem;
+  }
+
+  .wsm-dials,
+  .wsm-metrics,
+  .wsm-terminal-head,
+  .wsm-terminal form {
+    grid-template-columns: 1fr;
+  }
+
+  .wsm-presets {
+    grid-template-columns: 1fr;
+  }
+}
+
