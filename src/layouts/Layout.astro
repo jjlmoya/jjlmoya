@@ -72,7 +72,6 @@ const mainClass =
 
         <script>
             import { handleGlobalShare } from "../utils/share";
-            import { stampApi } from "../lib/api";
 
             document.addEventListener("DOMContentLoaded", () => {
                 document.removeEventListener("click", handleGlobalShare);
@@ -96,11 +95,13 @@ const mainClass =
                     `SR-${Math.random().toString(36).substring(7).toUpperCase()}`;
 
                 if ("requestIdleCallback" in window) {
-                    requestIdleCallback(() => {
+                    requestIdleCallback(async () => {
+                        const { stampApi } = await import("../lib/api");
                         stampApi.pageView({ page: window.location.pathname, visitId }).catch(() => {});
                     });
                 } else {
-                    setTimeout(() => {
+                    setTimeout(async () => {
+                        const { stampApi } = await import("../lib/api");
                         stampApi.pageView({ page: window.location.pathname, visitId }).catch(() => {});
                     }, 1000);
                 }
