@@ -95,7 +95,15 @@ const mainClass =
                     (storedData.id as string) ||
                     `SR-${Math.random().toString(36).substring(7).toUpperCase()}`;
 
-                stampApi.pageView({ page: window.location.pathname, visitId }).catch(() => {});
+                if ("requestIdleCallback" in window) {
+                    requestIdleCallback(() => {
+                        stampApi.pageView({ page: window.location.pathname, visitId }).catch(() => {});
+                    });
+                } else {
+                    setTimeout(() => {
+                        stampApi.pageView({ page: window.location.pathname, visitId }).catch(() => {});
+                    }, 1000);
+                }
 
                 const visits = ((storedData.visits as number) || 0) + 1;
                 const shouldSync = SYNC_THRESHOLDS.includes(visits);

@@ -40,12 +40,14 @@ export function getWidgetHtml({
                 }
             });
             window._jjshow = update;
+            var f = document.getElementById(id);
+            if (f) update();
         })();
     \x3C/script>
     \x3Cdiv id="${widgetId}-loader" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; z-index: 10; transition: opacity 0.4s;">
         \x3Cdiv style="width: 24px; height: 24px; border: 2px solid ${isDark ? "#18181b" : "#f3f4f6"}; border-top-color: #94a3b8; border-radius: 50%; animation: jjspin 0.8s linear infinite;">\x3C/div>
     \x3C/div>
-    \x3Ciframe id="${widgetId}" src="${finalWidgetUrl}&id=${widgetId}" width="100%" height="400" frameborder="0" scrolling="no" style="display: block; opacity: 0; transition: opacity 0.4s, height 0.3s ease; border: none;" onload="window._jjshow?window._jjshow():(function(){var i=setInterval(function(){if(window._jjshow){window._jjshow();clearInterval(i);}},50);})()">\x3C/iframe>
+    \x3Ciframe id="${widgetId}" src="${finalWidgetUrl}&id=${widgetId}" width="100%" height="400" frameborder="0" scrolling="no" style="display: block; opacity: 0; transition: opacity 0.4s, height 0.3s ease; border: none;" onload="window._jjshow && window._jjshow()">\x3C/iframe>
     \x3Cstyle>@keyframes jjspin { to { transform: rotate(360deg); } } #${widgetId}-link:hover { opacity: 1 !important; color: ${isDark ? "#fff" : "#000"} !important; background: ${isDark ? "#18181b" : "#f8fafc"} !important; border-color: ${border} !important; }\x3C/style>
 \x3C/div>
 \x3Cdiv style="text-align: center; margin-top: 10px;">

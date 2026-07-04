@@ -1,4 +1,3 @@
-import html2canvas from "html2canvas";
 
 export interface ShareImageOptions {
     element: HTMLElement;
@@ -87,6 +86,7 @@ export const shareElementAsImage = async ({
 
         element.style.background = "radial-gradient(circle at center, #292524 0%, #0c0a09 100%)";
 
+        const html2canvas = (await import("html2canvas")).default;
         const canvas = await html2canvas(element, {
             backgroundColor: null,
             scale: 2,
