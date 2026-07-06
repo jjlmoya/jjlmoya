@@ -49,7 +49,7 @@ function getToolsForDate(dateInput) {
                     allTools.set(toolId, suffix);
                 });
             }
-        } catch {}
+        } catch { }
     }
     return allTools;
 }
@@ -72,10 +72,10 @@ const TITLE_RE = /const\s+title\s*=\s*['"]([^'"]+)['"]/;
 for (const { toolId, suffix } of newToolsList) {
     const repoPath = `../jjlmoya-utils-${suffix}`;
     const esFile = path.join(repoPath, "src", "tool", toolId, "i18n", "es.ts");
-    
+
     let slug = toolId;
     let title = toolId;
-    
+
     if (fs.existsSync(esFile)) {
         const content = fs.readFileSync(esFile, "utf8");
         const slugMatch = content.match(SLUG_RE);
@@ -83,7 +83,7 @@ for (const { toolId, suffix } of newToolsList) {
         if (slugMatch) slug = slugMatch[1];
         if (titleMatch) title = titleMatch[1];
     }
-    
+
     result.push({
         toolId,
         category: suffix,
@@ -92,7 +92,6 @@ for (const { toolId, suffix } of newToolsList) {
     });
 }
 
-// Group by category
 const grouped = {};
 for (const item of result) {
     if (!grouped[item.category]) {
