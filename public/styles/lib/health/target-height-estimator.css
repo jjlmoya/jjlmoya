@@ -1,0 +1,407 @@
+.the {
+  --the-paper: #f7faf9;
+  --the-panel: #fff;
+  --the-ink: #20262d;
+  --the-muted: #65717d;
+  --the-line: #d6dee3;
+  --the-blue: #2f78a5;
+  --the-green: #2c9a7b;
+  --the-gold: #bd7b2a;
+  --the-rose: #bd5361;
+  --the-shadow: rgba(24, 35, 45, 0.12);
+
+  width: 100%;
+}
+
+.theme-dark .the {
+  --the-paper: #111820;
+  --the-panel: #18222b;
+  --the-ink: #f3f7f8;
+  --the-muted: #a9b5bd;
+  --the-line: #33414c;
+  --the-shadow: rgba(0, 0, 0, 0.34);
+}
+
+.the__shell {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--the-line);
+  border-radius: 8px;
+  background: var(--the-paper);
+  color: var(--the-ink);
+  box-shadow: 0 18px 44px var(--the-shadow);
+}
+
+.the__stage {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(22rem, auto) auto;
+  min-height: 23rem;
+  border-bottom: 1px solid var(--the-line);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--the-line) 32%, transparent) 1px, transparent 1px),
+    linear-gradient(180deg, color-mix(in srgb, var(--the-line) 28%, transparent) 1px, transparent 1px),
+    var(--the-panel);
+  background-size: 34px 34px;
+}
+
+.the__scene {
+  display: block;
+  width: 100%;
+  height: min(56vw, 28rem);
+  min-height: 22rem;
+}
+
+.the__wall {
+  fill: color-mix(in srgb, var(--the-panel) 88%, var(--the-paper));
+  stroke: var(--the-line);
+}
+
+.the__ticks line {
+  stroke: var(--the-line);
+  stroke-width: 1;
+  stroke-dasharray: 4 10;
+}
+
+.the__ticks text,
+.the__scale-label,
+.the__figure-label {
+  fill: var(--the-muted);
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.the__figure-label {
+  text-anchor: middle;
+  font-size: 13px;
+}
+
+.the__range-band {
+  fill: url("#theRangeFill");
+  stroke: var(--the-green);
+  stroke-width: 2;
+  stroke-dasharray: 9 7;
+}
+
+.the__target-line {
+  stroke: var(--the-rose);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.the__floor {
+  stroke: color-mix(in srgb, var(--the-ink) 42%, transparent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.the__person {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: transform 180ms ease;
+}
+
+.the__person circle,
+.the__body,
+.the__hair {
+  stroke: var(--the-ink);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.the__arm,
+.the__leg {
+  fill: none;
+  stroke: var(--the-ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.95;
+}
+
+.the__person--mother circle,
+.the__person--mother .the__body {
+  fill: color-mix(in srgb, var(--the-green) 28%, var(--the-panel));
+}
+
+.the__person--father circle,
+.the__person--father .the__body {
+  fill: color-mix(in srgb, var(--the-blue) 28%, var(--the-panel));
+}
+
+.the__person--child circle,
+.the__person--child .the__body,
+.the__person--child .the__pants {
+  fill: color-mix(in srgb, var(--the-gold) 38%, var(--the-panel));
+}
+
+.the__hair {
+  fill: color-mix(in srgb, var(--the-ink) 74%, transparent);
+}
+
+.the__ponytail {
+  fill: color-mix(in srgb, var(--the-ink) 74%, transparent);
+  stroke: var(--the-ink);
+  stroke-width: 3;
+}
+
+.the__pants {
+  stroke: var(--the-ink);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.the__person--child[data-sex="boy"] .the__hair--girl,
+.the__person--child[data-sex="boy"] .the__body--girl,
+.the__person--child[data-sex="boy"] .the__leg--girl,
+.the__person--child[data-sex="boy"] .the__ponytail,
+.the__person--child[data-sex="girl"] .the__hair--boy,
+.the__person--child[data-sex="girl"] .the__body--boy,
+.the__person--child[data-sex="girl"] .the__pants--boy,
+.the__person--child[data-sex="girl"] .the__leg--boy {
+  display: none;
+}
+
+.the__result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "label value"
+    "range value";
+  gap: 0.2rem 1rem;
+  align-items: center;
+  padding: 0.95rem clamp(1rem, 3vw, 1.25rem);
+  border-top: 1px solid var(--the-line);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--the-rose) 10%, transparent), transparent 48%),
+    color-mix(in srgb, var(--the-panel) 86%, var(--the-paper));
+}
+
+.the__result span {
+  grid-area: label;
+  color: var(--the-muted);
+  font-size: 0.75rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.the__result strong {
+  grid-area: value;
+  color: var(--the-rose);
+  font-size: clamp(2.8rem, 8vw, 4.5rem);
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.the__result em {
+  grid-area: range;
+  color: var(--the-muted);
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.the__panel {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1rem, 3vw, 1.35rem);
+}
+
+.the__toggles {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.the__unit,
+.the__sex {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--the-line);
+  border-radius: 8px;
+  background: var(--the-panel);
+}
+
+.the__unit {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.the__unit-btn,
+.the__sex-btn {
+  height: 2.35rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--the-muted);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.the__sex-btn {
+  width: 2.35rem;
+  display: grid;
+  place-items: center;
+}
+
+.the__sex-btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.the__unit-btn--active,
+.the__sex-btn--active {
+  background: var(--the-ink);
+  color: var(--the-panel);
+}
+
+.theme-dark .the__unit-btn--active,
+.theme-dark .the__sex-btn--active {
+  background: #eef4f5;
+  color: #111820;
+}
+
+.the__field {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.85rem;
+  border: 1px solid var(--the-line);
+  border-radius: 8px;
+  background: var(--the-panel);
+}
+
+.the__field > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  color: var(--the-muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.the__field strong {
+  color: var(--the-ink);
+  font-size: clamp(1.3rem, 5vw, 1.85rem);
+  line-height: 1;
+}
+
+.the__range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.28rem;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  accent-color: var(--the-green);
+}
+
+.the__range::-webkit-slider-runnable-track {
+  height: 0.44rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--the-blue), var(--the-green), var(--the-gold));
+}
+
+.the__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: calc((0.44rem - 1.28rem) / 2);
+  width: 1.28rem;
+  height: 1.28rem;
+  border: 2px solid var(--the-panel);
+  border-radius: 999px;
+  background: var(--the-ink);
+  box-shadow: 0 3px 12px var(--the-shadow);
+}
+
+.the__range::-moz-range-track {
+  height: 0.44rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--the-blue), var(--the-green), var(--the-gold));
+}
+
+.the__range::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 1.28rem;
+  height: 1.28rem;
+  border: 2px solid var(--the-panel);
+  border-radius: 999px;
+  background: var(--the-ink);
+}
+
+.the__cards {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.the__card {
+  display: grid;
+  grid-template-columns: 1.45rem 1fr;
+  gap: 0.72rem;
+  padding: 0.85rem;
+  border: 1px solid var(--the-line);
+  border-radius: 8px;
+  background: var(--the-panel);
+  color: var(--the-muted);
+}
+
+.the__card svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--the-green);
+}
+
+.the__card--note svg,
+.the__card--note strong {
+  color: var(--the-gold);
+}
+
+.the__card p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.the__card strong {
+  color: var(--the-ink);
+}
+
+@media (max-width: 520px) {
+  .the__toggles,
+  .the__field > span {
+    grid-template-columns: 1fr;
+  }
+
+  .the__sex {
+    width: max-content;
+  }
+
+  .the__result {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "label"
+      "value"
+      "range";
+  }
+
+  .the__result strong {
+    text-align: left;
+  }
+}
+
+@media (min-width: 920px) {
+  .the__shell {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  }
+
+  .the__stage {
+    border-right: 1px solid var(--the-line);
+    border-bottom: 0;
+  }
+}

@@ -1,0 +1,345 @@
+.tdee {
+  --c-bg: #fff;
+  --c-surface: #f5f5f5;
+  --c-border: #e0e0e0;
+  --c-ink: #111;
+  --c-muted: #888;
+  --c-accent: #111;
+  --c-accent-inv: #fff;
+  --c-active-bg: #111;
+  --c-active-fg: #fff;
+  --c-active-sub: rgba(255, 255, 255, 0.55);
+  --c-bar: #111;
+  --r: 6px;
+
+  color: var(--c-ink);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.theme-dark .tdee {
+  --c-bg: #0f0f0f;
+  --c-surface: #1a1a1a;
+  --c-border: #2a2a2a;
+  --c-ink: #f0f0f0;
+  --c-muted: #666;
+  --c-bar: #f0f0f0;
+  --c-active-bg: #f0f0f0;
+  --c-active-fg: #0f0f0f;
+  --c-active-sub: rgba(15, 15, 15, 0.5);
+}
+
+.tdee__row {
+  display: grid;
+  background: var(--c-bg);
+}
+
+@media (min-width: 860px) {
+  .tdee__row--split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.tdee__cell {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.tdee__cell:not(:last-child) {
+  border-right: 1px solid var(--c-border);
+}
+
+@media (max-width: 859px) {
+  .tdee__cell:not(:last-child) {
+    border-right: none;
+  }
+}
+
+.tdee__result {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.tdee__result-value {
+  font-size: clamp(2.8rem, 8vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--c-ink);
+}
+
+.tdee__result-unit {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--c-muted);
+}
+
+.tdee__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
+.tdee__meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--c-border);
+}
+
+.tdee__meta-item {
+  background: var(--c-bg);
+  padding: 0.9rem 1.25rem;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.tdee__meta-item strong {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.tdee__targets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--c-border);
+}
+
+.tdee__target {
+  background: var(--c-bg);
+  padding: 0.9rem 1.25rem;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.tdee__target strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.tdee__target--main {
+  background: var(--c-active-bg);
+  color: var(--c-active-fg);
+}
+
+.tdee__target--main .tdee__label {
+  color: var(--c-active-sub);
+}
+
+.tdee__controls-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--c-border);
+}
+
+@media (min-width: 640px) {
+  .tdee__controls-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.tdee__control {
+  background: var(--c-bg);
+  padding: 1rem 1.5rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.tdee__control-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tdee__control-head b {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.tdee__control-head output {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+.tdee__control input[type="range"] {
+  width: 100%;
+  height: 2px;
+  appearance: none;
+  background: var(--c-border);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+.tdee__control input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--c-ink);
+  cursor: pointer;
+}
+
+.tdee__control input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--c-ink);
+  cursor: pointer;
+}
+
+.tdee__seg {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r);
+  overflow: hidden;
+  align-self: start;
+}
+
+.tdee__seg-btn {
+  flex: 1;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.tdee__seg-btn:not(:last-child) {
+  border-right: 1px solid var(--c-border);
+}
+
+.tdee__seg-btn--active {
+  background: var(--c-active-bg);
+  color: var(--c-active-fg);
+}
+
+.tdee__toggles {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--c-border);
+}
+
+
+
+.tdee__bars {
+  display: grid;
+  gap: 1px;
+  background: var(--c-border);
+}
+
+.tdee__bar {
+  background: var(--c-bg);
+  border: none;
+  padding: 0.85rem 1.5rem;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  gap: 0.4rem;
+  color: var(--c-ink);
+  transition: background 0.12s;
+}
+
+.tdee__bar:hover {
+  background: var(--c-surface);
+}
+
+.tdee__bar span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tdee__bar strong {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.tdee__bar em {
+  font-size: 0.7rem;
+  font-style: normal;
+  color: var(--c-muted);
+}
+
+.tdee__bar i {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--c-bar);
+  display: block;
+  opacity: 0.18;
+  transition: opacity 0.15s;
+}
+
+.tdee__bar b {
+  font-size: 0.78rem;
+  font-weight: 700;
+  justify-self: end;
+  display: block;
+}
+
+.tdee__bar--active {
+  background: var(--c-active-bg);
+  color: var(--c-active-fg);
+}
+
+.tdee__bar--active .tdee__bar em {
+  color: var(--c-active-sub);
+}
+
+.tdee__bar--active i {
+  background: var(--c-active-fg);
+  opacity: 0.35;
+}
+
+.tdee__bar--active b {
+  color: var(--c-active-fg);
+}
+
+.tdee__section-head {
+  padding: 0.7rem 1.5rem;
+  border-bottom: 1px solid var(--c-border);
+  border-top: 1px solid var(--c-border);
+  background: var(--c-surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tdee__section-head span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.tdee__section-head strong {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
