@@ -1,0 +1,444 @@
+.beltlab {
+  --lab-bg: #fff7ea;
+  --lab-panel: #fff;
+  --lab-field: #fff1dc;
+  --lab-ink: #21170e;
+  --lab-soft: #7a654e;
+  --lab-line: #ead5b8;
+  --lab-belt: #2a2118;
+  --lab-mark: #f07920;
+  --lab-good: #4f9b55;
+  --lab-bad: #d95445;
+  --lab-glow: rgba(240, 121, 32, .18);
+
+  display: grid;
+  gap: .75rem;
+  width: 100%;
+  padding: clamp(.75rem, 2vw, 1rem);
+  border: 1px solid var(--lab-line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 14% 0, var(--lab-glow), transparent 34%),
+    var(--lab-bg);
+  color: var(--lab-ink);
+  box-shadow: 0 18px 45px rgba(108, 74, 34, .1);
+}
+
+.theme-dark .beltlab {
+  --lab-bg: #17120d;
+  --lab-panel: #1e1711;
+  --lab-field: #120e0a;
+  --lab-ink: #fff4e5;
+  --lab-soft: #cbb79c;
+  --lab-line: #4a3828;
+  --lab-belt: #f7ead7;
+  --lab-mark: #ff9636;
+  --lab-good: #8ac06b;
+  --lab-bad: #ff7565;
+  --lab-glow: rgba(255, 150, 54, .16);
+
+  box-shadow: none;
+}
+
+.beltlab-headline,
+.beltlab-main,
+.beltlab-chipset,
+.beltlab-units,
+.beltlab-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-items: center;
+}
+
+.beltlab-headline {
+  justify-content: space-between;
+}
+
+.beltlab-main {
+  align-items: stretch;
+}
+
+.beltlab-left,
+.beltlab-controls {
+  min-width: 0;
+}
+
+.beltlab-left {
+  flex: 1 1 34rem;
+  display: grid;
+  gap: .65rem;
+}
+
+.beltlab-controls {
+  flex: 1 1 18rem;
+  display: grid;
+  gap: .58rem;
+  align-content: start;
+}
+
+.beltlab button {
+  border: 1px solid var(--lab-line);
+  border-radius: 8px;
+  background: var(--lab-panel);
+  color: var(--lab-ink);
+  padding: .48rem .66rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.beltlab button.active {
+  border-color: var(--lab-mark);
+  background: var(--lab-mark);
+  color: #211309;
+}
+
+.beltlab-units button {
+  font-size: .78rem;
+}
+
+.beltlab-result {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .1rem .75rem;
+  align-items: end;
+  padding: .62rem .72rem;
+  border: 1px solid var(--lab-line);
+  border-radius: 8px;
+  background: var(--lab-panel);
+  animation: beltlab-enter .36s ease both;
+}
+
+.beltlab-result > span,
+.beltlab-metrics span,
+.beltlab-controls span {
+  display: block;
+  color: var(--lab-soft);
+  font-size: .68rem;
+  font-weight: 950;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.beltlab-result > span {
+  grid-column: 1 / -1;
+}
+
+.beltlab-result strong {
+  display: flex;
+  align-items: baseline;
+  gap: .28rem;
+  color: var(--lab-mark);
+  font-size: clamp(3rem, 9vw, 5.25rem);
+  font-weight: 950;
+  line-height: .78;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.beltlab-result strong small {
+  color: var(--lab-soft);
+  font-size: 1rem;
+}
+
+.beltlab-result[data-state="ok"] strong {
+  color: var(--lab-good);
+}
+
+.beltlab-result[data-state="high"] strong {
+  color: var(--lab-bad);
+}
+
+.beltlab-result p {
+  margin: 0;
+  color: var(--lab-soft);
+  font-size: .86rem;
+  font-weight: 750;
+}
+
+.beltlab-diagram {
+  position: relative;
+  min-height: 9.4rem;
+  overflow: hidden;
+  border: 1px solid var(--lab-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--lab-field) 76%, transparent), transparent),
+    var(--lab-panel);
+  animation: beltlab-enter .42s .04s ease both;
+}
+
+.beltlab-wheel {
+  position: absolute;
+  top: 50%;
+  width: 3.2rem;
+  height: 3.2rem;
+  border: .35rem solid var(--lab-belt);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.beltlab-wheel.left {
+  left: .9rem;
+}
+
+.beltlab-wheel.right {
+  right: .9rem;
+}
+
+.beltlab-belt {
+  position: absolute;
+  left: 4.75rem;
+  right: 4.75rem;
+  height: .38rem;
+  border-radius: 99px;
+  background: var(--lab-belt);
+}
+
+.beltlab-belt.top {
+  top: calc(50% - 1.35rem);
+  opacity: .28;
+}
+
+.beltlab-belt.measured {
+  top: calc(50% + var(--sag, 8px));
+  box-shadow: 0 .26rem 0 color-mix(in srgb, var(--lab-mark) 80%, transparent);
+  transition: top .24s ease;
+  animation: beltlab-breathe 1.7s ease-in-out infinite;
+}
+
+.beltlab-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: baseline;
+  gap: .18rem;
+  padding: .5rem .62rem;
+  border: 1px solid var(--lab-line);
+  border-radius: 8px;
+  background: var(--lab-panel);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 .45rem 1rem rgba(0, 0, 0, .08);
+}
+
+.beltlab-note b {
+  color: var(--lab-mark);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.beltlab-note span,
+.beltlab-span-tag {
+  color: var(--lab-soft);
+  font-size: .72rem;
+  font-weight: 850;
+}
+
+.beltlab-span-tag {
+  position: absolute;
+  right: .7rem;
+  bottom: .52rem;
+}
+
+.beltlab-scale {
+  position: relative;
+  height: .5rem;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--lab-mark), var(--lab-good) 55%, var(--lab-bad));
+  overflow: visible;
+}
+
+.beltlab-scale i {
+  position: absolute;
+  top: -.3rem;
+  width: .16rem;
+  height: 1.1rem;
+  border-radius: 99px;
+  background: var(--lab-ink);
+  transform: translateX(-50%);
+  transition: left .24s cubic-bezier(.2, .8, .2, 1);
+}
+
+.beltlab-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .42rem;
+}
+
+.beltlab-metrics div,
+.beltlab-slider,
+.beltlab-minirow label,
+.beltlab-mode {
+  border: 1px solid var(--lab-line);
+  border-radius: 8px;
+  background: var(--lab-field);
+}
+
+.beltlab-metrics div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .42rem;
+  padding: .48rem .55rem;
+}
+
+.beltlab-metrics b {
+  display: flex;
+  align-items: baseline;
+  gap: .14rem;
+  margin-top: 0;
+  color: var(--lab-ink);
+  font-size: .98rem;
+  font-weight: 950;
+  text-align: right;
+}
+
+.beltlab-metrics small {
+  color: var(--lab-soft);
+  font-size: .66rem;
+}
+
+.beltlab-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .3rem;
+  padding: .3rem;
+}
+
+.beltlab-slider,
+.beltlab-minirow label {
+  display: grid;
+  gap: .35rem;
+  padding: .58rem;
+}
+
+.beltlab-slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--lab-mark);
+}
+
+.beltlab-slider output {
+  display: flex;
+  align-items: baseline;
+  gap: .32rem;
+}
+
+.beltlab-minirow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem;
+}
+
+.beltlab-minirow label {
+  position: relative;
+}
+
+.beltlab input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  appearance: textfield;
+  background: transparent;
+  color: var(--lab-ink);
+  font-size: 1.35rem;
+  font-weight: 950;
+  line-height: 1;
+  outline: 0;
+}
+
+.beltlab input::-webkit-outer-spin-button,
+.beltlab input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.beltlab b {
+  color: var(--lab-mark);
+}
+
+.beltlab-minirow label b {
+  position: absolute;
+  right: .58rem;
+  bottom: .62rem;
+  color: var(--lab-soft);
+  font-size: .72rem;
+}
+
+.beltlab-minirow label.quiet {
+  opacity: .45;
+}
+
+.beltlab-controls p {
+  margin: 0;
+  color: var(--lab-soft);
+  font-size: .8rem;
+  font-weight: 750;
+}
+
+.beltlab button.beltlab-copy {
+  width: 100%;
+  background: var(--lab-ink);
+  color: var(--lab-bg);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.beltlab-copy:hover {
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--lab-mark) 18%, transparent);
+}
+
+.beltlab[data-state="ok"] {
+  --lab-glow: color-mix(in srgb, var(--lab-good) 22%, transparent);
+}
+
+.beltlab[data-state="high"] {
+  --lab-glow: color-mix(in srgb, var(--lab-bad) 20%, transparent);
+}
+
+@keyframes beltlab-enter {
+  from {
+    opacity: .35;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes beltlab-breathe {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.18);
+  }
+}
+
+@media (max-width: 760px) {
+  .beltlab-result,
+  .beltlab-minirow {
+    grid-template-columns: 1fr;
+  }
+
+  .beltlab-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .beltlab-belt {
+    left: 4.25rem;
+    right: 4.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beltlab *,
+  .beltlab *::before,
+  .beltlab *::after {
+    animation-duration: .001ms;
+    transition-duration: .001ms;
+  }
+}
