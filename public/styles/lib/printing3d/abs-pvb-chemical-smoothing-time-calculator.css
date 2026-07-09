@@ -192,6 +192,38 @@
   font-weight: 750;
 }
 
+.csts-main {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--csts-solvent) 18%, var(--csts-line));
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--csts-solvent) 16%, transparent), transparent 32%),
+    linear-gradient(135deg, color-mix(in srgb, var(--csts-panel) 96%, white), var(--csts-soft));
+  padding: clamp(.9rem, 2.4vw, 1.25rem);
+}
+
+.csts-main::after {
+  content: "";
+  position: absolute;
+  right: -3.8rem;
+  bottom: -4.8rem;
+  z-index: -1;
+  width: 13rem;
+  height: 13rem;
+  border: 1px solid color-mix(in srgb, var(--csts-solvent) 24%, transparent);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--csts-vapor) 18%, transparent), transparent 66%);
+}
+
+.csts-time-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: .8rem;
+}
+
 .csts-main strong {
   display: flex;
   align-items: flex-end;
@@ -204,6 +236,20 @@
   line-height: .82;
 }
 
+.csts-time-orbit {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 3.15rem;
+  height: 3.15rem;
+  margin-bottom: .35rem;
+  border: 1px solid color-mix(in srgb, var(--csts-solvent) 28%, var(--csts-line));
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--csts-solvent) 10%, var(--csts-panel));
+  color: var(--csts-solvent);
+  box-shadow: inset 0 0 0 .45rem color-mix(in srgb, var(--csts-solvent) 5%, transparent);
+}
+
 .csts-main em,
 .csts-stats em {
   color: var(--csts-solvent);
@@ -212,9 +258,135 @@
   font-weight: 950;
 }
 
-.csts-main small {
-  color: var(--csts-muted);
-  font-weight: 900;
+.csts-live-timer {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .62rem;
+  width: min(100%, 15.5rem);
+  margin-top: .9rem;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background:
+    linear-gradient(var(--csts-panel), var(--csts-panel)) padding-box,
+    conic-gradient(from -90deg, var(--csts-solvent) var(--timer-progress, 0deg), color-mix(in srgb, var(--csts-line) 70%, transparent) 0deg) border-box;
+  color: var(--csts-ink);
+  padding: .58rem .68rem;
+  font-size: .95rem;
+  font-weight: 950;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--csts-solvent) 10%, transparent);
+  transition: transform .16s ease, color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.csts-live-timer:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--csts-solvent) 16%, transparent);
+}
+
+.csts-live-timer.ready,
+.csts-live-timer.running {
+  color: var(--csts-solvent);
+  border-color: transparent;
+}
+
+.csts-live-timer.running {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--csts-solvent) 14%, transparent),
+    0 16px 34px color-mix(in srgb, var(--csts-solvent) 18%, transparent);
+}
+
+.csts-timer-icon,
+.csts-timer-spark {
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  width: 2.05rem;
+  height: 2.05rem;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--csts-solvent) 12%, var(--csts-panel));
+  color: var(--csts-solvent);
+}
+
+.csts-timer-play,
+.csts-timer-pause,
+.csts-live-timer.running .csts-timer-idle,
+.csts-live-timer.ready:not(.running) .csts-timer-idle {
+  display: none;
+}
+
+.csts-live-timer.ready:not(.running) .csts-timer-play,
+.csts-live-timer.running .csts-timer-pause {
+  display: inline-grid;
+}
+
+.csts-timer-value {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: .18rem;
+  min-width: 0;
+  width: 4.95rem;
+  color: currentcolor;
+}
+
+.csts-timer-value > span {
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.28rem;
+  text-align: right;
+}
+
+.csts-timer-value > em {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--csts-solvent) 12%, transparent);
+  color: color-mix(in srgb, var(--csts-solvent) 72%, var(--csts-ink));
+  font-size: .64rem;
+  font-style: normal;
+  line-height: 1;
+  transform: translateY(-.08rem);
+}
+
+.csts-live-timer > i {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--csts-solvent) 14%, transparent), transparent 62%),
+    color-mix(in srgb, var(--csts-solvent) 5%, transparent);
+  opacity: .65;
+  pointer-events: none;
+}
+
+.csts-live-timer.running > i {
+  opacity: 1;
+}
+
+.csts-timer-spark {
+  background: transparent;
+  color: color-mix(in srgb, var(--csts-solvent) 68%, var(--csts-muted));
+}
+
+.csts-spark-clock,
+.csts-live-timer.running .csts-spark-play {
+  display: none;
+}
+
+.csts-live-timer.running .csts-spark-clock {
+  display: block;
+}
+
+.csts-live-timer.running .csts-timer-spark {
+  animation: csts-spin 1.1s linear infinite;
 }
 
 .csts-vapor {
@@ -343,6 +515,12 @@
   50% {
     opacity: .85;
     transform: translateY(-1.7rem) scaleY(1.08);
+  }
+}
+
+@keyframes csts-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
