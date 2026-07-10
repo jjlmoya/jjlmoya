@@ -1,0 +1,514 @@
+.mase-root {
+  --mase-bg: #f7fbff;
+  --mase-card: #fff;
+  --mase-ink: #122033;
+  --mase-muted: #617086;
+  --mase-line: rgba(18, 32, 51, 0.15);
+  --mase-x: #2f7df6;
+  --mase-y: #2ca66f;
+  --mase-z: #d85252;
+
+  color: var(--mase-ink);
+}
+
+.theme-dark .mase-root {
+  --mase-bg: #0e1420;
+  --mase-card: #151f2f;
+  --mase-ink: #edf5ff;
+  --mase-muted: #a8b7cc;
+  --mase-line: rgba(230, 242, 255, 0.17);
+  --mase-x: #70a8ff;
+  --mase-y: #73d59f;
+  --mase-z: #ff8b8b;
+}
+
+.mase-panel {
+  display: grid;
+  grid-template-columns: minmax(330px, 0.95fr) minmax(340px, 1.05fr);
+  gap: 1rem;
+  width: 100%;
+  padding: clamp(0.9rem, 2.2vw, 1.25rem);
+  border: 1px solid var(--mase-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(47, 125, 246, 0.12), transparent 38%),
+    linear-gradient(180deg, var(--mase-bg), var(--mase-card));
+}
+
+.mase-controls,
+.mase-results {
+  border: 1px solid var(--mase-line);
+  border-radius: 8px;
+  background: var(--mase-card);
+}
+
+.mase-controls {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+}
+
+.mase-materials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.mase-materials button,
+.mase-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--mase-line);
+  border-radius: 999px;
+  min-width: 4.25rem;
+  min-height: 2.35rem;
+  padding: 0.5rem 0.78rem;
+  background: transparent;
+  color: var(--mase-ink);
+  line-height: 1;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.mase-materials button.active,
+.mase-copy {
+  border-color: transparent;
+  background: var(--mase-x);
+  color: #fff;
+}
+
+.mase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.mase-field {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  border: 1px solid var(--mase-line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mase-bg) 72%, transparent);
+}
+
+.mase-field span,
+.mase-main span,
+.mase-metrics span,
+.mase-axis-map > span {
+  color: var(--mase-muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.mase-field b {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.mase-field input,
+.mase-field select {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid var(--mase-line);
+  background: color-mix(in srgb, var(--mase-card) 84%, var(--mase-bg));
+  color: var(--mase-ink);
+  font: inherit;
+  font-size: 1.45rem;
+  font-weight: 950;
+}
+
+.mase-field input {
+  padding: 0.2rem 0;
+}
+
+.mase-field select {
+  appearance: none;
+  font-size: 1rem;
+  line-height: 1.2;
+  min-height: 2.4rem;
+  padding: 0.45rem 2rem 0.45rem 0.65rem;
+  border: 1px solid var(--mase-line);
+  border-radius: 6px;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--mase-muted) 50%) calc(100% - 1rem) 50% / 0.42rem 0.42rem no-repeat,
+    linear-gradient(135deg, var(--mase-muted) 50%, transparent 50%) calc(100% - 0.72rem) 50% / 0.42rem 0.42rem no-repeat,
+    color-mix(in srgb, var(--mase-card) 88%, var(--mase-bg));
+}
+
+.mase-field select option {
+  background: var(--mase-card);
+  color: var(--mase-ink);
+}
+
+.theme-dark .mase-field select,
+.theme-dark .mase-field select option {
+  background-color: #151f2f;
+  color: #edf5ff;
+}
+
+.mase-required {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mase-z) 50%, transparent);
+}
+
+.mase-results {
+  position: relative;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-areas:
+    "cube main"
+    "cube metrics"
+    "warn warn"
+    "walls walls"
+    "map map"
+    "copy copy";
+  gap: 0.9rem;
+  padding: 1rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 88% 7%, color-mix(in srgb, var(--mase-x) 16%, transparent), transparent 30%),
+    linear-gradient(180deg, color-mix(in srgb, var(--mase-card) 92%, var(--mase-bg)), var(--mase-card));
+}
+
+.mase-blocker {
+  position: absolute;
+  inset: 1rem;
+  z-index: 3;
+  display: none;
+  place-content: center;
+  gap: 0.45rem;
+  padding: 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--mase-z) 50%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mase-card) 92%, transparent);
+  text-align: center;
+}
+
+.mase-root[data-state='blocked'] .mase-blocker {
+  display: grid;
+}
+
+.mase-cube {
+  grid-area: cube;
+  position: relative;
+  min-height: 270px;
+  border: 1px solid var(--mase-line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--mase-x) 12%, transparent), transparent 42%),
+    linear-gradient(90deg, color-mix(in srgb, var(--mase-x) 13%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--mase-x) 13%, transparent) 1px, transparent 1px),
+    color-mix(in srgb, var(--mase-bg) 78%, var(--mase-card));
+  background-size: 100% 100%, 22px 22px, 22px 22px, auto;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.mase-cube i {
+  position: absolute;
+  inset: 28% 24%;
+  border: 3px solid color-mix(in srgb, var(--mase-muted) 38%, transparent);
+  transform: skewY(-12deg) rotate(-4deg);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--mase-x) 20%, transparent), color-mix(in srgb, var(--mase-z) 13%, transparent));
+  box-shadow: 0 18px 42px rgba(18, 32, 51, 0.1);
+}
+
+.mase-cube span {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(18, 32, 51, 0.18);
+  font-weight: 950;
+}
+
+.mase-axis-x {
+  left: 12%;
+  bottom: 18%;
+  background: var(--mase-x);
+}
+
+.mase-axis-y {
+  right: 12%;
+  bottom: 28%;
+  background: var(--mase-y);
+}
+
+.mase-axis-z {
+  left: 46%;
+  top: 8%;
+  background: var(--mase-z);
+}
+
+.mase-main {
+  grid-area: main;
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  min-height: 160px;
+  padding: clamp(0.95rem, 2vw, 1.25rem);
+  border: 1px solid color-mix(in srgb, var(--mase-x) 22%, var(--mase-line));
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--mase-x) 14%, transparent), transparent 48%),
+    color-mix(in srgb, var(--mase-bg) 55%, var(--mase-card));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.mase-main strong {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  color: var(--mase-x);
+  font-size: clamp(3rem, 7vw, 5.1rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.mase-main em,
+.mase-metrics em {
+  color: var(--mase-muted);
+  font-size: 0.85rem;
+  font-style: normal;
+}
+
+.mase-main small {
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: fit-content;
+  gap: 0.25rem;
+  padding: 0.24rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mase-card) 70%, transparent);
+  color: var(--mase-muted);
+  font-weight: 850;
+}
+
+.mase-root[data-state='perpendicular'] .mase-main strong {
+  color: var(--mase-z);
+}
+
+.mase-warning {
+  grid-area: warn;
+  display: none;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--mase-z) 48%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mase-z) 13%, transparent);
+  color: var(--mase-ink);
+  font-weight: 850;
+}
+
+.mase-root[data-state='perpendicular'] .mase-warning {
+  display: block;
+}
+
+.mase-metrics {
+  grid-area: metrics;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.mase-metrics div,
+.mase-wall-compare,
+.mase-axis-map {
+  border: 1px solid var(--mase-line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mase-bg) 65%, transparent);
+}
+
+.mase-metrics div {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 0.45rem;
+  min-height: 96px;
+  padding: 0.78rem;
+  overflow: hidden;
+}
+
+.mase-metrics div::after {
+  content: "";
+  position: absolute;
+  right: -18px;
+  bottom: -24px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--mase-x) 10%, transparent);
+}
+
+.mase-metrics strong {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.18rem;
+  color: var(--mase-ink);
+  font-size: clamp(1.18rem, 2vw, 1.55rem);
+  line-height: 1.05;
+}
+
+.mase-metrics div:nth-child(2)::after,
+.mase-metrics div:nth-child(3)::after {
+  background: color-mix(in srgb, var(--mase-z) 10%, transparent);
+}
+
+.mase-metrics div:nth-child(2) strong,
+.mase-metrics div:nth-child(3) strong {
+  color: var(--mase-z);
+}
+
+.mase-wall-compare {
+  grid-area: walls;
+  display: grid;
+  grid-template-columns: minmax(150px, 0.7fr) repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.9rem;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--mase-x) 10%, transparent), transparent 62%),
+    color-mix(in srgb, var(--mase-bg) 65%, transparent);
+}
+
+.mase-wall-compare > span {
+  color: var(--mase-muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.mase-wall-compare div {
+  position: relative;
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.72rem 0.8rem;
+  border: 1px solid var(--mase-line);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--mase-card) 78%, transparent);
+  overflow: hidden;
+}
+
+.mase-wall-compare div::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  width: var(--load, 0%);
+  height: 5px;
+  background: linear-gradient(90deg, var(--mase-x), color-mix(in srgb, var(--mase-x) 62%, #fff));
+}
+
+.mase-wall-compare b {
+  position: relative;
+  z-index: 1;
+  color: var(--mase-muted);
+  font-size: 0.78rem;
+}
+
+.mase-wall-compare strong {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.18rem;
+  color: var(--mase-x);
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.mase-axis-map {
+  grid-area: map;
+  display: grid;
+  gap: 0.62rem;
+  padding: 0.95rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--mase-y) 9%, transparent), transparent 48%),
+    color-mix(in srgb, var(--mase-bg) 65%, transparent);
+}
+
+.mase-axis-map div {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr 4.2rem;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.mase-axis-map meter {
+  --bar: var(--mase-x);
+
+  width: 100%;
+  height: 0.78rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mase-muted) 18%, transparent);
+}
+
+.mase-axis-map div:nth-child(3) meter { --bar: var(--mase-y); }
+.mase-axis-map div:nth-child(4) meter { --bar: var(--mase-z); }
+
+.mase-axis-map meter::-webkit-meter-bar {
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mase-muted) 18%, transparent);
+}
+
+.mase-axis-map meter::-webkit-meter-optimum-value {
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--bar), color-mix(in srgb, var(--bar) 70%, #fff));
+}
+
+.mase-axis-map meter::-moz-meter-bar {
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--bar), color-mix(in srgb, var(--bar) 70%, #fff));
+}
+
+.mase-axis-map em {
+  color: var(--mase-ink);
+  font-style: normal;
+  font-weight: 950;
+  text-align: right;
+}
+
+.mase-copy {
+  grid-area: copy;
+  justify-self: center;
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--mase-x) 26%, transparent);
+}
+
+@media (max-width: 840px) {
+  .mase-panel,
+  .mase-results {
+    grid-template-columns: 1fr;
+  }
+
+  .mase-results {
+    grid-template-areas:
+      "main"
+      "cube"
+      "metrics"
+      "warn"
+      "walls"
+      "map"
+      "copy";
+  }
+
+  .mase-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .mase-grid,
+  .mase-metrics,
+  .mase-wall-compare {
+    grid-template-columns: 1fr;
+  }
+}
