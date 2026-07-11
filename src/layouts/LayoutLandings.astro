@@ -19,11 +19,11 @@ if (!loader) {
     throw new Error(`Loader not found for locale ${locale}`);
 }
 const card = await loader();
-const seo = def.entry.seo ?? {
+const seo = {
     title: card.title,
     description: card.description,
-    image: undefined,
-    openGraphImage: undefined,
+    ...def.entry.seo,
+    ...card.seo,
 };
 const cssPath = def.entry.publicAssets?.cssPath;
 const { default: LandingComponent } = (await def.LandingComponent()) as { default: any };
