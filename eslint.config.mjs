@@ -110,4 +110,10 @@ export default [
             "custom/no-css-comments": "error",
         },
     },
+    {
+        files: ["**/LayoutLandings.astro"],
+        rules: {
+            "custom/no-css-comments": "off",
+        },
+    },
 ];

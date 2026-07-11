@@ -1,0 +1,25 @@
+﻿---
+import { ALL_LANDING_DEFINITIONS } from "@jjlmoya/landings";
+import LayoutLandings from "../layouts/LayoutLandings.astro";
+
+export async function getStaticPaths() {
+    const paths = [];
+
+    for (const def of ALL_LANDING_DEFINITIONS) {
+        const loader = def.entry.i18n.es ?? def.entry.i18n.en;
+        if (!loader) continue;
+
+        const card = await loader();
+        paths.push({
+            params: { landingSlug: card.slug },
+            props: { landingId: def.entry.id },
+        });
+    }
+
+    return paths;
+}
+
+const { landingId } = Astro.props;
+---
+
+<LayoutLandings landingId={landingId} locale="es" />

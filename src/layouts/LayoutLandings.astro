@@ -1,0 +1,43 @@
+---
+import Layout from "./Layout.astro";
+import { ALL_LANDING_DEFINITIONS } from "@jjlmoya/landings";
+
+interface Props {
+    landingId: string;
+    locale?: "es";
+}
+
+const { landingId, locale = "es" } = Astro.props;
+
+const def = ALL_LANDING_DEFINITIONS.find((d) => d.entry.id === landingId);
+if (!def) {
+    throw new Error(`Landing with ID ${landingId} not found`);
+}
+
+const loader = def.entry.i18n[locale] || def.entry.i18n.en;
+if (!loader) {
+    throw new Error(`Loader not found for locale ${locale}`);
+}
+const card = await loader();
+const seo = def.entry.seo ?? {
+    title: card.title,
+    description: card.description,
+    image: undefined,
+    openGraphImage: undefined,
+};
+const cssPath = def.entry.publicAssets?.cssPath;
+const { default: LandingComponent } = (await def.LandingComponent()) as { default: any };
+---
+
+<Layout
+    title={`${seo.title}`}
+    description={seo.description}
+    image={seo.openGraphImage ?? seo.image}
+    fullWidth={true}
+    mainClass="layout-main-landing"
+    showBackground={false}
+>
+    {cssPath && <link slot="head" rel="preload" href={cssPath} as="style" />}
+    {cssPath && <link slot="head" rel="stylesheet" href={cssPath} />}
+    <LandingComponent locale={locale} />
+</Layout>
