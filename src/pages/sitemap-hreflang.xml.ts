@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getAllRegisteredTools, buildEsSlugMap } from "../i18n/toolRegistry";
-import { getUtilityAlternates, getCategoryAlternates, getStaticPageAlternates, getUtilitiesHubAlternates, getLandingAlternates } from "../i18n/gamebob";
+import { getUtilityAlternates, getCategoryAlternates, getStaticPageAlternates, getUtilitiesHubAlternates } from "../i18n/gamebob";
+import { getLandingAlternates } from "../i18n/landings";
 import { ALL_LANDING_DEFINITIONS } from "@jjlmoya/landings";
 
 export const prerender = true;
