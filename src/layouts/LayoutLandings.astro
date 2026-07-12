@@ -1,6 +1,8 @@
 ---
 import Layout from "./Layout.astro";
 import { ALL_LANDING_DEFINITIONS } from "@jjlmoya/landings";
+import { LANDINGS_VERSION } from "@jjlmoya/landings/version";
+import { getLandingAlternates } from "../i18n/gamebob";
 
 interface Props {
     landingId: string;
@@ -26,6 +28,8 @@ const seo = {
     ...card.seo,
 };
 const cssPath = def.entry.publicAssets?.cssPath;
+const versionedCssPath = cssPath ? `${cssPath}${cssPath.includes("?") ? "&" : "?"}version=${LANDINGS_VERSION}` : null;
+const alternateUrls = await getLandingAlternates(landingId);
 const { default: LandingComponent } = (await def.LandingComponent()) as { default: any };
 ---
 
@@ -36,8 +40,9 @@ const { default: LandingComponent } = (await def.LandingComponent()) as { defaul
     fullWidth={true}
     mainClass="layout-main-landing"
     showBackground={false}
+    alternateUrls={alternateUrls}
 >
-    {cssPath && <link slot="head" rel="preload" href={cssPath} as="style" />}
-    {cssPath && <link slot="head" rel="stylesheet" href={cssPath} />}
+    {versionedCssPath && <link slot="head" rel="preload" href={versionedCssPath} as="style" />}
+    {versionedCssPath && <link slot="head" rel="stylesheet" href={versionedCssPath} />}
     <LandingComponent locale={locale} />
 </Layout>

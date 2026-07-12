@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getAllRegisteredTools, buildEsSlugMap } from "../i18n/toolRegistry";
-import { getUtilityAlternates, getCategoryAlternates, getStaticPageAlternates, getUtilitiesHubAlternates } from "../i18n/gamebob";
+import { getUtilityAlternates, getCategoryAlternates, getStaticPageAlternates, getUtilitiesHubAlternates, getLandingAlternates } from "../i18n/gamebob";
+import { ALL_LANDING_DEFINITIONS } from "@jjlmoya/landings";
 
 export const prerender = true;
 
@@ -54,6 +55,19 @@ export const GET: APIRoute = async () => {
     }
 
     entries.push(urlEntry(`${SITE}/utilidades/`, getUtilitiesHubAlternates()));
+
+    for (const definition of ALL_LANDING_DEFINITIONS) {
+        const loader = definition.entry.i18n.es ?? definition.entry.i18n.en;
+        if (!loader) continue;
+
+        const card = await loader();
+        if (!card?.slug) continue;
+
+        const alternates = await getLandingAlternates(definition.entry.id);
+        if (alternates.length === 0) continue;
+
+        entries.push(urlEntry(`${SITE}/${card.slug}/`, alternates));
+    }
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${entries.join("\n")}\n</urlset>`;
 

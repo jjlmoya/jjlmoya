@@ -1,6 +1,7 @@
 import { GAMEBOB_URL, GAMEBOB_LANGS, urlSegments } from "./slugs";
 import type { AlternateUrl, GamebobLang } from "./slugs";
 import { buildEsSlugMap, getCategorySlug } from "./toolRegistry";
+import { ALL_LANDING_DEFINITIONS } from "@jjlmoya/landings";
 
 export type { AlternateUrl };
 
@@ -68,4 +69,21 @@ export function getUtilitiesHubAlternates(): AlternateUrl[] {
         lang,
         url: `${GAMEBOB_URL}/${lang}/${urlSegments.utilities[lang]}/`,
     }));
+}
+
+export async function getLandingAlternates(landingId: string): Promise<AlternateUrl[]> {
+    const definition = ALL_LANDING_DEFINITIONS.find((landing) => landing.entry.id === landingId);
+    if (!definition) return [];
+
+    const results = await Promise.all(
+        GAMEBOB_LANGS.map(async (lang) => {
+            const loader = definition.entry.i18n[lang] ?? definition.entry.i18n.en;
+            if (!loader) return null;
+
+            const card = await loader();
+            return { lang, url: `${GAMEBOB_URL}/${lang}/${card.slug}/` };
+        })
+    );
+
+    return results.filter((result) => result !== null) as AlternateUrl[];
 }
