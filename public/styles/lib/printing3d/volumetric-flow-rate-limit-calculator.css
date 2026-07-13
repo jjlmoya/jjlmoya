@@ -1,0 +1,354 @@
+.hfr-root {
+  --hfr-ink: #18212f;
+  --hfr-muted: #5c6875;
+  --hfr-card: #fff;
+  --hfr-panel: #f4f6f8;
+  --hfr-control: #fff;
+  --hfr-line: #d5dde6;
+  --hfr-ideal: #3d756b;
+  --hfr-limit: #98743e;
+  --hfr-critical: #914a45;
+  --hfr-accent: var(--hfr-ideal);
+  --hfr-load: 0;
+  --hfr-arc-progress: 0;
+  --hfr-shadow: 0 18px 46px rgba(20, 30, 44, 0.1);
+
+  border: 1px solid var(--hfr-line);
+  border-radius: 8px;
+  padding: clamp(14px, 3vw, 24px);
+  background: var(--hfr-card);
+  box-shadow: var(--hfr-shadow);
+  color: var(--hfr-ink);
+  color-scheme: light;
+}
+
+.hfr-root[data-state="LIMIT_ZONE"] {
+  --hfr-accent: var(--hfr-limit);
+}
+
+.hfr-root[data-state="CRITICAL_FLOW"] {
+  --hfr-accent: var(--hfr-critical);
+}
+
+.theme-dark .hfr-root {
+  --hfr-ink: #ecf1f5;
+  --hfr-muted: #9aa7b4;
+  --hfr-card: #11161d;
+  --hfr-panel: #171d25;
+  --hfr-control: #121820;
+  --hfr-line: #303946;
+  --hfr-ideal: #7fa99d;
+  --hfr-limit: #b79a64;
+  --hfr-critical: #b66f68;
+  --hfr-shadow: 0 24px 58px rgba(0, 0, 0, 0.34);
+
+  color-scheme: dark;
+}
+
+.hfr-toolbar {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hfr-segment {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--hfr-line);
+  border-radius: 8px;
+  background: var(--hfr-control);
+}
+
+.hfr-segment button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 14px;
+  color: var(--hfr-ink);
+  background: transparent;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.hfr-segment button.is-active {
+  color: var(--hfr-card);
+  background: var(--hfr-accent);
+}
+
+.hfr-hotend {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  color: var(--hfr-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.hfr-hotend select,
+.hfr-root input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--hfr-line);
+  border-radius: 7px;
+  padding: 10px;
+  color: var(--hfr-ink);
+  background: var(--hfr-control);
+  font: inherit;
+  font-weight: 850;
+}
+
+.hfr-stage {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.2fr) minmax(220px, 0.8fr);
+  gap: 14px;
+}
+
+.hfr-gauge,
+.hfr-status,
+.hfr-controls,
+.hfr-metrics article {
+  border: 1px solid var(--hfr-line);
+  border-radius: 8px;
+  background: var(--hfr-panel);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 12px 32px rgba(0, 0, 0, 0.14);
+}
+
+.hfr-gauge {
+  position: relative;
+  min-height: 300px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.hfr-gauge::before {
+  position: absolute;
+  inset: 16px;
+  border: 1px solid color-mix(in srgb, var(--hfr-line) 72%, transparent);
+  border-radius: 8px;
+  content: "";
+  pointer-events: none;
+}
+
+.hfr-gauge svg {
+  display: block;
+  width: 100%;
+  height: 200px;
+}
+
+.hfr-rail,
+.hfr-arc {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.hfr-rail {
+  stroke: color-mix(in srgb, var(--hfr-line) 80%, transparent);
+  stroke-width: 16;
+}
+
+.hfr-arc {
+  stroke: var(--hfr-accent);
+  stroke-width: 12;
+  stroke-dasharray: 298;
+  stroke-dashoffset: var(--hfr-arc-offset, 298px);
+  transition:
+    stroke-dashoffset 520ms cubic-bezier(0.2, 1.4, 0.3, 1),
+    stroke 240ms ease;
+}
+
+.hfr-root[data-state="CRITICAL_FLOW"] .hfr-arc {
+  animation: hfr-critical-pulse 900ms ease-in-out infinite;
+}
+
+.hfr-needle {
+  transform: rotate(var(--hfr-angle, -112deg));
+  transform-origin: 130px 145px;
+  transition: transform 540ms cubic-bezier(0.2, 1.5, 0.28, 1);
+}
+
+.hfr-needle line {
+  stroke: var(--hfr-ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.hfr-needle circle {
+  fill: var(--hfr-accent);
+  stroke: var(--hfr-card);
+  stroke-width: 3;
+  transition: fill 240ms ease;
+}
+
+.hfr-ticks line {
+  stroke: var(--hfr-muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.hfr-primary {
+  display: grid;
+  justify-items: center;
+  margin-top: -8px;
+}
+
+.hfr-primary span,
+.hfr-status span,
+.hfr-metrics span {
+  color: var(--hfr-muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.hfr-primary strong {
+  color: var(--hfr-accent);
+  font-size: clamp(3rem, 10vw, 5.8rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 0.92;
+  transition:
+    color 220ms ease,
+    filter 180ms ease,
+    transform 180ms ease;
+}
+
+.hfr-primary small {
+  margin-top: 4px;
+  color: var(--hfr-muted);
+  font-weight: 900;
+}
+
+.hfr-status {
+  display: grid;
+  align-content: center;
+  min-height: 300px;
+  padding: 18px;
+}
+
+.hfr-status strong {
+  margin-top: 10px;
+  color: var(--hfr-accent);
+  font-size: clamp(1.9rem, 6vw, 3.2rem);
+  line-height: 1;
+}
+
+.hfr-status p {
+  max-width: 32ch;
+  margin: 12px 0 0;
+  color: var(--hfr-muted);
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.hfr-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+  padding: 14px;
+}
+
+.hfr-slider {
+  display: grid;
+  gap: 8px;
+}
+
+.hfr-slider > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--hfr-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.hfr-slider strong {
+  color: var(--hfr-ink);
+}
+
+.hfr-slider input {
+  padding: 0;
+  accent-color: var(--hfr-accent);
+  background: transparent;
+}
+
+.hfr-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.hfr-metrics article {
+  min-height: 84px;
+  padding: 12px;
+}
+
+.hfr-metrics strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--hfr-ink);
+  font-size: clamp(1.05rem, 3vw, 1.65rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.hfr-root strong.is-counting {
+  filter: blur(0.45px);
+  transform: translateY(-1px);
+}
+
+.hfr-gauge.is-recalibrating {
+  animation: hfr-recalibrate 520ms cubic-bezier(0.2, 1.5, 0.28, 1);
+}
+
+@keyframes hfr-critical-pulse {
+  0%,
+  100% {
+    opacity: 0.74;
+    stroke-width: 12;
+  }
+
+  50% {
+    opacity: 1;
+    stroke-width: 15;
+  }
+}
+
+@keyframes hfr-recalibrate {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  38% {
+    transform: scale(0.985);
+  }
+
+  72% {
+    transform: scale(1.012);
+  }
+}
+
+@media (max-width: 860px) {
+  .hfr-toolbar,
+  .hfr-stage,
+  .hfr-controls,
+  .hfr-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .hfr-hotend {
+    grid-template-columns: 1fr;
+  }
+
+  .hfr-segment {
+    width: 100%;
+  }
+
+  .hfr-segment button {
+    flex: 1;
+  }
+}

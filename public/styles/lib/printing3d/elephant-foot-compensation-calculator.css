@@ -1,0 +1,302 @@
+.efc {
+  --efc-bg: #f4f6f5;
+  --efc-panel: #fff;
+  --efc-panel-soft: #eef2f1;
+  --efc-ink: #17211f;
+  --efc-muted: #62716d;
+  --efc-line: rgba(29, 44, 40, 0.14);
+  --efc-accent: #147b5a;
+  --efc-accent-soft: rgba(20, 123, 90, 0.12);
+  --efc-warn: #9c6c13;
+  --efc-red: #a8423b;
+
+  width: 100%;
+  color: var(--efc-ink);
+  background: var(--efc-bg);
+  border: 1px solid var(--efc-line);
+  border-radius: 8px;
+  padding: clamp(14px, 2vw, 22px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.72);
+}
+
+.theme-dark .efc {
+  --efc-bg: #121615;
+  --efc-panel: #1b211f;
+  --efc-panel-soft: #232b28;
+  --efc-ink: #edf3f1;
+  --efc-muted: #a7b4b0;
+  --efc-line: rgba(233, 242, 239, 0.12);
+  --efc-accent: #78d7b0;
+  --efc-accent-soft: rgba(120, 215, 176, 0.14);
+  --efc-warn: #e5c15e;
+  --efc-red: #ef8b83;
+
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 18px 48px rgba(0, 0, 0, 0.28);
+}
+
+.efc button,
+.efc input {
+  font: inherit;
+}
+
+.efc-toolbar,
+.efc-grid,
+.efc-readouts,
+.efc-duo {
+  display: grid;
+  gap: 12px;
+}
+
+.efc-toolbar {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.efc-segments,
+.efc-units {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.efc-segments button,
+.efc-units button,
+.efc-panel button {
+  border: 1px solid var(--efc-line);
+  color: var(--efc-ink);
+  background: var(--efc-panel);
+  border-radius: 6px;
+  padding: 0.62rem 0.78rem;
+  cursor: pointer;
+}
+
+.efc-segments button.active,
+.efc-units button.active {
+  color: var(--efc-ink);
+  background: var(--efc-accent-soft);
+  border-color: var(--efc-accent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--efc-accent) 35%, transparent);
+}
+
+.efc-grid {
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  grid-template-areas:
+    "scope panel"
+    "controls controls";
+}
+
+.efc-scope,
+.efc-panel,
+.efc-controls {
+  background: var(--efc-panel);
+  border: 1px solid var(--efc-line);
+  border-radius: 8px;
+}
+
+.efc-scope {
+  grid-area: scope;
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.efc-scope canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+}
+
+.efc-legend {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--efc-muted);
+  font-size: 0.82rem;
+}
+
+.efc-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.efc-legend i {
+  width: 30px;
+  border-top: 3px solid currentcolor;
+}
+
+.efc-legend i.dashed {
+  border-top-style: dashed;
+  color: var(--efc-accent);
+}
+
+.efc-panel {
+  grid-area: panel;
+  padding: 16px;
+}
+
+.efc-verdict {
+  border-left: 4px solid var(--efc-warn);
+  border-radius: 6px;
+  padding: 4px 0 14px 12px;
+  margin-bottom: 14px;
+}
+
+.efc-verdict[data-state="optimal"] {
+  border-color: var(--efc-accent);
+}
+
+.efc-verdict[data-state="severe"] {
+  border-color: var(--efc-red);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--efc-red) 18%, transparent), transparent 78%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--efc-red) 30%, transparent);
+  padding: 12px 12px 14px 14px;
+}
+
+.efc-verdict[data-state="severe"] strong {
+  color: var(--efc-red);
+}
+
+.efc-verdict span,
+.efc-readouts span,
+.efc-command span,
+.efc-control span,
+.efc-duo span {
+  display: block;
+  color: var(--efc-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.efc-verdict strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--efc-ink);
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+  line-height: 1.1;
+}
+
+.efc-readouts {
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 14px;
+}
+
+.efc-readouts div,
+.efc-command {
+  border: 1px solid var(--efc-line);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.efc-readouts strong {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  color: var(--efc-accent);
+  font: 700 clamp(1.05rem, 2vw, 1.35rem) / 1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  margin-top: 6px;
+}
+
+.efc-command {
+  margin-top: 10px;
+}
+
+.efc-command code {
+  display: block;
+  margin-top: 6px;
+  color: var(--efc-accent);
+  white-space: normal;
+}
+
+.efc-panel button {
+  width: 100%;
+  margin-top: 14px;
+  background: var(--efc-panel-soft);
+  color: var(--efc-ink);
+  border-color: var(--efc-line);
+}
+
+.efc-controls {
+  grid-area: controls;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) minmax(260px, 0.8fr);
+  gap: 14px;
+  padding: 16px;
+}
+
+.efc-control {
+  display: grid;
+  gap: 10px;
+}
+
+.efc-control input[type="range"] {
+  accent-color: var(--efc-accent);
+}
+
+.efc-control output,
+.efc-duo label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.efc-control output input,
+.efc-duo input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--efc-line);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--efc-ink);
+  padding: 0.6rem;
+}
+
+.efc-control b,
+.efc-duo b {
+  color: var(--efc-muted);
+  font-weight: 600;
+}
+
+.efc-duo {
+  grid-template-columns: 1fr;
+}
+
+.efc-duo label {
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.efc-duo label span {
+  grid-column: 1 / -1;
+}
+
+.efc-duo b {
+  min-width: 2.4ch;
+  text-align: left;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .efc-toolbar,
+  .efc-grid,
+  .efc-controls {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+
+  .efc-scope,
+  .efc-panel,
+  .efc-controls {
+    grid-area: auto;
+  }
+
+  .efc-readouts {
+    grid-template-columns: 1fr;
+  }
+}
