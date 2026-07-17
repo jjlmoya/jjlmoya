@@ -2,6 +2,7 @@
 import LayoutUtility from "../../layouts/LayoutUtility.astro";
 import UtilityHeader from "./UtilityHeader.astro";
 import { getUtilityAlternates } from "../../i18n/gamebob";
+import type { UtilityItem } from "../../data/utilities/types";
 import packageJson from "../../../package.json";
 
 interface Props {
@@ -11,10 +12,13 @@ interface Props {
         SEOComponent: any;
         BibliographyComponent: any;
     };
+    categoryEntry: any;
+    category?: string;
+    relatedUtilities?: UtilityItem[];
     categoryKey: string;
 }
 
-const { tool, categoryKey } = Astro.props;
+const { tool, categoryEntry, category, relatedUtilities = [], categoryKey } = Astro.props;
 const { entry } = tool;
 
 type ComponentLoader = () => Promise<{ default: any }>;
@@ -30,7 +34,7 @@ const titleBase = words.slice(1).join(" ");
 
 const image = content.slug;
 
-const alternateUrls = categoryKey ? await getUtilityAlternates(tool, categoryKey) : [];
+const alternateUrls = categoryKey ? await getUtilityAlternates(tool, categoryEntry) : [];
 
 const getPackageVersion = (key: string): string => {
     const pkgName = `@jjlmoya/utils-${key}`;
@@ -52,6 +56,8 @@ const cssHref = `/styles/lib/${categoryKey}/${enContent.slug}.css?version=${vers
     appSlug={entry.appSlug}
     alternateUrls={alternateUrls}
     toolCss={cssHref}
+    {category}
+    {relatedUtilities}
 >
     <div slot="header">
         <UtilityHeader

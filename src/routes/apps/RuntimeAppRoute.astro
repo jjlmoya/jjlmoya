@@ -1,0 +1,36 @@
+---
+import AppLayout from '../../layouts/AppLayout.astro';
+
+interface Props {
+    app: { entry: any; LandingComponent: any };
+}
+
+const { app } = Astro.props;
+const { entry } = app;
+const loader = entry.i18n.es ?? entry.i18n.en;
+if (!loader) throw new Error(`Missing Spanish locale for ${entry.id}`);
+const card = await loader();
+const { default: LandingComponent } = await app.LandingComponent() as { default: any };
+const iconPath = `/assets/apps/${entry.id}/icon.webp`;
+const defaultThemes: Record<string, { primary: string }> = {
+    'sauce-lab': { primary: '#FF4D4D' },
+    'fortune-cookie': { primary: '#FFD700' },
+    'lexi-crash': { primary: '#4D94FF' },
+    pizzametrics: { primary: '#FFA500' },
+    vesp: { primary: '#00FF9F' },
+    'day-check': { primary: '#B185FF' },
+    'fast-task': { primary: '#00E5FF' },
+};
+const theme = defaultThemes[entry.id] ?? { primary: '#000000' };
+---
+
+<AppLayout
+    title={`${card.title} — ${card.subtitle}`}
+    description={card.description}
+    image={iconPath}
+    color={theme.primary}
+    favicon={iconPath}
+    currentSlug={card.slug}
+>
+    <LandingComponent locale="es" />
+</AppLayout>

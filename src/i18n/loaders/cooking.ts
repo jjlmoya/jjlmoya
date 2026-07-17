@@ -1,2 +1,1 @@
-export { ALL_TOOLS } from "@jjlmoya/utils-cooking";
-export { CookingCategorySEO as CategorySEO } from "@jjlmoya/utils-cooking";
+export const CategorySEO = () => import("@jjlmoya/utils-cooking/category-seo").then(module => module.default);

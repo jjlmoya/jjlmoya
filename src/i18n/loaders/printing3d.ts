@@ -1,2 +1,1 @@
-export { ALL_TOOLS } from "@jjlmoya/utils-printing3d";
-export { printing3dCategorySEO as CategorySEO } from "@jjlmoya/utils-printing3d";
+export const CategorySEO = () => import("@jjlmoya/utils-printing3d/category-seo").then(module => module.default);

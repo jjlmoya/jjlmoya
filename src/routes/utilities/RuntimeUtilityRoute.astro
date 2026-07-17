@@ -1,0 +1,32 @@
+---
+import LibraryUtilityLayout from '../../components/utilidades/LibraryUtilityLayout.astro';
+
+interface Props {
+    tool: { entry: any; Component: any; SEOComponent: any; BibliographyComponent: any };
+    categoryEntry: any;
+    categoryEntries: any[];
+    categoryColor: string;
+    categoryKey: string;
+}
+
+const { tool, categoryEntry, categoryEntries, categoryColor, categoryKey } = Astro.props;
+const categoryLoader = categoryEntry.i18n.es ?? categoryEntry.i18n.en;
+if (!categoryLoader) throw new Error(`Missing Spanish category locale for ${categoryKey}`);
+const category = await categoryLoader();
+const relatedUtilities = await Promise.all(categoryEntries.map(async entry => {
+    const loader = entry.i18n.es ?? entry.i18n.en;
+    if (!loader) throw new Error(`Missing Spanish locale for ${entry.id}`);
+    const content = await loader();
+    return {
+        href: `/utilidades/${content.slug}/`,
+        iconBg: entry.icons.bg,
+        iconFg: entry.icons.fg,
+        title: content.title,
+        description: content.description,
+        seoDescription: content.seoDescription,
+        color: categoryColor,
+    };
+}));
+---
+
+<LibraryUtilityLayout {tool} {categoryEntry} category={category.title} {relatedUtilities} {categoryKey} />

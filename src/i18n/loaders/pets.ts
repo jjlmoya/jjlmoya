@@ -1,2 +1,1 @@
-export { ALL_TOOLS } from "@jjlmoya/utils-pets";
-export { PetsCategorySEO as CategorySEO } from "@jjlmoya/utils-pets";
+export const CategorySEO = () => import("@jjlmoya/utils-pets/category-seo").then(module => module.default);

@@ -1,2 +1,1 @@
-export { ALL_TOOLS } from "@jjlmoya/utils-creative";
-export { creativeCategorySEO as CategorySEO } from "@jjlmoya/utils-creative";
+export const CategorySEO = () => import("@jjlmoya/utils-creative/category-seo").then(module => module.default);

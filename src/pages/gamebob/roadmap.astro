@@ -3,7 +3,7 @@ export const prerender = true;
 import GameBobLayout from "../../layouts/GameBobLayout.astro";
 import RoadmapHeader from "../../components/gamebob/roadmap/RoadmapHeader.astro";
 import ProjectCard from "../../components/gamebob/roadmap/ProjectCard.astro";
-import { ALL_APP_DEFINITIONS, type KnownLocale } from "@jjlmoya/apps";
+import { ALL_APP_ENTRIES, type KnownLocale } from "@jjlmoya/apps/data";
 
 const DEFAULT_THEMES: Record<string, string> = {
     "sauce-lab": "#FF4D4D",
@@ -16,9 +16,9 @@ const DEFAULT_THEMES: Record<string, string> = {
 };
 
 const roadmapApps = await Promise.all(
-    ALL_APP_DEFINITIONS
-        .filter(({ entry }) => entry.isGame)
-        .map(async ({ entry }) => {
+    ALL_APP_ENTRIES
+        .filter((entry) => entry.isGame)
+        .map(async (entry) => {
             const loader = entry.i18n["es" as KnownLocale] ?? entry.i18n.en;
             const card = await loader!();
             return {

@@ -1,10 +1,10 @@
 import { GAMEBOB_URL, GAMEBOB_LANGS, urlSegments } from "./slugs";
 import type { AlternateUrl, GamebobLang } from "./slugs";
-import { buildEsSlugMap, getCategorySlug } from "./toolRegistry";
 
 export type { AlternateUrl };
 
 export async function buildGamebobUtilityUrl(lang: GamebobLang, categoryKey: string, toolSlug: string): Promise<string> {
+    const { getCategorySlug } = await import("./toolRegistry");
     const utilSlug = urlSegments.utilities[lang];
     const catSegSlug = urlSegments.categories[lang];
     const catSlug = await getCategorySlug(categoryKey, lang);
@@ -13,6 +13,7 @@ export async function buildGamebobUtilityUrl(lang: GamebobLang, categoryKey: str
 }
 
 export async function buildGamebobCategoryUrl(lang: GamebobLang, categoryKey: string): Promise<string> {
+    const { getCategorySlug } = await import("./toolRegistry");
     const utilSlug = urlSegments.utilities[lang];
     const catSegSlug = urlSegments.categories[lang];
     const catSlug = await getCategorySlug(categoryKey, lang);
@@ -20,7 +21,7 @@ export async function buildGamebobCategoryUrl(lang: GamebobLang, categoryKey: st
     return `${GAMEBOB_URL}/${lang}/${utilSlug}/${catSegSlug}/${catSlug}/`;
 }
 
-export async function getUtilityAlternates(tool: { entry: any }, categoryKey: string): Promise<AlternateUrl[]> {
+export async function getUtilityAlternates(tool: { entry: any }, categoryEntry: any): Promise<AlternateUrl[]> {
     const { entry } = tool;
     const results: AlternateUrl[] = [];
 
@@ -28,7 +29,14 @@ export async function getUtilityAlternates(tool: { entry: any }, categoryKey: st
         GAMEBOB_LANGS.map(async (lang) => {
             if (!entry.i18n?.[lang]) return;
             const content = await entry.i18n[lang]();
-            const url = await buildGamebobUtilityUrl(lang, categoryKey, content.slug);
+            const categoryLoader = categoryEntry.i18n?.[lang] ?? categoryEntry.i18n?.en;
+            if (!categoryLoader) return;
+            const category = await categoryLoader();
+            const utilSlug = urlSegments.utilities[lang];
+            const catSegSlug = urlSegments.categories[lang];
+            const url = utilSlug && catSegSlug
+                ? `${GAMEBOB_URL}/${lang}/${utilSlug}/${catSegSlug}/${category.slug}/${content.slug}/`
+                : "";
             if (url) results.push({ lang, url });
         })
     );
@@ -37,6 +45,7 @@ export async function getUtilityAlternates(tool: { entry: any }, categoryKey: st
 }
 
 export async function getCategoryAlternates(esPageSlug: string): Promise<AlternateUrl[]> {
+    const { buildEsSlugMap } = await import("./toolRegistry");
     const esSlugMap = await buildEsSlugMap();
     const categoryKey = esSlugMap[esPageSlug];
     if (!categoryKey) return [];

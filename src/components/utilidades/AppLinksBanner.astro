@@ -1,7 +1,7 @@
 ---
 import "./AppLinksBanner.css";
 import { Icon } from "astro-icon/components";
-import { ALL_APP_DEFINITIONS, type KnownLocale } from "@jjlmoya/apps";
+import { ALL_APP_ENTRIES, type KnownLocale } from "@jjlmoya/apps/data";
 
 const DEFAULT_THEMES: Record<string, string> = {
     "sauce-lab": "#FF4D4D",
@@ -14,7 +14,7 @@ const DEFAULT_THEMES: Record<string, string> = {
 };
 
 const apps = await Promise.all(
-    ALL_APP_DEFINITIONS.map(async ({ entry }) => {
+    ALL_APP_ENTRIES.map(async (entry) => {
         const loader = entry.i18n["es" as KnownLocale] ?? entry.i18n.en;
         const card = await loader!();
         return {

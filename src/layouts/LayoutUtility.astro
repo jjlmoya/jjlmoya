@@ -8,7 +8,7 @@ import UtilityStructuredData from "../components/utilidades/UtilityStructuredDat
 import FAQSection from "../components/utilidades/FAQSection.astro";
 import WidgetCreator from "../components/utilidades/WidgetCreator.astro";
 import ZoomControl from "../components/utilidades/ZoomControl.astro";
-import { sections } from "../data/utilities";
+import type { UtilityItem } from "../data/utilities/types";
 
 interface AppLinks {
     android?: string;
@@ -45,6 +45,7 @@ interface Props {
     hideWidget?: boolean;
     alternateUrls?: AlternateUrl[];
     toolCss?: string;
+    relatedUtilities?: UtilityItem[];
 }
 
 const {
@@ -60,23 +61,13 @@ const {
     hideWidget = false,
     alternateUrls = [],
     toolCss,
+    relatedUtilities = [],
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 
-const normalize = (path: string) => path.replace(/\/+$/, "");
-const targetPath = normalize(currentPath);
-
-let category = propCategory;
-
-if (!category) {
-    const foundSection = sections.find((section) =>
-        section.utilities.some((u) => normalize(u.href) === targetPath)
-    );
-    if (foundSection) {
-        category = foundSection.title;
-    }
-}
+const targetPath = currentPath.replace(/\/+$/, "");
+const category = propCategory;
 
 const isWidget = Astro.url.searchParams.get("widget") === "true";
 const hasBanner = !isWidget;
@@ -168,7 +159,7 @@ const hasBanner = !isWidget;
             </div>
 
             <div class="no-widget-hidden">
-                <RelatedUtilities category={category ?? ""} currentPath={currentPath} />
+                <RelatedUtilities category={category ?? ""} utilities={relatedUtilities} currentPath={currentPath} />
             </div>
         </div>
     </div>

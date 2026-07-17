@@ -1,0 +1,52 @@
+---
+import LayoutUtilityCategory from '../../layouts/LayoutUtilityCategory.astro';
+
+interface Props {
+    CategorySEO: any;
+    categoryEntry: any;
+    categoryEntries: any[];
+    categoryColor: string;
+    categoryKey: string;
+}
+
+const { CategorySEO, categoryEntry, categoryEntries, categoryColor, categoryKey } = Astro.props;
+const categoryLoader = categoryEntry.i18n.es ?? categoryEntry.i18n.en;
+if (!categoryLoader) throw new Error(`Missing Spanish category locale for ${categoryKey}`);
+
+const content = await categoryLoader();
+const utilities = await Promise.all(categoryEntries.map(async entry => {
+    const loader = entry.i18n.es ?? entry.i18n.en;
+    if (!loader) throw new Error(`Missing Spanish locale for ${entry.id}`);
+    const toolContent = await loader();
+    return {
+        href: `/utilidades/${toolContent.slug}/`,
+        iconBg: entry.icons.bg,
+        iconFg: entry.icons.fg,
+        title: toolContent.title.split('|')[0].trim(),
+        description: toolContent.description,
+        color: categoryColor,
+    };
+}));
+
+const section = {
+    title: content.title,
+    slug: content.slug,
+    icon: categoryEntry.icon ?? 'mdi:tools',
+    description: content.description,
+    utilities,
+};
+const image = `/images/utilities/category/${content.slug}.webp`;
+---
+
+<LayoutUtilityCategory
+    title={content.title}
+    description={content.description}
+    {image}
+    {utilities}
+    {categoryColor}
+    {section}
+>
+    <div slot="seo">
+        <CategorySEO locale="es" />
+    </div>
+</LayoutUtilityCategory>

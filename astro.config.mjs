@@ -2,16 +2,17 @@ import { defineConfig } from "astro/config";
 import icon from "astro-icon";
 
 import sitemap from "@astrojs/sitemap";
+import isolatedContentRoutes from "./src/integrations/isolatedContentRoutes.mjs";
 
 export default defineConfig({
     site: "https://www.jjlmoya.es",
     build: {
-        inlineStylesheets: "always",
+        inlineStylesheets: "auto",
     },
     devToolbar: {
         enabled: false,
     },
-    integrations: [icon(), sitemap()],
+    integrations: [isolatedContentRoutes(), icon(), sitemap()],
     vite: {
         plugins: [],
         server: {

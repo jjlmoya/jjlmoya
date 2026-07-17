@@ -1,18 +1,16 @@
 ---
-import { sections } from "../../data/utilities";
 import CardUtility from "./CardUtility.astro";
 import "./RelatedUtilities.css";
+import type { UtilityItem } from "../../data/utilities/types";
 
 interface Props {
     category: string;
     currentPath: string;
+    utilities?: UtilityItem[];
 }
 
-const { category, currentPath } = Astro.props;
-
-const section = sections.find((s) => s.title === category);
-
-const relatedUtilities = section ? section.utilities.filter((u) => u.href !== currentPath) : [];
+const { category, currentPath, utilities = [] } = Astro.props;
+const relatedUtilities = utilities.filter(utility => utility.href !== currentPath);
 ---
 
 {

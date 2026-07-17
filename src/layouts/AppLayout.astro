@@ -2,8 +2,7 @@
 import "../styles/global.css";
 import "./AppLayout.css";
 import { ClientRouter } from "astro:transitions";
-import { ALL_APP_DEFINITIONS } from "@jjlmoya/apps";
-import type { KnownLocale } from "@jjlmoya/apps";
+import { ALL_APP_ENTRIES, type KnownLocale } from "@jjlmoya/apps/data";
 
 interface Props {
     title: string;
@@ -24,7 +23,7 @@ const {
 } = Astro.props;
 
 const appCards = await Promise.all(
-    ALL_APP_DEFINITIONS.map(async ({ entry }) => {
+    ALL_APP_ENTRIES.map(async (entry) => {
         const loader = entry.i18n["es" as KnownLocale] ?? entry.i18n.en;
         const card = await loader!();
         return { entry, card };
