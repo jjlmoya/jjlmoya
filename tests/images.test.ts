@@ -31,39 +31,36 @@ describe("Image Assets Integrity", () => {
 
         const validDataFiles = files.filter((f) => !path.basename(f).startsWith("."));
 
-        const errors: string[] = [];
         const checkedExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"];
 
-        for (const file of validDataFiles) {
+        const checkPromises = validDataFiles.map(async (file) => {
             const ext = path.extname(file).toLowerCase();
 
             if (checkedExtensions.includes(ext)) {
                 if (ext !== ".webp") {
-                    errors.push(
-                        `File ${path.relative(PUBLIC_DIR, file)} has invalid extension '${ext}'. Should be '.webp'.`
-                    );
+                    return `File ${path.relative(PUBLIC_DIR, file)} has invalid extension '${ext}'. Should be '.webp'.`;
                 } else {
                     try {
                         const metadata = await sharp(file).metadata();
                         if (metadata.format !== "webp") {
-                            errors.push(
-                                `File ${path.relative(PUBLIC_DIR, file)} has extension .webp but is actually ${metadata.format}.`
-                            );
+                            return `File ${path.relative(PUBLIC_DIR, file)} has extension .webp but is actually ${metadata.format}.`;
                         }
                     } catch (err: any) {
-                        errors.push(
-                            `Could not read metadata for ${path.relative(PUBLIC_DIR, file)}: ${err.message}`
-                        );
+                        return `Could not read metadata for ${path.relative(PUBLIC_DIR, file)}: ${err.message}`;
                     }
                 }
             }
-        }
+            return null;
+        });
+
+        const results = await Promise.all(checkPromises);
+        const errors = results.filter((r): r is string => r !== null);
 
         expect(
             errors,
             `Found ${errors.length} image issues in public/:\n${errors.join("\n")}`
         ).toEqual([]);
-    });
+    }, 60000);
 
     it("should not reference non-webp images in src/** code", () => {
         const files = getAllFiles(SRC_DIR);

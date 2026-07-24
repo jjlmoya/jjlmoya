@@ -5,7 +5,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Toast from "../components/ui/Toast.astro";
 import Search from "../components/search/Search.astro";
-import LanguageSwitcher from "../components/ui/LanguageSwitcher.astro";
+import ThemeBoot from "@jjlmoya/identity/theme-boot";
 
 import "./Layout.css";
 
@@ -46,27 +46,7 @@ const mainClass =
 <!doctype html>
 <html lang="es">
     <head>
-        <script is:inline>
-            (function () {
-                const applyTheme = () => {
-                    const stored = localStorage.getItem("theme") || "theme-system";
-                    const root = document.documentElement;
-                    let isDark;
-                    if (stored === "theme-system") {
-                        isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                    } else {
-                        isDark = stored === "theme-dark";
-                    }
-                    root.classList.remove("theme-light", "theme-dark", "theme-system");
-                    root.classList.add(stored);
-                    root.classList.toggle("theme-light", !isDark);
-                    root.classList.toggle("theme-dark", isDark);
-                    root.classList.toggle("dark", isDark);
-                };
-                applyTheme();
-                document.addEventListener("astro:after-swap", applyTheme);
-            })();
-        </script>
+        <ThemeBoot />
         <SEO title={title} description={description} image={image} alternateUrls={alternateUrls} />
         <slot name="head" />
 
@@ -161,7 +141,7 @@ const mainClass =
             )
         }
 
-        <Header className={headerClass} />
+        <Header className={headerClass} {alternateUrls} />
 
         <main class={`layout-main ${mainClass}`}>
             <slot />
@@ -170,6 +150,5 @@ const mainClass =
         <Toast />
         <Footer className={footerClass} />
         <Search />
-        <LanguageSwitcher />
     </body>
 </html>

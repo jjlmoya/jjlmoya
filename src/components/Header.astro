@@ -1,73 +1,81 @@
 ---
-import HeaderLight from "./HeaderLight.astro";
-import HeaderDark from "./HeaderDark.astro";
-import "./Header.css";
+import IdentityHeader from "@jjlmoya/identity/header";
+import LanguageSheet from "@jjlmoya/identity/language-sheet";
+import LanguageTrigger from "@jjlmoya/identity/language-trigger";
+import { LANG_METADATA, type GamebobLang } from "../i18n/slugs";
+
+interface AlternateUrl {
+    lang: string;
+    url: string;
+}
 
 interface Props {
     className?: string;
+    alternateUrls?: readonly AlternateUrl[];
 }
 
-const { className = "" } = Astro.props;
+const { className = "", alternateUrls = [] } = Astro.props;
+const pathname = Astro.url.pathname;
+const navigation = [
+    { label: "proyectos", href: "/proyectos/", active: pathname.startsWith("/proyectos") },
+    { label: "conceptos", href: "/conceptos/", active: pathname.startsWith("/conceptos") },
+    { label: "apps", href: "/apps/", active: pathname.startsWith("/apps") },
+    { label: "utilidades", href: "/utilidades/", active: pathname.startsWith("/utilidades") },
+    { label: "gamebob", href: "/gamebob/", active: pathname.startsWith("/gamebob") },
+    { label: "charlas", href: "/charlas/", active: pathname.startsWith("/charlas") },
+    { label: "equipo", href: "/equipo/", active: pathname.startsWith("/equipo") },
+];
+const labels = {
+    menu: "Abrir menú",
+    closeMenu: "Cerrar menú",
+    theme: "Tema",
+    switchToLight: "Cambiar al tema claro",
+    switchToDark: "Cambiar al tema oscuro",
+    switchToSystem: "Usar el tema del sistema",
+};
+const languageLinks = [
+    { code: "es", name: "Español", href: Astro.url.pathname, current: true },
+    ...alternateUrls
+        .filter(({ lang }) => lang !== "es" && lang in LANG_METADATA)
+        .map(({ lang, url }) => ({
+            code: lang,
+            name: LANG_METADATA[lang as GamebobLang].label,
+            href: url,
+            current: false,
+        })),
+];
+const showLanguageSelector = languageLinks.length > 1;
 ---
 
-<div class={`header-wrapper ${className}`}>
-    <div class="header-light-container">
-        <HeaderLight />
-    </div>
-    <div class="header-dark-container">
-        <HeaderDark />
-    </div>
-</div>
+<IdentityHeader identity="jjlmoya" homeUrl="/" {navigation} {labels} class={className}>
+    <Fragment slot="desktop-actions">
+        <button
+            type="button"
+            class="jjlmoya-header__search"
+            data-jjlmoya-search
+            aria-label="Buscar (Ctrl + K / Espacio)"
+            title="Buscar (Ctrl + K / Espacio)"
+        >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+            </svg>
+        </button>
+        {showLanguageSelector && <LanguageTrigger label="Cambiar idioma" />}
+    </Fragment>
+    {showLanguageSelector && <LanguageTrigger slot="mobile-actions" label="Cambiar idioma" />}
+</IdentityHeader>
+{showLanguageSelector && <LanguageSheet links={languageLinks} title="Seleccionar idioma" closeLabel="Cerrar selector de idioma" />}
 
 <script>
-    function setupHeader() {
-        const body = document.body;
-        const html = document.documentElement;
-
-        const setupMenuForContainer = (
-            toggleBtnSelector: string,
-            linksSelector: string,
-            overlaySelector: string
-        ) => {
-            const toggleBtns = document.querySelectorAll(toggleBtnSelector);
-            const overlay = document.querySelector(overlaySelector);
-            const links = document.querySelectorAll(linksSelector);
-
-            toggleBtns.forEach((btn) => {
-                const newBtn = btn.cloneNode(true);
-                btn.parentNode?.replaceChild(newBtn, btn);
-
-                newBtn.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    body.classList.toggle("menu-open");
-                    html.classList.toggle("menu-open");
-                    overlay?.classList.toggle("menu-open");
-                    (newBtn as HTMLElement).classList.toggle("menu-open");
-                });
-            });
-
-            links.forEach((link) => {
-                link.addEventListener("click", () => {
-                    body.classList.remove("menu-open");
-                    html.classList.remove("menu-open");
-                    overlay?.classList.remove("menu-open");
-                });
-            });
-        };
-
-        setupMenuForContainer(".menu-toggle-button-light", ".menu-link-light", ".mobile-overlay-light");
-        setupMenuForContainer(".menu-toggle-button-dark", ".menu-link-dark", ".mobile-overlay-dark");
-
-        const searchBtns = document.querySelectorAll(".search-button-light, .search-button-dark");
-        searchBtns.forEach((btn) => {
-            btn.addEventListener("click", () => {
-                document.dispatchEvent(new CustomEvent("open-search"));
-            });
+    const setupIdentitySearch = (): void => {
+        document.querySelectorAll<HTMLButtonElement>("[data-jjlmoya-search]").forEach((button) => {
+            if (button.dataset.ready === "true") return;
+            button.dataset.ready = "true";
+            button.addEventListener("click", () => document.dispatchEvent(new CustomEvent("open-search")));
         });
-    }
+    };
 
-    setupHeader();
-
-    document.addEventListener("DOMContentLoaded", setupHeader);
-    document.addEventListener("astro:after-swap", setupHeader);
+    setupIdentitySearch();
+    document.addEventListener("astro:after-swap", setupIdentitySearch);
 </script>
