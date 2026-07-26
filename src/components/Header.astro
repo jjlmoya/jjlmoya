@@ -2,6 +2,10 @@
 import IdentityHeader from "@jjlmoya/identity/header";
 import LanguageSheet from "@jjlmoya/identity/language-sheet";
 import LanguageTrigger from "@jjlmoya/identity/language-trigger";
+import {
+    getActiveNavigationSection,
+    getSiteNavigation,
+} from "@jjlmoya/identity/navigation";
 import { LANG_METADATA, type GamebobLang } from "../i18n/slugs";
 
 interface AlternateUrl {
@@ -16,15 +20,10 @@ interface Props {
 
 const { className = "", alternateUrls = [] } = Astro.props;
 const pathname = Astro.url.pathname;
-const navigation = [
-    { label: "proyectos", href: "/proyectos/", active: pathname.startsWith("/proyectos") },
-    { label: "conceptos", href: "/conceptos/", active: pathname.startsWith("/conceptos") },
-    { label: "apps", href: "/apps/", active: pathname.startsWith("/apps") },
-    { label: "utilidades", href: "/utilidades/", active: pathname.startsWith("/utilidades") },
-    { label: "gamebob", href: "/gamebob/", active: pathname.startsWith("/gamebob") },
-    { label: "charlas", href: "/charlas/", active: pathname.startsWith("/charlas") },
-    { label: "equipo", href: "/equipo/", active: pathname.startsWith("/equipo") },
-];
+const navigation = getSiteNavigation({
+    language: "es",
+    activeSection: getActiveNavigationSection(pathname, "es"),
+});
 const labels = {
     menu: "Abrir menú",
     closeMenu: "Cerrar menú",
