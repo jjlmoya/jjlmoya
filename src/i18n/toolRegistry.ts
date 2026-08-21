@@ -44,6 +44,8 @@ import { healthCategory } from "@jjlmoya/utils-health/data";
 import { ALL_ENTRIES as healthCategoryEntries } from "@jjlmoya/utils-health/entries";
 import { sportsCategory } from "@jjlmoya/utils-sports/data";
 import { ALL_ENTRIES as sportsCategoryEntries } from "@jjlmoya/utils-sports/entries";
+import { motorCategory } from "@jjlmoya/utils-motor/data";
+import { ALL_ENTRIES as motorCategoryEntries } from "@jjlmoya/utils-motor/entries";
 import { natureCategory } from "@jjlmoya/utils-nature/data";
 import { ALL_ENTRIES as natureCategoryEntries } from "@jjlmoya/utils-nature/entries";
 import { developerCategory } from "@jjlmoya/utils-developer/data";
@@ -119,6 +121,7 @@ register(socialCategory, "social", "#f43f5e", "@jjlmoya/utils-social", socialCat
 register(musicCategory, "music", "#db2777", "@jjlmoya/utils-music", musicCategoryEntries);
 register(healthCategory, "health", "#06b6d4", "@jjlmoya/utils-health", healthCategoryEntries);
 register(sportsCategory, "sports", "#f97316", "@jjlmoya/utils-sports", sportsCategoryEntries);
+register(motorCategory, "motor", "#0f766e", "@jjlmoya/utils-motor", motorCategoryEntries);
 register(natureCategory, "nature", "#10b981", "@jjlmoya/utils-nature", natureCategoryEntries);
 register(developerCategory, "developer", "#6366f1", "@jjlmoya/utils-developer", developerCategoryEntries);
 register(hardwareCategory, "hardware", "#3b82f6", "@jjlmoya/utils-hardware", hardwareCategoryEntries);
