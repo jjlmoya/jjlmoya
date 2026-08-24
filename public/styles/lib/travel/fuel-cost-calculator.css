@@ -1,0 +1,407 @@
+.fuel-cost-card {
+  --fc-ink: #17202a;
+  --fc-muted: #61707e;
+  --fc-paper: #fffdf8;
+  --fc-panel: #f4f0e8;
+  --fc-line: #ded7c9;
+  --fc-accent: #e65d3f;
+  --fc-accent-strong: #b63d2c;
+  --fc-teal: #2f7d74;
+  --fc-teal-soft: #d9eeea;
+  --fc-sun: #f2c75c;
+  --fc-shadow: rgba(44, 38, 28, 0.16);
+  --fc-road: #c4b8a5;
+  --fc-road-mark: #fff7d6;
+
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+  overflow: hidden;
+  color: var(--fc-ink);
+  background: var(--fc-paper);
+  border: 1px solid var(--fc-line);
+  border-radius: 1.75rem;
+  box-shadow: 0 1.25rem 3rem var(--fc-shadow);
+  box-sizing: border-box;
+}
+
+html.theme-dark .fuel-cost-card,
+body.theme-dark .fuel-cost-card {
+  --fc-ink: #f7f1e5;
+  --fc-muted: #b9c1c3;
+  --fc-paper: #1d2528;
+  --fc-panel: #252f32;
+  --fc-line: #435054;
+  --fc-accent: #ff8061;
+  --fc-accent-strong: #ff9a7f;
+  --fc-teal: #70c6b9;
+  --fc-teal-soft: #254944;
+  --fc-sun: #f4d36d;
+  --fc-shadow: rgba(0, 0, 0, 0.36);
+  --fc-road: #556368;
+  --fc-road-mark: #f6d781;
+}
+
+.fc-stage {
+  position: relative;
+  min-height: 16rem;
+  padding: 2.25rem 2.5rem;
+  overflow: hidden;
+  background: var(--fc-panel);
+}
+
+.fc-route-art {
+  position: absolute;
+  inset: 0;
+  opacity: 0.92;
+}
+.fc-route-art svg {
+  width: 100%;
+  height: 100%;
+}
+.fc-road-shadow,
+.fc-road,
+.fc-road-progress {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fc-road-shadow {
+  stroke: var(--fc-ink);
+  stroke-width: 23;
+  opacity: 0.08;
+}
+.fc-road {
+  stroke: var(--fc-road);
+  stroke-width: 18;
+}
+.fc-road-progress {
+  stroke: var(--fc-accent);
+  stroke-width: 5;
+  stroke-dasharray: 340;
+  transition: stroke-dashoffset 0.5s ease;
+}
+.fc-map-pin {
+  fill: var(--fc-paper);
+  stroke: var(--fc-teal);
+  stroke-width: 5;
+}
+.fc-pin-end {
+  stroke: var(--fc-accent);
+}
+.fc-route-orb {
+  fill: var(--fc-sun);
+}
+
+.fc-stage-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  max-width: 18rem;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.fc-kicker,
+.fc-section-label {
+  color: var(--fc-teal);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.fc-cost-status {
+  align-self: flex-start;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  color: var(--fc-ink);
+  background: var(--fc-sun);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+.fc-cost-status[data-level="light"] {
+  background: var(--fc-teal-soft);
+  color: var(--fc-teal);
+}
+.fc-cost-status[data-level="high"] {
+  background: var(--fc-accent);
+  color: #fff;
+}
+.fc-total-cost {
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.08em;
+  font-variant-numeric: tabular-nums;
+}
+.fc-route-statement {
+  max-width: 15rem;
+  margin: 0;
+  color: var(--fc-muted);
+  font-size: 0.95rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.fc-result-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--fc-line);
+}
+.fc-result-strip div {
+  display: flex;
+  min-height: 5.25rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.8rem 1.5rem;
+  border-right: 1px solid var(--fc-line);
+}
+.fc-result-strip div:last-child {
+  border-right: 0;
+}
+.fc-result-strip span,
+.fc-field small,
+.fc-presets > span {
+  color: var(--fc-muted);
+  font-size: 0.75rem;
+}
+.fc-result-strip strong {
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+.fc-controls-head,
+.fc-option-row,
+.fc-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.fc-unit-toggle,
+.fc-currency-group {
+  display: flex;
+  padding: 0.2rem;
+  border: 1px solid var(--fc-line);
+  border-radius: 999px;
+  background: var(--fc-panel);
+}
+.fc-unit-toggle button,
+.fc-currency-group button {
+  border: 0;
+  border-radius: 999px;
+  color: var(--fc-muted);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.fc-unit-toggle button {
+  padding: 0.48rem 0.8rem;
+}
+.fc-currency-group button {
+  padding: 0.42rem 0.65rem;
+}
+.fc-unit-toggle button.is-active,
+.fc-currency-group button.is-active {
+  color: var(--fc-paper);
+  background: var(--fc-teal);
+}
+.fc-input-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+}
+.fc-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+.fc-field > span {
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+.fc-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--fc-line);
+  border-radius: 0.8rem;
+  background: var(--fc-paper);
+  overflow: hidden;
+}
+.fc-input-wrap:focus-within {
+  border-color: var(--fc-teal);
+  box-shadow: 0 0 0 3px var(--fc-teal-soft);
+}
+.fc-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.75rem 0.7rem;
+  border: 0;
+  outline: 0;
+  color: var(--fc-ink);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.fc-input-wrap b {
+  padding-right: 0.65rem;
+  color: var(--fc-muted);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+.fc-switch-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--fc-ink);
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.fc-switch-label input {
+  position: absolute;
+  opacity: 0;
+}
+.fc-switch {
+  width: 2.3rem;
+  height: 1.3rem;
+  padding: 0.17rem;
+  border-radius: 999px;
+  background: var(--fc-line);
+  box-sizing: border-box;
+}
+.fc-switch::after {
+  display: block;
+  width: 0.96rem;
+  height: 0.96rem;
+  border-radius: 50%;
+  background: var(--fc-paper);
+  content: "";
+  transition: transform 0.2s ease;
+}
+.fc-switch-label input:checked + .fc-switch {
+  background: var(--fc-accent);
+}
+.fc-switch-label input:checked + .fc-switch::after {
+  transform: translateX(1rem);
+}
+.fc-currency-group {
+  margin-left: auto;
+}
+.fc-presets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--fc-line);
+}
+.fc-presets > span {
+  margin-right: 0.25rem;
+  font-weight: 800;
+}
+.fc-presets button,
+.fc-action-secondary,
+.fc-action-primary {
+  border: 1px solid var(--fc-line);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+.fc-presets button {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.55rem 0.7rem;
+  color: var(--fc-ink);
+  background: var(--fc-paper);
+  text-align: left;
+}
+.fc-presets button:hover,
+.fc-presets button:focus-visible {
+  border-color: var(--fc-accent);
+}
+.fc-presets b {
+  color: var(--fc-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.fc-action-secondary,
+.fc-action-primary {
+  padding: 0.72rem 1rem;
+}
+.fc-action-secondary {
+  color: var(--fc-teal);
+  background: transparent;
+}
+.fc-action-primary {
+  border-color: var(--fc-accent);
+  color: #fff;
+  background: var(--fc-accent);
+}
+button:focus-visible,
+input:focus-visible,
+label:has(input:focus-visible) {
+  outline: 3px solid var(--fc-sun);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .fc-input-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .fc-stage {
+    min-height: 18rem;
+    padding: 1.5rem;
+  }
+  .fc-stage-copy {
+    max-width: 13rem;
+  }
+  .fc-result-strip {
+    grid-template-columns: 1fr;
+  }
+  .fc-result-strip div {
+    min-height: auto;
+    padding: 0.75rem 1.5rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--fc-line);
+  }
+  .fc-result-strip div:last-child {
+    border-bottom: 0;
+  }
+  .fc-controls-head,
+  .fc-option-row,
+  .fc-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .fc-unit-toggle,
+  .fc-currency-group {
+    align-self: stretch;
+    justify-content: center;
+  }
+  .fc-currency-group {
+    margin-left: 0;
+  }
+  .fc-input-grid {
+    grid-template-columns: 1fr;
+  }
+  .fc-action-secondary,
+  .fc-action-primary {
+    width: 100%;
+  }
+}
