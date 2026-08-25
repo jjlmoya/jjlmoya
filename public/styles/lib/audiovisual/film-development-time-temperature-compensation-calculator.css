@@ -1,0 +1,647 @@
+.film-development-temperature-tool {
+  --n-ink: #1c2221;
+  --n-muted: #68716d;
+  --n-paper: #f7f5ed;
+  --n-card: #fffdf7;
+  --n-line: #d9d8cc;
+  --n-accent: #c85a35;
+  --n-accent-soft: #f1d4c5;
+  --n-chemical: #85a5a0;
+  --n-shadow: rgba(28, 34, 33, 0.14);
+
+  color: var(--n-ink);
+  background: var(--n-paper);
+  border: 1px solid var(--n-line);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px var(--n-shadow);
+}
+
+.theme-dark .film-development-temperature-tool {
+  --n-ink: #f4f0e4;
+  --n-muted: #b9b7ae;
+  --n-paper: #0e1010;
+  --n-card: #171918;
+  --n-line: #343735;
+  --n-accent: #ef8560;
+  --n-accent-soft: #633e35;
+  --n-chemical: #171a19;
+  --n-shadow: rgba(0, 0, 0, 0.3);
+}
+
+.film-dev-intro {
+  padding: 1.5rem 1.75rem 1.25rem;
+  background: var(--n-card);
+}
+
+.film-dev-kicker {
+  color: var(--n-accent);
+  font: 700 0.72rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.kicker-dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: 0.35rem;
+  border-radius: 50%;
+  background: var(--n-accent);
+  box-shadow: 0 0 0 0.25rem var(--n-accent-soft);
+}
+
+.film-dev-intro p {
+  max-width: 62rem;
+  margin: 0.65rem 0 0;
+  color: var(--n-muted);
+}
+
+.film-dev-stage {
+  position: relative;
+  padding: 1.5rem 1.75rem 1.25rem;
+  background: var(--n-chemical);
+  isolation: isolate;
+}
+
+.film-dev-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at var(--n-temp-progress) 35%, rgba(255, 244, 214, 0.32), transparent 20rem);
+  opacity: 0.8;
+}
+
+.film-dev-stage-header,
+.film-dev-readout,
+.temperature-control-head,
+.reference-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.stage-label,
+.readout-label,
+.readout-meta span,
+.field-label {
+  display: block;
+  color: var(--n-muted);
+  font: 700 0.7rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.film-dev-stage .stage-label,
+.film-dev-stage .readout-label,
+.film-dev-stage .readout-meta span {
+  color: rgba(255, 253, 247, 0.76);
+}
+
+.stage-source {
+  display: block;
+  margin-top: 0.35rem;
+  color: #fffdf7;
+  font-size: 1rem;
+}
+
+.temperature-badge {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid rgba(255, 253, 247, 0.42);
+  border-radius: 999px;
+  color: #fffdf7;
+  font: 700 0.72rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+  text-transform: uppercase;
+}
+
+.temperature-badge.status-cool {
+  background: rgba(47, 84, 94, 0.6);
+}
+
+.temperature-badge.status-steady {
+  background: rgba(47, 105, 91, 0.6);
+}
+
+.temperature-badge.status-warm {
+  background: rgba(154, 70, 44, 0.68);
+}
+
+.film-dev-scene {
+  position: relative;
+  height: 12rem;
+  margin: 1.25rem 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 253, 247, 0.25);
+  border-radius: 16px;
+  background: rgba(18, 55, 53, 0.2);
+}
+
+.safelight {
+  position: absolute;
+  top: 1.2rem;
+  left: 13%;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: rgba(255, 182, 105, 0.22);
+  box-shadow: 0 0 3rem rgba(255, 182, 105, 0.28);
+}
+
+.chemical-tray {
+  position: absolute;
+  right: 11%;
+  bottom: 1.35rem;
+  width: 43%;
+  height: 4.7rem;
+  border: 3px solid rgba(255, 253, 247, 0.55);
+  border-radius: 12px 12px 22px 22px;
+  transform: perspective(12rem) rotateX(13deg);
+  background: rgba(20, 62, 62, 0.26);
+  overflow: hidden;
+}
+
+.chemical-level {
+  position: absolute;
+  inset: 31% 0 0;
+  background: rgba(116, 180, 168, 0.38);
+}
+
+.chemical-ripple {
+  position: absolute;
+  left: 13%;
+  width: 72%;
+  height: 1.1rem;
+  border-top: 2px solid rgba(255, 253, 247, 0.42);
+  border-radius: 50%;
+}
+
+.ripple-one {
+  top: 43%;
+  transform: rotate(-4deg);
+}
+
+.ripple-two {
+  top: 60%;
+  transform: rotate(5deg);
+}
+
+.film-strip {
+  position: absolute;
+  top: 36%;
+  left: 8%;
+  width: 76%;
+  height: 3.6rem;
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  border-top: 4px solid #272c29;
+  border-bottom: 4px solid #272c29;
+  background: #171b19;
+  transform: rotate(-7deg);
+  box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.25);
+}
+
+.film-strip span {
+  flex: 1;
+  min-width: 1.1rem;
+  border: 1px solid rgba(255, 240, 199, 0.28);
+  background: linear-gradient(145deg, rgba(225, 169, 94, 0.72), rgba(58, 84, 68, 0.85));
+}
+
+.film-reel {
+  position: absolute;
+  z-index: 2;
+  width: 3.7rem;
+  height: 3.7rem;
+  display: grid;
+  place-items: center;
+  border: 4px solid #242b27;
+  border-radius: 50%;
+  background: #d4c3a1;
+  box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+.film-reel::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #242b27;
+  border-radius: 50%;
+}
+
+.film-reel span {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #242b27;
+}
+
+.film-reel span:nth-child(1) {
+  transform: translateY(-1rem);
+}
+
+.film-reel span:nth-child(2) {
+  transform: translate(0.85rem, 0.5rem);
+}
+
+.film-reel span:nth-child(3) {
+  transform: translate(-0.85rem, 0.5rem);
+}
+
+.reel-left {
+  top: 31%;
+  left: 3%;
+}
+
+.reel-right {
+  right: 3%;
+  bottom: 12%;
+  transform: scale(0.7);
+}
+
+.temperature-needle {
+  position: absolute;
+  top: 7%;
+  right: 23%;
+  width: 0.3rem;
+  height: 5rem;
+  border-radius: 999px;
+  background: #fffdf7;
+  transform-origin: bottom center;
+  transform: rotate(calc(-34deg + (var(--n-temp-progress) * 0.68)));
+  opacity: 0.86;
+}
+
+.temperature-needle::after {
+  content: "";
+  position: absolute;
+  bottom: -0.55rem;
+  left: -0.45rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: var(--n-accent);
+}
+
+.temperature-needle span {
+  position: absolute;
+  top: 0;
+  left: -0.18rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: #fffdf7;
+}
+
+.time-orbit {
+  position: absolute;
+  right: 4%;
+  top: 8%;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 1px solid rgba(255, 253, 247, 0.32);
+  border-radius: 50%;
+}
+
+.time-orbit::before {
+  content: "";
+  position: absolute;
+  inset: 0.55rem;
+  border: 1px dashed rgba(255, 253, 247, 0.36);
+  border-radius: 50%;
+}
+
+.time-orbit span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1.3rem;
+  height: 0.16rem;
+  background: #fffdf7;
+  transform-origin: left center;
+  transform: rotate(calc(-90deg + (var(--n-time-progress) * 2.7deg)));
+}
+
+.film-dev-readout {
+  align-items: end;
+}
+
+.readout-time {
+  display: block;
+  margin-top: 0.3rem;
+  color: #fffdf7;
+  font: 700 clamp(2rem, 5vw, 3.4rem)/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.readout-meta {
+  min-width: 7rem;
+}
+
+.readout-meta strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: #fffdf7;
+  font-size: 0.95rem;
+}
+
+.result-note {
+  margin: 1rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 253, 247, 0.28);
+  color: rgba(255, 253, 247, 0.85);
+  font-size: 0.86rem;
+}
+
+.result-note.is-warning {
+  color: #ffe1b8;
+}
+
+.film-dev-controls {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem 1.75rem;
+  background: var(--n-card);
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.film-dev-select {
+  position: relative;
+}
+
+.film-dev-select .field-label {
+  margin-bottom: 0.45rem;
+  color: var(--n-muted);
+}
+
+.select-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--n-line);
+  border-radius: 10px;
+  color: var(--n-ink);
+  background: var(--n-paper);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.select-trigger:focus-visible,
+.reset-button:focus-visible,
+input:focus-visible,
+.film-dev-option:focus-visible {
+  outline: 3px solid var(--n-accent);
+  outline-offset: 2px;
+}
+
+.select-chevron {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.is-open .select-chevron {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.select-menu[hidden] {
+  display: none;
+}
+
+.select-menu {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  max-height: 14rem;
+  overflow: auto;
+  padding: 0.35rem;
+  border: 1px solid var(--n-line);
+  border-radius: 10px;
+  background: var(--n-card);
+  box-shadow: 0 0.7rem 1.5rem var(--n-shadow);
+}
+
+.film-dev-option {
+  width: 100%;
+  padding: 0.65rem 0.55rem;
+  border: 0;
+  border-radius: 7px;
+  color: var(--n-ink);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.film-dev-option:hover,
+.film-dev-option[aria-selected="true"] {
+  background: var(--n-accent-soft);
+}
+
+.temperature-control {
+  padding-top: 0.25rem;
+}
+
+.temperature-control-head output {
+  color: var(--n-accent);
+  font: 700 1rem ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.temperature-settings {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.unit-switch {
+  display: inline-flex;
+  padding: 0.2rem;
+  border: 1px solid var(--n-line);
+  border-radius: 999px;
+  background: var(--n-paper);
+}
+
+.unit-switch button {
+  padding: 0.35rem 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  color: var(--n-muted);
+  background: transparent;
+  font: 700 0.66rem ui-monospace, SFMono-Regular, Consolas, monospace;
+  cursor: pointer;
+}
+
+.unit-switch button[aria-pressed="true"] {
+  color: var(--n-card);
+  background: var(--n-accent);
+}
+
+.temperature-input-line {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 0.65rem;
+}
+
+.temperature-input-line input[type="number"] {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.65rem;
+  border: 1px solid var(--n-line);
+  border-radius: 10px;
+  color: var(--n-ink);
+  background: var(--n-paper);
+  font: 700 1rem ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.temperature-input-line input[type="range"] {
+  width: 100%;
+  accent-color: var(--n-accent);
+}
+
+.temperature-control p,
+.reference-heading p {
+  margin: 0.5rem 0 0;
+  color: var(--n-muted);
+  font-size: 0.83rem;
+}
+
+.reset-button {
+  justify-self: start;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--n-line);
+  border-radius: 999px;
+  color: var(--n-ink);
+  background: transparent;
+  font: 700 0.78rem ui-monospace, SFMono-Regular, Consolas, monospace;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  border-color: var(--n-accent);
+  color: var(--n-accent);
+}
+
+.film-dev-reference {
+  padding: 1.5rem 1.75rem 1.75rem;
+  border-top: 1px solid var(--n-line);
+  background: var(--n-card);
+}
+
+.reference-heading {
+  align-items: start;
+}
+
+.reference-line {
+  width: 4rem;
+  height: 0.3rem;
+  margin-top: 0.3rem;
+  background: var(--n-accent);
+}
+
+.reference-table-wrap {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.film-dev-reference table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.film-dev-reference th,
+.film-dev-reference td {
+  padding: 0.7rem 0.55rem;
+  border-bottom: 1px solid var(--n-line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.film-dev-reference thead th {
+  color: var(--n-muted);
+  font: 700 0.68rem ui-monospace, SFMono-Regular, Consolas, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.film-dev-reference tbody th {
+  font-weight: 700;
+}
+
+.film-dev-reference tr.is-current {
+  background: var(--n-accent-soft);
+}
+
+.row-marker {
+  display: inline-block;
+  margin-left: 0.35rem;
+  color: var(--n-accent);
+  font: 700 0.65rem ui-monospace, SFMono-Regular, Consolas, monospace;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .film-dev-intro,
+  .film-dev-stage,
+  .film-dev-controls,
+  .film-dev-reference {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .control-row {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .film-dev-scene {
+    height: 10rem;
+  }
+
+  .film-dev-readout {
+    align-items: start;
+    flex-wrap: wrap;
+  }
+
+  .readout-meta {
+    min-width: 0;
+  }
+
+  .temperature-control-head {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .temperature-settings {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .temperature-input-line {
+    grid-template-columns: 6rem 1fr;
+    gap: 0.75rem;
+  }
+
+  .film-development-temperature-tool {
+    border-radius: 16px;
+  }
+}
