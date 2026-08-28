@@ -4,6 +4,8 @@ import { bikeCategory } from "@jjlmoya/utils-bike/data";
 import { ALL_ENTRIES as bikeCategoryEntries } from "@jjlmoya/utils-bike/entries";
 import { alcoholCategory } from "@jjlmoya/utils-alcohol/data";
 import { ALL_ENTRIES as alcoholCategoryEntries } from "@jjlmoya/utils-alcohol/entries";
+import { aquariumCategory } from "@jjlmoya/utils-aquarium/data";
+import { ALL_ENTRIES as aquariumCategoryEntries } from "@jjlmoya/utils-aquarium/entries";
 import { astronomyCategory } from "@jjlmoya/utils-astronomy/data";
 import { ALL_ENTRIES as astronomyCategoryEntries } from "@jjlmoya/utils-astronomy/entries";
 import { audiovisualCategory } from "@jjlmoya/utils-audiovisual/data";
@@ -101,6 +103,7 @@ function register(category: object, key: string, color: string, packageName: str
 register(homeCategory, "home", "#a855f7", "@jjlmoya/utils-home", homeCategoryEntries);
 register(bikeCategory, "bikes", "#ef4444", "@jjlmoya/utils-bike", bikeCategoryEntries);
 register(alcoholCategory, "alcohol", "#a855f7", "@jjlmoya/utils-alcohol", alcoholCategoryEntries);
+register(aquariumCategory, "aquarium", "#0284c7", "@jjlmoya/utils-aquarium", aquariumCategoryEntries);
 register(astronomyCategory, "astronomy", "#4f46e5", "@jjlmoya/utils-astronomy", astronomyCategoryEntries);
 register(audiovisualCategory, "audiovisual", "#8b5cf6", "@jjlmoya/utils-audiovisual", audiovisualCategoryEntries);
 register(babiesCategory, "babies", "#ec4899", "@jjlmoya/utils-babies", babiesCategoryEntries);
