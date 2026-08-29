@@ -78,6 +78,10 @@ import { booksCategory } from "@jjlmoya/utils-books/data";
 import { ALL_ENTRIES as booksCategoryEntries } from "@jjlmoya/utils-books/entries";
 import { forensicCategory } from "@jjlmoya/utils-forensic-science/data";
 import { ALL_ENTRIES as forensicCategoryEntries } from "@jjlmoya/utils-forensic-science/entries";
+import { genealogyCategory } from "@jjlmoya/utils-genealogy/data";
+import { ALL_ENTRIES as genealogyCategoryEntries } from "@jjlmoya/utils-genealogy/entries";
+import { languageCategory } from "@jjlmoya/utils-language/data";
+import { ALL_ENTRIES as languageCategoryEntries } from "@jjlmoya/utils-language/entries";
 
 export interface ToolEntry {
     id: string;
@@ -142,6 +146,8 @@ register(chronoCategory, "chrono", "#d97706", "@jjlmoya/utils-chrono", chronoCat
 register(tabletopCategory, "tabletop", "#e11d48", "@jjlmoya/utils-tabletop", tabletopCategoryEntries);
 register(booksCategory, "books", "#92400e", "@jjlmoya/utils-books", booksCategoryEntries);
 register(forensicCategory, "forensic-science", "#14b8a6", "@jjlmoya/utils-forensic-science", forensicCategoryEntries);
+register(genealogyCategory, "genealogy", "#0f766e", "@jjlmoya/utils-genealogy", genealogyCategoryEntries);
+register(languageCategory, "language", "#0f766e", "@jjlmoya/utils-language", languageCategoryEntries);
 
 export async function getCategorySlug(categoryKey: string, lang: string): Promise<string | undefined> {
     let langMap = categorySlugCache.get(categoryKey);
