@@ -74,6 +74,8 @@ import { chronoCategory } from "@jjlmoya/utils-chrono/data";
 import { ALL_ENTRIES as chronoCategoryEntries } from "@jjlmoya/utils-chrono/entries";
 import { tabletopCategory } from "@jjlmoya/utils-tabletop/data";
 import { ALL_ENTRIES as tabletopCategoryEntries } from "@jjlmoya/utils-tabletop/entries";
+import { booksCategory } from "@jjlmoya/utils-books/data";
+import { ALL_ENTRIES as booksCategoryEntries } from "@jjlmoya/utils-books/entries";
 import { forensicCategory } from "@jjlmoya/utils-forensic-science/data";
 import { ALL_ENTRIES as forensicCategoryEntries } from "@jjlmoya/utils-forensic-science/entries";
 
@@ -138,6 +140,7 @@ register(workCategory, "work", "#3b82f6", "@jjlmoya/utils-work", workCategoryEnt
 register(toolsCategory, "tools", "#64748b", "@jjlmoya/utils-tools", toolsCategoryEntries);
 register(chronoCategory, "chrono", "#d97706", "@jjlmoya/utils-chrono", chronoCategoryEntries);
 register(tabletopCategory, "tabletop", "#e11d48", "@jjlmoya/utils-tabletop", tabletopCategoryEntries);
+register(booksCategory, "books", "#92400e", "@jjlmoya/utils-books", booksCategoryEntries);
 register(forensicCategory, "forensic-science", "#14b8a6", "@jjlmoya/utils-forensic-science", forensicCategoryEntries);
 
 export async function getCategorySlug(categoryKey: string, lang: string): Promise<string | undefined> {
