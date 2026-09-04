@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import projects from "../../data/projects.json";
+import { getAllRegisteredTools, CATEGORIES } from "../../i18n/toolRegistry";
 
 export interface SearchResult {
     id: string;
@@ -41,7 +42,7 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[] = []) {
     return arrayOfFiles;
 }
 
-export function getSearchIndex(): SearchResult[] {
+export async function getSearchIndex(): Promise<SearchResult[]> {
     const results: SearchResult[] = [];
     const pagesDir = path.join(process.cwd(), "src/pages");
 
@@ -124,6 +125,24 @@ export function getSearchIndex(): SearchResult[] {
             icon,
         });
     });
+
+    const registeredTools = await getAllRegisteredTools(CATEGORIES);
+    const utilityResults = await Promise.all(registeredTools.map(async ([toolDefinition]) => {
+        const content = await toolDefinition.entry.i18n.es?.();
+        if (!content?.slug) return null;
+
+        const url = `/utilidades/${content.slug}/`;
+        return {
+            id: url,
+            title: content.title.split("|")[0].trim(),
+            url,
+            description: content.description,
+            category: "Utilidad" as const,
+            icon: "mdi:tools",
+        };
+    }));
+
+    results.push(...utilityResults.filter((result): result is SearchResult => result !== null));
 
     projects.forEach((project) => {
         results.push({

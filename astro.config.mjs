@@ -12,7 +12,7 @@ export default defineConfig({
     devToolbar: {
         enabled: false,
     },
-    integrations: [isolatedContentRoutes(), icon(), sitemap()],
+    integrations: [icon(), sitemap(), isolatedContentRoutes()],
     vite: {
         plugins: [],
         server: {

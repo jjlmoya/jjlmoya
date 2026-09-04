@@ -3,7 +3,7 @@ export const prerender = true;
 import { getSearchIndex } from "../../lib/search/SearchIndex";
 
 export async function GET() {
-    const items = getSearchIndex();
+    const items = await getSearchIndex();
     return new Response(JSON.stringify(items), {
         status: 200,
         headers: {

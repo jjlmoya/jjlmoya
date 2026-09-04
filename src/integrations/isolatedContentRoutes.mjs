@@ -3,25 +3,10 @@ import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { ALL_APP_ENTRIES } from '@jjlmoya/apps/data';
-import { CATEGORIES } from '../i18n/toolRegistry.ts';
 
 const require = createRequire(import.meta.url);
 const projectRoot = fileURLToPath(new URL('../../', import.meta.url));
 const generatedRoot = join(projectRoot, '.astro', 'runtime-routes');
-
-function categoryExportName(packageName) {
-    const dataSource = readFileSync(join(resolvePackageRoot(packageName), 'src', 'data.ts'), 'utf8');
-    const exportedConst = [...dataSource.matchAll(/export\s+const\s+([A-Za-z_$][\w$]*Category)\b/g)]
-        .map(match => match[1]);
-    if (exportedConst.length > 0) return exportedConst.at(-1);
-
-    const categoryExports = dataSource.match(/export\s*{([^}]+)}\s*from\s*['"]\.\/category['"]/)?.[1]
-        .split(',')
-        .map(value => value.trim().split(/\s+as\s+/).at(-1))
-        .filter(name => name?.endsWith('Category')) ?? [];
-    if (categoryExports.length === 0) throw new Error(`${packageName}/data does not export a category entry`);
-    return categoryExports[0];
-}
 
 function resolvePackageRoot(packageName) {
     return resolve(dirname(require.resolve(packageName)), '..');
@@ -66,51 +51,35 @@ function writeGeneratedRoute(filename, source) {
     return pathToFileURL(destination);
 }
 
-function utilityAdapter(runtime, category) {
-    const entryExport = categoryExportName(category.packageName);
-    return `---\nimport RuntimeUtilityRoute from '../../src/routes/utilities/RuntimeUtilityRoute.astro';\nimport { ${runtime.exportName} } from '${runtime.packageName}/runtime/${runtime.subpath}';\nimport { ${entryExport} as categoryEntry } from '${category.packageName}/data';\nimport { ALL_ENTRIES as categoryEntries } from '${category.packageName}/entries';\n---\n\n<RuntimeUtilityRoute tool={${runtime.exportName}} {categoryEntry} {categoryEntries} categoryColor="${category.color}" categoryKey="${category.key}" />\n`;
-}
-
-function categoryAdapter(category) {
-    const entryExport = categoryExportName(category.packageName);
-    return `---\nimport RuntimeCategoryRoute from '../../src/routes/utilities/RuntimeCategoryRoute.astro';\nimport CategorySEO from '${category.packageName}/category-seo';\nimport { ${entryExport} as categoryEntry } from '${category.packageName}/data';\nimport { ALL_ENTRIES as categoryEntries } from '${category.packageName}/entries';\n---\n\n<RuntimeCategoryRoute {CategorySEO} {categoryEntry} {categoryEntries} categoryColor="${category.color}" categoryKey="${category.key}" />\n`;
-}
-
 function appAdapter(runtime) {
     return `---\nimport RuntimeAppRoute from '../../src/routes/apps/RuntimeAppRoute.astro';\nimport { ${runtime.exportName} } from '${runtime.packageName}/runtime/${runtime.subpath}';\n---\n\n<RuntimeAppRoute app={${runtime.exportName}} />\n`;
 }
 
-const utilityRuntimeGroups = CATEGORIES.map(category => ({
-    category,
-    runtimes: discoverRuntimes(category.packageName, 'tool', category.tools, '_TOOL'),
-}));
-const appRuntimes = discoverRuntimes('@jjlmoya/apps', 'app', ALL_APP_ENTRIES, '_APP');
+function getMfeSitemapUrls() {
+    return [
+        'https://www.jjlmoya.es/conceptos/sitemap.xml',
+        'https://www.jjlmoya.es/juegos/sitemap.xml',
+    ];
+}
 
-const utilityRoutes = [];
-for (const { category, runtimes } of utilityRuntimeGroups) {
-    for (const runtime of runtimes) {
-        const entrypoint = writeGeneratedRoute(
-            `${category.key}-${runtime.subpath.replaceAll(/[^a-zA-Z0-9-]/g, '-')}.astro`,
-            utilityAdapter(runtime, category),
-        );
-        const loader = runtime.entry.i18n.es ?? runtime.entry.i18n.en;
-        if (!loader) throw new Error(`Missing Spanish locale for ${runtime.entry.id}`);
-        const content = await loader();
-        utilityRoutes.push({ pattern: `/utilidades/${content.slug}`, entrypoint });
+function appendHreflangSitemap(distDirectory, logger) {
+    const sitemapIndexPath = join(fileURLToPath(distDirectory), 'sitemap-index.xml');
+    if (!existsSync(sitemapIndexPath)) {
+        logger.warn(`Sitemap index was not generated at ${sitemapIndexPath}`);
+        return;
     }
+
+    const source = readFileSync(sitemapIndexPath, 'utf8');
+    const sitemapUrls = ['https://www.jjlmoya.es/sitemap-utilities.xml', ...getMfeSitemapUrls()];
+    const missingEntries = sitemapUrls
+        .filter((sitemapUrl) => !source.includes(`<loc>${sitemapUrl}</loc>`))
+        .map((sitemapUrl) => `  <sitemap>\n    <loc>${sitemapUrl}</loc>\n  </sitemap>`);
+    if (missingEntries.length === 0) return;
+
+    writeFileSync(sitemapIndexPath, source.replace('</sitemapindex>', `${missingEntries.join('\n')}\n</sitemapindex>`), 'utf8');
 }
 
-const categoryRoutes = [];
-for (const category of CATEGORIES) {
-    const entrypoint = writeGeneratedRoute(
-        `category-${category.key}.astro`,
-        categoryAdapter(category),
-    );
-    const loader = category.entry.i18n.es ?? category.entry.i18n.en;
-    if (!loader) throw new Error(`Missing Spanish category locale for ${category.key}`);
-    const content = await loader();
-    categoryRoutes.push({ pattern: `/utilidades/categorias/${content.slug}`, entrypoint });
-}
+const appRuntimes = discoverRuntimes('@jjlmoya/apps', 'app', ALL_APP_ENTRIES, '_APP');
 
 const appRoutes = [];
 for (const runtime of appRuntimes) {
@@ -122,15 +91,17 @@ for (const runtime of appRuntimes) {
 }
 
 export default function isolatedContentRoutes() {
-    const utilityCount = utilityRuntimeGroups.reduce((total, group) => total + group.runtimes.length, 0);
     return {
         name: 'jjlmoya-isolated-content-routes',
         hooks: {
             'astro:config:setup': ({ injectRoute, logger }) => {
-                for (const route of [...utilityRoutes, ...categoryRoutes, ...appRoutes]) {
+                for (const route of appRoutes) {
                     injectRoute({ ...route, prerender: true });
                 }
-                logger.info(`Injected ${utilityCount} utility runtimes, ${categoryRoutes.length} category runtimes and ${appRuntimes.length} app runtimes`);
+                logger.info(`Injected 0 utility runtimes, 0 category runtimes and ${appRuntimes.length} app runtimes`);
+            },
+            'astro:build:done': ({ dir, logger }) => {
+                appendHreflangSitemap(dir, logger);
             },
         },
     };

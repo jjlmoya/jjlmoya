@@ -99,12 +99,10 @@ export interface CategoryDef {
     tools: ToolEntry[];
 }
 
-const categoryRegistryMap = new Map<object, string>();
 const categorySlugCache = new Map<string, Map<string, string | undefined>>();
 export const CATEGORIES: CategoryDef[] = [];
 
 function register(category: object, key: string, color: string, packageName: string, tools: ToolEntry[]) {
-    categoryRegistryMap.set(category, key);
     CATEGORIES.push({ key, packageName, entry: category as CategoryDef["entry"], color, tools });
 }
 
@@ -152,6 +150,12 @@ register(genealogyCategory, "genealogy", "#0f766e", "@jjlmoya/utils-genealogy", 
 register(languageCategory, "language", "#0f766e", "@jjlmoya/utils-language", languageCategoryEntries);
 register(civicCategory, "civic", "#2563eb", "@jjlmoya/utils-civic", civicCategoryEntries);
 
+export const MFE_UTILITY_KEYS = new Set(CATEGORIES.map(category => category.key));
+
+export const LEGACY_ROUTE_CATEGORIES = CATEGORIES.filter(
+    category => !MFE_UTILITY_KEYS.has(category.key),
+);
+
 export async function getCategorySlug(categoryKey: string, lang: string): Promise<string | undefined> {
     let langMap = categorySlugCache.get(categoryKey);
     if (langMap?.has(lang)) return langMap.get(lang);
@@ -173,18 +177,18 @@ export function getCategoryKeyForTool(tool: object): string | undefined {
     return CATEGORIES.find(category => category.tools.includes(entry as ToolEntry))?.key;
 }
 
-export async function getAllRegisteredTools(): Promise<Array<[{ entry: ToolEntry }, string]>> {
-    return CATEGORIES.flatMap(category => category.tools.map(
+export async function getAllRegisteredTools(categories: CategoryDef[] = CATEGORIES): Promise<Array<[{ entry: ToolEntry }, string]>> {
+    return categories.flatMap(category => category.tools.map(
         (entry): [{ entry: ToolEntry }, string] => [{ entry }, category.key],
     ));
 }
 
-export async function buildEsSlugMap(): Promise<Record<string, string>> {
+export async function buildEsSlugMap(categories: CategoryDef[] = CATEGORIES): Promise<Record<string, string>> {
     const map: Record<string, string> = {};
     await Promise.all(
-        Array.from(categoryRegistryMap.entries()).map(async ([entry, key]) => {
-            const content = await (entry as CategoryDef["entry"]).i18n?.es?.();
-            if (content?.slug) map[content.slug] = key;
+        categories.map(async category => {
+            const content = await category.entry.i18n?.es?.();
+            if (content?.slug) map[content.slug] = category.key;
         }),
     );
     return map;

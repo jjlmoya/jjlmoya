@@ -33,6 +33,7 @@ function main() {
         }
 
         const changes = [];
+        const failures = [];
 
         for (const name of jjlmoyaDeps) {
             const currentRaw = allDeps[name];
@@ -51,7 +52,12 @@ function main() {
                 }
             } catch (error) {
                 console.log(`${COLOR.YELLOW}[ERROR]${COLOR.RESET} No se pudo comprobar ${name}`);
+                failures.push(name);
             }
+        }
+
+        if (failures.length > 0) {
+            throw new Error(`No se pudieron comprobar: ${failures.join(", ")}`);
         }
 
         const depsToInstall = changes.filter(c => !c.isDev).map(c => `${c.name}@latest`);
@@ -70,6 +76,7 @@ function main() {
         }
 
     } catch (error) {
+        console.error(error);
         process.exit(1);
     }
 }
