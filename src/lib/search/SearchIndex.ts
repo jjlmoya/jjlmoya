@@ -142,7 +142,9 @@ export async function getSearchIndex(): Promise<SearchResult[]> {
         };
     }));
 
-    results.push(...utilityResults.filter((result): result is SearchResult => result !== null));
+    for (const result of utilityResults) {
+        if (result) results.push(result);
+    }
 
     projects.forEach((project) => {
         results.push({
