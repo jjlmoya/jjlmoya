@@ -51,11 +51,14 @@ jobs:
               if: steps.changes.outputs.changed == 'true'
               run: npm run build
 
-            - name: Commit and push synchronization
+            - name: Commit synchronization
               if: steps.changes.outputs.changed == 'true'
               run: |
                   git config user.name "github-actions[bot]"
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   git add package.json package-lock.json
-                  git commit -m "chore: sync jjlmoya packages"
-                  git push
+                  git commit --no-verify -m "chore: sync jjlmoya packages"
+
+            - name: Push synchronization
+              if: steps.changes.outputs.changed == 'true'
+              run: git push
