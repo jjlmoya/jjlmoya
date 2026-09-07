@@ -84,6 +84,8 @@ import { languageCategory } from "@jjlmoya/utils-language/data";
 import { ALL_ENTRIES as languageCategoryEntries } from "@jjlmoya/utils-language/entries";
 import { civicCategory } from "@jjlmoya/utils-civic/data";
 import { ALL_ENTRIES as civicCategoryEntries } from "@jjlmoya/utils-civic/entries";
+import { aviationCategory } from "@jjlmoya/utils-aviation/data";
+import { ALL_ENTRIES as aviationCategoryEntries } from "@jjlmoya/utils-aviation/entries";
 
 export interface ToolEntry {
     id: string;
@@ -149,6 +151,7 @@ register(forensicCategory, "forensic-science", "#14b8a6", "@jjlmoya/utils-forens
 register(genealogyCategory, "genealogy", "#0f766e", "@jjlmoya/utils-genealogy", genealogyCategoryEntries);
 register(languageCategory, "language", "#0f766e", "@jjlmoya/utils-language", languageCategoryEntries);
 register(civicCategory, "civic", "#2563eb", "@jjlmoya/utils-civic", civicCategoryEntries);
+register(aviationCategory, "aviation", "#0284c7", "@jjlmoya/utils-aviation", aviationCategoryEntries);
 
 export const MFE_UTILITY_KEYS = new Set(CATEGORIES.map(category => category.key));
 
