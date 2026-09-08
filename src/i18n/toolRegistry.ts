@@ -30,6 +30,8 @@ import { gamesCategory as gamesDevelopmentCategory } from "@jjlmoya/utils-games-
 import { ALL_ENTRIES as gamesDevelopmentCategoryEntries } from "@jjlmoya/utils-games-development/entries";
 import { nauticalCategory } from "@jjlmoya/utils-nautical/data";
 import { ALL_ENTRIES as nauticalCategoryEntries } from "@jjlmoya/utils-nautical/entries";
+import { performingArtsCategory } from "@jjlmoya/utils-performing-arts/data";
+import { ALL_ENTRIES as performingArtsCategoryEntries } from "@jjlmoya/utils-performing-arts/entries";
 import { petsCategory } from "@jjlmoya/utils-pets/data";
 import { ALL_ENTRIES as petsCategoryEntries } from "@jjlmoya/utils-pets/entries";
 import { scienceCategory } from "@jjlmoya/utils-science/data";
@@ -124,6 +126,7 @@ register(filesCategory, "files", "#3b82f6", "@jjlmoya/utils-files", filesCategor
 register(gamesCategory, "games", "#f43f5e", "@jjlmoya/utils-games", gamesCategoryEntries);
 register(gamesDevelopmentCategory, "games-development", "#8b5cf6", "@jjlmoya/utils-games-development", gamesDevelopmentCategoryEntries);
 register(nauticalCategory, "nautical", "#0ea5e9", "@jjlmoya/utils-nautical", nauticalCategoryEntries);
+register(performingArtsCategory, "performing-arts", "#10b981", "@jjlmoya/utils-performing-arts", performingArtsCategoryEntries);
 register(petsCategory, "pets", "#f59e0b", "@jjlmoya/utils-pets", petsCategoryEntries);
 register(scienceCategory, "science", "#f97316", "@jjlmoya/utils-science", scienceCategoryEntries);
 register(textilesCategory, "textiles", "#6366f1", "@jjlmoya/utils-textiles", textilesCategoryEntries);
