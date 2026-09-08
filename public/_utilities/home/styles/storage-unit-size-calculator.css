@@ -1,0 +1,379 @@
+.storage-tool {
+  --n-paper: #f5f1e8;
+  --n-surface: #fffdf8;
+  --n-surface-soft: #eee8dc;
+  --n-ink: #232522;
+  --n-muted: #6c7169;
+  --n-line: #d7d0c2;
+  --n-accent: #bf5b3d;
+  --n-accent-strong: #8f3929;
+  --n-accent-soft: #f1c8b7;
+  --n-blue: #497b83;
+  --n-blue-soft: #c9e0dd;
+  --n-yellow: #d6a942;
+  --n-shadow: rgba(35, 37, 34, 0.12);
+
+  color: var(--n-ink);
+  background: var(--n-paper);
+  border: 1px solid var(--n-line);
+  border-radius: 1.25rem;
+  box-shadow: 0 0.75rem 2rem var(--n-shadow);
+  overflow: hidden;
+}
+
+.theme-dark .storage-tool {
+  --n-paper: #202522;
+  --n-surface: #2b302d;
+  --n-surface-soft: #373c37;
+  --n-ink: #f1eee6;
+  --n-muted: #c1c7bb;
+  --n-line: #51584f;
+  --n-accent: #e1835f;
+  --n-accent-strong: #ffad89;
+  --n-accent-soft: #64382f;
+  --n-blue: #82bec0;
+  --n-blue-soft: #294d4e;
+  --n-yellow: #e6c66b;
+  --n-shadow: rgba(0, 0, 0, 0.3);
+}
+
+.storage-tool-workbench {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(22rem, 1.1fr);
+}
+.storage-tool-inventory {
+  padding: clamp(1rem, 3vw, 2rem);
+  border-right: 1px solid var(--n-line);
+  background: var(--n-surface);
+}
+.storage-tool-preset-area {
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--n-line);
+}
+.storage-tool-section-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--n-muted);
+  font-size: 0.73rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.storage-tool-section-label button {
+  border: 0;
+  background: transparent;
+  color: var(--n-accent-strong);
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.storage-tool-presets {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+.storage-tool-preset {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 2.65rem;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--n-line);
+  border-radius: 0.55rem;
+  background: var(--n-surface-soft);
+  color: var(--n-ink);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+.storage-tool-preset[aria-pressed="true"] {
+  border-color: var(--n-accent);
+  background: var(--n-accent-soft);
+  color: var(--n-accent-strong);
+}
+.storage-tool-preset-mark {
+  display: grid;
+  width: 1.7rem;
+  height: 1.7rem;
+  place-items: center;
+  border-radius: 0.35rem;
+  background: var(--n-accent);
+  color: var(--n-surface);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+.storage-tool-fieldset {
+  margin: 1.3rem 0 0;
+  padding: 0;
+  border: 0;
+}
+.storage-tool-fieldset legend {
+  margin-bottom: 0.75rem;
+  color: var(--n-ink);
+  font-weight: 800;
+}
+.storage-tool-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+.storage-tool-fieldset:nth-of-type(2) .storage-tool-fields {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.storage-tool-fields label {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.storage-tool-fields label span {
+  min-height: 2.1em;
+  color: var(--n-muted);
+  font-size: 0.76rem;
+  line-height: 1.1;
+}
+.storage-tool input[type="number"] {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.55rem;
+  border: 1px solid var(--n-line);
+  border-radius: 0.45rem;
+  background: var(--n-surface);
+  color: var(--n-ink);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.storage-tool input:focus-visible,
+.storage-tool button:focus-visible {
+  outline: 3px solid var(--n-yellow);
+  outline-offset: 2px;
+}
+.storage-tool-fieldset-access {
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--n-line);
+}
+.storage-tool-access-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.storage-tool-access-option {
+  position: relative;
+}
+.storage-tool-access-option input {
+  position: absolute;
+  opacity: 0;
+}
+.storage-tool-access-option span {
+  display: block;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--n-line);
+  border-radius: 999px;
+  color: var(--n-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.storage-tool-access-option input:checked + span {
+  border-color: var(--n-blue);
+  background: var(--n-blue-soft);
+  color: var(--n-ink);
+}
+.storage-tool-access-range {
+  width: 100%;
+  margin-top: 0.8rem;
+  accent-color: var(--n-blue);
+}
+.storage-tool-fieldset-access p {
+  margin: 0.65rem 0 0;
+  color: var(--n-muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+.storage-tool-result {
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--n-surface-soft);
+}
+.storage-tool-result-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--n-line);
+}
+.storage-tool-eyebrow {
+  margin: 0;
+  color: var(--n-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.storage-tool-status {
+  margin: 0.35rem 0 0;
+  color: var(--n-accent-strong);
+  font-size: clamp(1.2rem, 2.6vw, 1.75rem);
+  font-weight: 850;
+}
+.storage-tool-status-ready {
+  color: var(--n-blue);
+}
+.storage-tool-status-empty {
+  color: var(--n-muted);
+}
+.storage-tool-status-message {
+  max-width: 15rem;
+  margin: 0;
+  color: var(--n-muted);
+  font-size: 0.83rem;
+  line-height: 1.4;
+  text-align: right;
+}
+.storage-tool-plan-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7rem;
+  gap: 1rem;
+  align-items: end;
+  padding: 1.35rem 0;
+}
+.storage-tool-unit-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+  color: var(--n-muted);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+.storage-tool-floor-plan {
+  display: flex;
+  align-items: stretch;
+  min-height: 12rem;
+  border: 2px solid var(--n-ink);
+  border-radius: 0.35rem 0.35rem 0 0;
+  background: var(--n-paper);
+  overflow: hidden;
+}
+.storage-tool-floor-plan-empty {
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.storage-tool-zone {
+  display: flex;
+  min-width: 0;
+  width: var(--zone-size);
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.65rem;
+  border-right: 1px dashed var(--n-ink);
+  color: var(--n-ink);
+}
+.storage-tool-zone span {
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.storage-tool-zone strong {
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-variant-numeric: tabular-nums;
+}
+.storage-tool-zone-boxes {
+  background: var(--n-accent-soft);
+}
+.storage-tool-zone-furniture {
+  background: var(--n-blue-soft);
+}
+.storage-tool-zone-lane {
+  border-right: 0;
+  background: var(--n-yellow);
+  color: #232522;
+}
+.storage-tool-empty-plan {
+  margin: 0;
+  color: var(--n-muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+.storage-tool-unit-door {
+  display: flex;
+  justify-content: space-between;
+  min-height: 2.8rem;
+  padding: 0.65rem 0.8rem;
+  border: 2px solid var(--n-ink);
+  border-top: 0;
+  background: var(--n-ink);
+  color: var(--n-surface);
+  font-size: 0.74rem;
+}
+.storage-tool-unit-door strong {
+  color: var(--n-yellow);
+  font-variant-numeric: tabular-nums;
+}
+.storage-tool-plan-note {
+  padding-bottom: 0.2rem;
+  border-bottom: 3px solid var(--n-accent);
+}
+.storage-tool-plan-note span,
+.storage-tool-plan-note small {
+  display: block;
+  color: var(--n-muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+.storage-tool-plan-note strong {
+  display: block;
+  margin: 0.25rem 0;
+  color: var(--n-accent-strong);
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+.storage-tool-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--n-line);
+}
+.storage-tool-metrics > div {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem 0.8rem 0 0;
+}
+.storage-tool-metrics > div + div {
+  padding-left: 0.8rem;
+  border-left: 1px solid var(--n-line);
+}
+.storage-tool-metrics span,
+.storage-tool-metrics small {
+  color: var(--n-muted);
+  font-size: 0.74rem;
+}
+.storage-tool-metrics strong {
+  color: var(--n-ink);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  .storage-tool-workbench {
+    grid-template-columns: 1fr;
+  }
+  .storage-tool-inventory {
+    border-right: 0;
+    border-bottom: 1px solid var(--n-line);
+  }
+}
+
+@media (max-width: 480px) {
+  .storage-tool-fields,
+  .storage-tool-fieldset:nth-of-type(2) .storage-tool-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .storage-tool-plan-wrap {
+    grid-template-columns: 1fr;
+  }
+  .storage-tool-status-message {
+    max-width: 11rem;
+  }
+}
