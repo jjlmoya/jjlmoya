@@ -1,0 +1,78 @@
+---
+export const prerender = true;
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/hold-jump";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/hold-jump/HoldJumpMechanic.ts";
+---
+
+<MechanicPage
+    title="Hold to Jump"
+    description="Calcula, carga y salta. La tensión de la energía potencial liberada en el momento exacto."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/hold-to-jump.webp"
+>
+    <Icon slot="icon" name="mdi:arrow-up-bold-box-outline" class="text-red-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Mantén para Cargar"
+        subInstruction="Suelta para saltar"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Acumulación de energía proporcional al tiempo de pulsación.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Conversión de carga en vector de fuerza (salto).</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Feedback visual de carga (brillo y deformación).</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Mantener Click / Espacio</span>
+                <span class="text-xs text-zinc-400">Cargar Salto</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { HoldJumpGame } from "../../../lib/mechanics/hold-jump/HoldJumpGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: HoldJumpGame | null = null;
+
+    if (canvas && overlay) {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new HoldJumpGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+    }
+</script>

@@ -1,0 +1,28 @@
+---
+export const prerender = true;
+import GameBobLayout from "../../layouts/GameBobLayout.astro";
+import RoadmapHeader from "../../components/gamebob/roadmap/RoadmapHeader.astro";
+import ProjectCard from "../../components/gamebob/roadmap/ProjectCard.astro";
+import { apps } from "../../data/apps/index";
+
+const roadmapApps = apps.filter((app) => app.isGame);
+---
+
+<GameBobLayout
+    title="Roadmap: ¿En qué estoy invirtiendo el tiempo ahora mismo?"
+    description="Próximos lanzamientos, actualizaciones de juegos y planes futuros. Transparencia total sobre lo que estoy construyendo."
+    image="/images/gamebob/roadmap/index.webp"
+>
+    <div class="min-h-screen flex flex-col items-center py-12 px-4">
+        <div class="z-10 w-full max-w-5xl mt-8">
+            <RoadmapHeader
+                title="roadmap"
+                description="Transparencia total sobre lo que estoy construyendo y lo que vendrá después."
+            />
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {roadmapApps.map((app) => <ProjectCard project={app} />)}
+            </div>
+        </div>
+    </div>
+</GameBobLayout>

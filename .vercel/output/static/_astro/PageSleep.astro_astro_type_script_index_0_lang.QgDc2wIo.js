@@ -1,0 +1,1 @@
+import{a as n}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("sleep-hours");document.addEventListener("update-life-stats",s=>{const{stats:t}=s.detail;if(!e||!t)return;const{hoursSlept:o}=n(t.hoursAlive);e.innerText=o.toLocaleString()});

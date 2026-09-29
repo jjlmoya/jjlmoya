@@ -1,0 +1,1 @@
+import{g as o}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("skin-count"),n=document.getElementById("skin-suits");document.addEventListener("update-life-stats",s=>{const{stats:t}=s.detail;if(!e||!t)return;const{skinShedKg:i,skinSuits:d}=o(t.daysAlive);e.innerText=i.toFixed(1).replace(".",","),n&&(n.innerText=`${d.toFixed(1)} CUERPOS COMPLETOS`)});

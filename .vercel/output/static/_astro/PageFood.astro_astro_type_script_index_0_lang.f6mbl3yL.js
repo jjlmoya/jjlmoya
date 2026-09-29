@@ -1,0 +1,1 @@
+import{j as c}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("food-count"),o=document.getElementById("food-kg");document.addEventListener("update-life-stats",n=>{const{stats:t}=n.detail;if(!e||!t)return;const{kgEaten:a,tonsEaten:d}=c(t.daysAlive);e.innerText=d.toFixed(2).replace(".",","),o&&(o.innerText=`${Math.floor(a).toLocaleString()} KG`)});

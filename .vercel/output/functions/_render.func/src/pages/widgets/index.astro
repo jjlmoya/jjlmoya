@@ -1,0 +1,387 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import { sections } from "../../data/utilities/index";
+import { getWidgetHtml } from "../../utils/widget";
+import WidgetSidebar from "../../components/widgets/WidgetSidebar.astro";
+import WidgetHeader from "../../components/widgets/WidgetHeader.astro";
+import WidgetPreview from "../../components/widgets/WidgetPreview.astro";
+import WidgetEmbedCodes from "../../components/widgets/WidgetEmbedCodes.astro";
+import WidgetEducation from "../../components/widgets/WidgetEducation.astro";
+import WidgetPlatforms from "../../components/widgets/WidgetPlatforms.astro";
+import WidgetWordPressGuide from "../../components/widgets/WidgetWordPressGuide.astro";
+import WidgetBenefits from "../../components/widgets/WidgetBenefits.astro";
+
+const sectionsWithHtml = sections.map((section) => ({
+    title: section.title,
+    utilities: section.utilities.map((utility) => {
+        const utilityName = utility.href.split("/").filter(Boolean).pop() || "utility";
+        const widgetId = `wj-${utilityName}`;
+        const baseUrl = Astro.url.origin;
+        const widgetUrl = `${baseUrl}${utility.href}${utility.href.endsWith("/") ? "" : "/"}?widget=true`;
+        const cleanUrl = `${baseUrl}${utility.href}${utility.href.endsWith("/") ? "" : "/"}`;
+
+        return {
+            ...utility,
+            widgetId,
+            html: getWidgetHtml({ widgetId, widgetUrl, cleanUrl }),
+        };
+    }),
+}));
+
+const flatUtilities = sectionsWithHtml.flatMap((s) => s.utilities);
+
+const title = "Estudio de Utilidades: Calculadoras Gratis e Interacción para tu Web | jjlmoya";
+const description =
+    "Potencia tu sitio con herramientas interactivas. Inserta calculadoras de cocina, utilidades técnicas y herramientas personalizadas gratis. Optimizado para WordPress y sitios personalizados.";
+const image = "/assets/widgets/hero.webp";
+---
+
+<Layout title={title} description={description} image={image} fullWidth={true}>
+    <div
+        class="flex flex-col lg:flex-row min-h-[calc(100vh-60px)] pt-0 overflow-hidden relative bg-slate-50 dark:bg-black"
+    >
+        <WidgetSidebar sections={sectionsWithHtml} />
+
+        <main class="flex-grow flex flex-col overflow-y-auto custom-scrollbar relative">
+            <WidgetHeader />
+
+            <div class="p-4 lg:p-10 pb-32">
+                <div class="max-w-5xl mx-auto space-y-8 lg:space-y-16">
+                    <WidgetPreview />
+                    <WidgetEmbedCodes />
+
+                    <div class="mt-20 space-y-16">
+                        <WidgetEducation />
+                        <WidgetPlatforms />
+                        <WidgetWordPressGuide />
+                    </div>
+                </div>
+            </div>
+
+            <WidgetBenefits />
+        </main>
+    </div>
+</Layout>
+
+<script is:inline define:vars={{ flatUtilities }}>
+    let activeUtility = null;
+    let activeWidgetTheme = "light";
+
+    const searchInput = document.getElementById("widget-search");
+    const buttons = document.querySelectorAll(".utility-btn");
+    const toggles = document.querySelectorAll(".category-toggle");
+    const display = document.getElementById("canvas-inner");
+    const canvas = document.getElementById("preview-canvas");
+    const titleEl = document.getElementById("current-title");
+    const descEl = document.getElementById("current-desc");
+    const categoryBadge = document.getElementById("current-category-badge");
+    const embedSection = document.getElementById("embed-section");
+    const codeUrl = document.getElementById("code-url");
+    const codeIframe = document.getElementById("code-iframe");
+    const copyUrlBtn = document.getElementById("copy-url");
+    const copyIframeBtn = document.getElementById("copy-iframe");
+    const widgetThemeBtns = document.querySelectorAll(".widget-theme-btn");
+
+    function getWidgetHtmlClient({ widgetId, widgetUrl, cleanUrl, theme }) {
+        const params = new URLSearchParams();
+        if (theme) params.append("theme", theme);
+        const queryString = params.toString();
+        const finalWidgetUrl = queryString
+            ? `${widgetUrl}${widgetUrl.includes("?") ? "&" : "?"}${queryString}`
+            : widgetUrl;
+
+        const isDark = theme === "dark";
+        const bg = isDark ? "#09090b" : "#fff";
+        const border = isDark ? "#27272a" : "#e2e8f0";
+
+        return `\x3Cdiv id="${widgetId}-wrp" style="position: relative; width: 100%; border: 1px solid ${border}; border-radius: 12px; overflow: hidden; background: ${bg};">
+    \x3Cscript>
+        (function() {
+            var id = '${widgetId}';
+            function update(h) {
+                var f = document.getElementById(id);
+                var l = document.getElementById(id + '-loader');
+                if (f && h) f.style.height = h + 'px';
+                if (f) f.style.opacity = '1';
+                if (l) { l.style.opacity = '0'; setTimeout(function(){ l.style.display = 'none'; }, 400); }
+            }
+            window.addEventListener('message', function(e) {
+                if (e.data && e.data.jjlmoyaId === id && e.data.jjlmoyaHeight) {
+                    update(e.data.jjlmoyaHeight);
+                }
+            });
+            window._jjshow = update;
+        })();
+    \x3C/script>
+    \x3Cdiv id="${widgetId}-loader" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; z-index: 10; transition: opacity 0.4s;">
+        \x3Cdiv style="width: 24px; height: 24px; border: 2px solid ${isDark ? "#18181b" : "#f3f4f6"}; border-top-color: #94a3b8; border-radius: 50%; animation: jjspin 0.8s linear infinite;">\x3C/div>
+    \x3C/div>
+    \x3Ciframe id="${widgetId}" src="${finalWidgetUrl}&id=${widgetId}" width="100%" height="400" frameborder="0" scrolling="no" style="display: block; opacity: 0; transition: opacity 0.4s, height 0.3s ease; border: none;" onload="window._jjshow()">\x3C/iframe>
+    \x3Cstyle>@keyframes jjspin { to { transform: rotate(360deg); } } #${widgetId}-link:hover { opacity: 1 !important; color: ${isDark ? "#fff" : "#000"} !important; background: ${isDark ? "#18181b" : "#f8fafc"} !important; border-color: ${border} !important; }\x3C/style>
+\x3C/div>
+\x3Cdiv style="text-align: center; margin-top: 10px;">
+    \x3Ca id="${widgetId}-link" href="${cleanUrl}" target="_blank" title="Usa esta utilidad en tu web" style="display: inline-flex; align-items: center; gap: 6px; font-size: 9px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 100px; border: 1px solid ${isDark ? "#18181b" : "#f1f5f9"}; background: ${bg}; transition: all 0.2s ease; opacity: 0.8; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+        \x3Csvg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">\x3Cpolyline points="16 18 22 12 16 6">\x3C/polyline>\x3Cpolyline points="8 6 2 12 8 18">\x3C/polyline>\x3C/svg>
+        \x3Cspan style="font-weight: 600; letter-spacing: 0.02em;">jjlmoya.es\x3C/span>
+    \x3C/a>
+\x3C/div>`;
+    }
+
+    function updateCurrentWidget() {
+        if (!activeUtility) return;
+
+        const baseUrl = window.location.origin;
+        const widgetUrl = `${baseUrl}${activeUtility.href}${activeUtility.href.endsWith("/") ? "" : "/"}?widget=true`;
+        const cleanUrl = `${baseUrl}${activeUtility.href}${activeUtility.href.endsWith("/") ? "" : "/"}`;
+        const widgetId = activeUtility.widgetId;
+
+        const html = getWidgetHtmlClient({
+            widgetId,
+            widgetUrl,
+            cleanUrl,
+            theme: activeWidgetTheme,
+        });
+
+        codeIframe.textContent = html.trim();
+        const urlParams = new URLSearchParams();
+        if (activeWidgetTheme) urlParams.append("theme", activeWidgetTheme);
+        const q = urlParams.toString();
+        codeUrl.textContent = `${cleanUrl}${q ? "?" + q : ""}`;
+
+        const range = document.createRange();
+        const fragment = range.createContextualFragment(html);
+        display.innerHTML = "";
+        display.appendChild(fragment);
+    }
+
+    toggles.forEach((toggle) => {
+        toggle.addEventListener("click", () => {
+            const group = toggle.closest(".category-group");
+            const content = group.querySelector(".category-content");
+            const chevron = toggle.querySelector(".chevron");
+            const isHidden = content.classList.contains("hidden");
+
+            document.querySelectorAll(".category-group").forEach((otherGroup) => {
+                if (otherGroup !== group) {
+                    otherGroup.querySelector(".category-content").classList.add("hidden");
+                    otherGroup.querySelector(".chevron").classList.remove("rotate-180");
+                    otherGroup.classList.remove(
+                        "ring-1",
+                        "ring-indigo-500/20",
+                        "border-indigo-500/30"
+                    );
+                    otherGroup.classList.add("border-slate-100", "dark:border-slate-800/50");
+                }
+            });
+
+            if (isHidden) {
+                content.classList.remove("hidden");
+                chevron.classList.add("rotate-180");
+                group.classList.add("ring-1", "ring-indigo-500/20", "border-indigo-500/30");
+                group.classList.remove("border-slate-100", "dark:border-slate-800/50");
+            } else {
+                content.classList.add("hidden");
+                chevron.classList.remove("rotate-180");
+                group.classList.remove("ring-1", "ring-indigo-500/20", "border-indigo-500/30");
+                group.classList.add("border-slate-100", "dark:border-slate-800/50");
+            }
+        });
+    });
+
+    searchInput?.addEventListener("input", (e) => {
+        const term = e.target.value.toLowerCase();
+
+        document.querySelectorAll(".category-group").forEach((group) => {
+            const groupContent = group.querySelector(".category-content");
+            const groupToggle = group.querySelector(".category-toggle");
+            const groupBtns = group.querySelectorAll(".utility-btn");
+            const chevron = groupToggle.querySelector(".chevron");
+
+            let groupHasMatch = false;
+
+            groupBtns.forEach((btn) => {
+                const title = btn.dataset.title.toLowerCase();
+                const isMatch = title.includes(term);
+                btn.style.display = isMatch ? "flex" : "none";
+                if (isMatch) groupHasMatch = true;
+            });
+
+            group.style.display = groupHasMatch || term === "" ? "block" : "none";
+
+            if (term !== "" && groupHasMatch) {
+                groupContent.classList.remove("hidden");
+                chevron.classList.add("rotate-180");
+            } else if (term === "") {
+                groupContent.classList.add("hidden");
+                chevron.classList.remove("rotate-180");
+            }
+        });
+    });
+
+    document.querySelectorAll(".bg-toggle").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const bg = btn.dataset.bg;
+            document.querySelectorAll(".bg-toggle").forEach((b) => b.classList.remove("active-bg"));
+            btn.classList.add("active-bg");
+
+            canvas.className =
+                "rounded-[2rem] p-0 sm:p-10 min-h-[300px] flex items-center justify-center border transition-all duration-500 shadow-2xl relative overflow-hidden";
+
+            if (bg === "white") canvas.classList.add("bg-white", "border-slate-200");
+            if (bg === "black") canvas.classList.add("bg-black", "border-slate-800");
+            if (bg === "grid")
+                canvas.classList.add(
+                    "bg-slate-50",
+                    "border-slate-200",
+                    "bg-[linear-gradient(to_right,#80808011_1px,transparent_1px),linear-gradient(to_bottom,#80808011_1px,transparent_1px)]",
+                    "bg-[size:14px_24px]"
+                );
+        });
+    });
+
+    function setWidgetTheme(theme) {
+        activeWidgetTheme = theme;
+        widgetThemeBtns.forEach((btn) => {
+            if (btn.dataset.theme === theme) {
+                btn.classList.add("bg-indigo-50", "text-indigo-600");
+                btn.classList.remove(
+                    "text-slate-400",
+                    "hover:bg-slate-50",
+                    "dark:hover:bg-zinc-800"
+                );
+            } else {
+                btn.classList.remove("bg-indigo-50", "text-indigo-600");
+                btn.classList.add("text-slate-400", "hover:bg-slate-50", "dark:hover:bg-zinc-800");
+            }
+        });
+        updateCurrentWidget();
+    }
+
+    widgetThemeBtns.forEach((btn) => {
+        btn.addEventListener("click", () => setWidgetTheme(btn.dataset.theme));
+    });
+
+    window.addEventListener("message", (e) => {
+        if (e.data && e.data.jjlmoyaId && e.data.jjlmoyaHeight) {
+            const iframe = document.getElementById(e.data.jjlmoyaId);
+            if (iframe) {
+                iframe.style.height = e.data.jjlmoyaHeight + "px";
+                iframe.style.opacity = "1";
+            }
+            const loader = document.getElementById(e.data.jjlmoyaId + "-loader");
+            if (loader) {
+                loader.style.opacity = "0";
+                setTimeout(() => (loader.style.display = "none"), 400);
+            }
+        }
+    });
+
+    buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            buttons.forEach((b) => b.classList.remove("active-tool"));
+            btn.classList.add("active-tool");
+
+            const href = btn.dataset.href;
+            const category = btn.dataset.category;
+            const utData = flatUtilities.find((u) => u.href === href);
+            if (!utData) return;
+
+            activeUtility = utData;
+            activeUtility.category = category;
+
+            const url = new URL(window.location.href);
+            const slug = href.split("/").filter(Boolean).pop();
+            url.searchParams.set("utilidad", slug);
+            window.history.replaceState({}, "", url);
+
+            titleEl.textContent = utData.title;
+            categoryBadge.textContent = category;
+            categoryBadge.classList.remove("opacity-0");
+            descEl.textContent = utData.description || "Widget profesional para tu sitio web.";
+
+            updateCurrentWidget();
+
+            embedSection.classList.remove("hidden");
+            setTimeout(() => {
+                embedSection.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
+            }, 50);
+
+            if (window.innerWidth < 1024) {
+                titleEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        });
+    });
+
+    function setupCopy(btn, target) {
+        btn.addEventListener("click", () => {
+            const text = target.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML =
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-white"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                setTimeout(() => (btn.innerHTML = original), 2000);
+            });
+        });
+    }
+    setupCopy(copyUrlBtn, codeUrl);
+    setupCopy(copyIframeBtn, codeIframe);
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const toolSlug = urlParams.get("utilidad");
+
+        if (toolSlug) {
+            const targetBtn = Array.from(buttons).find((btn) =>
+                btn.dataset.href.includes(toolSlug)
+            );
+            if (targetBtn) {
+                const group = targetBtn.closest(".category-group");
+                const content = group?.querySelector(".category-content");
+                const toggle = group?.querySelector(".category-toggle");
+
+                if (content?.classList.contains("hidden")) {
+                    toggle?.click();
+                }
+
+                targetBtn.click();
+            }
+        }
+    });
+</script>
+
+<style is:global>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.2);
+        border-radius: 10px;
+    }
+
+    .active-bg {
+        border-color: #4f46e5 !important;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    }
+
+    .active-tool {
+        color: #4f46e5 !important;
+        border-color: #4f46e5 !important;
+        background-color: rgba(79, 70, 229, 0.05) !important;
+    }
+
+    @media (min-width: 1024px) {
+        .active-tool {
+            background-color: rgba(79, 70, 229, 0.08) !important;
+            border: none !important;
+        }
+    }
+
+    .active-color {
+        outline: 2px solid #4f46e5;
+        outline-offset: 2px;
+    }
+</style>

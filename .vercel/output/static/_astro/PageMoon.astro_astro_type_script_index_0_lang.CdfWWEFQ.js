@@ -1,0 +1,1 @@
+import{h as l}from"./libraryLogic.DCzgBDh3.js";const n=document.getElementById("moon-count"),o=document.getElementById("moon-count-text");document.addEventListener("update-life-stats",c=>{const{stats:t}=c.detail;if(!n||!t)return;const{fullMoons:e}=l(t.daysAlive);n.innerText=e.toLocaleString(),o&&(o.innerText=`${e.toLocaleString()} VECES`)});

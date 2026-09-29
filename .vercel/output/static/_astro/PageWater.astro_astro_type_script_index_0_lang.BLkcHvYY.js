@@ -1,0 +1,1 @@
+import{i as s}from"./libraryLogic.DCzgBDh3.js";const n=document.getElementById("water-count"),o=document.getElementById("water-bottles");document.addEventListener("update-life-stats",a=>{const{stats:t}=a.detail;if(!n||!t)return;const{litersDrunk:e}=s(t.daysAlive),l=Math.floor(e/.5);n.innerText=e.toLocaleString(),o&&(o.innerText=`${l.toLocaleString()} BOTELLAS`)});

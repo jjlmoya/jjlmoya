@@ -1,0 +1,81 @@
+---
+export const prerender = true;
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/size-matters";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/size-matters/SizeMattersGame.js";
+---
+
+<MechanicPage
+    title="Size Matters"
+    description="El tamaño importa. Crece para romper, encoge para flotar."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/size-matters.webp"
+>
+    <Icon slot="icon" name="mdi:arrow-expand-all" class="text-yellow-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Mantén para Crecer"
+        subInstruction="Suelta para Encoger"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span
+                    >Mantén pulsado para <strong>CRECER</strong>: rompes bloques rojos, pero caes
+                    rápido.</span
+                >
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Suelta para <strong>ENCOGER</strong>: flotas y pasas por huecos azules.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Física de masa variable y gravedad dinámica.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Click / Tap (Mantener)</span>
+                <span class="text-xs text-zinc-400">Crecer / Aumentar Masa</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { SizeMattersGame } from "../../../lib/mechanics/size-matters/SizeMattersGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: SizeMattersGame | null = null;
+
+    if (canvas && overlay) {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new SizeMattersGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+    }
+</script>

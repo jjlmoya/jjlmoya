@@ -1,0 +1,94 @@
+---
+export const prerender = true;
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/platformer";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/platformer/PlatformerGame.js";
+---
+
+<MechanicPage
+    title="Plataformas"
+    description="Demo de mecánicas fluidas: salto, doble salto, deslizamiento y partículas."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/platformer.webp"
+>
+    <Icon slot="icon" name="mdi:controller-classic" class="text-indigo-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Usa las Flechas"
+        subInstruction="Muévete y Salta"
+        verticalOnMobile={false}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Máquina de estados finitos para el jugador.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Física de movimiento con inercia y fricción.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Sistema de partículas para feedback visual.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">← / →</span>
+                <span class="text-xs text-zinc-400">Moverse</span>
+            </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Espacio</span>
+                <span class="text-xs text-zinc-400">Saltar</span>
+            </div>
+            <div class="bg-zinc-800 p-3 rounded-lg text-center col-span-2">
+                <span class="block text-white font-bold">Shift + ↓</span>
+                <span class="text-xs text-zinc-400">Deslizar / Caer</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+
+    <div
+        class="absolute top-4 right-4 bg-black/50 backdrop-blur-md p-2 rounded text-xs font-mono text-white pointer-events-none z-20 hidden md:block"
+    >
+        <div>State: <span id="debug-state" class="text-green-400">Idle</span></div>
+        <div>VX: <span id="debug-vel-x" class="text-blue-400">0.00</span></div>
+        <div>VY: <span id="debug-vel-y" class="text-red-400">0.00</span></div>
+    </div>
+</MechanicPage>
+
+<script>
+    import { PlatformerGame } from "../../../lib/mechanics/platformer/PlatformerGame.js";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    let game: PlatformerGame | null = null;
+
+    if (canvas && overlay) {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new PlatformerGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+    }
+</script>

@@ -1,0 +1,85 @@
+---
+export const prerender = true;
+import MechanicPage from "../../../components/gamebob/mechanics/MechanicPage.astro";
+import MechanicCanvas from "../../../components/gamebob/mechanics/MechanicCanvas.astro";
+import MechanicInfo from "../../../components/gamebob/mechanics/MechanicInfo.astro";
+import { Icon } from "astro-icon/components";
+
+const GITHUB_BASE = "https://github.com/jjlmoya/jjlmoya/tree/main/src/lib/mechanics/gravity-well";
+const CODE_URL =
+    "https://github.com/jjlmoya/jjlmoya/blob/main/src/lib/mechanics/gravity-well/GravityWellMechanic.ts";
+---
+
+<MechanicPage
+    title="Gravity Well"
+    description="Dobla el espacio-tiempo. Atrae partículas y crea caos orbital con la punta de tus dedos."
+    githubUrl={GITHUB_BASE}
+    codeUrl={CODE_URL}
+    image="/images/gamebob/mechanics/gravity-well.webp"
+>
+    <Icon slot="icon" name="mdi:orbit" class="text-purple-400" />
+
+    <MechanicCanvas
+        id="game-canvas"
+        instruction="Toca para crear gravedad"
+        subInstruction="Las partículas orbitarán tus puntos de gravedad"
+        verticalOnMobile={true}
+    />
+
+    <MechanicInfo>
+        <Fragment slot="how-it-works">
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Simulación de n-cuerpos simplificada.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Pozos de gravedad temporales que atraen partículas.</span>
+            </li>
+            <li class="flex items-start gap-2">
+                <span class="text-blue-400 mt-1">•</span>
+                <span>Estela visual para mostrar trayectorias.</span>
+            </li>
+        </Fragment>
+
+        <Fragment slot="controls">
+            <div class="bg-zinc-800 p-3 rounded-lg text-center">
+                <span class="block text-white font-bold">Click / Tap</span>
+                <span class="text-xs text-zinc-400">Crear Pozo</span>
+            </div>
+        </Fragment>
+    </MechanicInfo>
+</MechanicPage>
+
+<script>
+    import { GravityWellGame } from "../../../lib/mechanics/gravity-well/GravityWellGame";
+
+    const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
+    const overlay = document.getElementById("game-canvas-overlay");
+    const clearBtn = document.getElementById("clear-btn");
+    let game: GravityWellGame | null = null;
+
+    if (canvas && overlay) {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        overlay.addEventListener("click", () => {
+            overlay.style.opacity = "0";
+            overlay.style.pointerEvents = "none";
+            if (!game) {
+                game = new GravityWellGame(canvas);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (game) game.resize();
+        });
+
+        if (clearBtn) {
+            clearBtn.addEventListener("click", () => {
+                if (game) game.clearWells();
+            });
+        }
+    }
+</script>

@@ -1,0 +1,1 @@
+import{d as s}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("words-count");document.addEventListener("update-life-stats",n=>{const{stats:t}=n.detail;if(!e||!t)return;const{wordsSpoken:o}=s(t.daysAlive);e.innerText=o.toLocaleString()});

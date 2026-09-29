@@ -1,0 +1,1 @@
+import{f as a}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("tears-count"),s=document.getElementById("tears-drops");document.addEventListener("update-life-stats",n=>{const{stats:t}=n.detail;if(!e||!t)return;const{litersTears:o,tearDrops:r}=a(t.daysAlive);e.innerText=o.toFixed(1).replace(".",","),s&&(s.innerText=`${Math.floor(r).toLocaleString()} GOTAS`)});

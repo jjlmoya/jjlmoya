@@ -1,0 +1,1 @@
+import{m as a}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("mind-count");document.addEventListener("update-life-stats",n=>{const{stats:t}=n.detail;if(!e||!t)return;const{thoughts:o}=a(t.daysAlive);e.innerText=Math.floor(o).toLocaleString()});

@@ -1,0 +1,1 @@
+import{l as a}from"./libraryLogic.DCzgBDh3.js";const n=document.getElementById("sun-count"),o=document.getElementById("sun-text-count");document.addEventListener("update-life-stats",s=>{const{stats:t}=s.detail;if(!n||!t)return;const{sunrises:e}=a(t.daysAlive);n.innerText=Math.floor(e).toLocaleString(),o&&(o.innerText=`${Math.floor(e).toLocaleString()} VECES`)});

@@ -1,0 +1,99 @@
+---
+export const prerender = true;
+import GameBobLayout from "../../../layouts/GameBobLayout.astro";
+import { Icon } from "astro-icon/components";
+import { mechanics } from "../../../data/mechanics";
+import MechanicCard from "../../../components/gamebob/mechanics/MechanicCard.astro";
+import MechanicsFilter from "../../../components/gamebob/mechanics/MechanicsFilter.astro";
+
+const allTags = [...new Set(mechanics.flatMap((m) => m.tags))];
+---
+
+<GameBobLayout
+    title="Mecánicas de Juego: Experimentos y Demos para Developers"
+    description="Explora un sandbox con una variedad de experimentos de mecánicas de juego. Cada ejemplo es una demostración técnica lista para su análisis y aplicación en desarrollo."
+    image="/images/gamebob/mechanics/index.webp"
+>
+    <div class="min-h-screen flex flex-col items-center justify-start py-6 md:py-12 px-4">
+        <div class="z-10 w-full max-w-5xl mt-4 md:mt-8">
+            <h1 class="sr-only">Colección de Mecánicas de Juego y Prototipos</h1>
+            <MechanicsFilter allTags={allTags} />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mechanics-grid">
+                {mechanics.map((mechanic) => <MechanicCard mechanic={mechanic} />)}
+            </div>
+
+            <div id="no-results" class="hidden text-center py-12 text-zinc-500">
+                <Icon name="mdi:ghost-off" class="w-12 h-12 mx-auto mb-2 opacity-50" />
+                <p>No se encontraron mecánicas con estos filtros.</p>
+            </div>
+        </div>
+    </div>
+</GameBobLayout>
+
+<script>
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const tagBtns = document.querySelectorAll(".tag-filter-btn");
+    const cards = document.querySelectorAll(".mechanic-card");
+    const noResults = document.getElementById("no-results");
+
+    let currentPlatform = "all";
+    let activeTags: string[] = [];
+
+    function filterCards() {
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+            const platforms = (card as HTMLElement).dataset.platforms;
+            const tags = (card as HTMLElement).dataset.tags?.split(",") || [];
+
+            const platformMatch =
+                currentPlatform === "all" || platforms === "all" || platforms === currentPlatform;
+            const tagsMatch =
+                activeTags.length === 0 || activeTags.every((tag) => tags.includes(tag));
+
+            if (platformMatch && tagsMatch) {
+                (card as HTMLElement).style.display = "block";
+                visibleCount++;
+            } else {
+                (card as HTMLElement).style.display = "none";
+            }
+        });
+
+        if (noResults) {
+            noResults.classList.toggle("hidden", visibleCount > 0);
+        }
+    }
+
+    filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            filterBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            currentPlatform = (btn as HTMLElement).dataset.filter || "all";
+            filterCards();
+        });
+    });
+
+    tagBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const tag = (btn as HTMLElement).dataset.tag;
+            if (!tag) return;
+
+            if (activeTags.includes(tag)) {
+                activeTags = activeTags.filter((t) => t !== tag);
+                btn.classList.remove("active");
+            } else {
+                activeTags.push(tag);
+                btn.classList.add("active");
+            }
+
+            filterCards();
+        });
+    });
+
+    const allBtn = document.querySelector('[data-filter="all"]');
+    if (allBtn) allBtn.classList.add("active");
+</script>
+
+<style></style>

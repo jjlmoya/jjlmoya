@@ -1,0 +1,133 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import InflationHeader from "../../components/pages/inflacion/InflationHeader.astro";
+import InflationBill from "../../components/pages/inflacion/InflationBill.astro";
+import InflationSlider from "../../components/pages/inflacion/InflationSlider.astro";
+import InflationIconRegistry from "../../components/pages/inflacion/InflationIconRegistry.astro";
+import InflationInfo from "../../components/pages/inflacion/InflationInfo.astro";
+import InflationCases from "../../components/pages/inflacion/InflationCases.astro";
+import InflationDarkSection from "../../components/pages/inflacion/InflationDarkSection.astro";
+import InflationHiddenTypes from "../../components/pages/inflacion/InflationHiddenTypes.astro";
+import InflationSources from "../../components/pages/inflacion/InflationSources.astro";
+import InflationPersonalNote from "../../components/pages/inflacion/InflationPersonalNote.astro";
+---
+
+<Layout
+    title="Inflación - La memoria es frágil, pero los datos permanecen"
+    description="¿Qué es la inflación? Visualiza cómo el valor del dinero ha cambiado a lo largo del tiempo."
+    image="/images/concepts/inflacion_concept.webp"
+    fullWidth={true}
+>
+    <div
+        class="flex flex-col items-center justify-center bg-amber-50 text-amber-900 p-4 relative overflow-hidden"
+    >
+        <InflationHeader>
+            <InflationBill />
+            <InflationSlider />
+            <InflationCases />
+        </InflationHeader>
+
+        <InflationInfo />
+    </div>
+
+    <InflationDarkSection />
+
+    <InflationHiddenTypes />
+
+    <InflationSources />
+    <InflationPersonalNote />
+    <InflationIconRegistry />
+</Layout>
+
+<script>
+    import { getPurchasingPower, calculateBasket } from "../../utils/inflationLogic";
+    import { handleGlobalShare } from "../../utils/share";
+    import itemsData from "../../data/inflacion-items.json";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.removeEventListener("click", handleGlobalShare);
+        document.addEventListener("click", handleGlobalShare);
+
+        const slider = document.getElementById("year-slider") as HTMLInputElement;
+        const yearDisplay = document.getElementById("year-display");
+        const valueDisplay = document.getElementById("value-display");
+        const itemsContainer = document.getElementById("items-container");
+
+        const getIconHtml = (iconName: string) => {
+            const iconContainer = document.getElementById(`icon-${iconName}`);
+            return iconContainer ? iconContainer.innerHTML : "";
+        };
+
+        const items = itemsData;
+
+        const createItemHtml = (item: any, count: number, delay: number) => {
+            const scale = item.price > 50 ? "scale-110" : "scale-100";
+            const bg = item.price > 50 ? "bg-amber-200/50" : "bg-amber-100/50";
+
+            const countBadge =
+                count > 1
+                    ? `<div class="absolute -top-2 -right-2 bg-black text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-lg">${count}</div>`
+                    : "";
+
+            return `<div class="relative animate-pop text-amber-900 flex flex-col items-center p-2 ${bg} rounded-lg border border-amber-200/50 ${scale}" style="animation-delay: ${delay}ms" title="${item.name} (${item.price}€) ${count > 1 ? `x${count}` : ""}">
+            ${countBadge}
+            ${getIconHtml(item.icon)}
+            <span class="text-[10px] font-bold mt-1 opacity-60">${item.name}</span>
+          </div>`;
+        };
+
+        const update = () => {
+            if (!slider) return;
+            const year = parseInt(slider.value);
+            const power = getPurchasingPower(year);
+            const totalValue = 100 * power;
+
+            if (yearDisplay) yearDisplay.innerText = year.toString();
+            if (valueDisplay) valueDisplay.innerText = `${Math.round(totalValue)}€`;
+
+            const itemCounts = calculateBasket(totalValue, items, year);
+
+            let html = "";
+            let animationDelay = 0;
+            const availableItems = items.filter(
+                (item) => item.minYear <= year && item.maxYear >= year
+            );
+
+            itemCounts.forEach((count, itemName) => {
+                const item = availableItems.find((i) => i.name === itemName);
+                if (item) {
+                    html += createItemHtml(item, count, animationDelay);
+                    animationDelay += 30;
+                }
+            });
+
+            if (itemsContainer) itemsContainer.innerHTML = html;
+        };
+
+        slider?.addEventListener("input", update);
+
+        update();
+    });
+</script>
+
+<style>
+    @keyframes pop {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        80% {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    .animate-pop {
+        animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        opacity: 0;
+    }
+</style>

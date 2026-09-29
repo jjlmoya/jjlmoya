@@ -1,0 +1,1 @@
+import{k as s}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("hair-count");document.addEventListener("update-life-stats",a=>{const{stats:t}=a.detail;if(!e||!t)return;const{hairMeters:n}=s(t.daysAlive);e.innerText=n.toFixed(2).replace(".",",")});

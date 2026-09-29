@@ -1,0 +1,1 @@
+import{b as c}from"./libraryLogic.DCzgBDh3.js";const n=document.getElementById("steps-count"),s=document.getElementById("steps-km");document.addEventListener("update-life-stats",o=>{const{stats:t}=o.detail;if(!n||!t)return;const{stepsTaken:e}=c(t.daysAlive),a=e*.762/1e3;n.innerText=e.toLocaleString(),s&&(s.innerText=`${Math.floor(a).toLocaleString()} KM`)});

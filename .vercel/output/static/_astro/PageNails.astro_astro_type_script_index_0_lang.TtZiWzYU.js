@@ -1,0 +1,1 @@
+import{k as a}from"./libraryLogic.DCzgBDh3.js";const e=document.getElementById("nails-count");document.addEventListener("update-life-stats",n=>{const{stats:t}=n.detail;if(!e||!t)return;const{nailsMeters:s}=a(t.daysAlive);e.innerText=s.toFixed(2).replace(".",",")});

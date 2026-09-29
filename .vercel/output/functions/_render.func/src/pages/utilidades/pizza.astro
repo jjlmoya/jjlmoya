@@ -1,0 +1,187 @@
+---
+export const prerender = true;
+import LayoutUtility from "../../layouts/LayoutUtility.astro";
+import PizzaControls from "../../components/pages/pizza/PizzaControls.astro";
+import PizzaRecipe from "../../components/pages/pizza/PizzaRecipe.astro";
+import PizzaVisual from "../../components/pages/pizza/PizzaVisual.astro";
+
+import UtilityHeader from "../../components/utilidades/UtilityHeader.astro";
+
+const faqItems = [
+    {
+        question: "¿Qué es la hidratación en la masa de pizza?",
+        answer: "Es el porcentaje de agua respecto a la harina. 65% significa 650g de agua por cada 1kg de harina. Mayor hidratación = masa más extensible y alvéolos grandes, pero más difícil de manejar. La napolitana clásica usa 55-65%.",
+    },
+    {
+        question: "¿Levadura fresca o seca, cuál usar?",
+        answer: "Levadura fresca tiene más potencia pero dura menos (1-2 semanas en nevera). Levadura seca dura meses y es más cómoda. Ratio: 1g seca = 3g fresca. Para fermentación larga (24h+), usa menos levadura.",
+    },
+    {
+        question: "¿Por qué mi masa no sube?",
+        answer: "Causas comunes: levadura muerta (caducada o agua demasiado caliente >40°C), poca temperatura ambiente (<20°C), exceso de sal que mata la levadura, o harina muy débil (W<200). Prueba con agua tibia (25-30°C) y deja fermentar más tiempo.",
+    },
+    {
+        question: "¿Cuánto tiempo de fermentación necesita?",
+        answer: "Mínimo 24h en nevera para desarrollar sabor. Óptimo: 48-72h a 4°C. Fermentación larga = más digestible, más sabor, mejor textura. Si tienes prisa: 6-8h a temperatura ambiente, pero el resultado es inferior.",
+    },
+];
+---
+
+<LayoutUtility
+    title="Calculadora Masa Pizza Napolitana: Proporciones Exactas"
+    description="Calculadora online gratuita. Obtén proporciones exactas de harina, agua, sal y levadura para la auténtica Masa de Pizza Napolitana. Receta optimizada AVPN."
+    image="/images/utilities/pizza.webp"
+    gradientFrom="from-orange-100"
+    faqItems={faqItems}
+    appSlug="pizzametrics"
+>
+    <div slot="header">
+        <UtilityHeader
+            titleHighlight="Pizza Napolitana"
+            titleBase="Calculadora de Masa"
+            description="Calcula las proporciones exactas de harina, agua, sal y levadura para preparar la auténtica pizza napolitana en casa. Receta optimizada según los estándares de la Verace Pizza Napoletana."
+            gradientFrom="from-orange-600"
+            gradientTo="to-red-600"
+            reverse={true}
+        />
+        <div class="mt-minus-10 text-center relative z-10 -mt-10 mb-12">
+            <span
+                class="px-3 py-1 rounded-full border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-500 uppercase tracking-widest inline-block bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm"
+                >Estilo AVPN</span
+            >
+        </div>
+    </div>
+
+    <div>
+        <div class="grid lg:grid-cols-12 gap-8 items-start mb-16">
+            <PizzaControls />
+
+            <div class="lg:col-span-7 space-y-6">
+                <PizzaRecipe />
+                <PizzaVisual />
+            </div>
+        </div>
+    </div>
+
+    <div slot="seo"></div>
+</LayoutUtility>
+
+<script>
+    const inputs = {
+        pizzas: document.getElementById("input-pizzas") as HTMLInputElement,
+        weight: document.getElementById("input-weight") as HTMLInputElement,
+        hydration: document.getElementById("input-hydration") as HTMLInputElement,
+        salt: document.getElementById("input-salt") as HTMLInputElement,
+    };
+
+    const displays = {
+        pizzas: document.getElementById("display-pizzas"),
+        weight: document.getElementById("display-weight"),
+        hydration: document.getElementById("display-hydration"),
+        salt: document.getElementById("display-salt"),
+    };
+
+    const results = {
+        flour: document.getElementById("result-flour"),
+        water: document.getElementById("result-water"),
+        salt: document.getElementById("result-salt"),
+        yeast: document.getElementById("result-yeast"),
+        total: document.getElementById("result-total"),
+    };
+
+    const visuals = {
+        barWater: document.getElementById("bar-water"),
+        dough: document.getElementById("dough-visual"),
+        diameter: document.getElementById("visual-diameter"),
+    };
+
+    const yeastBtns = {
+        fresh: document.getElementById("btn-yeast-fresh"),
+        dry: document.getElementById("btn-yeast-dry"),
+    };
+
+    const state = {
+        pizzas: 4,
+        weight: 260,
+        hydration: 65,
+        salt: 3.0,
+        yeastType: "fresh",
+    };
+
+    const YEAST_FACTOR_FRESH = 0.002;
+    const YEAST_FACTOR_DRY = 0.0007;
+
+    function calculate() {
+        const totalDough = state.pizzas * state.weight;
+
+        const yeastFactor = state.yeastType === "fresh" ? YEAST_FACTOR_FRESH : YEAST_FACTOR_DRY;
+        const totalPercentage = 100 + state.hydration + state.salt + yeastFactor * 100;
+
+        const flour = totalDough * (100 / totalPercentage);
+        const water = flour * (state.hydration / 100);
+        const salt = flour * (state.salt / 100);
+        const yeast = flour * yeastFactor;
+
+        if (results.flour) results.flour.textContent = Math.round(flour).toString();
+        if (results.water) results.water.textContent = Math.round(water).toString();
+        if (results.salt) results.salt.textContent = salt.toFixed(1);
+        if (results.yeast) results.yeast.textContent = yeast.toFixed(2);
+        if (results.total) results.total.textContent = totalDough.toString();
+
+        if (visuals.barWater) visuals.barWater.style.width = `${state.hydration}%`;
+
+        const baseWeight = 260;
+        const scale = Math.sqrt(state.weight / baseWeight);
+        const sizePx = 180 * scale;
+
+        if (visuals.dough) {
+            visuals.dough.style.width = `${sizePx}px`;
+            visuals.dough.style.height = `${sizePx}px`;
+        }
+
+        const estDiameter = 30 * Math.sqrt(state.weight / 260);
+        if (visuals.diameter) visuals.diameter.textContent = Math.round(estDiameter).toString();
+    }
+
+    function updateState() {
+        if (!inputs.pizzas || !inputs.weight || !inputs.hydration || !inputs.salt) return;
+
+        state.pizzas = parseInt(inputs.pizzas.value);
+        state.weight = parseInt(inputs.weight.value);
+        state.hydration = parseInt(inputs.hydration.value);
+        state.salt = parseFloat(inputs.salt.value);
+
+        if (displays.pizzas) displays.pizzas.textContent = state.pizzas.toString();
+        if (displays.weight) displays.weight.textContent = state.weight.toString();
+        if (displays.hydration) displays.hydration.textContent = state.hydration.toString();
+        if (displays.salt) displays.salt.textContent = state.salt.toFixed(1);
+
+        calculate();
+    }
+
+    Object.values(inputs).forEach((input) => {
+        if (input) {
+            input.addEventListener("input", updateState);
+        }
+    });
+
+    yeastBtns.fresh?.addEventListener("click", () => {
+        state.yeastType = "fresh";
+        yeastBtns.fresh?.classList.add("active", "bg-white/10", "text-white");
+        yeastBtns.fresh?.classList.remove("bg-transparent", "text-slate-400");
+        yeastBtns.dry?.classList.remove("active", "bg-white/10", "text-white");
+        yeastBtns.dry?.classList.add("bg-transparent", "text-slate-400");
+        calculate();
+    });
+
+    yeastBtns.dry?.addEventListener("click", () => {
+        state.yeastType = "dry";
+        yeastBtns.dry?.classList.add("active", "bg-white/10", "text-white");
+        yeastBtns.dry?.classList.remove("bg-transparent", "text-slate-400");
+        yeastBtns.fresh?.classList.remove("active", "bg-white/10", "text-white");
+        yeastBtns.fresh?.classList.add("bg-transparent", "text-slate-400");
+        calculate();
+    });
+
+    updateState();
+</script>
