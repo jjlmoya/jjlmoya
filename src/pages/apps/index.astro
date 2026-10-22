@@ -49,7 +49,7 @@ const DEFAULT_THEMES: Record<string, any> = {
                 {
                     appCards.map(({ entry, card }, index) => {
                         const theme = DEFAULT_THEMES[entry.id] || { primary: "#555", bgSurface: "#111" };
-                        const heroImage = `/assets/apps/${entry.id}/hero.webp`;
+                        const heroImage = entry.media?.hero ?? `/assets/apps/${entry.id}/hero.webp`;
                         
                         return (
                             <div
@@ -67,12 +67,13 @@ const DEFAULT_THEMES: Record<string, any> = {
                                 <div class="app-entry-glow" />
 
                                 <div class={`app-image-wrapper ${index % 2 !== 0 ? "order-odd" : ""}`}>
-                                    <div class="app-image-container">
+                                    <div class="app-image-container" style={entry.media?.hero ? "aspect-ratio: auto;" : undefined}>
                                         <div class="app-image-hover-overlay" />
                                         <img
                                             src={heroImage}
                                             alt=""
                                             class="app-image"
+                                            style={entry.media?.hero ? "display: block; height: auto;" : undefined}
                                         />
                                         <div class="app-image-darken" />
                                     </div>
