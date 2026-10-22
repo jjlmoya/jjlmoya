@@ -34,7 +34,8 @@ function discoverRuntimes(packageName, sourceDirectory, entries, exportSuffix) {
         }
         const entry = entries.find(candidate => candidate.id === entryId);
         if (!entry) throw new Error(`${packageName}/runtime/${runtimeDirectory.name} is missing from its data registry`);
-        runtimes.push({ packageName, subpath: runtimeDirectory.name, exportName: exportNames[0], entry });
+        const pagePaths = [...indexSource.matchAll(/\bpath\s*:\s*['"]([a-z0-9-]+(?:\/[a-z0-9-]+)*)['"]/g)].map(match => match[1]);
+        runtimes.push({ packageName, subpath: runtimeDirectory.name, exportName: exportNames[0], entry, pagePaths });
     }
     const discoveredIds = new Set(runtimes.map(runtime => runtime.entry.id));
     const missingEntries = entries.filter(entry => !discoveredIds.has(entry.id));
@@ -88,6 +89,11 @@ for (const runtime of appRuntimes) {
     if (!loader) throw new Error(`Missing Spanish locale for ${runtime.entry.id}`);
     const content = await loader();
     appRoutes.push({ pattern: `/apps/${content.slug}`, entrypoint });
+    for (const pagePath of runtime.pagePaths) {
+        const pageSource = `---\nimport RuntimeAppPageRoute from '../../src/routes/apps/RuntimeAppPageRoute.astro';\nimport { ${runtime.exportName} } from '${runtime.packageName}/runtime/${runtime.subpath}';\n---\n<RuntimeAppPageRoute app={${runtime.exportName}} pagePath=${JSON.stringify(pagePath)} />\n`;
+        const pageEntrypoint = writeGeneratedRoute(`app-${runtime.subpath}-${pagePath.replaceAll('/', '-')}.astro`, pageSource);
+        appRoutes.push({ pattern: `/apps/${content.slug}/${pagePath}`, entrypoint: pageEntrypoint });
+    }
 }
 
 export default function isolatedContentRoutes() {
