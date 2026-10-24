@@ -96,7 +96,7 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    order: 2;
+    order: 1;
 }
 
 @media (min-width: 1024px) {
@@ -160,7 +160,7 @@
 }
 
 .vesp-hero-visual {
-    order: 1;
+    order: 2;
     display: flex;
     justify-content: center;
 }
@@ -197,6 +197,18 @@
     box-shadow: var(--vesp-shadow-huge);
     background-color: var(--vesp-bg-card);
     aspect-ratio: 9 / 19.5;
+    animation: vesp-phone-drift 8s ease-in-out infinite;
+}
+
+@keyframes vesp-phone-drift {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-0.45rem) rotate(-0.6deg);
+    }
 }
 
 .vesp-hero-phone-img {
@@ -379,16 +391,19 @@
 .vesp-benefits-header {
     text-align: center;
     margin-bottom: 5rem;
+    width: 100%;
     max-width: 48rem;
 }
 
 .vesp-benefits-title {
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(3rem, 7vw, 5rem);
     color: var(--vesp-text);
     font-style: italic;
     margin-bottom: 2.5rem;
     line-height: 1;
     text-transform: uppercase;
+    overflow-wrap: anywhere;
+    hyphens: auto;
 }
 
 .vesp-benefits-title-highlight {
@@ -405,7 +420,7 @@
 
 .vesp-benefits-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
     width: 100%;
 }
@@ -423,14 +438,17 @@
 }
 
 .vesp-benefit-card {
-    padding: 3rem;
+    min-width: 0;
+    padding: clamp(1.5rem, 4vw, 3rem);
     border: 1px solid var(--vesp-border);
     background-color: var(--vesp-bg-surface);
-    transition: border-color 0.3s ease;
+    transition: transform 300ms cubic-bezier(0.2, 0.75, 0.25, 1), border-color 300ms ease, box-shadow 300ms ease;
 }
 
 .vesp-benefit-card:hover {
+    transform: translateY(-5px);
     border-color: var(--vesp-border-hover);
+    box-shadow: var(--vesp-shadow-xl);
 }
 
 .vesp-benefit-icon {
@@ -446,6 +464,8 @@
     color: var(--vesp-text);
     text-transform: uppercase;
     margin-bottom: 1rem;
+    overflow-wrap: anywhere;
+    hyphens: auto;
 }
 
 .vesp-benefit-text {
@@ -454,6 +474,8 @@
     line-height: 1.7;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    overflow-wrap: anywhere;
+    hyphens: auto;
 }
 
 /* =============================================
@@ -518,7 +540,8 @@
 }
 
 .vesp-ecosystem-item {
-    min-width: 300px;
+    min-width: 0;
+    flex: 0 0 min(300px, 78vw);
     border-radius: 2rem;
     overflow: hidden;
     border: 1px solid var(--vesp-border);
@@ -565,12 +588,14 @@
 }
 
 .vesp-footer-title {
-    font-size: clamp(3rem, 10vw, 6rem);
+    font-size: clamp(3rem, 8vw, 5rem);
     color: var(--vesp-text);
     text-transform: uppercase;
     margin-bottom: 3rem;
     font-style: italic;
     line-height: 1;
+    overflow-wrap: anywhere;
+    hyphens: auto;
 }
 
 .vesp-footer-title-highlight {
@@ -614,6 +639,32 @@
     border-color: var(--vesp-gold);
 }
 
+.vesp-landing :where(a, button):focus-visible {
+    outline: 3px solid var(--vesp-gold);
+    outline-offset: 4px;
+}
+
+.vesp-ecosystem-grid:focus-visible {
+    outline: 3px solid var(--vesp-gold);
+    outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* stylelint-disable declaration-no-important -- Motion preferences must override component animations. */
+    .vesp-landing *,
+    .vesp-landing *::before,
+    .vesp-landing *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .vesp-landing :where(a, button, .vesp-benefit-card, .vesp-ecosystem-img):hover {
+        transform: none;
+    }
+    /* stylelint-enable declaration-no-important */
+}
+
 .vesp-footer-divider {
     height: 1px;
     width: 8rem;
@@ -622,4 +673,132 @@
 }
 .vesp-landing :where(h1, h2, h3) {
     margin-block-start: 0;
+}
+
+@media (max-width: 480px) {
+    .vesp-hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding-inline: 1rem;
+    }
+
+    .vesp-hero-body,
+    .vesp-hero-body > *,
+    .vesp-hero-visual,
+    .vesp-hero-phone {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .vesp-hero-body,
+    .vesp-hero-visual,
+    .vesp-hero-phone {
+        width: 100%;
+    }
+
+    .vesp-hero-title {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        font-size: clamp(3rem, 16vw, 5rem);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .vesp-hero-subtitle,
+    .vesp-hero-philosophy,
+    .vesp-hero-price-label {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    .vesp-hero-subtitle,
+    .vesp-hero-price-label {
+        letter-spacing: 0.12em;
+    }
+
+    .vesp-hero-price {
+        min-width: 0;
+        font-size: clamp(2rem, 12vw, 3rem);
+    }
+
+    .vesp-techspecs-inner {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vesp-techspecs-inner > *,
+    .vesp-footer-inner {
+        min-width: 0;
+    }
+
+    .vesp-benefits-header {
+        min-width: 0;
+    }
+
+    .vesp-benefits-title {
+        max-width: 100%;
+        font-size: clamp(1.5rem, 8vw, 3rem);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .vesp-techspecs-label {
+        letter-spacing: clamp(0.12em, 1vw, 0.6em);
+    }
+
+    .vesp-techspecs-concept {
+        font-size: clamp(1.75rem, 8vw, 4.5rem);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .vesp-techspecs-desc {
+        font-size: clamp(1rem, 4.5vw, 1.5rem);
+    }
+
+    .vesp-techspecs-specs-label {
+        letter-spacing: clamp(0.12em, 0.5vw, 0.4em);
+    }
+
+    .vesp-techspecs-table-wrapper {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .vesp-techspecs-table {
+        table-layout: fixed;
+        overflow-wrap: anywhere;
+    }
+
+    .vesp-ecosystem-header {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .vesp-ecosystem-title {
+        max-width: 100%;
+        font-size: clamp(1.25rem, 6vw, 2.25rem);
+        letter-spacing: clamp(0.08em, 0.75vw, 0.3em);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .vesp-ecosystem-subtitle {
+        letter-spacing: clamp(0.12em, 0.75vw, 0.5em);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .vesp-footer-title {
+        font-size: clamp(1.75rem, 8.5vw, 3rem);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .vesp-footer-cta {
+        letter-spacing: clamp(0.15em, 1vw, 1em);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
 }

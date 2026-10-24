@@ -181,7 +181,15 @@
 .ft-hero-inner {
     max-width: 80rem;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: center;
+}
+
+.ft-hero-copy {
     display: flex;
+    min-width: 0;
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -189,7 +197,7 @@
 
 .ft-hero-icon-wrap {
     position: relative;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
 }
 
 .ft-hero-icon-glow {
@@ -221,6 +229,12 @@
     border-radius: 1.5rem;
     box-shadow: var(--ft-shadow-green);
     border: 1px solid var(--ft-green-border-faint);
+    transition: transform 320ms cubic-bezier(0.2, 0.75, 0.25, 1), box-shadow 320ms ease;
+}
+
+.ft-hero-icon-wrap:hover .ft-hero-icon {
+    transform: translateY(-4px) rotate(-3deg) scale(1.025);
+    box-shadow: 0 1.5rem 3rem var(--ft-green-glow);
 }
 
 .ft-hero-title {
@@ -234,10 +248,17 @@
 }
 
 .ft-hero-title-gradient {
-    background: linear-gradient(135deg, var(--ft-green), #00ff9f, #00a86b);
+    background: linear-gradient(135deg, #006b43, #00875a, #005c43);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.theme-dark .ft-landing .ft-hero-title-gradient,
+.dark .ft-landing .ft-hero-title-gradient {
+    background: linear-gradient(135deg, var(--ft-green), #00ff9f, #00a86b);
+    background-clip: text;
+    -webkit-background-clip: text;
 }
 
 .ft-hero-subtitle {
@@ -246,7 +267,7 @@
     letter-spacing: -0.025em;
     color: var(--ft-text-muted);
     max-width: 42rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     text-transform: uppercase;
 }
 
@@ -265,14 +286,77 @@
     letter-spacing: 0.3em;
     color: var(--ft-text-faint);
     font-weight: 700;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .ft-hero-buttons {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 1rem;
+}
+
+.ft-hero-visual {
+    position: relative;
+    isolation: isolate;
+    width: min(100%, 18rem);
+    margin: 0 auto;
+}
+
+.ft-hero-visual-glow {
+    position: absolute;
+    z-index: -1;
+    inset: 12% 8%;
+    background: radial-gradient(ellipse, var(--ft-green-glow), transparent 70%);
+    filter: blur(2rem);
+}
+
+.ft-hero-preview-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: min(75svh, 48rem);
+    object-fit: contain;
+    border-radius: 1.75rem;
+    filter: drop-shadow(0 1.5rem 2.5rem #0008);
+    animation: ft-preview-drift 8s ease-in-out infinite;
+}
+
+@keyframes ft-preview-drift {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0.5deg);
+    }
+
+    50% {
+        transform: translateY(-0.45rem) rotate(-0.5deg);
+    }
+}
+
+@media (min-width: 1024px) {
+    .ft-hero-inner {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: clamp(3rem, 6vw, 6rem);
+    }
+
+    .ft-hero-copy {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .ft-hero-title {
+        font-size: clamp(3rem, 6vw, 5.5rem);
+    }
+
+    .ft-hero-buttons {
+        justify-content: flex-start;
+    }
+
+    .ft-hero-visual {
+        width: min(100%, 28rem);
+        justify-self: center;
+        margin: 0;
+    }
 }
 
 /* =============================================
@@ -292,14 +376,14 @@
     max-width: 80rem;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 5rem;
     align-items: center;
 }
 
 @media (min-width: 1024px) {
     .ft-concept-inner {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 }
 
@@ -323,7 +407,8 @@
     margin-bottom: 2rem;
     text-transform: uppercase;
     font-style: italic;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto;
 }
 
 .ft-concept-title-highlight {
@@ -366,11 +451,12 @@
 
 .ft-benefits-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1rem;
 }
 
 .ft-benefit-card {
+    min-width: 0;
     padding: 1.5rem 2rem;
     background-color: var(--ft-border-faint);
     border: 1px solid var(--ft-border);
@@ -414,6 +500,41 @@
 
 .ft-benefit-card:hover .ft-benefit-text {
     color: var(--ft-text-muted);
+}
+
+@media (max-width: 640px) {
+    .ft-concept-inner,
+    .ft-concept-inner > * {
+        min-width: 0;
+    }
+
+    .ft-concept-inner,
+    .ft-benefits-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ft-concept-title {
+        font-size: clamp(1.5rem, 7vw, 2.5rem);
+        line-height: 1;
+    }
+
+    .ft-concept-text {
+        padding-left: 1.25rem;
+    }
+
+    .ft-concept-highlights {
+        gap: 1.5rem;
+    }
+
+    .ft-benefit-card {
+        padding: 1.25rem;
+    }
+
+    .ft-benefit-title,
+    .ft-benefit-text {
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
 }
 
 /* =============================================
@@ -700,7 +821,7 @@
 
 @media (min-width: 1024px) {
     .ft-integrations-inner {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 }
 
@@ -776,6 +897,7 @@
 
 .ft-integrations-text {
     order: 1;
+    min-width: 0;
 }
 
 @media (min-width: 1024px) {
@@ -801,7 +923,10 @@
     font-style: italic;
     line-height: 0.9;
     margin-bottom: 2rem;
-    overflow-wrap: break-word;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    hyphens: auto;
 }
 
 .ft-integrations-title-highlight {
@@ -897,7 +1022,7 @@
 }
 
 .ft-early-title-highlight {
-    color: var(--ft-white);
+    color: var(--ft-on-green);
 }
 
 .ft-early-desc {
@@ -1205,6 +1330,13 @@
     margin-bottom: 4rem;
 }
 
+@media (max-width: 767px) {
+    .ft-gallery-title {
+        font-size: clamp(1.5rem, 6vw, 1.875rem);
+        letter-spacing: 0.08em;
+    }
+}
+
 .ft-gallery-inner {
     max-width: 80rem;
     margin: 0 auto;
@@ -1279,6 +1411,116 @@
     transform: scale(1.01);
 }
 
+.ft-landing :where(a, button):focus-visible {
+    outline: 3px solid var(--ft-green);
+    outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+    .ft-integrations-inner,
+    .ft-enterprise-inner {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ft-integrations-inner > *,
+    .ft-enterprise-inner > *,
+    .ft-integrations-grid,
+    .ft-integration-card,
+    .ft-enterprise-feature,
+    .ft-enterprise-feature-text {
+        min-width: 0;
+    }
+
+    .ft-integrations-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ft-integration-card {
+        padding: clamp(0.75rem, 4vw, 1.25rem);
+    }
+
+    .ft-integration-name {
+        font-size: clamp(0.8rem, 4vw, 1.125rem);
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .ft-integrations-title,
+    .ft-enterprise-title {
+        width: 100%;
+        min-width: 0;
+        font-size: clamp(1.5rem, 7.5vw, 2rem);
+        line-height: 1.05;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .ft-integrations-desc,
+    .ft-enterprise-desc,
+    .ft-enterprise-feature-text {
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .ft-integrations-cta {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        padding: 1rem;
+    }
+
+    .ft-integrations-cta-title,
+    .ft-integrations-cta-link,
+    .ft-enterprise-cta {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .ft-enterprise-code-box {
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        padding: clamp(1.25rem, 5vw, 2rem);
+        border-radius: 1.5rem;
+    }
+
+    .ft-enterprise-code,
+    .ft-enterprise-code p {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .ft-code-muted {
+        padding-left: 0.75rem;
+    }
+
+    .ft-gallery-title {
+        font-size: clamp(1.125rem, 5vw, 1.5rem);
+        letter-spacing: 0.04em;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    /* stylelint-disable declaration-no-important -- Motion preferences must override component animations. */
+    .ft-landing *,
+    .ft-landing *::before,
+    .ft-landing *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .ft-landing :where(a, button, .ft-benefit-card, .ft-integration-card, .ft-gallery-item):hover {
+        transform: none;
+    }
+    /* stylelint-enable declaration-no-important */
+}
+
 .ft-feature-graphic-img {
     width: 100%;
     height: auto;
@@ -1336,4 +1578,74 @@
 }
 .ft-landing :where(h1, h2, h3) {
     margin-block-start: 0;
+}
+
+@media (max-width: 640px) {
+    .ft-early-inner > *,
+    .ft-early-card {
+        min-width: 0;
+    }
+
+    .ft-early-card {
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        max-width: 28rem;
+        margin-inline: auto;
+        padding: clamp(1rem, 5vw, 1.5rem);
+    }
+
+    .ft-early-count-row {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .ft-early-count-label,
+    .ft-early-count-note {
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .ft-early-count-label {
+        letter-spacing: 0.1em;
+    }
+
+    .ft-early-count-note {
+        font-size: clamp(0.75rem, 3.75vw, 0.875rem);
+        line-height: 1.45;
+    }
+
+    .ft-early-cta {
+        box-sizing: border-box;
+        font-size: clamp(0.6875rem, 3.5vw, 0.875rem);
+        line-height: 1.3;
+        letter-spacing: 0.04em;
+        padding: 0.875rem 0.5rem;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
+
+    .ft-enterprise-inner > *,
+    .ft-enterprise-feature > * {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .ft-enterprise-feature > div:last-child {
+        flex: 1 1 0%;
+        width: 0;
+        max-width: none;
+    }
+
+    .ft-enterprise-feature-text {
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    .ft-enterprise-feature-title {
+        font-size: clamp(0.75rem, 4vw, 1rem);
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+    }
 }
